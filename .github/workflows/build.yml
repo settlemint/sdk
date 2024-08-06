@@ -183,3 +183,4 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           file_pattern: 'package.json'
+          branch: main
