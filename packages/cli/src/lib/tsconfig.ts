@@ -1,6 +1,6 @@
-import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 
 export function writeTsConfig() {
   const root = findProjectRoot(process.cwd());
@@ -28,6 +28,7 @@ export function writeTsConfig() {
           isolatedModules: true,
           jsx: "preserve",
           incremental: true,
+          noImplicitAny: false,
           plugins: [
             {
               name: "next",
@@ -39,7 +40,6 @@ export function writeTsConfig() {
         },
         include: ["**/*.ts", "**/*.tsx"],
         exclude: ["node_modules"],
-        noImplicitAny: false,
       },
       null,
       2,
