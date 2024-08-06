@@ -13,7 +13,7 @@ export async function withBTP<C extends NextConfig>(
   nextConfig: C,
   { disabled, output }: WithBTPOptions = {},
 ): Promise<C> {
-  if (disabled) {
+  if (!disabled) {
     const cfg = await config();
     if (!cfg) {
       throw new Error("No configuration found, please run btp-sdk-cli init");

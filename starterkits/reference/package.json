@@ -5,13 +5,17 @@
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "codegen": "btp-sdk-cli codegen"
   },
   "dependencies": {
     "@settlemint/btp-sdk-next": "workspace:*",
+    "graphql": "^16",
+    "graphql-request": "^7",
+    "next": "14.2.5",
+    "openapi-fetch": "^0.10",
     "react": "^18",
-    "react-dom": "^18",
-    "next": "14.2.5"
+    "react-dom": "^18"
   },
   "devDependencies": {
     "typescript": "^5",

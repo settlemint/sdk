@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@settlemint/btp-sdk-react": "workspace:*",
-    "@settlemint/btp-sdk-cli": "0.4.3"
+    "@settlemint/btp-sdk-cli": "workspace:*"
   },
   "devDependencies": {
     "tsup": "8.2.4",
