@@ -36,6 +36,8 @@ jobs:
     steps:
       - name: Checkout
         uses: namespacelabs/nscloud-checkout-action@v5
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@v1
@@ -176,11 +178,8 @@ jobs:
                 | React | `bun add @settlemint/btp-sdk-react@${{ env.VERSION }}` |
                 | SDK | `bun add @settlemint/btp-sdk@${{ env.VERSION }}` |
 
-
-      - name: Commit and push package.json changes
+      - uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ env.TAG == 'latest' }}
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add **/package.json
-          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update package versions [skip ci]" && git push)
+        with:
+          commit_message: "chore: update package versions [skip ci]"
+          file_pattern: 'package.json'
