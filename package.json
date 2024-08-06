@@ -9,7 +9,9 @@
     "lint": "biome lint --write --unsafe .",
     "format": "biome format --write .",
     "test:next": "./scripts/test-full-stack-next.sh",
-    "packcheck": "turbo packcheck"
+    "packcheck": "turbo packcheck",
+    "publint": "turbo publint",
+    "attw": "turbo attw"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.3",
