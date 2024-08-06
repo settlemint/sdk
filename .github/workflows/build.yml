@@ -29,6 +29,10 @@ permissions:
   security-events: write
   statuses: write
 
+env:
+  BTP_PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  BTP_HASURA_GQL_ADMIN_SECRET: ${{ secrets.BTP_HASURA_GQL_ADMIN_SECRET }}
+
 jobs:
   test:
     name: Test and Build

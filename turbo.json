@@ -8,8 +8,12 @@
     "//#format": {
       "cache": false
     },
+    "codegen": {
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [".btp/**"]
+    },
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "^codegen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },

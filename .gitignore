@@ -215,6 +215,3 @@ dist
 
 
 bun.lockb
-.btprc.json
-.btp/
-packages/cli/graphql
