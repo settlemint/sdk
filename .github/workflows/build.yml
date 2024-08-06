@@ -37,7 +37,6 @@ jobs:
       - name: Checkout
         uses: namespacelabs/nscloud-checkout-action@v5
         with:
-          ref: ${{ github.head_ref }}
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup caches
