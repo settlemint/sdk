@@ -41,8 +41,8 @@
   "scripts": {
     "build": "tsup-node src/index.ts --format esm,cjs --dts",
     "dev": "tsup-node src/index.ts --format esm,cjs --dts --watch",
-    "lint:publint": "publint run",
-    "lint:attw": "attw --pack ."
+    "publint": "publint run",
+    "attw": "attw --pack ."
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",

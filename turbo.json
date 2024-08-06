@@ -3,7 +3,6 @@
   "ui": "tui",
   "tasks": {
     "//#lint": {
-      "dependsOn": ["^lint:attw", "^lint:publint"],
       "cache": false
     },
     "//#format": {
@@ -22,11 +21,11 @@
       "dependsOn": ["^test", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "lint:attw": {
+    "attw": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "lint:publint": {
+    "publint": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     }

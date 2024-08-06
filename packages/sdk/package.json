@@ -19,8 +19,8 @@
     "email": "support@settlemint.com"
   },
   "scripts": {
-    "lint:publint": "publint run",
-    "lint:attw": "attw --pack ."
+    "publint": "publint run",
+    "attw": "attw --pack ."
   },
   "dependencies": {
     "@settlemint/btp-sdk-cli": "workspace:*",
