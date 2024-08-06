@@ -1,7 +1,7 @@
 {
   "name": "btp-sdk",
   "private": true,
-  "version": "0.3.2",
+  "version": "0.4.3",
   "scripts": {
     "build": "turbo build",
     "test": "turbo test",
@@ -27,6 +27,12 @@
     "node": "20.16.0"
   },
   "packageManager": "bun@1.1.21",
-  "workspaces": ["packages/*"],
-  "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
+  "workspaces": [
+    "packages/*"
+  ],
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "esbuild",
+    "lefthook"
+  ]
 }

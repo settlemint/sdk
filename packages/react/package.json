@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/btp-sdk-react",
-  "version": "0.3.2",
+  "version": "0.4.3",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,9 @@
     "url": "https://github.com/settlemint/btp-sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": {

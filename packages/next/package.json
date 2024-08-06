@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/btp-sdk-next",
-  "version": "0.3.2",
+  "version": "0.4.3",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,9 @@
     "url": "https://github.com/settlemint/btp-sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -41,8 +43,8 @@
     "packcheck": "attw --pack ."
   },
   "dependencies": {
-    "@settlemint/btp-sdk-react": "workspace:*",
-    "@settlemint/btp-sdk-cli": "workspace:*"
+    "@settlemint/btp-sdk-react": "0.4.3",
+    "@settlemint/btp-sdk-cli": "0.4.3"
   },
   "devDependencies": {
     "tsup": "8.2.4",

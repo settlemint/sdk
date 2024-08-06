@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/btp-sdk",
-  "version": "0.3.2",
+  "version": "0.4.3",
   "type": "module",
   "private": false,
   "license": "MIT",
@@ -19,9 +19,9 @@
     "email": "support@settlemint.com"
   },
   "dependencies": {
-    "@settlemint/btp-sdk-cli": "workspace:*",
-    "@settlemint/btp-sdk-next": "workspace:*",
-    "@settlemint/btp-sdk-react": "workspace:*"
+    "@settlemint/btp-sdk-cli": "0.4.3",
+    "@settlemint/btp-sdk-next": "0.4.3",
+    "@settlemint/btp-sdk-react": "0.4.3"
   },
   "devDependencies": {},
   "peerDependencies": {}
