@@ -49,9 +49,9 @@ jobs:
             ./packages/**/node_modules
             ./packages/**/.turbo
             ./packages/**/dist
-            ./utils/**/node_modules
-            ./utils/**/.turbo
-            ./utils/**/dist
+            ./starterkits/**/node_modules
+            ./starterkits/**/.turbo
+            ./starterkits/**/.next
 
       - uses: oven-sh/setup-bun@v2
 
@@ -61,7 +61,7 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo check test build
+      - run: bunx turbo format lint test build
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4

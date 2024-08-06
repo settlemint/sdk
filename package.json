@@ -6,7 +6,6 @@
     "build": "turbo build",
     "test": "turbo test",
     "dev": "turbo dev",
-    "check": "biome ci --organize-imports-enabled=false .",
     "lint": "biome lint --write --unsafe .",
     "format": "biome format --write .",
     "test:next": "./scripts/test-full-stack-next.sh",

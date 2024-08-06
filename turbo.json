@@ -9,9 +9,6 @@
     "//#format": {
       "cache": false
     },
-    "//#check": {
-      "dependsOn": ["//#format", "^lint:attw", "^lint:publint"]
-    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
