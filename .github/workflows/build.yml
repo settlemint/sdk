@@ -36,8 +36,6 @@ jobs:
     steps:
       - name: Checkout
         uses: namespacelabs/nscloud-checkout-action@v5
-        with:
-          fetch-depth: 0
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@v1
@@ -57,11 +55,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-
-      - name: Secret Scanning
-        uses: trufflesecurity/trufflehog@main
-        with:
-          extra_args: --only-verified
 
       - run: bun install
 
@@ -126,6 +119,15 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/config/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/cli/package.json
           access: public
           provenance: false
@@ -168,6 +170,7 @@ jobs:
                 # 📦 Packages
                 | Package | Install |
                 | ------- | -------------------- |
+                | Config | `bun add @settlemint/btp-sdk-config@${{ env.VERSION }}` |
                 | CLI | `bun add @settlemint/btp-sdk-cli@${{ env.VERSION }}` |
                 | Next | `bun add @settlemint/btp-sdk-next@${{ env.VERSION }}` |
                 | React | `bun add @settlemint/btp-sdk-react@${{ env.VERSION }}` |

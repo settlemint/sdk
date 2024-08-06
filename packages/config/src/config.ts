@@ -4,7 +4,6 @@ import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { merge } from "ts-deepmerge";
 import { z } from "zod";
-import { printCancel } from "./cli-message";
 import { findProjectRoot } from "./path";
 
 /**
@@ -92,14 +91,8 @@ async function parseConfig(): Promise<Config | undefined> {
   if (!result) {
     return undefined;
   }
-  try {
-    // Attempt to parse and validate the configuration
-    return ConfigSchema.parse(result.config);
-  } catch (e) {
-    // If parsing fails, print a message and return undefined
-    printCancel("Configuration file does not match the expected format. Starting fresh!");
-    return undefined;
-  }
+  // Attempt to parse and validate the configuration
+  return ConfigSchema.parse(result.config);
 }
 
 /**

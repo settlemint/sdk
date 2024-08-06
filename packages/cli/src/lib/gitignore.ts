@@ -1,6 +1,6 @@
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path";
 
 export function updateGitignore() {
   const root = findProjectRoot(process.cwd());

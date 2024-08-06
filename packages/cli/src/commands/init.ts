@@ -1,4 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
+import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/btp-sdk-config";
 import { greenBright } from "yoctocolors";
 import pkg from "../../package.json";
 import {
@@ -12,8 +13,6 @@ import {
 } from "../lib/cli-message";
 import { type Works, getServices } from "../lib/cluster-manager";
 import { coerceSelect, coerceText } from "../lib/coerce";
-import { type ConfigEnv, config, createConfig, createEnv } from "../lib/config";
-import { detectFramework } from "../lib/framework";
 import { updateGitignore } from "../lib/gitignore";
 import { addDependencies } from "../lib/package-json";
 import { install } from "../lib/package-manager";

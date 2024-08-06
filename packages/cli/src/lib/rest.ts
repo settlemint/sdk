@@ -1,8 +1,8 @@
 import { createConfig } from "@redocly/openapi-core";
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import openapiTS, { astToString } from "openapi-typescript";
-import { findProjectRoot } from "./path";
 
 /**
  * Creates a Portal REST client based on the OpenAPI specification.
