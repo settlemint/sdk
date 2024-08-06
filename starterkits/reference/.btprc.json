@@ -1,0 +1,16 @@
+{
+  "framework": "nodejs",
+  "instance": "https://console.settlemint.com",
+  "defaultEnvironment": "development",
+  "environments": {
+    "development": {
+      "workspace": "64fb6ac9b26cc86b3c8df937",
+      "application": "66b231b6db4e18a17c396fdc",
+      "portal": "https://reference-portal-a3f2.gke-europe.settlemint.com/graphql",
+      "portalRest": "https://reference-portal-a3f2.gke-europe.settlemint.com/api",
+      "graph": "https://reference-middleware-b1b9.gke-europe.settlemint.com/subgraphs/name/reference-erc20-0013",
+      "hasura": "https://reference-hasura-e60f.gke-europe.settlemint.com/v1/graphql",
+      "node": "https://reference-read-node-1-56ab.gke-europe.settlemint.com/"
+    }
+  }
+}

@@ -1,8 +1,8 @@
 {
   "name": "@settlemint/btp-sdk-react",
-  "version": "0.4.3",
+  "version": "0.0.1",
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "private": false,
@@ -21,9 +21,7 @@
     "url": "https://github.com/settlemint/btp-sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -38,15 +36,17 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "packcheck": "attw --pack ."
+    "build": "tsup-node src/index.ts --format esm,cjs --dts",
+    "dev": "tsup-node src/index.ts --format esm,cjs --dts --watch",
+    "publint": "publint run",
+    "attw": "attw --pack ."
   },
   "devDependencies": {
     "tsup": "8.2.4"
   },
   "dependencies": {},
   "peerDependencies": {
-    "react": "18.3.1"
+    "react": ">=18 || >=19.0.0-beta",
+    "react-dom": ">=18 || >=19.0.0-beta"
   }
 }

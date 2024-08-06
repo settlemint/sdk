@@ -29,6 +29,11 @@ permissions:
   security-events: write
   statuses: write
 
+env:
+  BTP_PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  BTP_HASURA_GQL_ADMIN_SECRET: ${{ secrets.BTP_HASURA_GQL_ADMIN_SECRET }}
+  NEXT_PUBLIC_BTP_APP_URL: ${{ vars.NEXT_PUBLIC_BTP_APP_URL }}
+
 jobs:
   test:
     name: Test and Build
@@ -37,7 +42,6 @@ jobs:
       - name: Checkout
         uses: namespacelabs/nscloud-checkout-action@v5
         with:
-          ref: ${{ github.head_ref }}
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup caches
@@ -49,9 +53,9 @@ jobs:
             ./packages/**/node_modules
             ./packages/**/.turbo
             ./packages/**/dist
-            ./utils/**/node_modules
-            ./utils/**/.turbo
-            ./utils/**/dist
+            ./starterkits/**/node_modules
+            ./starterkits/**/.turbo
+            ./starterkits/**/.next
 
       - uses: oven-sh/setup-bun@v2
 
@@ -61,13 +65,7 @@ jobs:
 
       - run: bun install
 
-      - run: bun check
-
-      - run: bun test
-
-      - run: bun run build
-
-      - run: bun packcheck
+      - run: bunx turbo format lint test build attw publint
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
@@ -113,6 +111,12 @@ jobs:
           fi
 
           for dir in ./packages/*; do
+            if [ -f "$dir/package.json" ]; then
+              update_package_json "$dir" "$VERSION"
+            fi
+          done
+
+          for dir in ./starterkits/*; do
             if [ -f "$dir/package.json" ]; then
               update_package_json "$dir" "$VERSION"
             fi
@@ -184,3 +188,4 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
+          file_pattern: 'package.json'

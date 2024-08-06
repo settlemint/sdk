@@ -1,7 +1,7 @@
-import { generate } from "@graphql-codegen/cli";
-import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { generate } from "@graphql-codegen/cli";
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 
 export interface CreateGqlClientOptions {
   framework: string;
@@ -37,6 +37,29 @@ export async function createGqlClient(options: CreateDefaultGqlClientOptions | C
   const typeQueriesDir = join(root, "graphql", type);
   mkdirSync(typeCodegenDir, { recursive: true });
   mkdirSync(typeQueriesDir, { recursive: true });
+
+  if (type === "thegraph") {
+    const hasBeenDeployedResult = await fetch(gqlUrl, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        "x-auth-token": personalAccessToken,
+      },
+      body: JSON.stringify({ operationName: null, variables: {}, query: "{_meta { deployment }}" }),
+      mode: "cors",
+    });
+
+    const hasBeenDeployedJson = (await hasBeenDeployedResult.json()) as {
+      data?: { _meta: { deployment: string } };
+      errors?: string[];
+    };
+    const hasNotBeenDeployed = (hasBeenDeployedJson?.errors?.length ?? 0) > 0;
+
+    if (hasNotBeenDeployed) {
+      return;
+    }
+  }
 
   if (framework === "nextjs") {
     writeFileSync(
@@ -76,22 +99,43 @@ export const ${type} = new GraphQLClient('${gqlUrl}', {
     );
   }
 
-  writeFileSync(
-    `${typeQueriesDir}/apollo.config.ts`,
-    `module.exports = {
-  client: {
-    includes: ["./*.graphql", "./**/*.graphql"],
-    service: {
-      name: "${type}",
-      url: "${gqlUrl}",
-      headers: {
-          "x-auth-token": "${personalAccessToken}",
-          ${type === "hasura" ? `"x-hasura-admin-secret": "${options.hasuraAdminSecret}",` : ""}
-      },
-    },
-  },
-};`,
-  );
+  if (type === "portal") {
+    writeFileSync(
+      `${typeQueriesDir}/get-all-pending-and-recently-processed-transactions.graphql`,
+      `query GetAllPendingAndRecentlyProcessedTransactions {
+  getPendingAndRecentlyProcessedTransactions {
+    records {
+      address
+      createdAt
+      from
+      functionName
+      metadata
+      transactionHash
+      updatedAt
+      receipt {
+        type
+        transactionIndex
+        transactionHash
+        to
+        root
+        status
+        logsBloom
+        logs
+        gasUsed
+        from
+        effectiveGasPrice
+        cumulativeGasUsed
+        contractAddress
+        blockNumber
+        blockHash
+        blobGasUsed
+        blobGasPrice
+      }
+    }
+  }
+}`,
+    );
+  }
 
   await generate(
     {
@@ -111,7 +155,7 @@ export const ${type} = new GraphQLClient('${gqlUrl}', {
               },
             },
           ],
-          documents: [`./${typeQueriesDir}/*.graphql`, `./${typeQueriesDir}/**/*.graphql`],
+          documents: [`${typeQueriesDir}/*.graphql`, `${typeQueriesDir}/**/*.graphql`],
           presetConfig: {
             useTypeImports: true,
             nonOptionalTypename: true,

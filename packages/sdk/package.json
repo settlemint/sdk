@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/btp-sdk",
-  "version": "0.4.3",
+  "version": "0.0.1",
   "type": "module",
   "private": false,
   "license": "MIT",
@@ -18,10 +18,11 @@
     "url": "https://github.com/settlemint/btp-sdk/issues",
     "email": "support@settlemint.com"
   },
+  "scripts": {},
   "dependencies": {
-    "@settlemint/btp-sdk-cli": "0.4.3",
-    "@settlemint/btp-sdk-next": "0.4.3",
-    "@settlemint/btp-sdk-react": "0.4.3"
+    "@settlemint/btp-sdk-cli": "workspace:*",
+    "@settlemint/btp-sdk-next": "workspace:*",
+    "@settlemint/btp-sdk-react": "workspace:*"
   },
   "devDependencies": {},
   "peerDependencies": {}

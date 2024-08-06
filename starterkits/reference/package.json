@@ -1,0 +1,29 @@
+{
+  "name": "reference",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "codegen": "btp-sdk-cli codegen"
+  },
+  "dependencies": {
+    "@settlemint/btp-sdk-next": "workspace:*",
+    "graphql": "^16",
+    "graphql-request": "^7",
+    "next": "14.2.5",
+    "openapi-fetch": "^0.10",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "typescript": "^5",
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  },
+  "peerDependencies": {}
+}

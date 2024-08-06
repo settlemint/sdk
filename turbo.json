@@ -1,6 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalPassThroughEnv": ["BTP_PAT_TOKEN", "BTP_HASURA_GQL_ADMIN_SECRET", "NEXT_PUBLIC_BTP_APP_URL"],
   "tasks": {
     "//#lint": {
       "cache": false
@@ -8,22 +9,29 @@
     "//#format": {
       "cache": false
     },
-    "//#check": {},
-    "build": {
-      "dependsOn": ["^build"],
+    "codegen": {
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**"]
+      "outputs": [".btp/**"]
+    },
+    "build": {
+      "dependsOn": ["^build", "^codegen"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "dev": {
       "cache": false,
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^test"],
+      "dependsOn": ["^test", "build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
-    "packcheck": {
-      "dependsOn": ["^build"],
+    "attw": {
+      "dependsOn": ["build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+    },
+    "publint": {
+      "dependsOn": ["build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     }
   }
