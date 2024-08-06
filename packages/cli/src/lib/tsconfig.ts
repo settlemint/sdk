@@ -1,6 +1,6 @@
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path";
 
 export function writeTsConfig() {
   const root = findProjectRoot(process.cwd());

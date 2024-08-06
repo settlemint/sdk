@@ -1,6 +1,6 @@
 import { type PackageJson, default as pkgj } from "@npmcli/package-json";
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { lt } from "semver";
-import { findProjectRoot } from "./path";
 
 export async function addDependencies(dependencies: Record<string, string>, checkVersion = false) {
   // Read the package.json file

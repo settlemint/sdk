@@ -1,7 +1,7 @@
 import { Command } from "@commander-js/extra-typings";
+import { config } from "@settlemint/btp-sdk-config";
 import { greenBright } from "yoctocolors";
 import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
-import { config } from "../lib/config";
 import { createGqlClient } from "../lib/graphql";
 import { createRestClient } from "../lib/rest";
 import { writeTsConfig } from "../lib/tsconfig";

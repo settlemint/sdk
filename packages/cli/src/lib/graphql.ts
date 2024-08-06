@@ -1,7 +1,7 @@
 import { generate } from "@graphql-codegen/cli";
+import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path";
 
 export interface CreateGqlClientOptions {
   framework: string;
@@ -29,12 +29,12 @@ export async function createGqlClient(options: CreateDefaultGqlClientOptions | C
   const { framework, type, gqlUrl, personalAccessToken } = options;
 
   // Create directory structure
-  const btpDir = join(findProjectRoot(process.cwd()), ".btp");
-
+  const root = findProjectRoot(process.cwd());
+  const btpDir = join(root, ".btp");
   const typeDir = join(btpDir, type);
   const typeGqlDir = join(typeDir, "gql");
   const typeCodegenDir = join(typeGqlDir, "codegen");
-  const typeQueriesDir = join(findProjectRoot(process.cwd()), "graphql", type);
+  const typeQueriesDir = join(root, "graphql", type);
   mkdirSync(typeCodegenDir, { recursive: true });
   mkdirSync(typeQueriesDir, { recursive: true });
 

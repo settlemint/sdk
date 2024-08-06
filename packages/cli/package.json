@@ -49,6 +49,7 @@
     "@types/npmcli__package-json": "4.0.4"
   },
   "dependencies": {
+    "@settlemint/btp-sdk-config": "workspace:*",
     "@clack/prompts": "0.7.0",
     "@commander-js/extra-typings": "12.1.0",
     "@graphql-codegen/cli": "5.0.2",
@@ -56,12 +57,9 @@
     "commander": "12.1.0",
     "cosmiconfig": "9.0.0",
     "cross-spawn": "7.0.3",
-    "dotenv": "16.4.5",
     "openapi-typescript": "7.3.0",
     "semver": "7.6.3",
-    "ts-deepmerge": "7.0.1",
-    "yoctocolors": "2.1.1",
-    "zod": "3.23.8"
+    "yoctocolors": "2.1.1"
   },
   "peerDependencies": {
     "graphql": "^16",
