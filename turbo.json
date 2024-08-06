@@ -10,7 +10,7 @@
       "cache": false
     },
     "//#check": {
-      "dependsOn": ["^lint:attw", "^lint:publint"]
+      "dependsOn": ["format", "^lint:attw", "^lint:publint"]
     },
     "build": {
       "dependsOn": ["^build"],
