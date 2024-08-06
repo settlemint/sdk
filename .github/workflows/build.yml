@@ -32,6 +32,7 @@ permissions:
 env:
   BTP_PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
   BTP_HASURA_GQL_ADMIN_SECRET: ${{ secrets.BTP_HASURA_GQL_ADMIN_SECRET }}
+  NEXT_PUBLIC_BTP_APP_URL: ${{ vars.NEXT_PUBLIC_BTP_APP_URL }}
 
 jobs:
   test:
