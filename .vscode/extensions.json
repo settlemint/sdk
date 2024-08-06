@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "inlang.vs-code-extension",
+    "bradlc.vscode-tailwindcss",
+    "biomejs.biome",
+    "graphql.vscode-graphql-syntax",
+    "apollographql.vscode-apollo"
+  ]
+}

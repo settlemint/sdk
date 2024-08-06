@@ -1,0 +1,28 @@
+{
+  "name": "@settlemint/btp-sdk",
+  "version": "0.3.2",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "author": {
+    "name": "SettleMint",
+    "email": "support@settlemint.com",
+    "url": "https://settlemint.com"
+  },
+  "homepage": "https://github.com/settlemint/btp-sdk/blob/main/packages/sdk/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/settlemint/btp-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/settlemint/btp-sdk/issues",
+    "email": "support@settlemint.com"
+  },
+  "dependencies": {
+    "@settlemint/btp-sdk-cli": "workspace:*",
+    "@settlemint/btp-sdk-next": "workspace:*",
+    "@settlemint/btp-sdk-react": "workspace:*"
+  },
+  "devDependencies": {},
+  "peerDependencies": {}
+}

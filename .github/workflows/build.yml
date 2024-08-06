@@ -1,0 +1,183 @@
+name: Test
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  id-token: write
+  issues: write
+  discussions: write
+  packages: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+jobs:
+  test:
+    name: Test and Build
+    runs-on: namespace-profile-btp-sdk
+    steps:
+      - name: Checkout
+        uses: namespacelabs/nscloud-checkout-action@v5
+        with:
+          fetch-depth: 0
+
+      - name: Setup caches
+        uses: namespacelabs/nscloud-cache-action@v1
+        with:
+          path: |
+            ./node_modules
+            ./.turbo
+            ./packages/**/node_modules
+            ./packages/**/.turbo
+            ./packages/**/dist
+            ./utils/**/node_modules
+            ./utils/**/.turbo
+            ./utils/**/dist
+
+      - uses: oven-sh/setup-bun@v2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Secret Scanning
+        uses: trufflesecurity/trufflehog@main
+        with:
+          extra_args: --only-verified
+
+      - run: bun install
+
+      - run: bun check
+
+      - run: bun test
+
+      - run: bun run build
+
+      - run: bun packcheck
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: Package version
+        id: package-version
+        run: |
+          OLD_VERSION=$(jq -r '.version' package.json)
+          echo "Old version: $OLD_VERSION"
+          if [[ $GITHUB_REF_SLUG =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            VERSION=$(echo $GITHUB_REF_SLUG | sed 's/^v//')
+            echo "TAG=latest" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF_NAME == "main" ]]; then
+            VERSION="${OLD_VERSION}-main$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
+            echo "TAG=main" >> $GITHUB_ENV
+          else
+            VERSION="${OLD_VERSION}-pr$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
+            echo "TAG=pr" >> $GITHUB_ENV
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Updating version to $VERSION"
+          jq --arg version "$VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+
+          update_package_json() {
+            local dir="$1"
+            local version="$2"
+            echo "Updating $dir/package.json version to $version and updating workspace dependencies"
+            jq --arg version "$version" '
+              .version = $version |
+              (.dependencies) |= with_entries(if .value == "workspace:*" then .value = $version else . end) |
+              (.devDependencies) |= with_entries(if .value == "workspace:*" then .value = $version else . end) |
+              (.peerDependencies) |= with_entries(if .value == "workspace:*" then .value = $version else . end)
+            ' "$dir/package.json" > "$dir/package.json.tmp" && mv "$dir/package.json.tmp" "$dir/package.json" || {
+              echo "Error updating $dir/package.json"
+              cat "$dir/package.json.tmp"
+              exit 1
+            }
+          }
+
+          if [ -z "$VERSION" ]; then
+            echo "Error: VERSION is not set"
+            exit 1
+          fi
+
+          for dir in ./packages/*; do
+            if [ -f "$dir/package.json" ]; then
+              update_package_json "$dir" "$VERSION"
+            fi
+          done
+          echo "Updated version to $VERSION"
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/cli/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/next/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/react/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/sdk/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Create or update a comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: taoliujun/action-unique-comment@v1
+        with:
+            uniqueIdentifier: ${{ github.workflow }}
+            body: |
+                # 📦 Packages
+                | Package | Install |
+                | ------- | -------------------- |
+                | CLI | `bun add @settlemint/btp-sdk-cli@${{ env.VERSION }}` |
+                | Next | `bun add @settlemint/btp-sdk-next@${{ env.VERSION }}` |
+                | React | `bun add @settlemint/btp-sdk-react@${{ env.VERSION }}` |
+                | SDK | `bun add @settlemint/btp-sdk@${{ env.VERSION }}` |
+
+
+      - name: Commit and push package.json changes
+        if: ${{ env.TAG == 'latest' }}
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add **/package.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "chore: update package versions [skip ci]" && git push)

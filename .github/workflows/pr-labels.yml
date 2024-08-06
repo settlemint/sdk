@@ -1,0 +1,28 @@
+name: PR Labels
+
+on:
+  pull_request:
+    types: [opened, closed]
+    branches:
+      - main
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  id-token: write
+  issues: write
+  discussions: write
+  packages: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+jobs:
+  labels:
+    runs-on: namespace-profile-sony-bank-app
+    steps:
+      - uses: fuxingloh/multi-labeler@v4

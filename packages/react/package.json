@@ -1,0 +1,50 @@
+{
+  "name": "@settlemint/btp-sdk-react",
+  "version": "0.3.2",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "private": false,
+  "license": "MIT",
+  "author": {
+    "name": "SettleMint",
+    "email": "support@settlemint.com",
+    "url": "https://settlemint.com"
+  },
+  "homepage": "https://github.com/settlemint/btp-sdk/blob/main/packages/react/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/settlemint/btp-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/settlemint/btp-sdk/issues",
+    "email": "support@settlemint.com"
+  },
+  "files": ["dist"],
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "packcheck": "attw --pack ."
+  },
+  "devDependencies": {
+    "tsup": "8.2.4"
+  },
+  "dependencies": {},
+  "peerDependencies": {
+    "react": "18.3.1"
+  }
+}

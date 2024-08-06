@@ -1,0 +1,47 @@
+name: PR Settings
+
+on:
+  pull_request:
+    types: [ready_for_review]
+    branches:
+      - main
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  id-token: write
+  issues: write
+  discussions: write
+  packages: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+jobs:
+  labels:
+    runs-on: namespace-profile-sony-bank-app
+    steps:
+      - name: Send GitHub Action trigger data to Slack workflow with reviewers
+        if: ${{ tojson(github.event.pull_request.requested_reviewers) != '[]' && !github.event.pull_request.draft }}
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_SLACK_WEBHOOK_URL }}
+        with:
+          payload: |
+            {
+              "message": "${{ github.event.pull_request.title }} (by ${{ github.event.pull_request.user.login }} and to be checked by ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}) -> ${{ github.event.pull_request.html_url }}"
+            }
+      - name: Send GitHub Action trigger data to Slack workflow without reviewers
+        if: ${{ !github.event.pull_request.draft }}
+        uses: slackapi/slack-github-action@v1.26.0
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.PR_SLACK_WEBHOOK_URL }}
+        with:
+          payload: |
+            {
+              "message": "${{ github.event.pull_request.title }} (by ${{ github.event.pull_request.user.login }}) -> ${{ github.event.pull_request.html_url }}"
+            }

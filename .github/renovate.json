@@ -1,0 +1,38 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":automergeMinor",
+    ":automergePr",
+    ":automergeRequireAllStatusChecks",
+    ":gitSignOff",
+    ":pinAllExceptPeerDependencies",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)",
+    ":enableVulnerabilityAlerts",
+    ":combinePatchMinorReleases",
+    ":prConcurrentLimitNone",
+    ":prHourlyLimitNone",
+    ":widenPeerDependencies",
+    "npm:unpublishSafe",
+    "security:openssf-scorecard",
+    "schedule:nonOfficeHours"
+  ],
+  "labels": ["dependencies"],
+  "rebaseWhen": "conflicted",
+  "customManagers": [
+    {
+      "customType": "regex",
+      "datasourceTemplate": "npm",
+      "depNameTemplate": "@biomejs/biome",
+      "fileMatch": ["(^|/)biome.jsonc?$"],
+      "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
+    }
+  ],
+  "packageRules": [],
+  "hostRules": [
+    {
+      "timeout": 3000000
+    }
+  ]
+}
