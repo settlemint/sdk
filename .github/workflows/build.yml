@@ -61,13 +61,7 @@ jobs:
 
       - run: bun install
 
-      - run: bun check
-
-      - run: bun test
-
-      - run: bun run build
-
-      - run: bun packcheck
+      - run: bunx turbo check test build
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
@@ -113,6 +107,12 @@ jobs:
           fi
 
           for dir in ./packages/*; do
+            if [ -f "$dir/package.json" ]; then
+              update_package_json "$dir" "$VERSION"
+            fi
+          done
+
+          for dir in ./starterkits/*; do
             if [ -f "$dir/package.json" ]; then
               update_package_json "$dir" "$VERSION"
             fi
@@ -184,3 +184,4 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
+          file_pattern: 'package.json'

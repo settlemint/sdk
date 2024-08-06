@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/btp-sdk-cli",
-  "version": "0.4.3",
+  "version": "0.0.1",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,9 +21,7 @@
     "url": "https://github.com/settlemint/btp-sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -43,7 +41,8 @@
   "scripts": {
     "build": "tsup-node src/index.ts --format esm,cjs --dts",
     "dev": "tsup-node src/index.ts --format esm,cjs --dts --watch",
-    "packcheck": "attw --pack ."
+    "lint:publint": "publint run",
+    "lint:attw": "attw --pack ."
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",
@@ -51,7 +50,7 @@
     "@types/npmcli__package-json": "4.0.4"
   },
   "dependencies": {
-    "@settlemint/btp-sdk-config": "0.4.3",
+    "@settlemint/btp-sdk-config": "workspace:*",
     "@clack/prompts": "0.7.0",
     "@commander-js/extra-typings": "12.1.0",
     "@graphql-codegen/cli": "5.0.2",
