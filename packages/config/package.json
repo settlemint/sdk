@@ -36,9 +36,10 @@
     }
   },
   "scripts": {
-    "build": "tsup src/index.ts --format cjs,esm --dts",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
-    "packcheck": "attw --pack ."
+    "build": "tsup-node src/index.ts --format cjs,esm --dts",
+    "dev": "tsup-node src/index.ts --format cjs,esm --dts --watch",
+    "publint": "publint run",
+    "attw": "attw --pack ."
   },
   "devDependencies": {
     "tsup": "8.2.4"

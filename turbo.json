@@ -18,15 +18,15 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^test", "^build"],
+      "dependsOn": ["^test", "build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "attw": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     },
     "publint": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"]
     }
   }
