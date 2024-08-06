@@ -8,7 +8,6 @@
     "dev": "turbo dev",
     "lint": "biome lint --write --unsafe .",
     "format": "biome format --write .",
-    "test:next": "./scripts/test-full-stack-next.sh",
     "packcheck": "turbo packcheck",
     "publint": "turbo publint",
     "attw": "turbo attw"
