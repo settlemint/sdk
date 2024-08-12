@@ -18,8 +18,8 @@
     "@biomejs/biome": "1.8.3",
     "@tsconfig/node22": "22.0.0",
     "@tsconfig/strictest": "2.0.5",
-    "@types/node": "20.14.14",
-    "lefthook": "1.7.11",
+    "@types/node": "22.2.0",
+    "lefthook": "1.7.12",
     "publint": "0.2.9",
     "tsup": "8.2.4",
     "turbo": "2.0.12",
@@ -29,7 +29,9 @@
     "node": "20.16.0"
   },
   "packageManager": "bun@1.1.21",
-  "workspaces": ["packages/*"],
+  "workspaces": [
+    "packages/*"
+  ],
   "trustedDependencies": [
     "@biomejs/biome",
     "esbuild",
