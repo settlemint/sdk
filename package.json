@@ -1,7 +1,7 @@
 {
   "name": "btp-sdk",
   "private": true,
-  "version": "0.4.3",
+  "version": "0.4.4",
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
     "build": "turbo build",
@@ -14,15 +14,15 @@
     "attw": "turbo attw"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.3",
+    "@arethetypeswrong/cli": "0.15.4",
     "@biomejs/biome": "1.8.3",
     "@tsconfig/node22": "22.0.0",
     "@tsconfig/strictest": "2.0.5",
     "@types/node": "20.14.14",
     "lefthook": "1.7.11",
-    "publint": "^0.2.9",
+    "publint": "0.2.9",
     "tsup": "8.2.4",
-    "turbo": "^2.0.12",
+    "turbo": "2.0.12",
     "typescript": "5.5.4"
   },
   "engines": {
@@ -30,5 +30,9 @@
   },
   "packageManager": "bun@1.1.21",
   "workspaces": ["packages/*"],
-  "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "esbuild",
+    "lefthook"
+  ]
 }
