@@ -8,7 +8,7 @@ export async function addDependencies(
   path?: string,
 ): Promise<boolean> {
   // Read the package.json file
-  const pkgJson = await pkgj.load(findProjectRoot(path ?? process.cwd()));
+  const pkgJson = await pkgj.load(path ?? findProjectRoot(process.cwd()));
 
   const newDependencies: Record<string, string> = {};
 
@@ -41,7 +41,7 @@ export async function addDependencies(
 
 export async function setName(name: string, path?: string) {
   // Read the package.json file
-  const pkgJson = await pkgj.load(findProjectRoot(path ?? process.cwd()));
+  const pkgJson = await pkgj.load(path ?? findProjectRoot(process.cwd()));
 
   pkgJson.update({
     name,

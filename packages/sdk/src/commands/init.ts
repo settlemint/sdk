@@ -13,7 +13,7 @@ import {
 } from "../lib/cli-message.js";
 import { type Works, getServices } from "../lib/cluster-manager.js";
 import { coerceSelect, coerceText } from "../lib/coerce.js";
-import { updateGitignore } from "../lib/gitignore.js";
+import { updateGitignore } from "../lib/git.js";
 import { addDependencies } from "../lib/package-json.js";
 import { install } from "../lib/package-manager.js";
 
