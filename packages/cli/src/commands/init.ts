@@ -10,12 +10,12 @@ import {
   printOutro,
   printSpinner,
   promptConfirm,
-} from "../lib/cli-message";
-import { type Works, getServices } from "../lib/cluster-manager";
-import { coerceSelect, coerceText } from "../lib/coerce";
-import { updateGitignore } from "../lib/gitignore";
-import { addDependencies } from "../lib/package-json";
-import { install } from "../lib/package-manager";
+} from "../lib/cli-message.js";
+import { type Works, getServices } from "../lib/cluster-manager.js";
+import { coerceSelect, coerceText } from "../lib/coerce.js";
+import { updateGitignore } from "../lib/gitignore.js";
+import { addDependencies } from "../lib/package-json.js";
+import { install } from "../lib/package-manager.js";
 
 /**
  * Creates and returns the 'init' command for the BTP SDK CLI.
@@ -25,7 +25,7 @@ import { install } from "../lib/package-manager";
  *
  * @returns {Command} The configured 'init' command
  */
-export function initCommand() {
+export function initCommand(): Command {
   return (
     new Command("init")
       // Add options for various configuration parameters

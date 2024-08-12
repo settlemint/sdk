@@ -1,8 +1,8 @@
 import { type PackageJson, default as pkgj } from "@npmcli/package-json";
 import { findProjectRoot } from "@settlemint/btp-sdk-config";
-import { lt } from "semver";
+import { compare } from "compare-versions";
 
-export async function addDependencies(dependencies: Record<string, string>, checkVersion = false) {
+export async function addDependencies(dependencies: Record<string, string>, checkVersion = false): Promise<boolean> {
   // Read the package.json file
   const pkgJson = await pkgj.load(findProjectRoot(process.cwd()));
 
@@ -11,7 +11,7 @@ export async function addDependencies(dependencies: Record<string, string>, chec
   for (const [name, version] of Object.entries(dependencies)) {
     if (checkVersion) {
       const currentVersion = pkgJson.content.dependencies?.[name];
-      if (!currentVersion || lt(currentVersion, version)) {
+      if (!currentVersion || compare(currentVersion, version, "<")) {
         newDependencies[name] = version;
       }
     } else {

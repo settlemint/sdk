@@ -3,8 +3,8 @@ import { cancel } from "@clack/prompts";
 import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../package.json";
-import { codegenCommand } from "./commands/codegen";
-import { initCommand } from "./commands/init";
+import { codegenCommand } from "./commands/codegen.js";
+import { initCommand } from "./commands/init.js";
 
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files

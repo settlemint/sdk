@@ -4,19 +4,21 @@
     "@tsconfig/node22/tsconfig.json"
   ],
   "compilerOptions": {
-    "module": "Preserve",
-    "moduleDetection": "force",
-    "moduleResolution": "bundler",
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "noErrorTruncation": true,
     "resolveJsonModule": true,
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
-    "isolatedDeclarations": true,
-    "isolatedModules": false
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true
   },
   "exclude": [
-    "**/dist",
-    "starterkits/reference"
+    "**/dist"
   ]
 }
