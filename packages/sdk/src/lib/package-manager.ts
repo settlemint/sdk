@@ -1,9 +1,10 @@
-import spawn from "cross-spawn";
 import { execSync } from "node:child_process";
 import { lookup } from "node:dns/promises";
 import { createWriteStream, mkdirSync } from "node:fs";
 import { parse } from "node:url";
+import spawn from "cross-spawn";
 
+export const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"] as const;
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
 export function getPkgManager(): PackageManager {
@@ -24,12 +25,26 @@ export function getPkgManager(): PackageManager {
   return "npm";
 }
 
+export function getExecutor(packageManager: PackageManager): string {
+  switch (packageManager) {
+    case "npm":
+      return "npx";
+    case "pnpm":
+      return "pnpm dlx";
+    case "yarn":
+      return "yarn dlx";
+    case "bun":
+      return "bunx";
+    default:
+      return "npx";
+  }
+}
 /**
  * Spawn a package manager installation based on user preference.
  *
  * @returns A Promise that resolves once the installation is finished.
  */
-export async function install(): Promise<void> {
+export async function install(packageManager?: PackageManager, cwd?: string): Promise<void> {
   const args: string[] = ["install"];
   if (!getOnline()) {
     args.push("--offline");
@@ -42,7 +57,7 @@ export async function install(): Promise<void> {
     /**
      * Spawn the installation process.
      */
-    const child = spawn(getPkgManager(), args, {
+    const child = spawn(packageManager ?? getPkgManager(), args, {
       stdio: ["ignore", "pipe", "pipe"],
       env: {
         ...process.env,
@@ -52,6 +67,7 @@ export async function install(): Promise<void> {
         NODE_ENV: "development",
         DISABLE_OPENCOLLECTIVE: "1",
       },
+      cwd,
     });
 
     mkdirSync(".btp/logs", { recursive: true });
@@ -63,7 +79,7 @@ export async function install(): Promise<void> {
     child.on("close", (code) => {
       logStream.end();
       if (code !== 0) {
-        reject({ command: `${getPkgManager()} ${args.join(" ")}` });
+        reject({ command: `${packageManager ?? getPkgManager()} ${args.join(" ")}` });
         return;
       }
       resolve();

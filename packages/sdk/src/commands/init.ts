@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/btp-sdk-config";
+import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/sdk-config";
 import { greenBright } from "yoctocolors";
 import pkg from "../../package.json";
 import {
@@ -13,7 +13,7 @@ import {
 } from "../lib/cli-message.js";
 import { type Works, getServices } from "../lib/cluster-manager.js";
 import { coerceSelect, coerceText } from "../lib/coerce.js";
-import { updateGitignore } from "../lib/gitignore.js";
+import { updateGitignore } from "../lib/git.js";
 import { addDependencies } from "../lib/package-json.js";
 import { install } from "../lib/package-manager.js";
 
@@ -424,11 +424,11 @@ export function initCommand(): Command {
             printNote(
               `To generate the code for using the BTP services, run the following command:
 
-${greenBright("btp-sdk-cli codegen")}
+${greenBright("sdk-cli codegen")}
 
 or for another environment:
 
-${greenBright(`btp-sdk-cli codegen -e <${possibleEnvironments.join(" | ")}>`)}`,
+${greenBright(`sdk-cli codegen -e <${possibleEnvironments.join(" | ")}>`)}`,
               "Next steps",
             );
 

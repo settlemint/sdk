@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { generate } from "@graphql-codegen/cli";
-import { findProjectRoot } from "@settlemint/btp-sdk-config";
+import { findProjectRoot } from "@settlemint/sdk-config";
 
 export interface CreateGqlClientOptions {
   framework: string;

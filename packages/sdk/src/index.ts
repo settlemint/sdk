@@ -4,6 +4,7 @@ import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../package.json";
 import { codegenCommand } from "./commands/codegen.js";
+import { createCommand } from "./commands/create.js";
 import { initCommand } from "./commands/init.js";
 
 // Load environment variables from .env.local and .env files
@@ -18,9 +19,9 @@ const sdkcli = new Command();
 
 // Configure the CLI command
 sdkcli
-  .name("btp-sdk-cli")
+  .name("sdk-cli")
   .usage("[command]")
-  .description(`CLI for the SettleMint Blockchain Transformation Platform SDK (v${pkg.version})`)
+  .description(`CLI for the SettleMint Blockchain Transformation Platform (v${pkg.version})`)
   .version(pkg.version, "-v, --version", "Output the current version")
   .helpOption("-h, --help", "Display help for command")
   .allowUnknownOption()
@@ -30,6 +31,7 @@ sdkcli
 // Add the init command to the CLI
 sdkcli.addCommand(initCommand());
 sdkcli.addCommand(codegenCommand());
+sdkcli.addCommand(createCommand());
 
 // Parse command line arguments and handle errors
 sdkcli.parseAsync(process.argv).catch(async (reason) => {

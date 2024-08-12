@@ -20,6 +20,7 @@
     "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
   },
   "exclude": [
-    "**/dist"
+    "**/dist",
+    "**/templates"
   ]
 }

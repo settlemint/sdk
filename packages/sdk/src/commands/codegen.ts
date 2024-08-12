@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { config } from "@settlemint/btp-sdk-config";
+import { config } from "@settlemint/sdk-config";
 import { greenBright } from "yoctocolors";
 import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.js";
 import { createGqlClient } from "../lib/graphql.js";
