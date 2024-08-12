@@ -1,4 +1,4 @@
-import { readdirSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Command } from "@commander-js/extra-typings";
@@ -54,6 +54,10 @@ export function createCommand(): Command {
 
           const targetDir = formatTargetDir(selectedProjectName);
           const projectDir = join(process.cwd(), targetDir);
+          if (!existsSync(projectDir)) {
+            mkdirSync(projectDir, { recursive: true });
+          }
+
           if (!isEmpty(projectDir)) {
             const confirmEmpty = await promptConfirm({
               message: `The folder ${projectDir} already exists. Do you want to empty it?`,
