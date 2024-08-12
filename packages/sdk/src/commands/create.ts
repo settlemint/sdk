@@ -108,7 +108,7 @@ export function createCommand(): Command {
           await printSpinner({
             startMessage: "Scaffolding the project",
             task: async () => {
-              const templateDir = resolve(fileURLToPath(import.meta.url), "../../../templates", selectedTemplate);
+              const templateDir = resolve(fileURLToPath(import.meta.url), "../../templates", selectedTemplate);
               const files = readdirSync(templateDir);
               for (const file of files.filter((f) => f !== "package.json")) {
                 write(projectDir, templateDir, file);
