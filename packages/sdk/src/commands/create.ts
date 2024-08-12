@@ -110,7 +110,7 @@ export function createCommand(): Command {
             task: async () => {
               const templateDir = resolve(fileURLToPath(import.meta.url), "../../templates", selectedTemplate);
               const files = readdirSync(templateDir);
-              for (const file of files.filter((f) => f !== "package.json")) {
+              for (const file of files) {
                 write(projectDir, templateDir, file);
               }
               await setName(selectedProjectName, projectDir);
