@@ -23,7 +23,7 @@
     "url": "https://github.com/settlemint/btp-sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": ["dist", "templates"],
   "exports": {
     "./package.json": "./package.json",
     ".": {

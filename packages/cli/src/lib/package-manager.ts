@@ -1,9 +1,10 @@
-import spawn from "cross-spawn";
 import { execSync } from "node:child_process";
 import { lookup } from "node:dns/promises";
 import { createWriteStream, mkdirSync } from "node:fs";
 import { parse } from "node:url";
+import spawn from "cross-spawn";
 
+export const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"] as const;
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
 export function getPkgManager(): PackageManager {

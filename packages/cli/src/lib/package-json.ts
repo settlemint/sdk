@@ -2,9 +2,13 @@ import { type PackageJson, default as pkgj } from "@npmcli/package-json";
 import { findProjectRoot } from "@settlemint/btp-sdk-config";
 import { compare } from "compare-versions";
 
-export async function addDependencies(dependencies: Record<string, string>, checkVersion = false): Promise<boolean> {
+export async function addDependencies(
+  dependencies: Record<string, string>,
+  checkVersion = false,
+  path?: string,
+): Promise<boolean> {
   // Read the package.json file
-  const pkgJson = await pkgj.load(findProjectRoot(process.cwd()));
+  const pkgJson = await pkgj.load(findProjectRoot(path ?? process.cwd()));
 
   const newDependencies: Record<string, string> = {};
 
@@ -33,4 +37,15 @@ export async function addDependencies(dependencies: Record<string, string>, chec
     return true;
   }
   return false;
+}
+
+export async function setName(name: string, path?: string) {
+  // Read the package.json file
+  const pkgJson = await pkgj.load(findProjectRoot(path ?? process.cwd()));
+
+  pkgJson.update({
+    name,
+  });
+
+  await pkgJson.save();
 }
