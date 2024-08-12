@@ -118,11 +118,6 @@ jobs:
             fi
           done
 
-          for dir in ./starterkits/*; do
-            if [ -f "$dir/package.json" ]; then
-              update_package_json "$dir" "$VERSION"
-            fi
-          done
           echo "Updated version to $VERSION"
 
       - uses: JS-DevTools/npm-publish@v3
