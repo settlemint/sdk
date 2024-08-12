@@ -2,10 +2,19 @@ import { existsSync, mkdirSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { Command } from "@commander-js/extra-typings";
-import { printAsciiArt, printCancel, printIntro, printSpinner, promptConfirm } from "../lib/cli-message.js";
+import { greenBright } from "yoctocolors";
+import {
+  printAsciiArt,
+  printCancel,
+  printIntro,
+  printNote,
+  printOutro,
+  printSpinner,
+  promptConfirm,
+} from "../lib/cli-message.js";
 import { coerceSelect, coerceText } from "../lib/coerce.js";
 import { setName } from "../lib/package-json.js";
-import { type PackageManager, getPkgManager, install, packageManagers } from "../lib/package-manager.js";
+import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager.js";
 import {
   emptyDir,
   formatTargetDir,
@@ -50,6 +59,7 @@ export function createCommand(): Command {
             promptMessage: "Enter name for your BTP project",
             existingMessage: "A valid name is already provided. Do you want to change it?",
             invalidMessage: "This is not a valid name, please choose a different name.",
+            autoAccept: true,
           });
 
           const targetDir = formatTargetDir(selectedProjectName);
@@ -80,7 +90,7 @@ export function createCommand(): Command {
             validate: (value) => templates.map((template) => template.value).includes(value?.trim() ?? ""),
             promptMessage: "Select a template",
             existingMessage: "A template is already selected. Do you want to change it?",
-            skipCoerce: true,
+            autoAccept: true,
           });
 
           if (!selectedTemplate) {
@@ -98,12 +108,15 @@ export function createCommand(): Command {
             validate: (value) => packageManagers.includes(value?.trim() ?? ""),
             promptMessage: "Select a package manager",
             existingMessage: "A package manager is already selected. Do you want to change it?",
+            autoAccept: true,
           });
 
           if (!selectedPackageManager) {
             printCancel("No package manager selected. Please select a package manager to continue.");
             process.exit(1);
           }
+
+          const executor = getExecutor(selectedPackageManager as PackageManager);
 
           await printSpinner({
             startMessage: "Scaffolding the project",
@@ -118,6 +131,16 @@ export function createCommand(): Command {
             },
             stopMessage: "Project fully scaffolded",
           });
+
+          printNote(
+            greenBright(`
+cd ${selectedProjectName}
+${executor} settlemint init
+`),
+            "Next steps",
+          );
+
+          printOutro("Your project is ready to go!");
         } catch (error) {
           printCancel(`Error: ${(error as Error).message}`);
           console.error((error as Error).stack);

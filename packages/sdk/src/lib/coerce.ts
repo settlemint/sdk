@@ -17,6 +17,8 @@ export async function coerceText(options: {
   promptMessage: string;
   existingMessage: string;
   invalidMessage: string;
+  skipCoerce?: boolean;
+  autoAccept?: boolean;
 }) {
   const {
     configValue,
@@ -28,27 +30,34 @@ export async function coerceText(options: {
     envValue,
     cliParamValue,
     validate,
+    skipCoerce,
+    autoAccept,
   } = options;
   let value = envValue || cliParamValue || configValue || defaultValue;
 
-  // Check if existing value is valid
-  try {
-    if (validate(value)) {
-      // Prompt user to change existing valid value
-      const change = await promptConfirm({
-        message: type === "password" ? existingMessage : `${existingMessage} (${value})`,
-        initialValue: false,
-      });
+  if (!skipCoerce) {
+    // Check if existing value is valid
+    try {
+      if (validate(value)) {
+        if (autoAccept) {
+          return value as string;
+        }
+        // Prompt user to change existing valid value
+        const change = await promptConfirm({
+          message: type === "password" ? existingMessage : `${existingMessage} (${value})`,
+          initialValue: false,
+        });
 
-      // Return existing value if user doesn't want to change
-      if (!change) {
-        return value as string;
+        // Return existing value if user doesn't want to change
+        if (!change) {
+          return value as string;
+        }
+        // If user wants to change, we'll fall through to the prompt below
       }
-      // If user wants to change, we'll fall through to the prompt below
+      // If validation fails, we'll fall through to the prompt below
+    } catch {
+      // Continue if value is invalid or throws an error
     }
-    // If validation fails, we'll fall through to the prompt below
-  } catch {
-    // Continue if value is invalid or throws an error
   }
 
   // Prompt user for new input
@@ -107,6 +116,7 @@ export async function coerceSelect<Value>(params: {
   promptMessage: string;
   existingMessage: string;
   skipCoerce?: boolean;
+  autoAccept?: boolean;
 }) {
   const {
     skipCoerce,
@@ -118,6 +128,7 @@ export async function coerceSelect<Value>(params: {
     envValue,
     cliParamValue,
     validate,
+    autoAccept,
   } = params;
 
   let value = envValue || cliParamValue || configValue;
@@ -126,6 +137,9 @@ export async function coerceSelect<Value>(params: {
     // Check if existing value is valid
     try {
       if (validate(value)) {
+        if (autoAccept) {
+          return value as Value;
+        }
         // Prompt user to change existing valid value
         const change = await promptConfirm({
           message: `${existingMessage} (${

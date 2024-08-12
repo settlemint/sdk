@@ -25,6 +25,20 @@ export function getPkgManager(): PackageManager {
   return "npm";
 }
 
+export function getExecutor(packageManager: PackageManager): string {
+  switch (packageManager) {
+    case "npm":
+      return "npx";
+    case "pnpm":
+      return "pnpm dlx";
+    case "yarn":
+      return "yarn dlx";
+    case "bun":
+      return "bunx";
+    default:
+      return "npx";
+  }
+}
 /**
  * Spawn a package manager installation based on user preference.
  *
