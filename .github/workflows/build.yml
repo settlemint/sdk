@@ -56,6 +56,7 @@ jobs:
             ./starterkits/**/node_modules
             ./starterkits/**/.turbo
             ./starterkits/**/.next
+            ~/.bun/install/cache
 
       - uses: oven-sh/setup-bun@v2
 
