@@ -37,7 +37,7 @@ env:
 jobs:
   test:
     name: Test and Build
-    runs-on: namespace-profile-btp-sdk
+    runs-on: namespace-profile-sdk
     steps:
       - name: Checkout
         uses: namespacelabs/nscloud-checkout-action@v5
@@ -53,16 +53,17 @@ jobs:
             ./packages/**/node_modules
             ./packages/**/.turbo
             ./packages/**/dist
-            ./starterkits/**/node_modules
-            ./starterkits/**/.turbo
-            ./starterkits/**/.next
             ~/.bun/install/cache
 
       - uses: oven-sh/setup-bun@v2
-
-      - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          bun-version-file: package.json
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: bun install
 
@@ -136,7 +137,7 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/cli/package.json
+          package: ./packages/sdk/package.json
           access: public
           provenance: false
           strategy: all
@@ -160,15 +161,6 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/sdk/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
       - name: Create or update a comment
         if: ${{ github.event_name == 'pull_request' }}
         uses: taoliujun/action-unique-comment@v1
@@ -178,11 +170,10 @@ jobs:
                 # 📦 Packages
                 | Package | Install |
                 | ------- | -------------------- |
-                | Config | `bun add @settlemint/btp-sdk-config@${{ env.VERSION }}` |
-                | CLI | `bun add @settlemint/btp-sdk-cli@${{ env.VERSION }}` |
-                | Next | `bun add @settlemint/btp-sdk-next@${{ env.VERSION }}` |
-                | React | `bun add @settlemint/btp-sdk-react@${{ env.VERSION }}` |
-                | SDK | `bun add @settlemint/btp-sdk@${{ env.VERSION }}` |
+                | Config | `bun add @settlemint/sdk-config@${{ env.VERSION }}` |
+                | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
+                | React | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
+                | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ env.TAG == 'latest' }}

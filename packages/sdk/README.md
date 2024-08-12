@@ -1,18 +1,18 @@
 <p align="center">
-  <img src="https://github.com/settlemint/btp-sdk/blob/main/logo.svg" width="200px" align="center" alt="SettleMint logo" />
-  <h1 align="center">SettleMint Blockchain Transformation Platform SDK (Umbrella)</h1>
+  <img src="https://github.com/settlemint/sdk/blob/main/logo.svg" width="200px" align="center" alt="SettleMint logo" />
+  <h1 align="center">SettleMint SDK</h1>
   <p align="center">
     ✨ <a href="https://settlemint.com">https://settlemint.com</a> ✨
     <br/>
-    Integrate the SettleMint Blockchain Transformation Platform into your application with ease.
+    Integrate SettleMint into your application with ease.
   </p>
 </p>
 <br/>
 <p align="center">
-<a href="https://github.com/settlemint/btp-sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/btp-sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://img.shields.io/github/license/settlemint/btp-sdk" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/btp-sdk" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/btp-sdk" alt="npm"></a>
-<a href="https://github.com/settlemint/btp-sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/btp-sdk" alt="stars"></a>
+<a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
+<a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://img.shields.io/github/license/settlemint/sdk" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk" alt="npm"></a>
+<a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
 <div align="center">
@@ -20,9 +20,9 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/btp-sdk">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://github.com/settlemint/btp-sdk/issues">Issues</a>
+  <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
 </div>
 
@@ -30,14 +30,14 @@
 
 ```bash
 # Using npm
-npm install @settlemint/btp-sdk
+npm install @settlemint/sdk
 
 # Using yarn
-yarn add @settlemint/btp-sdk
+yarn add @settlemint/sdk
 
 # Using pnpm
-pnpm add @settlemint/btp-sdk
+pnpm add @settlemint/sdk
 
 # Using bun
-bun add @settlemint/btp-sdk
+bun add @settlemint/sdk
 ```

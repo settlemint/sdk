@@ -1,5 +1,5 @@
 {
-  "name": "btp-sdk",
+  "name": "sdk",
   "private": true,
   "version": "0.4.4",
   "scripts": {
@@ -26,15 +26,9 @@
     "typescript": "5.5.4"
   },
   "engines": {
-    "node": "20.16.0"
+    "node": "22.6.0"
   },
-  "packageManager": "bun@1.1.21",
-  "workspaces": [
-    "packages/*"
-  ],
-  "trustedDependencies": [
-    "@biomejs/biome",
-    "esbuild",
-    "lefthook"
-  ]
+  "packageManager": "bun@1.1.22",
+  "workspaces": ["packages/*"],
+  "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
 }

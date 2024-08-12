@@ -1,5 +1,6 @@
 {
-  "name": "@settlemint/btp-sdk-config",
+  "name": "@settlemint/sdk-config",
+  "description": "SettleMint SDK (configuration utility)",
   "version": "0.0.1",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -13,14 +14,14 @@
     "email": "support@settlemint.com",
     "url": "https://settlemint.com"
   },
-  "homepage": "https://github.com/settlemint/btp-sdk/blob/main/packages/config/README.md",
+  "homepage": "https://github.com/settlemint/sdk/blob/main/packages/config/README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/settlemint/btp-sdk.git",
+    "url": "git+https://github.com/settlemint/sdk.git",
     "directory": "packages/config"
   },
   "bugs": {
-    "url": "https://github.com/settlemint/btp-sdk/issues",
+    "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
   "files": ["dist"],
