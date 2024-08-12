@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/btp-sdk-config";
+import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/sdk-config";
 import { greenBright } from "yoctocolors";
 import pkg from "../../package.json";
 import {
@@ -424,11 +424,11 @@ export function initCommand(): Command {
             printNote(
               `To generate the code for using the BTP services, run the following command:
 
-${greenBright("btp-sdk-cli codegen")}
+${greenBright("sdk-cli codegen")}
 
 or for another environment:
 
-${greenBright(`btp-sdk-cli codegen -e <${possibleEnvironments.join(" | ")}>`)}`,
+${greenBright(`sdk-cli codegen -e <${possibleEnvironments.join(" | ")}>`)}`,
               "Next steps",
             );
 

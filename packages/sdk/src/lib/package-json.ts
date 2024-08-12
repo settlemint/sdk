@@ -1,5 +1,5 @@
 import { type PackageJson, default as pkgj } from "@npmcli/package-json";
-import { findProjectRoot } from "@settlemint/btp-sdk-config";
+import { findProjectRoot } from "@settlemint/sdk-config";
 import { compare } from "compare-versions";
 
 export async function addDependencies(

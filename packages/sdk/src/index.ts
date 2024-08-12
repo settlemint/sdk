@@ -19,7 +19,7 @@ const sdkcli = new Command();
 
 // Configure the CLI command
 sdkcli
-  .name("btp-sdk-cli")
+  .name("sdk-cli")
   .usage("[command]")
   .description(`CLI for the SettleMint Blockchain Transformation Platform (v${pkg.version})`)
   .version(pkg.version, "-v, --version", "Output the current version")

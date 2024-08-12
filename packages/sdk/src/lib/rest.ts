@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createConfig } from "@redocly/openapi-core";
-import { findProjectRoot } from "@settlemint/btp-sdk-config";
+import { findProjectRoot } from "@settlemint/sdk-config";
 import openapiTS, { astToString } from "openapi-typescript";
 
 /**

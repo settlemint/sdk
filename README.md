@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/btp-sdk-cli">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-cli">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -50,26 +50,26 @@ Would you like to use App Router? (recommended) Yes
 Would you like to customize the default import alias (@/*)? No
 ```
 
-Then we will install the `@settlemint/btp-sdk-cli` package.
+Then we will install the `@settlemint/sdk-cli` package.
 
 ```bash
 cd my-app;
 
 # Using npm
-npm install -D@settlemint/btp-sdk-cli
+npm install -D@settlemint/sdk-cli
 
 # Using bun
-bun add -D @settlemint/btp-sdk-cli
+bun add -D @settlemint/sdk-cli
 ```
 
 Now we can start the setup process by running the following command.
 
 ```bash
 # Using npm
-npmx btp-sdk-cli init
+npmx sdk-cli init
 
 # Using bun
-bunx btp-sdk-cli init
+bunx sdk-cli init
 ```
 
 This will create a new configuration file in your project's root directory.
@@ -78,10 +78,10 @@ As the last step we will generate the SDK code for the first time:
 
 ```bash
 # Using npm
-npmx btp-sdk-cli codegen
+npmx sdk-cli codegen
 
 # Using bun
-bunx btp-sdk-cli codegen
+bunx sdk-cli codegen
 ```
 
 Anytime we want to update the generated SDK (when you have updated the portal or created new graphql queries) you need to repeat the command.
