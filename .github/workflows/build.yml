@@ -182,14 +182,3 @@ jobs:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
           file_pattern: 'package.json'
-
-
-      - name: Scaffold next-app-router
-        run: |
-          bunx --bun @settlemint/sdk@${{ env.VERSION }} create -n next-app-router -t next-app-router -p bun
-          cd next-app-router
-
-      - name: Scaffold next-pages-router
-        run: |
-          bunx --bun @settlemint/sdk@${{ env.VERSION }} create -n next-pages-router -t next-pages-router -p bun
-          cd next-pages-router
