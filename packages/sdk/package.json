@@ -2,6 +2,7 @@
   "name": "@settlemint/btp-sdk",
   "version": "0.0.1",
   "type": "module",
+  "sideEffects": false,
   "private": false,
   "license": "MIT",
   "author": {
@@ -12,7 +13,8 @@
   "homepage": "https://github.com/settlemint/btp-sdk/blob/main/packages/sdk/README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/settlemint/btp-sdk.git"
+    "url": "git+https://github.com/settlemint/btp-sdk.git",
+    "directory": "packages/sdk"
   },
   "bugs": {
     "url": "https://github.com/settlemint/btp-sdk/issues",

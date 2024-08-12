@@ -5,6 +5,7 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "sideEffects": false,
   "private": false,
   "license": "MIT",
   "author": {
@@ -15,7 +16,8 @@
   "homepage": "https://github.com/settlemint/btp-sdk/blob/main/packages/next/README.md",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/settlemint/btp-sdk.git"
+    "url": "git+https://github.com/settlemint/btp-sdk.git",
+    "directory": "packages/next"
   },
   "bugs": {
     "url": "https://github.com/settlemint/btp-sdk/issues",
@@ -38,7 +40,7 @@
   "scripts": {
     "build": "tsup-node src/index.ts --format esm,cjs --dts",
     "dev": "tsup-node src/index.ts --format esm,cjs --dts --watch",
-    "publint": "publint run",
+    "publint": "publint run --strict",
     "attw": "attw --pack ."
   },
   "dependencies": {
