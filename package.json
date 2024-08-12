@@ -1,7 +1,7 @@
 {
   "name": "btp-sdk",
   "private": true,
-  "version": "0.4.4",
+  "version": "0.4.5",
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
     "build": "turbo build",
