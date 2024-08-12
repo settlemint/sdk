@@ -1,7 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalPassThroughEnv": ["BTP_PAT_TOKEN", "BTP_HASURA_GQL_ADMIN_SECRET", "NEXT_PUBLIC_BTP_APP_URL"],
   "tasks": {
     "//#lint": {
       "cache": false
@@ -11,7 +10,6 @@
     },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "dev": {
@@ -19,16 +17,11 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^test", "build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": ["^test", "build"]
     },
     "attw": {
-      "dependsOn": ["build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
+      "dependsOn": ["build"]
     },
-    "publint": {
-      "dependsOn": ["build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"]
-    }
+    "publint": { "dependsOn": ["build"] }
   }
 }
