@@ -45,6 +45,7 @@
     "tsup": "8.2.4"
   },
   "dependencies": {
+    "compare-versions": "^6.1.1",
     "cosmiconfig": "9.0.0",
     "dotenv": "16.4.5",
     "ts-deepmerge": "7.0.1",
