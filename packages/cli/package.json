@@ -61,7 +61,7 @@
     "cosmiconfig": "9.0.0",
     "cross-spawn": "7.0.3",
     "openapi-typescript": "7.3.0",
-    "semver": "7.6.3",
+    "compare-versions": "^6.1.1",
     "yoctocolors": "2.1.1"
   },
   "peerDependencies": {
