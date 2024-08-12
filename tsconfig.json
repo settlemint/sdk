@@ -12,6 +12,8 @@
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
+    "isolatedDeclarations": true,
+    "isolatedModules": false
   },
   "exclude": [
     "**/dist",

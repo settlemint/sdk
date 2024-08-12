@@ -29,6 +29,6 @@
     "node": "20.16.0"
   },
   "packageManager": "bun@1.1.21",
-  "workspaces": ["packages/*", "starterkits/*"],
+  "workspaces": ["packages/*"],
   "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
 }
