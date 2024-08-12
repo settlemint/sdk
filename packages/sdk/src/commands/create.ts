@@ -5,7 +5,7 @@ import { Command } from "@commander-js/extra-typings";
 import { printAsciiArt, printCancel, printIntro, printSpinner, promptConfirm } from "../lib/cli-message.js";
 import { coerceSelect, coerceText } from "../lib/coerce.js";
 import { setName } from "../lib/package-json.js";
-import { getPkgManager, packageManagers } from "../lib/package-manager.js";
+import { type PackageManager, getPkgManager, install, packageManagers } from "../lib/package-manager.js";
 import {
   emptyDir,
   formatTargetDir,
@@ -114,6 +114,7 @@ export function createCommand(): Command {
                 write(projectDir, templateDir, file);
               }
               await setName(selectedProjectName, projectDir);
+              await install(selectedPackageManager as PackageManager, projectDir);
             },
             stopMessage: "Project fully scaffolded",
           });

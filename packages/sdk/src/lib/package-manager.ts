@@ -30,7 +30,7 @@ export function getPkgManager(): PackageManager {
  *
  * @returns A Promise that resolves once the installation is finished.
  */
-export async function install(): Promise<void> {
+export async function install(packageManager?: PackageManager, cwd?: string): Promise<void> {
   const args: string[] = ["install"];
   if (!getOnline()) {
     args.push("--offline");
@@ -43,7 +43,7 @@ export async function install(): Promise<void> {
     /**
      * Spawn the installation process.
      */
-    const child = spawn(getPkgManager(), args, {
+    const child = spawn(packageManager ?? getPkgManager(), args, {
       stdio: ["ignore", "pipe", "pipe"],
       env: {
         ...process.env,
@@ -53,6 +53,7 @@ export async function install(): Promise<void> {
         NODE_ENV: "development",
         DISABLE_OPENCOLLECTIVE: "1",
       },
+      cwd,
     });
 
     mkdirSync(".btp/logs", { recursive: true });
@@ -64,7 +65,7 @@ export async function install(): Promise<void> {
     child.on("close", (code) => {
       logStream.end();
       if (code !== 0) {
-        reject({ command: `${getPkgManager()} ${args.join(" ")}` });
+        reject({ command: `${packageManager ?? getPkgManager()} ${args.join(" ")}` });
         return;
       }
       resolve();
