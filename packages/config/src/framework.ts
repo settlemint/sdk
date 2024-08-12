@@ -1,7 +1,7 @@
-import { cosmiconfig } from "cosmiconfig";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path";
+import { cosmiconfig } from "cosmiconfig";
+import { findProjectRoot } from "./path.js";
 
 export type Framework = "nextjs" | "nodejs";
 

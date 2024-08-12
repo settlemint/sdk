@@ -1,10 +1,10 @@
 import { Command } from "@commander-js/extra-typings";
 import { config } from "@settlemint/btp-sdk-config";
 import { greenBright } from "yoctocolors";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
-import { createGqlClient } from "../lib/graphql";
-import { createRestClient } from "../lib/rest";
-import { writeTsConfig } from "../lib/tsconfig";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.js";
+import { createGqlClient } from "../lib/graphql.js";
+import { createRestClient } from "../lib/rest.js";
+import { writeTsConfig } from "../lib/tsconfig.js";
 
 /**
  * Creates and returns the 'codegen' command for the BTP SDK CLI.
@@ -12,7 +12,7 @@ import { writeTsConfig } from "../lib/tsconfig";
  *
  * @returns {Command} The configured 'codegen' command
  */
-export function codegenCommand() {
+export function codegenCommand(): Command {
   return (
     new Command("codegen")
       // Set the command description

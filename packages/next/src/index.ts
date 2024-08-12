@@ -1,1 +1,1 @@
-export * from "./config/with-btp";
+export * from "./config/with-btp.js";
