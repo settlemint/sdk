@@ -7,7 +7,7 @@ import { type Works, getServices } from "../lib/cluster-manager.js";
 import { coerceSelect, coerceText } from "../lib/coerce.js";
 import { updateGitignore } from "../lib/git.js";
 import { addDependencies } from "../lib/package-json.js";
-import { install } from "../lib/package-manager.js";
+import { getExecutor, getPkgManager, install } from "../lib/package-manager.js";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -310,12 +310,12 @@ export function connectCommand(): Command {
               };
             }
 
-            const defaultApplication = await coerceSelect({
+            const selectedDefaultApplication = await coerceSelect({
               options: Object.values(possibleApplications).map((penv) => ({
                 value: penv.application,
                 label: penv.application.displayName,
               })),
-              envValue: possibleApplications[selectedApplication.id]?.application,
+              envValue: possibleApplications[defaultApplication ?? selectedApplication.id]?.application,
               configValue: cfg?.defaultApplication,
               validate: (value) => !!value?.id,
               promptMessage:
@@ -324,7 +324,7 @@ export function connectCommand(): Command {
                 "A valid default environment is already provided. Do you want to select a different one?",
             });
 
-            if (!defaultApplication) {
+            if (!selectedDefaultApplication) {
               throw new Error("No default environment selected");
             }
 
@@ -344,7 +344,7 @@ export function connectCommand(): Command {
               startMessage: "Creating or updating the .settlemintrc.json config file",
               task: async () => {
                 await createConfig({
-                  defaultApplication: defaultApplication,
+                  defaultApplication: selectedDefaultApplication,
                   framework: selectedFramework,
                   instance: instanceUrl,
                   workspace: {
@@ -404,12 +404,12 @@ export function connectCommand(): Command {
             printNote(
               `To generate the code for using the SettleMint services, run the following command:
 
-${greenBright("settlemint codegen")}
+${greenBright(`${getExecutor(getPkgManager())} settlemint codegen`)}
 
 or for another environment:
 
 ${greenBright(
-  `settlemint codegen -e <${Object.values(possibleApplications)
+  `${getExecutor(getPkgManager())} settlemint codegen -a <${Object.values(possibleApplications)
     .map((app) => app.application.id)
     .join(" | ")}>`,
 )}`,
