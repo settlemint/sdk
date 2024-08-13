@@ -37,7 +37,7 @@ export function createCommand(): Command {
       // Set the command description
       .description("Creates a new SettleMint integrated project")
       .option(
-        "-n, --projectName <name>",
+        "-n, --project-name <name>",
         "The name for your SettleMint project (SETTLEMINT_PROJECT_NAME environment variable)",
       )
       .option(
@@ -45,7 +45,7 @@ export function createCommand(): Command {
         `The template for your SettleMint project, options are ${templates.map((templates) => templates.value).join(", ")} (SETTLEMINT_TEMPLATE environment variable)`,
       )
       .option(
-        "-p, --packageManager <packageManager>",
+        "-p, --package-manager <packageManager>",
         `The package manager to use, options are ${packageManagers.join(", ")} (SETTLEMINT_PACKAGE_MANAGER environment variable)`,
       )
       // Define the action to be executed when the command is run
@@ -62,7 +62,6 @@ export function createCommand(): Command {
             promptMessage: "Enter name for your SettleMint project",
             existingMessage: "A valid name is already provided. Do you want to change it?",
             invalidMessage: "This is not a valid name, please choose a different name.",
-            autoAccept: true,
           });
 
           const targetDir = formatTargetDir(selectedProjectName);
@@ -93,7 +92,6 @@ export function createCommand(): Command {
             validate: (value) => templates.map((template) => template.value).includes(value?.trim() ?? ""),
             promptMessage: "Select a template",
             existingMessage: "A template is already selected. Do you want to change it?",
-            autoAccept: true,
           });
 
           if (!selectedTemplate) {
@@ -111,7 +109,6 @@ export function createCommand(): Command {
             validate: (value) => packageManagers.includes(value?.trim() ?? ""),
             promptMessage: "Select a package manager",
             existingMessage: "A package manager is already selected. Do you want to change it?",
-            autoAccept: true,
           });
 
           if (!selectedPackageManager) {

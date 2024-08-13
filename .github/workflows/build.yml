@@ -182,3 +182,16 @@ jobs:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
           file_pattern: 'package.json'
+
+
+      - name: Run scaffold test
+        run: |
+          sleep 5s
+          rm -Rf testtemplate
+          bunx @settlemint/sdk@${{ env.VERSION }} create -n testtemplate -t next-app-router -p bun
+
+          cd testtemplate
+
+          bunx settlemint connect -p ${{ secrets.TEST_PAT_TOKEN }} -i https://console.settlemint.com -w settlemint-product-strategy-f4e9 -a reference-sdk-app-7313 -da reference-sdk-app-7313 -pr https://reference-portal-a3f2.gke-europe.settlemint.com/api -pg https://reference-portal-a3f2.gke-europe.settlemint.com/graphql -tg https://reference-middleware-b1b9.gke-europe.settlemint.com/subgraphs/name/reference-erc20-0013 -h https://reference-hasura-e60f.gke-europe.settlemint.com/v1/graphql -n https://reference-read-node-1-56ab.gke-europe.settlemint.com/ -au http://localhost:3000
+
+          bunx settlemint codegen

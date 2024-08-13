@@ -19,11 +19,11 @@ export function codegenCommand(): Command {
       .description("Generates the code for using the SettleMint services")
       // Add an option for specifying the environment
       .option(
-        "-e, --environment <id>",
-        "The name of the environment to use (SETTLEMINT_ENVIRONMENT environment variable)",
+        "-a, --application <id>",
+        "The name of the environment to use (SETTLEMINT_APPLICATION environment variable)",
       )
       // Define the action to be executed when the command is run
-      .action(async ({ environment }) => {
+      .action(async ({ application }) => {
         // Display ASCII art and intro message
         printAsciiArt();
         printIntro("Code generating");
@@ -37,20 +37,20 @@ export function codegenCommand(): Command {
             throw new Error("No configuration found");
           }
 
-          const { pat, defaultEnvironment, environments } = cfg;
+          const { pat, defaultApplication, applications } = cfg;
 
           // Check if environments are defined in the configuration
-          if (!environments) {
+          if (!applications || Object.keys(applications).length === 0) {
             throw new Error("No environments found in configuration");
           }
 
           // Determine the environment to use
           const environmentConfig =
-            environments[process.env.SETTLEMINT_ENVIRONMENT ?? environment ?? defaultEnvironment];
+            applications[process.env.SETTLEMINT_APPLICATION ?? application ?? defaultApplication.id];
           if (!environmentConfig) {
             throw new Error("No environment found");
           }
-          const { portalRest, portal, graph, hasura } = environmentConfig;
+          const { portalRest, portalGql, thegraphGql, hasuraGql } = environmentConfig;
 
           let usageMessage = "";
 
@@ -72,7 +72,7 @@ ${greenBright("import { portal } from './.settlemint/portal/rest'")}
 `;
           }
 
-          if (portal) {
+          if (portalGql) {
             await printSpinner({
               startMessage: "Generating the Portal GQL client",
               task: async () => {
@@ -80,7 +80,7 @@ ${greenBright("import { portal } from './.settlemint/portal/rest'")}
                 await createGqlClient({
                   framework: cfg.framework,
                   type: "portal",
-                  gqlUrl: portal,
+                  gqlUrl: portalGql,
                   personalAccessToken: pat,
                 });
               },
@@ -94,7 +94,7 @@ ${greenBright("import { portal } from './.settlemint/portal/gql'")}
 `;
           }
 
-          if (graph) {
+          if (thegraphGql) {
             await printSpinner({
               startMessage: "Generating the The Graph GQL client",
               task: async () => {
@@ -102,7 +102,7 @@ ${greenBright("import { portal } from './.settlemint/portal/gql'")}
                 await createGqlClient({
                   framework: cfg.framework,
                   type: "thegraph",
-                  gqlUrl: graph,
+                  gqlUrl: thegraphGql,
                   personalAccessToken: pat,
                 });
               },
@@ -116,7 +116,7 @@ ${greenBright("import { thegraph } from './.settlemint/thegraph/gql'")}
 `;
           }
 
-          if (hasura) {
+          if (hasuraGql) {
             const adminSecret = cfg.hasuraAdminSecret;
             if (!adminSecret) {
               printCancel("No Hasura Admin Secret found");
@@ -129,7 +129,7 @@ ${greenBright("import { thegraph } from './.settlemint/thegraph/gql'")}
                 await createGqlClient({
                   framework: cfg.framework,
                   type: "hasura",
-                  gqlUrl: hasura,
+                  gqlUrl: hasuraGql,
                   personalAccessToken: pat,
                   hasuraAdminSecret: adminSecret,
                 });

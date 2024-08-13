@@ -9,15 +9,16 @@ import { findProjectRoot } from "./path.js";
 /**
  * Schema for environment-specific configuration
  */
-const EnvironmentConfigSchema = z.object({
-  workspace: z.string(),
-  childWorkspace: z.string().optional(),
-  application: z.string(),
-  portal: z.string().url().optional(),
+const ApplicationConfigSchema = z.object({
+  application: z.object({
+    id: z.string(),
+    displayName: z.string(),
+  }),
+  portalGql: z.string().url().optional(),
   portalRest: z.string().url().optional(),
-  graph: z.string().url().optional(),
-  hasura: z.string().url().optional(),
-  node: z.string().url().optional(),
+  thegraphGql: z.string().url().optional(),
+  hasuraGql: z.string().url().optional(),
+  nodeJsonRpc: z.string().url().optional(),
 });
 
 /**
@@ -26,8 +27,21 @@ const EnvironmentConfigSchema = z.object({
 const ConfigSchema = z.object({
   framework: z.string(),
   instance: z.string().url(),
-  defaultEnvironment: z.string().default("development"),
-  environments: z.record(z.string(), EnvironmentConfigSchema).optional(),
+  workspace: z.object({
+    id: z.string(),
+    displayName: z.string(),
+  }),
+  childWorkspace: z
+    .object({
+      id: z.string(),
+      displayName: z.string(),
+    })
+    .optional(),
+  defaultApplication: z.object({
+    id: z.string(),
+    displayName: z.string(),
+  }),
+  applications: z.record(z.string(), ApplicationConfigSchema).optional(),
 });
 
 /**
@@ -35,8 +49,8 @@ const ConfigSchema = z.object({
  */
 const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
-  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
+  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
 });
 
 /**

@@ -1,7 +1,8 @@
 import { execSync } from "node:child_process";
 import { lookup } from "node:dns/promises";
 import { createWriteStream, mkdirSync } from "node:fs";
-import { parse } from "node:url";
+import { join } from "node:path";
+import { URL } from "node:url";
 import spawn from "cross-spawn";
 
 export const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"] as const;
@@ -44,7 +45,7 @@ export function getExecutor(packageManager: PackageManager): string {
  *
  * @returns A Promise that resolves once the installation is finished.
  */
-export async function install(packageManager?: PackageManager, cwd?: string): Promise<void> {
+export async function install(packageManager?: PackageManager, cwd: string = process.cwd()): Promise<void> {
   const args: string[] = ["install"];
   if (!getOnline()) {
     args.push("--offline");
@@ -70,8 +71,8 @@ export async function install(packageManager?: PackageManager, cwd?: string): Pr
       cwd,
     });
 
-    mkdirSync(".settlemint/logs", { recursive: true });
-    const logStream = createWriteStream(".settlemint/logs/install.log", { flags: "a" });
+    mkdirSync(join(cwd, ".settlemint/logs"), { recursive: true });
+    const logStream = createWriteStream(join(cwd, ".settlemint/logs/install.log"), { flags: "a" });
 
     child.stdout?.pipe(logStream);
     child.stderr?.pipe(logStream);
@@ -112,18 +113,24 @@ export async function getOnline(): Promise<boolean> {
       return false;
     }
 
-    const { hostname } = parse(proxy);
-    if (!hostname) {
-      // Invalid proxy URL
-      return false;
-    }
-
     try {
-      await lookup(hostname);
-      // If DNS lookup succeeds for the proxy server, we are online
-      return true;
+      const proxyUrl = new URL(proxy);
+      const hostname = proxyUrl.hostname;
+      if (!hostname) {
+        // Invalid proxy URL
+        return false;
+      }
+
+      try {
+        await lookup(hostname);
+        // If DNS lookup succeeds for the proxy server, we are online
+        return true;
+      } catch {
+        // The DNS lookup for the proxy server also failed, so we are offline
+        return false;
+      }
     } catch {
-      // The DNS lookup for the proxy server also failed, so we are offline
+      // Invalid proxy URL
       return false;
     }
   }

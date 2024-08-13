@@ -3,4 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
 };
 
-export default nextConfig;
+export default withSettleMint(nextConfig, {
+  output: "standalone",
+});
