@@ -1,13 +1,7 @@
 import { type Option, promptConfirm, promptPassword, promptSelect, promptText } from "./cli-message.js";
 
-/**
- * Coerces text or password input, handling validation and prompts.
- * This function attempts to use existing values, validates them, and prompts for new input if necessary.
- *
- * @param options - Configuration options for the coercion process
- * @returns A Promise that resolves to the coerced string value
- */
-export async function coerceText(options: {
+// Define options for coercing text input
+type CoerceTextOptions = {
   type: "text" | "password";
   envValue?: string;
   cliParamValue?: string;
@@ -18,96 +12,66 @@ export async function coerceText(options: {
   existingMessage: string;
   invalidMessage: string;
   skipCoerce?: boolean;
-}) {
+};
+
+// Function to coerce text input based on various sources and user interaction
+export async function coerceText(options: CoerceTextOptions): Promise<string> {
   const {
-    configValue,
-    defaultValue,
-    invalidMessage,
-    existingMessage,
     type,
-    promptMessage,
     envValue,
     cliParamValue,
+    configValue,
+    defaultValue,
     validate,
+    promptMessage,
+    existingMessage,
+    invalidMessage,
     skipCoerce,
   } = options;
-  if (envValue) {
-    if (validate(envValue)) {
-      return envValue as string;
+
+  // Check environment and CLI values first
+  for (const value of [envValue, cliParamValue]) {
+    if (value && validate(value)) {
+      return value;
     }
   }
 
-  let value = envValue || cliParamValue || configValue || defaultValue;
+  // Determine the initial value
+  const value = envValue ?? cliParamValue ?? configValue ?? defaultValue;
 
-  if (!skipCoerce) {
-    // Check if existing value is valid
-    try {
-      if (validate(value)) {
-        // Prompt user to change existing valid value
-        const change = await promptConfirm({
-          message: type === "password" ? existingMessage : `${existingMessage} (${value})`,
-          initialValue: false,
-        });
-
-        // Return existing value if user doesn't want to change
-        if (!change) {
-          return value as string;
-        }
-        // If user wants to change, we'll fall through to the prompt below
-      }
-      // If validation fails, we'll fall through to the prompt below
-    } catch {
-      // Continue if value is invalid or throws an error
-    }
-  }
-
-  // Prompt user for new input
-  if (type === "password") {
-    // Use password prompt for sensitive information
-    value = await promptPassword({
-      message: promptMessage,
-      validate(value) {
-        try {
-          if (!validate(value)) {
-            return invalidMessage;
-          }
-          return;
-        } catch {
-          return invalidMessage;
-        }
-      },
+  // If a valid value exists and coercion is not skipped, prompt for confirmation
+  if (!skipCoerce && value && validate(value)) {
+    const change = await promptConfirm({
+      message: type === "password" ? existingMessage : `${existingMessage} (${value})`,
+      initialValue: false,
     });
-  } else {
-    // Use text prompt for non-sensitive information
-    value = await promptText({
-      message: promptMessage,
-      defaultValue: defaultValue,
+
+    if (!change) {
+      return value;
+    }
+  }
+
+  // Prompt for input using the appropriate function based on the type
+  const promptFunction = type === "password" ? promptPassword : promptText;
+  return promptFunction({
+    message: promptMessage,
+    ...(type === "text" && {
+      defaultValue,
       initialValue: value ?? defaultValue,
       placeholder: value ?? defaultValue,
-      validate(value) {
-        try {
-          if (!validate(value)) {
-            return invalidMessage;
-          }
-          return;
-        } catch {
-          return invalidMessage;
-        }
-      },
-    });
-  }
-
-  return value as string;
+    }),
+    validate(input) {
+      try {
+        return validate(input) ? undefined : invalidMessage;
+      } catch {
+        return invalidMessage;
+      }
+    },
+  });
 }
 
-/**
- * Coerces select input, handling validation and prompts.
- * This function attempts to use existing values, validates them, and prompts for selection if necessary.
- *
- * @param params - Configuration parameters for the coercion process
- * @returns A Promise that resolves to the coerced value or undefined if "none" option is selected
- */
-export async function coerceSelect<Value>(params: {
+// Define options for coercing select input
+type CoerceSelectParams<Value> = {
   noneOption?: Option<Value>;
   options: Option<Value>[];
   envValue?: Value;
@@ -117,62 +81,61 @@ export async function coerceSelect<Value>(params: {
   promptMessage: string;
   existingMessage: string;
   skipCoerce?: boolean;
-}) {
+};
+
+// Function to coerce select input based on various sources and user interaction
+export async function coerceSelect<Value>(params: CoerceSelectParams<Value>): Promise<Value | undefined> {
   const {
-    skipCoerce,
-    configValue,
-    options,
     noneOption,
-    existingMessage,
-    promptMessage,
+    options,
     envValue,
     cliParamValue,
+    configValue,
     validate,
+    promptMessage,
+    existingMessage,
+    skipCoerce,
   } = params;
-  if (envValue) {
-    if (validate(envValue) && options.find((option) => option.value === envValue)) {
-      return envValue as Value;
+
+  // Helper function to check if a value is a valid option
+  const isValidOption = (value: Value | undefined) =>
+    value !== undefined && validate(value) && options.some((option) => option.value === value);
+
+  // Check environment and CLI values first
+  for (const value of [envValue, cliParamValue]) {
+    if (isValidOption(value)) {
+      return value;
     }
   }
 
-  let value = envValue || cliParamValue || configValue;
+  // Determine the initial value
+  const value = envValue ?? cliParamValue ?? configValue;
 
-  if (!skipCoerce) {
-    // Check if existing value is valid
-    try {
-      if (validate(value) && options.find((option) => option.value === value)) {
-        // Prompt user to change existing valid value
-        const change = await promptConfirm({
-          message: `${existingMessage} (${
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            typeof value === "string" ? value : value ? (value as any).name : ""
-          })`,
-          initialValue: false,
-        });
+  // If a valid value exists and coercion is not skipped, prompt for confirmation
+  if (!skipCoerce && isValidOption(value)) {
+    const change = await promptConfirm({
+      message: `${existingMessage} (${
+        typeof value === "string"
+          ? value
+          : value && typeof value === "object"
+            ? (value as { name?: string }).name ?? ""
+            : ""
+      })`,
+      initialValue: false,
+    });
 
-        // Return existing value if user doesn't want to change
-        if (!change) {
-          return value as Value;
-        }
-        // If user wants to change, we'll fall through to the prompt below
-      }
-      // If validation fails, we'll fall through to the prompt below
-    } catch {
-      // Continue if value is invalid or throws an error
+    if (!change) {
+      return value;
     }
   }
 
-  // Prompt user to select new value
-  value = await promptSelect({
+  // Prompt for select input
+  const selectedValue = await promptSelect({
     options,
     message: promptMessage,
     noneOption,
   });
 
-  // Return undefined if "none" option is selected
-  if (noneOption && value === noneOption.value) {
-    return undefined;
-  }
-
-  return value as Value;
+  // Return undefined if 'none' option is selected, otherwise return the selected value
+  return noneOption && selectedValue === noneOption.value ? undefined : (selectedValue as Value);
 }
