@@ -31,8 +31,6 @@ permissions:
 
 env:
   SETTLEMINT_PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: ${{ secrets.SETTLEMINT_HASURA_GQL_ADMIN_SECRET }}
-  NEXT_PUBLIC_SETTLEMINT_APP_URL: ${{ vars.NEXT_PUBLIC_SETTLEMINT_APP_URL }}
 
 jobs:
   test:
@@ -67,7 +65,7 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format lint test build attw publint"
+      - run: bunx turbo format lint pkg:test pkg:build pkg:attw pkg:publint"
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
@@ -129,15 +127,6 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/config/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/sdk/package.json
           access: public
           provenance: false
@@ -171,9 +160,8 @@ jobs:
                 # 📦 Packages
                 | Package | Install |
                 | ------- | -------------------- |
-                | Config | `bun add @settlemint/sdk-config@${{ env.VERSION }}` |
+                | Next | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
                 | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
-                | React | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
                 | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5

@@ -1,10 +1,10 @@
 import { Command } from "@commander-js/extra-typings";
-import { config } from "@settlemint/sdk-config";
 import { greenBright } from "yoctocolors";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.js";
-import { createGqlClient } from "../lib/graphql.js";
-import { createRestClient } from "../lib/rest.js";
-import { writeTsConfig } from "../lib/tsconfig.js";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
+import { config } from "../lib/config";
+import { createGqlClient } from "../lib/graphql";
+import { createRestClient } from "../lib/rest";
+import { writeTsConfig } from "../lib/tsconfig";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.

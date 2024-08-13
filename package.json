@@ -4,21 +4,23 @@
   "version": "0.4.5",
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
-    "build": "turbo build",
-    "test": "turbo test",
-    "dev": "turbo dev",
+    "pkg:build": "turbo pkg:build",
+    "pkg:test": "turbo pkg:test",
+    "pkg:dev": "turbo pkg:dev",
     "lint": "biome lint --write --unsafe .",
     "format": "biome format --write .",
-    "packcheck": "turbo packcheck",
-    "publint": "turbo publint",
-    "attw": "turbo attw"
+    "pkg:publint": "turbo pkg:publint",
+    "pkg:attw": "turbo pkg:attw",
+    "knip": "knip"
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.15.4",
     "@biomejs/biome": "1.8.3",
+    "@tsconfig/next": "^2.0.3",
     "@tsconfig/node22": "22.0.0",
     "@tsconfig/strictest": "2.0.5",
     "@types/node": "22.2.0",
+    "knip": "^5.27.2",
     "lefthook": "1.7.12",
     "publint": "0.2.9",
     "tsup": "8.2.4",
@@ -29,6 +31,6 @@
     "node": "22.6.0"
   },
   "packageManager": "bun@1.1.22",
-  "workspaces": ["packages/*"],
+  "workspaces": ["packages/*", "packages/sdk/templates/*"],
   "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
 }

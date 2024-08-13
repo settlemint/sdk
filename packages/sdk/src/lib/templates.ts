@@ -61,7 +61,7 @@ function copyDir(srcDir: string, destDir: string) {
   }
 }
 
-export function copy(src: string, dest: string) {
+function copy(src: string, dest: string) {
   const stat = statSync(src);
   if (stat.isDirectory()) {
     copyDir(src, dest);

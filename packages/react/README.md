@@ -30,14 +30,14 @@
 
 ```bash
 # Using npm
-npm install @settlemint/sdk-react
+npm install @settlemint/sdk-next
 
 # Using yarn
-yarn add @settlemint/sdk-react
+yarn add @settlemint/sdk-next
 
 # Using pnpm
-pnpm add @settlemint/sdk-react
+pnpm add @settlemint/sdk-next
 
 # Using bun
-bun add @settlemint/sdk-react
+bun add @settlemint/sdk-next
 ```

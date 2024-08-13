@@ -11,10 +11,10 @@ import {
   printOutro,
   printSpinner,
   promptConfirm,
-} from "../lib/cli-message.js";
-import { coerceSelect, coerceText } from "../lib/coerce.js";
-import { setName } from "../lib/package-json.js";
-import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager.js";
+} from "../lib/cli-message";
+import { coerceSelect, coerceText } from "../lib/coerce";
+import { setName } from "../lib/package-json";
+import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager";
 import {
   emptyDir,
   formatTargetDir,
@@ -23,7 +23,7 @@ import {
   templates,
   toValidPackageName,
   write,
-} from "../lib/templates.js";
+} from "../lib/templates";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK CLI.
@@ -89,7 +89,7 @@ export function createCommand(): Command {
             })),
             envValue: process.env.SETTLEMINT_TEMPLATE,
             cliParamValue: template,
-            validate: (value) => templates.map((template) => template.value).includes(value?.trim() ?? ""),
+            validate: (value): value is (typeof templates)[number]["value"] => templates.some((t) => t.value === value),
             promptMessage: "Select a template",
             existingMessage: "A template is already selected. Do you want to change it?",
           });
@@ -106,7 +106,7 @@ export function createCommand(): Command {
             })),
             envValue: process.env.SETTLEMINT_PACKAGE_MANAGER ?? getPkgManager(),
             cliParamValue: packageManager,
-            validate: (value) => packageManagers.includes(value?.trim() ?? ""),
+            validate: (value): value is PackageManager => packageManagers.includes(value?.trim() as PackageManager),
             promptMessage: "Select a package manager",
             existingMessage: "A package manager is already selected. Do you want to change it?",
           });

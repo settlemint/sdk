@@ -1,0 +1,17 @@
+{
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/next/tsconfig.json"
+  ],
+  "compilerOptions": {
+    "exactOptionalPropertyTypes": false,
+    "noPropertyAccessFromIndexSignature": false,
+    "verbatimModuleSyntax": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "plugins": []
+  },
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": [
+    "**/dist",
+  ],
+}

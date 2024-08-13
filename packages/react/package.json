@@ -18,7 +18,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/settlemint/sdk.git",
-    "directory": "packages/react"
+    "directory": "packages/next"
   },
   "bugs": {
     "url": "https://github.com/settlemint/sdk/issues",
@@ -39,17 +39,23 @@
     }
   },
   "scripts": {
-    "build": "tsup-node src/index.ts --format esm,cjs --dts",
-    "dev": "tsup-node src/index.ts --format esm,cjs --dts --watch",
-    "publint": "publint run --strict",
-    "attw": "attw --pack ."
+    "pkg:build": "tsup --format esm,cjs --dts",
+    "pkg:dev": "tsup --format esm,cjs --dts --watch",
+    "pkg:publint": "publint run --strict",
+    "pkg:attw": "attw --pack ."
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5"
   },
   "devDependencies": {
-    "tsup": "8.2.4"
+    "tsup": "8.2.4",
+    "react": "18.3.1",
+    "@types/react": "18.3.3"
   },
-  "dependencies": {},
   "peerDependencies": {
-    "react": ">=18 || >=19.0.0-beta",
-    "react-dom": ">=18 || >=19.0.0-beta"
+    "react": ">=18 || >=19.0.0-beta"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
