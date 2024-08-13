@@ -39,14 +39,14 @@
     }
   },
   "scripts": {
-    "build": "tsup-node src/index.ts --format esm,cjs --dts",
-    "dev": "tsup-node src/index.ts --format esm,cjs --dts --watch",
-    "publint": "publint run --strict",
-    "attw": "attw --pack ."
+    "pkg:build": "tsup --format esm,cjs --dts",
+    "pkg:dev": "tsup --format esm,cjs --dts --watch",
+    "pkg:publint": "publint run --strict",
+    "pkg:attw": "attw --pack ."
   },
   "dependencies": {
-    "@settlemint/sdk-config": "workspace:*",
-    "@settlemint/sdk-react": "workspace:*"
+    "cosmiconfig": "^9",
+    "zod": "^3"
   },
   "devDependencies": {
     "tsup": "8.2.4",
@@ -54,5 +54,8 @@
   },
   "peerDependencies": {
     "next": "^13.5.4 || ^14.0.3 || >=15.0.0-rc"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }

@@ -1,3 +1,5 @@
+import { withSettleMint } from "@settlemint/sdk-next";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {};
 

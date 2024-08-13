@@ -1,13 +1,12 @@
 import { Command } from "@commander-js/extra-typings";
-import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/sdk-config";
 import { greenBright } from "yoctocolors";
-import pkg from "../../package.json";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.js";
-import { type Works, getServices } from "../lib/cluster-manager.js";
-import { coerceSelect, coerceText } from "../lib/coerce.js";
-import { updateGitignore } from "../lib/git.js";
-import { addDependencies } from "../lib/package-json.js";
-import { getExecutor, getPkgManager, install } from "../lib/package-manager.js";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
+import { type Works, getServices } from "../lib/cluster-manager";
+import { coerceSelect, coerceText } from "../lib/coerce";
+import { type ConfigEnv, config, createConfig, createEnv } from "../lib/config";
+import { detectFramework } from "../lib/framework";
+import { updateGitignore } from "../lib/git";
+import { getExecutor, getPkgManager } from "../lib/package-manager";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -381,24 +380,6 @@ export function connectCommand(): Command {
                 updateGitignore();
               },
               stopMessage: "Configuration files modified",
-            });
-
-            await printSpinner({
-              startMessage: "Installing dependencies",
-              task: async () => {
-                if (portalRestUrl) {
-                  await addDependencies({ "openapi-fetch": pkg.peerDependencies["openapi-fetch"] });
-                }
-                if (!!portalGqlUrl || !!thegraphGqlUrl || !!hasuraUrl) {
-                  await addDependencies({
-                    graphql: pkg.peerDependencies.graphql,
-                    "graphql-request": pkg.peerDependencies["graphql-request"],
-                  });
-                }
-
-                await install();
-              },
-              stopMessage: "Dependencies installed",
             });
 
             printNote(

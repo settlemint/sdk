@@ -8,20 +8,23 @@
     "//#format": {
       "cache": false
     },
-    "build": {
-      "dependsOn": ["^build"],
+    "//#knip": {
+      "cache": false
+    },
+    "pkg:build": {
+      "dependsOn": ["^pkg:build"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
-    "dev": {
+    "pkg:dev": {
       "cache": false,
       "persistent": true
     },
-    "test": {
-      "dependsOn": ["^test", "build"]
+    "pkg:test": {
+      "dependsOn": ["^pkg:test", "pkg:build"]
     },
-    "attw": {
-      "dependsOn": ["build"]
+    "pkg:attw": {
+      "dependsOn": ["pkg:build"]
     },
-    "publint": { "dependsOn": ["build"] }
+    "pkg:publint": { "dependsOn": ["pkg:build"] }
   }
 }

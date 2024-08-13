@@ -4,7 +4,7 @@ import { cosmiconfig } from "cosmiconfig";
 import dotenv from "dotenv";
 import { merge } from "ts-deepmerge";
 import { z } from "zod";
-import { findProjectRoot } from "./path.js";
+import { findProjectRoot } from "./path";
 
 /**
  * Schema for environment-specific configuration
@@ -45,15 +45,6 @@ const ConfigSchema = z.object({
 });
 
 /**
- * Schema for environment variables
- */
-const EnvSchema = z.object({
-  SETTLEMINT_PAT_TOKEN: z.string(),
-  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
-  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
-});
-
-/**
  * Extended schema combining ConfigSchema with additional fields
  */
 const ConfigEnvSchema = ConfigSchema.extend({
@@ -62,10 +53,19 @@ const ConfigEnvSchema = ConfigSchema.extend({
   hasuraAdminSecret: z.string().optional(),
 });
 
+/**
+ * Schema for environment variables
+ */
+const EnvSchema = z.object({
+  SETTLEMINT_PAT_TOKEN: z.string(),
+  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
+  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
+});
+
 // Infer types from the schemas
+export type ConfigEnv = z.infer<typeof ConfigEnvSchema>;
 type Config = z.infer<typeof ConfigSchema>;
 type Env = z.infer<typeof EnvSchema>;
-export type ConfigEnv = z.infer<typeof ConfigEnvSchema>;
 
 /**
  * Retrieves and parses the configuration, combining it with environment variables

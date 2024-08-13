@@ -31,8 +31,6 @@ permissions:
 
 env:
   SETTLEMINT_PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: ${{ secrets.SETTLEMINT_HASURA_GQL_ADMIN_SECRET }}
-  NEXT_PUBLIC_SETTLEMINT_APP_URL: ${{ vars.NEXT_PUBLIC_SETTLEMINT_APP_URL }}
 
 jobs:
   test:
@@ -67,7 +65,7 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format lint test build attw publint
+      - run: bunx turbo format lint pkg:test pkg:build pkg:attw pkg:publint
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
@@ -129,15 +127,6 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/config/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/sdk/package.json
           access: public
           provenance: false
@@ -171,9 +160,8 @@ jobs:
                 # 📦 Packages
                 | Package | Install |
                 | ------- | -------------------- |
-                | Config | `bun add @settlemint/sdk-config@${{ env.VERSION }}` |
-                | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
                 | React | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
+                | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
                 | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5
@@ -184,14 +172,28 @@ jobs:
           file_pattern: 'package.json'
 
 
-      - name: Run scaffold test
+      - name: Run scaffold test next-app-router
         run: |
           sleep 5s
-          rm -Rf testtemplate
-          bunx @settlemint/sdk@${{ env.VERSION }} create -n testtemplate -t next-app-router -p bun
+          bunx @settlemint/sdk@${{ env.VERSION }} create -n test-next-app-router -t next-app-router -p bun
 
-          cd testtemplate
+          cd test-next-app-router
 
           bunx settlemint connect -p ${{ secrets.TEST_PAT_TOKEN }} -i https://console.settlemint.com -w settlemint-product-strategy-f4e9 -a reference-sdk-app-7313 -da reference-sdk-app-7313 -pr https://reference-portal-a3f2.gke-europe.settlemint.com/api -pg https://reference-portal-a3f2.gke-europe.settlemint.com/graphql -tg https://reference-middleware-b1b9.gke-europe.settlemint.com/subgraphs/name/reference-erc20-0013 -h https://reference-hasura-e60f.gke-europe.settlemint.com/v1/graphql -n https://reference-read-node-1-56ab.gke-europe.settlemint.com/ -au http://localhost:3000
 
           bunx settlemint codegen
+
+          bun run build
+
+      - name: Run scaffold test next-pages-router
+        run: |
+          sleep 5s
+          bunx @settlemint/sdk@${{ env.VERSION }} create -n test-next-pages-router -t next-pages-router -p bun
+
+          cd test-next-pages-router
+
+          bunx settlemint connect -p ${{ secrets.TEST_PAT_TOKEN }} -i https://console.settlemint.com -w settlemint-product-strategy-f4e9 -a reference-sdk-app-7313 -da reference-sdk-app-7313 -pr https://reference-portal-a3f2.gke-europe.settlemint.com/api -pg https://reference-portal-a3f2.gke-europe.settlemint.com/graphql -tg https://reference-middleware-b1b9.gke-europe.settlemint.com/subgraphs/name/reference-erc20-0013 -h https://reference-hasura-e60f.gke-europe.settlemint.com/v1/graphql -n https://reference-read-node-1-56ab.gke-europe.settlemint.com/ -au http://localhost:3000
+
+          bunx settlemint codegen
+
+          bun run build

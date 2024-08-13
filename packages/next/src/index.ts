@@ -1,1 +1,1 @@
-export * from "./config/with-settlemint.js";
+export * from "./config/withSettlemint";

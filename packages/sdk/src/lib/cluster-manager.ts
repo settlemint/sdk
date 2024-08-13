@@ -1,12 +1,12 @@
 // Type definitions for various services
-export type NodeSvc = { rpcUrl: string; name: string; chainId: number; uniqueName: string };
-export type GraphSvc = { gqlUrl: string; name: string; uniqueName: string };
-export type PortalSvc = { gqlUrl: string; restUrl: string; name: string; uniqueName: string };
-export type HasuraSvc = { gqlUrl: string; name: string; adminSecret: string; uniqueName: string };
+type NodeSvc = { rpcUrl: string; name: string; chainId: number; uniqueName: string };
+type GraphSvc = { gqlUrl: string; name: string; uniqueName: string };
+type PortalSvc = { gqlUrl: string; restUrl: string; name: string; uniqueName: string };
+type HasuraSvc = { gqlUrl: string; name: string; adminSecret: string; uniqueName: string };
 
 // Type definition for Application
 // Represents an application with its associated services
-export type Appl = {
+type Appl = {
   id: string;
   name: string;
   portals: PortalSvc[]; // List of Portal services

@@ -1,8 +1,8 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path.js";
+import { findProjectRoot } from "./path";
 
-export type Framework = "nextjs" | "nodejs";
+type Framework = "nextjs" | "nodejs";
 
 export async function detectFramework(): Promise<Framework> {
   const root = findProjectRoot(process.cwd());

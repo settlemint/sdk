@@ -1,19 +1,19 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { generate } from "@graphql-codegen/cli";
-import { findProjectRoot } from "@settlemint/sdk-config";
+import { findProjectRoot } from "./path";
 
-export interface CreateGqlClientOptions {
+interface CreateGqlClientOptions {
   framework: string;
   gqlUrl: string;
   personalAccessToken: string;
 }
 
-export interface CreateDefaultGqlClientOptions extends CreateGqlClientOptions {
+interface CreateDefaultGqlClientOptions extends CreateGqlClientOptions {
   type: "portal" | "thegraph";
 }
 
-export interface CreateHasuraGqlClientOptions extends CreateGqlClientOptions {
+interface CreateHasuraGqlClientOptions extends CreateGqlClientOptions {
   type: "hasura";
   hasuraAdminSecret: string;
 }

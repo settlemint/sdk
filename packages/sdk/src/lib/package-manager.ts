@@ -101,7 +101,7 @@ function getProxy(): string | undefined {
   }
 }
 
-export async function getOnline(): Promise<boolean> {
+async function getOnline(): Promise<boolean> {
   try {
     await lookup("registry.yarnpkg.com");
     // If DNS lookup succeeds, we are online

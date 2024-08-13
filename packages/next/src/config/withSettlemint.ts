@@ -1,6 +1,5 @@
-import { config } from "@settlemint/sdk-config";
 import type { NextConfig } from "next";
-import { getExecutor, getPkgManager } from "../../../sdk/src/lib/package-manager.js";
+import { config } from "./config";
 
 export type WithSettleMintOptions = {
   disabled?: boolean;
@@ -31,7 +30,7 @@ export async function withSettleMint<C extends NextConfig>(
 
     const envConf = applications[env];
     if (!envConf) {
-      throw new Error(`No application found for ${env}, please run ${getExecutor(getPkgManager())} settlemint connect`);
+      throw new Error(`No application found for ${env}, please run \`settlemint connect\``);
     }
 
     return {
