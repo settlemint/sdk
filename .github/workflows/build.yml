@@ -67,7 +67,7 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format lint test build attw publint --filter="!./packages/sdk/template/*"
+      - run: bunx turbo format lint test build attw publint --filter="!./packages/sdk/templates/*"
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
