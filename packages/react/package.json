@@ -45,9 +45,9 @@
     "pkg:attw": "attw --pack ."
   },
   "dependencies": {
-    "@tanstack/react-query": "^5",
-    "viem": "^2",
-    "wagmi": "^2"
+    "@tanstack/react-query": "5.51.23",
+    "viem": "2.19.4",
+    "wagmi": "2.12.5"
   },
   "devDependencies": {
     "tsup": "8.2.4",
