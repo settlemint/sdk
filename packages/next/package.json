@@ -45,6 +45,7 @@
     "attw": "attw --pack ."
   },
   "dependencies": {
+    "@settlemint/sdk-config": "workspace:*",
     "@settlemint/sdk-react": "workspace:*"
   },
   "devDependencies": {
