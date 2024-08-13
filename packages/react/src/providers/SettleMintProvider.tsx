@@ -1,8 +1,17 @@
-import { QueryClientProvider, type QueryClientProviderProps } from "@tanstack/react-query";
-import type React from "react";
+"use client";
 
-interface SettleMintProviderProps extends QueryClientProviderProps {}
+import type { FC, ReactNode } from "react";
+import { type ReactQueryProps, ReactQueryWrapper } from "./wrappers/ReactQueryWrapper";
+import { type WagmiProps, WagmiWrapper } from "./wrappers/WagmiWrapper";
 
-export const SettleMintProvider: React.FC<SettleMintProviderProps> = ({ client, children }) => {
-  return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+export const SettleMintProvider: FC<{
+  children: ReactNode;
+  wagmi: WagmiProps;
+  reactQuery: ReactQueryProps;
+}> = ({ children, wagmi, reactQuery }) => {
+  return (
+    <WagmiWrapper {...wagmi}>
+      <ReactQueryWrapper {...reactQuery}>{children}</ReactQueryWrapper>
+    </WagmiWrapper>
+  );
 };
