@@ -70,8 +70,8 @@ export async function install(packageManager?: PackageManager, cwd?: string): Pr
       cwd,
     });
 
-    mkdirSync(".btp/logs", { recursive: true });
-    const logStream = createWriteStream(".btp/logs/install.log", { flags: "a" });
+    mkdirSync(".settlemint/logs", { recursive: true });
+    const logStream = createWriteStream(".settlemint/logs/install.log", { flags: "a" });
 
     child.stdout?.pipe(logStream);
     child.stderr?.pipe(logStream);

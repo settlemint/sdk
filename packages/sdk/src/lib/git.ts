@@ -8,8 +8,8 @@ export function updateGitignore() {
 
   const gitignoreContent = existsSync(gitignorePath) ? readFileSync(gitignorePath, "utf-8") : "";
 
-  if (!gitignoreContent.split("\n").some((line) => line.trim().startsWith(".btp"))) {
-    const updatedContent = `${gitignoreContent.trim()}\n\n.btp/\n`;
+  if (!gitignoreContent.split("\n").some((line) => line.trim().startsWith(".settlemint"))) {
+    const updatedContent = `${gitignoreContent.trim()}\n\n.settlemint/\n`;
     writeFileSync(gitignorePath, updatedContent);
   }
 }

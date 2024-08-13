@@ -1,1 +1,1 @@
-export * from "./config/with-btp.js";
+export * from "./config/with-settlemint.js";

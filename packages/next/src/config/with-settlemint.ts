@@ -1,7 +1,7 @@
 import { config } from "@settlemint/sdk-config";
 import type { NextConfig } from "next";
 
-export type WithBTPOptions = {
+export type WithSettleMintOptions = {
   disabled?: boolean;
   output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
 };
@@ -9,9 +9,9 @@ export type WithBTPOptions = {
 /**
  * Modifies the passed in Next.js configuration
  */
-export async function withBTP<C extends NextConfig>(
+export async function withSettleMint<C extends NextConfig>(
   nextConfig: C,
-  { disabled, output }: WithBTPOptions = {},
+  { disabled, output }: WithSettleMintOptions = {},
 ): Promise<C> {
   if (!disabled) {
     const cfg = await config();
@@ -19,10 +19,10 @@ export async function withBTP<C extends NextConfig>(
       throw new Error("No configuration found, please run sdk-cli init");
     }
 
-    const env = process.env.BTP_ENVIRONMENT ?? cfg?.defaultEnvironment;
+    const env = process.env.SETTLEMINT_ENVIRONMENT ?? cfg?.defaultEnvironment;
     if (!env || !cfg.environments) {
       throw new Error(
-        "No environment found, either set BTP_ENVIRONMENT or define a default environment in your .btprc.json file",
+        "No environment found, either set SETTLEMINT_ENVIRONMENT or define a default environment in your .settlemintrc.json file",
       );
     }
 

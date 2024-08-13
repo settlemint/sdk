@@ -49,8 +49,8 @@ export async function createRestClient(options: {
     const contents = astToString(ast);
 
     // Create directory structure
-    const btpDir = join(findProjectRoot(process.cwd()), ".btp");
-    const portalDir = join(btpDir, "portal");
+    const settleMintDir = join(findProjectRoot(process.cwd()), ".settlemint");
+    const portalDir = join(settleMintDir, "portal");
     const restDir = join(portalDir, "rest");
     const restCodegenDir = join(restDir, "codegen");
     mkdirSync(restCodegenDir, { recursive: true });
@@ -69,7 +69,7 @@ export async function createRestClient(options: {
 import createClient from "openapi-fetch";
 import type { paths } from "./codegen/portal-schema";
 
-export const portal = createClient<paths>({ baseUrl: \`\${process.env.NEXT_PUBLIC_BTP_APP_URL}/proxy/portal/rest\` });
+export const portal = createClient<paths>({ baseUrl: \`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest\` });
 `,
       );
     } else {
@@ -83,11 +83,11 @@ if(globalThis.window?.document !== undefined){
   throw new Error('You cannot use this SDK in a browser environment as it would expose your secrets.')
 }
 
-if(!process.env.BTP_PAT_TOKEN){
-  throw new Error("BTP_PAT_TOKEN environment variable is required");
+if(!process.env.SETTLEMINT_PAT_TOKEN){
+  throw new Error("SETTLEMINT_PAT_TOKEN environment variable is required");
 }
 
-export const portal = createClient<paths>({ baseUrl: '${restURL}', headers: { "x-auth-token": process.env.BTP_PAT_TOKEN } });
+export const portal = createClient<paths>({ baseUrl: '${restURL}', headers: { "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN } });
 `,
       );
     }
