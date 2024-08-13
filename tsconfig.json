@@ -18,6 +18,7 @@
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
+    "jsx": "preserve",
   },
   "exclude": [
     "**/dist",

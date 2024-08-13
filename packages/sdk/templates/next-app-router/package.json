@@ -6,13 +6,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prebuild": "settlemint codegen"
   },
   "dependencies": {
+    "@settlemint/sdk-next": "workspace:*",
+    "next": "14.2.5",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "next": "14.2.5",
-    "@settlemint/sdk-next": "workspace:*"
+    "@tanstack/react-query": "5.51.23",
+    "@tanstack/react-query-devtools": "5.51.23"
   },
   "devDependencies": {
     "typescript": "5.5.4",
