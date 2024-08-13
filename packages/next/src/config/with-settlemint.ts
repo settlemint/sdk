@@ -16,7 +16,7 @@ export async function withSettleMint<C extends NextConfig>(
   if (!disabled) {
     const cfg = await config();
     if (!cfg) {
-      throw new Error("No configuration found, please run sdk-cli init");
+      throw new Error("No configuration found, please run settlemint init");
     }
 
     const env = process.env.SETTLEMINT_ENVIRONMENT ?? cfg?.defaultEnvironment;
@@ -28,7 +28,7 @@ export async function withSettleMint<C extends NextConfig>(
 
     const envConf = cfg.environments[env];
     if (!envConf) {
-      throw new Error(`No environment found for ${env}, please run sdk-cli init`);
+      throw new Error(`No environment found for ${env}, please run settlemint init`);
     }
 
     return {

@@ -2,15 +2,7 @@ import { Command } from "@commander-js/extra-typings";
 import { type ConfigEnv, config, createConfig, createEnv, detectFramework } from "@settlemint/sdk-config";
 import { greenBright } from "yoctocolors";
 import pkg from "../../package.json";
-import {
-  printAsciiArt,
-  printCancel,
-  printIntro,
-  printNote,
-  printOutro,
-  printSpinner,
-  promptConfirm,
-} from "../lib/cli-message.js";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.js";
 import { type Works, getServices } from "../lib/cluster-manager.js";
 import { coerceSelect, coerceText } from "../lib/coerce.js";
 import { updateGitignore } from "../lib/git.js";
@@ -35,37 +27,42 @@ export function connectCommand(): Command {
         "The url to your SettleMint instance, defaults to https://console.settlemint.com (SETTLEMINT_INSTANCE_URL environment variable)",
       )
       .option(
-        "-au, --appUrl <url>",
+        "-au, --app-url <url>",
         "The development url to your application, defaults to http://localhost:3000 (NEXT_PUBLIC_SETTLEMINT_APP_URL environment variable)",
       )
       .option("-w, --workspace <id>", "The id of the workspace to use (SETTLEMINT_WORKSPACE environment variable)")
       .option(
-        "-cw, --childWorkspace <id>",
+        "-cw, --child-workspace <id>",
         "The id of the child workspace to use (SETTLEMINT_CHILD_WORKSPACE environment variable)",
-      )
-      .option(
-        "-e, --environment <id>",
-        "The name of the environment to use (SETTLEMINT_ENVIRONMENT environment variable)",
       )
       .option(
         "-a, --application <id>",
         "The id of the application to use (SETTLEMINT_APPLICATION environment variable)",
       )
       .option(
-        "-pr, --portalRest <url>",
+        "-da, --default-application <id>",
+        "The id of the default application (SETTLEMINT_DEFAULT_APPLICATION environment variable)",
+      )
+      .option(
+        "-pr, --portal-rest <url>",
         "The url to the portal rest api (SETTLEMINT_PORTAL_REST_URL environment variable)",
       )
       .option(
-        "-pg, --portalGql <url>",
+        "-pg, --portal-gql <url>",
         "The url to the portal gql api (SETTLEMINT_PORTAL_GQL_URL environment variable)",
       )
       .option(
-        "-tg, --theGraph <url>",
+        "-tg, --the-graph-gql <url>",
         "The url to the graph gql api (SETTLEMINT_THE_GRAPH_GQL_URL environment variable)",
       )
-      .option("-h, --hasura <url>", "The url to the hasura gql api (SETTLEMINT_HASURA_GQL_URL environment variable)")
-      .option("-n, --node <url>", "The url to the node rpc api (SETTLEMINT_NODE_URL environment variable)")
-      .option("-c, --create", "Create a new environment if it does not exist (SETTLEMINT_CREATE environment variable)")
+      .option(
+        "-h, --hasura-gql <url>",
+        "The url to the hasura gql api (SETTLEMINT_HASURA_GQL_URL environment variable)",
+      )
+      .option(
+        "-n, --node-json-rpc <url>",
+        "The url to the node rpc api (SETTLEMINT_NODE_JSON_RPC_URL environment variable)",
+      )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
@@ -76,14 +73,13 @@ export function connectCommand(): Command {
           appUrl,
           portalRest,
           portalGql,
-          theGraph,
-          hasura,
-          node,
+          theGraphGql,
+          hasuraGql,
+          nodeJsonRpc,
           workspace,
           application,
           childWorkspace,
-          environment,
-          create,
+          defaultApplication,
         }) => {
           printAsciiArt();
           printIntro("Setting up the SettleMint SDK in your project");
@@ -124,74 +120,6 @@ export function connectCommand(): Command {
               invalidMessage: "Invalid SettleMint instance URL. Please enter a valid HTTPS URL.",
             });
 
-            // Environment handling
-            const possibleEnvironments = Object.keys(cfg?.environments ?? {});
-            if (possibleEnvironments.length === 0) {
-              possibleEnvironments.push("development");
-            }
-
-            // Determine if a new environment should be created
-            let createEnvironment = !!process.env.SETTLEMINT_CREATE || !!create;
-            if (!createEnvironment) {
-              createEnvironment = await promptConfirm({
-                message: `Do you want to create a new environment? (${possibleEnvironments.join(", ")})`,
-                initialValue: false,
-              });
-            }
-
-            // Environment selection or creation
-            let currentEnvironment: string | undefined;
-            if (!createEnvironment) {
-              // Select existing environment
-              currentEnvironment = await coerceSelect({
-                options: possibleEnvironments.map((penv) => ({
-                  value: penv,
-                  label: penv,
-                })),
-                envValue: process.env.SETTLEMINT_ENVIRONMENT,
-                cliParamValue: environment,
-                configValue: cfg?.defaultEnvironment,
-                validate: (value) => !!value?.trim(),
-                promptMessage: "Select an environment to configure",
-                existingMessage: "A valid default environment is already provided. Do you want to add one?",
-                skipCoerce: true,
-              });
-            } else {
-              // Create new environment
-              currentEnvironment = await coerceText({
-                type: "text",
-                envValue: process.env.SETTLEMINT_ENVIRONMENT,
-                cliParamValue: undefined,
-                configValue: undefined,
-                validate: (value) => !!value?.trim() && !possibleEnvironments.includes(value),
-                promptMessage: "Enter a new environment name",
-                existingMessage: "A valid environment name is already provided. Do you want to change it?",
-                invalidMessage: "Invalid environment name or it already exists. Please enter a valid name.",
-              });
-              possibleEnvironments.push(currentEnvironment);
-            }
-
-            // Exit if no environment is selected
-            if (!currentEnvironment) {
-              throw new Error("No environment selected");
-            }
-
-            // Application URL input (only for Next.js)
-            let selectedAppUrl: string | undefined;
-            if (selectedFramework === "nextjs") {
-              selectedAppUrl = await coerceText({
-                type: "text",
-                envValue: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
-                cliParamValue: appUrl,
-                defaultValue: "http://localhost:3000",
-                configValue: cfg?.appUrl,
-                validate: (value) => !!new URL(value ?? "").toString(),
-                promptMessage: "Enter the development URL of your application instance",
-                existingMessage: "A valid application URL is already provided. Do you want to change it?",
-                invalidMessage: "Invalid application instance URL. Please enter a valid URL.",
-              });
-            }
-
             // Fetch services
             const services = await printSpinner({
               startMessage: "Fetching services",
@@ -214,8 +142,8 @@ export function connectCommand(): Command {
               })),
               envValue: services.find((svc) => svc.id === process.env.SETTLEMINT_WORKSPACE),
               cliParamValue: services.find((svc) => svc.id === workspace),
-              configValue: services.find((svc) => svc.id === cfg?.environments?.[currentEnvironment]?.workspace),
-              validate: (value) => !!value?.id,
+              configValue: services.find((svc) => svc.id === cfg?.workspace.id),
+              validate: (value) => !!services.find((svc) => svc.id === value?.id),
               promptMessage: "Select a top level workspace",
               existingMessage: "A valid top level workspace is already provided. Do you want to change it?",
             });
@@ -242,8 +170,8 @@ export function connectCommand(): Command {
                 options,
                 envValue: list.find((svc) => svc.id === process.env.SETTLEMINT_CHILD_WORKSPACE),
                 cliParamValue: list.find((svc) => svc.id === childWorkspace),
-                configValue: list.find((svc) => svc.id === cfg?.environments?.[currentEnvironment]?.childWorkspace),
-                validate: (value) => !!value?.id,
+                configValue: list.find((svc) => svc.id === cfg?.childWorkspace?.id),
+                validate: (value) => !!list.find((svc) => svc.id === value?.id),
                 promptMessage: "Select a child workspace",
                 existingMessage: "A valid child workspace is already provided. Do you want to change it?",
               });
@@ -266,10 +194,7 @@ export function connectCommand(): Command {
               options: lowestWorkspace.applications.map((app) => ({ value: app, label: app.name })),
               envValue: lowestWorkspace.applications.find((svc) => svc.id === process.env.SETTLEMINT_APPLICATION),
               cliParamValue: lowestWorkspace.applications.find((svc) => svc.id === application),
-              configValue: lowestWorkspace.applications.find(
-                (svc) => svc.id === cfg?.environments?.[currentEnvironment]?.application,
-              ),
-              validate: (value) => !!value?.id,
+              validate: (value) => !!lowestWorkspace.applications.find((svc) => svc.id === value?.id),
               promptMessage: "Select an application",
               existingMessage: "A valid application is already provided. Do you want to change it?",
             });
@@ -278,6 +203,24 @@ export function connectCommand(): Command {
             if (!selectedApplication) {
               throw new Error("No application selected");
             }
+
+            // Application URL input (only for Next.js)
+            let selectedAppUrl: string | undefined;
+            if (selectedFramework === "nextjs") {
+              selectedAppUrl = await coerceText({
+                type: "text",
+                envValue: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+                cliParamValue: appUrl,
+                defaultValue: "http://localhost:3000",
+                configValue: cfg?.appUrl,
+                validate: (value) => !!new URL(value ?? "").toString(),
+                promptMessage: "Enter the development URL of your application instance",
+                existingMessage: "A valid application URL is already provided. Do you want to change it?",
+                invalidMessage: "Invalid application instance URL. Please enter a valid URL.",
+              });
+            }
+
+            const configApplication = cfg?.applications?.[selectedApplication.id];
 
             // Portal REST URL selection
             const portalRestUrl = await coerceSelect({
@@ -288,7 +231,7 @@ export function connectCommand(): Command {
               noneOption: { value: undefined, label: "None" },
               envValue: process.env.SETTLEMINT_PORTAL_REST_URL,
               cliParamValue: portalRest,
-              configValue: cfg?.environments?.[currentEnvironment]?.portalRest,
+              configValue: configApplication?.portalRest,
               validate: (value) => !!new URL(value ?? "").toString(),
               promptMessage: "Select your Smart Contract Set Portal instance (REST API)",
               existingMessage:
@@ -304,7 +247,7 @@ export function connectCommand(): Command {
               noneOption: { value: undefined, label: "None" },
               envValue: process.env.SETTLEMINT_PORTAL_GQL_URL,
               cliParamValue: portalGql,
-              configValue: cfg?.environments?.[currentEnvironment]?.portal,
+              configValue: configApplication?.portalGql,
               validate: (value) => !!new URL(value ?? "").toString(),
               promptMessage: "Select your Smart Contract Set Portal instance (GraphQL API)",
               existingMessage:
@@ -319,8 +262,8 @@ export function connectCommand(): Command {
               })),
               noneOption: { value: undefined, label: "None" },
               envValue: process.env.SETTLEMINT_THE_GRAPH_GQL_URL,
-              cliParamValue: theGraph,
-              configValue: cfg?.environments?.[currentEnvironment]?.graph,
+              cliParamValue: theGraphGql,
+              configValue: configApplication?.thegraphGql,
               validate: (value) => !!new URL(value ?? "").toString(),
               promptMessage: "Select your The Graph instance",
               existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
@@ -335,9 +278,8 @@ export function connectCommand(): Command {
               options: hasuras,
               noneOption: { value: undefined, label: "None" },
               envValue: hasuras.find((h) => h.value.gqlUrl === process.env.SETTLEMINT_HASURA_GQL_URL)?.value,
-              cliParamValue: hasuras.find((h) => h.value.gqlUrl === hasura)?.value,
-              configValue: hasuras.find((h) => h.value.gqlUrl === cfg?.environments?.[currentEnvironment]?.hasura)
-                ?.value,
+              cliParamValue: hasuras.find((h) => h.value.gqlUrl === hasuraGql)?.value,
+              configValue: hasuras.find((h) => h.value.gqlUrl === configApplication?.hasuraGql)?.value,
               validate: (value) => !!new URL(value?.gqlUrl ?? "").toString(),
               promptMessage: "Select your Hasura instance",
               existingMessage: "A valid Hasura URL is already provided. Do you want to change it?",
@@ -350,27 +292,39 @@ export function connectCommand(): Command {
                 label: `${node.name} (${node.uniqueName})`,
               })),
               noneOption: { value: undefined, label: "None" },
-              envValue: process.env.SETTLEMINT_NODE_URL,
-              cliParamValue: node,
-              configValue: cfg?.environments?.[currentEnvironment]?.node,
+              envValue: process.env.SETTLEMINT_NODE_JSON_RPC_URL,
+              cliParamValue: nodeJsonRpc,
+              configValue: configApplication?.nodeJsonRpc,
               validate: (value) => !!new URL(value ?? "").toString(),
               promptMessage: "Select a blockchain node or loadbalancer",
               existingMessage: "A valid blockchain node URL is already provided. Do you want to change it?",
             });
 
-            const defaultEnvironment = await coerceSelect({
-              options: possibleEnvironments.map((penv) => ({
-                value: penv,
-                label: penv,
+            const possibleApplications = cfg?.applications ?? {};
+            if (!possibleApplications[selectedApplication.id]) {
+              possibleApplications[selectedApplication.id] = {
+                application: {
+                  id: selectedApplication.id,
+                  displayName: selectedApplication.name,
+                },
+              };
+            }
+
+            const defaultApplication = await coerceSelect({
+              options: Object.values(possibleApplications).map((penv) => ({
+                value: penv.application,
+                label: penv.application.displayName,
               })),
-              configValue: cfg?.defaultEnvironment,
-              validate: (value) => !!value?.trim(),
-              promptMessage: "Select a default environment (used when no environment is specified)",
+              envValue: possibleApplications[selectedApplication.id]?.application,
+              configValue: cfg?.defaultApplication,
+              validate: (value) => !!value?.id,
+              promptMessage:
+                "Select a default application (used when no application is specified on the command line or environment variable)",
               existingMessage:
                 "A valid default environment is already provided. Do you want to select a different one?",
             });
 
-            if (!defaultEnvironment) {
+            if (!defaultApplication) {
               throw new Error("No default environment selected");
             }
 
@@ -390,19 +344,30 @@ export function connectCommand(): Command {
               startMessage: "Creating or updating the .settlemintrc.json config file",
               task: async () => {
                 await createConfig({
-                  defaultEnvironment: defaultEnvironment,
+                  defaultApplication: defaultApplication,
                   framework: selectedFramework,
                   instance: instanceUrl,
-                  environments: {
-                    [currentEnvironment]: {
-                      workspace: selectedWorkspace.id,
-                      childWorkspace: selectedChildWorkspace?.id,
-                      application: selectedApplication.id,
-                      portal: portalGqlUrl,
+                  workspace: {
+                    id: selectedWorkspace.id,
+                    displayName: selectedWorkspace.name,
+                  },
+                  ...(selectedChildWorkspace && {
+                    childWorkspace: {
+                      id: selectedChildWorkspace?.id,
+                      displayName: selectedChildWorkspace?.name,
+                    },
+                  }),
+                  applications: {
+                    [selectedApplication.id]: {
+                      application: {
+                        id: selectedApplication.id,
+                        displayName: selectedApplication.name,
+                      },
+                      portalGql: portalGqlUrl,
                       portalRest: portalRestUrl,
-                      graph: thegraphGqlUrl,
-                      hasura: hasuraUrl?.gqlUrl,
-                      node: nodeUrl,
+                      thegraphGql: thegraphGqlUrl,
+                      hasuraGql: hasuraUrl?.gqlUrl,
+                      nodeJsonRpc: nodeUrl,
                     },
                   },
                 });
@@ -439,11 +404,15 @@ export function connectCommand(): Command {
             printNote(
               `To generate the code for using the SettleMint services, run the following command:
 
-${greenBright("sdk-cli codegen")}
+${greenBright("settlemint codegen")}
 
 or for another environment:
 
-${greenBright(`sdk-cli codegen -e <${possibleEnvironments.join(" | ")}>`)}`,
+${greenBright(
+  `settlemint codegen -e <${Object.values(possibleApplications)
+    .map((app) => app.application.id)
+    .join(" | ")}>`,
+)}`,
               "Next steps",
             );
 

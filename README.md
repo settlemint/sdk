@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-cli">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/settlemint">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -50,26 +50,26 @@ Would you like to use App Router? (recommended) Yes
 Would you like to customize the default import alias (@/*)? No
 ```
 
-Then we will install the `@settlemint/sdk-cli` package.
+Then we will install the `@settlemint/settlemint` package.
 
 ```bash
 cd my-app;
 
 # Using npm
-npm install -D@settlemint/sdk-cli
+npm install -D@settlemint/settlemint
 
 # Using bun
-bun add -D @settlemint/sdk-cli
+bun add -D @settlemint/settlemint
 ```
 
 Now we can start the setup process by running the following command.
 
 ```bash
 # Using npm
-npmx sdk-cli init
+npmx settlemint init
 
 # Using bun
-bunx sdk-cli init
+bunx settlemint init
 ```
 
 This will create a new configuration file in your project's root directory.
@@ -78,10 +78,10 @@ As the last step we will generate the SDK code for the first time:
 
 ```bash
 # Using npm
-npmx sdk-cli codegen
+npmx settlemint codegen
 
 # Using bun
-bunx sdk-cli codegen
+bunx settlemint codegen
 ```
 
 Anytime we want to update the generated SDK (when you have updated the portal or created new graphql queries) you need to repeat the command.
