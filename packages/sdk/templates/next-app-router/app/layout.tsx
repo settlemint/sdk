@@ -1,4 +1,4 @@
-import { SettleMintProvider } from "@settlemint/sdk-next";
+import { SettleMintProvider } from "@settlemint/sdk-react";
 import { QueryClient } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";

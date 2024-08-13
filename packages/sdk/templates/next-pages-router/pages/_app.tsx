@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import { SettleMintProvider } from "@settlemint/sdk-next";
+import { SettleMintProvider } from "@settlemint/sdk-react";
 import { QueryClient } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 

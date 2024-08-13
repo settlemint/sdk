@@ -46,8 +46,7 @@
   },
   "dependencies": {
     "cosmiconfig": "^9",
-    "zod": "^3",
-    "@settlemint/sdk-react": "workspace:*"
+    "zod": "^3"
   },
   "devDependencies": {
     "tsup": "8.2.4",

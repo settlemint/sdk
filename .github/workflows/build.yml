@@ -160,7 +160,7 @@ jobs:
                 # 📦 Packages
                 | Package | Install |
                 | ------- | -------------------- |
-                | Next | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
+                | React | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
                 | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
                 | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
 
