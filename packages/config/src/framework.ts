@@ -1,23 +1,19 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { cosmiconfig } from "cosmiconfig";
 import { findProjectRoot } from "./path.js";
 
 export type Framework = "nextjs" | "nodejs";
 
 export async function detectFramework(): Promise<Framework> {
-  // Check for Next.js configuration
-  const explorer = cosmiconfig("next");
-  try {
-    const result = await explorer.search(process.cwd());
-    if (result) {
+  const root = findProjectRoot(process.cwd());
+
+  // Check for Next.js configuration file
+  const nextConfigFiles = ["next.config.js", "next.config.mjs", "next.config.ts"];
+  for (const configFile of nextConfigFiles) {
+    if (existsSync(join(root, configFile))) {
       return "nextjs";
     }
-  } catch (error) {
-    // If there's an error searching for Next.js config, we'll continue to check for Node.js
   }
-
-  const root = findProjectRoot(process.cwd());
 
   // Check for package.json (Node.js)
   const packageJsonPath = join(root, "package.json");
