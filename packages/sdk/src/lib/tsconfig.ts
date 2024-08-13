@@ -4,11 +4,11 @@ import { findProjectRoot } from "@settlemint/sdk-config";
 
 export function writeTsConfig() {
   const root = findProjectRoot(process.cwd());
-  const btpDir = join(root, ".btp");
-  const tsconfigPath = join(btpDir, "tsconfig.json");
+  const settleMintDir = join(root, ".settlemint");
+  const tsconfigPath = join(settleMintDir, "tsconfig.json");
 
-  if (!existsSync(btpDir)) {
-    mkdirSync(btpDir, { recursive: true });
+  if (!existsSync(settleMintDir)) {
+    mkdirSync(settleMintDir, { recursive: true });
   }
 
   writeFileSync(

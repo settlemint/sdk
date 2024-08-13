@@ -34,9 +34,9 @@ const ConfigSchema = z.object({
  * Schema for environment variables
  */
 const EnvSchema = z.object({
-  BTP_PAT_TOKEN: z.string(),
-  NEXT_PUBLIC_BTP_APP_URL: z.string().url().optional(),
-  BTP_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
+  SETTLEMINT_PAT_TOKEN: z.string(),
+  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
+  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
 });
 
 /**
@@ -66,9 +66,9 @@ export async function config(): Promise<ConfigEnv | undefined> {
   // Parse and return the config with additional environment variables
   return ConfigEnvSchema.parse({
     ...config,
-    pat: process.env.BTP_PAT_TOKEN,
-    appUrl: process.env.NEXT_PUBLIC_BTP_APP_URL,
-    hasuraAdminSecret: process.env.BTP_HASURA_GQL_ADMIN_SECRET,
+    pat: process.env.SETTLEMINT_PAT_TOKEN,
+    appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    hasuraAdminSecret: process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
   });
 }
 
@@ -76,14 +76,14 @@ export async function config(): Promise<ConfigEnv | undefined> {
  * Searches for and parses the configuration file
  * Supported file names and formats:
  * - 'package.json'
- * - '.btprc' (various formats: .json, .yaml, .yml, .js, .ts, .mjs, .cjs)
- * - '.config/btprc' (various formats: .json, .yaml, .yml, .js, .ts, .mjs, .cjs)
- * - 'btp.config' (formats: .js, .ts, .mjs, .cjs)
+ * - '.settlemintrc' (various formats: .json, .yaml, .yml, .js, .ts, .mjs, .cjs)
+ * - '.config/settlemintrc' (various formats: .json, .yaml, .yml, .js, .ts, .mjs, .cjs)
+ * - 'settlemint.config' (formats: .js, .ts, .mjs, .cjs)
  * @returns A promise that resolves to the parsed Config or undefined if not found
  */
 async function parseConfig(): Promise<Config | undefined> {
   // Initialize cosmiconfig explorer
-  const explorer = cosmiconfig("btp");
+  const explorer = cosmiconfig("settlemint");
   // Search for configuration
   const result = await explorer.search();
 
@@ -117,7 +117,7 @@ export async function createConfig(config: Config): Promise<void> {
   // Find the project root directory
   const projectRoot = findProjectRoot(process.cwd());
   // Define the path for the new config file
-  const configPath = path.join(projectRoot, ".btprc.json");
+  const configPath = path.join(projectRoot, ".settlemintrc.json");
   // Write the validated merged config to the file
   writeFileSync(configPath, JSON.stringify(validatedMergedConfig, null, 2));
 }

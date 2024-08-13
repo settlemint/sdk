@@ -26,8 +26,8 @@ import {
 } from "../lib/templates.js";
 
 /**
- * Creates and returns the 'codegen' command for the BTP SDK CLI.
- * This command generates the code for using the BTP services in the user's project.
+ * Creates and returns the 'codegen' command for the SettleMint SDK CLI.
+ * This command generates the code for using the SettleMint services in the user's project.
  *
  * @returns {Command} The configured 'codegen' command
  */
@@ -35,28 +35,31 @@ export function createCommand(): Command {
   return (
     new Command("create")
       // Set the command description
-      .description("Creates a new BTP integrated project")
-      .option("-n, --projectName <name>", "The name for your BTP project (BTP_PROJECT_NAME environment variable)")
+      .description("Creates a new SettleMint integrated project")
+      .option(
+        "-n, --projectName <name>",
+        "The name for your SettleMint project (SETTLEMINT_PROJECT_NAME environment variable)",
+      )
       .option(
         "-t, --template <url>",
-        `The template for your BTP project, options are ${templates.map((templates) => templates.value).join(", ")} (BTP_TEMPLATE environment variable)`,
+        `The template for your SettleMint project, options are ${templates.map((templates) => templates.value).join(", ")} (SETTLEMINT_TEMPLATE environment variable)`,
       )
       .option(
         "-p, --packageManager <packageManager>",
-        `The package manager to use, options are ${packageManagers.join(", ")} (BTP_PACKAGE_MANAGER environment variable)`,
+        `The package manager to use, options are ${packageManagers.join(", ")} (SETTLEMINT_PACKAGE_MANAGER environment variable)`,
       )
       // Define the action to be executed when the command is run
       .action(async ({ projectName, template, packageManager }) => {
         // Display ASCII art and intro message
         printAsciiArt();
-        printIntro("Creating a new BTP project");
+        printIntro("Creating a new SettleMint project");
         try {
           const selectedProjectName = await coerceText({
             type: "text",
-            envValue: process.env.BTP_PROJECT_NAME,
+            envValue: process.env.SETTLEMINT_PROJECT_NAME,
             cliParamValue: projectName,
             validate: (value) => isValidPackageName(toValidPackageName(value ?? "")),
-            promptMessage: "Enter name for your BTP project",
+            promptMessage: "Enter name for your SettleMint project",
             existingMessage: "A valid name is already provided. Do you want to change it?",
             invalidMessage: "This is not a valid name, please choose a different name.",
             autoAccept: true,
@@ -85,7 +88,7 @@ export function createCommand(): Command {
               value: template.value,
               label: template.label,
             })),
-            envValue: process.env.BTP_TEMPLATE,
+            envValue: process.env.SETTLEMINT_TEMPLATE,
             cliParamValue: template,
             validate: (value) => templates.map((template) => template.value).includes(value?.trim() ?? ""),
             promptMessage: "Select a template",
@@ -103,7 +106,7 @@ export function createCommand(): Command {
               value: pm,
               label: pm,
             })),
-            envValue: process.env.BTP_PACKAGE_MANAGER ?? getPkgManager(),
+            envValue: process.env.SETTLEMINT_PACKAGE_MANAGER ?? getPkgManager(),
             cliParamValue: packageManager,
             validate: (value) => packageManagers.includes(value?.trim() ?? ""),
             promptMessage: "Select a package manager",
@@ -135,7 +138,7 @@ export function createCommand(): Command {
           printNote(
             greenBright(`
 cd ${selectedProjectName}
-${executor} settlemint init
+${executor} settlemint connect
 `),
             "Next steps",
           );

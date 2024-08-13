@@ -30,8 +30,8 @@ export async function createGqlClient(options: CreateDefaultGqlClientOptions | C
 
   // Create directory structure
   const root = findProjectRoot(process.cwd());
-  const btpDir = join(root, ".btp");
-  const typeDir = join(btpDir, type);
+  const settleMintDir = join(root, ".settlemint");
+  const typeDir = join(settleMintDir, type);
   const typeGqlDir = join(typeDir, "gql");
   const typeCodegenDir = join(typeGqlDir, "codegen");
   const typeQueriesDir = join(root, "graphql", type);
@@ -66,7 +66,7 @@ export async function createGqlClient(options: CreateDefaultGqlClientOptions | C
       `${typeGqlDir}/index.ts`,
       `import { GraphQLClient } from "graphql-request";
 
-export const ${type} = new GraphQLClient(\`\${process.env.NEXT_PUBLIC_BTP_APP_URL}/proxy/${type}\`);`,
+export const ${type} = new GraphQLClient(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/${type}\`);`,
     );
   } else {
     writeFileSync(
@@ -77,23 +77,23 @@ if(globalThis.window?.document !== undefined){
   throw new Error('You cannot use this SDK in a browser environment as it would expose your secrets.')
 }
 
-if(!process.env.BTP_PAT_TOKEN){
-  throw new Error("BTP_PAT_TOKEN environment variable is required");
+if(!process.env.SETTLEMINT_PAT_TOKEN){
+  throw new Error("SETTLEMINT_PAT_TOKEN environment variable is required");
 }
 
 ${
   type === "hasura"
     ? `
-if(!process.env.BTP_HASURA_GQL_ADMIN_SECRET){
-  throw new Error("BTP_HASURA_GQL_ADMIN_SECRET environment variable is required");
+if(!process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET){
+  throw new Error("SETTLEMINT_HASURA_GQL_ADMIN_SECRET environment variable is required");
 }`
     : ""
 }
 
 export const ${type} = new GraphQLClient('${gqlUrl}', {
   headers: {
-    "x-auth-token": process.env.BTP_PAT_TOKEN,
-    ${type === "hasura" ? '"x-hasura-admin-secret": process.env.BTP_HASURA_GQL_ADMIN_SECRET,' : ""}
+    "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN,
+    ${type === "hasura" ? '"x-hasura-admin-secret": process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,' : ""}
   },
 });`,
     );

@@ -7,8 +7,8 @@ import { createRestClient } from "../lib/rest.js";
 import { writeTsConfig } from "../lib/tsconfig.js";
 
 /**
- * Creates and returns the 'codegen' command for the BTP SDK CLI.
- * This command generates the code for using the BTP services in the user's project.
+ * Creates and returns the 'codegen' command for the SettleMint SDK.
+ * This command generates the code for using the SettleMint services in the user's project.
  *
  * @returns {Command} The configured 'codegen' command
  */
@@ -16,9 +16,12 @@ export function codegenCommand(): Command {
   return (
     new Command("codegen")
       // Set the command description
-      .description("Generates the code for using the BTP services")
+      .description("Generates the code for using the SettleMint services")
       // Add an option for specifying the environment
-      .option("-e, --environment <id>", "The name of the environment to use (BTP_ENVIRONMENT environment variable)")
+      .option(
+        "-e, --environment <id>",
+        "The name of the environment to use (SETTLEMINT_ENVIRONMENT environment variable)",
+      )
       // Define the action to be executed when the command is run
       .action(async ({ environment }) => {
         // Display ASCII art and intro message
@@ -42,7 +45,8 @@ export function codegenCommand(): Command {
           }
 
           // Determine the environment to use
-          const environmentConfig = environments[process.env.BTP_ENVIRONMENT ?? environment ?? defaultEnvironment];
+          const environmentConfig =
+            environments[process.env.SETTLEMINT_ENVIRONMENT ?? environment ?? defaultEnvironment];
           if (!environmentConfig) {
             throw new Error("No environment found");
           }
@@ -64,7 +68,7 @@ export function codegenCommand(): Command {
             usageMessage += `
 To use the Portal REST client:
 
-${greenBright("import { portal } from './.btp/portal/rest'")}
+${greenBright("import { portal } from './.settlemint/portal/rest'")}
 `;
           }
 
@@ -86,7 +90,7 @@ ${greenBright("import { portal } from './.btp/portal/rest'")}
             usageMessage += `
 To use the Portal GQL client:
 
-${greenBright("import { portal } from './.btp/portal/gql'")}
+${greenBright("import { portal } from './.settlemint/portal/gql'")}
 `;
           }
 
@@ -108,7 +112,7 @@ ${greenBright("import { portal } from './.btp/portal/gql'")}
             usageMessage += `
 To use the The Graph GQL client:
 
-${greenBright("import { thegraph } from './.btp/thegraph/gql'")}
+${greenBright("import { thegraph } from './.settlemint/thegraph/gql'")}
 `;
           }
 
@@ -136,7 +140,7 @@ ${greenBright("import { thegraph } from './.btp/thegraph/gql'")}
             usageMessage += `
 To use the Hasura GQL client:
 
-${greenBright("import { hasura } from './.btp/hasura/gql'")}
+${greenBright("import { hasura } from './.settlemint/hasura/gql'")}
 `;
           }
 
