@@ -4,9 +4,9 @@
   "version": "0.4.5",
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
-    "build": "turbo build --filter=\"!./packages/sdk/templates/*\"",
+    "build": "turbo build",
     "test": "turbo test",
-    "dev": "turbo dev --filter=\"!./packages/sdk/templates/*\"",
+    "dev": "turbo dev",
     "lint": "biome lint --write --unsafe .",
     "format": "biome format --write .",
     "packcheck": "turbo packcheck",
@@ -29,6 +29,6 @@
     "node": "22.6.0"
   },
   "packageManager": "bun@1.1.22",
-  "workspaces": ["packages/*", "packages/sdk/templates/*"],
+  "workspaces": ["packages/*"],
   "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
 }
