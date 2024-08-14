@@ -214,5 +214,5 @@ dist
 .DS_Store
 
 
-.settlemintrc
+.settlemintrc.json
 .settlemint

@@ -16,7 +16,7 @@ export async function withSettleMint<C extends NextConfig>(
   if (!disabled) {
     const cfg = await config();
     if (!cfg) {
-      throw new Error("No configuration found, please run settlemint init");
+      throw new Error("No configuration found, please run settlemint connect");
     }
 
     const applications = cfg.applications ?? {};
