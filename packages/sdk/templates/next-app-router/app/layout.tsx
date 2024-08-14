@@ -1,4 +1,4 @@
-import { SettleMintProvider } from "@settlemint/sdk-react";
+import { ClientProvider } from "@/providers/ClientProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -17,9 +17,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <SettleMintProvider wagmi={{ enabled: false }} reactQuery={{ enabled: false }}>
+      <ClientProvider>
         <body className={inter.className}>{children}</body>
-      </SettleMintProvider>
+      </ClientProvider>
     </html>
   );
 }
