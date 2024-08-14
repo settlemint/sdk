@@ -28,7 +28,12 @@
 
 ## Getting started
 
-[![Demo](https://img.youtube.com/vi/fPVpsDQt380/0.jpg)](https://www.youtube.com/watch?v=fPVpsDQt380)
+<div align="center">
+  <a href="https://www.youtube.com/watch?v=fPVpsDQt380">
+    <img src="https://img.youtube.com/vi/fPVpsDQt380/0.jpg" alt="Demo Video" style="width: 100%; max-width: 640px;">
+    <img src="https://www.gstatic.com/youtube/img/watch/yt_play_btn.png" alt="Play Button" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 68px; height: 48px;">
+  </a>
+</div>
 
 First we will create a new Next JS project using the following command.
 
