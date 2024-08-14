@@ -8,7 +8,7 @@
   "type": "module",
   "sideEffects": false,
   "private": false,
-  "license": "MIT",
+  "license": "FSL-1.1-MIT",
   "author": {
     "name": "SettleMint",
     "email": "support@settlemint.com",
