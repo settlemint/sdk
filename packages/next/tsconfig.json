@@ -15,7 +15,8 @@
 		"noEmit": true,
 		"allowImportingTsExtensions": true,
     "jsx": "react-jsx",
-    "incremental": false
+    "incremental": false,
+    "isolatedModules": true
   },
 	"include": ["src"]
 }

@@ -16,7 +16,8 @@
 		"allowImportingTsExtensions": true,
     "plugins": [],
     "jsx": "react-jsx",
-    "incremental": false
+    "incremental": false,
+    "isolatedModules": true
   },
 	"include": ["src"]
 }
