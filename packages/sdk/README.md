@@ -10,7 +10,7 @@
 <br/>
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://opensource.org/licenses/MIT" rel="nofollow"><img src="https://img.shields.io/github/license/settlemint/sdk" alt="License"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk" alt="License"></a>
 <a href="https://www.npmjs.com/package/@settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
