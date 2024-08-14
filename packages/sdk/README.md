@@ -26,18 +26,21 @@
   <br />
 </div>
 
-## Installation
+## Getting started
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fPVpsDQt380?si=XFHn02M0Y9Td3yOQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+First we will create a new Next JS project using the following command.
 
 ```bash
-# Using npm
-npm install @settlemint/sdk
-
-# Using yarn
-yarn add @settlemint/sdk
-
-# Using pnpm
-pnpm add @settlemint/sdk
+# Using npx
+npx @settlemint/sdk@latest create
 
 # Using bun
-bun add @settlemint/sdk
+bunx @settlemint/sdk@latest create
+
+# Using pnpm
+pnpm dlx @settlemint/sdk@latest create
 ```
+
+Then following the next steps in your terminal.

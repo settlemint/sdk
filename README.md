@@ -26,62 +26,21 @@
   <br />
 </div>
 
-## Start a new project (Next JS)
+## Getting started
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fPVpsDQt380?si=XFHn02M0Y9Td3yOQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
 First we will create a new Next JS project using the following command.
 
 ```bash
 # Using npx
-npx create-next-app@latest
+npx @settlemint/sdk@latest create
 
 # Using bun
-bunx create-next-app@latest
+bunx @settlemint/sdk@latest create
+
+# Using pnpm
+pnpm dlx @settlemint/sdk@latest create
 ```
 
-And we recommend the following settings:
-
-```text
-What is your project named? my-app
-Would you like to use TypeScript? Yes
-Would you like to use ESLint? Yes
-Would you like to use Tailwind CSS? Yes
-Would you like to use `src/` directory? No
-Would you like to use App Router? (recommended) Yes
-Would you like to customize the default import alias (@/*)? No
-```
-
-Then we will install the `@settlemint/settlemint` package.
-
-```bash
-cd my-app;
-
-# Using npm
-npm install -D@settlemint/settlemint
-
-# Using bun
-bun add -D @settlemint/settlemint
-```
-
-Now we can start the setup process by running the following command.
-
-```bash
-# Using npm
-npmx settlemint connect
-
-# Using bun
-bunx settlemint connect
-```
-
-This will create a new configuration file in your project's root directory.
-
-As the last step we will generate the SDK code for the first time:
-
-```bash
-# Using npm
-npmx settlemint codegen
-
-# Using bun
-bunx settlemint codegen
-```
-
-Anytime we want to update the generated SDK (when you have updated the portal or created new graphql queries) you need to repeat the command.
+Then following the next steps in your terminal.
