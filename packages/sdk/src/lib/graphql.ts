@@ -66,7 +66,7 @@ export async function createGqlClient(options: CreateDefaultGqlClientOptions | C
       `${typeGqlDir}/index.ts`,
       `import { GraphQLClient } from "graphql-request";
 
-export const ${type} = new GraphQLClient(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/${type}\`);`,
+export const ${type} = new GraphQLClient(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/${type}/graphql\`);`,
     );
   } else {
     writeFileSync(

@@ -5,6 +5,8 @@ import { config } from "../lib/config";
 import { createGqlClient } from "../lib/graphql";
 import { createRestClient } from "../lib/rest";
 import { writeTsConfig } from "../lib/tsconfig";
+import { createViemClient } from "../lib/viem";
+import { createWagmiClient } from "../lib/wagmi";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
@@ -50,9 +52,7 @@ export function codegenCommand(): Command {
           if (!environmentConfig) {
             throw new Error("No environment found");
           }
-          const { portalRest, portalGql, thegraphGql, hasuraGql } = environmentConfig;
-
-          let usageMessage = "";
+          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc } = environmentConfig;
 
           // Generate Portal REST client if portalRest is defined
           if (portalRest) {
@@ -64,12 +64,6 @@ export function codegenCommand(): Command {
               },
               stopMessage: "Portal REST client generated",
             });
-
-            usageMessage += `
-To use the Portal REST client:
-
-${greenBright("import { portal } from './.settlemint/portal/rest'")}
-`;
           }
 
           if (portalGql) {
@@ -86,12 +80,6 @@ ${greenBright("import { portal } from './.settlemint/portal/rest'")}
               },
               stopMessage: "Portal GQL client generated",
             });
-
-            usageMessage += `
-To use the Portal GQL client:
-
-${greenBright("import { portal } from './.settlemint/portal/gql'")}
-`;
           }
 
           if (thegraphGql) {
@@ -108,12 +96,6 @@ ${greenBright("import { portal } from './.settlemint/portal/gql'")}
               },
               stopMessage: "The Graph GQL client generated",
             });
-
-            usageMessage += `
-To use the The Graph GQL client:
-
-${greenBright("import { thegraph } from './.settlemint/thegraph/gql'")}
-`;
           }
 
           if (hasuraGql) {
@@ -136,12 +118,34 @@ ${greenBright("import { thegraph } from './.settlemint/thegraph/gql'")}
               },
               stopMessage: "Hasura GQL client generated",
             });
+          }
 
-            usageMessage += `
-To use the Hasura GQL client:
+          if (nodeJsonRpc) {
+            await printSpinner({
+              startMessage: "Generating the Viem client",
+              task: async () => {
+                // Create the Portal REST client
+                await createViemClient({
+                  framework: cfg.framework,
+                  nodeUrl: nodeJsonRpc,
+                  personalAccessToken: pat,
+                });
+              },
+              stopMessage: "Viem client generated",
+            });
 
-${greenBright("import { hasura } from './.settlemint/hasura/gql'")}
-`;
+            await printSpinner({
+              startMessage: "Generating the Wagmi client",
+              task: async () => {
+                // Create the Portal REST client
+                await createWagmiClient({
+                  framework: cfg.framework,
+                  nodeUrl: nodeJsonRpc,
+                  personalAccessToken: pat,
+                });
+              },
+              stopMessage: "Wagmi client generated",
+            });
           }
 
           await printSpinner({
@@ -152,7 +156,10 @@ ${greenBright("import { hasura } from './.settlemint/hasura/gql'")}
             stopMessage: "Configuration files modified",
           });
 
-          printNote(usageMessage, "Usage hints");
+          printNote(
+            greenBright("Read the documentation to learn how to use the generated SDK <link here>"),
+            "Usage hints",
+          );
 
           // Display completion message
           printOutro("Code generation complete");
