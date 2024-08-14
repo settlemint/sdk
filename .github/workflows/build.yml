@@ -65,7 +65,7 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format lint pkg:test pkg:build pkg:attw pkg:publint
+      - run: bunx turbo format lint pkg:build pkg:attw pkg:publint pkg:test:coverage
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
