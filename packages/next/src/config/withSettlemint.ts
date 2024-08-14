@@ -1,9 +1,11 @@
 import type { NextConfig } from "next";
+import type { Rewrite } from "../../../../node_modules/next/dist/lib/load-custom-routes";
 import { config } from "./config";
 
 export type WithSettleMintOptions = {
   disabled?: boolean;
   output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
+  typedRoutes?: boolean;
 };
 
 /**
@@ -11,7 +13,7 @@ export type WithSettleMintOptions = {
  */
 export async function withSettleMint<C extends NextConfig>(
   nextConfig: C,
-  { disabled, output }: WithSettleMintOptions = {},
+  { disabled, output, typedRoutes }: WithSettleMintOptions = {},
 ): Promise<C> {
   if (!disabled) {
     const cfg = await config();
@@ -36,6 +38,78 @@ export async function withSettleMint<C extends NextConfig>(
     return {
       ...nextConfig,
       output: output ?? nextConfig.output ?? "standalone",
+      experimental: {
+        ...nextConfig.experimental,
+        typedRoutes,
+      },
+      async rewrites() {
+        let existingRewrites:
+          | Rewrite[]
+          | {
+              beforeFiles: Rewrite[];
+              afterFiles: Rewrite[];
+              fallback: Rewrite[];
+            };
+
+        if (nextConfig.rewrites) {
+          existingRewrites = await nextConfig.rewrites();
+        } else {
+          existingRewrites = [];
+        }
+
+        const rewrites = [
+          ...(envConf.thegraphGql
+            ? [
+                {
+                  source: "/proxy/thegraph/graphql",
+                  destination: envConf.thegraphGql,
+                },
+              ]
+            : []),
+          ...(envConf.hasuraGql
+            ? [
+                {
+                  source: "/proxy/hasura/graphql",
+                  destination: envConf.hasuraGql,
+                },
+              ]
+            : []),
+          ...(envConf.portalRest
+            ? [
+                {
+                  source: "/proxy/portal/rest/:path*",
+                  destination: `${envConf.portalRest}/:path*`,
+                },
+              ]
+            : []),
+          ...(envConf.portalGql
+            ? [
+                {
+                  source: "/proxy/portal/graphql",
+                  destination: envConf.portalGql,
+                },
+              ]
+            : []),
+          ...(envConf.nodeJsonRpc
+            ? [
+                {
+                  source: "/proxy/node/jsonrpc",
+                  destination: envConf.nodeJsonRpc,
+                },
+              ]
+            : []),
+        ];
+
+        if (Array.isArray(existingRewrites)) {
+          return [...existingRewrites, ...rewrites];
+        }
+
+        return {
+          beforeFiles: existingRewrites.beforeFiles,
+          afterFiles: [...existingRewrites.afterFiles, ...rewrites],
+          fallback: existingRewrites.fallback,
+        };
+      },
     } as C;
   }
   return nextConfig;

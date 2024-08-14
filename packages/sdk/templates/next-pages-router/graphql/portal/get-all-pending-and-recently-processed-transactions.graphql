@@ -1,0 +1,32 @@
+query GetAllPendingAndRecentlyProcessedTransactions {
+  getPendingAndRecentlyProcessedTransactions {
+    records {
+      address
+      createdAt
+      from
+      functionName
+      metadata
+      transactionHash
+      updatedAt
+      receipt {
+        type
+        transactionIndex
+        transactionHash
+        to
+        root
+        status
+        logsBloom
+        logs
+        gasUsed
+        from
+        effectiveGasPrice
+        cumulativeGasUsed
+        contractAddress
+        blockNumber
+        blockHash
+        blobGasUsed
+        blobGasPrice
+      }
+    }
+  }
+}
