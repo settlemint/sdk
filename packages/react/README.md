@@ -28,7 +28,7 @@
 
 ## Getting started
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/fPVpsDQt380?si=XFHn02M0Y9Td3yOQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Demo](https://img.youtube.com/vi/fPVpsDQt380/0.jpg)](https://www.youtube.com/watch?v=fPVpsDQt380)
 
 First we will create a new Next JS project using the following command.
 
