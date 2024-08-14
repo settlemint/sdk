@@ -1,7 +1,7 @@
 {
   "name": "sdk",
   "private": true,
-  "version": "0.4.5",
+  "version": "0.4.6",
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
     "pkg:build": "turbo pkg:build",
@@ -31,6 +31,13 @@
     "node": "22.6.0"
   },
   "packageManager": "bun@1.1.22",
-  "workspaces": ["packages/*", "packages/sdk/templates/*"],
-  "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
+  "workspaces": [
+    "packages/*",
+    "packages/sdk/templates/*"
+  ],
+  "trustedDependencies": [
+    "@biomejs/biome",
+    "esbuild",
+    "lefthook"
+  ]
 }
