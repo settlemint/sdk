@@ -4,7 +4,7 @@ import { cosmiconfig } from "cosmiconfig";
 import dotenv from "dotenv";
 import { merge } from "ts-deepmerge";
 import { z } from "zod";
-import { findProjectRoot } from "./path";
+import { findProjectRoot } from "./path.ts";
 
 /**
  * Schema for environment-specific configuration

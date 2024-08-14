@@ -4,17 +4,17 @@
     "@tsconfig/node22/tsconfig.json"
   ],
   "compilerOptions": {
-    "moduleResolution": "bundler",
-    "module": "preserve",
+    "module": "NodeNext",
+		"moduleResolution": "NodeNext",
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
     "resolveJsonModule": true,
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+		"declaration": true,
+		"declarationMap": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
+    "incremental": false
   },
-  "exclude": [
-    "**/dist",
-    "**/templates"
-  ],
+	"include": ["src"]
 }

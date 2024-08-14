@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
-import type { Rewrite } from "../../../../node_modules/next/dist/lib/load-custom-routes";
-import { config } from "./config";
+import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
+import { config } from "./config.ts";
 
 export type WithSettleMintOptions = {
   disabled?: boolean;
