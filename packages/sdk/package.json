@@ -24,7 +24,7 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist", "templates"],
+  "files": ["dist", "templates", "!templates/**/node_modules"],
   "exports": {
     "./package.json": "./package.json",
     ".": {
