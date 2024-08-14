@@ -20,7 +20,7 @@
       "persistent": true
     },
     "pkg:test": {
-      "dependsOn": ["^pkg:test", "pkg:build"]
+      "dependsOn": ["^pkg:test"]
     },
     "pkg:attw": {
       "dependsOn": ["pkg:build"]
