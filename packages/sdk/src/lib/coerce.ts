@@ -1,4 +1,4 @@
-import { type Option, promptConfirm, promptPassword, promptSelect, promptText } from "./cli-message";
+import { type Option, promptConfirm, promptPassword, promptSelect, promptText } from "./cli-message.ts";
 
 // Define options for coercing text input
 type CoerceTextOptions = {

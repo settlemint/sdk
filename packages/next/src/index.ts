@@ -1,1 +1,1 @@
-export * from "./config/withSettlemint";
+export * from "./config/withSettlemint.ts";

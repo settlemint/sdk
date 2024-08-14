@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
-import type { Rewrite } from "../../../../node_modules/next/dist/lib/load-custom-routes";
-import { config } from "./config";
+import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
+import { config } from "./config.ts";
 
 export type WithSettleMintOptions = {
   disabled?: boolean;
@@ -18,7 +18,7 @@ export async function withSettleMint<C extends NextConfig>(
   if (!disabled) {
     const cfg = await config();
     if (!cfg) {
-      throw new Error("No configuration found, please run settlemint init");
+      throw new Error("No configuration found, please run settlemint connect");
     }
 
     const applications = cfg.applications ?? {};

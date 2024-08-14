@@ -24,7 +24,7 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist", "templates"],
+  "files": ["dist", "templates", "!templates/**/node_modules"],
   "exports": {
     "./package.json": "./package.json",
     ".": {
@@ -45,7 +45,9 @@
     "pkg:build": "tsup-node --format esm,cjs --dts",
     "pkg:dev": "tsup-node --format esm,cjs --dts --watch",
     "pkg:publint": "publint run --strict",
-    "pkg:attw": "attw --pack ."
+    "pkg:attw": "attw --pack .",
+    "pkg:test": "vitest",
+    "pkg:test:coverabe": "vitest --coverage"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",

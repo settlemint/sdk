@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path";
+import { findProjectRoot } from "./path.ts";
 
 type Framework = "nextjs" | "nodejs";
 

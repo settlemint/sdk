@@ -11,10 +11,10 @@ import {
   printOutro,
   printSpinner,
   promptConfirm,
-} from "../lib/cli-message";
-import { coerceSelect, coerceText } from "../lib/coerce";
-import { setName } from "../lib/package-json";
-import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager";
+} from "../lib/cli-message.ts";
+import { coerceSelect, coerceText } from "../lib/coerce.ts";
+import { setName } from "../lib/package-json.ts";
+import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager.ts";
 import {
   emptyDir,
   formatTargetDir,
@@ -23,7 +23,7 @@ import {
   templates,
   toValidPackageName,
   write,
-} from "../lib/templates";
+} from "../lib/templates.ts";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK CLI.

@@ -214,5 +214,5 @@ dist
 .DS_Store
 
 
-packages/sdk/templates/next-app-router/.settlemintrc.json
-packages/sdk/templates/next-pages-router/.settlemintrc.json
+.settlemintrc.json
+.settlemint

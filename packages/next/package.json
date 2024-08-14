@@ -42,7 +42,9 @@
     "pkg:build": "tsup --format esm,cjs --dts",
     "pkg:dev": "tsup --format esm,cjs --dts --watch",
     "pkg:publint": "publint run --strict",
-    "pkg:attw": "attw --pack ."
+    "pkg:attw": "attw --pack .",
+    "pkg:test": "vitest",
+    "pkg:test:coverabe": "vitest --coverage"
   },
   "dependencies": {
     "cosmiconfig": "9.0.0",

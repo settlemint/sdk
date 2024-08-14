@@ -1,12 +1,12 @@
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
-import { config } from "../lib/config";
-import { createGqlClient } from "../lib/graphql";
-import { createRestClient } from "../lib/rest";
-import { writeTsConfig } from "../lib/tsconfig";
-import { createViemClient } from "../lib/viem";
-import { createWagmiClient } from "../lib/wagmi";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.ts";
+import { config } from "../lib/config.ts";
+import { createGqlClient } from "../lib/graphql.ts";
+import { createRestClient } from "../lib/rest.ts";
+import { writeTsConfig } from "../lib/tsconfig.ts";
+import { createViemClient } from "../lib/viem.ts";
+import { createWagmiClient } from "../lib/wagmi.ts";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.

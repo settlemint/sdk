@@ -66,10 +66,10 @@ Now we can start the setup process by running the following command.
 
 ```bash
 # Using npm
-npmx settlemint init
+npmx settlemint connect
 
 # Using bun
-bunx settlemint init
+bunx settlemint connect
 ```
 
 This will create a new configuration file in your project's root directory.

@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path";
+import { findProjectRoot } from "./path.ts";
 
 export function updateGitignore() {
   const root = findProjectRoot(process.cwd());

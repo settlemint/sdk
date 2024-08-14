@@ -4,15 +4,20 @@
     "@tsconfig/next/tsconfig.json"
   ],
   "compilerOptions": {
+    "module": "NodeNext",
+		"moduleResolution": "NodeNext",
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
+    "resolveJsonModule": true,
+		"declaration": true,
+		"declarationMap": true,
+		"noEmit": true,
+		"allowImportingTsExtensions": true,
     "plugins": [],
     "jsx": "react-jsx",
+    "incremental": false,
+    "isolatedModules": true
   },
-  "include": ["**/*.ts", "**/*.tsx"],
-  "exclude": [
-    "**/dist",
-  ],
+	"include": ["src"]
 }

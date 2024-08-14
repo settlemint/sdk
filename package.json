@@ -7,6 +7,7 @@
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
     "pkg:build": "turbo pkg:build",
     "pkg:test": "turbo pkg:test",
+    "pkg:test:coverage": "turbo pkg:test:coverage",
     "pkg:dev": "turbo pkg:dev",
     "lint": "biome lint --write --unsafe .",
     "format": "biome format --write .",
@@ -20,13 +21,15 @@
     "@tsconfig/next": "2.0.3",
     "@tsconfig/node22": "22.0.0",
     "@tsconfig/strictest": "2.0.5",
-    "@types/node": "22.2.0",
+    "@types/node": "22.3.0",
     "knip": "5.27.2",
     "lefthook": "1.7.12",
     "publint": "0.2.9",
     "tsup": "8.2.4",
-    "turbo": "2.0.12",
-    "typescript": "5.5.4"
+    "turbo": "2.0.13",
+    "typescript": "5.5.4",
+    "@vitest/coverage-v8": "2.0.5",
+    "vitest": "2.0.5"
   },
   "engines": {
     "node": "22.6.0"
