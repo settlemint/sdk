@@ -22,6 +22,9 @@
     "pkg:test": {
       "dependsOn": ["^pkg:test"]
     },
+    "pkg:test:coverage": {
+      "dependsOn": ["^pkg:test:coverage"]
+    },
     "pkg:attw": {
       "dependsOn": ["pkg:build"]
     },
