@@ -24,7 +24,7 @@
     "@types/node": "22.3.0",
     "knip": "5.27.2",
     "lefthook": "1.7.12",
-    "publint": "0.2.9",
+    "publint": "0.2.10",
     "tsup": "8.2.4",
     "turbo": "2.0.13",
     "typescript": "5.5.4",
