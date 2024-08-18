@@ -28,20 +28,12 @@
     "tsup": "8.2.4",
     "turbo": "2.0.14",
     "typescript": "5.5.4",
-    "@vitest/coverage-v8": "2.0.5",
-    "vitest": "2.0.5"
+    "@types/bun": "1.1.6"
   },
   "engines": {
     "node": "22.6.0"
   },
   "packageManager": "bun@1.1.22",
-  "workspaces": [
-    "packages/*",
-    "packages/sdk/templates/*"
-  ],
-  "trustedDependencies": [
-    "@biomejs/biome",
-    "esbuild",
-    "lefthook"
-  ]
+  "workspaces": ["packages/*", "packages/sdk/templates/*"],
+  "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
 }

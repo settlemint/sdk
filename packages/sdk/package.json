@@ -46,8 +46,8 @@
     "pkg:dev": "tsup-node --format esm,cjs --dts --watch",
     "pkg:publint": "publint run --strict",
     "pkg:attw": "attw --pack .",
-    "pkg:test": "vitest",
-    "pkg:test:coverabe": "vitest --coverage"
+    "pkg:test": "bun test",
+    "pkg:test:coverage": "bun test --coverage"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",

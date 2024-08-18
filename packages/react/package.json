@@ -43,8 +43,8 @@
     "pkg:dev": "tsup --format esm,cjs --dts --watch",
     "pkg:publint": "publint run --strict",
     "pkg:attw": "attw --pack .",
-    "pkg:test": "vitest",
-    "pkg:test:coverabe": "vitest --coverage"
+    "pkg:test": "bun test",
+    "pkg:test:coverage": "bun test --coverage"
   },
   "dependencies": {
     "@tanstack/react-query": "5.51.23",

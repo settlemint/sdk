@@ -1,5 +1,5 @@
+import { describe, expect, it } from "bun:test";
 import type { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
 import { createRouteMatcher } from "./route-matcher";
 
 const createMockRequest = (pathname: string): NextRequest => {
