@@ -1,4 +1,4 @@
-import { cosmiconfig } from "cosmiconfig";
+import { lilconfigSync } from "lilconfig";
 import { z } from "zod";
 
 /**
@@ -80,11 +80,11 @@ export async function config(): Promise<ConfigEnv | undefined> {
  * - 'settlemint.config' (formats: .js, .ts, .mjs, .cjs)
  * @returns A promise that resolves to the parsed Config or undefined if not found
  */
-async function parseConfig(): Promise<Config | undefined> {
-  // Initialize cosmiconfig explorer
-  const explorer = cosmiconfig("settlemint");
+function parseConfig(): Config | undefined {
+  // Initialize lilconfig explorer
+  const explorer = lilconfigSync("settlemint");
   // Search for configuration
-  const result = await explorer.search();
+  const result = explorer.search();
 
   // If no configuration is found, return undefined
   if (!result) {

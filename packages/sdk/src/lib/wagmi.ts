@@ -34,7 +34,7 @@ export async function createWagmiClient(options: {
         `"use client"
 
 import type { TransportConfig } from 'viem';
-import { Config, createConfig, CreateConfigParameters, http } from 'wagmi';
+import { Config, cookieStorage, createConfig, CreateConfigParameters, createStorage, http } from 'wagmi';
 import { chain } from './codegen/chain';
 
 export function settleMintWagmiConfig(
@@ -47,8 +47,13 @@ export function settleMintWagmiConfig(
       ...(parameters?.transports??[]),
       [chain.id]: http(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc\`,parameters?.transportConfig),
     },
+    ssr: true,
+    storage: createStorage({
+      storage: cookieStorage
+    }),
   })
 };
+
 `,
       );
     } else {

@@ -47,7 +47,7 @@
     "pkg:test:coverabe": "vitest --coverage"
   },
   "dependencies": {
-    "cosmiconfig": "9.0.0"
+    "lilconfig": "3.1.2"
   },
   "devDependencies": {
     "tsup": "8.2.4",

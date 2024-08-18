@@ -1,7 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
-import { cosmiconfig } from "cosmiconfig";
 import dotenv from "dotenv";
+import { lilconfigSync } from "lilconfig";
 import { merge } from "ts-deepmerge";
 import { z } from "zod";
 import { findProjectRoot } from "./path.ts";
@@ -96,8 +96,8 @@ export async function config(): Promise<ConfigEnv | undefined> {
  * @returns A promise that resolves to the parsed Config or undefined if not found
  */
 async function parseConfig(): Promise<Config | undefined> {
-  // Initialize cosmiconfig explorer
-  const explorer = cosmiconfig("settlemint");
+  // Initialize lilconfigSync explorer
+  const explorer = lilconfigSync("settlemint");
   // Search for configuration
   const result = await explorer.search();
 
