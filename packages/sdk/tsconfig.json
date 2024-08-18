@@ -4,8 +4,8 @@
     "@tsconfig/node22/tsconfig.json"
   ],
   "compilerOptions": {
-    "module": "NodeNext",
-		"moduleResolution": "NodeNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
@@ -14,7 +14,6 @@
 		"declarationMap": true,
     "isolatedModules": true,
 		"noEmit": true,
-		"allowImportingTsExtensions": true,
     "incremental": false
   },
 	"include": ["src"]

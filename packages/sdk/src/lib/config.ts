@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import { lilconfigSync } from "lilconfig";
 import { merge } from "ts-deepmerge";
 import { z } from "zod";
-import { findProjectRoot } from "./path.ts";
+import { findProjectRoot } from "./path";
 
 /**
  * Schema for environment-specific configuration

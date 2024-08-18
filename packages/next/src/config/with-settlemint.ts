@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
-import { config } from "./config.ts";
+import { applicationConfig } from "./config";
 
 export type WithSettleMintOptions = {
   disabled?: boolean;
@@ -11,29 +11,12 @@ export type WithSettleMintOptions = {
 /**
  * Modifies the passed in Next.js configuration
  */
-export async function withSettleMint<C extends NextConfig>(
+export function withSettleMint<C extends NextConfig>(
   nextConfig: C,
   { disabled, output, typedRoutes }: WithSettleMintOptions = {},
-): Promise<C> {
+): C {
   if (!disabled) {
-    const cfg = await config();
-    if (!cfg) {
-      throw new Error("No configuration found, please run settlemint connect");
-    }
-
-    const applications = cfg.applications ?? {};
-
-    const env = process.env.SETTLEMINT_APPLICATION ?? cfg?.defaultApplication.id;
-    if (!env || Object.keys(applications).length === 0) {
-      throw new Error(
-        "No environment found, either set SETTLEMINT_APPLICATION or define a default environment in your .settlemintrc.json file",
-      );
-    }
-
-    const envConf = applications[env];
-    if (!envConf) {
-      throw new Error(`No application found for ${env}, please run \`settlemint connect\``);
-    }
+    const cfg = applicationConfig();
 
     return {
       ...nextConfig,
@@ -41,6 +24,19 @@ export async function withSettleMint<C extends NextConfig>(
       experimental: {
         ...nextConfig.experimental,
         typedRoutes,
+      },
+      env: {
+        ...nextConfig.env,
+        SETTLEMINT_APPLICATION_ID: cfg.application.id,
+        SETTLEMINT_APPLICATION_DISPLAY_NAME: cfg.application.displayName,
+        SETTLEMINT_PORTAL_GQL: cfg.portalGql,
+        SETTLEMINT_PORTAL_REST: cfg.portalRest,
+        SETTLEMINT_THEGRAPH_GQL: cfg.thegraphGql,
+        SETTLEMINT_HASURA_GQL: cfg.hasuraGql,
+        SETTLEMINT_NODE_JSON_RPC: cfg.nodeJsonRpc,
+        SETTLEMINT_PAT: cfg.pat,
+        SETTLEMINT_APP_URL: cfg.appUrl,
+        SETTLEMINT_HASURA_ADMIN_SECRET: cfg.hasuraAdminSecret,
       },
       async rewrites() {
         let existingRewrites:
@@ -58,43 +54,43 @@ export async function withSettleMint<C extends NextConfig>(
         }
 
         const rewrites = [
-          ...(envConf.thegraphGql
+          ...(cfg.thegraphGql
             ? [
                 {
                   source: "/proxy/thegraph/graphql",
-                  destination: envConf.thegraphGql,
+                  destination: cfg.thegraphGql,
                 },
               ]
             : []),
-          ...(envConf.hasuraGql
+          ...(cfg.hasuraGql
             ? [
                 {
                   source: "/proxy/hasura/graphql",
-                  destination: envConf.hasuraGql,
+                  destination: cfg.hasuraGql,
                 },
               ]
             : []),
-          ...(envConf.portalRest
+          ...(cfg.portalRest
             ? [
                 {
                   source: "/proxy/portal/rest/:path*",
-                  destination: `${envConf.portalRest}/:path*`,
+                  destination: `${cfg.portalRest}/:path*`,
                 },
               ]
             : []),
-          ...(envConf.portalGql
+          ...(cfg.portalGql
             ? [
                 {
                   source: "/proxy/portal/graphql",
-                  destination: envConf.portalGql,
+                  destination: cfg.portalGql,
                 },
               ]
             : []),
-          ...(envConf.nodeJsonRpc
+          ...(cfg.nodeJsonRpc
             ? [
                 {
                   source: "/proxy/node/jsonrpc",
-                  destination: envConf.nodeJsonRpc,
+                  destination: cfg.nodeJsonRpc,
                 },
               ]
             : []),

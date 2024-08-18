@@ -4,8 +4,8 @@
     "@tsconfig/next/tsconfig.json"
   ],
   "compilerOptions": {
-    "module": "NodeNext",
-		"moduleResolution": "NodeNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "verbatimModuleSyntax": true,
@@ -13,7 +13,6 @@
 		"declaration": true,
 		"declarationMap": true,
 		"noEmit": true,
-		"allowImportingTsExtensions": true,
     "plugins": [],
     "jsx": "react-jsx",
     "incremental": false,

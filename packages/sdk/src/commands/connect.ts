@@ -1,12 +1,12 @@
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message.ts";
-import { type Works, getServices } from "../lib/cluster-manager.ts";
-import { coerceSelect, coerceText } from "../lib/coerce.ts";
-import { type ConfigEnv, config, createConfig, createEnv } from "../lib/config.ts";
-import { detectFramework } from "../lib/framework.ts";
-import { updateGitignore } from "../lib/git.ts";
-import { getExecutor, getPkgManager } from "../lib/package-manager.ts";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
+import { type Works, getServices } from "../lib/cluster-manager";
+import { coerceSelect, coerceText } from "../lib/coerce";
+import { type ConfigEnv, config, createConfig, createEnv } from "../lib/config";
+import { detectFramework } from "../lib/framework";
+import { updateGitignore } from "../lib/git";
+import { getExecutor, getPkgManager } from "../lib/package-manager";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.

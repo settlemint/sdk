@@ -1,2 +1,3 @@
-export * from "./auth/settlemint-auth.ts";
-export * from "./config/with-settlemint.ts";
+export * from "./auth/auth";
+export * from "./config/with-settlemint";
+export * from "./middleware/middleware";

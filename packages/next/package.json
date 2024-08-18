@@ -47,7 +47,8 @@
     "pkg:test:coverabe": "vitest --coverage"
   },
   "dependencies": {
-    "lilconfig": "3.1.2"
+    "lilconfig": "3.1.2",
+    "path-to-regexp": "^7.1.0"
   },
   "devDependencies": {
     "tsup": "8.2.4",

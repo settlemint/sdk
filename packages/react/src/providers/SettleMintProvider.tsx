@@ -1,8 +1,8 @@
 "use client";
 
 import type { FC, ReactNode } from "react";
-import { type ReactQueryProps, ReactQueryWrapper } from "./wrappers/ReactQueryWrapper.tsx";
-import { type WagmiProps, WagmiWrapper } from "./wrappers/WagmiWrapper.tsx";
+import { type ReactQueryProps, ReactQueryWrapper } from "./wrappers/ReactQueryWrapper";
+import { type WagmiProps, WagmiWrapper } from "./wrappers/WagmiWrapper";
 
 export const SettleMintProvider: FC<{
   children: ReactNode;

@@ -48,16 +48,23 @@ const ConfigEnvSchema = ConfigSchema.extend({
   hasuraAdminSecret: z.string().optional(),
 });
 
+const ApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
+  pat: z.string(),
+  appUrl: z.string().url().optional(),
+  hasuraAdminSecret: z.string().optional(),
+});
+
 // Infer types from the schemas
 type ConfigEnv = z.infer<typeof ConfigEnvSchema>;
+type ApplicationConfigEnv = z.infer<typeof ApplicationConfigEnvSchema>;
 type Config = z.infer<typeof ConfigSchema>;
 
 /**
  * Retrieves and parses the configuration, combining it with environment variables
  * @returns A promise that resolves to the parsed configuration or undefined if not found
  */
-export async function config(): Promise<ConfigEnv | undefined> {
-  const config = await parseConfig();
+export function config(): ConfigEnv | undefined {
+  const config = parseConfig();
   // If no config is found, return undefined
   if (!config) {
     return undefined;
@@ -68,6 +75,34 @@ export async function config(): Promise<ConfigEnv | undefined> {
     pat: process.env.SETTLEMINT_PAT_TOKEN,
     appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     hasuraAdminSecret: process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
+  });
+}
+
+export function applicationConfig(): ApplicationConfigEnv {
+  const cfg = config();
+  if (!cfg) {
+    throw new Error("No configuration found, please run settlemint connect");
+  }
+
+  const applications = cfg.applications ?? {};
+
+  const env = process.env.SETTLEMINT_APPLICATION ?? cfg?.defaultApplication.id;
+  if (!env || Object.keys(applications).length === 0) {
+    throw new Error(
+      "No environment found, either set SETTLEMINT_APPLICATION or define a default environment in your .settlemintrc.json file",
+    );
+  }
+
+  const envConf = applications[env];
+  if (!envConf) {
+    throw new Error(`No application found for ${env}, please run \`settlemint connect\``);
+  }
+
+  return ApplicationConfigEnvSchema.parse({
+    ...envConf,
+    pat: cfg.pat,
+    appUrl: cfg.appUrl,
+    hasuraAdminSecret: cfg.hasuraAdminSecret,
   });
 }
 

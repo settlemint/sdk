@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { createChainConfig } from "./chain.ts";
-import { findProjectRoot } from "./path.ts";
+import { createChainConfig } from "./chain";
+import { findProjectRoot } from "./path";
 
 /**
  * Creates a Portal REST client based on the OpenAPI specification.
