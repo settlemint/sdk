@@ -5,7 +5,7 @@ import { getSession } from "./session/session.js";
 
 const isAuthenticatedRoute = createRouteMatcher(["/app/(.*)"]);
 
-async function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const session = await getSession(request, response);
 
@@ -15,5 +15,3 @@ async function middleware(request: NextRequest) {
 
   return response;
 }
-
-export default middleware;
