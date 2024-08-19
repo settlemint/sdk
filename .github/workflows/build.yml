@@ -80,6 +80,10 @@ jobs:
 
       - run: bunx turbo connect --concurrency=100% --summarize --env-mode=loose
 
+      - run: cat apps/asset-tokenization/.settlemintrc.json
+
+      - run: cat apps/asset-tokenization/.env.local
+
       - run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
 
       - run: bunx turbo lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
