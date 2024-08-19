@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "5.51.23",
-    "viem": "2.19.4",
+    "viem": "2.19.6",
     "wagmi": "2.12.5"
   },
   "devDependencies": {

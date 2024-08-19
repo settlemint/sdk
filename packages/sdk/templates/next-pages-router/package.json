@@ -20,7 +20,7 @@
     "graphql-request": "6.1.0",
     "openapi-fetch": "0.11.1",
     "wagmi": "2.12.5",
-    "viem": "2.19.4"
+    "viem": "2.19.6"
   },
   "devDependencies": {
     "typescript": "5.5.4",
