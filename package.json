@@ -26,7 +26,8 @@
     "attw": "turbo attw",
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint"
+    "lint": "turbo lint",
+    "connect": "turbo connect"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",

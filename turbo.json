@@ -15,7 +15,7 @@
       "cache": false
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^build", "//#lint:biome", "^lint"]
     },
     "//#format": {
       "cache": false
@@ -37,6 +37,10 @@
     },
     "test:coverage": {
       "dependsOn": ["^test:coverage"]
+    },
+    "connect": {
+      "dependsOn": ["^build"],
+      "cache": false
     }
   }
 }
