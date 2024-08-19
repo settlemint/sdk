@@ -63,6 +63,10 @@ export function connectCommand(): Command {
         "-n, --node-json-rpc <url>",
         "The url to the node rpc api (SETTLEMINT_NODE_JSON_RPC_URL environment variable)",
       )
+      .option(
+        "-c, --session-secret <secret>",
+        "The secret to use to encrypt the session, 32 characters (SETTLEMINT_SESSION_SECRET environment variable)",
+      )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
@@ -80,6 +84,7 @@ export function connectCommand(): Command {
           application,
           childWorkspace,
           defaultApplication,
+          sessionSecret,
         }) => {
           printAsciiArt();
           printIntro("Setting up the SettleMint SDK in your project");
@@ -206,6 +211,7 @@ export function connectCommand(): Command {
 
             // Application URL input (only for Next.js)
             let selectedAppUrl: string | undefined;
+            let selectedSessionSecret: string | undefined;
             if (selectedFramework === "nextjs") {
               selectedAppUrl = await coerceText({
                 type: "text",
@@ -217,6 +223,18 @@ export function connectCommand(): Command {
                 promptMessage: "Enter the development URL of your application instance",
                 existingMessage: "A valid application URL is already provided. Do you want to change it?",
                 invalidMessage: "Invalid application instance URL. Please enter a valid URL.",
+              });
+
+              selectedSessionSecret = await coerceText({
+                type: "password",
+                envValue: process.env.SETTLEMINT_SESSION_SECRET,
+                cliParamValue: sessionSecret,
+                configValue: cfg?.sessionSecret ?? randomBytes(16).toString("hex"),
+                validate: (value) => (value?.trim() ?? "").length === 32,
+                promptMessage: "Enter a secret to encrypt the session",
+                existingMessage:
+                  "A valid session secret is already provided or was auto generated for you. Do you want to change it?",
+                invalidMessage: "Invalid session secret",
               });
             }
 
@@ -335,7 +353,7 @@ export function connectCommand(): Command {
                   SETTLEMINT_PAT_TOKEN: personalAccessToken,
                   NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
-                  SETTLEMINT_AUTH_SECRET: randomBytes(16).toString("hex"),
+                  SETTLEMINT_SESSION_SECRET: selectedSessionSecret,
                 });
               },
               stopMessage: ".env.local file created or updated",

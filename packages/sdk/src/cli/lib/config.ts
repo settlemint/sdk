@@ -51,6 +51,7 @@ const ConfigEnvSchema = ConfigSchema.extend({
   pat: z.string(),
   appUrl: z.string().url().optional(),
   hasuraAdminSecret: z.string().optional(),
+  sessionSecret: z.string().min(32).optional(),
 });
 
 /**
@@ -60,7 +61,7 @@ const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
   NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
-  SETTLEMINT_AUTH_SECRET: z.string(),
+  SETTLEMINT_SESSION_SECRET: z.string().min(32).optional(),
 });
 
 // Infer types from the schemas
@@ -85,6 +86,7 @@ export async function config(): Promise<ConfigEnv | undefined> {
     appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     hasuraAdminSecret: process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
     authSecret: process.env.SETTLEMINT_AUTH_SECRET,
+    sessionSecret: process.env.SETTLEMINT_SESSION_SECRET,
   });
 }
 
