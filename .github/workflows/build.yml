@@ -46,11 +46,7 @@ jobs:
         uses: namespacelabs/nscloud-cache-action@v1
         with:
           path: |
-            ./node_modules
             ./.turbo
-            ./packages/**/node_modules
-            ./packages/**/.turbo
-            ./packages/**/dist
             ~/.bun/install/cache
 
       - uses: oven-sh/setup-bun@v2
@@ -65,7 +61,7 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format lint pkg:build pkg:attw pkg:publint pkg:test:coverage
+      - run: bunx turbo format lint build attw publint test:coverage
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
@@ -116,7 +112,7 @@ jobs:
             fi
           done
 
-          for dir in ./packages/sdk/templates/*; do
+          for dir in ./apps/*; do
             if [ -f "$dir/package.json" ]; then
               update_package_json "$dir" "$VERSION"
             fi
@@ -142,14 +138,14 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/react/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
+      # - uses: JS-DevTools/npm-publish@v3
+      #   with:
+      #     token: ${{ secrets.NPM_TOKEN }}
+      #     package: ./packages/react/package.json
+      #     access: public
+      #     provenance: false
+      #     strategy: all
+      #     tag: ${{ env.TAG }}
 
       - name: Create or update a comment
         if: ${{ github.event_name == 'pull_request' }}
@@ -160,7 +156,6 @@ jobs:
                 # 📦 Packages
                 | Package | Install |
                 | ------- | -------------------- |
-                | React | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
                 | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
                 | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
 

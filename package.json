@@ -1,39 +1,46 @@
 {
   "name": "sdk",
   "private": true,
-  "version": "0.4.7",
   "license": "FSL-1.1-MIT",
+  "author": {
+    "name": "SettleMint",
+    "email": "support@settlemint.com",
+    "url": "https://settlemint.com"
+  },
+  "homepage": "https://github.com/settlemint/sdk/blob/main/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/settlemint/sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/settlemint/sdk/issues",
+    "email": "support@settlemint.com"
+  },
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
-    "pkg:build": "turbo pkg:build",
-    "pkg:test": "turbo pkg:test",
-    "pkg:test:coverage": "turbo pkg:test:coverage",
-    "pkg:dev": "turbo pkg:dev",
-    "lint": "biome lint --write --unsafe .",
+    "lint:biome": "biome lint --write --unsafe .",
     "format": "biome format --write .",
-    "pkg:publint": "turbo pkg:publint",
-    "pkg:attw": "turbo pkg:attw",
-    "knip": "knip"
+    "knip": "knip",
+    "publint": "turbo publint",
+    "attw": "turbo attw",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.15.4",
     "@biomejs/biome": "1.8.3",
-    "@tsconfig/next": "2.0.3",
-    "@tsconfig/node22": "22.0.0",
-    "@tsconfig/strictest": "2.0.5",
-    "@types/node": "22.4.0",
-    "knip": "5.27.2",
     "lefthook": "1.7.14",
-    "publint": "0.2.10",
-    "tsup": "8.2.4",
-    "turbo": "2.0.14",
-    "typescript": "5.5.4",
-    "@types/bun": "1.1.6"
+    "turbo": "^2.0.13",
+    "typescript": "^5.4.5",
+    "knip": "5.27.2",
+    "@types/bun": "1.1.6",
+    "@arethetypeswrong/cli": "0.15.4",
+    "publint": "0.2.10"
   },
   "engines": {
-    "node": "22.6.0"
+    "node": ">=18"
   },
-  "packageManager": "bun@1.1.22",
-  "workspaces": ["packages/*", "packages/sdk/templates/*"],
-  "trustedDependencies": ["@biomejs/biome", "esbuild", "lefthook"]
+  "packageManager": "bun@1.1.24",
+  "workspaces": ["apps/*", "packages/*", "packages/repo/*"],
+  "trustedDependencies": ["@biomejs/biome", "lefthook"]
 }

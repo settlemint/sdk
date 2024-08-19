@@ -4,14 +4,15 @@
     "enabled": true
   },
   "files": {
-    "ignore": [".changeset/**", "**/dist/**", "**/portal-schema.d.ts", "tsconfig.json", "**/.settlemint/**"]
+    "ignore": []
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "a11y": {
-        "useHtmlLang": "off"
+        "useHtmlLang": "warn",
+        "useButtonType": "warn"
       }
     }
   },

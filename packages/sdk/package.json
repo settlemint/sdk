@@ -2,11 +2,7 @@
   "name": "@settlemint/sdk",
   "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
   "version": "0.0.1",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "type": "module",
-  "sideEffects": false,
   "private": false,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -24,30 +20,29 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist", "templates", "!templates/**/node_modules"],
+  "files": ["dist"],
   "exports": {
-    "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/cli.d.ts",
+        "default": "./dist/cli.js"
       },
       "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
+        "types": "./dist/cli.d.cts",
+        "default": "./dist/cli.cjs"
       }
     }
   },
   "bin": {
-    "settlemint": "dist/index.js"
+    "settlemint": "dist/cli.js"
   },
   "scripts": {
-    "pkg:build": "tsup-node --format esm,cjs --dts",
-    "pkg:dev": "tsup-node --format esm,cjs --dts --watch",
-    "pkg:publint": "publint run --strict",
-    "pkg:attw": "attw --pack .",
-    "pkg:test": "bun test",
-    "pkg:test:coverage": "bun test --coverage"
+    "build": "tsup-node src/cli.ts",
+    "dev": "tsup-node src/cli.ts --watch",
+    "publint": "publint run --strict",
+    "attw": "attw --pack . --ignore-rules no-resolution",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",

@@ -1,0 +1,9 @@
+{
+  "name": "@repo/tsup-config",
+  "version": "0.0.0",
+  "private": true,
+  "files": ["tsup-cli.ts", "tsup.ts"],
+  "devDependencies": {
+    "tsup": "8.2.4"
+  }
+}
