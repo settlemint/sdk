@@ -41,11 +41,21 @@
         "types": "./dist/middleware/middleware.d.cts",
         "default": "./dist/middleware/middleware.cjs"
       }
+    },
+    "./providers/*": {
+      "import": {
+        "types": "./dist/providers/*.d.ts",
+        "default": "./dist/providers/*.js"
+      },
+      "require": {
+        "types": "./dist/providers/*.d.cts",
+        "default": "./dist/providers/*.cjs"
+      }
     }
   },
   "scripts": {
-    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts",
-    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts --watch",
+    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx",
+    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack . --ignore-rules no-resolution",
     "test": "bun test",
@@ -62,6 +72,9 @@
     "iron-session": "^8.0.2",
     "path-to-regexp": "^7.1.0",
     "zod": "^3.23.8",
+    "@tanstack/react-query": "5.51.23",
+    "viem": "2.19.4",
+    "wagmi": "2.12.5",
     "@settlemint/sdk-common": "workspace:*"
   },
   "peerDependencies": {
