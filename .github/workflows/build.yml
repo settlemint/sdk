@@ -146,6 +146,15 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/sdk-common/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/sdk-next/package.json
           access: public
           provenance: false
@@ -161,14 +170,31 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      # - uses: JS-DevTools/npm-publish@v3
-      #   with:
-      #     token: ${{ secrets.NPM_TOKEN }}
-      #     package: ./packages/react/package.json
-      #     access: public
-      #     provenance: false
-      #     strategy: all
-      #     tag: ${{ env.TAG }}
+      - name: Wait for NPM packages to be published
+        run: |
+          wait_for_package() {
+            package=$1
+            version=$2
+            max_attempts=30
+            attempt=1
+
+            while [ $attempt -le $max_attempts ]; do
+              if bun pm view $package@$version version &>/dev/null; then
+                echo "$package@$version is now available on NPM"
+                return 0
+              fi
+              echo "Waiting for $package@$version to be available on NPM (attempt $attempt/$max_attempts)"
+              sleep 10
+              attempt=$((attempt + 1))
+            done
+
+            echo "Timeout: $package@$version is not available on NPM after $max_attempts attempts"
+            return 1
+          }
+
+          wait_for_package "@settlemint/sdk" "$VERSION" && \
+          wait_for_package "@settlemint/sdk-next" "$VERSION" && \
+          wait_for_package "@settlemint/sdk-common" "$VERSION" && \
 
       - name: Docker meta
         id: meta
