@@ -71,7 +71,7 @@ jobs:
       - name: Write configs
         run: |
           echo '${{ secrets.SETTLEMINTRC }}' > apps/asset-tokenization/.settlemintrc.json
-          echo '${{ secrets.ENVLOCAL }}' > apps/asset-tokenization/env.local
+          echo '${{ secrets.ENVLOCAL }}' > apps/asset-tokenization/.env.local
 
       - run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
 
