@@ -194,7 +194,7 @@ jobs:
 
           wait_for_package "@settlemint/sdk" "$VERSION" && \
           wait_for_package "@settlemint/sdk-next" "$VERSION" && \
-          wait_for_package "@settlemint/sdk-common" "$VERSION" && \
+          wait_for_package "@settlemint/sdk-common" "$VERSION"
 
       - name: Docker meta
         id: meta
