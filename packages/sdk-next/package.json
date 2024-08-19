@@ -24,12 +24,12 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/tsup.config.d.mts",
-        "default": "./dist/tsup.config.mjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
       },
       "require": {
-        "types": "./dist/tsup.config.d.ts",
-        "default": "./dist/tsup.config.js"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
