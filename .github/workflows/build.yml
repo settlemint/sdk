@@ -76,7 +76,7 @@ jobs:
 
       - run: bunx turbo lint build attw publint test:coverage --filter="./packages/*" --concurrency=100% --summarize --env-mode=loose
 
-      - run: bunx turbo connect
+      - run: bunx turbo connect --concurrency=100% --summarize --env-mode=loose
 
       - run: bunx turbo lint build attw publint test:coverage --filter="./apps/*" --concurrency=100% --summarize --env-mode=loose
 
