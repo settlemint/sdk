@@ -1,6 +1,6 @@
 {
   "name": "asset-tokenization",
-  "version": "0.1.0",
+  "version": "0.4.7",
   "private": true,
   "scripts": {
     "dev": "next dev --turbo --port 3330",
@@ -28,5 +28,6 @@
     "tailwindcss": "3.4.10",
     "eslint": "8.57.0",
     "eslint-config-next": "14.2.5"
-  }
+  },
+  "peerDependencies": {}
 }
