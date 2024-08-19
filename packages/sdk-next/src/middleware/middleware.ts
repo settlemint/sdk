@@ -6,7 +6,6 @@ import { getSession } from "./session/session.js";
 const isProxyRoute = createRouteMatcher(["/proxy/(.*)"]);
 const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura"]);
 const isAuthenticatedRoute = createRouteMatcher(["/s", "/s/(.*)"]);
-const isAuthRoute = createRouteMatcher(["/a", "/a/(.*)"]);
 
 export async function middleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -23,10 +22,7 @@ export async function middleware(request: NextRequest) {
   const session = await getSession(request, response);
 
   if (isAuthenticatedRoute(request) && !session.auth?.address) {
-    return NextResponse.redirect(new URL(`/a?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
-  }
-  if (isAuthRoute(request) && session.auth?.address) {
-    return NextResponse.redirect(new URL("/s", request.nextUrl.origin));
+    return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
   }
 
   return response;
