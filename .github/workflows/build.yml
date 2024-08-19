@@ -67,11 +67,13 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format lint build attw publint test:coverage --filter="./packages/*"
+      - run: bunx turbo format
+
+      - run: bunx turbo lint build attw publint test:coverage --filter="./packages/*"
 
       - run: bunx turbo connect
 
-      - run: bunx turbo format lint build attw publint test:coverage --filter="./apps/*"
+      - run: bunx turbo lint build attw publint test:coverage --filter="./apps/*"
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
