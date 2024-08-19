@@ -132,7 +132,7 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/next/package.json
+          package: ./packages/sdk-next/package.json
           access: public
           provenance: false
           strategy: all
