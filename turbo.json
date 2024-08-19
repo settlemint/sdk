@@ -26,6 +26,12 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "test": {
+      "dependsOn": ["^pkg:test"]
+    },
+    "test:coverage": {
+      "dependsOn": ["^pkg:test:coverage"]
     }
   }
 }
