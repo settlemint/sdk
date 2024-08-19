@@ -63,7 +63,12 @@ jobs:
         uses: settlemint/setup-op@main
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          version: 2.30.0
+          version: 2.29.0
+
+      - name: Test 1Password
+        run: |
+          op whoami
+          op user get --me
 
       - run: bun install
 
