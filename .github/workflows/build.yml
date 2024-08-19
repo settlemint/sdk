@@ -72,13 +72,13 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo format
+      - run: bunx turbo format --concurrency=100% --summarize --env-mode=loose
 
-      - run: bunx turbo lint build attw publint test:coverage --filter="./packages/*"
+      - run: bunx turbo lint build attw publint test:coverage --filter="./packages/*" --concurrency=100% --summarize --env-mode=loose
 
       - run: bunx turbo connect
 
-      - run: bunx turbo lint build attw publint test:coverage --filter="./apps/*"
+      - run: bunx turbo lint build attw publint test:coverage --filter="./apps/*" --concurrency=100% --summarize --env-mode=loose
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
