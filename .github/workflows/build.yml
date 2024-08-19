@@ -175,6 +175,32 @@ jobs:
       #     strategy: all
       #     tag: ${{ env.TAG }}
 
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/settlemint/starterkit-asset-tokenization
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/asset-tokenization
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          provenance: mode=max
+          sbom: true
+
       - name: Create or update a comment
         if: ${{ github.event_name == 'pull_request' }}
         uses: taoliujun/action-unique-comment@v1
@@ -188,9 +214,9 @@ jobs:
                 | SDK | `@settlemint/sdk@${{ env.VERSION }}` |
 
                 # 🚀 Starterkits
-                | Use Case | Version |
+                | Use Case | NPM | Docker |
                 | ------- | -------------------- |
-                | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` |
+                | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` | | `ghcr.io/settlemint/starterkit-asset-tokenization:${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ env.TAG == 'latest' }}

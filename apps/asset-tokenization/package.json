@@ -25,7 +25,7 @@
     "public",
     "styles",
     "types",
-    "./.eslintrc.js",
+    "./.eslintrc.json",
     "./.gitignore",
     "./*.js",
     "./*.md",
@@ -58,8 +58,6 @@
   },
   "devDependencies": {
     "@settlemint/sdk": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
     "typescript": "5.5.4",
     "@types/node": "22.4.1",
     "@types/react": "18.3.3",
