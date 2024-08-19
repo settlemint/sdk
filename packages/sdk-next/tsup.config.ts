@@ -1,1 +1,1 @@
-export { default } from "@repo/tsup-config/tsup.js";
+export { default } from "@repo/tsup-config";

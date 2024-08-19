@@ -28,10 +28,10 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^pkg:test"]
+      "dependsOn": ["^test"]
     },
     "test:coverage": {
-      "dependsOn": ["^pkg:test:coverage"]
+      "dependsOn": ["^test:coverage"]
     }
   }
 }

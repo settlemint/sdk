@@ -46,7 +46,10 @@
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",
-    "@types/npmcli__package-json": "4.0.4"
+    "@types/npmcli__package-json": "4.0.4",
+    "@repo/typescript-config": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/tsup-config": "workspace:*"
   },
   "dependencies": {
     "@clack/prompts": "0.7.0",
