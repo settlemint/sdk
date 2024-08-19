@@ -59,6 +59,12 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Setup 1Password
+        uses: settlemint/setup-op@main
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          version: 2.30.0
+
       - run: bun install
 
       - run: bunx turbo format lint build attw publint test:coverage
