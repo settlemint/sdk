@@ -80,6 +80,8 @@ jobs:
 
       - run: bunx turbo connect --concurrency=100% --summarize --env-mode=loose
 
+      - run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
+
       - run: bunx turbo lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
 
       - name: Inject slug/short variables
