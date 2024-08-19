@@ -43,9 +43,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
                   <p className="flex justify-center backdrop-blur-2xl static w-auto rounded-xl border bg-gray-200 p-4 dark:bg-zinc-800/30">
-                    <code className="font-mono font-bold">
-                      bunx @settlemint/sdk@latest create -t asset-tokenization
-                    </code>
+                    <code className="font-mono font-bold">bunx @settlemint/sdk create -t asset-tokenization</code>
                   </p>
                 </div>
               </div>
