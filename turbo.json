@@ -8,7 +8,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "codegen": {
-      "dependsOn": ["^codegen"]
+      "dependsOn": ["^codegen"],
       "inputs": ["$TURBO_DEFAULT$", ".settlemintrc.json"]
     },
     "//#lint:biome": {
