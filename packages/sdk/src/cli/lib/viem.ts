@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
 import { createChainConfig } from "./chain.js";
-import { findProjectRoot } from "./path.js";
 
 /**
  * Creates a Portal REST client based on the OpenAPI specification.

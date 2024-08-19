@@ -10,11 +10,11 @@
     "email": "support@settlemint.com",
     "url": "https://settlemint.com"
   },
-  "homepage": "https://github.com/settlemint/sdk/blob/main/packages/next/README.md",
+  "homepage": "https://github.com/settlemint/sdk/blob/main/packages/sdk-next/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/settlemint/sdk.git",
-    "directory": "packages/next"
+    "directory": "packages/sdk-next"
   },
   "bugs": {
     "url": "https://github.com/settlemint/sdk/issues",
@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "exports": {
-    ".": {
+    "./config": {
       "import": {
-        "types": "./dist/index.d.ts",
-        "default": "./dist/index.js"
+        "types": "./dist/config/with-settlemint.d.ts",
+        "default": "./dist/config/with-settlemint.js"
       },
       "require": {
-        "types": "./dist/index.d.cts",
-        "default": "./dist/index.cjs"
+        "types": "./dist/config/with-settlemint.d.cts",
+        "default": "./dist/config/with-settlemint.cjs"
       }
     },
     "./middleware": {
@@ -44,8 +44,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node src/index.ts src/middleware/middleware.ts",
-    "dev": "tsup-node src/index.ts src/middleware/middleware.ts --watch",
+    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts",
+    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack . --ignore-rules no-resolution",
     "test": "bun test",
@@ -54,7 +54,6 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "@repo/eslint-config": "workspace:*",
-    "@repo/tsup-config": "workspace:*",
     "next": "14.2.5"
   },
   "dependencies": {
@@ -62,7 +61,8 @@
     "graphql-request": "^7.1.0",
     "iron-session": "^8.0.2",
     "path-to-regexp": "^7.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "@settlemint/sdk-common": "workspace:*"
   },
   "peerDependencies": {
     "next": "^13.5.4 || ^14.0.3 || >=15.0.0-rc"

@@ -1,5 +1,5 @@
 import pkgjs from "@npmcli/package-json";
-import { findProjectRoot } from "./path.js";
+import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
 
 export async function setName(name: string, path?: string) {
   // Read the package.json file

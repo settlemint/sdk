@@ -1,8 +1,8 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
 import { http, createPublicClient } from "viem";
 import * as chains from "viem/chains";
-import { findProjectRoot } from "./path.js";
 
 function getChain(chainId: number): { chain: chains.Chain; name: string } | undefined {
   for (const [key, chain] of Object.entries(chains)) {

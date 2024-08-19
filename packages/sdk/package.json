@@ -49,7 +49,7 @@
     "@types/npmcli__package-json": "4.0.4",
     "@repo/typescript-config": "workspace:*",
     "@repo/eslint-config": "workspace:*",
-    "@repo/tsup-config": "workspace:*"
+    "@settlemint/sdk-common": "workspace:*"
   },
   "dependencies": {
     "@clack/prompts": "0.7.0",
@@ -58,10 +58,8 @@
     "@npmcli/package-json": "5.2.0",
     "commander": "12.1.0",
     "cross-spawn": "7.0.3",
-    "dotenv": "16.4.5",
     "giget": "^1.2.3",
     "graphql": "16.9.0",
-    "lilconfig": "3.1.2",
     "openapi-typescript": "7.3.0",
     "ts-deepmerge": "7.0.1",
     "viem": "2.19.6",

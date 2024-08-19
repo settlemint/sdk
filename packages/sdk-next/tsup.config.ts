@@ -1,1 +1,12 @@
-export { default } from "@repo/tsup-config";
+import { defineConfig } from "tsup";
+
+export default defineConfig(() => {
+  return {
+    minify: false,
+    sourcemap: true,
+    treeshake: true,
+    splitting: false,
+    dts: true,
+    format: ["cjs", "esm"],
+  };
+});

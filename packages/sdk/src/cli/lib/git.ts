@@ -1,6 +1,6 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "./path.js";
+import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
 
 export function updateGitignore() {
   const root = findProjectRoot(process.cwd());

@@ -1,0 +1,99 @@
+import { activeConfig } from "@settlemint/sdk-common/config";
+import type { NextConfig } from "next";
+import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
+
+export type WithSettleMintOptions = {
+  disabled?: boolean;
+  output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
+  typedRoutes?: boolean;
+};
+
+/**
+ * Modifies the passed in Next.js configuration
+ */
+export function withSettleMint<C extends NextConfig>(
+  nextConfig: C,
+  { disabled, output, typedRoutes }: WithSettleMintOptions = {},
+): C {
+  if (!disabled) {
+    const cfg = activeConfig();
+
+    return {
+      ...nextConfig,
+      output: output ?? nextConfig.output ?? "standalone",
+      experimental: {
+        ...nextConfig.experimental,
+        typedRoutes,
+      },
+      async rewrites() {
+        let existingRewrites:
+          | Rewrite[]
+          | {
+              beforeFiles: Rewrite[];
+              afterFiles: Rewrite[];
+              fallback: Rewrite[];
+            };
+
+        if (nextConfig.rewrites) {
+          existingRewrites = await nextConfig.rewrites();
+        } else {
+          existingRewrites = [];
+        }
+
+        const rewrites = [
+          ...(cfg.thegraphGql
+            ? [
+                {
+                  source: "/proxy/thegraph/graphql",
+                  destination: cfg.thegraphGql,
+                },
+              ]
+            : []),
+          ...(cfg.hasuraGql
+            ? [
+                {
+                  source: "/proxy/hasura/graphql",
+                  destination: cfg.hasuraGql,
+                },
+              ]
+            : []),
+          ...(cfg.portalRest
+            ? [
+                {
+                  source: "/proxy/portal/rest/:path*",
+                  destination: `${cfg.portalRest}/:path*`,
+                },
+              ]
+            : []),
+          ...(cfg.portalGql
+            ? [
+                {
+                  source: "/proxy/portal/graphql",
+                  destination: cfg.portalGql,
+                },
+              ]
+            : []),
+          ...(cfg.nodeJsonRpc
+            ? [
+                {
+                  source: "/proxy/node/jsonrpc",
+                  destination: cfg.nodeJsonRpc,
+                },
+              ]
+            : []),
+        ];
+
+        if (Array.isArray(existingRewrites)) {
+          return [...existingRewrites, ...rewrites];
+        }
+
+        return {
+          beforeFiles: existingRewrites.beforeFiles,
+          afterFiles: [...existingRewrites.afterFiles, ...rewrites],
+          fallback: existingRewrites.fallback,
+        };
+      },
+    } as C;
+  }
+  return nextConfig;
+}

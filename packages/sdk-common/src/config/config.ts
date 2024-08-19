@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
 import dotenv from "dotenv";
 import { lilconfigSync } from "lilconfig";
 import { merge } from "ts-deepmerge";
 import { z } from "zod";
+import { findProjectRoot } from "../utils/path.js";
 
 /**
  * Schema for environment-specific configuration
@@ -64,17 +64,24 @@ const EnvSchema = z.object({
   SETTLEMINT_SESSION_SECRET: z.string().min(32).optional(),
 });
 
+export const ApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
+  pat: z.string(),
+  appUrl: z.string().url().optional(),
+  hasuraAdminSecret: z.string().optional(),
+});
+
 // Infer types from the schemas
 export type ConfigEnv = z.infer<typeof ConfigEnvSchema>;
 type Config = z.infer<typeof ConfigSchema>;
 type Env = z.infer<typeof EnvSchema>;
+export type ApplicationConfigEnv = z.infer<typeof ApplicationConfigEnvSchema>;
 
 /**
  * Retrieves and parses the configuration, combining it with environment variables
  * @returns A promise that resolves to the parsed configuration or undefined if not found
  */
-export async function config(): Promise<ConfigEnv | undefined> {
-  const config = await parseConfig();
+export function config(): ConfigEnv | undefined {
+  const config = parseConfig();
   // If no config is found, return undefined
   if (!config) {
     return undefined;
@@ -99,11 +106,11 @@ export async function config(): Promise<ConfigEnv | undefined> {
  * - 'settlemint.config' (formats: .js, .ts, .mjs, .cjs)
  * @returns A promise that resolves to the parsed Config or undefined if not found
  */
-async function parseConfig(): Promise<Config | undefined> {
+function parseConfig(): Config | undefined {
   // Initialize lilconfigSync explorer
   const explorer = lilconfigSync("settlemint");
   // Search for configuration
-  const result = await explorer.search();
+  const result = explorer.search();
 
   // If no configuration is found, return undefined
   if (!result) {
@@ -187,5 +194,33 @@ export async function createEnv(env: Env) {
   dotenv.config({
     path: [".env.local", ".env"],
     override: true,
+  });
+}
+
+export function activeConfig(): ApplicationConfigEnv {
+  const cfg = config();
+  if (!cfg) {
+    throw new Error("No configuration found, please run settlemint connect");
+  }
+
+  const applications = cfg.applications ?? {};
+
+  const env = process.env.SETTLEMINT_APPLICATION ?? cfg?.defaultApplication.id;
+  if (!env || Object.keys(applications).length === 0) {
+    throw new Error(
+      "No environment found, either set SETTLEMINT_APPLICATION or define a default environment in your .settlemintrc.json file",
+    );
+  }
+
+  const envConf = applications[env];
+  if (!envConf) {
+    throw new Error(`No application found for ${env}, please run \`settlemint connect\``);
+  }
+
+  return ApplicationConfigEnvSchema.parse({
+    ...envConf,
+    pat: cfg.pat,
+    appUrl: cfg.appUrl,
+    hasuraAdminSecret: cfg.hasuraAdminSecret,
   });
 }
