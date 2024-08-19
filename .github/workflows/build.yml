@@ -59,16 +59,6 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Setup 1Password
-        uses: settlemint/setup-op@main
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          version: 2.29.0
-
-      - name: Test 1Password
-        run: |
-          op whoami
-          op user get --me
 
       - run: bun install
 
@@ -78,11 +68,10 @@ jobs:
 
       - run: bun install
 
-      - run: bunx turbo connect --concurrency=100% --summarize --env-mode=loose
-
-      - run: cat apps/asset-tokenization/.settlemintrc.json
-
-      - run: cat apps/asset-tokenization/.env.local
+      - name: Write configs
+        run: |
+          echo '${{ secrets.SETTLEMINTRC }}' > apps/asset-tokenization/.settlemintrc.json
+          echo '${{ secrets.ENVLOCAL }}' > apps/asset-tokenization/env.local
 
       - run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
 
