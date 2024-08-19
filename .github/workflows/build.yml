@@ -179,7 +179,7 @@ jobs:
             attempt=1
 
             while [ $attempt -le $max_attempts ]; do
-              if bun pm view $package@$version version &>/dev/null; then
+              if npm view $package@$version version &>/dev/null; then
                 echo "$package@$version is now available on NPM"
                 return 0
               fi
