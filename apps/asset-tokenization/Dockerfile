@@ -1,6 +1,8 @@
 # DEPENDENCIES
 FROM oven/bun:1.1.24-alpine AS dependencies
 
+RUN apk add --no-cache python3 make g++ gcc
+
 COPY package.json .
 RUN bun install
 
