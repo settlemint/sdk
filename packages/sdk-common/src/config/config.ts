@@ -197,10 +197,11 @@ export async function createEnv(env: Env) {
   });
 }
 
-export function activeConfig(): ApplicationConfigEnv {
+export function activeConfig(): ApplicationConfigEnv | undefined {
   const cfg = config();
   if (!cfg) {
-    throw new Error("No configuration found, please run settlemint connect");
+    console.warn("No configuration found, please run settlemint connect");
+    return undefined;
   }
 
   const applications = cfg.applications ?? {};

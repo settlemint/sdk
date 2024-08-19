@@ -17,6 +17,9 @@ export function withSettleMint<C extends NextConfig>(
 ): C {
   if (!disabled) {
     const cfg = activeConfig();
+    if (!cfg) {
+      return nextConfig;
+    }
 
     return {
       ...nextConfig,

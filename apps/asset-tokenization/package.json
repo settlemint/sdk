@@ -35,6 +35,7 @@
   ],
   "scripts": {
     "dev": "next dev --turbo --port 3330",
+    "dev:connect": "op run --env-file=\".env.connect.1p\" -- bunx settlemint connect",
     "codegen": "settlemint codegen",
     "build": "next build",
     "start": "next start",

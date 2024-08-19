@@ -36,7 +36,8 @@
     "knip": "5.27.2",
     "@types/bun": "1.1.6",
     "@arethetypeswrong/cli": "0.15.4",
-    "publint": "0.2.10"
+    "publint": "0.2.10",
+    "tsup": "8.2.4"
   },
   "engines": {
     "node": ">=18"
