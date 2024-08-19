@@ -9,6 +9,7 @@
     },
     "codegen": {
       "dependsOn": ["^codegen"]
+      "inputs": ["$TURBO_DEFAULT$", ".settlemintrc.json"]
     },
     "//#lint:biome": {
       "cache": false
