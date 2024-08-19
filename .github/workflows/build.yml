@@ -138,6 +138,15 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./apps/asset-tokenization/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
       # - uses: JS-DevTools/npm-publish@v3
       #   with:
       #     token: ${{ secrets.NPM_TOKEN }}
@@ -154,10 +163,15 @@ jobs:
             uniqueIdentifier: ${{ github.workflow }}
             body: |
                 # 📦 Packages
-                | Package | Install |
+                | Package | Version |
                 | ------- | -------------------- |
-                | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
-                | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
+                | Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
+                | SDK | `@settlemint/sdk@${{ env.VERSION }}` |
+
+                # 🚀 Starterkits
+                | Use Case | Version |
+                | ------- | -------------------- |
+                | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ env.TAG == 'latest' }}

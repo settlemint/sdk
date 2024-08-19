@@ -1,7 +1,38 @@
 {
-  "name": "asset-tokenization",
+  "name": "@settlemint/starterkit-asset-tokenization",
   "version": "0.4.7",
-  "private": true,
+  "private": false,
+  "license": "FSL-1.1-MIT",
+  "author": {
+    "name": "SettleMint",
+    "email": "support@settlemint.com",
+    "url": "https://settlemint.com"
+  },
+  "homepage": "https://github.com/settlemint/sdk/blob/main/apps/asset-tokenization/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/settlemint/sdk.git",
+    "directory": "apps/asset-tokenization"
+  },
+  "bugs": {
+    "url": "https://github.com/settlemint/sdk/issues",
+    "email": "support@settlemint.com"
+  },
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "public",
+    "styles",
+    "types",
+    "./.eslintrc.js",
+    "./.gitignore",
+    "./*.js",
+    "./*.md",
+    "./*.mjs",
+    "./*.ts",
+    "./*.json"
+  ],
   "scripts": {
     "dev": "next dev --turbo --port 3330",
     "codegen": "settlemint codegen",
