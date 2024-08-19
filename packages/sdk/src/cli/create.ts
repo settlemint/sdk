@@ -1,6 +1,5 @@
-import { existsSync, mkdirSync, readdirSync } from "node:fs";
-import { join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync, mkdirSync } from "node:fs";
+import { join } from "node:path";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
 import {
@@ -16,13 +15,13 @@ import { coerceSelect, coerceText } from "./lib/coerce.js";
 import { setName } from "./lib/package-json.js";
 import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "./lib/package-manager.js";
 import {
+  downloadAndExtractNpmPackage,
   emptyDir,
   formatTargetDir,
   isEmpty,
   isValidPackageName,
   templates,
   toValidPackageName,
-  write,
 } from "./lib/templates.js";
 
 /**
@@ -41,7 +40,7 @@ export function createCommand(): Command {
         "The name for your SettleMint project (SETTLEMINT_PROJECT_NAME environment variable)",
       )
       .option(
-        "-t, --template <url>",
+        "-t, --template <template>",
         `The template for your SettleMint project, options are ${templates.map((templates) => templates.value).join(", ")} (SETTLEMINT_TEMPLATE environment variable)`,
       )
       .option(
@@ -121,11 +120,7 @@ export function createCommand(): Command {
           await printSpinner({
             startMessage: "Scaffolding the project",
             task: async () => {
-              const templateDir = resolve(fileURLToPath(import.meta.url), "../../templates", selectedTemplate);
-              const files = readdirSync(templateDir);
-              for (const file of files) {
-                write(projectDir, templateDir, file);
-              }
+              await downloadAndExtractNpmPackage(selectedTemplate as (typeof templates)[number]["value"], projectDir);
               await setName(selectedProjectName, projectDir);
               await install(selectedPackageManager as PackageManager, projectDir);
             },

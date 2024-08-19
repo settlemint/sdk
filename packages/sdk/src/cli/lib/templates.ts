@@ -1,10 +1,9 @@
-import { copyFileSync, existsSync, mkdirSync, readdirSync, rmSync, statSync, writeFileSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
+import { resolve } from "node:path";
+import { downloadTemplate } from "giget";
+import { version } from "../../../package.json";
 
-export const templates = [
-  { value: "next-app-router", label: "Next.js (App Router)" },
-  { value: "next-pages-router", label: "Next.js (Pages Router)" },
-] as const;
+export const templates = [{ value: "asset-tokenization", label: "Asset Tokenization" }] as const;
 
 export function isValidPackageName(projectName: string) {
   return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(projectName);
@@ -36,36 +35,16 @@ export function emptyDir(dir: string) {
   }
 }
 
-const renameFiles: Record<string, string | undefined> = {
-  "_env.local": ".env.local",
-  // https://github.com/npm/npm/issues/1862
-  _gitignore: ".gitignore",
-  _npmrc: ".npmrc",
-};
+export async function downloadAndExtractNpmPackage(
+  template: (typeof templates)[number]["value"],
+  targetDir: string,
+): Promise<void> {
+  // Create target directory if it doesn't exist
+  mkdirSync(targetDir, { recursive: true });
 
-export function write(root: string, templateDir: string, file: string, content?: string) {
-  const targetPath = join(root, renameFiles[file] ?? file);
-  if (content) {
-    writeFileSync(targetPath, content);
-  } else {
-    copy(join(templateDir, file), targetPath);
-  }
-}
-
-function copyDir(srcDir: string, destDir: string) {
-  mkdirSync(destDir, { recursive: true });
-  for (const file of readdirSync(srcDir)) {
-    const srcFile = resolve(srcDir, file);
-    const destFile = resolve(destDir, file);
-    copy(srcFile, destFile);
-  }
-}
-
-function copy(src: string, dest: string) {
-  const stat = statSync(src);
-  if (stat.isDirectory()) {
-    copyDir(src, dest);
-  } else {
-    copyFileSync(src, dest);
-  }
+  // Download and extract the package using giget
+  await downloadTemplate(`https://registry.npmjs.org/${template}/-/${template}-${version}.tgz`, {
+    dir: targetDir,
+    force: true,
+  });
 }
