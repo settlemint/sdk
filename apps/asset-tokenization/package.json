@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo --port 3330",
-    "predev": "settlemint codegen",
+    "codegen": "settlemint codegen",
     "build": "next build",
-    "prebuild": "settlemint codegen",
     "start": "next start",
     "lint": "next lint"
   },

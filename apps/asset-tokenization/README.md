@@ -55,13 +55,13 @@ This solution is a full stack solution that includes a web application and smart
 
 This starterkit is pre-configured with a best in class [wallet based authentication toolkit](https://docs.walletconnect.com/appkit/overview). It offers the best experience by allowing a user to log in using a browser or mobile wallet. But also a limited selection of OAuth based social logins and even by email. For public chain use cases it features an onramp feature.
 
-> In case your usecase digresses from the standard, please describe the differences extensively including the reasons for the differences. One options is to use regular OAuth based login options, including options that can integrate with [LDAP systems](https://authjs.dev/getting-started/providers/keycloak) (user needs to supply a configured Keycloak instance). This is not a preferred option as account linking for wallet based actions is exceedingly complex unless all actions happen via the portal service and platform held keys.
+> In case your usecase diverges from the standard, please describe the differences extensively including the reasons for the differences. One options is to use regular OAuth based login options, including options that can integrate with [LDAP systems](https://authjs.dev/getting-started/providers/keycloak) (user needs to supply a configured Keycloak instance). This is not a preferred option as account linking for wallet based actions is exceedingly complex unless all actions happen via the portal service and platform held keys.
 
 Any actions the platform manager executes happen via the portal service and a connected private key in the platform. This way this key can be secured in an HSM and be considered secure. The fact that they actual key is not linked to the manager logging in, means that changes in who executes the action can change or be shared. Apart from transfer, all actions are executed by the platform manager. It severely simplifies on chain permissioning as there is only one administrator key.
 
 Platform users use their own wallet (browser, mobile or social) to sign their actions. Currently this is only transfer.
 
-> In case your usecase digresses from the standard, please describe the differences extensively including the reasons for the differences. Realise that moving away from the standard incurs a high cost in development time (smart contract and frontend) and risk.
+> In case your usecase diverges from the standard, please describe the differences extensively including the reasons for the differences. Realise that moving away from the standard incurs a high cost in development time (smart contract and frontend) and risk.
 
 ### Assets
 
@@ -105,7 +105,7 @@ These can be extended with custom methods to support more involved use cases lik
       - Token Economics
           - Max supply (n / y+value)
           - Initial Distribution
-              - CVS upload
+              - CSV upload
               - Repeating field
                   - Wallet address
                   - Amount
@@ -134,7 +134,7 @@ These can be extended with custom methods to support more involved use cases lik
                         - Update info
                         - Upload documents
                 - New distribution
-                    - CVS upload
+                    - CSV upload
                     - Repeating field
                         - Wallet address
                         - Amount

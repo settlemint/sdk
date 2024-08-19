@@ -3,9 +3,12 @@
   "ui": "tui",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^codegen,^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "codegen": {
+      "dependsOn": ["^codegen"]
     },
     "//#lint:biome": {
       "cache": false
