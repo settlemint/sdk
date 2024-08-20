@@ -215,7 +215,6 @@ jobs:
         with:
           images: |
             ghcr.io/settlemint/starterkit-asset-tokenization
-            docker.io/settlemint/starterkit-asset-tokenization
           tags: |
             type=schedule
             type=ref,event=branch
