@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { ConnectButton } from "@/components/ui/connect-button";
 import Link from "next/link";
 import { DarkModeToggle } from "../ui/darkmode-toggle";
 
@@ -13,9 +14,7 @@ export function PublicNavigation({ navItems }: { navItems: { href: string; label
           </Button>
         </Link>
       ))}
-      <Link href="/s" className="text-sm font-medium hover:underline underline-offset-4" prefetch={false}>
-        <Button>Login</Button>
-      </Link>
+      <ConnectButton />
     </nav>
   );
 }

@@ -51,11 +51,21 @@
         "types": "./dist/providers/*.d.cts",
         "default": "./dist/providers/*.cjs"
       }
+    },
+    "./connectors/*": {
+      "import": {
+        "types": "./dist/connectors/*.d.ts",
+        "default": "./dist/connectors/*.js"
+      },
+      "require": {
+        "types": "./dist/connectors/*.d.cts",
+        "default": "./dist/connectors/*.cjs"
+      }
     }
   },
   "scripts": {
-    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx",
-    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx --watch",
+    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx src/connectors/*.ts",
+    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx src/connectors/*.ts --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack . --ignore-rules no-resolution",
     "test": "bun test",
@@ -74,7 +84,7 @@
     "graphql-request": "^7.1.0",
     "iron-session": "^8.0.2",
     "path-to-regexp": "^7.1.0",
-    "viem": "2.19.4",
+    "viem": "2.19.6",
     "wagmi": "2.12.5",
     "zod": "^3.23.8"
   },
