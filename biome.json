@@ -12,7 +12,17 @@
       "recommended": true,
       "a11y": {
         "useHtmlLang": "warn",
-        "useButtonType": "warn"
+        "useButtonType": "warn",
+        "useAriaPropsForRole": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
+      "complexity": {
+        "noForEach": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
       }
     }
   },
