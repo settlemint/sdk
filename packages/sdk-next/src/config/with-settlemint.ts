@@ -5,7 +5,6 @@ import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
 export type WithSettleMintOptions = {
   disabled?: boolean;
   output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
-  typedRoutes?: boolean;
 };
 
 /**
@@ -13,7 +12,7 @@ export type WithSettleMintOptions = {
  */
 export function withSettleMint<C extends NextConfig>(
   nextConfig: C,
-  { disabled, output, typedRoutes }: WithSettleMintOptions = {},
+  { disabled, output }: WithSettleMintOptions = {},
 ): C {
   if (!disabled) {
     const cfg = activeConfig();
@@ -24,10 +23,6 @@ export function withSettleMint<C extends NextConfig>(
     return {
       ...nextConfig,
       output: output ?? nextConfig.output ?? "standalone",
-      experimental: {
-        ...nextConfig.experimental,
-        typedRoutes,
-      },
       async rewrites() {
         let existingRewrites:
           | Rewrite[]

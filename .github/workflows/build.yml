@@ -196,12 +196,26 @@ jobs:
           wait_for_package "@settlemint/sdk-next" "$VERSION" && \
           wait_for_package "@settlemint/sdk-common" "$VERSION"
 
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+
       - name: Docker meta
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/settlemint/starterkit-asset-tokenization
+            docker.io/settlemint/starterkit-asset-tokenization
           tags: |
             type=schedule
             type=ref,event=branch
@@ -218,6 +232,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          provenance: mode=max
+          sbom: true
 
       - name: Create or update a comment
         if: ${{ github.event_name == 'pull_request' }}
