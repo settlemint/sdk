@@ -10,13 +10,27 @@ export type LimitedWeb3ModalConfig = Prettify<
   }
 >;
 
+/**
+ * Creates a SettleMint-specific Wagmi configuration.
+ * @param chain - The blockchain chain to configure.
+ * @returns A function to generate Wagmi and Web3Modal configurations.
+ */
 export function createSettleMintWagmiConfig(chain: Chain) {
+  /**
+   * Generates Wagmi and Web3Modal configurations based on provided parameters.
+   * @param parameters - Configuration parameters for Wagmi and Web3Modal.
+   * @param parameters.wagmiConfig - Partial Wagmi configuration options.
+   * @param parameters.wagmiConfig.transportConfig - Optional HTTP transport configuration.
+   * @param parameters.web3ModalConfig - Limited Web3Modal configuration options.
+   * @returns An object containing Wagmi and Web3Modal configurations.
+   */
   const settleMintWagmiConfig = (
     parameters: Prettify<{
       wagmiConfig: Partial<Omit<CreateConfigParameters, "client">> & { transportConfig?: TransportConfig<"http"> };
       web3ModalConfig: LimitedWeb3ModalConfig;
     }>,
   ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
+    // Retrieve the WalletConnect project ID from environment variables
     const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
 
     if (!projectId) {
@@ -25,6 +39,7 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       );
     }
 
+    // Create the Wagmi configuration
     const wagmiConfig = defaultWagmiConfig({
       ...parameters.wagmiConfig,
       chains: [chain],
@@ -46,6 +61,7 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       },
     });
 
+    // Create the Web3Modal configuration
     const web3ModalConfig: Web3ModalConfig = {
       metadata: {
         ...parameters.web3ModalConfig.metadata,
