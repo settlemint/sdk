@@ -83,6 +83,8 @@
     "graphql": "^16.9.0",
     "graphql-request": "^7.1.0",
     "iron-session": "^8.0.2",
+    "next-themes": "^0.3.0",
+    "openapi-fetch": "^0.11.1",
     "path-to-regexp": "^7.1.0",
     "viem": "2.19.6",
     "wagmi": "2.12.5",

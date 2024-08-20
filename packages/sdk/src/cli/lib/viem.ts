@@ -31,38 +31,10 @@ export async function createViemClient(options: {
     if (framework === "nextjs") {
       writeFileSync(
         clientConfigPath,
-        `
-import type { Prettify } from "viem";
-import { Address } from "abitype";
-import {
-  type Account,
-  type Chain,
-  type HttpTransport,
-  type PublicClientConfig,
-  type RpcSchema,
-  type TransportConfig,
-  http,
-} from "viem";
+        `import { createSettleMintViemConfig } from "@settlemint/sdk-next/connectors/viem";
 import { chain } from "./codegen/chain";
 
-export function settleMintViemConfig<
-  chain extends Chain | undefined = undefined,
-  accountOrAddress extends Account | Address | undefined = undefined,
-  rpcSchema extends RpcSchema | undefined = undefined,
->(
-  parameters: Prettify<
-    Omit<PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>, "chain" | "transport"> & {
-      transportConfig?: TransportConfig<"http">;
-    }
-  >,
-): PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema> {
-  return {
-    chain,
-    transport: http(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc\`, parameters.transportConfig),
-    ...parameters,
-  };
-}
-
+export const settleMintViemConfig = createSettleMintViemConfig(chain)
 `,
       );
     } else {

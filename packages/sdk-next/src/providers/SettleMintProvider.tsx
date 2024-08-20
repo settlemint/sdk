@@ -2,6 +2,7 @@
 
 import type { FC, ReactNode } from "react";
 import { type ReactQueryProps, ReactQueryWrapper } from "./wrappers/ReactQueryWrapper.jsx";
+import { ThemeWrapper } from "./wrappers/ThemeWrapper.js";
 import { type WagmiProps, WagmiWrapper } from "./wrappers/WagmiWrapper.jsx";
 
 export const SettleMintProvider: FC<{
@@ -11,7 +12,11 @@ export const SettleMintProvider: FC<{
 }> = ({ children, wagmi, reactQuery }) => {
   return (
     <WagmiWrapper {...wagmi}>
-      <ReactQueryWrapper {...reactQuery}>{children}</ReactQueryWrapper>
+      <ReactQueryWrapper {...reactQuery}>
+        <ThemeWrapper attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {children}
+        </ThemeWrapper>
+      </ReactQueryWrapper>
     </WagmiWrapper>
   );
 };
