@@ -12,7 +12,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 permissions:
   actions: write
@@ -46,11 +46,7 @@ jobs:
         uses: namespacelabs/nscloud-cache-action@v1
         with:
           path: |
-            ./node_modules
             ./.turbo
-            ./packages/**/node_modules
-            ./packages/**/.turbo
-            ./packages/**/dist
             ~/.bun/install/cache
 
       - uses: oven-sh/setup-bun@v2
@@ -63,9 +59,23 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
+
       - run: bun install
 
-      - run: bunx turbo format lint pkg:build pkg:attw pkg:publint pkg:test:coverage
+      - run: bunx turbo format --concurrency=100% --summarize --env-mode=loose
+
+      - run: bunx turbo build --filter="./packages/*" --concurrency=100% --summarize --env-mode=loose
+
+      - run: bun install
+
+      - name: Write configs
+        run: |
+          echo '${{ secrets.SETTLEMINTRC }}' > apps/asset-tokenization/.settlemintrc.json
+          echo '${{ secrets.ENVLOCAL }}' > apps/asset-tokenization/.env.local
+
+      - run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
+
+      - run: bunx turbo lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
@@ -116,7 +126,7 @@ jobs:
             fi
           done
 
-          for dir in ./packages/sdk/templates/*; do
+          for dir in ./apps/*; do
             if [ -f "$dir/package.json" ]; then
               update_package_json "$dir" "$VERSION"
             fi
@@ -136,7 +146,7 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/next/package.json
+          package: ./packages/sdk-common/package.json
           access: public
           provenance: false
           strategy: all
@@ -145,11 +155,84 @@ jobs:
       - uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/react/package.json
+          package: ./packages/sdk-next/package.json
           access: public
           provenance: false
           strategy: all
           tag: ${{ env.TAG }}
+
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./apps/asset-tokenization/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Wait for NPM packages to be published
+        run: |
+          wait_for_package() {
+            package=$1
+            version=$2
+            max_attempts=30
+            attempt=1
+
+            while [ $attempt -le $max_attempts ]; do
+              if npm view $package@$version version &>/dev/null; then
+                echo "$package@$version is now available on NPM"
+                return 0
+              fi
+              echo "Waiting for $package@$version to be available on NPM (attempt $attempt/$max_attempts)"
+              sleep 10
+              attempt=$((attempt + 1))
+            done
+
+            echo "Timeout: $package@$version is not available on NPM after $max_attempts attempts"
+            return 1
+          }
+
+          wait_for_package "@settlemint/sdk" "$VERSION" && \
+          wait_for_package "@settlemint/sdk-next" "$VERSION" && \
+          wait_for_package "@settlemint/sdk-common" "$VERSION"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_PASS }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/settlemint/starterkit-asset-tokenization
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: ./apps/asset-tokenization
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          provenance: mode=max
+          sbom: true
 
       - name: Create or update a comment
         if: ${{ github.event_name == 'pull_request' }}
@@ -158,11 +241,15 @@ jobs:
             uniqueIdentifier: ${{ github.workflow }}
             body: |
                 # 📦 Packages
-                | Package | Install |
+                | Package | Version |
                 | ------- | -------------------- |
-                | React | `bun add @settlemint/sdk-react@${{ env.VERSION }}` |
-                | Next | `bun add @settlemint/sdk-next@${{ env.VERSION }}` |
-                | SDK | `bun add @settlemint/sdk@${{ env.VERSION }}` |
+                | Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
+                | SDK | `@settlemint/sdk@${{ env.VERSION }}` |
+
+                # 🚀 Starterkits
+                | Use Case | NPM | Docker |
+                | ------- | -------------------- |
+                | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` | | `ghcr.io/settlemint/starterkit-asset-tokenization:${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ env.TAG == 'latest' }}
@@ -170,30 +257,3 @@ jobs:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
           file_pattern: 'package.json'
-
-
-      # - name: Run scaffold test next-app-router
-      #   run: |
-      #     sleep 5s
-      #     bunx @settlemint/sdk@${{ env.VERSION }} create -n test-next-app-router -t next-app-router -p bun
-
-      #     cd test-next-app-router
-
-      #     bunx settlemint connect -p ${{ secrets.TEST_PAT_TOKEN }} -i https://console.settlemint.com -w settlemint-product-strategy-f4e9 -a reference-sdk-app-7313 -da reference-sdk-app-7313 -pr https://reference-portal-a3f2.gke-europe.settlemint.com/api -pg https://reference-portal-a3f2.gke-europe.settlemint.com/graphql -tg https://reference-middleware-b1b9.gke-europe.settlemint.com/subgraphs/name/reference-erc20-0013 -h https://reference-hasura-e60f.gke-europe.settlemint.com/v1/graphql -n https://reference-read-node-1-56ab.gke-europe.settlemint.com/ -au http://localhost:3000
-
-      #     bunx settlemint codegen
-
-      #     bun run build
-
-      # - name: Run scaffold test next-pages-router
-      #   run: |
-      #     sleep 5s
-      #     bunx @settlemint/sdk@${{ env.VERSION }} create -n test-next-pages-router -t next-pages-router -p bun
-
-      #     cd test-next-pages-router
-
-      #     bunx settlemint connect -p ${{ secrets.TEST_PAT_TOKEN }} -i https://console.settlemint.com -w settlemint-product-strategy-f4e9 -a reference-sdk-app-7313 -da reference-sdk-app-7313 -pr https://reference-portal-a3f2.gke-europe.settlemint.com/api -pg https://reference-portal-a3f2.gke-europe.settlemint.com/graphql -tg https://reference-middleware-b1b9.gke-europe.settlemint.com/subgraphs/name/reference-erc20-0013 -h https://reference-hasura-e60f.gke-europe.settlemint.com/v1/graphql -n https://reference-read-node-1-56ab.gke-europe.settlemint.com/ -au http://localhost:3000
-
-      #     bunx settlemint codegen
-
-      #     bun run build

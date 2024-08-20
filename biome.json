@@ -4,14 +4,25 @@
     "enabled": true
   },
   "files": {
-    "ignore": [".changeset/**", "**/dist/**", "**/portal-schema.d.ts", "tsconfig.json", "**/.settlemint/**"]
+    "ignore": ["apps/asset-tokenization/.settlemint"]
   },
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
       "a11y": {
-        "useHtmlLang": "off"
+        "useHtmlLang": "warn",
+        "useButtonType": "warn",
+        "useAriaPropsForRole": "warn"
+      },
+      "security": {
+        "noDangerouslySetInnerHtml": "warn"
+      },
+      "complexity": {
+        "noForEach": "warn"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "warn"
       }
     }
   },

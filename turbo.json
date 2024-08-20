@@ -2,8 +2,20 @@
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
   "tasks": {
-    "//#lint": {
+    "build": {
+      "dependsOn": ["^codegen", "^build"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    },
+    "codegen": {
+      "dependsOn": ["^codegen"],
+      "inputs": ["$TURBO_DEFAULT$", ".settlemintrc.json"]
+    },
+    "//#lint:biome": {
       "cache": false
+    },
+    "lint": {
+      "dependsOn": ["^build", "//#lint:biome", "^lint"]
     },
     "//#format": {
       "cache": false
@@ -11,23 +23,24 @@
     "//#knip": {
       "cache": false
     },
-    "pkg:build": {
-      "dependsOn": ["^pkg:build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+    "attw": {
+      "dependsOn": ["build"]
     },
-    "pkg:dev": {
+    "publint": { "dependsOn": ["build"] },
+    "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
-    "pkg:test": {
-      "dependsOn": ["^pkg:test"]
+    "test": {
+      "dependsOn": ["^test"]
     },
-    "pkg:test:coverage": {
-      "dependsOn": ["^pkg:test:coverage"]
+    "test:coverage": {
+      "dependsOn": ["^test:coverage"]
     },
-    "pkg:attw": {
-      "dependsOn": ["pkg:build"]
-    },
-    "pkg:publint": { "dependsOn": ["pkg:build"] }
+    "connect": {
+      "dependsOn": ["^build"],
+      "cache": false
+    }
   }
 }
