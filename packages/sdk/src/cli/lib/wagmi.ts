@@ -31,29 +31,64 @@ export async function createWagmiClient(options: {
     if (framework === "nextjs") {
       writeFileSync(
         clientConfigPath,
-        `"use client"
+        `import { createWeb3Modal } from "@web3modal/wagmi/react";
+import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
+import type { Prettify, TransportConfig } from "viem";
+import { Config, cookieStorage, CreateConfigParameters, createStorage, http } from "wagmi";
+import { chain } from "./codegen/chain";
 
-import type { TransportConfig } from 'viem';
-import { Config, cookieStorage, createConfig, CreateConfigParameters, createStorage, http } from 'wagmi';
-import { chain } from './codegen/chain';
+export type Web3ModalConfig = Parameters<typeof createWeb3Modal>["0"];
+export type LimitedWeb3ModalMetadata = Omit<NonNullable<Web3ModalConfig["metadata"]>, "url">;
+
+// Get projectId from https://cloud.walletconnect.com
+export const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
+
+if (!projectId) {
+  console.warn(
+    "Wallet Connect Project ID is not defined, add it to your .env.local file as NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID",
+  );
+}
 
 export function settleMintWagmiConfig(
-  parameters?: Omit<CreateConfigParameters, 'client'> & { transportConfig?: TransportConfig<'http'>},
-): Config {
-  return createConfig({
+  parameters: Prettify<
+    Partial<Omit<CreateConfigParameters, "client">> & {
+      transportConfig?: TransportConfig<"http">;
+      metadata: LimitedWeb3ModalMetadata;
+    }
+  >,
+): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } {
+  const wagmiConfig = defaultWagmiConfig({
     ...parameters,
-    chains: [...(parameters?.chains??[]),chain],
+    chains: [...(parameters?.chains ?? []), chain],
     transports: {
-      ...(parameters?.transports??[]),
-      [chain.id]: http(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc\`,parameters?.transportConfig),
+      ...(parameters?.transports ?? []),
+      [chain.id]: http(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc\`, parameters?.transportConfig),
     },
     ssr: true,
     storage: createStorage({
-      storage: cookieStorage
+      storage: cookieStorage,
     }),
-  })
-};
+    projectId: projectId ?? "",
+    metadata: {
+      ...parameters.metadata,
+      url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
+    },
+  });
 
+  const web3ModalConfig = {
+    metadata: {
+      ...parameters.metadata,
+      url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
+    },
+    wagmiConfig,
+    projectId,
+  };
+
+  return {
+    wagmiConfig,
+    web3ModalConfig,
+  };
+}
 `,
       );
     } else {

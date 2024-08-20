@@ -67,6 +67,10 @@ export function connectCommand(): Command {
         "-c, --session-secret <secret>",
         "The secret to use to encrypt the session, 32 characters (SETTLEMINT_SESSION_SECRET environment variable)",
       )
+      .option(
+        "-wc, --wallet-connect <id>",
+        "The project id to use for Wallet Connect (NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID environment variable)",
+      )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
@@ -85,6 +89,7 @@ export function connectCommand(): Command {
           childWorkspace,
           defaultApplication,
           sessionSecret,
+          walletConnect,
         }) => {
           printAsciiArt();
           printIntro("Setting up the SettleMint SDK in your project");
@@ -212,6 +217,7 @@ export function connectCommand(): Command {
             // Application URL input (only for Next.js)
             let selectedAppUrl: string | undefined;
             let selectedSessionSecret: string | undefined;
+            let selectedWalletConnectProjectId: string | undefined;
             if (selectedFramework === "nextjs") {
               selectedAppUrl = await coerceText({
                 type: "text",
@@ -235,6 +241,18 @@ export function connectCommand(): Command {
                 existingMessage:
                   "A valid session secret is already provided or was auto generated for you. Do you want to change it?",
                 invalidMessage: "Invalid session secret",
+              });
+
+              selectedWalletConnectProjectId = await coerceText({
+                type: "text",
+                envValue: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+                cliParamValue: walletConnect,
+                configValue: cfg?.walletConnectProjectId,
+                validate: (value) => (value?.trim() ?? "").length > 0,
+                promptMessage:
+                  "Enter the Wallet Connect project id, get one for free at https://cloud.walletconnect.com",
+                existingMessage: "A valid Wallet Connect project id is already provided. Do you want to change it?",
+                invalidMessage: "Invalid Wallet Connect project id. Please enter a valid project id.",
               });
             }
 
@@ -354,6 +372,7 @@ export function connectCommand(): Command {
                   NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
                   SETTLEMINT_SESSION_SECRET: selectedSessionSecret,
+                  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
                 });
               },
               stopMessage: ".env.local file created or updated",

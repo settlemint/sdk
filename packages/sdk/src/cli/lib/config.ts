@@ -52,6 +52,7 @@ const ConfigEnvSchema = ConfigSchema.extend({
   appUrl: z.string().url().optional(),
   hasuraAdminSecret: z.string().optional(),
   sessionSecret: z.string().min(32).optional(),
+  walletConnectProjectId: z.string().optional(),
 });
 
 /**
@@ -62,6 +63,7 @@ const EnvSchema = z.object({
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
   NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
   SETTLEMINT_SESSION_SECRET: z.string().min(32).optional(),
+  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string().optional(),
 });
 
 // Infer types from the schemas
@@ -87,6 +89,7 @@ export async function config(): Promise<ConfigEnv | undefined> {
     hasuraAdminSecret: process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
     authSecret: process.env.SETTLEMINT_AUTH_SECRET,
     sessionSecret: process.env.SETTLEMINT_SESSION_SECRET,
+    walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   });
 }
 

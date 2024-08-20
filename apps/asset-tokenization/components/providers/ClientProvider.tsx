@@ -1,23 +1,25 @@
 "use client";
 
-import { settleMintWagmiConfig } from "@/.settlemint/node/wagmi";
+import { wagmiConfig, web3ModalConfig } from "@/lib/config";
 import { SettleMintProvider } from "@settlemint/sdk-next/providers/SettleMintProvider";
 import { QueryClient } from "@tanstack/react-query";
+import { createWeb3Modal } from "@web3modal/wagmi/react";
 import type { FC, PropsWithChildren } from "react";
+import type { State } from "wagmi";
 
-// biome-ignore lint/suspicious/noEmptyInterface: currently there are no custom props for this provider
-export interface ClientProviderProps {}
+export interface ClientProviderProps {
+  initialState?: State;
+}
 
 // Create a React Query client -> https://tanstack.com/query/latest/docs/framework/react/quick-start
 const queryClient = new QueryClient();
 
-// Create the Wagmi Config
-const wagmiConfig = settleMintWagmiConfig();
+createWeb3Modal(web3ModalConfig);
 
-export const ClientProvider: FC<PropsWithChildren<ClientProviderProps>> = ({ children }) => {
+export const ClientProvider: FC<PropsWithChildren<ClientProviderProps>> = ({ children, initialState }) => {
   return (
     <SettleMintProvider
-      wagmi={{ enabled: true, config: wagmiConfig }}
+      wagmi={{ enabled: true, config: wagmiConfig, initialState }}
       reactQuery={{ enabled: true, client: queryClient }}
     >
       {children}

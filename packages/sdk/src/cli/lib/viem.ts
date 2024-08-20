@@ -32,49 +32,76 @@ export async function createViemClient(options: {
       writeFileSync(
         clientConfigPath,
         `
-import type { UnifyIntersection } from '@settlemint/sdk-react';
-import { Address } from 'abitype';
-import { type Account, type Chain, type HttpTransport, type PublicClientConfig, type RpcSchema, type TransportConfig, http } from 'viem';
-import { chain } from './codegen/chain';
+import type { Prettify } from "viem";
+import { Address } from "abitype";
+import {
+  type Account,
+  type Chain,
+  type HttpTransport,
+  type PublicClientConfig,
+  type RpcSchema,
+  type TransportConfig,
+  http,
+} from "viem";
+import { chain } from "./codegen/chain";
 
 export function settleMintViemConfig<
-chain extends Chain | undefined = undefined,
-accountOrAddress extends Account | Address | undefined = undefined,
-rpcSchema extends RpcSchema | undefined = undefined,
->(parameters: UnifyIntersection<Omit<PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>, 'chain'|'transport'> &{ transportConfig?: TransportConfig<'http'>}>,
-):PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>{
+  chain extends Chain | undefined = undefined,
+  accountOrAddress extends Account | Address | undefined = undefined,
+  rpcSchema extends RpcSchema | undefined = undefined,
+>(
+  parameters: Prettify<
+    Omit<PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>, "chain" | "transport"> & {
+      transportConfig?: TransportConfig<"http">;
+    }
+  >,
+): PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema> {
   return {
     chain,
-    transport: http(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc\`,parameters.transportConfig),
-    ...parameters
-  }
+    transport: http(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc\`, parameters.transportConfig),
+    ...parameters,
+  };
 }
+
 `,
       );
     } else {
       writeFileSync(
         clientConfigPath,
         `
-import type { UnifyIntersection } from '@settlemint/sdk-react';
-import { Address } from 'abitype';
-import { type Account, type Chain, type HttpTransport, type PublicClientConfig, type RpcSchema, type TransportConfig, http } from 'viem';
-import { chain } from './codegen/chain';
+import type { Prettify } from "viem";
+import { Address } from "abitype";
+import {
+  type Account,
+  type Chain,
+  type HttpTransport,
+  type PublicClientConfig,
+  type RpcSchema,
+  type TransportConfig,
+  http,
+} from "viem";
+import { chain } from "./codegen/chain";
 
 if(globalThis.window?.document !== undefined){
   throw new Error('You cannot use this SDK in a browser environment as it would expose your secrets.')
 }
 
 export function settleMintViemConfig<
-chain extends Chain | undefined = undefined,
-accountOrAddress extends Account | Address | undefined = undefined,
-rpcSchema extends RpcSchema | undefined = undefined,
->(parameters: UnifyIntersection<Omit<PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>, 'chain'|'transport'> &{ transportConfig?: TransportConfig<'http'>}>,
-):PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>{
+  chain extends Chain | undefined = undefined,
+  accountOrAddress extends Account | Address | undefined = undefined,
+  rpcSchema extends RpcSchema | undefined = undefined,
+>(
+  parameters: Prettify<
+    Omit<PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>, "chain" | "transport"> & {
+      transportConfig?: TransportConfig<"http">;
+    }
+  >,
+): PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema> {
   return {
     chain,
     transport: http("${nodeUrl}",{...parameters.transportConfig, fetchOptions: { ...parameters.transportConfig.fetchOptions, headers: {...parameters.transportConfig.fetchOptions.headers, "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN} }}),
-    ...parameters
-  }
+    ...parameters,
+  };
 }
 `,
       );
