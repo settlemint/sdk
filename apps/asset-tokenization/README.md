@@ -200,3 +200,54 @@ bunx auth secret
 ```
 
 Create the [following schema](https://authjs.dev/getting-started/adapters/hasura#migrations) in Hasura and select `Track all the tables and relationships` when you do
+
+
+## Development
+
+### Hasura
+
+Hasura generated an instant GraphQL API for your database. While you run Hasura inside of SettleMint, during dAPP development it is usefull to run a local version so any schema changes can be tested and worked on locally and in your CI.
+
+With Hasura migrations we have the ability to version control our database schema and Hasura metadata changes. When we make changes through the Hasura Console, these changes can be saved as migration files. This approach offers several benefits:
+
+Using Hasura Console for migrations is crucial for maintaining a robust and scalable application:
+
+1. **Reproducibility**: You can recreate your entire database schema and Hasura configuration from scratch using migration files.
+2. **Rollbacks**: If something goes wrong, you can revert to a previous state of your schema.
+3. **Auditing**: Migrations provide a clear history of changes made to your data structure and API.
+4. **Consistency**: Avoid discrepancies between different environments by applying the same migrations everywhere.
+
+Working with these migrations is pre-configured in this starterkit, dockerfile and provided Github Actions.
+
+Make sure you have the prerequisite Hasura cli installed:
+
+```bash
+# macOS
+
+brew install hasura-cli
+
+# Linux
+
+curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+
+# Windows
+
+# Download the binary cli-hasura-windows-amd64.exe available under Assets of the latest release from the GitHub release page: https://github.com/hasura/graphql-engine/releases
+
+#Rename the downloaded file to hasura. You can add the path to the environment variable PATH for making hasura accessible globally.
+```
+
+Run the following command to start the hasura server:
+
+```bash
+# Start the required docker containers
+docker-compose up -d
+
+# Deploy the current migrations (only if there is at least one migration file in the ./database/migrations folder)
+bun run hasura:migrate
+
+# Launch the migration aware local console
+bun run hasura:console
+```
+
+When modifying the schema or inserting data, check the migration checkbox to generate a new migration file. This will be saved in the `./database/migrations` folder. Commit these files into GIT.

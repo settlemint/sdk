@@ -37,7 +37,7 @@ jobs:
     name: Test and Build
     runs-on: namespace-profile-sdk
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
         with:
           token: ${{ secrets.PAT_TOKEN }}
@@ -49,7 +49,24 @@ jobs:
             ./.turbo
             ~/.bun/install/cache
 
-      - uses: oven-sh/setup-bun@v2
+      # - name: Launch docker-compose services
+      #   shell: bash
+      #   run: |
+      #     if [[ -f docker-compose.yml ]]; then
+      #       docker compose -f docker-compose.yml up -d --wait
+      #     fi
+
+      # - name: Install Hasura CLI
+      #   run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
+
+      # - name: Apply Hasura migrations
+      #   working-directory: apps/asset-tokenization/database
+      #   run: |
+      #     hasura migrate apply --all-databases
+      #     hasura metadata apply
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: package.json
 
@@ -59,28 +76,33 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install dependencies
+        run: bun install
 
-      - run: bun install
+      - name: Run Turbo format
+        run: bunx turbo format --concurrency=100% --summarize --env-mode=loose
 
-      - run: bunx turbo format --concurrency=100% --summarize --env-mode=loose
+      - name: Build packages
+        run: bunx turbo build --filter="./packages/*" --concurrency=100% --summarize --env-mode=loose
 
-      - run: bunx turbo build --filter="./packages/*" --concurrency=100% --summarize --env-mode=loose
+      - name: Reinstall dependencies to get the settlemint cli in the bin folder
+        run: bun install
 
-      - run: bun install
-
-      - name: Write configs
+      - name: Write configurations
         run: |
           echo '${{ secrets.SETTLEMINTRC }}' > apps/asset-tokenization/.settlemintrc.json
           echo '${{ secrets.ENVLOCAL }}' > apps/asset-tokenization/.env.local
 
-      - run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
+      - name: Generate code
+        run: bunx turbo codegen --concurrency=100% --summarize --env-mode=loose
 
-      - run: bunx turbo lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
+      - name: Run tests and checks
+        run: bunx turbo lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
 
-      - name: Package version
+      - name: Update package versions
         id: package-version
         run: |
           OLD_VERSION=$(jq -r '.version' package.json)
@@ -134,7 +156,8 @@ jobs:
 
           echo "Updated version to $VERSION"
 
-      - uses: JS-DevTools/npm-publish@v3
+      - name: Publish SDK package
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/sdk/package.json
@@ -143,7 +166,8 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - uses: JS-DevTools/npm-publish@v3
+      - name: Publish SDK Common package
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/sdk-common/package.json
@@ -152,7 +176,8 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - uses: JS-DevTools/npm-publish@v3
+      - name: Publish SDK Next package
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/sdk-next/package.json
@@ -161,7 +186,8 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - uses: JS-DevTools/npm-publish@v3
+      - name: Publish Asset Tokenization package
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./apps/asset-tokenization/package.json
@@ -209,7 +235,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
 
-      - name: Docker meta
+      - name: Generate Docker metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -224,7 +250,7 @@ jobs:
             type=semver,pattern={{major}}
             type=sha
 
-      - name: Build and push
+      - name: Build and push Docker image
         uses: docker/build-push-action@v6
         with:
           context: ./apps/asset-tokenization
@@ -234,7 +260,7 @@ jobs:
           provenance: mode=max
           sbom: true
 
-      - name: Create or update a comment
+      - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' }}
         uses: taoliujun/action-unique-comment@v1
         with:
@@ -251,7 +277,8 @@ jobs:
                 | ------- | -------------------- | --- |
                 | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` | `ghcr.io/settlemint/starterkit-asset-tokenization:${{ env.VERSION }}` |
 
-      - uses: stefanzweifel/git-auto-commit-action@v5
+      - name: Auto-commit updated package versions
+        uses: stefanzweifel/git-auto-commit-action@v5
         if: ${{ env.TAG == 'latest' }}
         with:
           commit_message: "chore: update package versions [skip ci]"

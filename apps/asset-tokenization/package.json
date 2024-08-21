@@ -23,11 +23,12 @@
     "app",
     "components",
     "lib",
+    "graphql",
+    "database",
     "public",
-    "styles",
-    "types",
-    "./.eslintrc.json",
-    "./.gitignore",
+    "./.*",
+    "!./.env.*",
+    "!./.settlemintrc*",
     "./*.js",
     "./*.md",
     "./*.mjs",
@@ -40,7 +41,9 @@
     "codegen": "settlemint codegen",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "hasura:migrate": "cd database && hasura metadata apply && hasura migrate apply --all-databases && hasura metadata reload",
+    "hasura:console": "cd database && hasura console"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
