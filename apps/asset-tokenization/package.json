@@ -95,7 +95,7 @@
   "devDependencies": {
     "@settlemint/sdk": "workspace:*",
     "typescript": "5.5.4",
-    "@types/node": "22.4.1",
+    "@types/node": "22.4.2",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
     "postcss": "8.4.41",
