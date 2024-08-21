@@ -13,7 +13,7 @@ export type LimitedWeb3ModalConfig = Prettify<
 /**
  * Creates a SettleMint-specific Wagmi configuration.
  * @param chain - The blockchain chain to configure.
- * @returns A function to generate Wagmi and Web3Modal configurations.
+ * @returns A function that generates Wagmi and Web3Modal configurations.
  */
 export function createSettleMintWagmiConfig(chain: Chain) {
   /**
@@ -33,7 +33,7 @@ export function createSettleMintWagmiConfig(chain: Chain) {
     }>,
   ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
     // Retrieve the WalletConnect project ID from environment variables
-    const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
+    const projectId: string | undefined = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
 
     if (!projectId) {
       console.warn(
@@ -56,7 +56,7 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       storage: createStorage({
         storage: cookieStorage,
       }),
-      projectId: projectId ?? "",
+      projectId,
       metadata: {
         ...parameters.web3ModalConfig.metadata,
         url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
@@ -80,14 +80,15 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       projectId,
       allowUnsupportedChain: true,
       defaultChain: parameters.web3ModalConfig.defaultChain ?? chain,
-      ...((parameters?.web3ModalConfig?.metadata?.icons ?? []).length > 0 &&
-        parameters.web3ModalConfig.metadata.icons[0] && {
-          chainImages: {
-            [chain.id]: parameters.web3ModalConfig.metadata.icons[0],
-            ...parameters.web3ModalConfig.chainImages,
-          },
-        }),
     };
+
+    const firstIcon = parameters.web3ModalConfig.metadata.icons?.[0];
+    if (firstIcon) {
+      web3ModalConfig.chainImages = {
+        [chain.id]: firstIcon,
+        ...parameters.web3ModalConfig.chainImages,
+      };
+    }
 
     return {
       wagmiConfig,
