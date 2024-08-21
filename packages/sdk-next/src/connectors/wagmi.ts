@@ -1,7 +1,7 @@
 import type { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import type { Chain, Prettify, TransportConfig } from "viem";
-import { http, type Config, type CreateConfigParameters, cookieStorage, createStorage } from "wagmi";
+import { cookieStorage, createStorage, http, type Config } from "wagmi";
 
 export type Web3ModalConfig = Parameters<typeof createWeb3Modal>["0"];
 export type LimitedWeb3ModalConfig = Prettify<
@@ -13,7 +13,7 @@ export type LimitedWeb3ModalConfig = Prettify<
 /**
  * Creates a SettleMint-specific Wagmi configuration.
  * @param chain - The blockchain chain to configure.
- * @returns A function to generate Wagmi and Web3Modal configurations.
+ * @returns A function that generates Wagmi and Web3Modal configurations.
  */
 export function createSettleMintWagmiConfig(chain: Chain) {
   /**
@@ -26,12 +26,14 @@ export function createSettleMintWagmiConfig(chain: Chain) {
    */
   const settleMintWagmiConfig = (
     parameters: Prettify<{
-      wagmiConfig: Partial<Omit<CreateConfigParameters, "client">> & { transportConfig?: TransportConfig<"http"> };
+      wagmiConfig: Partial<Omit<Parameters<typeof defaultWagmiConfig>[0], "client">> & {
+        transportConfig?: TransportConfig<"http">;
+      };
       web3ModalConfig: LimitedWeb3ModalConfig;
     }>,
   ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
     // Retrieve the WalletConnect project ID from environment variables
-    const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
+    const projectId: string | undefined = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
 
     if (!projectId) {
       console.warn(
@@ -54,10 +56,17 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       storage: createStorage({
         storage: cookieStorage,
       }),
-      projectId: projectId ?? "",
+      projectId,
       metadata: {
         ...parameters.web3ModalConfig.metadata,
         url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
+      },
+      auth: {
+        email: true,
+        socials: ["google", "x", "github", "discord", "apple", "facebook", "farcaster"],
+        showWallets: true,
+        walletFeatures: true,
+        ...parameters.wagmiConfig.auth,
       },
     });
 
@@ -69,7 +78,17 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       },
       wagmiConfig,
       projectId,
+      allowUnsupportedChain: true,
+      defaultChain: parameters.web3ModalConfig.defaultChain ?? chain,
     };
+
+    const firstIcon = parameters.web3ModalConfig.metadata.icons?.[0];
+    if (firstIcon) {
+      web3ModalConfig.chainImages = {
+        [chain.id]: firstIcon,
+        ...parameters.web3ModalConfig.chainImages,
+      };
+    }
 
     return {
       wagmiConfig,
