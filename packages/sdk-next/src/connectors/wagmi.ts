@@ -1,7 +1,7 @@
 import type { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import type { Chain, Prettify, TransportConfig } from "viem";
-import { http, type Config, type CreateConfigParameters, cookieStorage, createStorage } from "wagmi";
+import { cookieStorage, createStorage, http, type Config, type CreateConfigParameters } from "wagmi";
 
 export type Web3ModalConfig = Parameters<typeof createWeb3Modal>["0"];
 export type LimitedWeb3ModalConfig = Prettify<
@@ -59,6 +59,12 @@ export function createSettleMintWagmiConfig(chain: Chain) {
         ...parameters.web3ModalConfig.metadata,
         url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
       },
+      auth: {
+        email: true,
+        socials: ["google", "x", "github", "discord", "apple", "facebook", "farcaster"],
+        showWallets: true,
+        walletFeatures: true,
+      },
     });
 
     // Create the Web3Modal configuration
@@ -69,6 +75,17 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       },
       wagmiConfig,
       projectId,
+      allowUnsupportedChain: true,
+      defaultChain: chain,
+      enableAnalytics: false,
+      enableOnramp: true,
+      enableSwaps: true,
+      ...((parameters?.web3ModalConfig?.metadata?.icons ?? []).length > 0 &&
+        parameters.web3ModalConfig.metadata.icons[0] && {
+          chainImages: {
+            [chain.id]: parameters.web3ModalConfig.metadata.icons[0],
+          },
+        }),
     };
 
     return {
