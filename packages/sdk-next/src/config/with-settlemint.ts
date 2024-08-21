@@ -33,6 +33,7 @@ export function withSettleMint<C extends NextConfig>(
           "pino-pretty",
           "lokijs",
           "encoding",
+          "debug",
         ];
 
         return updatedConfig;
