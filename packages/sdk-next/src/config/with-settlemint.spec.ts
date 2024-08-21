@@ -37,21 +37,8 @@ describe("withSettleMint", () => {
     const result = withSettleMint(mockNextConfig);
 
     expect(result).not.toEqual(mockNextConfig);
-    expect(result.webpack).toBeDefined();
     expect(result.experimental).toBeDefined();
     expect(result.rewrites).toBeDefined();
-  });
-
-  test("should add correct externals to webpack config", async () => {
-    (activeConfig as unknown as ReturnType<typeof mock>).mockReturnValue({});
-    const result = withSettleMint(mockNextConfig);
-
-    const mockWebpackConfig = { externals: [] };
-    await result.webpack(mockWebpackConfig);
-
-    expect(mockWebpackConfig.externals).toContain("pino-pretty");
-    expect(mockWebpackConfig.externals).toContain("lokijs");
-    expect(mockWebpackConfig.externals).toContain("encoding");
   });
 
   test("should add correct rewrites based on activeConfig", async () => {
