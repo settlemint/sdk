@@ -206,7 +206,7 @@ Create the [following schema](https://authjs.dev/getting-started/adapters/hasura
 
 ### Hasura
 
-Hasura generated an instant GraphQL API for your database. While you run Hasura inside of SettleMint, during dAPP development it is usefull to run a local version so any schema changes can be tested and worked on locally and in your CI.
+Hasura generates an instant GraphQL API for your database. While you run Hasura inside of SettleMint, during dApp development it is useful to run a local version so any schema changes can be tested and worked on locally and in your CI.
 
 With Hasura migrations we have the ability to version control our database schema and Hasura metadata changes. When we make changes through the Hasura Console, these changes can be saved as migration files. This approach offers several benefits:
 
