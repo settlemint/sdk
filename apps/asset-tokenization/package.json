@@ -27,8 +27,6 @@
     "database",
     "public",
     "./.*",
-    "!./.env.*",
-    "!./.settlemintrc*",
     "./*.js",
     "./*.md",
     "./*.mjs",
