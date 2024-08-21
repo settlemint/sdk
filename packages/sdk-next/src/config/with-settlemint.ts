@@ -16,13 +16,16 @@ export function withSettleMint<C extends NextConfig>(
 ): C {
   if (!disabled) {
     const cfg = activeConfig();
+    const baseConfig = {
+      ...nextConfig,
+      output: output ?? nextConfig.output ?? "standalone",
+    };
     if (!cfg) {
-      return nextConfig;
+      return baseConfig;
     }
 
     return {
-      ...nextConfig,
-      output: output ?? nextConfig.output ?? "standalone",
+      ...baseConfig,
       async rewrites() {
         let existingRewrites:
           | Rewrite[]
