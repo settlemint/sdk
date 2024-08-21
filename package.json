@@ -32,8 +32,8 @@
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
     "lefthook": "1.7.14",
-    "turbo": "^2.0.13",
-    "typescript": "^5.4.5",
+    "turbo": "2.0.14",
+    "typescript": "5.5.4",
     "knip": "5.27.2",
     "@types/bun": "1.1.6",
     "@arethetypeswrong/cli": "0.15.4",
