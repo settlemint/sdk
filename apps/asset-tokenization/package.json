@@ -1,5 +1,6 @@
 {
   "name": "@settlemint/starterkit-asset-tokenization",
+  "description": "SettleMint Starter Kit - Asset Tokenization",
   "version": "0.4.7",
   "private": false,
   "license": "FSL-1.1-MIT",
