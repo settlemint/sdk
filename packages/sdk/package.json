@@ -58,7 +58,7 @@
     "@npmcli/package-json": "5.2.0",
     "commander": "12.1.0",
     "cross-spawn": "7.0.3",
-    "giget": "^1.2.3",
+    "giget": "1.2.3",
     "graphql": "16.9.0",
     "openapi-typescript": "7.3.0",
     "ts-deepmerge": "7.0.1",
