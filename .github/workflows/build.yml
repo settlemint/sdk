@@ -248,7 +248,7 @@ jobs:
 
                 # 🚀 Starterkits
                 | Use Case | NPM | Docker |
-                | ------- | -------------------- |
+                | ------- | -------------------- | --- |
                 | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` | | `ghcr.io/settlemint/starterkit-asset-tokenization:${{ env.VERSION }}` |
 
       - uses: stefanzweifel/git-auto-commit-action@v5
