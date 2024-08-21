@@ -1,7 +1,7 @@
 import type { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
 import type { Chain, Prettify, TransportConfig } from "viem";
-import { cookieStorage, createStorage, http, type Config, type CreateConfigParameters } from "wagmi";
+import { cookieStorage, createStorage, http, type Config } from "wagmi";
 
 export type Web3ModalConfig = Parameters<typeof createWeb3Modal>["0"];
 export type LimitedWeb3ModalConfig = Prettify<
@@ -26,7 +26,9 @@ export function createSettleMintWagmiConfig(chain: Chain) {
    */
   const settleMintWagmiConfig = (
     parameters: Prettify<{
-      wagmiConfig: Partial<Omit<CreateConfigParameters, "client">> & { transportConfig?: TransportConfig<"http"> };
+      wagmiConfig: Partial<Omit<Parameters<typeof defaultWagmiConfig>[0], "client">> & {
+        transportConfig?: TransportConfig<"http">;
+      };
       web3ModalConfig: LimitedWeb3ModalConfig;
     }>,
   ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
@@ -64,6 +66,7 @@ export function createSettleMintWagmiConfig(chain: Chain) {
         socials: ["google", "x", "github", "discord", "apple", "facebook", "farcaster"],
         showWallets: true,
         walletFeatures: true,
+        ...parameters.wagmiConfig.auth,
       },
     });
 
@@ -76,14 +79,12 @@ export function createSettleMintWagmiConfig(chain: Chain) {
       wagmiConfig,
       projectId,
       allowUnsupportedChain: true,
-      defaultChain: chain,
-      enableAnalytics: false,
-      enableOnramp: true,
-      enableSwaps: true,
+      defaultChain: parameters.web3ModalConfig.defaultChain ?? chain,
       ...((parameters?.web3ModalConfig?.metadata?.icons ?? []).length > 0 &&
         parameters.web3ModalConfig.metadata.icons[0] && {
           chainImages: {
             [chain.id]: parameters.web3ModalConfig.metadata.icons[0],
+            ...parameters.web3ModalConfig.chainImages,
           },
         }),
     };
