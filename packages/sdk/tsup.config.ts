@@ -7,6 +7,7 @@ export default defineConfig(() => {
     sourcemap: true,
     shims: true,
     dts: true,
+    spltting: false,
     format: ["cjs", "esm"],
   };
 });

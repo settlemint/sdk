@@ -20,19 +20,24 @@
     "email": "support@settlemint.com"
   },
   "files": [
-    "app",
-    "components",
-    "lib",
-    "public",
-    "styles",
-    "types",
-    "./.eslintrc.json",
-    "./.gitignore",
-    "./*.js",
-    "./*.md",
-    "./*.mjs",
-    "./*.ts",
-    "./*.json"
+    "/app",
+    "/components",
+    "/database",
+    "/graphql",
+    "/lib",
+    "/public",
+    "/components.json",
+    "/docker-compose.yml",
+    "/docker-entrypoint.sh",
+    "/Dockerfile",
+    "/LICENSE",
+    "/middleware.ts",
+    "/next.config.mjs",
+    "/package.json",
+    "/postcss.config.mjs",
+    "/README.md",
+    "/tailwind.config.ts",
+    "/tsconfig.json"
   ],
   "scripts": {
     "dev": "next dev --turbo --port 3330",
@@ -40,7 +45,9 @@
     "codegen": "settlemint codegen",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "hasura:migrate": "cd database && hasura metadata apply && hasura migrate apply --all-databases && hasura metadata reload",
+    "hasura:console": "cd database && hasura console"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
@@ -81,6 +88,7 @@
     "lucide-react": "0.428.0",
     "next": "14.2.5",
     "next-themes": "0.3.0",
+    "pino-pretty": "^11.2.2",
     "react": "18.3.1",
     "react-day-picker": "8.10.1",
     "react-dom": "18.3.1",

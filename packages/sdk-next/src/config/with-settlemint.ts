@@ -16,39 +16,16 @@ export function withSettleMint<C extends NextConfig>(
 ): C {
   if (!disabled) {
     const cfg = activeConfig();
+    const baseConfig = {
+      ...nextConfig,
+      output: output ?? nextConfig.output ?? "standalone",
+    };
     if (!cfg) {
-      return nextConfig;
+      return baseConfig;
     }
 
     return {
-      ...nextConfig,
-      output: output ?? nextConfig.output ?? "standalone",
-      webpack: (config, context) => {
-        // Call the existing webpack function if it exists
-        const updatedConfig = typeof nextConfig.webpack === "function" ? nextConfig.webpack(config, context) : config;
-
-        // Add our externals
-        updatedConfig.externals = [
-          ...(Array.isArray(updatedConfig.externals) ? updatedConfig.externals : []),
-          "pino-pretty",
-          "lokijs",
-          "encoding",
-        ];
-
-        return updatedConfig;
-      },
-      experimental: {
-        ...nextConfig.experimental,
-        turbo: {
-          ...nextConfig.experimental?.turbo,
-          resolveAlias: {
-            ...nextConfig.experimental?.turbo?.resolveAlias,
-            "pino-pretty": "pino-pretty",
-            lokijs: "lokijs",
-            encoding: "encoding",
-          },
-        },
-      },
+      ...baseConfig,
       async rewrites() {
         let existingRewrites:
           | Rewrite[]
