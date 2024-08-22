@@ -78,7 +78,7 @@
   },
   "dependencies": {
     "@settlemint/sdk-common": "workspace:*",
-    "@tanstack/react-query": "5.51.23",
+    "@tanstack/react-query": "5.51.24",
     "@web3modal/wagmi": "5.1.1",
     "graphql": "16.9.0",
     "graphql-request": "7.1.0",
