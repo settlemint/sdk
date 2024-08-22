@@ -62,7 +62,7 @@
     "graphql": "16.9.0",
     "openapi-typescript": "7.3.0",
     "ts-deepmerge": "7.0.1",
-    "viem": "2.19.6",
+    "viem": "2.19.7",
     "yoctocolors": "2.1.1",
     "zod": "3.23.8"
   },
