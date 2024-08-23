@@ -2,7 +2,6 @@ import type { GraphQLClient } from "graphql-request";
 import type { Session, User } from "lucia";
 import { Lucia } from "lucia";
 import { cookies } from "next/headers.js";
-import { cache } from "react";
 import { HasuraAdapter } from "./hasura.adapter.js";
 
 export function createLucia<
@@ -21,7 +20,7 @@ export function createLucia<
 
   return {
     lucia,
-    validateRequest: cache(async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
+    validateRequest: async (): Promise<{ user: User; session: Session } | { user: null; session: null }> => {
       const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
       if (!sessionId) {
         return {
@@ -43,6 +42,6 @@ export function createLucia<
         }
       } catch {}
       return result;
-    }),
+    },
   };
 }
