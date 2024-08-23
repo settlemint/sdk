@@ -1,16 +1,7 @@
-import {
-  type SIWECreateMessageArgs,
-  type SIWEVerifyMessageArgs,
-  createSIWEConfig,
-  formatMessage,
-} from "@web3modal/siwe";
 import type { createWeb3Modal } from "@web3modal/wagmi/react";
 import { defaultWagmiConfig } from "@web3modal/wagmi/react/config";
-import { cookies } from "next/headers";
 import type { Chain, Prettify, TransportConfig } from "viem";
 import { http, type Config, cookieStorage, createStorage } from "wagmi";
-import type { createLucia } from "../auth/lucia.js";
-import { retrieveNonce } from "./nonce.js";
 
 export type Web3ModalConfig = Parameters<typeof createWeb3Modal>["0"];
 export type LimitedWeb3ModalConfig = Prettify<
@@ -24,7 +15,7 @@ export type LimitedWeb3ModalConfig = Prettify<
  * @param chain - The blockchain chain to configure.
  * @returns A function that generates Wagmi and Web3Modal configurations.
  */
-export function createSettleMintWagmiConfig(chain: Chain, auth: ReturnType<typeof createLucia>) {
+export function createSettleMintWagmiConfig(chain: Chain) {
   /**
    * Generates Wagmi and Web3Modal configurations based on provided parameters.
    * @param parameters - Configuration parameters for Wagmi and Web3Modal.
@@ -50,57 +41,57 @@ export function createSettleMintWagmiConfig(chain: Chain, auth: ReturnType<typeo
       );
     }
 
-    const siweConfig = createSIWEConfig({
-      getMessageParams: async () => ({
-        domain: typeof window !== "undefined" ? window.location.host : "",
-        uri: typeof window !== "undefined" ? window.location.origin : "",
-        chains: [chain.id],
-        statement: "Please sign with your wallet",
-      }),
-      createMessage: ({ address, ...args }: SIWECreateMessageArgs) => formatMessage(args, address),
-      getNonce: async () => {
-        return await retrieveNonce();
-      },
-      getSession: async () => {
-        const sessionId = cookies().get(auth.lucia.sessionCookieName)?.value ?? null;
-        const { user, session } = await auth.lucia.validateSession(sessionId);
-        if (!session || !user) {
-          throw new Error("Failed to get session!");
-        }
+    // const siweConfig = createSIWEConfig({
+    //   getMessageParams: async () => ({
+    //     domain: typeof window !== "undefined" ? window.location.host : "",
+    //     uri: typeof window !== "undefined" ? window.location.origin : "",
+    //     chains: [chain.id],
+    //     statement: "Please sign with your wallet",
+    //   }),
+    //   createMessage: ({ address, ...args }: SIWECreateMessageArgs) => formatMessage(args, address),
+    //   getNonce: async () => {
+    //     return await retrieveNonce();
+    //   },
+    //   getSession: async () => {
+    //     const sessionId = cookies().get(auth.lucia.sessionCookieName)?.value ?? null;
+    //     const { user, session } = await auth.lucia.validateSession(sessionId);
+    //     if (!session || !user) {
+    //       throw new Error("Failed to get session!");
+    //     }
 
-        return { address: user.id, chainId: chain.id };
-      },
-      verifyMessage: async ({ message, signature }: SIWEVerifyMessageArgs) => {
-        await auth.createUser({
-          id: "test",
-          roles: ["test"],
-        });
-        try {
-          const success = await signIn("credentials", {
-            message,
-            redirect: false,
-            signature,
-            callbackUrl: "/protected",
-          });
+    //     return { address: user.id, chainId: chain.id };
+    //   },
+    //   verifyMessage: async ({ message, signature }: SIWEVerifyMessageArgs) => {
+    //     await auth.createUser({
+    //       id: "test",
+    //       roles: ["test"],
+    //     });
+    //     try {
+    //       const success = await signIn("credentials", {
+    //         message,
+    //         redirect: false,
+    //         signature,
+    //         callbackUrl: "/protected",
+    //       });
 
-          return Boolean(success?.ok);
-        } catch (error) {
-          return false;
-        }
-      },
-      signOut: async () => {
-        lucia.invalidateSession(session.id);
-        try {
-          await signOut({
-            redirect: false,
-          });
+    //       return Boolean(success?.ok);
+    //     } catch (error) {
+    //       return false;
+    //     }
+    //   },
+    //   signOut: async () => {
+    //     lucia.invalidateSession(session.id);
+    //     try {
+    //       await signOut({
+    //         redirect: false,
+    //       });
 
-          return true;
-        } catch (error) {
-          return false;
-        }
-      },
-    });
+    //       return true;
+    //     } catch (error) {
+    //       return false;
+    //     }
+    //   },
+    // });
 
     // Create the Wagmi configuration
     const wagmiConfig = defaultWagmiConfig({
