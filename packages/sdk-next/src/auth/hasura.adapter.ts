@@ -204,8 +204,14 @@ export class HasuraAdapter implements Adapter {
 
   async createUser(userId: string, attributes?: DatabaseUserAttributes): Promise<DatabaseUser> {
     const query = `
-      mutation CreateUser($userId: String!, $attributes: jsonb!) {
-        insert_auth_user_one(object: {id: $userId, attributes: $attributes}) {
+      mutation UpsertUser($userId: String!, $attributes: jsonb!) {
+        insert_auth_user_one(
+          object: {id: $userId, attributes: $attributes},
+          on_conflict: {
+            constraint: auth_user_pkey,
+            update_columns: [attributes]
+          }
+        ) {
           id
           attributes
         }
@@ -217,7 +223,7 @@ export class HasuraAdapter implements Adapter {
       }
     `;
 
-    type CreateUserResponse = {
+    type UpsertUserResponse = {
       insert_auth_user_one: {
         id: string;
         attributes: DatabaseUserAttributes;
@@ -229,12 +235,12 @@ export class HasuraAdapter implements Adapter {
       };
     };
 
-    type CreateUserVariables = {
+    type UpsertUserVariables = {
       userId: string;
       attributes: DatabaseUserAttributes;
     };
 
-    const variables: CreateUserVariables = {
+    const variables: UpsertUserVariables = {
       userId,
       attributes: {
         ...attributes,
@@ -242,13 +248,16 @@ export class HasuraAdapter implements Adapter {
       },
     };
 
-    const data = await this.client.request<CreateUserResponse>(query, variables);
+    const data = await this.client.request<UpsertUserResponse>(query, variables);
 
     if (data.auth_user_aggregate.aggregate.count === 1) {
       // If this is the first user, add the admin role
       const updateQuery = `
         mutation UpdateUserRoles($userId: String!) {
-          update_auth_user_by_pk(pk_columns: {id: $userId}, _set: {attributes: {roles: ["admin"]}}) {
+          update_auth_user_by_pk(
+            pk_columns: {id: $userId},
+            _set: {attributes: {roles: ["admin"]}}
+          ) {
             id
             attributes
           }

@@ -4,7 +4,10 @@ import { Lucia } from "lucia";
 import { cookies } from "next/headers.js";
 import { HasuraAdapter } from "./hasura.adapter.js";
 
-export type DatabaseSessionAttributes = Record<never, never>;
+export type DatabaseSessionAttributes = {
+  nonce?: string;
+};
+
 export type DatabaseUserAttributes = {
   roles: string[];
 };
@@ -29,6 +32,11 @@ export function createLucia({ client }: { client: GraphQLClient }) {
     getUserAttributes: (attributes) => {
       return {
         roles: attributes.roles,
+      };
+    },
+    getSessionAttributes: (attributes) => {
+      return {
+        nonce: attributes.nonce,
       };
     },
   });

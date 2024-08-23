@@ -9,7 +9,7 @@ const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura"]);
 const isSecuredRoute = createRouteMatcher(["/s", "/s/(.*)"]);
 const isAdminRoute = createRouteMatcher(["/a", "/a/(.*)"]);
 
-export function middleware(lucia: Lucia<DatabaseSessionAttributes, DatabaseUserAttributes>) {
+export function middleware(lucia: Lucia<DatabaseSessionAttributes, DatabaseUserAttributes>, noAuthRoute = "/auth") {
   const settleMintMiddleware = async (request: NextRequest) => {
     const response = NextResponse.next();
 
@@ -27,20 +27,22 @@ export function middleware(lucia: Lucia<DatabaseSessionAttributes, DatabaseUserA
 
       // no cookie exists
       if (!sessionId) {
-        return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
+        return NextResponse.redirect(new URL(`${noAuthRoute}/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
       }
 
       const { user, session } = await lucia.validateSession(sessionId.value);
 
       // session expired
       if (!session) {
-        return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
+        return NextResponse.redirect(new URL(`${noAuthRoute}/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
       }
 
       if (isAdminRoute(request)) {
         // User does not have the admin role
         if (!user.roles?.includes("admin")) {
-          return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
+          return NextResponse.redirect(
+            new URL(`${noAuthRoute}/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin),
+          );
         }
       }
     }
