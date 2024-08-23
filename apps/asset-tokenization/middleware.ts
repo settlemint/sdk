@@ -1,6 +1,7 @@
 import { middleware } from "@settlemint/sdk-next/middleware";
+import { lucia } from "./lib/auth";
 
-export default middleware;
+export default middleware(lucia);
 
 export const config = {
   matcher: [
