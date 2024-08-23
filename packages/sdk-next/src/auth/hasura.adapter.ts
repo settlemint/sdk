@@ -1,5 +1,6 @@
 import type { GraphQLClient } from "graphql-request";
 import type { Adapter, DatabaseSession, DatabaseUser } from "lucia";
+import type { DatabaseSessionAttributes, DatabaseUserAttributes } from "./lucia.js";
 
 interface HasuraAdapterOptions {
   client: GraphQLClient;
@@ -7,11 +8,7 @@ interface HasuraAdapterOptions {
   sessionAttributesFragment?: string;
 }
 
-export class HasuraAdapter<
-  SessionAttributes extends {} = Record<never, never>,
-  UserAttributes extends {} = Record<never, never>,
-> implements Adapter
-{
+export class HasuraAdapter implements Adapter {
   private client: GraphQLClient;
 
   constructor(options: HasuraAdapterOptions) {
@@ -37,10 +34,10 @@ export class HasuraAdapter<
       auth_session_by_pk: {
         id: string;
         expires_at: string;
-        attributes: SessionAttributes;
+        attributes: DatabaseSessionAttributes;
         user: {
           id: string;
-          attributes: UserAttributes;
+          attributes: DatabaseUserAttributes;
         };
       } | null;
     };
@@ -52,7 +49,9 @@ export class HasuraAdapter<
     const variables: GetSessionAndUserVariables = { sessionId };
 
     const data = await this.client.request<GetSessionAndUserResponse>(query, variables);
-    if (!data.auth_session_by_pk) return [null, null];
+    if (!data.auth_session_by_pk) {
+      return [null, null];
+    }
 
     const session: DatabaseSession = {
       id: data.auth_session_by_pk.id,
@@ -84,7 +83,7 @@ export class HasuraAdapter<
       auth_session: {
         id: string;
         expires_at: string;
-        attributes: SessionAttributes;
+        attributes: DatabaseSessionAttributes;
       }[];
     };
 
@@ -201,5 +200,72 @@ export class HasuraAdapter<
     };
 
     await this.client.request(mutation, variables);
+  }
+
+  async createUser(userId: string, attributes?: DatabaseUserAttributes): Promise<DatabaseUser> {
+    const query = `
+      mutation CreateUser($userId: String!, $attributes: jsonb!) {
+        insert_auth_user_one(object: {id: $userId, attributes: $attributes}) {
+          id
+          attributes
+        }
+        auth_user_aggregate {
+          aggregate {
+            count
+          }
+        }
+      }
+    `;
+
+    type CreateUserResponse = {
+      insert_auth_user_one: {
+        id: string;
+        attributes: DatabaseUserAttributes;
+      };
+      auth_user_aggregate: {
+        aggregate: {
+          count: number;
+        };
+      };
+    };
+
+    type CreateUserVariables = {
+      userId: string;
+      attributes: DatabaseUserAttributes;
+    };
+
+    const variables: CreateUserVariables = {
+      userId,
+      attributes: {
+        ...attributes,
+        roles: attributes?.roles || [],
+      },
+    };
+
+    const data = await this.client.request<CreateUserResponse>(query, variables);
+
+    if (data.auth_user_aggregate.aggregate.count === 1) {
+      // If this is the first user, add the admin role
+      const updateQuery = `
+        mutation UpdateUserRoles($userId: String!) {
+          update_auth_user_by_pk(pk_columns: {id: $userId}, _set: {attributes: {roles: ["admin"]}}) {
+            id
+            attributes
+          }
+        }
+      `;
+
+      type UpdateUserRolesResponse = {
+        update_auth_user_by_pk: {
+          id: string;
+          attributes: DatabaseUserAttributes;
+        };
+      };
+
+      const updateData = await this.client.request<UpdateUserRolesResponse>(updateQuery, { userId });
+      return updateData.update_auth_user_by_pk;
+    }
+
+    return data.insert_auth_user_one;
   }
 }

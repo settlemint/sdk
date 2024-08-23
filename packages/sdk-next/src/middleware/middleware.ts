@@ -1,13 +1,15 @@
 import type { Lucia } from "lucia";
 import type { NextRequest } from "next/server.js";
 import { NextResponse } from "next/server.js";
+import type { DatabaseSessionAttributes, DatabaseUserAttributes } from "../auth/lucia.js";
 import { createRouteMatcher } from "./lib/route-matcher.js";
 
 const isProxyRoute = createRouteMatcher(["/proxy/(.*)"]);
 const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura"]);
-const isAuthenticatedRoute = createRouteMatcher(["/s", "/s/(.*)"]);
+const isSecuredRoute = createRouteMatcher(["/s", "/s/(.*)"]);
+const isAdminRoute = createRouteMatcher(["/a", "/a/(.*)"]);
 
-export function middleware(lucia: Lucia) {
+export function middleware(lucia: Lucia<DatabaseSessionAttributes, DatabaseUserAttributes>) {
   const settleMintMiddleware = async (request: NextRequest) => {
     const response = NextResponse.next();
 
@@ -20,19 +22,26 @@ export function middleware(lucia: Lucia) {
       return response;
     }
 
-    if (isAuthenticatedRoute(request)) {
-      const sessionId = request.cookies.get("settlemint");
+    if (isSecuredRoute(request) || isAdminRoute(request)) {
+      const sessionId = request.cookies.get(lucia.sessionCookieName);
 
       // no cookie exists
       if (!sessionId) {
         return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
       }
 
-      const { session } = await lucia.validateSession(sessionId.value);
+      const { user, session } = await lucia.validateSession(sessionId.value);
 
       // session expired
       if (!session) {
         return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
+      }
+
+      if (isAdminRoute(request)) {
+        // User does not have the admin role
+        if (!user.roles?.includes("admin")) {
+          return NextResponse.redirect(new URL(`/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
+        }
       }
     }
 
