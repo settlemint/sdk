@@ -12,4 +12,6 @@ declare module "lucia" {
   }
 }
 
-export const lucia = createLucia<DatabaseSessionAttributes, DatabaseUserAttributes>({ client: hasura });
+export const { lucia, validateRequest } = createLucia<DatabaseSessionAttributes, DatabaseUserAttributes>({
+  client: hasura,
+});
