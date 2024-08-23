@@ -1,6 +1,4 @@
 import { ClientProvider } from "@/components/providers/ClientProvider";
-import { PublicFooter } from "@/components/public/footer";
-import { PublicHeader } from "@/components/public/header";
 import { wagmiConfig } from "@/lib/config";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -15,8 +13,8 @@ const fontSans = FontSans({
 });
 
 export const metadata: Metadata = {
-  title: "SettleMint Asset Tokenization Starterkit",
-  description: "SettleMint Asset Tokenization Starterkit",
+  title: "SettleMint Asset Tokenization Starter Kit",
+  description: "SettleMint Asset Tokenization Starter Kit",
 };
 
 export default function RootLayout({
@@ -28,15 +26,11 @@ export default function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="darkreader-lock" />
+      </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-        <ClientProvider initialState={initialState}>
-          <div className="flex flex-col min-h-[100dvh] relative">
-            <div className="absolute inset-0 z-[-1] bg-[url('/background-lm.svg')] dark:bg-[url('/background-dm.svg')] bg-cover bg-center" />
-            <PublicHeader />
-            <main>{children}</main>
-            <PublicFooter />
-          </div>
-        </ClientProvider>
+        <ClientProvider initialState={initialState}>{children}</ClientProvider>
       </body>
     </html>
   );

@@ -90,7 +90,7 @@ if(!process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET){
     : ""
 }
 
-export const ${type} = new GraphQLClient('${gqlUrl}', {
+export const ${type} = new GraphQLClient('${process.env.LOCAL_HASURA && type === "hasura" ? process.env.LOCAL_HASURA : gqlUrl}', {
   headers: {
     "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN,
     ${type === "hasura" ? '"x-hasura-admin-secret": process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,' : ""}

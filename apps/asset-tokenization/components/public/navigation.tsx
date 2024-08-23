@@ -1,5 +1,5 @@
+import { ConnectButton } from "@/components/public/connect-button";
 import { Button } from "@/components/ui/button";
-import { ConnectButton } from "@/components/ui/connect-button";
 import Link from "next/link";
 import { DarkModeToggle } from "../ui/darkmode-toggle";
 

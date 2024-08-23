@@ -13,7 +13,7 @@ export const TokenizationWizardValidator = z.object({
     })
     .optional(),
   tokenHasMaxSupply: z.boolean(),
-  tokenMaxSupply: z.number().min(1),
+  tokenMaxSupply: z.coerce.number().min(1),
   walletEntriesCsvFileUpload: z
     .instanceof(File)
     .refine((file) => file.name.endsWith(".csv"), {

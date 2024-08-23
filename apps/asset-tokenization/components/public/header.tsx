@@ -1,5 +1,5 @@
+import Logo from "@/components/public/logo";
 import { PublicNavigation } from "@/components/public/navigation";
-import Logo from "@/components/ui/logo";
 import Link from "next/link";
 
 export function PublicHeader() {

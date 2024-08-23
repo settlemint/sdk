@@ -42,6 +42,16 @@
         "default": "./dist/middleware/middleware.cjs"
       }
     },
+    "./auth": {
+      "import": {
+        "types": "./dist/auth/lucia.d.ts",
+        "default": "./dist/auth/lucia.js"
+      },
+      "require": {
+        "types": "./dist/auth/lucia.d.cts",
+        "default": "./dist/auth/lucia.cjs"
+      }
+    },
     "./providers/*": {
       "import": {
         "types": "./dist/providers/*.d.ts",
@@ -64,8 +74,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx src/connectors/*.ts",
-    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx src/connectors/*.ts --watch",
+    "build": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx src/connectors/*.ts src/auth/lucia.ts",
+    "dev": "tsup-node src/config/with-settlemint.ts src/middleware/middleware.ts src/providers/*.tsx src/connectors/*.ts src/auth/lucia.ts--watch",
     "publint": "publint run --strict",
     "attw": "attw --pack . --ignore-rules no-resolution",
     "test": "bun test",
@@ -78,20 +88,24 @@
   },
   "dependencies": {
     "@settlemint/sdk-common": "workspace:*",
-    "@tanstack/react-query": "5.51.23",
+    "@tanstack/react-query": "5.52.0",
+    "@web3modal/siwe": "^5.1.2",
     "@web3modal/wagmi": "5.1.1",
     "graphql": "16.9.0",
-    "graphql-request": "7.1.0",
-    "iron-session": "8.0.3",
+    "graphql-request": "6.1.0",
+    "iron-session": "^8.0.3",
+    "lucia": "^3.2.0",
+    "nanoid": "^5.0.7",
     "next-themes": "0.3.0",
     "openapi-fetch": "0.11.1",
     "path-to-regexp": "7.1.0",
-    "viem": "2.19.6",
-    "wagmi": "2.12.5",
+    "viem": "2.19.8",
+    "wagmi": "2.12.7",
     "zod": "3.23.8"
   },
   "peerDependencies": {
-    "next": "^13.5.4 || ^14.0.3 || >=15.0.0-rc"
+    "next": "^13.5.4 || ^14.0.3 || >=15.0.0-rc",
+    "react": ">=18"
   },
   "engines": {
     "node": ">=18"
