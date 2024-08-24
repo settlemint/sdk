@@ -40,7 +40,7 @@
     "/tsconfig.json"
   ],
   "scripts": {
-    "dev": "next dev --turbo --port 3330",
+    "dev": "next dev --port 3330",
     "connect": "op run --env-file=\".env.connect.1p\" -- bun run --bun ../../packages/sdk/src/cli/cli.ts connect",
     "codegen": "bun run --bun ../../packages/sdk/src/cli/cli.ts codegen",
     "build": "next build",
@@ -89,7 +89,7 @@
     "input-otp": "1.2.4",
     "lucide-react": "0.435.0",
     "next": "14.2.6",
-    "next-auth": "^5.0.0-beta.20",
+    "next-auth": "4.24.7",
     "next-themes": "0.3.0",
     "pino-pretty": "11.2.2",
     "react": "18.3.1",

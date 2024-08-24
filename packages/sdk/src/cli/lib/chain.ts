@@ -70,7 +70,7 @@ export const chain = defineChain({
   },
   rpcUrls: {
     default: {
-      http: [${framework === "nextjs" ? "`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc`" : `"${nodeUrl}"`}],
+      http: [${framework === "nextjs" ? "`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`" : `"${nodeUrl}"`}],
     },
   },
 });
