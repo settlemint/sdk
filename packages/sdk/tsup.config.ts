@@ -1,13 +1,31 @@
-import { defineConfig } from "tsup";
+import { type Options, defineConfig } from "tsup";
 
-export default defineConfig(() => {
-  return {
-    banner: { js: "#!/usr/bin/env node" },
-    minify: false,
-    sourcemap: true,
-    shims: true,
-    dts: true,
-    spltting: false,
-    format: ["cjs", "esm"],
-  };
+const sharedConfig: Options = {
+  sourcemap: true,
+  dts: true,
+  splitting: false,
+  treeshake: false,
+  format: ["cjs", "esm"],
+};
+
+export default defineConfig(({ watch }) => {
+  return [
+    {
+      entry: ["src/cli/cli.ts"],
+      shims: true,
+    },
+    {
+      entry: ["src/next/browser/browser.ts"],
+    },
+    {
+      entry: ["src/next/node/node.ts"],
+    },
+    {
+      entry: ["src/next/edge/edge.ts"],
+    },
+  ].map((config) => ({
+    minify: !watch,
+    ...sharedConfig,
+    ...config,
+  }));
 });

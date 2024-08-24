@@ -14,7 +14,6 @@
     ":prConcurrentLimitNone",
     ":prHourlyLimitNone",
     ":widenPeerDependencies",
-    "npm:unpublishSafe",
     "security:openssf-scorecard",
     "schedule:nonOfficeHours"
   ],

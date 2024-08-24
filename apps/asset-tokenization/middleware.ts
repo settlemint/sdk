@@ -1,8 +1,24 @@
-import { middleware } from "@settlemint/sdk-next/middleware";
-import { lucia } from "./lib/auth";
+import { proxyMiddleware } from "@settlemint/sdk/edge";
+import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
 
-export default middleware(lucia);
+export function middleware(request: NextRequest) {
+  try {
+    const response = NextResponse.next();
 
+    const proxyResponse = proxyMiddleware(request, response);
+    if (proxyResponse) {
+      return proxyResponse;
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Middleware error:", error);
+    return NextResponse.error();
+  }
+}
+
+// Optional: Configure which paths this middleware will run on
 export const config = {
   matcher: [
     /*

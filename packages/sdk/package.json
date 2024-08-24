@@ -22,34 +22,32 @@
   },
   "files": ["dist"],
   "exports": {
-    ".": {
+    "./*": {
       "import": {
-        "types": "./dist/cli.d.ts",
-        "default": "./dist/cli.js"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.js"
       },
       "require": {
-        "types": "./dist/cli.d.cts",
-        "default": "./dist/cli.cjs"
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.cjs"
       }
     }
   },
   "bin": {
-    "settlemint": "dist/cli.js"
+    "settlemint": "dist/cli/cli.js"
   },
   "scripts": {
-    "build": "tsup-node src/cli.ts",
-    "dev": "tsup-node src/cli.ts --watch",
+    "build": "tsup-node",
+    "dev": "tsup-node --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack . --ignore-rules no-resolution",
     "test": "bun test",
-    "test:coverage": "bun test --coverage"
+    "test:coverage": "bun test --coverage",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@types/cross-spawn": "6.0.6",
-    "@types/npmcli__package-json": "4.0.4",
-    "@repo/typescript-config": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
-    "@settlemint/sdk-common": "workspace:*"
+    "@types/npmcli__package-json": "4.0.4"
   },
   "dependencies": {
     "@clack/prompts": "0.7.0",
@@ -58,18 +56,26 @@
     "@npmcli/package-json": "5.2.0",
     "commander": "12.1.0",
     "cross-spawn": "7.0.3",
-    "dotenv": "^16.4.5",
+    "dotenv": "16.4.5",
     "giget": "1.2.3",
     "graphql": "16.9.0",
-    "lilconfig": "^3.1.2",
+    "graphql-request": "7.1.0",
+    "next-themes": "0.3.0",
+    "openapi-fetch": "0.11.1",
     "openapi-typescript": "7.3.0",
+    "path-to-regexp": "7.1.0",
+    "react-query": "3.39.3",
     "ts-deepmerge": "7.0.1",
-    "viem": "2.19.8",
+    "viem": "2.20.0",
+    "wagmi": "2.12.7",
     "yoctocolors": "2.1.1",
     "zod": "3.23.8"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "next": ">=14",
+    "react": ">=18"
+  },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   }
 }
