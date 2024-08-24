@@ -181,6 +181,9 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                 />
               </FormPage>
               <Button type="submit">Submit</Button>
+              <Button type="button" onClick={() => setFormPage((formPage) => formPage + 1)}>
+                Continue
+              </Button>
             </form>
           </Form>
         </CardContent>
