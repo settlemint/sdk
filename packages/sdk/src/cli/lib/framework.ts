@@ -1,6 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
+import { findProjectRoot } from "@/common/path";
 
 type Framework = "nextjs" | "nodejs";
 

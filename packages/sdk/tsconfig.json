@@ -1,7 +1,25 @@
 {
-  "extends": "@repo/typescript-config/library.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "declaration": true,
+    "esModuleInterop": true,
+    "isolatedModules": true,
+    "lib": ["es2022", "DOM", "DOM.Iterable"],
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "outDir": "dist",
+    "jsx": "react-jsx",
+    "noEmit": true,
+    "paths": {
+      "@/common/*": ["./src/common/*"],
+      "@/next/browser/*": ["./src/next/browser/*"],
+      "@/next/node/*": ["./src/next/node/*"],
+      "@/next/edge/*": ["./src/next/edge/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
