@@ -98,7 +98,7 @@
     "tailwind-merge": "2.5.2",
     "tailwindcss-animate": "1.0.7",
     "vaul": "0.9.1",
-    "@web3modal/wagmi": "5.1.1",
+    "@web3modal/wagmi": "5.1.2",
     "wagmi": "2.12.7",
     "zod": "3.23.8",
     "@settlemint/sdk": "workspace:*"
