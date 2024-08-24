@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { findProjectRoot } from "@/common/path";
 import { createConfig } from "@redocly/openapi-core";
-import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
 import openapiTS, { astToString } from "openapi-typescript";
 
 /**
@@ -52,44 +52,10 @@ export async function createRestClient(options: {
     const settleMintDir = join(findProjectRoot(process.cwd()), ".settlemint");
     const portalDir = join(settleMintDir, "portal");
     const restDir = join(portalDir, "rest");
-    const restCodegenDir = join(restDir, "codegen");
-    mkdirSync(restCodegenDir, { recursive: true });
+    mkdirSync(restDir, { recursive: true });
 
     // Write Portal REST types to file
-    const portalRestTypesPath = join(restCodegenDir, "portal-schema.d.ts");
+    const portalRestTypesPath = join(restDir, "portal-schema.d.ts");
     writeFileSync(portalRestTypesPath, contents);
-
-    // Generate and write Portal REST client
-    const portalRestClientPath = join(restDir, "index.ts");
-
-    if (framework === "nextjs") {
-      writeFileSync(
-        portalRestClientPath,
-        `
-import createClient from "openapi-fetch";
-import type { paths } from "./codegen/portal-schema";
-
-export const portal = createClient<paths>({ baseUrl: \`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest\` });
-`,
-      );
-    } else {
-      writeFileSync(
-        portalRestClientPath,
-        `
-import createClient from "openapi-fetch";
-import type { paths } from "./codegen/portal-schema";
-
-if(globalThis.window?.document !== undefined){
-  throw new Error('You cannot use this SDK in a browser environment as it would expose your secrets.')
-}
-
-if(!process.env.SETTLEMINT_PAT_TOKEN){
-  throw new Error("SETTLEMINT_PAT_TOKEN environment variable is required");
-}
-
-export const portal = createClient<paths>({ baseUrl: '${restURL}', headers: { "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN } });
-`,
-      );
-    }
   }
 }

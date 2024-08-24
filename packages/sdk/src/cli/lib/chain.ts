@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { findProjectRoot } from "@settlemint/sdk-common/utils/path";
+import { findProjectRoot } from "@/common/path";
 import { http, createPublicClient } from "viem";
 import * as chains from "viem/chains";
 
@@ -31,11 +31,10 @@ export async function createChainConfig(options: {
     // Create directory structure
     const settleMintDir = join(findProjectRoot(process.cwd()), ".settlemint");
     const nodeDir = join(settleMintDir, "node");
-    const codegenDir = join(nodeDir, "codegen");
-    mkdirSync(codegenDir, { recursive: true });
+    mkdirSync(nodeDir, { recursive: true });
 
     // Generate and write Portal REST client
-    const chainPath = join(codegenDir, "chain.ts");
+    const chainPath = join(nodeDir, "chain.ts");
 
     // Create a temporary public client to fetch the chain ID
     const tempClient = createPublicClient({

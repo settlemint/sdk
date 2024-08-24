@@ -1,5 +1,5 @@
 import { ClientProvider } from "@/components/providers/ClientProvider";
-import { wagmiConfig } from "@/lib/config";
+import { settlemint } from "@/lib/settlemint";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
@@ -22,7 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const initialState = cookieToInitialState(wagmiConfig, headers().get("cookie"));
+  const initialState = cookieToInitialState(settlemint.wagmi.wagmiConfig, headers().get("cookie"));
 
   return (
     <html lang="en" suppressHydrationWarning>

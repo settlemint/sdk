@@ -36,7 +36,6 @@
     "*.cts": "${capture}.typegen.ts"
   },
   "typescript.tsserver.maxTsServerMemory": 16384,
-  "workbench.activityBar.orientation": "vertical",
   "typescript.disableAutomaticTypeAcquisition": true,
   "editor.formatOnSave": true,
   "editor.cursorBlinking": "smooth",
