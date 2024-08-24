@@ -12,7 +12,7 @@ export function config(): ConfigEnv | undefined {
     appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     hasuraAdminSecret: process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
     authSecret: process.env.SETTLEMINT_AUTH_SECRET,
-    sessionSecret: process.env.SETTLEMINT_SESSION_SECRET,
+    sessionSecret: process.env.AUTH_SECRET,
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   });
 }

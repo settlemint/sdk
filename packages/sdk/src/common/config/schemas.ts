@@ -44,7 +44,7 @@ export const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
   NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
-  SETTLEMINT_SESSION_SECRET: z.string().min(32).optional(),
+  AUTH_SECRET: z.string().min(32).optional(),
   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string(),
 });
 

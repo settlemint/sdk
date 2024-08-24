@@ -1,8 +1,10 @@
-import { proxyMiddleware } from "@settlemint/sdk/edge";
-import type { NextRequest } from "next/server";
+import { auth } from "@/lib/auth";
+import { createRouteMatcher, proxyMiddleware } from "@settlemint/sdk/edge";
 import { NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
+const isSecuredRoute = createRouteMatcher(["/s", "/s/(.*)"]);
+
+export default auth((request) => {
   try {
     const response = NextResponse.next();
 
@@ -11,23 +13,18 @@ export function middleware(request: NextRequest) {
       return proxyResponse;
     }
 
+    if (isSecuredRoute(request) && !request.auth) {
+      return NextResponse.redirect(new URL(`/auth/?rd=${request.nextUrl.pathname}`, request.nextUrl.origin));
+    }
+
     return response;
   } catch (error) {
     console.error("Middleware error:", error);
     return NextResponse.error();
   }
-}
+});
 
 // Optional: Configure which paths this middleware will run on
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

@@ -1,6 +1,5 @@
-// import { hasura } from "@/.settlemint/hasura/gql";
-// import { createLucia } from "@settlemint/sdk-next/auth";
+import NextAuth from "next-auth";
 
-// export const { lucia, validateRequest, createUser } = createLucia({
-//   client: hasura,
-// });
+export const { handlers, signIn, signOut, auth } = NextAuth({
+  providers: [],
+});
