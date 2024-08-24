@@ -40,6 +40,11 @@ export const ConfigEnvSchema = ConfigSchema.extend({
   walletConnectProjectId: z.string(),
 });
 
+export const BrowserConfigEnvSchema = ConfigSchema.extend({
+  appUrl: z.string().url(),
+  walletConnectProjectId: z.string(),
+});
+
 export const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
@@ -52,9 +57,17 @@ export const ApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
   pat: z.string(),
   appUrl: z.string().url().optional(),
   hasuraAdminSecret: z.string().optional(),
+  walletConnectProjectId: z.string(),
+});
+
+export const BrowserApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
+  appUrl: z.string().url(),
+  walletConnectProjectId: z.string(),
 });
 
 export type ConfigEnv = z.infer<typeof ConfigEnvSchema>;
+export type BrowserConfigEnv = z.infer<typeof BrowserConfigEnvSchema>;
 export type Config = z.infer<typeof ConfigSchema>;
 export type Env = z.infer<typeof EnvSchema>;
 export type ApplicationConfigEnv = z.infer<typeof ApplicationConfigEnvSchema>;
+export type BrowserApplicationConfigEnv = z.infer<typeof BrowserApplicationConfigEnvSchema>;
