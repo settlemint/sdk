@@ -87,7 +87,7 @@
     "framer-motion": "11.3.29",
     "input-otp": "1.2.4",
     "lucide-react": "0.435.0",
-    "next": "14.2.5",
+    "next": "14.2.6",
     "next-themes": "0.3.0",
     "pino-pretty": "11.2.2",
     "react": "18.3.1",
@@ -96,12 +96,13 @@
     "react-dropzone": "14.2.3",
     "react-hook-form": "7.53.0",
     "react-resizable-panels": "2.1.1",
+    "@tanstack/react-query": "^5.52.1",
     "recharts": "2.12.7",
     "sonner": "1.5.0",
     "tailwind-merge": "2.5.2",
     "tailwindcss-animate": "1.0.7",
     "vaul": "0.9.1",
-    "@web3modal/wagmi": "5.1.1",
+    "@web3modal/wagmi": "5.1.2",
     "wagmi": "2.12.7",
     "zod": "3.23.8",
     "@settlemint/sdk": "workspace:*"
@@ -109,12 +110,12 @@
   "devDependencies": {
     "typescript": "5.5.4",
     "@types/node": "22.5.0",
-    "@types/react": "18.3.3",
+    "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
     "postcss": "8.4.41",
     "tailwindcss": "3.4.10",
     "eslint": "8.57.0",
-    "eslint-config-next": "14.2.5"
+    "eslint-config-next": "14.2.6"
   },
   "peerDependencies": {}
 }

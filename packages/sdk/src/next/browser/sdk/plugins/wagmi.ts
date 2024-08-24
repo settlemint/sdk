@@ -120,7 +120,6 @@ export const wagmiConfig = (
     wagmiConfig,
     projectId,
     allowUnsupportedChain: true,
-    defaultChain: parameters.web3ModalConfig.defaultChain ?? parameters.chain,
   };
 
   const firstIcon = parameters.web3ModalConfig.metadata.icons?.[0];

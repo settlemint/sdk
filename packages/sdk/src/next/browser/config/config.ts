@@ -6,6 +6,7 @@ import {
 } from "@/common/config/schemas";
 
 export function activeConfig(config: Config): ApplicationConfigEnv {
+  console.log("CONFIG", process.env);
   const cfg = ConfigEnvSchema.parse({
     ...config,
     pat: process.env.SETTLEMINT_PAT_TOKEN,
