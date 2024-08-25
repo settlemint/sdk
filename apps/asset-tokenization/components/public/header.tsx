@@ -8,7 +8,7 @@ interface NavItem {
   label: string;
 }
 
-const NAV_ITEMS: NavItem[] = [{ href: "https://console.settlemint.com/documentation", label: "Documentation" }];
+const NAV_ITEMS: NavItem[] = [{ href: "https://console.settlemint.com/documentation", label: "Docs" }];
 
 export function PublicHeader({ children }: PropsWithChildren) {
   return (

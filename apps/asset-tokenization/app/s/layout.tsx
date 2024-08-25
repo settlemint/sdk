@@ -1,7 +1,5 @@
 import { Logo } from "@/components/public/logo";
-import { SecureHeader } from "@/components/secure/header";
-import { SidebarNavigation } from "@/components/secure/sidebar-navigation";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { SidebarNavigation } from "@/components/secure/sidebar/sidebar-navigation";
 import { getServerSession } from "next-auth/next";
 import { headers } from "next/headers";
 import Link from "next/link";
@@ -10,29 +8,31 @@ import type { PropsWithChildren } from "react";
 
 export default async function SecureLayout({ children }: PropsWithChildren) {
   const session = await getServerSession();
+  const pathname = headers().get("x-current-path") || "/s";
 
   if (!session) {
-    const headersList = headers();
-    const fullUrl = headersList.get("x-url") ?? "/s";
-    redirect(`/auth?rd=${encodeURIComponent(fullUrl)}`);
+    redirect(`/auth?rd=${encodeURIComponent(pathname)}`);
+  }
+
+  if (pathname === "/s") {
+    redirect("/s/dashboard");
   }
 
   return (
-    <TooltipProvider>
-      <div className="grid h-screen w-full pl-[56px] bg-[url('/background-lm.svg')] dark:bg-[url('/background-dm.svg')] bg-cover bg-center">
-        <aside className="fixed inset-y-0 left-0 z-20 flex h-full w-[56px] flex-col">
-          <div className="p-2">
-            <Link href="/s" className="flex items-center" aria-label="SettleMint Asset Tokenization Starterkit">
-              <Logo variant="icon" />
+    <div className="grid min-h-screen w-full md:grid-cols-[165px_1fr] lg:grid-cols-[210px_1fr] bg-custom-background-sidebar">
+      <div className="hidden md:block">
+        <div className="flex h-full max-h-screen flex-col gap-2">
+          <div className="flex h-16 items-center justify-left px-3 py-2 lg:h-[64px] lg:px-4">
+            <Link href="/s/dashboard" className="flex items-center gap-2 font-semibold">
+              <Logo className="h-7 w-auto" />
             </Link>
           </div>
-          <SidebarNavigation />
-        </aside>
-        <div className="flex flex-col">
-          <SecureHeader />
-          <main className="flex-1 overflow-auto p-6 bg-background rounded-tl-lg">{children}</main>
+          <div className="flex-1 overflow-auto py-2">
+            <SidebarNavigation />
+          </div>
         </div>
       </div>
-    </TooltipProvider>
+      {children}
+    </div>
   );
 }

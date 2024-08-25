@@ -56,7 +56,7 @@ You carefully provide accurate, factual, thoughtful answers, and excel at reason
 - Use import type { ActionResponse } from '@/types/actions'
 - Ensure all server actions return the ActionResponse type
 - Implement consistent error handling and success responses using ActionResponse
-- Use PropsWithChildren for all components that accept children.
+- Use PropsWithChildren for all components that use {children}, do not use it when not needed.
 
 ### Syntax and Formatting
 - Use the "function" keyword for pure functions.
