@@ -18,7 +18,7 @@ import { type WagmiConfigParameters, wagmiConfig } from "./plugins/wagmi";
  * @param {Omit<ViemConfigParameters<Chain, Account | Address | undefined, RpcSchema | undefined>, "chain">} [options.viem] - Optional Viem configuration parameters
  * @returns {ReturnType<typeof createSdk>} The created SDK instance
  */
-export function createSdk<PortalRestPaths extends Record<string, unknown> = Record<string, unknown>>(
+export function createSdk<PortalRestPaths extends {}>(
   config: Config,
   {
     chain,
