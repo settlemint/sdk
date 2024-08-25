@@ -1,9 +1,11 @@
 "use client";
 
-import { settlemint } from "@/lib/settlemint";
+import { settlemint } from "@/lib/sdk/browser/settlemint";
 import { SettleMintProvider } from "@settlemint/sdk/browser";
 import { QueryClient } from "@tanstack/react-query";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
+import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
 import type { FC, PropsWithChildren } from "react";
 import type { State } from "wagmi";
 
@@ -15,14 +17,17 @@ createWeb3Modal(settlemint.wagmi.web3ModalConfig);
 export const ClientProvider: FC<
   PropsWithChildren<{
     initialState?: State;
+    session: Session | null;
   }>
-> = ({ children, initialState }) => {
+> = ({ children, initialState, session }) => {
   return (
-    <SettleMintProvider
-      wagmi={{ enabled: true, config: settlemint.wagmi.wagmiConfig, initialState }}
-      reactQuery={{ enabled: true, client: queryClient }}
-    >
-      {children}
-    </SettleMintProvider>
+    <SessionProvider session={session}>
+      <SettleMintProvider
+        wagmi={{ enabled: true, config: settlemint.wagmi.wagmiConfig, initialState }}
+        reactQuery={{ enabled: true, client: queryClient }}
+      >
+        {children}
+      </SettleMintProvider>
+    </SessionProvider>
   );
 };

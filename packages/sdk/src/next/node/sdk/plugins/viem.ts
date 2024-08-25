@@ -29,7 +29,7 @@ export const viemConfig = <
   parameters: ViemConfigParameters<chain, accountOrAddress, rpcSchema>,
 ): PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema> => {
   return {
-    transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, parameters.transportConfig),
+    transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc`, parameters.transportConfig),
     ...parameters,
     chain: parameters.chain,
   };

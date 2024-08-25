@@ -1,33 +1,18 @@
 import { proxyMiddleware } from "@settlemint/sdk/edge";
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-export function middleware(request: NextRequest) {
-  try {
-    const response = NextResponse.next();
+export default (request: NextRequest) => {
+  const response = NextResponse.next();
 
-    const proxyResponse = proxyMiddleware(request, response);
-    if (proxyResponse) {
-      return proxyResponse;
-    }
-
-    return response;
-  } catch (error) {
-    console.error("Middleware error:", error);
-    return NextResponse.error();
+  const proxyResponse = proxyMiddleware(request, response);
+  if (proxyResponse) {
+    return proxyResponse;
   }
-}
+
+  return response;
+};
 
 // Optional: Configure which paths this middleware will run on
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
-    "/((?!api|_next/static|_next/image|favicon.ico).*)",
-  ],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

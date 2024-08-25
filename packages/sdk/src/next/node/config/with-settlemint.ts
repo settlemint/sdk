@@ -1,7 +1,7 @@
-import { activeConfig } from "@/next/browser/config/config";
 import type { NextConfig } from "next";
 import type { Rewrite } from "next/dist/lib/load-custom-routes";
 import { readSettlemintConfig } from "../../../cli/lib/config/read-config";
+import { activeServerConfig } from "./config";
 
 export type WithSettleMintOptions = {
   disabled?: boolean;
@@ -25,7 +25,7 @@ export function withSettleMint<C extends NextConfig>(
     if (!config) {
       return baseConfig;
     }
-    const cfg = activeConfig(config);
+    const cfg = activeServerConfig(config);
     if (!cfg) {
       return baseConfig;
     }

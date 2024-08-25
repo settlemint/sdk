@@ -1,15 +1,18 @@
 import {
-  type BrowserApplicationConfigEnv,
-  BrowserApplicationConfigEnvSchema,
-  BrowserConfigEnvSchema,
+  type ApplicationConfigEnv,
+  ApplicationConfigEnvSchema,
   type Config,
+  ConfigEnvSchema,
 } from "@/common/config/schemas";
 
-export function activeBrowserConfig(config: Config): BrowserApplicationConfigEnv {
-  const cfg = BrowserConfigEnvSchema.parse({
+export function activeServerConfig(config: Config): ApplicationConfigEnv {
+  const cfg = ConfigEnvSchema.parse({
     ...config,
-    appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+    pat: process.env.SETTLEMINT_PAT_TOKEN,
+    appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    hasuraAdminSecret: process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
+    sessionSecret: process.env.NEXTAUTH_SECRET,
   });
 
   const applications = cfg.applications ?? {};
@@ -26,9 +29,11 @@ export function activeBrowserConfig(config: Config): BrowserApplicationConfigEnv
     throw new Error(`No application found for ${env}, please run \`settlemint connect\``);
   }
 
-  return BrowserApplicationConfigEnvSchema.parse({
+  return ApplicationConfigEnvSchema.parse({
     ...envConf,
+    pat: cfg.pat,
     appUrl: cfg.appUrl,
+    hasuraAdminSecret: cfg.hasuraAdminSecret,
     walletConnectProjectId: cfg.walletConnectProjectId,
   });
 }
