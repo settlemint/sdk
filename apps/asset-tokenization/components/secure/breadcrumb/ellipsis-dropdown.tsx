@@ -12,6 +12,11 @@ interface EllipsisDropdownProps {
   items: BreadcrumbItemType[];
 }
 
+/**
+ * Renders a single item in the ellipsis dropdown.
+ * @param props - The component props.
+ * @returns The rendered EllipsisDropdownItem component.
+ */
 function EllipsisDropdownItem({ href, children }: PropsWithChildren<{ href: string }>) {
   return (
     <Link
@@ -23,6 +28,11 @@ function EllipsisDropdownItem({ href, children }: PropsWithChildren<{ href: stri
   );
 }
 
+/**
+ * Renders a dropdown component for collapsed breadcrumb items.
+ * @param props - The component props.
+ * @returns The rendered EllipsisDropdown component.
+ */
 export function EllipsisDropdown({ items }: EllipsisDropdownProps) {
   return (
     <Popover>
@@ -33,7 +43,7 @@ export function EllipsisDropdown({ items }: EllipsisDropdownProps) {
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2">
         {items.map(({ label, href }) => (
-          <EllipsisDropdownItem key={label} href={href || "#"}>
+          <EllipsisDropdownItem key={label} href={href ?? "#"}>
             {label}
           </EllipsisDropdownItem>
         ))}
