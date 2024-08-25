@@ -7,7 +7,10 @@ export default (request: NextRequest) => {
     return proxyResponse;
   }
 
-  return NextResponse.next();
+  const headers = new Headers(request.headers);
+  headers.set("x-current-path", request.nextUrl.pathname);
+
+  return NextResponse.next({ headers });
 };
 
 // Optional: Configure which paths this middleware will run on

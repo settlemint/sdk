@@ -42,7 +42,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
+      <body className={cn("min-h-screen bg-custom-background-sidebar font-sans antialiased", fontSans.variable)}>
         <ClientProvider session={session}>{children}</ClientProvider>
       </body>
     </html>

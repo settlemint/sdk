@@ -1,3 +1,3 @@
-export default function Home() {
-  return <div>Secure!</div>;
+export default function SecureHome() {
+  return <div />;
 }
