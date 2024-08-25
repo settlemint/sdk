@@ -1,5 +1,5 @@
 import { ConnectButton } from "@/components/global/connect-button";
-import Logo from "@/components/public/logo";
+import { Logo } from "@/components/public/logo";
 
 export default function Auth() {
   return (
