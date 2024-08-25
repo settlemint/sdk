@@ -1,4 +1,4 @@
-import Logo from "@/components/public/logo";
+import { Logo } from "@/components/public/logo";
 import { PublicNavigation } from "@/components/public/navigation";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
