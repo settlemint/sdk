@@ -6,13 +6,17 @@ import { parseSiweMessage } from "viem/siwe";
 
 declare module "next-auth" {
   interface Session {
-    address: string;
-    chainId: number;
-    nonce: string;
+    user: {
+      address: string;
+      chainId: number;
+    };
   }
 }
 
+process.env.NEXTAUTH_URL = process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL;
+
 const handler = NextAuth({
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth",
   },
@@ -32,7 +36,6 @@ const handler = NextAuth({
         },
       },
       async authorize(credentials) {
-        console.log("authorize", credentials);
         try {
           if (!credentials?.message) {
             return null;
@@ -62,18 +65,20 @@ const handler = NextAuth({
   ],
   session: {
     strategy: "jwt",
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+    updateAge: 24 * 60 * 60, // 24 hours
   },
   callbacks: {
     session({ session, token }) {
-      console.log("session", session);
       if (!token.sub) {
         return session;
       }
 
-      const [, chainId, address] = token.sub.split(":");
+      const [chainId, address] = token.sub.split(":");
+
       if (chainId && address) {
-        session.address = address;
-        session.chainId = Number.parseInt(chainId, 10);
+        session.user.address = address;
+        session.user.chainId = Number.parseInt(chainId, 10);
       }
 
       return session;

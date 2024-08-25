@@ -68,7 +68,7 @@ export function connectCommand(): Command {
       )
       .option(
         "-c, --session-secret <secret>",
-        "The secret to use to encrypt the session, 32 characters (AUTH_SECRET environment variable)",
+        "The secret to use to encrypt the session, 32 characters (NEXTAUTH_SECRET environment variable)",
       )
       .option(
         "-wc, --wallet-connect <id>",
@@ -236,7 +236,7 @@ export function connectCommand(): Command {
 
               selectedSessionSecret = await coerceText({
                 type: "password",
-                envValue: process.env.AUTH_SECRET,
+                envValue: process.env.NEXTAUTH_SECRET,
                 cliParamValue: sessionSecret,
                 configValue: cfg?.sessionSecret ?? randomBytes(16).toString("hex"),
                 validate: (value) => (value?.trim() ?? "").length === 32,
@@ -374,7 +374,7 @@ export function connectCommand(): Command {
                   SETTLEMINT_PAT_TOKEN: personalAccessToken,
                   NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
-                  AUTH_SECRET: selectedSessionSecret,
+                  NEXTAUTH_SECRET: selectedSessionSecret,
                   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
                 });
               },

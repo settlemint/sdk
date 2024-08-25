@@ -101,7 +101,7 @@ export const wagmiConfig = (
 
         const success = await signIn("credentials", {
           message,
-          redirect: false,
+          redirect: true,
           signature,
           callbackUrl,
         });
@@ -114,7 +114,8 @@ export const wagmiConfig = (
     signOut: async () => {
       try {
         await signOut({
-          redirect: false,
+          redirect: true,
+          callbackUrl: "/",
         });
 
         return true;
