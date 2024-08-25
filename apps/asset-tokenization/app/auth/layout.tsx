@@ -1,11 +1,9 @@
 import { getServerSession } from "next-auth/next";
 import { redirect } from "next/navigation";
+import type { PropsWithChildren } from "react";
 
-export default async function SecureLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+// This layout ensures that authenticated users are redirected to the secure area
+export default async function UnauthenticatedLayout({ children }: PropsWithChildren) {
   const session = await getServerSession();
 
   if (session) {

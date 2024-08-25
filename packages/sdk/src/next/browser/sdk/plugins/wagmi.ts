@@ -12,13 +12,23 @@ import type { Chain, Prettify, TransportConfig } from "viem";
 import { mainnet, sepolia } from "viem/chains";
 import { http, type Config, cookieStorage, createStorage } from "wagmi";
 
+/**
+ * Configuration type for Web3Modal
+ */
 export type Web3ModalConfig = Parameters<typeof createWeb3Modal>["0"];
+
+/**
+ * Limited configuration type for Web3Modal, excluding certain properties
+ */
 export type LimitedWeb3ModalConfig = Prettify<
   Omit<Web3ModalConfig, "chains" | "wagmiConfig" | "metadata" | "projectId"> & {
     metadata: Omit<NonNullable<Web3ModalConfig["metadata"]>, "url">;
   }
 >;
 
+/**
+ * Parameters for configuring Wagmi
+ */
 export type WagmiConfigParameters = Prettify<{
   chain: Chain;
   wagmiConfig?: Partial<Omit<Parameters<typeof defaultWagmiConfig>[0], "client">> & {
@@ -27,6 +37,11 @@ export type WagmiConfigParameters = Prettify<{
   web3ModalConfig: LimitedWeb3ModalConfig;
 }>;
 
+/**
+ * Generates Wagmi and Web3Modal configurations
+ * @param parameters - WagmiConfigParameters
+ * @returns An object containing wagmiConfig and web3ModalConfig
+ */
 export const wagmiConfig = (
   parameters: WagmiConfigParameters,
 ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
@@ -68,6 +83,9 @@ export const wagmiConfig = (
     },
   });
 
+  /**
+   * SIWE (Sign-In with Ethereum) configuration
+   */
   const siweConfig = createSIWEConfig({
     getMessageParams: async () => ({
       domain: typeof window !== "undefined" ? window.location.host : "",

@@ -1,43 +1,44 @@
 import { ClientProvider } from "@/components/providers/ClientProvider";
-import { settlemint } from "@/lib/sdk/browser/settlemint";
 import { cn } from "@/lib/utils";
-import { createRouteMatcher } from "@settlemint/sdk/edge";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Figtree as FontSans } from "next/font/google";
-import { headers } from "next/headers";
-import { cookieToInitialState } from "wagmi";
 import "./globals.css";
 
 const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {
   title: "SettleMint Asset Tokenization Starter Kit",
   description: "SettleMint Asset Tokenization Starter Kit",
+  keywords: ["asset tokenization", "blockchain", "SettleMint", "blockchain transformation"],
+  authors: [{ name: "SettleMint" }],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    siteName: "SettleMint Asset Tokenization Starter Kit",
+  },
+  viewport: "width=device-width, initial-scale=1",
+  other: {
+    "darkreader-lock": "",
+  },
 };
 
-const isSecuredRoute = createRouteMatcher(["/s", "/s/(.*)"]);
-
-export default async function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
-  const initialState = cookieToInitialState(settlemint.wagmi.wagmiConfig, headers().get("cookie"));
+}
+
+export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession();
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="darkreader-lock" />
-      </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
-        <ClientProvider initialState={initialState} session={session}>
-          {children}
-        </ClientProvider>
+        <ClientProvider session={session}>{children}</ClientProvider>
       </body>
     </html>
   );

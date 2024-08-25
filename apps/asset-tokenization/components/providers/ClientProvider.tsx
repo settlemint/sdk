@@ -1,33 +1,32 @@
 "use client";
 
-import { settlemint } from "@/lib/sdk/browser/settlemint";
+import { settlemint } from "@/lib/settlemint";
 import { SettleMintProvider } from "@settlemint/sdk/browser";
-import { QueryClient } from "@tanstack/react-query";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import type { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
-import type { FC, PropsWithChildren } from "react";
-import type { State } from "wagmi";
+import { type PropsWithChildren, useMemo } from "react";
 
-// Create a React Query client -> https://tanstack.com/query/latest/docs/framework/react/quick-start
-const queryClient = new QueryClient();
+if (settlemint.wagmi) {
+  createWeb3Modal(settlemint.wagmi.web3ModalConfig);
+}
 
-createWeb3Modal(settlemint.wagmi.web3ModalConfig);
+interface ClientProviderProps {
+  session: Session | null;
+}
 
-export const ClientProvider: FC<
-  PropsWithChildren<{
-    initialState?: State;
-    session: Session | null;
-  }>
-> = ({ children, initialState, session }) => {
+export function ClientProvider({ children, session }: PropsWithChildren<ClientProviderProps>) {
+  const wagmiConfig = useMemo(() => {
+    if (!settlemint.wagmi) return null;
+    return { config: settlemint.wagmi.wagmiConfig };
+  }, []);
+
+  if (!wagmiConfig) {
+    return null;
+  }
+
   return (
-    <SessionProvider session={session}>
-      <SettleMintProvider
-        wagmi={{ enabled: true, config: settlemint.wagmi.wagmiConfig, initialState }}
-        reactQuery={{ enabled: true, client: queryClient }}
-      >
-        {children}
-      </SettleMintProvider>
-    </SessionProvider>
+    <SettleMintProvider wagmi={wagmiConfig} session={session}>
+      {children}
+    </SettleMintProvider>
   );
-};
+}

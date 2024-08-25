@@ -1,31 +1,37 @@
 "use client";
 
-import type { FC, PropsWithChildren } from "react";
 import { WagmiProvider, type WagmiProviderProps } from "wagmi";
 
 type WagmiBaseProps = Omit<WagmiProviderProps, "children">;
 
 interface WagmiEnabledProps extends WagmiBaseProps {
-  enabled: true;
+  enabled?: true;
 }
 
 interface WagmiDisabledProps {
   enabled: false;
 }
 
-export type WagmiProps = PropsWithChildren<WagmiEnabledProps | WagmiDisabledProps>;
+export type WagmiProps = WagmiEnabledProps | WagmiDisabledProps;
 
-function isWagmiEnabled(props: WagmiProps): props is PropsWithChildren<WagmiEnabledProps> {
-  return props.enabled === true;
+/**
+ * Type guard to check if Wagmi is enabled
+ * @param props - The WagmiProps to check
+ * @returns True if Wagmi is enabled, false otherwise
+ */
+function isWagmiEnabled(props: WagmiProps): props is WagmiEnabledProps {
+  return props.enabled !== false;
 }
 
-export const WagmiWrapper: FC<WagmiProps> = (props) => {
-  const { children } = props;
-
+/**
+ * Wrapper component for WagmiProvider
+ * @param props - The WagmiProps and children
+ * @returns WagmiProvider if enabled, otherwise just the children
+ */
+export function WagmiWrapper({ children, ...props }: React.PropsWithChildren<WagmiProps>) {
   if (isWagmiEnabled(props)) {
-    const { ...wagmiProps } = props;
-    return <WagmiProvider {...wagmiProps}>{children}</WagmiProvider>;
+    return <WagmiProvider {...props}>{children}</WagmiProvider>;
   }
 
   return <>{children}</>;
-};
+}

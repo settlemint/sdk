@@ -2,14 +2,12 @@ import { proxyMiddleware } from "@settlemint/sdk/edge";
 import { type NextRequest, NextResponse } from "next/server";
 
 export default (request: NextRequest) => {
-  const response = NextResponse.next();
-
-  const proxyResponse = proxyMiddleware(request, response);
+  const proxyResponse = proxyMiddleware(request);
   if (proxyResponse) {
     return proxyResponse;
   }
 
-  return response;
+  return NextResponse.next();
 };
 
 // Optional: Configure which paths this middleware will run on
