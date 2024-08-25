@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "tui",
+  "ui": "stream",
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
     "build": {
@@ -29,6 +29,7 @@
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },

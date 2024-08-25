@@ -5,9 +5,78 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d667c314-5116-4663-abb6-f5d97c4fb336" name="Changes" comment="merge main">
+      <change afterPath="$PROJECT_DIR$/.prompts/docblock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.prompts/optimize" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/(home)/error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/api/auth/[...nextauth]/route.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/auth/error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/auth/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/global-error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/s/dashboard/page.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/s/error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/s/layout.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/global/darkmode-toggle.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/global/error.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/global/icons/cross.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/global/metadata.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/breadcrumb/breadcrumb.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/breadcrumb/ellipsis-dropdown.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/header.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/main.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/sidebar/modile-navigation.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/sidebar/sidebar-navigation-group.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/sidebar/sidebar-navigation-item.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/secure/sidebar/sidebar-navigation.tsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/public/settlemint-logo-i-dm.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/apps/asset-tokenization/public/settlemint-logo-i-lm.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/sdk/src/next/node/config/config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/packages/sdk/src/next/node/config/with-settlemint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.cursorrules" beforeDir="false" afterPath="$PROJECT_DIR$/.cursorrules" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.vscode/settings.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/settings.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/.env.connect.1p" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/.env.connect.1p" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/(home)/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/(home)/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/(home)/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/(home)/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/a/page.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/auth/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/auth/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/layout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/layout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/app/s/page.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/app/s/page.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/providers/ClientProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/providers/ClientProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/connect-button.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/global/connect-button.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/features.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/public/features.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/footer.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/public/footer.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/header.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/public/header.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/hero.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/public/hero.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/logo.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/public/logo.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/public/navigation.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/components/public/navigation.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/ui/darkmode-toggle.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/ui/toast.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/ui/toaster.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/components/ui/use-toast.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/lib/auth.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/lib/config.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/lib/settlemint.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/lib/settlemint.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/middleware.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/middleware.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/sdk/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/asset-tokenization/tailwind.config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/asset-tokenization/tailwind.config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/cli/commands/connect.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/cli/commands/connect.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/cli/lib/chain.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/cli/lib/chain.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/cli/lib/config/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/cli/lib/config/config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/common/config/schemas.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/common/config/schemas.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/config/config.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/config/config.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/SettleMintProvider.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/SettleMintProvider.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/wrappers/ReactQueryWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/wrappers/ReactQueryWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/wrappers/ThemeWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/wrappers/ThemeWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/wrappers/WagmiWrapper.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/providers/wrappers/WagmiWrapper.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/plugins/portal.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/plugins/portal.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/plugins/viem.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/plugins/viem.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/plugins/wagmi.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/plugins/wagmi.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/sdk.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/browser/sdk/sdk.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/edge/middleware/proxy.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/edge/middleware/proxy.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/node/lib/with-settlemint.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/sdk/src/next/node/node.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/sdk/src/next/node/node.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/turbo.json" beforeDir="false" afterPath="$PROJECT_DIR$/turbo.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,23 +94,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "git-widget-placeholder": "Merging patrick/srt-181-form-poc",
-    "go.import.settings.migrated": "true",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/pmualaba/Development/settlemint/sdk",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Merging patrick/srt-181-form-poc&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/pmualaba/Development/settlemint/sdk&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -61,6 +130,7 @@
       <workItem from="1724427204206" duration="1391000" />
       <workItem from="1724502270454" duration="282000" />
       <workItem from="1724510197988" duration="889000" />
+      <workItem from="1724616839179" duration="298000" />
     </task>
     <servers />
   </component>

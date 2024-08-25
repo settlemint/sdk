@@ -11,26 +11,34 @@ import {
 } from "viem";
 
 export type ViemConfigParameters<
-  chain extends Chain | undefined = undefined,
-  accountOrAddress extends Account | Address | undefined = undefined,
-  rpcSchema extends RpcSchema | undefined = undefined,
+  TChain extends Chain = Chain,
+  TAccount extends Account | Address | undefined = undefined,
+  TRpcSchema extends RpcSchema | undefined = undefined,
 > = Prettify<
-  Omit<PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema>, "chain" | "transport"> & {
+  Omit<PublicClientConfig<HttpTransport, TChain, TAccount, TRpcSchema>, "chain" | "transport"> & {
     transportConfig?: TransportConfig<"http">;
-    chain: Chain;
+    chain: TChain;
   }
 >;
 
-export const viemConfig = <
-  chain extends Chain | undefined = undefined,
-  accountOrAddress extends Account | Address | undefined = undefined,
-  rpcSchema extends RpcSchema | undefined = undefined,
+/**
+ * Creates a Viem public client configuration
+ * @param parameters - The configuration parameters
+ * @returns A public client configuration
+ */
+export function viemConfig<
+  TChain extends Chain = Chain,
+  TAccount extends Account | Address | undefined = undefined,
+  TRpcSchema extends RpcSchema | undefined = undefined,
 >(
-  parameters: ViemConfigParameters<chain, accountOrAddress, rpcSchema>,
-): PublicClientConfig<HttpTransport, chain, accountOrAddress, rpcSchema> => {
+  parameters: ViemConfigParameters<TChain, TAccount, TRpcSchema>,
+): PublicClientConfig<HttpTransport, TChain, TAccount, TRpcSchema> {
+  const { chain, transportConfig, ...rest } = parameters;
+  const rpcUrl = `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`;
+
   return {
-    transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/node/jsonrpc`, parameters.transportConfig),
-    ...parameters,
-    chain: parameters.chain,
+    transport: http(rpcUrl, transportConfig),
+    chain,
+    ...rest,
   };
-};
+}

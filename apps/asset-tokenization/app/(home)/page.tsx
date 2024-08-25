@@ -5,12 +5,12 @@ import { SidePanel } from "@/components/ui/sidepanel";
 
 export default function Home() {
   return (
-    <div>
+    <main>
       <PublicHero />
       <PublicFeatures />
       <SidePanel>
         <TokenizationWizard />
       </SidePanel>
-    </div>
+    </main>
   );
 }
