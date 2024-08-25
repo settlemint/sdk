@@ -28,7 +28,8 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "connect": "turbo connect",
-    "codegen": "turbo codegen"
+    "codegen": "turbo codegen",
+    "deploy": "turbo deploy"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
