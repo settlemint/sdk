@@ -2,6 +2,7 @@ import { ClientProvider } from "@/components/providers/ClientProvider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
+import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
 import "./globals.css";
 
@@ -22,10 +23,14 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     siteName: "SettleMint Asset Tokenization Starter Kit",
   },
-  viewport: "width=device-width, initial-scale=1",
   other: {
     "darkreader-lock": "",
   },
+};
+
+export const viewport: ViewportLayout = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 interface RootLayoutProps {
