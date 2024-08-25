@@ -10,6 +10,7 @@ export const ApplicationConfigSchema = z.object({
   thegraphGql: z.string().url().optional(),
   hasuraGql: z.string().url().optional(),
   nodeJsonRpc: z.string().url().optional(),
+  nodeJsonRpcDeploy: z.string().url().optional(),
 });
 
 export const ConfigSchema = z.object({

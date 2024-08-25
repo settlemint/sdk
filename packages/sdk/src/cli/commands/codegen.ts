@@ -1,3 +1,4 @@
+import { existsSync } from "node:fs";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
 import { createChainConfig } from "../lib/chain";
@@ -6,6 +7,7 @@ import { config } from "../lib/config/config";
 import { createGqlClient } from "../lib/graphql";
 import { createRestClient } from "../lib/rest";
 import { writeTsConfig } from "../lib/tsconfig";
+import { runWagmiCli } from "../lib/wagmi";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
@@ -130,6 +132,16 @@ export function codegenCommand(): Command {
                 });
               },
               stopMessage: "Chain clients generated",
+            });
+          }
+
+          if (existsSync("./contracts")) {
+            await printSpinner({
+              startMessage: "Generating the wagmi hooks",
+              task: async () => {
+                await runWagmiCli("generate --config ./.settlemint/wagmi/wagmi.config.ts");
+              },
+              stopMessage: "wagmi hooks generated",
             });
           }
 

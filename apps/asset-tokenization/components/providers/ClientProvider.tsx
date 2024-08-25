@@ -19,6 +19,7 @@ export function ClientProvider({ children, session }: PropsWithChildren<ClientPr
   const { theme } = useTheme();
   const { setThemeMode } = useWeb3ModalTheme();
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   // biome-ignore lint/correctness/useExhaustiveDependencies: the darkmode toggle will handle this on changes
   useEffect(() => {
     if (theme === "system") {

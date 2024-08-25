@@ -20,14 +20,15 @@
   "scripts": {
     "clean": "git clean -fdX && find . -type f \\( -name 'pnpm-lock.yaml' -o -name 'package-lock.json' -o -name 'yarn.lock' -o -name 'bun.lockb' \\) -exec rm -f {} + && bun install",
     "lint:biome": "biome lint --write --unsafe .",
-    "format": "biome format --write .",
     "knip": "knip",
+    "format": "turbo format",
     "publint": "turbo publint",
     "attw": "turbo attw",
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "connect": "turbo connect"
+    "connect": "turbo connect",
+    "codegen": "turbo codegen"
   },
   "devDependencies": {
     "@biomejs/biome": "1.8.3",
@@ -43,6 +44,6 @@
   "engines": {
     "node": ">=18"
   },
-  "workspaces": ["apps/*", "packages/*", "packages/repo/*"],
+  "workspaces": ["apps/*", "apps/*/contracts", "packages/*", "packages/repo/*"],
   "trustedDependencies": ["@biomejs/biome", "lefthook"]
 }

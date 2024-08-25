@@ -43,9 +43,11 @@
     "dev": "next dev --port 3330",
     "connect": "op run --env-file=\".env.connect.1p\" -- bun run --bun ../../packages/sdk/src/cli/cli.ts connect",
     "codegen": "bun run --bun ../../packages/sdk/src/cli/cli.ts codegen",
+    "deploy": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts scs hardhat deploy remote",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "format": "biome format --write .",
     "hasura:migrate": "cd database && hasura metadata apply && hasura migrate apply --all-databases && hasura metadata reload",
     "hasura:console": "cd database && hasura console"
   },
@@ -106,14 +108,14 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "typescript": "5.5.4",
     "@types/node": "22.5.0",
     "@types/react": "18.3.4",
     "@types/react-dom": "18.3.0",
+    "eslint": "8.57.0",
+    "eslint-config-next": "14.2.6",
     "postcss": "8.4.41",
     "tailwindcss": "3.4.10",
-    "eslint": "8.57.0",
-    "eslint-config-next": "14.2.6"
+    "typescript": "5.5.4"
   },
   "peerDependencies": {}
 }

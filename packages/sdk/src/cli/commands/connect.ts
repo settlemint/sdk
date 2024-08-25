@@ -67,6 +67,10 @@ export function connectCommand(): Command {
         "The url to the node rpc api (SETTLEMINT_NODE_JSON_RPC_URL environment variable)",
       )
       .option(
+        "-nd, --node-json-rpc-deploy <url>",
+        "The url to the node rpc api for deployment (SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY environment variable)",
+      )
+      .option(
         "-c, --session-secret <secret>",
         "The secret to use to encrypt the session, 32 characters (NEXTAUTH_SECRET environment variable)",
       )
@@ -87,6 +91,7 @@ export function connectCommand(): Command {
           theGraphGql,
           hasuraGql,
           nodeJsonRpc,
+          nodeJsonRpcDeploy,
           workspace,
           application,
           childWorkspace,
@@ -339,6 +344,21 @@ export function connectCommand(): Command {
               existingMessage: "A valid blockchain node URL is already provided. Do you want to change it?",
             });
 
+            const nodeDeployUrl = await coerceSelect({
+              options: selectedApplication.nodes.map((node) => ({
+                value: node.rpcUrl,
+                label: `${node.name} (${node.uniqueName})`,
+              })),
+              noneOption: { value: undefined, label: "None" },
+              envValue: process.env.SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY,
+              cliParamValue: nodeJsonRpcDeploy,
+              configValue: configApplication?.nodeJsonRpcDeploy,
+              validate: (value) => !!new URL(value ?? "").toString(),
+              promptMessage: "Select a blockchain node for deployment",
+              existingMessage:
+                "A valid blockchain node URL for deployment is already provided. Do you want to change it?",
+            });
+
             const possibleApplications = cfg?.applications ?? {};
             if (!possibleApplications[selectedApplication.id]) {
               possibleApplications[selectedApplication.id] = {
@@ -410,6 +430,7 @@ export function connectCommand(): Command {
                       thegraphGql: thegraphGqlUrl,
                       hasuraGql: hasuraUrl?.gqlUrl,
                       nodeJsonRpc: nodeUrl,
+                      nodeJsonRpcDeploy: nodeDeployUrl,
                     },
                   },
                 });

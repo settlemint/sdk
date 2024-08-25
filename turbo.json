@@ -4,13 +4,19 @@
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
     "build": {
-      "dependsOn": ["^codegen", "^build"],
+      "dependsOn": ["codegen", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
     "codegen": {
-      "dependsOn": ["^codegen"],
-      "inputs": ["$TURBO_DEFAULT$", ".settlemintrc.json"]
+      "dependsOn": ["connect", "^codegen"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".settlemintrc.json",
+        "graphql/**",
+        "apps/asset-tokenization/contracts/ignition/deployments/**"
+      ],
+      "outputs": [".settlemint/**"]
     },
     "//#lint:biome": {
       "cache": false
@@ -18,14 +24,14 @@
     "lint": {
       "dependsOn": ["^build", "//#lint:biome", "^lint"]
     },
-    "//#format": {
-      "cache": false
-    },
     "//#knip": {
       "cache": false
     },
     "attw": {
       "dependsOn": ["build"]
+    },
+    "format": {
+      "dependsOn": ["^format"]
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {
@@ -40,8 +46,8 @@
       "dependsOn": ["^test:coverage"]
     },
     "connect": {
-      "dependsOn": ["^build"],
-      "cache": false
+      "inputs": [".settlemintrc.json", ".env.local"],
+      "outputs": [".settlemintrc.json", ".env.local"]
     }
   }
 }

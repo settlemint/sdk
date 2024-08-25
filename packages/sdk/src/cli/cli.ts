@@ -7,11 +7,12 @@ import pkg from "../../package.json";
 import { codegenCommand } from "./commands/codegen";
 import { connectCommand } from "./commands/connect";
 import { createCommand } from "./commands/create";
+import { scsCommand } from "./commands/scs";
 
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files
 dotenv.config({
-  path: [".env.local", ".env"],
+  path: [".env.local", "../.env.local", ".env", "../.env"],
   override: true,
 });
 
@@ -33,6 +34,7 @@ sdkcli
 sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(createCommand());
+sdkcli.addCommand(scsCommand());
 
 // Parse command line arguments and handle errors
 sdkcli.parseAsync(process.argv).catch(async (reason) => {

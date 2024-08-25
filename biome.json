@@ -4,7 +4,7 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["apps/asset-tokenization/.settlemint"]
+    "ignore": ["apps/asset-tokenization/.settlemint", "apps/asset-tokenization/contracts/artifacts"]
   },
   "linter": {
     "enabled": true,
