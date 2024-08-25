@@ -3,127 +3,88 @@ import type { Rewrite } from "next/dist/lib/load-custom-routes";
 import { readSettlemintConfig } from "../../../cli/lib/config/read-config";
 import { activeServerConfig } from "./config";
 
-export type WithSettleMintOptions = {
+export interface WithSettleMintOptions {
   disabled?: boolean;
   output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
-};
+}
 
 /**
- * Modifies the passed in Next.js configuration
+ * Modifies the passed in Next.js configuration with SettleMint-specific settings
+ * @param nextConfig - The original Next.js configuration
+ * @param options - Options for customizing the SettleMint configuration
+ * @returns The modified Next.js configuration
  */
 export function withSettleMint<C extends NextConfig>(
   nextConfig: C,
-  { disabled, output }: WithSettleMintOptions = { disabled: false },
+  { disabled = false, output }: WithSettleMintOptions = {},
 ): C {
-  if (!disabled) {
-    const baseConfig = {
-      ...nextConfig,
-      output: output ?? nextConfig.output ?? "standalone",
-    };
+  if (disabled) return nextConfig;
 
-    const config = readSettlemintConfig();
-    if (!config) {
-      return baseConfig;
-    }
-    const cfg = activeServerConfig(config);
-    if (!cfg) {
-      return baseConfig;
-    }
+  const baseConfig = {
+    ...nextConfig,
+    output: output ?? nextConfig.output ?? "standalone",
+  };
 
-    return {
-      ...baseConfig,
-      poweredByHeader: false,
-      reactStrictMode: true,
-      images: {
-        remotePatterns: [
-          {
-            protocol: "https",
-            hostname: "**",
-          },
-        ],
-      },
-      async headers() {
-        return [
-          {
-            source: "/(.*)",
-            headers: [
-              {
-                key: "X-Frame-Options",
-                value: "DENY",
-              },
-            ],
-          },
-        ];
-      },
-      async rewrites() {
-        let existingRewrites:
-          | Rewrite[]
-          | {
-              beforeFiles: Rewrite[];
-              afterFiles: Rewrite[];
-              fallback: Rewrite[];
-            };
+  const config = readSettlemintConfig();
+  if (!config) return baseConfig;
 
-        if (nextConfig.rewrites) {
-          existingRewrites = await nextConfig.rewrites();
-        } else {
-          existingRewrites = [];
-        }
+  const cfg = activeServerConfig(config);
+  if (!cfg) return baseConfig;
 
-        const rewrites = [
-          ...(cfg.thegraphGql
-            ? [
-                {
-                  source: "/proxy/thegraph/graphql",
-                  destination: cfg.thegraphGql,
-                },
-              ]
-            : []),
-          ...(cfg.hasuraGql
-            ? [
-                {
-                  source: "/proxy/hasura/graphql",
-                  destination: cfg.hasuraGql,
-                },
-              ]
-            : []),
-          ...(cfg.portalRest
-            ? [
-                {
-                  source: "/proxy/portal/rest/:path*",
-                  destination: `${cfg.portalRest}/:path*`,
-                },
-              ]
-            : []),
-          ...(cfg.portalGql
-            ? [
-                {
-                  source: "/proxy/portal/graphql",
-                  destination: cfg.portalGql,
-                },
-              ]
-            : []),
-          ...(cfg.nodeJsonRpc
-            ? [
-                {
-                  source: "/proxy/node/jsonrpc",
-                  destination: cfg.nodeJsonRpc,
-                },
-              ]
-            : []),
-        ];
+  return {
+    ...baseConfig,
+    poweredByHeader: false,
+    reactStrictMode: true,
+    images: {
+      remotePatterns: [{ protocol: "https", hostname: "**" }],
+    },
+    async headers() {
+      return [
+        {
+          source: "/(.*)",
+          headers: [{ key: "X-Frame-Options", value: "DENY" }],
+        },
+      ];
+    },
+    async rewrites() {
+      const existingRewrites = await getExistingRewrites(nextConfig);
+      const newRewrites = generateRewrites(cfg);
 
-        if (Array.isArray(existingRewrites)) {
-          return [...existingRewrites, ...rewrites];
-        }
+      return mergeRewrites(existingRewrites, newRewrites);
+    },
+  } as C;
+}
 
-        return {
-          beforeFiles: existingRewrites.beforeFiles,
-          afterFiles: [...existingRewrites.afterFiles, ...rewrites],
-          fallback: existingRewrites.fallback,
-        };
-      },
-    } as C;
+function getExistingRewrites(nextConfig: NextConfig) {
+  return nextConfig.rewrites ? nextConfig.rewrites() : [];
+}
+
+function generateRewrites(cfg: ReturnType<typeof activeServerConfig>) {
+  const rewriteConfigs = [
+    { condition: cfg.thegraphGql, source: "/proxy/thegraph/graphql", destination: cfg.thegraphGql },
+    { condition: cfg.hasuraGql, source: "/proxy/hasura/graphql", destination: cfg.hasuraGql },
+    { condition: cfg.portalRest, source: "/proxy/portal/rest/:path*", destination: `${cfg.portalRest}/:path*` },
+    { condition: cfg.portalGql, source: "/proxy/portal/graphql", destination: cfg.portalGql },
+    { condition: cfg.nodeJsonRpc, source: "/proxy/node/jsonrpc", destination: cfg.nodeJsonRpc },
+  ];
+
+  return rewriteConfigs.reduce((acc, { condition, source, destination }) => {
+    if (condition && destination) acc.push({ source, destination });
+    return acc;
+  }, [] as Rewrite[]);
+}
+
+function mergeRewrites(
+  existingRewrites: Rewrite[] | { beforeFiles: Rewrite[]; afterFiles: Rewrite[]; fallback: Rewrite[] },
+  newRewrites: Rewrite[],
+) {
+  if (Array.isArray(existingRewrites)) {
+    return [...existingRewrites, ...newRewrites];
   }
-  return nextConfig;
+
+  return {
+    beforeFiles: existingRewrites.beforeFiles,
+    afterFiles: [...existingRewrites.afterFiles, ...newRewrites],
+    fallback: existingRewrites.fallback,
+  };
 }

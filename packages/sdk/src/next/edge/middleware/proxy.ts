@@ -1,11 +1,12 @@
-import type { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { createRouteMatcher } from "../utils/route-matcher";
 
 const isProxyRoute = createRouteMatcher(["/proxy/(.*)"]);
 const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura"]);
 
-export function proxyMiddleware(request: NextRequest, response: NextResponse) {
+export function proxyMiddleware(request: NextRequest) {
   if (isProxyRoute(request)) {
+    const response = NextResponse.next();
     response.headers.delete("Authorization");
     response.headers.set("x-auth-token", process.env.SETTLEMINT_PAT ?? "");
     if (isHasuraProxyRoute(request)) {

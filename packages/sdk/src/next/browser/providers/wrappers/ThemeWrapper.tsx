@@ -1,8 +1,15 @@
 "use client";
 
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { ThemeProvider } from "next-themes";
 import type { ThemeProviderProps } from "next-themes/dist/types";
+import type { PropsWithChildren } from "react";
 
-export function ThemeWrapper({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+/**
+ * ThemeWrapper component for providing theme context to the application.
+ *
+ * @param props - The props for the ThemeProvider component
+ * @returns A wrapped component with theme context
+ */
+export function ThemeWrapper({ children, ...props }: PropsWithChildren<ThemeProviderProps>) {
+  return <ThemeProvider {...props}>{children}</ThemeProvider>;
 }

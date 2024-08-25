@@ -13,8 +13,6 @@ declare module "next-auth" {
   }
 }
 
-process.env.NEXTAUTH_URL = process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL;
-
 const handler = NextAuth({
   secret: process.env.NEXTAUTH_SECRET,
   pages: {

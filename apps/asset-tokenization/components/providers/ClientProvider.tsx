@@ -4,24 +4,29 @@ import { settlemint } from "@/lib/settlemint";
 import { SettleMintProvider } from "@settlemint/sdk/browser";
 import { createWeb3Modal } from "@web3modal/wagmi/react";
 import type { Session } from "next-auth";
-import type { FC, PropsWithChildren } from "react";
+import { type PropsWithChildren, useMemo } from "react";
 
 if (settlemint.wagmi) {
   createWeb3Modal(settlemint.wagmi.web3ModalConfig);
 }
 
-export const ClientProvider: FC<
-  PropsWithChildren<{
-    session: Session | null;
-  }>
-> = ({ children, session }) => {
-  if (!settlemint.wagmi) {
+interface ClientProviderProps {
+  session: Session | null;
+}
+
+export function ClientProvider({ children, session }: PropsWithChildren<ClientProviderProps>) {
+  const wagmiConfig = useMemo(() => {
+    if (!settlemint.wagmi) return null;
+    return { config: settlemint.wagmi.wagmiConfig };
+  }, []);
+
+  if (!wagmiConfig) {
     return null;
   }
 
   return (
-    <SettleMintProvider wagmi={{ config: settlemint.wagmi.wagmiConfig }} session={session}>
+    <SettleMintProvider wagmi={wagmiConfig} session={session}>
       {children}
     </SettleMintProvider>
   );
-};
+}

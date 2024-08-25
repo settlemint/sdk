@@ -373,6 +373,7 @@ export function connectCommand(): Command {
                 await createEnv({
                   SETTLEMINT_PAT_TOKEN: personalAccessToken,
                   NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
+                  NEXTAUTH_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
                   NEXTAUTH_SECRET: selectedSessionSecret,
                   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,

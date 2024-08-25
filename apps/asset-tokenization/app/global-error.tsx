@@ -2,18 +2,13 @@
 
 import { ErrorComponent } from "@/components/global/error";
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
-import { Figtree as FontSans } from "next/font/google";
+import { Figtree } from "next/font/google";
 
-const fontSans = FontSans({
+const fontSans = Figtree({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
-
-export const metadata: Metadata = {
-  title: "Error - SettleMint Asset Tokenization Starter Kit",
-};
 
 export default function GlobalError({
   error,
@@ -23,6 +18,7 @@ export default function GlobalError({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <title>Error - SettleMint Asset Tokenization Starter Kit</title>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="darkreader-lock" />
       </head>

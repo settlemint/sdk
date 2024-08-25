@@ -22,21 +22,21 @@ export const metadata: Metadata = {
     url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     siteName: "SettleMint Asset Tokenization Starter Kit",
   },
+  viewport: "width=device-width, initial-scale=1",
+  other: {
+    "darkreader-lock": "",
+  },
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{
+interface RootLayoutProps {
   children: React.ReactNode;
-}>) {
+}
+
+export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession();
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="darkreader-lock" />
-      </head>
       <body className={cn("min-h-screen bg-background font-sans antialiased", fontSans.variable)}>
         <ClientProvider session={session}>{children}</ClientProvider>
       </body>
