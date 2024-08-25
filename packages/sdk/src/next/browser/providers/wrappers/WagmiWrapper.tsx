@@ -6,7 +6,7 @@ import { WagmiProvider, type WagmiProviderProps } from "wagmi";
 type WagmiBaseProps = Omit<WagmiProviderProps, "children">;
 
 interface WagmiEnabledProps extends WagmiBaseProps {
-  enabled: true;
+  enabled?: true;
 }
 
 interface WagmiDisabledProps {
@@ -16,7 +16,7 @@ interface WagmiDisabledProps {
 export type WagmiProps = PropsWithChildren<WagmiEnabledProps | WagmiDisabledProps>;
 
 function isWagmiEnabled(props: WagmiProps): props is PropsWithChildren<WagmiEnabledProps> {
-  return props.enabled === true;
+  return props.enabled !== false;
 }
 
 export const WagmiWrapper: FC<WagmiProps> = (props) => {

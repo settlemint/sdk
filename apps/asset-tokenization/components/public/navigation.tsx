@@ -1,4 +1,3 @@
-import { ConnectButton } from "@/components/public/connect-button";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { DarkModeToggle } from "../ui/darkmode-toggle";
@@ -8,13 +7,15 @@ export function PublicNavigation({ navItems }: { navItems: { href: string; label
     <nav className="ml-auto flex gap-4 sm:gap-6">
       <DarkModeToggle variant="ghost" className="text-white" />
       {navItems.map((navItem) => (
-        <Link key={navItem.href} href={navItem.href} prefetch={false}>
+        <Link key={navItem.href} href={navItem.href}>
           <Button variant="ghost" className="text-white">
             {navItem.label}
           </Button>
         </Link>
       ))}
-      <ConnectButton />
+      <Link href="/s">
+        <Button>Go to the dAPP</Button>
+      </Link>
     </nav>
   );
 }

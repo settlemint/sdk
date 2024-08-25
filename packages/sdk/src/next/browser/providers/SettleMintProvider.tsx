@@ -1,22 +1,24 @@
 "use client";
 
+import type { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
 import type { FC, ReactNode } from "react";
-import { type ReactQueryProps, ReactQueryWrapper } from "./wrappers/ReactQueryWrapper";
+import { ReactQueryWrapper } from "./wrappers/ReactQueryWrapper";
 import { ThemeWrapper } from "./wrappers/ThemeWrapper";
 import { type WagmiProps, WagmiWrapper } from "./wrappers/WagmiWrapper";
 
 export const SettleMintProvider: FC<{
   children: ReactNode;
   wagmi: WagmiProps;
-  reactQuery: ReactQueryProps;
-}> = ({ children, wagmi, reactQuery }) => {
+  session: Session | null;
+}> = ({ children, wagmi, session }) => {
   return (
-    <WagmiWrapper {...wagmi}>
-      <ReactQueryWrapper {...reactQuery}>
-        <ThemeWrapper attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
-        </ThemeWrapper>
-      </ReactQueryWrapper>
-    </WagmiWrapper>
+    <SessionProvider session={session}>
+      <ThemeWrapper attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+        <WagmiWrapper {...wagmi}>
+          <ReactQueryWrapper>{children}</ReactQueryWrapper>
+        </WagmiWrapper>
+      </ThemeWrapper>
+    </SessionProvider>
   );
 };
