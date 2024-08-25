@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { createRouteMatcher } from "@settlemint/sdk/edge";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { Inter as FontSans } from "next/font/google";
+import { Figtree as FontSans } from "next/font/google";
 import { headers } from "next/headers";
 import { cookieToInitialState } from "wagmi";
 import "./globals.css";
