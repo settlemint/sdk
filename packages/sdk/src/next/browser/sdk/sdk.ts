@@ -1,5 +1,6 @@
-import type { BrowserApplicationConfigEnv, Config } from "@/common/config/schemas";
+import type { ApplicationConfigEnv, BrowserApplicationConfigEnv, Config } from "@/common/config/schemas";
 import { type ViemConfigParameters, viemConfig } from "@/next/browser/sdk/plugins/viem";
+import { activeServerConfig } from "@/next/node/config/config";
 import type { Address } from "abitype";
 import type { Account, Chain, RpcSchema } from "viem";
 import { activeBrowserConfig } from "../config/config";
@@ -23,6 +24,15 @@ export function createSdk<
     viem?: Omit<ViemConfigParameters<chain, accountOrAddress, rpcSchema>, "chain">;
   },
 ) {
+  if (process.env.NEXT_RUNTIME === "edge") {
+    const cfg: ApplicationConfigEnv = activeServerConfig(config);
+
+    return {
+      portal: cfg.portalRest ? createPortalClient<PortalRestPaths>(cfg.portalRest) : undefined,
+      viem: viemConfig({ ...viem, chain }),
+    };
+  }
+
   const cfg: BrowserApplicationConfigEnv = activeBrowserConfig(config);
 
   return {

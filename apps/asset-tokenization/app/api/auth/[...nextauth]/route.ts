@@ -1,4 +1,4 @@
-import { settlemint } from "@/lib/sdk/edge/settlemint";
+import { settlemint } from "@/lib/settlemint";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { createPublicClient } from "viem";

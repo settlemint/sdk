@@ -32,6 +32,29 @@ export function withSettleMint<C extends NextConfig>(
 
     return {
       ...baseConfig,
+      poweredByHeader: false,
+      reactStrictMode: true,
+      images: {
+        remotePatterns: [
+          {
+            protocol: "https",
+            hostname: "**",
+          },
+        ],
+      },
+      async headers() {
+        return [
+          {
+            source: "/(.*)",
+            headers: [
+              {
+                key: "X-Frame-Options",
+                value: "DENY",
+              },
+            ],
+          },
+        ];
+      },
       async rewrites() {
         let existingRewrites:
           | Rewrite[]
