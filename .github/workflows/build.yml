@@ -29,9 +29,6 @@ permissions:
   security-events: write
   statuses: write
 
-env:
-  SETTLEMINT_PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-
 jobs:
   test:
     name: Test and Build
@@ -87,6 +84,8 @@ jobs:
 
       - name: Run tests and checks
         run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
