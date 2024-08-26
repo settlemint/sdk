@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/starterkit-asset-tokenization-contracts",
-  "devDependencies": {
+  "dependencies": {
     "hardhat": "^2.22.9",
     "@nomicfoundation/hardhat-ignition-viem": "0.15.5",
     "@nomicfoundation/hardhat-toolbox-viem": "3.0.0",
