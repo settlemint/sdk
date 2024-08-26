@@ -47,7 +47,6 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "format": "biome format --write .",
     "hasura:migrate": "cd database && hasura metadata apply && hasura migrate apply --all-databases && hasura metadata reload",
     "hasura:console": "cd database && hasura console"
   },

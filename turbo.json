@@ -1,6 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "ui": "stream",
+  "ui": "tui",
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
     "build": {
@@ -8,21 +8,22 @@
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
+    "connect": {
+      "inputs": [".settlemintrc.json", ".env.local"],
+      "outputs": [".settlemintrc.json", ".env.local"]
+    },
     "codegen": {
-      "dependsOn": ["connect", "^codegen"],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".settlemintrc.json",
-        "graphql/**",
-        "apps/asset-tokenization/contracts/ignition/deployments/**"
-      ],
+      "dependsOn": ["connect"],
+      "inputs": ["graphql/**"],
       "outputs": [".settlemint/**"]
     },
-    "//#lint:biome": {
-      "cache": false
-    },
+    "//#lint:biome": {},
+    "//#format:biome": {},
     "lint": {
-      "dependsOn": ["^build", "//#lint:biome", "^lint"]
+      "dependsOn": ["^build", "//#lint:biome"]
+    },
+    "format": {
+      "dependsOn": ["//#format:biome"]
     },
     "//#knip": {
       "cache": false
@@ -33,24 +34,13 @@
     "attw": {
       "dependsOn": ["build"]
     },
-    "format": {
-      "dependsOn": ["^format"]
-    },
     "publint": { "dependsOn": ["build"] },
     "dev": {
       "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },
-    "test": {
-      "dependsOn": ["^test"]
-    },
-    "test:coverage": {
-      "dependsOn": ["^test:coverage"]
-    },
-    "connect": {
-      "inputs": [".settlemintrc.json", ".env.local"],
-      "outputs": [".settlemintrc.json", ".env.local"]
-    }
+    "test": {},
+    "test:coverage": {}
   }
 }

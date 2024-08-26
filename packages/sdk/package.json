@@ -25,23 +25,22 @@
     "./*": {
       "import": {
         "types": "./dist/*.d.ts",
-        "default": "./dist/*.js"
+        "default": "./dist/*.mjs"
       },
       "require": {
-        "types": "./dist/*.d.ts",
+        "types": "./dist/*.d.cts",
         "default": "./dist/*.cjs"
       }
     }
   },
   "bin": {
-    "settlemint": "dist/cli/cli.js"
+    "settlemint": "dist/cli/cli.mjs"
   },
   "scripts": {
     "build": "tsup-node",
-    "format": "biome format --write .",
     "dev": "tsup-node --watch",
     "publint": "publint run --strict",
-    "attw": "attw --pack . --ignore-rules no-resolution",
+    "attw": "attw --pack .",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit"

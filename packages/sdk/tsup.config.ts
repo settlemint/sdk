@@ -6,6 +6,9 @@ const sharedConfig: Options = {
   splitting: false,
   treeshake: false,
   format: ["cjs", "esm"],
+  outExtension: ({ format }) => ({
+    js: format === "esm" ? ".mjs" : ".cjs",
+  }),
 };
 
 export default defineConfig(({ watch }) => {

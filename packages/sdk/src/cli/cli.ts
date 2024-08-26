@@ -4,10 +4,10 @@ import { codegenCommand } from "@/cli/commands/codegen";
 import { connectCommand } from "@/cli/commands/connect";
 import { createCommand } from "@/cli/commands/create";
 import { hardhatCommand } from "@/cli/commands/hardhat";
-import pkg from "@/package.json";
 import { cancel } from "@clack/prompts";
 import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
+import pkg from "../../package.json";
 
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files

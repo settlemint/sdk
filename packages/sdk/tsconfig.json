@@ -15,7 +15,6 @@
     "jsx": "react-jsx",
     "noEmit": true,
     "paths": {
-      "@/*": ["./*"],
       "@/cli/*": ["./src/cli/*"],
       "@/common/*": ["./src/common/*"],
       "@/next/browser/*": ["./src/next/browser/*"],
