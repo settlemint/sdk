@@ -1,6 +1,6 @@
 import { createWriteStream, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { getPkgManager } from "@/cli/lib/package-manager";
+import { type PackageManager, getExecutor, getPkgManager } from "@/cli/lib/package-manager";
 import spawn from "cross-spawn";
 
 /**
@@ -10,12 +10,16 @@ import spawn from "cross-spawn";
  * @param cwd - The current working directory (optional).
  * @returns A Promise that resolves with the console output as a string.
  */
-export async function runHardhat(command: string, cwd: string = process.cwd()): Promise<string> {
+export async function runHardhat(
+  command: string,
+  packageManager?: PackageManager,
+  cwd: string = process.cwd(),
+): Promise<string> {
   const allArgs = command.split(/\s+/);
   const args: string[] = ["hardhat", ...allArgs];
 
   return new Promise((resolve, reject) => {
-    const child = spawn(getPkgManager(), args, {
+    const child = spawn(getExecutor(packageManager ?? getPkgManager()), args, {
       env: {
         ...process.env,
         ADBLOCK: "1",
