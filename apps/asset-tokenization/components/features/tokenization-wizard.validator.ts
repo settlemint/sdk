@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const TokenizationWizardValidator = z.object({
-  tokenName: z.string().min(1),
-  tokenSymbol: z.string().min(1),
+  tokenName: z.string().min(2),
+  tokenSymbol: z.string().min(2),
   tokenLogo: z
     .instanceof(File)
     .refine((file) => file.type.startsWith("image/"), {
@@ -12,7 +12,7 @@ export const TokenizationWizardValidator = z.object({
       message: "File size should be less than 5MB",
     })
     .optional(),
-  tokenHasMaxSupply: z.boolean(),
+  tokenHasMaxSupply: z.coerce.boolean(),
   tokenMaxSupply: z.coerce.number().min(1),
   walletEntriesCsvFileUpload: z
     .instanceof(File)

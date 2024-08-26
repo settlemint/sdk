@@ -24,6 +24,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
   const form = useForm<TokenizationWizardSchema>({
     resolver: zodResolver(TokenizationWizardValidator),
     defaultValues: tokenizationWizardDefaultValues,
+    mode: "all",
   });
 
   function onSubmit(values: TokenizationWizardSchema) {
@@ -38,16 +39,16 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
           <CardDescription>Issue a new token.</CardDescription>
         </CardHeader>
         <CardContent>
-          <FormMultiStepProvider>
+          <FormMultiStepProvider form={form}>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormPage title="Introduction">
+                <FormPage title="Introduction" fields={[]}>
                   <div>INTROPAGE</div>
                 </FormPage>
-                <FormPage title="Terms & Conditions">
+                <FormPage title="Terms & Conditions" fields={[]}>
                   <div>TERMS & CONDITIONS</div>
                 </FormPage>
-                <FormPage title="Token Information">
+                <FormPage title="Token Information" fields={["tokenName", "tokenSymbol"]}>
                   {/* Token Name */}
                   <FormField
                     control={form.control}
@@ -94,7 +95,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token Economics">
+                <FormPage title="Token Economics" fields={["tokenMaxSupply"]}>
                   {/* Token Has Max Supply */}
                   <FormField
                     control={form.control}
@@ -150,7 +151,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
 
                   <RepeatableForm />
                 </FormPage>
-                <FormPage title="Token Documentation">
+                <FormPage title="Token Documentation" fields={["currency"]}>
                   {/* Currency */}
                   <FormField
                     control={form.control}

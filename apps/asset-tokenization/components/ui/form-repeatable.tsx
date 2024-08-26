@@ -32,8 +32,8 @@ export function RepeatableForm() {
           </Button>
         </div>
       ))}
-      <Button onClick={() => append({ wallet: "", amount: "" })} type="button">
-        Add
+      <Button onClick={() => append({ wallet: "", amount: "" })} type="button" variant="ghost" className="underline">
+        + Add item
       </Button>
     </div>
   );
