@@ -2,7 +2,7 @@
 
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { Check, CloudUpload, File, FileSymlink, FileText, Image, LoaderCircle, TriangleAlert } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactDropzone from "react-dropzone";
 import { useToast } from "./../hooks/use-toast";
 import { Badge } from "./badge";
@@ -121,16 +121,11 @@ export function Dropzone({ label }: { label: string }) {
       }),
     );
   };
-  const checkIsReady = (): void => {
-    let tempIsReady = true;
-    for (const action of actions) {
-      if (!action.to) {
-        tempIsReady = false;
-        break;
-      }
-    }
+  const checkIsReady = useCallback((): void => {
+    const tempIsReady = actions.every((action) => action.to);
     setIsReady(tempIsReady);
-  };
+  }, [actions]);
+
   const deleteAction = (action: Action): void => {
     setActions(actions.filter((elt) => elt !== action));
     setFiles(files.filter((elt) => elt.name !== action.file_name));
@@ -141,8 +136,10 @@ export function Dropzone({ label }: { label: string }) {
       setIsDone(false);
       setFiles([]);
       setIsReady(false);
-    } else checkIsReady();
-  }, [actions]);
+    } else {
+      checkIsReady();
+    }
+  }, [actions, checkIsReady]);
 
   if (actions.length) {
     return (
