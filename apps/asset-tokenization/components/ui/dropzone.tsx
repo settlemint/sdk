@@ -4,9 +4,9 @@ import { Cross2Icon } from "@radix-ui/react-icons";
 import { Check, CloudUpload, File, FileSymlink, FileText, Image, LoaderCircle, TriangleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import ReactDropzone from "react-dropzone";
+import { useToast } from "./../hooks/use-toast";
 import { Badge } from "./badge";
 import { Skeleton } from "./skeleton";
-import { useToast } from "./use-toast";
 
 type Action = {
   file: File;
