@@ -88,6 +88,7 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Breakpoint if tests failed
+        if: ${{ failure() }}
         uses: namespacelabs/breakpoint-action@v0
         with:
           duration: 30m
