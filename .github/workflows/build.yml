@@ -73,8 +73,18 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Install Bun dependencies
         run: bun install
+
+      - name: Install Foundry dependencies
+        working-directory: apps/asset-tokenization/contracts
+        run: |
+          forge soldeer update
 
       - name: Setup 1Password
         uses: settlemint/setup-op@main

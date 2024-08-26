@@ -3,11 +3,11 @@
 import { codegenCommand } from "@/cli/commands/codegen";
 import { connectCommand } from "@/cli/commands/connect";
 import { createCommand } from "@/cli/commands/create";
-import { hardhatCommand } from "@/cli/commands/hardhat";
 import { cancel } from "@clack/prompts";
 import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../../package.json";
+import { forgeCommand } from "./commands/forge";
 
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files
@@ -34,7 +34,7 @@ sdkcli
 sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(createCommand());
-sdkcli.addCommand(hardhatCommand());
+sdkcli.addCommand(forgeCommand());
 
 // Parse command line arguments and handle errors
 sdkcli.parseAsync(process.argv).catch(async (reason) => {

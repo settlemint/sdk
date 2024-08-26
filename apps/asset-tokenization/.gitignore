@@ -37,3 +37,5 @@ next-env.d.ts
 
 .settlemint/
 dist
+contracts/dependencies
+contracts/cache_forge

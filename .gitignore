@@ -40,3 +40,4 @@ yarn-error.log*
 
 .settlemintrc.json
 apps/asset-tokenization/contracts/ignition/deployments
+*.deployments.json

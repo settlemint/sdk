@@ -25,6 +25,7 @@
     "publint": "turbo publint",
     "attw": "turbo attw",
     "build": "turbo build",
+    "forge:build": "turbo forge:build",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "connect": "turbo connect",

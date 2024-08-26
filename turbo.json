@@ -12,8 +12,13 @@
       "inputs": [".settlemintrc.json", ".env.local"],
       "outputs": [".settlemintrc.json", ".env.local"]
     },
-    "codegen": {
+    "forge:build": {
       "dependsOn": ["connect"],
+      "inputs": ["contracts/src/**", "contracts/deployments/*.args.txt"],
+      "outputs": ["contracts/deployments/*.deployments.json", "contracts/out/**"]
+    },
+    "codegen": {
+      "dependsOn": ["connect", "forge:build"],
       "inputs": ["graphql/**"],
       "outputs": [".settlemint/**"]
     },
