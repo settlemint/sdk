@@ -1,8 +1,8 @@
 import { createWriteStream, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
+import { getPkgManager } from "@/cli/lib/package-manager";
 import { findProjectRoot } from "@/common/path";
 import spawn from "cross-spawn";
-import { getPkgManager } from "./package-manager";
 
 /**
  * Run a Hardhat command and return all console output.
@@ -16,7 +16,7 @@ export async function runWagmiCli(command: string, cwd: string = process.cwd()):
   const args: string[] = ["wagmi", ...allArgs];
 
   const wagmiCliConfig = `import { defineConfig } from '@wagmi/cli'
-import { hardhat, react } from '@wagmi/cli/plugins'
+import { hardhat, react, actions } from '@wagmi/cli/plugins'
 
 /** @type {import('@wagmi/cli/plugins').HardhatConfig} */
 const hardhatConfig = {
@@ -26,12 +26,16 @@ const hardhatConfig = {
 /** @type {import('@wagmi/cli/plugins').ReactConfig} */
 const reactConfig = {}
 
+/** @type {import('@wagmi/cli/plugins').ActionsConfig} */
+const actionsConfig = {}
+
 /** @type {import('@wagmi/cli').Config} */
 export default defineConfig({
   out: '.settlemint/wagmi/generated.ts',
   plugins: [
     hardhat(hardhatConfig),
     react(reactConfig),
+    actions(actionsConfig),
   ],
 })
 `;

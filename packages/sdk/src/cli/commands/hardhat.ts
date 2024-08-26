@@ -1,6 +1,6 @@
+import { hardhatCompileCommand } from "@/cli/commands/hardhat/compile";
+import { hardhatDeployCommand } from "@/cli/commands/hardhat/deploy";
 import { Command } from "@commander-js/extra-typings";
-import { hardhatBuildCommand } from "./hardhat/build";
-import { hardhatDeployCommand } from "./hardhat/deploy";
 
 /**
  * Creates and returns a Smart Contract Suite (SCS) command.
@@ -11,7 +11,7 @@ export function hardhatCommand() {
   scs.description("Interact with the Hardhat solidity development environment");
 
   // Add the build subcommand
-  scs.addCommand(hardhatBuildCommand());
+  scs.addCommand(hardhatCompileCommand());
   scs.addCommand(hardhatDeployCommand());
 
   return scs;

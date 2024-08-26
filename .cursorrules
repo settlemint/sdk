@@ -19,6 +19,7 @@ You carefully provide accurate, factual, thoughtful answers, and excel at reason
 - Avoid enums; use maps instead.
 - Use functional components with TypeScript interfaces.
 - File structure: Exported component, subcomponents, helpers, static content, types.
+- for commander-js commands, do not type the action params, they are automatically inferred.
 
 ### Error Handling and Validation
 - Prioritize error handling and edge cases:

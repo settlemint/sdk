@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync, readdirSync, rmSync } from "node:fs";
 import { resolve } from "node:path";
+import { version } from "@/package.json";
 import { downloadTemplate } from "giget";
-import { version } from "../../../package.json";
 
 export const templates = [{ value: "asset-tokenization", label: "Asset Tokenization" }] as const;
 

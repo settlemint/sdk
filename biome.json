@@ -23,6 +23,9 @@
       },
       "correctness": {
         "useExhaustiveDependencies": "warn"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
       }
     }
   },

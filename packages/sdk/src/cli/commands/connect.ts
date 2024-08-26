@@ -1,16 +1,16 @@
 import { randomBytes } from "node:crypto";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
+import { type Works, getServices } from "@/cli/lib/cluster-manager";
+import { coerceSelect, coerceText } from "@/cli/lib/coerce";
+import { config } from "@/cli/lib/config/config";
+import { createConfig } from "@/cli/lib/config/create-config";
+import { createEnv } from "@/cli/lib/config/create-env";
+import { detectFramework } from "@/cli/lib/framework";
+import { updateGitignore } from "@/cli/lib/git";
+import { getExecutor, getPkgManager } from "@/cli/lib/package-manager";
 import type { ConfigEnv } from "@/common/config/schemas";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
-import { type Works, getServices } from "../lib/cluster-manager";
-import { coerceSelect, coerceText } from "../lib/coerce";
-import { config } from "../lib/config/config";
-import { createConfig } from "../lib/config/create-config";
-import { createEnv } from "../lib/config/create-env";
-import { detectFramework } from "../lib/framework";
-import { updateGitignore } from "../lib/git";
-import { getExecutor, getPkgManager } from "../lib/package-manager";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.

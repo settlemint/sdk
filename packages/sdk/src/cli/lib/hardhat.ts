@@ -1,7 +1,7 @@
 import { createWriteStream, mkdirSync } from "node:fs";
 import { join } from "node:path";
+import { getPkgManager } from "@/cli/lib/package-manager";
 import spawn from "cross-spawn";
-import { getPkgManager } from "./package-manager";
 
 /**
  * Run a Hardhat command and return all console output.

@@ -1,7 +1,5 @@
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { Command } from "@commander-js/extra-typings";
-import { greenBright } from "yoctocolors";
 import {
   printAsciiArt,
   printCancel,
@@ -10,10 +8,10 @@ import {
   printOutro,
   printSpinner,
   promptConfirm,
-} from "../lib/cli-message";
-import { coerceSelect, coerceText } from "../lib/coerce";
-import { setName } from "../lib/package-json";
-import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager";
+} from "@/cli/lib/cli-message";
+import { coerceSelect, coerceText } from "@/cli/lib/coerce";
+import { setName } from "@/cli/lib/package-json";
+import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "@/cli/lib/package-manager";
 import {
   downloadAndExtractNpmPackage,
   emptyDir,
@@ -22,7 +20,9 @@ import {
   isValidPackageName,
   templates,
   toValidPackageName,
-} from "../lib/templates";
+} from "@/cli/lib/templates";
+import { Command } from "@commander-js/extra-typings";
+import { greenBright } from "yoctocolors";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK CLI.

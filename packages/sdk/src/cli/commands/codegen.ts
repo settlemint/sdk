@@ -1,13 +1,13 @@
 import { existsSync } from "node:fs";
+import { createChainConfig } from "@/cli/lib/chain";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
+import { config } from "@/cli/lib/config/config";
+import { createGqlClient } from "@/cli/lib/graphql";
+import { createRestClient } from "@/cli/lib/rest";
+import { writeTsConfig } from "@/cli/lib/tsconfig";
+import { runWagmiCli } from "@/cli/lib/wagmi";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
-import { createChainConfig } from "../lib/chain";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
-import { config } from "../lib/config/config";
-import { createGqlClient } from "../lib/graphql";
-import { createRestClient } from "../lib/rest";
-import { writeTsConfig } from "../lib/tsconfig";
-import { runWagmiCli } from "../lib/wagmi";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
