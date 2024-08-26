@@ -49,7 +49,7 @@ export async function runHardhat(
     child.on("close", (code) => {
       logStream.end();
       if (code !== 0) {
-        reject(new Error(`${getPkgManager()} ${args.join(" ")}\n\n${output}`));
+        reject(new Error(`${getExecutor(packageManager ?? getPkgManager())} ${args.join(" ")}\n\n${output}`));
         return;
       }
       resolve(output);

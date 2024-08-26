@@ -82,18 +82,6 @@ jobs:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           version: 2.29.0
 
-      - name: Run tests and checks
-        run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-
-      - name: Breakpoint if tests failed
-        if: ${{ failure() }}
-        uses: namespacelabs/breakpoint-action@v0
-        with:
-          duration: 30m
-          authorized-users: roderik
-
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
 
@@ -150,6 +138,18 @@ jobs:
           done
 
           echo "Updated version to $VERSION"
+
+      - name: Run tests and checks
+        run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
+        env:
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      # - name: Breakpoint if tests failed
+      #   if: ${{ failure() }}
+      #   uses: namespacelabs/breakpoint-action@v0
+      #   with:
+      #     duration: 30m
+      #     authorized-users: roderik
 
       - name: Publish SDK package
         uses: JS-DevTools/npm-publish@v3
