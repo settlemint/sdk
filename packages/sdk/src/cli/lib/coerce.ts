@@ -1,4 +1,5 @@
-import { type Option, promptConfirm, promptPassword, promptSelect, promptText } from "@/cli/lib/cli-message";
+import type { Option } from "@/cli/lib/cli-message";
+import { confirm, input, password, select } from "@inquirer/prompts";
 
 // Define options for coercing text input
 type CoerceTextOptions = {
@@ -41,9 +42,9 @@ export async function coerceText(options: CoerceTextOptions): Promise<string> {
 
   // If a valid value exists and coercion is not skipped, prompt for confirmation
   if (!skipCoerce && value && validate(value)) {
-    const change = await promptConfirm({
+    const change = await confirm({
       message: type === "password" ? existingMessage : `${existingMessage} (${value})`,
-      initialValue: false,
+      default: false,
     });
 
     if (!change) {
@@ -52,7 +53,7 @@ export async function coerceText(options: CoerceTextOptions): Promise<string> {
   }
 
   // Prompt for input using the appropriate function based on the type
-  const promptFunction = type === "password" ? promptPassword : promptText;
+  const promptFunction = type === "password" ? password : input;
   return promptFunction({
     message: promptMessage,
     ...(type === "text" && {
@@ -62,7 +63,7 @@ export async function coerceText(options: CoerceTextOptions): Promise<string> {
     }),
     validate(input) {
       try {
-        return validate(input) ? undefined : invalidMessage;
+        return validate(input) ?? invalidMessage;
       } catch {
         return invalidMessage;
       }
@@ -113,7 +114,7 @@ export async function coerceSelect<Value>(params: CoerceSelectParams<Value>): Pr
 
   // If a valid value exists and coercion is not skipped, prompt for confirmation
   if (!skipCoerce && isValidOption(value)) {
-    const change = await promptConfirm({
+    const change = await confirm({
       message: `${existingMessage} (${
         typeof value === "string"
           ? value
@@ -121,7 +122,7 @@ export async function coerceSelect<Value>(params: CoerceSelectParams<Value>): Pr
             ? (value as { name?: string }).name ?? ""
             : ""
       })`,
-      initialValue: false,
+      default: false,
     });
 
     if (!change) {
@@ -130,10 +131,9 @@ export async function coerceSelect<Value>(params: CoerceSelectParams<Value>): Pr
   }
 
   // Prompt for select input
-  const selectedValue = await promptSelect({
-    options,
+  const selectedValue = await select({
+    choices: [...(noneOption ? [noneOption] : []), ...options],
     message: promptMessage,
-    noneOption,
   });
 
   // Return undefined if 'none' option is selected, otherwise return the selected value

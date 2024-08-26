@@ -3,6 +3,7 @@ import { join } from "node:path";
 import { printAsciiArt, printCancel, printIntro, printOutro, printSpinner, promptSelect } from "@/cli/lib/cli-message";
 import { readSettlemintConfig } from "@/cli/lib/config/read-config";
 import { runCli } from "@/cli/lib/run-cli";
+import { activeServerConfig } from "@/next/node/config/config";
 import { Command } from "@commander-js/extra-typings";
 
 export function forgeCreateCommand() {
@@ -80,13 +81,7 @@ export function forgeCreateCommand() {
       printCancel("No .settlemintrc.json file found");
       process.exit(1);
     }
-
-    const appId = process.env.SETTLEMINT_APPLICATION ?? options.application ?? config.defaultApplication?.id;
-    const app = config.applications?.[appId];
-    if (!app) {
-      printCancel("No application found");
-      process.exit(1);
-    }
+    const app = activeServerConfig(config);
 
     const nodeUrl = app.nodeJsonRpcDeploy;
     if (!nodeUrl) {
@@ -116,7 +111,7 @@ export function forgeCreateCommand() {
 
       signer = await promptSelect<string>({
         message: "Select an account to use for deployment:",
-        options: signers.map((account: string, index: number) => ({
+        choices: signers.map((account: string, index: number) => ({
           value: account,
           label: `[${index}] ${account}`,
         })),

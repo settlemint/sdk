@@ -1,14 +1,6 @@
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import {
-  printAsciiArt,
-  printCancel,
-  printIntro,
-  printNote,
-  printOutro,
-  printSpinner,
-  promptConfirm,
-} from "@/cli/lib/cli-message";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
 import { coerceSelect, coerceText } from "@/cli/lib/coerce";
 import { setName } from "@/cli/lib/package-json";
 import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "@/cli/lib/package-manager";
@@ -22,6 +14,7 @@ import {
   toValidPackageName,
 } from "@/cli/lib/templates";
 import { Command } from "@commander-js/extra-typings";
+import { confirm } from "@inquirer/prompts";
 import { greenBright } from "yoctocolors";
 
 /**
@@ -70,9 +63,9 @@ export function createCommand(): Command {
           }
 
           if (!isEmpty(projectDir)) {
-            const confirmEmpty = await promptConfirm({
+            const confirmEmpty = await confirm({
               message: `The folder ${projectDir} already exists. Do you want to empty it?`,
-              initialValue: false,
+              default: false,
             });
             if (!confirmEmpty) {
               printCancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);

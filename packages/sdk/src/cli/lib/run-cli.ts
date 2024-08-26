@@ -8,6 +8,7 @@ interface RunCliCommandOptions {
   cwd?: string;
   logFileName: string;
   envVars?: Record<string, string>;
+  outputToConsole?: boolean;
 }
 
 export async function runCli({
@@ -16,6 +17,7 @@ export async function runCli({
   cwd = process.cwd(),
   logFileName,
   envVars = {},
+  outputToConsole = false,
 }: RunCliCommandOptions): Promise<string> {
   return new Promise((resolve, reject) => {
     const child = spawn(command, commandOptions, {
@@ -27,32 +29,42 @@ export async function runCli({
         ...envVars,
       },
       cwd,
-      stdio: ["inherit", "pipe", "pipe"],
+      stdio: outputToConsole ? "inherit" : ["inherit", "pipe", "pipe"],
     });
 
     let output = "";
 
-    child.stdout?.on("data", (data) => {
-      output += data.toString();
-    });
+    if (!outputToConsole) {
+      child.stdout?.on("data", (data) => {
+        output += data.toString();
+      });
 
-    child.stderr?.on("data", (data) => {
-      output += data.toString();
-    });
+      child.stderr?.on("data", (data) => {
+        output += data.toString();
+      });
 
-    mkdirSync(join(cwd, ".settlemint/logs"), { recursive: true });
-    const logStream = createWriteStream(join(cwd, ".settlemint/logs", logFileName), { flags: "a" });
+      mkdirSync(join(cwd, ".settlemint/logs"), { recursive: true });
+      const logStream = createWriteStream(join(cwd, ".settlemint/logs", logFileName), { flags: "a" });
 
-    child.stdout?.pipe(logStream);
-    child.stderr?.pipe(logStream);
+      child.stdout?.pipe(logStream);
+      child.stderr?.pipe(logStream);
 
-    child.on("close", (code) => {
-      logStream.end();
-      if (code !== 0) {
-        reject(new Error(`${command} ${commandOptions.join(" ")}\n\n${output}`));
-        return;
-      }
-      resolve(output);
-    });
+      child.on("close", (code) => {
+        logStream.end();
+        if (code !== 0) {
+          reject(new Error(`${command} ${commandOptions.join(" ")}\n\n${output}`));
+          return;
+        }
+        resolve(output);
+      });
+    } else {
+      child.on("close", (code) => {
+        if (code !== 0) {
+          reject(new Error(`${command} ${commandOptions.join(" ")} exited with code ${code}`));
+          return;
+        }
+        resolve("Command executed successfully");
+      });
+    }
   });
 }

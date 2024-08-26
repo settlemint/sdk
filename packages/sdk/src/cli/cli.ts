@@ -3,11 +3,11 @@
 import { codegenCommand } from "@/cli/commands/codegen";
 import { connectCommand } from "@/cli/commands/connect";
 import { createCommand } from "@/cli/commands/create";
-import { cancel } from "@clack/prompts";
 import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../../package.json";
 import { forgeCommand } from "./commands/forge";
+import { printCancel } from "./lib/cli-message";
 
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files
@@ -40,7 +40,7 @@ sdkcli.addCommand(forgeCommand());
 sdkcli.parseAsync(process.argv).catch(async (reason) => {
   // If an error occurs:
   // 1. Cancel the current operation
-  cancel("An unexpected error occurred. Please report it as a bug:");
+  printCancel("An unexpected error occurred. Please report it as a bug:");
   // 2. Log the error to the console
   console.error(reason);
   // 3. Exit the process with an error code

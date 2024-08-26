@@ -48,6 +48,7 @@
     "start": "next start",
     "lint": "next lint",
     "forge:build": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts forge build",
+    "forge:test": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts forge test",
     "forge:deploy": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts forge create src/AssetERC1155.sol:AssetERC1155",
     "hasura:migrate": "cd database && hasura metadata apply && hasura migrate apply --all-databases && hasura metadata reload",
     "hasura:console": "cd database && hasura console"
