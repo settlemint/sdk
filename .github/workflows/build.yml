@@ -82,6 +82,12 @@ jobs:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           version: 2.29.0
 
+      - name: Breakpoint if tests failed
+        uses: namespacelabs/breakpoint-action@v0
+        with:
+          duration: 30m
+          authorized-users: roderik
+
       - name: Run tests and checks
         run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
         env:
