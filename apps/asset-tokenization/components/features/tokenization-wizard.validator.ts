@@ -12,7 +12,7 @@ export const TokenizationWizardValidator = z.object({
       message: "File size should be less than 5MB",
     })
     .optional(),
-  tokenHasMaxSupply: z.coerce.boolean(),
+  tokenHasMaxSupply: z.boolean(),
   tokenMaxSupply: z.coerce.number().min(1),
   walletEntriesCsvFileUpload: z
     .instanceof(File)
@@ -36,7 +36,7 @@ export const TokenizationWizardValidator = z.object({
     }),
   ),
   tokenCategory: z.string().min(1, { message: "Category is required" }),
-  monetaryValue: z.number().positive({ message: "Monetary value must be a positive number" }),
+  monetaryValue: z.coerce.number().positive({ message: "Monetary value must be a positive number" }),
   currency: z.string().min(1, { message: "Currency is required" }),
   DocumentationFileUploads: z.array(
     z.instanceof(File).refine((file) => file.type === "application/pdf" || file.type.startsWith("image/"), {

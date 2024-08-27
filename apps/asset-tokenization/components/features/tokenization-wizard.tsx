@@ -95,7 +95,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token Economics" fields={["tokenMaxSupply"]}>
+                <FormPage title="Token Economics" fields={["tokenMaxSupply", "tokenHasMaxSupply", "walletEntries"]}>
                   {/* Token Has Max Supply */}
                   <FormField
                     control={form.control}
@@ -105,7 +105,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                         <FormLabel>Max supply</FormLabel>
                         <FormControl>
                           <div>
-                            <Checkbox />
+                            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                           </div>
                         </FormControl>
                         <FormDescription>This enables max supply for the token</FormDescription>
@@ -149,9 +149,69 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                     )}
                   />
 
-                  <RepeatableForm />
+                  {/* Initial distribution */}
+                  <FormField
+                    control={form.control}
+                    name="walletEntries"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Wallets</FormLabel>
+                        <FormControl>
+                          <RepeatableForm control={form.control} name={field.name} />
+                        </FormControl>
+                        <FormDescription>
+                          Enter the wallet addresses for the initial distribution of the token supply
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </FormPage>
                 <FormPage title="Token Documentation" fields={["currency"]}>
+                  {/* Category */}
+                  <FormField
+                    control={form.control}
+                    name="tokenCategory"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="Category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="BONDS">Bonds</SelectItem>
+                            <SelectItem value="EQUITIES">Equities</SelectItem>
+                            <SelectItem value="DERIVATIVES">Derivatives</SelectItem>
+                            <SelectItem value="LOANS">Loans</SelectItem>
+                            <SelectItem value="FUNDS">Funds</SelectItem>
+                            <SelectItem value="COMMODITIES">Commodities</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>This is the type of financial instrument</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Monetary value */}
+                  <FormField
+                    control={form.control}
+                    name="monetaryValue"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Monetary value</FormLabel>
+                        <FormControl>
+                          <Input type="number" placeholder="Monetary value" {...field} />
+                        </FormControl>
+                        <FormDescription>This is the monetary value per token</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
                   {/* Currency */}
                   <FormField
                     control={form.control}
@@ -159,7 +219,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Currency</FormLabel>
-                        <Select>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger className="w-[180px]">
                               <SelectValue placeholder="Currency" />
@@ -177,6 +237,42 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                       </FormItem>
                     )}
                   />
+
+                  {/* Documentation upload */}
+                  <FormField
+                    control={form.control}
+                    name="DocumentationFileUploads"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Upload documentation files</FormLabel>
+                        <FormControl>
+                          <Dropzone label="Click, or drop your documents here" />
+                        </FormControl>
+                        <FormDescription>You can upload documentation files for the token</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </FormPage>
+                <FormPage title="Token administrators" fields={[]}>
+                  {/* Token administrators */}
+                  <FormField
+                    control={form.control}
+                    name="adminWalletAddresses"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Wallets</FormLabel>
+                        <FormControl>
+                          <RepeatableForm control={form.control} name={field.name} />
+                        </FormControl>
+                        <FormDescription>Enter the wallet addresses for the Token administrators</FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </FormPage>
+                <FormPage title="Review" fields={[]}>
+                  <div>Review</div>
                 </FormPage>
               </form>
             </Form>

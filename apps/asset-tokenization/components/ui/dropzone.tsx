@@ -75,7 +75,6 @@ export function Dropzone({ label }: { label: string }) {
   const [isDone, setIsDone] = useState<boolean>(false);
   const accepted_files = {
     "image/*": [".jpg", ".jpeg", ".png", ".webp"],
-    "application/*": ["pdf"],
   };
 
   const reset = () => {

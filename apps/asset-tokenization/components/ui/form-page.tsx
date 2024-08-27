@@ -23,23 +23,22 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
 
   const page = pageRef.current ?? 1;
 
-  useWatch({
+  const watchedFields = useWatch({
     control: form.control,
     name: fields,
   });
 
+  console.log("Watched Fields:", fields, watchedFields);
+
   useEffect(() => {
-    console.log("fields", fields);
-    console.log("form", form.formState);
     const isValid = fields.every((field) => {
       const fieldState = form.getFieldState(field);
-      console.log("fieldState", field, fieldState);
-      return fieldState.isDirty && !fieldState.invalid;
+      const fieldValue = form.getValues(field);
+      return typeof fieldValue === "boolean" ? !fieldState.invalid : fieldState.isDirty && !fieldState.invalid;
     });
     setIsValid(isValid);
   }, [fields, form]);
 
-  console.log("isValid", isValid);
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>
       {title && <h3>{title}</h3>}
@@ -61,7 +60,7 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
           Continue
         </Button>
 
-        <Button type="submit" className={cn({ hidden: currentStep !== totalSteps })}>
+        <Button type="submit" className={cn({ hidden: currentStep !== totalSteps })} disabled={!form.formState.isValid}>
           Submit
         </Button>
       </div>
