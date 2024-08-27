@@ -11,6 +11,7 @@ import { Checkbox } from "../ui/checkbox";
 import { FormMultiStepProvider } from "../ui/form-multistep";
 import { FormPage } from "../ui/form-page";
 import { RepeatableForm } from "../ui/form-repeatable";
+import { NumericInput } from "../ui/input-numeric";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 import {
   type TokenizationWizardSchema,
@@ -122,7 +123,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                       <FormItem>
                         <FormLabel>Max supply</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Max supply" {...field} />
+                          <NumericInput name="tokenMaxSupply" placeholder="Max supply" />
                         </FormControl>
                         <FormDescription>This is the max supply of the token</FormDescription>
                         <FormMessage />

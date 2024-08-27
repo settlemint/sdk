@@ -26,7 +26,7 @@ export const TokenizationWizardValidator = z.object({
   walletEntries: z.array(
     z.object({
       walletAddress: z.string().min(1, { message: "Wallet address is required" }), // or a more specific validation for wallet addresses
-      amount: z.number().positive({ message: "Amount must be a positive number" }),
+      amount: z.coerce.number().positive({ message: "Amount must be a positive number" }),
       ID: z.string().optional(),
       IDDocumentFileUploads: z.array(
         z.instanceof(File).refine((file) => file.type === "application/pdf" || file.type.startsWith("image/"), {
