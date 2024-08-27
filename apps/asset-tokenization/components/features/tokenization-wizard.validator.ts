@@ -43,7 +43,11 @@ export const TokenizationWizardValidator = z.object({
       message: "File must be a PDF or an image",
     }),
   ),
-  adminWalletAddresses: z.array(z.string().min(1, { message: "Admin wallet address is required" })),
+  adminWalletAddresses: z.array(
+    z.object({
+      walletAddress: z.string().min(1, { message: "Admin wallet address is required" }), // or a more specific validation for wallet addresses
+    }),
+  ),
 });
 
 export type TokenizationWizardSchema = z.infer<typeof TokenizationWizardValidator>;
