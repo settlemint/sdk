@@ -25,6 +25,6 @@ const NumericInput = React.forwardRef<HTMLInputElement, InputProps>(({ className
     />
   );
 });
-NumericInput.displayName = "NumericInput"; // Fixed displayName
+NumericInput.displayName = "NumericInput";
 
-export { NumericInput }; // Export NumericInput instead of Input
+export { NumericInput };
