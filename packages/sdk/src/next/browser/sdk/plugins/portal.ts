@@ -1,3 +1,6 @@
+import { config } from "@/cli/lib/config/config";
+import { isClientSide } from "@/common/is-clientside";
+import { activeServerConfig } from "@/next/node/config/config";
 import createClient from "openapi-fetch";
 
 interface PortalClientConfig {
@@ -12,23 +15,24 @@ interface PortalClientConfig {
  * @returns A client instance for making API requests.
  * @throws Error if SETTLEMINT_PAT_TOKEN is missing in a server environment.
  */
-export function createPortalClient<PortalRestPaths extends Record<string, unknown>>(
-  portalRestUrl: string,
-): ReturnType<typeof createClient<PortalRestPaths>> {
-  const config: PortalClientConfig = {
-    baseUrl: isClientSide() ? `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest` : portalRestUrl,
+export function createPortalRestClient<PortalRestPaths extends {}>(): ReturnType<typeof createClient<PortalRestPaths>> {
+  const pcfg: PortalClientConfig = {
+    baseUrl: `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest`,
   };
 
   if (!isClientSide()) {
-    if (!process.env.SETTLEMINT_PAT_TOKEN) {
-      throw new Error("SETTLEMINT_PAT_TOKEN is required in server environment");
+    const cfg = config();
+    if (cfg) {
+      const activeConfig = activeServerConfig(cfg);
+      if (!activeConfig.portalRest) {
+        throw new Error("Portal REST URL is not configured in the active server config");
+      }
+      pcfg.baseUrl = activeConfig.portalRest;
+      pcfg.headers = {
+        "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN ?? "",
+      };
     }
-    config.headers = { "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN };
   }
 
-  return createClient<PortalRestPaths>(config);
-}
-
-function isClientSide(): boolean {
-  return typeof window !== "undefined" && typeof window.document !== "undefined";
+  return createClient<PortalRestPaths>(pcfg);
 }

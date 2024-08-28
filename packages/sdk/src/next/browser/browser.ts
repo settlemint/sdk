@@ -1,2 +1,2 @@
 export { SettleMintProvider } from "./providers/SettleMintProvider";
-export { createSdk } from "./sdk/sdk";
+export { sdkGenerator } from "./sdk/sdk";

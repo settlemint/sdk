@@ -4,6 +4,7 @@ import { findProjectRoot } from "@/common/path";
 import { generate } from "@graphql-codegen/cli";
 
 interface CreateGqlClientOptions {
+  settleMintDir: string;
   framework: string;
   gqlUrl: string;
   personalAccessToken: string;
@@ -26,16 +27,11 @@ interface CreateHasuraGqlClientOptions extends CreateGqlClientOptions {
  * @param personalAccessToken - The personal access token for authentication
  */
 export async function createGqlClient(options: CreateDefaultGqlClientOptions | CreateHasuraGqlClientOptions) {
-  const { framework, type, gqlUrl, personalAccessToken } = options;
+  const { settleMintDir, framework, type, gqlUrl, personalAccessToken } = options;
 
   // Create directory structure
-  const root = findProjectRoot(process.cwd());
-  const settleMintDir = join(root, ".settlemint");
-  const typeDir = join(settleMintDir, type);
-  const typeGqlDir = join(typeDir, "gql");
-  const typeCodegenDir = join(typeGqlDir, "codegen");
-  const typeQueriesDir = join(root, "graphql", type);
-  mkdirSync(typeCodegenDir, { recursive: true });
+  const typeQueriesDir = join(findProjectRoot(process.cwd()), "graphql", type);
+  mkdirSync(join(settleMintDir, type, "gql"), { recursive: true });
   mkdirSync(typeQueriesDir, { recursive: true });
 
   if (type === "thegraph") {
@@ -59,44 +55,6 @@ export async function createGqlClient(options: CreateDefaultGqlClientOptions | C
     if (hasNotBeenDeployed) {
       return;
     }
-  }
-
-  if (framework === "nextjs") {
-    writeFileSync(
-      `${typeGqlDir}/index.ts`,
-      `import { GraphQLClient } from "graphql-request";
-
-export const ${type} = new GraphQLClient(\`\${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/${type}/graphql\`);`,
-    );
-  } else {
-    writeFileSync(
-      `${typeGqlDir}/index.ts`,
-      `import { GraphQLClient } from "graphql-request";
-
-if(globalThis.window?.document !== undefined){
-  throw new Error('You cannot use this SDK in a browser environment as it would expose your secrets.')
-}
-
-if(!process.env.SETTLEMINT_PAT_TOKEN){
-  throw new Error("SETTLEMINT_PAT_TOKEN environment variable is required");
-}
-
-${
-  type === "hasura"
-    ? `
-if(!process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET){
-  throw new Error("SETTLEMINT_HASURA_GQL_ADMIN_SECRET environment variable is required");
-}`
-    : ""
-}
-
-export const ${type} = new GraphQLClient('${process.env.LOCAL_HASURA && type === "hasura" ? process.env.LOCAL_HASURA : gqlUrl}', {
-  headers: {
-    "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN,
-    ${type === "hasura" ? '"x-hasura-admin-secret": process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,' : ""}
-  },
-});`,
-    );
   }
 
   if (type === "portal") {
@@ -137,47 +95,84 @@ export const ${type} = new GraphQLClient('${process.env.LOCAL_HASURA && type ===
     );
   }
 
+  writeFileSync(
+    `${typeQueriesDir}/apollo.config.js`,
+    `module.exports = {
+    client: {
+      includes: ["./**/*.graphql", "./*.graphql"],
+      service: {
+        name: "settlemint-${type}",
+        localSchemaFile: "../../.settlemint/${type}/gql/schema.graphql",
+      },
+    },
+  };`,
+  );
+
   await generate(
     {
       errorsOnly: true,
       silent: true,
       ignoreNoDocuments: true,
+      schema: [
+        {
+          [gqlUrl]: {
+            headers: {
+              "x-auth-token": personalAccessToken,
+              ...(type === "hasura" ? { "x-hasura-admin-secret": options.hasuraAdminSecret } : {}),
+            },
+          },
+        },
+      ],
+      documents: [`${typeQueriesDir}/*.graphql`, `${typeQueriesDir}/**/*.graphql`],
+      config: {
+        scalars: {
+          ID: "string",
+          BigInt: "string",
+          BigDecimal: "string",
+          date: "Date | string",
+          Bytes: "string",
+          Int8: "number",
+          Upload: "Blob",
+          Timestamp: "number",
+          DateTime: "string",
+          JSONObject: "Record<string, unknown>",
+          JSON: "Record<string, unknown>",
+        },
+        strictScalars: false,
+        avoidOptionals: true,
+        constEnums: true,
+        enumsAsTypes: true,
+        nonOptionalTypename: true,
+        enumsAsConst: true,
+        useTypeImports: true,
+        inlineFragmentTypes: "combine",
+        exportFragmentSpreadSubTypes: true,
+        useExplicitTyping: true,
+        useConsts: true,
+        withRefetchFn: true,
+        pureMagicComment: true,
+        includeDirectives: true,
+        immutableTypes: true,
+        allowEnumStringTypes: true,
+      },
       generates: {
-        [`${typeCodegenDir}/`]: {
-          preset: "client",
-          schema: [
-            {
-              [gqlUrl]: {
-                headers: {
-                  "x-auth-token": personalAccessToken,
-                  ...(type === "hasura" ? { "x-hasura-admin-secret": options.hasuraAdminSecret } : {}),
-                },
-              },
-            },
-          ],
-          documents: [`${typeQueriesDir}/*.graphql`, `${typeQueriesDir}/**/*.graphql`],
-          presetConfig: {
-            useTypeImports: true,
-            nonOptionalTypename: true,
-            dedupeFragments: true,
-            avoidOptionals: true,
-            fragmentMasking: false,
-          },
-          config: {
-            scalars: {
-              BigInt: "string",
-              BigDecimal: "string",
-              date: "Date | string",
-              Bytes: "string",
-              Int8: "number",
-              Upload: "Blob",
-              Timestamp: "number",
-            },
-            strictScalars: false,
-          },
+        [`${join(settleMintDir, type, "gql", "schema.graphql")}`]: {
+          plugins: ["schema-ast"],
+        },
+        [`${join(settleMintDir, type, "gql", "sdk.ts")}`]: {
+          plugins: ["typescript", "typescript-operations", "typescript-graphql-request"],
         },
       },
     },
     true,
   );
+
+  return {
+    importLine: `import { getSdk as ${type}GqlSdk } from './${type}/gql/sdk';`,
+    sdkLine: {
+      [type]: {
+        gql: `${type}GqlSdk(sdkGenerator.createGraphqlClient("${type}")),`,
+      },
+    },
+  };
 }

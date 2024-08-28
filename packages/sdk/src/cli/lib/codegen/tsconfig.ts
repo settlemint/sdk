@@ -34,9 +34,6 @@ export function writeTsConfig() {
               name: "next",
             },
           ],
-          paths: {
-            "@/*": ["./*"],
-          },
         },
         include: ["**/*.ts", "**/*.tsx"],
         exclude: ["node_modules"],

@@ -1,5 +1,6 @@
 import { select } from "@inquirer/prompts";
 import ora from "ora";
+import type { Prettify } from "viem";
 import { greenBright, inverse, magentaBright, redBright } from "yoctocolors";
 
 // ASCII art and color functions remain unchanged
@@ -46,33 +47,17 @@ export const printSpinner = async <R>(options: SpinnerOptions<R>): Promise<R> =>
     return result;
   } catch (error) {
     spinner.fail(redBright(`${options.startMessage} --> Error!`));
-    printNote(redBright(`${(error as Error).message}\n${(error as Error).stack}`), redBright("Error"));
+    printNote(redBright(`${(error as Error).message}\n${(error as Error).stack}`));
     process.exit(1);
   }
 };
 
-type Primitive = Readonly<string | boolean | number>;
-
-export type Option<Value> = Value extends Primitive
-  ? {
-      value: Value;
-      name?: string;
-      description?: string;
-    }
-  : {
-      value: Value;
-      name: string;
-      description?: string;
-    };
-
-interface SelectOptions<Value> {
-  message: string;
-  choices: Option<Value>[];
-  default?: Value;
-  noneOption?: Option<Value>;
+type SelectOptions<Value> = Parameters<typeof select<Value | undefined>>[0];
+export interface PromtSelectOptions<Value> extends SelectOptions<Value> {
+  noneOption?: boolean;
 }
 
-export const promptSelect = async <Value>(options: SelectOptions<Value>): Promise<Value | undefined> => {
+export const promptSelect = async <Value>(options: Prettify<PromtSelectOptions<Value>>): Promise<Value | undefined> => {
   if (!options.choices || options.choices.length === 0) {
     printCancel("No choices provided for selection.");
   }
@@ -80,7 +65,7 @@ export const promptSelect = async <Value>(options: SelectOptions<Value>): Promis
   const choices = [...options.choices];
 
   if (options.noneOption) {
-    choices.unshift(options.noneOption);
+    choices.unshift({ value: undefined, name: "None" });
   }
 
   return await select({
@@ -89,12 +74,7 @@ export const promptSelect = async <Value>(options: SelectOptions<Value>): Promis
   });
 };
 
-export const printNote = (message?: string, title?: string) => {
-  if (title) {
-    console.log("");
-    console.log(title);
-    console.log("");
-  }
+export const printNote = (message?: string) => {
   if (message) {
     console.log(message);
   }

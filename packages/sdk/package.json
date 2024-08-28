@@ -52,6 +52,10 @@
   "dependencies": {
     "@commander-js/extra-typings": "12.1.0",
     "@graphql-codegen/cli": "5.0.2",
+    "@graphql-codegen/schema-ast": "^4.1.0",
+    "@graphql-codegen/typescript": "^4.0.9",
+    "@graphql-codegen/typescript-graphql-request": "^6.2.0",
+    "@graphql-codegen/typescript-operations": "^4.2.3",
     "@inquirer/prompts": "^5.3.8",
     "@npmcli/package-json": "5.2.0",
     "@tanstack/react-query": "5.52.1",

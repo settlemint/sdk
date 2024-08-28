@@ -72,9 +72,6 @@
   "codesnap.transparentBackground": true,
   "codesnap.backgroundColor": "#282828",
   "editor.wordWrap": "on",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
   "editor.quickSuggestions": {
     "strings": "on"
   },
@@ -92,5 +89,11 @@
   },
   "solidity.formatter": "forge",
   "solidity.packageDefaultDependenciesContractsDirectory": "src",
-  "solidity.packageDefaultDependenciesDirectory": "lib"
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "emmet.includeLanguages": {
+    "typescript.handlebars": "typescript"
+  }
 }

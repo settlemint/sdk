@@ -1,5 +1,6 @@
-import type { Option } from "@/cli/lib/cli-message";
-import { confirm, input, password, select } from "@inquirer/prompts";
+import { type PromtSelectOptions, promptSelect } from "@/cli/lib/cli-message";
+import { confirm, input, password } from "@inquirer/prompts";
+import type { Prettify } from "viem";
 
 // Define options for coercing text input
 type CoerceTextOptions = {
@@ -72,35 +73,23 @@ export async function coerceText(options: CoerceTextOptions): Promise<string> {
 }
 
 // Define options for coercing select input
-type CoerceSelectParams<Value> = {
-  noneOption?: Option<Value>;
-  options: Option<Value>[];
+interface CoerceSelectParams<Value> extends PromtSelectOptions<Value> {
   envValue?: Value;
   cliParamValue?: Value;
   configValue?: Value;
   validate: (value?: Value) => boolean;
-  promptMessage: string;
   existingMessage: string;
   skipCoerce?: boolean;
-};
+}
 
 // Function to coerce select input based on various sources and user interaction
-export async function coerceSelect<Value>(params: CoerceSelectParams<Value>): Promise<Value | undefined> {
-  const {
-    noneOption,
-    options,
-    envValue,
-    cliParamValue,
-    configValue,
-    validate,
-    promptMessage,
-    existingMessage,
-    skipCoerce,
-  } = params;
+export async function coerceSelect<Value>(params: Prettify<CoerceSelectParams<Value>>): Promise<Value | undefined> {
+  const { message, noneOption, choices, envValue, cliParamValue, configValue, validate, existingMessage, skipCoerce } =
+    params;
 
   // Helper function to check if a value is a valid option
   const isValidOption = (value: Value | undefined) =>
-    value !== undefined && validate(value) && options.some((option) => option.value === value);
+    value !== undefined && validate(value) && choices.some((choice) => "value" in choice && choice.value === value);
 
   // Check environment and CLI values first
   for (const value of [envValue, cliParamValue]) {
@@ -131,11 +120,12 @@ export async function coerceSelect<Value>(params: CoerceSelectParams<Value>): Pr
   }
 
   // Prompt for select input
-  const selectedValue = await select({
-    choices: [...(noneOption ? [noneOption] : []), ...options],
-    message: promptMessage,
+  const selectedValue = await promptSelect({
+    choices: choices,
+    message,
+    noneOption,
   });
 
   // Return undefined if 'none' option is selected, otherwise return the selected value
-  return noneOption && selectedValue === noneOption.value ? undefined : (selectedValue as Value);
+  return selectedValue as Value;
 }
