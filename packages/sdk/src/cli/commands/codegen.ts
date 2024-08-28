@@ -165,14 +165,13 @@ export function codegenCommand(): Command {
               writeFileSync(
                 join(settleMintDir, "index.ts"),
                 `
-import { sdkGenerator } from "@settlemint/sdk/browser";
+import { sdkGenerator, type ViemConfigParameters } from "@settlemint/sdk/browser";
 ${importLines.filter((line) => line.trim() !== "").join("\n")}
 
-export const settlemint = ${JSON.stringify(settlemintObject, null, 2)
+export const settlemint = (config?: {viem?: ViemConfigParameters}) => (${JSON.stringify(settlemintObject, null, 2)
                   .replace(/"([^"]+)":/g, "$1:") // Remove quotes from keys
                   .replace(/: "(.+)"/g, ": $1") // Remove outer quotes from values
-                  .replace(/\\"/g, '"')}
-`,
+                  .replace(/\\"/g, '"')});`,
               );
 
               writeTsConfig();

@@ -11,8 +11,8 @@ export async function createViemClients() {
     sdkLine: {
       node: {
         viem: {
-          publicClient: "sdkGenerator.createViemPublicClient({ chain })",
-          walletClient: "sdkGenerator.createViemWalletClient({ chain })",
+          publicClient: "sdkGenerator.createViemPublicClient({ ...config?.viem, chain })",
+          walletClient: "sdkGenerator.createViemWalletClient({ ...config?.viem, chain })",
         },
       },
     },
