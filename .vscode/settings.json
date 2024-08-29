@@ -95,5 +95,6 @@
   },
   "emmet.includeLanguages": {
     "typescript.handlebars": "typescript"
-  }
+  },
+  "workbench.activityBar.orientation": "vertical"
 }

@@ -4,7 +4,6 @@
     "biomejs.biome",
     "graphql.vscode-graphql-syntax",
     "apollographql.vscode-apollo",
-    "nomicfoundation.hardhat-solidity",
     "andrejunges.handlebars"
   ]
 }

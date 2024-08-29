@@ -39,3 +39,5 @@ next-env.d.ts
 dist
 contracts/dependencies
 contracts/cache_forge
+
+apollo.config.js
