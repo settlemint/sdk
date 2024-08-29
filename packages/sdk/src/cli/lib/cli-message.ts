@@ -74,8 +74,7 @@ export const promptSelect = async <Value>(options: Prettify<PromtSelectOptions<V
   });
 };
 
-export const printNote = (message?: string) => {
-  if (message) {
-    console.log(message);
-  }
+export const printNote = (message: string) => {
+  console.log("");
+  console.log(message);
 };
