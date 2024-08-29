@@ -34,15 +34,17 @@ export type WagmiConfigParameters = Prettify<{
   wagmiConfig?: Partial<Omit<Parameters<typeof defaultWagmiConfig>[0], "client">> & {
     transportConfig?: TransportConfig<"http">;
   };
-  web3ModalConfig: LimitedWeb3ModalConfig;
+  web3ModalConfig?: LimitedWeb3ModalConfig;
 }>;
+
+export type WagmiConfig = Prettify<Omit<WagmiConfigParameters, "chain">>;
 
 /**
  * Generates Wagmi and Web3Modal configurations
  * @param parameters - WagmiConfigParameters
  * @returns An object containing wagmiConfig and web3ModalConfig
  */
-export const wagmiConfig = (
+export const createWagmiConfig = (
   parameters: WagmiConfigParameters,
 ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
   // Retrieve the WalletConnect project ID from environment variables
@@ -71,7 +73,10 @@ export const wagmiConfig = (
     }),
     projectId,
     metadata: {
-      ...parameters.web3ModalConfig.metadata,
+      name: "SettleMint StarterKit",
+      description: "A SettleMint StarterKit",
+      icons: [`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/apple-icon.png`],
+      ...parameters.web3ModalConfig?.metadata,
       url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
     },
     auth: {
@@ -146,20 +151,23 @@ export const wagmiConfig = (
   // Create the Web3Modal configuration
   const web3ModalConfig: Web3ModalConfig = {
     metadata: {
-      ...parameters.web3ModalConfig.metadata,
+      name: "SettleMint StarterKit",
+      description: "A SettleMint StarterKit",
+      icons: [`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/apple-icon.png`],
+      ...parameters.web3ModalConfig?.metadata,
       url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
     },
-    siweConfig: parameters.web3ModalConfig.siweConfig ?? siweConfig,
+    siweConfig: parameters.web3ModalConfig?.siweConfig ?? siweConfig,
     wagmiConfig,
     projectId,
     allowUnsupportedChain: true,
   };
 
-  const firstIcon = parameters.web3ModalConfig.metadata.icons?.[0];
+  const firstIcon = parameters.web3ModalConfig?.metadata.icons?.[0];
   if (firstIcon) {
     web3ModalConfig.chainImages = {
       [parameters.chain.id]: firstIcon,
-      ...parameters.web3ModalConfig.chainImages,
+      ...parameters.web3ModalConfig?.chainImages,
     };
   }
 

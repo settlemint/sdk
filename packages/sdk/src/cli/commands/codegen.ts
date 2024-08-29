@@ -11,6 +11,7 @@ import { createGqlClient } from "../lib/codegen/graphql";
 import { createRestClient } from "../lib/codegen/rest";
 import { writeTsConfig } from "../lib/codegen/tsconfig";
 import { createViemClients } from "../lib/codegen/viem";
+import { createWagmiConfig } from "../lib/codegen/wagmi";
 
 const formatObject = (obj: Record<string, unknown>, indent = 2): string => {
   const spaces = " ".repeat(indent);
@@ -137,6 +138,7 @@ export function codegenCommand(): Command {
               }
               if (nodeJsonRpc) {
                 sdkParts.push(createViemClients());
+                sdkParts.push(createWagmiConfig());
               }
 
               const sdkPartsResolved = await Promise.all(sdkParts);
@@ -165,10 +167,14 @@ export function codegenCommand(): Command {
               writeFileSync(
                 join(settleMintDir, "index.ts"),
                 `
-import { sdkGenerator, type ViemConfigParameters } from "@settlemint/sdk/browser";
+import { sdkGenerator, type ViemConfig, type WagmiConfig } from "@settlemint/sdk/browser";
 ${importLines.filter((line) => line.trim() !== "").join("\n")}
 
-export const settlemint = (config?: {viem?: ViemConfigParameters}) => (${JSON.stringify(settlemintObject, null, 2)
+export const settlemint = (config?: {viem?: ViemConfig, wagmi?: WagmiConfig}) => (${JSON.stringify(
+                  settlemintObject,
+                  null,
+                  2,
+                )
                   .replace(/"([^"]+)":/g, "$1:") // Remove quotes from keys
                   .replace(/: "(.+)"/g, ": $1") // Remove outer quotes from values
                   .replace(/\\"/g, '"')});`,

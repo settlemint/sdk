@@ -15,7 +15,7 @@ import {
   createWalletClient,
 } from "viem";
 
-export type ViemConfigParameters<
+export type ViemConfig<
   TChain extends Chain = Chain,
   TAccount extends Account | Address | undefined = undefined,
   TRpcSchema extends RpcSchema | undefined = undefined,
@@ -61,7 +61,7 @@ export function createViemPublicClient<
   TChain extends Chain = Chain,
   TAccount extends Account | Address | undefined = undefined,
   TRpcSchema extends RpcSchema | undefined = undefined,
->(parameters: ViemConfigParameters<TChain, TAccount, TRpcSchema>) {
+>(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
   const { rpcUrl, headers } = setupRpcConfig();
 
@@ -92,7 +92,7 @@ export function createViemWalletClient<
   TChain extends Chain = Chain,
   TAccount extends Account | Address | undefined = undefined,
   TRpcSchema extends RpcSchema | undefined = undefined,
->(parameters: ViemConfigParameters<TChain, TAccount, TRpcSchema>) {
+>(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
   const { rpcUrl, headers } = setupRpcConfig();
 
