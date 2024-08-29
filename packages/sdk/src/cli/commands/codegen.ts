@@ -170,7 +170,7 @@ export function codegenCommand(): Command {
 import { sdkGenerator, type ViemConfig, type WagmiConfig } from "@settlemint/sdk/browser";
 ${importLines.filter((line) => line.trim() !== "").join("\n")}
 
-export const settlemint = (config?: {viem?: ViemConfig, wagmi?: WagmiConfig}) => (${JSON.stringify(
+export const connectSettlemint = (config?: {viem?: ViemConfig, wagmi?: WagmiConfig}) => (${JSON.stringify(
                   settlemintObject,
                   null,
                   2,
