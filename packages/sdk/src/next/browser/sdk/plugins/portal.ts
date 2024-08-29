@@ -1,6 +1,3 @@
-import { config } from "@/cli/lib/config/config";
-import { isClientSide } from "@/common/is-clientside";
-import { activeServerConfig } from "@/next/node/config/config";
 import createClient from "openapi-fetch";
 
 interface PortalClientConfig {
@@ -19,20 +16,6 @@ export function createPortalRestClient<PortalRestPaths extends {}>(): ReturnType
   const pcfg: PortalClientConfig = {
     baseUrl: `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest`,
   };
-
-  if (!isClientSide()) {
-    const cfg = config();
-    if (cfg) {
-      const activeConfig = activeServerConfig(cfg);
-      if (!activeConfig.portalRest) {
-        throw new Error("Portal REST URL is not configured in the active server config");
-      }
-      pcfg.baseUrl = activeConfig.portalRest;
-      pcfg.headers = {
-        "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN ?? "",
-      };
-    }
-  }
 
   return createClient<PortalRestPaths>(pcfg);
 }
