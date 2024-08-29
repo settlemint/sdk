@@ -2,26 +2,10 @@
 
 import { WagmiProvider, type WagmiProviderProps } from "wagmi";
 
-type WagmiBaseProps = Omit<WagmiProviderProps, "children">;
-
-interface WagmiEnabledProps extends WagmiBaseProps {
-  enabled?: true;
-}
-
-interface WagmiDisabledProps {
-  enabled: false;
-}
-
-export type WagmiProps = WagmiEnabledProps | WagmiDisabledProps;
-
-/**
- * Type guard to check if Wagmi is enabled
- * @param props - The WagmiProps to check
- * @returns True if Wagmi is enabled, false otherwise
- */
-function isWagmiEnabled(props: WagmiProps): props is WagmiEnabledProps {
-  return props.enabled !== false;
-}
+export type WagmiProps = {
+  wagmiConfig: WagmiProviderProps["config"];
+  initialState: WagmiProviderProps["initialState"];
+};
 
 /**
  * Wrapper component for WagmiProvider
@@ -29,9 +13,9 @@ function isWagmiEnabled(props: WagmiProps): props is WagmiEnabledProps {
  * @returns WagmiProvider if enabled, otherwise just the children
  */
 export function WagmiWrapper({ children, ...props }: React.PropsWithChildren<WagmiProps>) {
-  if (isWagmiEnabled(props)) {
-    return <WagmiProvider {...props}>{children}</WagmiProvider>;
-  }
-
-  return <>{children}</>;
+  return (
+    <WagmiProvider config={props.wagmiConfig} initialState={props.initialState} reconnectOnMount={true}>
+      {children}
+    </WagmiProvider>
+  );
 }
