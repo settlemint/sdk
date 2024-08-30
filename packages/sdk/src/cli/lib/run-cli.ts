@@ -11,6 +11,34 @@ interface RunCliCommandOptions {
   outputToConsole?: boolean;
 }
 
+/**
+ * Executes a CLI command with specified options and handles output logging.
+ *
+ * @param options - The options for running the CLI command.
+ * @param options.command - The command to execute.
+ * @param options.commandOptions - An array of command-line arguments.
+ * @param options.cwd - The current working directory for the command. Defaults to process.cwd().
+ * @param options.logFileName - The name of the file to log output.
+ * @param options.envVars - Additional environment variables to set. Defaults to an empty object.
+ * @param options.outputToConsole - Whether to output to console. Defaults to false.
+ * @returns A promise that resolves with the command output as a string.
+ * @throws Will throw an error if the command exits with a non-zero code.
+ *
+ * @example
+ * ```typescript
+ * try {
+ *   const output = await runCli({
+ *     command: 'npm',
+ *     commandOptions: ['install'],
+ *     logFileName: 'npm-install.log',
+ *     outputToConsole: true
+ *   });
+ *   console.log('Command executed successfully:', output);
+ * } catch (error) {
+ *   console.error('Command execution failed:', error);
+ * }
+ * ```
+ */
 export async function runCli({
   command,
   commandOptions,

@@ -6,7 +6,13 @@ import { dirname, join, parse } from "node:path";
  *
  * @param startDir - The directory to start searching from
  * @returns The path to the project root directory
- * @throws Error if the project root cannot be found
+ * @throws {Error} If the project root cannot be found
+ *
+ * @example
+ * ```typescript
+ * const projectRoot = findProjectRoot('/path/to/current/directory');
+ * console.log(projectRoot); // Outputs: '/path/to/project/root'
+ * ```
  */
 export function findProjectRoot(startDir: string): string {
   let currentDir = startDir;
@@ -28,18 +34,24 @@ export function findProjectRoot(startDir: string): string {
 }
 
 /**
- * Finds the root directory of the project by looking for package.json
+ * Finds the root directory of the project by looking for .settlemintrc.json
  *
  * @param startDir - The directory to start searching from
- * @returns The path to the project root directory
- * @throws Error if the project root cannot be found
+ * @returns The path to the project root directory containing .settlemintrc.json
+ * @throws {Error} If the project root with .settlemintrc.json cannot be found
+ *
+ * @example
+ * ```typescript
+ * const configRoot = findParentConfigRoot('/path/to/current/directory');
+ * console.log(configRoot); // Outputs: '/path/to/config/root'
+ * ```
  */
 export function findParentConfigRoot(startDir: string): string {
   let currentDir = startDir;
 
-  // Traverse up the directory tree until we find package.json or reach the root
+  // Traverse up the directory tree until we find .settlemintrc.json or reach the root
   while (currentDir !== parse(currentDir).root) {
-    // Check if package.json exists in the current directory
+    // Check if .settlemintrc.json exists in the current directory
     if (existsSync(join(currentDir, ".settlemintrc.json"))) {
       // If found, return the current directory as the project root
       return currentDir;
@@ -49,6 +61,6 @@ export function findParentConfigRoot(startDir: string): string {
     currentDir = dirname(currentDir);
   }
 
-  // If we've reached the root without finding package.json, throw an error
-  throw new Error("Unable to find project root");
+  // If we've reached the root without finding .settlemintrc.json, throw an error
+  throw new Error("Unable to find project root with .settlemintrc.json");
 }

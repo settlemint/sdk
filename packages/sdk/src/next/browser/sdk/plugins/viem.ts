@@ -12,6 +12,13 @@ import {
   createWalletClient,
 } from "viem";
 
+/**
+ * Configuration type for Viem clients.
+ *
+ * @template TChain - The chain type
+ * @template TAccount - The account type (optional)
+ * @template TRpcSchema - The RPC schema type (optional)
+ */
 export type ViemConfig<
   TChain extends Chain = Chain,
   TAccount extends Account | Address | undefined = undefined,
@@ -24,25 +31,37 @@ export type ViemConfig<
 >;
 
 /**
- * Creates a portal client for interacting with the SettleMint API.
+ * Creates a Viem public client for interacting with the blockchain.
  *
- * @param portalRestUrl The base URL for the portal REST API.
- * @returns A client instance for making API requests.
- * @throws Error if SETTLEMINT_PAT_TOKEN is missing in a server environment.
+ * @template TChain - The chain type
+ * @template TAccount - The account type (optional)
+ * @template TRpcSchema - The RPC schema type (optional)
+ * @param parameters - Configuration parameters for the public client
+ * @returns A public client instance for making blockchain requests
+ * @throws {Error} If NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined in the environment
+ *
+ * @example
+ * ```typescript
+ * const publicClient = createViemPublicClient({
+ *   chain: mainnet,
+ *   transportConfig: { timeout: 30000 }
+ * });
+ * ```
  */
 export function createViemPublicClient<
-  TChain extends Chain = Chain,
+  TChain extends Chain,
   TAccount extends Account | Address | undefined = undefined,
   TRpcSchema extends RpcSchema | undefined = undefined,
 >(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
 
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
+    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined");
+  }
+
   return createPublicClient({
     transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, {
       ...transportConfig,
-      fetchOptions: {
-        ...transportConfig?.fetchOptions,
-      },
     }),
     chain,
     ...rest,
@@ -50,25 +69,37 @@ export function createViemPublicClient<
 }
 
 /**
- * Creates a wallet client for interacting with the SettleMint API.
+ * Creates a Viem wallet client for interacting with the blockchain.
  *
- * @param parameters Configuration parameters for the wallet client.
- * @returns A wallet client instance for making API requests.
- * @throws Error if SETTLEMINT_PAT_TOKEN is missing in a server environment.
+ * @template TChain - The chain type
+ * @template TAccount - The account type (optional)
+ * @template TRpcSchema - The RPC schema type (optional)
+ * @param parameters - Configuration parameters for the wallet client
+ * @returns A wallet client instance for making blockchain transactions
+ * @throws {Error} If NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined in the environment
+ *
+ * @example
+ * ```typescript
+ * const walletClient = createViemWalletClient({
+ *   chain: mainnet,
+ *   transportConfig: { timeout: 30000 }
+ * });
+ * ```
  */
 export function createViemWalletClient<
-  TChain extends Chain = Chain,
+  TChain extends Chain,
   TAccount extends Account | Address | undefined = undefined,
   TRpcSchema extends RpcSchema | undefined = undefined,
 >(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
 
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
+    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined");
+  }
+
   return createWalletClient({
     transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, {
       ...transportConfig,
-      fetchOptions: {
-        ...transportConfig?.fetchOptions,
-      },
     }),
     chain,
     ...rest,

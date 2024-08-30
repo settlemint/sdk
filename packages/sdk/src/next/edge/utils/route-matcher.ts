@@ -17,7 +17,7 @@ export const paths = {
    * Converts a path string to a regular expression
    * @param path - The path string to convert
    * @returns A RegExp object
-   * @throws Error if the path is invalid
+   * @throws {Error} If the path is invalid
    */
   toRegexp: (path: string) => {
     try {
@@ -55,13 +55,16 @@ export type RouteMatcherParam =
   | ((req: NextRequest) => boolean);
 
 /**
- * Returns a function that accepts a `Request` object and returns whether the request matches the list of
- * predefined routes that can be passed in as the first argument.
- *
- * You can use glob patterns to match multiple routes or a function to match against the request object.
- * Path patterns and regular expressions are supported, for example: `['/foo', '/bar(.*)'] or `[/^\/foo\/.*$/]`
+ * Creates a route matcher function based on the provided routes
  * @param routes - The routes to match against
  * @returns A function that accepts a NextRequest and returns a boolean indicating if the request matches any of the routes
+ * @throws {Error} If the path pattern is invalid
+ *
+ * @example
+ * ```typescript
+ * const matcher = createRouteMatcher(['/foo', '/bar(.*)']);
+ * const isMatch = matcher(request);
+ * ```
  */
 export const createRouteMatcher = (routes: RouteMatcherParam) => {
   if (typeof routes === "function") {

@@ -37,18 +37,32 @@ export type WagmiConfigParameters = Prettify<{
   web3ModalConfig?: LimitedWeb3ModalConfig;
 }>;
 
+/**
+ * Configuration type for Wagmi, excluding the chain property
+ */
 export type WagmiConfig = Prettify<Omit<WagmiConfigParameters, "chain">>;
 
 /**
  * Generates Wagmi and Web3Modal configurations
- * @param parameters - WagmiConfigParameters
- * @returns An object containing wagmiConfig and web3ModalConfig
+ *
+ * @param {WagmiConfigParameters} parameters - Configuration parameters for Wagmi and Web3Modal
+ * @returns {{wagmiConfig: Config, web3ModalConfig: Web3ModalConfig}} An object containing wagmiConfig and web3ModalConfig
+ * @throws {Error} Throws an error if unable to get nonce or session during SIWE configuration
+ *
+ * @example
+ * ```typescript
+ * const { wagmiConfig, web3ModalConfig } = createWagmiConfig({
+ *   chain: mainnet,
+ *   wagmiConfig: { ... },
+ *   web3ModalConfig: { ... }
+ * });
+ * ```
  */
 export const createWagmiConfig = (
   parameters: WagmiConfigParameters,
 ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
   // Retrieve the WalletConnect project ID from environment variables
-  const projectId: string | undefined = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
+  const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
 
   if (!projectId) {
     console.warn(
