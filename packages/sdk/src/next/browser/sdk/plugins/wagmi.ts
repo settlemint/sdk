@@ -34,19 +34,35 @@ export type WagmiConfigParameters = Prettify<{
   wagmiConfig?: Partial<Omit<Parameters<typeof defaultWagmiConfig>[0], "client">> & {
     transportConfig?: TransportConfig<"http">;
   };
-  web3ModalConfig: LimitedWeb3ModalConfig;
+  web3ModalConfig?: LimitedWeb3ModalConfig;
 }>;
 
 /**
- * Generates Wagmi and Web3Modal configurations
- * @param parameters - WagmiConfigParameters
- * @returns An object containing wagmiConfig and web3ModalConfig
+ * Configuration type for Wagmi, excluding the chain property
  */
-export const wagmiConfig = (
+export type WagmiConfig = Prettify<Omit<WagmiConfigParameters, "chain">>;
+
+/**
+ * Generates Wagmi and Web3Modal configurations
+ *
+ * @param {WagmiConfigParameters} parameters - Configuration parameters for Wagmi and Web3Modal
+ * @returns {{wagmiConfig: Config, web3ModalConfig: Web3ModalConfig}} An object containing wagmiConfig and web3ModalConfig
+ * @throws {Error} Throws an error if unable to get nonce or session during SIWE configuration
+ *
+ * @example
+ * ```typescript
+ * const { wagmiConfig, web3ModalConfig } = createWagmiConfig({
+ *   chain: mainnet,
+ *   wagmiConfig: { ... },
+ *   web3ModalConfig: { ... }
+ * });
+ * ```
+ */
+export const createWagmiConfig = (
   parameters: WagmiConfigParameters,
 ): { wagmiConfig: Config; web3ModalConfig: Web3ModalConfig } => {
   // Retrieve the WalletConnect project ID from environment variables
-  const projectId: string | undefined = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
+  const projectId = process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "";
 
   if (!projectId) {
     console.warn(
@@ -71,7 +87,10 @@ export const wagmiConfig = (
     }),
     projectId,
     metadata: {
-      ...parameters.web3ModalConfig.metadata,
+      name: "SettleMint StarterKit",
+      description: "A SettleMint StarterKit",
+      icons: [`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/apple-icon.png`],
+      ...parameters.web3ModalConfig?.metadata,
       url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
     },
     auth: {
@@ -146,20 +165,23 @@ export const wagmiConfig = (
   // Create the Web3Modal configuration
   const web3ModalConfig: Web3ModalConfig = {
     metadata: {
-      ...parameters.web3ModalConfig.metadata,
+      name: "SettleMint StarterKit",
+      description: "A SettleMint StarterKit",
+      icons: [`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/apple-icon.png`],
+      ...parameters.web3ModalConfig?.metadata,
       url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "",
     },
-    siweConfig: parameters.web3ModalConfig.siweConfig ?? siweConfig,
+    siweConfig: parameters.web3ModalConfig?.siweConfig ?? siweConfig,
     wagmiConfig,
     projectId,
     allowUnsupportedChain: true,
   };
 
-  const firstIcon = parameters.web3ModalConfig.metadata.icons?.[0];
+  const firstIcon = parameters.web3ModalConfig?.metadata.icons?.[0];
   if (firstIcon) {
     web3ModalConfig.chainImages = {
       [parameters.chain.id]: firstIcon,
-      ...parameters.web3ModalConfig.chainImages,
+      ...parameters.web3ModalConfig?.chainImages,
     };
   }
 

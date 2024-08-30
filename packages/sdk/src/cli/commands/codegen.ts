@@ -1,11 +1,31 @@
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
+import { config } from "@/cli/lib/config/config";
+import { findProjectRoot } from "@/common/path";
 import { Command } from "@commander-js/extra-typings";
+import { merge } from "ts-deepmerge";
 import { greenBright } from "yoctocolors";
-import { createChainConfig } from "../lib/chain";
-import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "../lib/cli-message";
-import { config } from "../lib/config/config";
-import { createGqlClient } from "../lib/graphql";
-import { createRestClient } from "../lib/rest";
-import { writeTsConfig } from "../lib/tsconfig";
+import { createChainConfig } from "../lib/codegen/chain";
+import { createGqlClient } from "../lib/codegen/graphql";
+import { createRestClient } from "../lib/codegen/rest";
+import { writeTsConfig } from "../lib/codegen/tsconfig";
+import { createViemClients } from "../lib/codegen/viem";
+import { createWagmiConfig } from "../lib/codegen/wagmi";
+
+const formatObject = (obj: Record<string, unknown>, indent = 2): string => {
+  const spaces = " ".repeat(indent);
+  return Object.entries(obj)
+    .map(([key, value]) => {
+      if (typeof value === "object" && value !== null) {
+        return `${key}: {
+${formatObject(value as Record<string, unknown>, indent + 2)}
+${spaces}}`;
+      }
+      return `${key}: ${JSON.stringify(value)}`;
+    })
+    .join(`,\n${spaces}`);
+};
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
@@ -51,100 +71,131 @@ export function codegenCommand(): Command {
           if (!environmentConfig) {
             throw new Error("No environment found");
           }
-          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc } = environmentConfig;
-
-          // Generate Portal REST client if portalRest is defined
-          if (portalRest) {
-            await printSpinner({
-              startMessage: "Generating the Portal REST client",
-              task: async () => {
-                // Create the Portal REST client
-                await createRestClient({ framework: cfg.framework, restURL: portalRest, personalAccessToken: pat });
-              },
-              stopMessage: "Portal REST client generated",
-            });
-          }
-
-          if (portalGql) {
-            await printSpinner({
-              startMessage: "Generating the Portal GQL client",
-              task: async () => {
-                // Create the Portal REST client
-                await createGqlClient({
-                  framework: cfg.framework,
-                  type: "portal",
-                  gqlUrl: portalGql,
-                  personalAccessToken: pat,
-                });
-              },
-              stopMessage: "Portal GQL client generated",
-            });
-          }
-
-          if (thegraphGql) {
-            await printSpinner({
-              startMessage: "Generating the The Graph GQL client",
-              task: async () => {
-                // Create the Portal REST client
-                await createGqlClient({
-                  framework: cfg.framework,
-                  type: "thegraph",
-                  gqlUrl: thegraphGql,
-                  personalAccessToken: pat,
-                });
-              },
-              stopMessage: "The Graph GQL client generated",
-            });
-          }
-
-          if (hasuraGql) {
-            const adminSecret = cfg.hasuraAdminSecret;
-            if (!adminSecret) {
-              printCancel("No Hasura Admin Secret found");
-              process.exit(1);
-            }
-            await printSpinner({
-              startMessage: "Generating the Hasura GQL client",
-              task: async () => {
-                // Create the Portal REST client
-                await createGqlClient({
-                  framework: cfg.framework,
-                  type: "hasura",
-                  gqlUrl: hasuraGql,
-                  personalAccessToken: pat,
-                  hasuraAdminSecret: adminSecret,
-                });
-              },
-              stopMessage: "Hasura GQL client generated",
-            });
-          }
-
-          if (nodeJsonRpc) {
-            await printSpinner({
-              startMessage: "Generating the chain clients",
-              task: async () => {
-                await createChainConfig({
-                  framework: cfg.framework,
-                  nodeUrl: nodeJsonRpc,
-                  personalAccessToken: pat,
-                });
-              },
-              stopMessage: "Chain clients generated",
-            });
-          }
+          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc, nodeJsonRpcDeploy } = environmentConfig;
 
           await printSpinner({
-            startMessage: "Modifying configuration files",
+            startMessage: "Generating SettleMint SDK",
             task: async () => {
+              const settleMintDir = join(findProjectRoot(process.cwd()), ".settlemint");
+              rmSync(settleMintDir, { recursive: true, force: true });
+              mkdirSync(settleMintDir, { recursive: true });
+
+              const sdkParts: Promise<
+                { importLine: string | string[]; sdkLine: Record<string, unknown> } | undefined
+              >[] = [];
+
+              if (portalRest) {
+                sdkParts.push(
+                  createRestClient({
+                    settleMintDir,
+                    restURL: portalRest,
+                    personalAccessToken: pat,
+                  }),
+                );
+              }
+              if (portalGql) {
+                sdkParts.push(
+                  createGqlClient({
+                    settleMintDir,
+                    framework: cfg.framework,
+                    type: "portal",
+                    gqlUrl: portalGql,
+                    personalAccessToken: pat,
+                  }),
+                );
+              }
+              if (thegraphGql) {
+                sdkParts.push(
+                  createGqlClient({
+                    settleMintDir,
+                    framework: cfg.framework,
+                    type: "thegraph",
+                    gqlUrl: thegraphGql,
+                    personalAccessToken: pat,
+                  }),
+                );
+              }
+              if (hasuraGql) {
+                sdkParts.push(
+                  createGqlClient({
+                    settleMintDir,
+                    framework: cfg.framework,
+                    type: "hasura",
+                    gqlUrl: hasuraGql,
+                    personalAccessToken: pat,
+                    hasuraAdminSecret: cfg.hasuraAdminSecret ?? "",
+                  }),
+                );
+              }
+              if (nodeJsonRpc || nodeJsonRpcDeploy) {
+                sdkParts.push(
+                  createChainConfig({
+                    framework: cfg.framework,
+                    nodeUrl: nodeJsonRpc,
+                    personalAccessToken: pat,
+                  }),
+                );
+              }
+              if (nodeJsonRpc) {
+                sdkParts.push(createViemClients());
+                sdkParts.push(createWagmiConfig());
+              }
+
+              const sdkPartsResolved = await Promise.all(sdkParts);
+
+              const importLinesSet = new Set<string>();
+              const sdkLinesObjects: Record<string, unknown>[] = [];
+
+              for (const part of sdkPartsResolved) {
+                if (part) {
+                  if (Array.isArray(part.importLine)) {
+                    for (const line of part.importLine) {
+                      importLinesSet.add(line);
+                    }
+                  } else {
+                    importLinesSet.add(part.importLine);
+                  }
+                  sdkLinesObjects.push(part.sdkLine);
+                }
+              }
+
+              const importLines = Array.from(importLinesSet);
+              const mergedSdkLines = sdkLinesObjects.reduce((acc, obj) => merge(acc, obj), {});
+
+              const settlemintObject = JSON.parse(JSON.stringify(mergedSdkLines));
+
+              writeFileSync(
+                join(settleMintDir, "index.ts"),
+                `
+import { sdkGenerator, type ViemConfig, type WagmiConfig } from "@settlemint/sdk/browser";
+${importLines.filter((line) => line.trim() !== "").join("\n")}
+
+export const connectSettlemint = (config?: {viem?: ViemConfig, wagmi?: WagmiConfig}) => (${JSON.stringify(
+                  settlemintObject,
+                  null,
+                  2,
+                )
+                  .replace(/"([^"]+)":/g, "$1:") // Remove quotes from keys
+                  .replace(/: "(.+)"/g, ": $1") // Remove outer quotes from values
+                  .replace(/\\"/g, '"')});`,
+              );
+
               writeTsConfig();
             },
-            stopMessage: "Configuration files modified",
+            stopMessage: "SettleMint SDK generated",
           });
 
-          printNote(
-            greenBright("Read the documentation to learn how to use the generated SDK <link here>"),
-            "Usage hints",
-          );
+          // if (existsSync("./contracts")) {
+          //   await printSpinner({
+          //     startMessage: "Generating the wagmi hooks",
+          //     task: async () => {
+          //       await runWagmiCli("generate --config ./.settlemint/wagmi/wagmi.config.ts");
+          //     },
+          //     stopMessage: "wagmi hooks generated",
+          //   });
+          // }
+
+          printNote(greenBright("Read the documentation to learn how to use the generated SDK <link here>"));
 
           // Display completion message
           printOutro("Code generation complete");

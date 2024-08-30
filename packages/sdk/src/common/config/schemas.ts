@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+/**
+ * Schema for application configuration.
+ */
 export const ApplicationConfigSchema = z.object({
   application: z.object({
     id: z.string(),
@@ -10,8 +13,12 @@ export const ApplicationConfigSchema = z.object({
   thegraphGql: z.string().url().optional(),
   hasuraGql: z.string().url().optional(),
   nodeJsonRpc: z.string().url().optional(),
+  nodeJsonRpcDeploy: z.string().url().optional(),
 });
 
+/**
+ * Schema for the main configuration.
+ */
 export const ConfigSchema = z.object({
   framework: z.string(),
   instance: z.string().url(),
@@ -32,6 +39,9 @@ export const ConfigSchema = z.object({
   applications: z.record(z.string(), ApplicationConfigSchema).optional(),
 });
 
+/**
+ * Schema for configuration with environment variables.
+ */
 export const ConfigEnvSchema = ConfigSchema.extend({
   pat: z.string(),
   appUrl: z.string().url().optional(),
@@ -40,11 +50,17 @@ export const ConfigEnvSchema = ConfigSchema.extend({
   walletConnectProjectId: z.string(),
 });
 
+/**
+ * Schema for browser-specific configuration with environment variables.
+ */
 export const BrowserConfigEnvSchema = ConfigSchema.extend({
   appUrl: z.string().url(),
   walletConnectProjectId: z.string(),
 });
 
+/**
+ * Schema for environment variables.
+ */
 export const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
@@ -54,6 +70,9 @@ export const EnvSchema = z.object({
   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string(),
 });
 
+/**
+ * Schema for application configuration with environment variables.
+ */
 export const ApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
   pat: z.string(),
   appUrl: z.string().url().optional(),
@@ -61,6 +80,9 @@ export const ApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
   walletConnectProjectId: z.string(),
 });
 
+/**
+ * Schema for browser-specific application configuration with environment variables.
+ */
 export const BrowserApplicationConfigEnvSchema = ApplicationConfigSchema.extend({
   appUrl: z.string().url(),
   walletConnectProjectId: z.string(),

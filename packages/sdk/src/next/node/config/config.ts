@@ -9,7 +9,13 @@ import {
  * Retrieves the active server configuration based on the provided config and environment variables.
  * @param config The base configuration object
  * @returns The active ApplicationConfigEnv
- * @throws Error if no valid environment or application is found
+ * @throws {Error} If no valid environment or application is found
+ *
+ * @example
+ * ```typescript
+ * const config = { ... }; // Your Config object
+ * const activeConfig = activeServerConfig(config);
+ * ```
  */
 export function activeServerConfig(config: Config): ApplicationConfigEnv {
   const cfg = parseConfig(config);
@@ -32,6 +38,11 @@ export function activeServerConfig(config: Config): ApplicationConfigEnv {
   });
 }
 
+/**
+ * Parses the provided config and merges it with environment variables.
+ * @param config The base configuration object
+ * @returns The parsed configuration
+ */
 function parseConfig(config: Config) {
   return ConfigEnvSchema.parse({
     ...config,
@@ -43,10 +54,21 @@ function parseConfig(config: Config) {
   });
 }
 
+/**
+ * Retrieves the environment from the config or environment variables.
+ * @param cfg The parsed configuration
+ * @returns The environment string
+ */
 function getEnvironment(cfg: Config): string {
   return process.env.SETTLEMINT_APPLICATION ?? cfg.defaultApplication?.id ?? "";
 }
 
+/**
+ * Validates the environment and applications.
+ * @param env The environment string
+ * @param applications The applications object
+ * @throws {Error} If no environment is found or applications are empty
+ */
 function validateEnvironment(env: string, applications: Record<string, unknown>): void {
   if (!env || Object.keys(applications).length === 0) {
     throw new Error(

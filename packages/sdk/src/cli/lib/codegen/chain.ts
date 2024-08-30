@@ -77,5 +77,14 @@ export const chain = defineChain({
 `,
       );
     }
+
+    return {
+      importLine: `import { chain } from './node/chain';`,
+      sdkLine: {
+        network: {
+          chain: "chain,",
+        },
+      },
+    };
   }
 }

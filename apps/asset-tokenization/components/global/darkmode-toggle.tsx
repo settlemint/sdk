@@ -7,7 +7,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useWeb3ModalTheme } from "@web3modal/wagmi/react";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback } from "react";
@@ -25,19 +24,12 @@ const themeOptions = [
 
 export function DarkModeToggle({ variant = "outline", className }: DarkModeToggleProps) {
   const { setTheme, theme } = useTheme();
-  const { setThemeMode } = useWeb3ModalTheme();
 
   const handleSetTheme = useCallback(
     (newTheme: string) => {
       setTheme(newTheme);
-      if (newTheme === "system") {
-        const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        setThemeMode(systemTheme);
-      } else {
-        setThemeMode(newTheme === "dark" ? "dark" : "light");
-      }
     },
-    [setTheme, setThemeMode],
+    [setTheme],
   );
 
   return (

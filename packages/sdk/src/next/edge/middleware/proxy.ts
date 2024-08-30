@@ -4,6 +4,20 @@ import { createRouteMatcher } from "../utils/route-matcher";
 const isProxyRoute = createRouteMatcher(["/proxy/(.*)"]);
 const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura"]);
 
+/**
+ * Middleware function to handle proxy requests
+ * @param request - The incoming Next.js request
+ * @returns A modified NextResponse for proxy routes, or undefined for non-proxy routes
+ *
+ * @example
+ * ```typescript
+ * import { proxyMiddleware } from './middleware/proxy';
+ *
+ * export default function middleware(request: NextRequest) {
+ *   return proxyMiddleware(request);
+ * }
+ * ```
+ */
 export function proxyMiddleware(request: NextRequest) {
   if (isProxyRoute(request)) {
     const response = NextResponse.next();

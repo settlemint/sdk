@@ -1,9 +1,13 @@
 import { ClientProvider } from "@/components/providers/ClientProvider";
+import { settlemint } from "@/lib/settlemint";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
+import { PublicEnvScript } from "next-runtime-env";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
 import "./globals.css";
 
 const fontSans = FontSans({
@@ -39,11 +43,17 @@ interface RootLayoutProps {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const session = await getServerSession();
+  const initialState = cookieToInitialState(settlemint.node.wagmi.wagmiConfig, headers().get("cookie"));
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <PublicEnvScript />
+      </head>
       <body className={cn("min-h-screen bg-custom-background-sidebar font-sans antialiased", fontSans.variable)}>
-        <ClientProvider session={session}>{children}</ClientProvider>
+        <ClientProvider session={session} initialState={initialState}>
+          {children}
+        </ClientProvider>
       </body>
     </html>
   );

@@ -72,9 +72,6 @@
   "codesnap.transparentBackground": true,
   "codesnap.backgroundColor": "#282828",
   "editor.wordWrap": "on",
-  "files.associations": {
-    "*.css": "tailwindcss"
-  },
   "editor.quickSuggestions": {
     "strings": "on"
   },
@@ -86,5 +83,18 @@
     "**/app/**/layout.tsx": "${dirname(1)}/${dirname} <layout>",
     "**/app/**/route.ts": "${dirname(1)}/${dirname} <route>",
     "**/components/**/index.tsx": "${dirname(1)}/${dirname} <component>"
-  }
+  },
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "solidity.formatter": "forge",
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "emmet.includeLanguages": {
+    "typescript.handlebars": "typescript"
+  },
+  "workbench.activityBar.orientation": "vertical"
 }

@@ -1,21 +1,36 @@
 #!/usr/bin/env node
 
-import { cancel } from "@clack/prompts";
+/**
+ * Main entry point for the SettleMint CLI.
+ *
+ * This script sets up the CLI environment, configures commands, and handles execution.
+ *
+ * @module cli
+ * @example
+ * ```bash
+ * settlemint [command]
+ * ```
+ */
+
+import { codegenCommand } from "@/cli/commands/codegen";
+import { connectCommand } from "@/cli/commands/connect";
+import { createCommand } from "@/cli/commands/create";
 import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../../package.json";
-import { codegenCommand } from "./commands/codegen";
-import { connectCommand } from "./commands/connect";
-import { createCommand } from "./commands/create";
+import { forgeCommand } from "./commands/forge";
+import { printCancel } from "./lib/cli-message";
 
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files
 dotenv.config({
-  path: [".env.local", ".env"],
+  path: [".env.local", "../.env.local", ".env", "../.env"],
   override: true,
 });
 
-// Create a new Command instance for the CLI
+/**
+ * The main Command instance for the SettleMint CLI.
+ */
 const sdkcli = new Command();
 
 // Configure the CLI command
@@ -29,16 +44,31 @@ sdkcli
   .showSuggestionAfterError(true)
   .showHelpAfterError();
 
-// Add the init command to the CLI
+// Add commands to the CLI
 sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(createCommand());
+sdkcli.addCommand(forgeCommand());
 
-// Parse command line arguments and handle errors
+/**
+ * Parses command line arguments and executes the appropriate command.
+ * Handles any errors that occur during execution.
+ *
+ * @throws {Error} If an unexpected error occurs during command execution.
+ *
+ * @example
+ * ```typescript
+ * sdkcli.parseAsync(process.argv).catch(async (reason) => {
+ *   printCancel("An unexpected error occurred. Please report it as a bug:");
+ *   console.error(reason);
+ *   process.exit(1);
+ * });
+ * ```
+ */
 sdkcli.parseAsync(process.argv).catch(async (reason) => {
   // If an error occurs:
   // 1. Cancel the current operation
-  cancel("An unexpected error occurred. Please report it as a bug:");
+  printCancel("An unexpected error occurred. Please report it as a bug:");
   // 2. Log the error to the console
   console.error(reason);
   // 3. Exit the process with an error code

@@ -5,9 +5,27 @@ import { join } from "node:path";
 import { URL } from "node:url";
 import { spawn } from "cross-spawn";
 
+/**
+ * Array of supported package managers.
+ */
 export const packageManagers: PackageManager[] = ["npm", "pnpm", "yarn", "bun"] as const;
+
+/**
+ * Type representing supported package managers.
+ */
 export type PackageManager = "npm" | "pnpm" | "yarn" | "bun";
 
+/**
+ * Determines the package manager based on the user agent string.
+ *
+ * @returns The detected package manager.
+ *
+ * @example
+ * ```typescript
+ * const manager = getPkgManager();
+ * console.log(manager); // 'npm', 'pnpm', 'yarn', or 'bun'
+ * ```
+ */
 export function getPkgManager(): PackageManager {
   const userAgent = process.env.npm_config_user_agent || "";
 
@@ -26,6 +44,18 @@ export function getPkgManager(): PackageManager {
   return "npm";
 }
 
+/**
+ * Gets the executor command for a given package manager.
+ *
+ * @param packageManager - The package manager to get the executor for.
+ * @returns The executor command for the given package manager.
+ *
+ * @example
+ * ```typescript
+ * const executor = getExecutor('npm');
+ * console.log(executor); // 'npx'
+ * ```
+ */
 export function getExecutor(packageManager: PackageManager): string {
   switch (packageManager) {
     case "npm":
@@ -40,10 +70,24 @@ export function getExecutor(packageManager: PackageManager): string {
       return "npx";
   }
 }
+
 /**
- * Spawn a package manager installation based on user preference.
+ * Spawns a package manager installation process based on user preference.
  *
+ * @param packageManager - The package manager to use. If not provided, it will be auto-detected.
+ * @param cwd - The current working directory for the installation. Defaults to the current process working directory.
  * @returns A Promise that resolves once the installation is finished.
+ * @throws Will throw an error if the installation process fails.
+ *
+ * @example
+ * ```typescript
+ * try {
+ *   await install('npm', '/path/to/project');
+ *   console.log('Installation completed successfully');
+ * } catch (error) {
+ *   console.error('Installation failed:', error);
+ * }
+ * ```
  */
 export async function install(packageManager?: PackageManager, cwd: string = process.cwd()): Promise<void> {
   const args: string[] = ["install"];
@@ -51,20 +95,12 @@ export async function install(packageManager?: PackageManager, cwd: string = pro
     args.push("--offline");
   }
 
-  /**
-   * Return a Promise that resolves once the installation is finished.
-   */
   return new Promise((resolve, reject) => {
-    /**
-     * Spawn the installation process.
-     */
     const child = spawn(packageManager ?? getPkgManager(), args, {
       stdio: ["ignore", "pipe", "pipe"],
       env: {
         ...process.env,
         ADBLOCK: "1",
-        // we set NODE_ENV to development as pnpm skips dev
-        // dependencies when production
         NODE_ENV: "development",
         DISABLE_OPENCOLLECTIVE: "1",
       },
@@ -88,6 +124,11 @@ export async function install(packageManager?: PackageManager, cwd: string = pro
   });
 }
 
+/**
+ * Retrieves the proxy configuration from environment variables or npm config.
+ *
+ * @returns The proxy URL if configured, undefined otherwise.
+ */
 function getProxy(): string | undefined {
   if (process.env.https_proxy) {
     return process.env.https_proxy;
@@ -101,13 +142,16 @@ function getProxy(): string | undefined {
   }
 }
 
+/**
+ * Checks if the system is online by attempting a DNS lookup.
+ *
+ * @returns A Promise that resolves to true if online, false otherwise.
+ */
 async function getOnline(): Promise<boolean> {
   try {
     await lookup("registry.yarnpkg.com");
-    // If DNS lookup succeeds, we are online
     return true;
   } catch {
-    // The DNS lookup failed, but we are still fine as long as a proxy has been set
     const proxy = getProxy();
     if (!proxy) {
       return false;
@@ -117,20 +161,16 @@ async function getOnline(): Promise<boolean> {
       const proxyUrl = new URL(proxy);
       const hostname = proxyUrl.hostname;
       if (!hostname) {
-        // Invalid proxy URL
         return false;
       }
 
       try {
         await lookup(hostname);
-        // If DNS lookup succeeds for the proxy server, we are online
         return true;
       } catch {
-        // The DNS lookup for the proxy server also failed, so we are offline
         return false;
       }
     } catch {
-      // Invalid proxy URL
       return false;
     }
   }
