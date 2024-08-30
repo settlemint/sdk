@@ -28,7 +28,6 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
   });
   const { register } = useFormContext();
 
-  // Function to add a new item
   const addItem = () => {
     append({ walletAddress: "", amount: 0, ID: "" } as FieldArray<T, ArrayPath<T>>);
   };
