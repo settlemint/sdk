@@ -123,7 +123,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                       <FormItem>
                         <FormLabel>Max supply</FormLabel>
                         <FormControl>
-                          <NumericInput name="tokenMaxSupply" placeholder="Max supply" />
+                          <NumericInput name={field.name} placeholder="Max supply" />
                         </FormControl>
                         <FormDescription>This is the max supply of the token</FormDescription>
                         <FormMessage />
@@ -158,7 +158,15 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                       <FormItem>
                         <FormLabel>Wallets</FormLabel>
                         <FormControl>
-                          <RepeatableForm control={form.control} name={field.name} />
+                          <RepeatableForm
+                            control={form.control}
+                            name={field.name}
+                            components={[
+                              { type: "Input", field: "walletAddress", placeholder: "Wallet" },
+                              { type: "NumericInput", field: "amount", placeholder: "Amount" },
+                              { type: "Textarea", field: "ID", placeholder: "ID" },
+                            ]}
+                          />
                         </FormControl>
                         <FormDescription>
                           Enter the wallet addresses for the initial distribution of the token supply
@@ -205,7 +213,7 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                       <FormItem>
                         <FormLabel>Monetary value</FormLabel>
                         <FormControl>
-                          <Input type="number" placeholder="Monetary value" {...field} />
+                          <NumericInput name={field.name} placeholder="Monetary value" />
                         </FormControl>
                         <FormDescription>This is the monetary value per token</FormDescription>
                         <FormMessage />
@@ -264,7 +272,15 @@ export function TokenizationWizard({ className, ...props }: TokenizationWizardPr
                       <FormItem>
                         <FormLabel>Wallets</FormLabel>
                         <FormControl>
-                          <RepeatableForm control={form.control} name={field.name} />
+                          <RepeatableForm
+                            control={form.control}
+                            name={field.name}
+                            components={[
+                              { type: "Input", field: "walletAddress", placeholder: "Wallet" },
+                              { type: "NumericInput", field: "amount", placeholder: "Amount" },
+                              { type: "Textarea", field: "ID", placeholder: "ID" },
+                            ]}
+                          />
                         </FormControl>
                         <FormDescription>Enter the wallet addresses for the Token administrators</FormDescription>
                         <FormMessage />

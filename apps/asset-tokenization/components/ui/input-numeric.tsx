@@ -12,6 +12,7 @@ const NumericInput = React.forwardRef<HTMLInputElement, InputProps>(({ className
       render={({ field }) => (
         <Input
           {...field}
+          name={field.name}
           type="number"
           placeholder={placeholder}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
