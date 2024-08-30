@@ -62,7 +62,7 @@
     "graphql": "16.9.0",
     "graphql-request": "7.1.0",
     "next-themes": "0.3.0",
-    "openapi-fetch": "0.11.1",
+    "openapi-fetch": "0.11.2",
     "openapi-typescript": "7.3.2",
     "path-to-regexp": "7.1.0",
     "ts-deepmerge": "7.0.1",
