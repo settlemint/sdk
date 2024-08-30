@@ -8,27 +8,38 @@ interface PortalClientConfig {
 /**
  * Creates a portal client for interacting with the SettleMint API.
  *
- * @param portalRestUrl The base URL for the portal REST API.
+ * This function generates a client instance that can be used to make API requests
+ * to the SettleMint portal. It uses the NEXT_PUBLIC_SETTLEMINT_APP_URL environment
+ * variable to construct the base URL for the API endpoints.
+ *
+ * @template PortalRestPaths - The type representing the API paths and operations.
  * @returns A client instance for making API requests.
- * @throws Error if SETTLEMINT_PAT_TOKEN is missing in a server environment.
+ * @throws {Error} If NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined in the environment.
+ *
+ * @example
+ * ```typescript
+ * type MyApiPaths = {
+ *   '/users': {
+ *     get: {
+ *       responses: {
+ *         200: { content: { 'application/json': User[] } }
+ *       }
+ *     }
+ *   }
+ * };
+ *
+ * const client = createPortalRestClient<MyApiPaths>();
+ * const { data, error } = await client.GET('/users');
+ * ```
  */
-export function createPortalClient<PortalRestPaths extends Record<string, unknown>>(
-  portalRestUrl: string,
-): ReturnType<typeof createClient<PortalRestPaths>> {
-  const config: PortalClientConfig = {
-    baseUrl: isClientSide() ? `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest` : portalRestUrl,
-  };
-
-  if (!isClientSide()) {
-    if (!process.env.SETTLEMINT_PAT_TOKEN) {
-      throw new Error("SETTLEMINT_PAT_TOKEN is required in server environment");
-    }
-    config.headers = { "x-auth-token": process.env.SETTLEMINT_PAT_TOKEN };
+export function createPortalRestClient<PortalRestPaths extends {}>(): ReturnType<typeof createClient<PortalRestPaths>> {
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
+    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined");
   }
 
-  return createClient<PortalRestPaths>(config);
-}
+  const pcfg: PortalClientConfig = {
+    baseUrl: `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest`,
+  };
 
-function isClientSide(): boolean {
-  return typeof window !== "undefined" && typeof window.document !== "undefined";
+  return createClient<PortalRestPaths>(pcfg);
 }

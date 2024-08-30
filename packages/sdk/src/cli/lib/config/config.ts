@@ -1,7 +1,7 @@
-import { type ConfigEnv, ConfigEnvSchema } from "@/common/config/schemas";
+import { ConfigEnvSchema } from "@/common/config/schemas";
 import { readSettlemintConfig } from "./read-config";
 
-export function config(): ConfigEnv | undefined {
+export function config() {
   const config = readSettlemintConfig();
   if (!config) {
     return undefined;

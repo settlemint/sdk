@@ -3,6 +3,7 @@
     "bradlc.vscode-tailwindcss",
     "biomejs.biome",
     "graphql.vscode-graphql-syntax",
-    "apollographql.vscode-apollo"
+    "apollographql.vscode-apollo",
+    "andrejunges.handlebars"
   ]
 }

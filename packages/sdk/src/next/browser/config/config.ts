@@ -8,9 +8,19 @@ import {
 /**
  * Retrieves and validates the active browser configuration.
  *
- * @param {Config} config - The initial configuration object.
- * @returns {BrowserApplicationConfigEnv} The validated browser application configuration.
+ * This function processes the initial configuration, validates it against the browser environment,
+ * and returns a fully validated browser application configuration.
+ *
+ * @param config - The initial configuration object.
+ * @returns The validated browser application configuration.
  * @throws {Error} If no application is found for the current environment.
+ *
+ * @example
+ * ```typescript
+ * const initialConfig = loadConfig();
+ * const browserConfig = activeBrowserConfig(initialConfig);
+ * console.log(browserConfig);
+ * ```
  */
 export function activeBrowserConfig(config: Config): BrowserApplicationConfigEnv {
   const cfg = parseBrowserConfig(config);
@@ -34,8 +44,11 @@ export function activeBrowserConfig(config: Config): BrowserApplicationConfigEnv
 /**
  * Parses and validates the browser configuration.
  *
- * @param {Config} config - The initial configuration object.
- * @returns {ReturnType<typeof BrowserConfigEnvSchema.parse>} The parsed and validated browser configuration.
+ * This function takes the initial configuration and enhances it with environment-specific
+ * variables before validating it against the BrowserConfigEnvSchema.
+ *
+ * @param config - The initial configuration object.
+ * @returns The parsed and validated browser configuration.
  */
 function parseBrowserConfig(config: Config) {
   return BrowserConfigEnvSchema.parse({
@@ -46,10 +59,13 @@ function parseBrowserConfig(config: Config) {
 }
 
 /**
- * Retrieves the current environment.
+ * Retrieves the current environment identifier.
  *
- * @param {ReturnType<typeof parseBrowserConfig>} cfg - The parsed browser configuration.
- * @returns {string} The current environment identifier.
+ * This function determines the current environment based on the SETTLEMINT_APPLICATION
+ * environment variable or the default application specified in the configuration.
+ *
+ * @param cfg - The parsed browser configuration.
+ * @returns The current environment identifier.
  */
 function getEnvironment(cfg: ReturnType<typeof parseBrowserConfig>): string {
   return process.env.SETTLEMINT_APPLICATION ?? cfg.defaultApplication?.id ?? "";
@@ -58,8 +74,11 @@ function getEnvironment(cfg: ReturnType<typeof parseBrowserConfig>): string {
 /**
  * Validates the environment and application configuration.
  *
- * @param {string} env - The environment identifier.
- * @param {Record<string, unknown>} applications - The applications configuration object.
+ * This function checks if a valid environment is specified and if there are any
+ * configured applications. It throws an error if either condition is not met.
+ *
+ * @param env - The environment identifier.
+ * @param applications - The applications configuration object.
  * @throws {Error} If no valid environment is found or no applications are configured.
  */
 function validateEnvironment(env: string, applications: Record<string, unknown>): void {

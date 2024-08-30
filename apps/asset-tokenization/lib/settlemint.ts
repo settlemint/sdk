@@ -1,11 +1,6 @@
-import { chain } from "@/.settlemint/node/chain";
-import type { paths } from "@/.settlemint/portal/rest/portal-schema.d.ts";
-import { createSdk } from "@settlemint/sdk/browser";
-import config from "../.settlemintrc.json";
+import { connectSettlemint } from "@/.settlemint/index";
 
-console.log("CONFIG", process.env);
-export const settlemint = createSdk<paths>(config, {
-  chain,
+export const settlemint = connectSettlemint({
   wagmi: {
     web3ModalConfig: {
       metadata: {

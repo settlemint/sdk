@@ -1,5 +1,9 @@
 import Image from "next/image";
 
+/**
+ * Array of feature objects representing key features of the asset tokenization platform.
+ * Each feature has an id, title, and description.
+ */
 const FEATURES = [
   {
     id: "stablecoins",
@@ -19,6 +23,14 @@ const FEATURES = [
   },
 ];
 
+/**
+ * PublicFeatures component
+ *
+ * Renders a section showcasing the key features of the asset tokenization platform.
+ * Includes a title, description, image, and a list of features.
+ *
+ * @returns {JSX.Element} The rendered PublicFeatures component
+ */
 export function PublicFeatures() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-cover bg-center" aria-labelledby="features-heading">
@@ -43,11 +55,12 @@ export function PublicFeatures() {
             alt="Benefits of Asset Tokenization"
             className="mx-auto overflow-hidden rounded-xl object-cover object-center sm:w-full lg:order-last"
             priority
+            quality={85}
           />
           <div className="flex flex-col justify-center space-y-4">
             <ul className="grid gap-6">
               {FEATURES.map((feature) => (
-                <li key={feature.id}>
+                <li key={feature.id} aria-label={feature.title}>
                   <div className="grid gap-1">
                     <h3 className="text-xl font-bold text-white">{feature.title}</h3>
                     <p className="text-white/80">{feature.description}</p>

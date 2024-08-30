@@ -1,19 +1,9 @@
 import { existsSync, mkdirSync } from "node:fs";
 import { join } from "node:path";
-import { Command } from "@commander-js/extra-typings";
-import { greenBright } from "yoctocolors";
-import {
-  printAsciiArt,
-  printCancel,
-  printIntro,
-  printNote,
-  printOutro,
-  printSpinner,
-  promptConfirm,
-} from "../lib/cli-message";
-import { coerceSelect, coerceText } from "../lib/coerce";
-import { setName } from "../lib/package-json";
-import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "../lib/package-manager";
+import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
+import { coerceSelect, coerceText } from "@/cli/lib/coerce";
+import { setName } from "@/cli/lib/package-json";
+import { type PackageManager, getExecutor, getPkgManager, install, packageManagers } from "@/cli/lib/package-manager";
 import {
   downloadAndExtractNpmPackage,
   emptyDir,
@@ -22,7 +12,10 @@ import {
   isValidPackageName,
   templates,
   toValidPackageName,
-} from "../lib/templates";
+} from "@/cli/lib/templates";
+import { Command } from "@commander-js/extra-typings";
+import { confirm } from "@inquirer/prompts";
+import { greenBright } from "yoctocolors";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK CLI.
@@ -70,9 +63,9 @@ export function createCommand(): Command {
           }
 
           if (!isEmpty(projectDir)) {
-            const confirmEmpty = await promptConfirm({
+            const confirmEmpty = await confirm({
               message: `The folder ${projectDir} already exists. Do you want to empty it?`,
-              initialValue: false,
+              default: false,
             });
             if (!confirmEmpty) {
               printCancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
@@ -82,14 +75,14 @@ export function createCommand(): Command {
           }
 
           const selectedTemplate = await coerceSelect({
-            options: templates.map((template) => ({
+            choices: templates.map((template) => ({
               value: template.value,
               label: template.label,
             })),
             envValue: process.env.SETTLEMINT_TEMPLATE,
             cliParamValue: template,
             validate: (value): value is (typeof templates)[number]["value"] => templates.some((t) => t.value === value),
-            promptMessage: "Select a template",
+            message: "Select a template",
             existingMessage: "A template is already selected. Do you want to change it?",
           });
 
@@ -99,14 +92,14 @@ export function createCommand(): Command {
           }
 
           const selectedPackageManager = await coerceSelect({
-            options: packageManagers.map((pm) => ({
+            choices: packageManagers.map((pm) => ({
               value: pm,
               label: pm,
             })),
             envValue: process.env.SETTLEMINT_PACKAGE_MANAGER ?? getPkgManager(),
             cliParamValue: packageManager,
             validate: (value): value is PackageManager => packageManagers.includes(value?.trim() as PackageManager),
-            promptMessage: "Select a package manager",
+            message: "Select a package manager",
             existingMessage: "A package manager is already selected. Do you want to change it?",
           });
 
@@ -132,7 +125,6 @@ export function createCommand(): Command {
 cd ${selectedProjectName}
 ${executor} settlemint connect
 `),
-            "Next steps",
           );
 
           printOutro("Your project is ready to go!");

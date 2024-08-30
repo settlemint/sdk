@@ -4,7 +4,12 @@
     "enabled": true
   },
   "files": {
-    "ignore": ["apps/asset-tokenization/.settlemint"]
+    "ignore": [
+      "apps/asset-tokenization/.settlemint",
+      "apps/asset-tokenization/contracts/artifacts",
+      "./.settlemint",
+      "./contracts/artifacts"
+    ]
   },
   "linter": {
     "enabled": true,
@@ -23,6 +28,9 @@
       },
       "correctness": {
         "useExhaustiveDependencies": "warn"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
       }
     }
   },

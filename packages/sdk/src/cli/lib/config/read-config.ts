@@ -1,10 +1,10 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { type Config, ConfigSchema } from "@/common/config/schemas";
-import { findProjectRoot } from "@/common/path";
+import { findParentConfigRoot, findProjectRoot } from "@/common/path";
 
-export function readSettlemintConfig(): Config | undefined {
-  const projectRoot = findProjectRoot(process.cwd());
+export function readSettlemintConfig(inParents = false): Config | undefined {
+  const projectRoot = inParents ? findParentConfigRoot(process.cwd()) : findProjectRoot(process.cwd());
   const configPath = join(projectRoot, ".settlemintrc.json");
 
   if (existsSync(configPath)) {

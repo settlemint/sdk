@@ -1,7 +1,6 @@
 import { settlemint } from "@/lib/settlemint";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { createPublicClient } from "viem";
 import { parseSiweMessage } from "viem/siwe";
 
 declare module "next-auth" {
@@ -41,9 +40,7 @@ const handler = NextAuth({
           const { message, signature } = credentials;
           const parsedMessage = parseSiweMessage(message as string);
 
-          const publicClient = createPublicClient(settlemint.viem);
-
-          const isValid = await publicClient.verifySiweMessage({
+          const isValid = await settlemint.node.viem.publicClient.verifySiweMessage({
             message: message as string,
             signature: signature as `0x${string}`,
           });

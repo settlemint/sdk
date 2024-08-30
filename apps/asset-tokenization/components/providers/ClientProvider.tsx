@@ -5,21 +5,22 @@ import { SettleMintProvider } from "@settlemint/sdk/browser";
 import { createWeb3Modal, useWeb3ModalTheme } from "@web3modal/wagmi/react";
 import type { Session } from "next-auth";
 import { useTheme } from "next-themes";
-import { type PropsWithChildren, useEffect, useMemo } from "react";
+import { type PropsWithChildren, useEffect } from "react";
+import type { WagmiProviderProps } from "wagmi";
 
-if (settlemint.wagmi) {
-  createWeb3Modal({ ...settlemint.wagmi.web3ModalConfig, themeMode: "light" });
-}
+createWeb3Modal({ ...settlemint.node.wagmi.web3ModalConfig, themeMode: "light" });
 
 interface ClientProviderProps {
   session: Session | null;
+  initialState: WagmiProviderProps["initialState"];
 }
 
-export function ClientProvider({ children, session }: PropsWithChildren<ClientProviderProps>) {
+export function ClientProvider({ children, session, initialState }: PropsWithChildren<ClientProviderProps>) {
   const { theme } = useTheme();
   const { setThemeMode } = useWeb3ModalTheme();
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: the darkmode toggle will handle this on changes
+  const wagmiConfig = settlemint.node.wagmi.wagmiConfig;
+
   useEffect(() => {
     if (theme === "system") {
       const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -27,19 +28,10 @@ export function ClientProvider({ children, session }: PropsWithChildren<ClientPr
     } else {
       setThemeMode(theme === "dark" ? "dark" : "light");
     }
-  }, []); // Run only once on component mount
-
-  const wagmiConfig = useMemo(() => {
-    if (!settlemint.wagmi) return null;
-    return { config: settlemint.wagmi.wagmiConfig };
-  }, []);
-
-  if (!wagmiConfig) {
-    return null;
-  }
+  }, [theme, setThemeMode]);
 
   return (
-    <SettleMintProvider wagmi={wagmiConfig} session={session}>
+    <SettleMintProvider wagmiConfig={wagmiConfig} initialState={initialState} session={session}>
       {children}
     </SettleMintProvider>
   );

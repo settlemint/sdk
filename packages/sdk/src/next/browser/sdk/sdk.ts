@@ -1,47 +1,30 @@
-import type { Config } from "@/common/config/schemas";
-import { type ViemConfigParameters, viemConfig } from "@/next/browser/sdk/plugins/viem";
-import { activeServerConfig } from "@/next/node/config/config";
-import type { Address } from "abitype";
-import type { Account, Chain, RpcSchema } from "viem";
-import { activeBrowserConfig } from "../config/config";
-import { createPortalClient } from "./plugins/portal";
-import { type WagmiConfigParameters, wagmiConfig } from "./plugins/wagmi";
+import { createGraphqlClient } from "@/next/browser/sdk/plugins/graphql";
+import { createPortalRestClient } from "@/next/browser/sdk/plugins/portal";
+import { type ViemConfig, createViemPublicClient, createViemWalletClient } from "@/next/browser/sdk/plugins/viem";
+import { type WagmiConfig, createWagmiConfig } from "@/next/browser/sdk/plugins/wagmi";
+
+export type { ViemConfig, WagmiConfig };
 
 /**
- * Creates an SDK instance based on the provided configuration and environment.
+ * A collection of functions for generating various SDK components.
  *
- * @template PortalRestPaths - The type for portal REST paths
- * @param {Config} config - The application configuration
- * @param {Object} options - The SDK options
- * @param {Chain} options.chain - The blockchain chain configuration
- * @param {Omit<WagmiConfigParameters, "chain">} options.wagmi - Wagmi configuration parameters
- * @param {Omit<ViemConfigParameters<Chain, Account | Address | undefined, RpcSchema | undefined>, "chain">} [options.viem] - Optional Viem configuration parameters
- * @returns {ReturnType<typeof createSdk>} The created SDK instance
+ * This object provides methods to create clients and configurations for interacting with
+ * different parts of the SettleMint ecosystem, including REST APIs, GraphQL endpoints,
+ * blockchain interactions, and React hooks for Web3 functionality.
+ *
+ * @example
+ * ```typescript
+ * const portalClient = sdkGenerator.createPortalRestClient();
+ * const graphqlClient = sdkGenerator.createGraphqlClient('portal');
+ * const viemPublicClient = sdkGenerator.createViemPublicClient({ chain: mainnet });
+ * const viemWalletClient = sdkGenerator.createViemWalletClient({ chain: mainnet });
+ * const { wagmiConfig, web3ModalConfig } = sdkGenerator.createWagmiConfig({ chain: mainnet });
+ * ```
  */
-export function createSdk<PortalRestPaths extends {}>(
-  config: Config,
-  {
-    chain,
-    wagmi,
-    viem,
-  }: {
-    chain: Chain;
-    wagmi: Omit<WagmiConfigParameters, "chain">;
-    viem?: Omit<ViemConfigParameters<Chain, Account | Address | undefined, RpcSchema | undefined>, "chain">;
-  },
-) {
-  if (process.env.NEXT_RUNTIME === "edge") {
-    const cfg = activeServerConfig(config);
-    return {
-      portal: cfg.portalRest && createPortalClient<PortalRestPaths>(cfg.portalRest),
-      viem: viemConfig({ ...viem, chain }),
-    };
-  }
-
-  const cfg = activeBrowserConfig(config);
-  return {
-    portal: cfg.portalRest && createPortalClient<PortalRestPaths>(cfg.portalRest),
-    viem: viemConfig({ ...viem, chain }),
-    wagmi: wagmiConfig({ ...wagmi, chain }),
-  };
-}
+export const sdkGenerator = {
+  createPortalRestClient,
+  createGraphqlClient,
+  createViemPublicClient,
+  createViemWalletClient,
+  createWagmiConfig,
+} as const;

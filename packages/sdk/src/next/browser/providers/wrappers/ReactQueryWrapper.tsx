@@ -1,7 +1,7 @@
 "use client";
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import type { FC, PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 /**
  * Creates a new QueryClient instance with default options.
@@ -16,14 +16,21 @@ const queryClient = new QueryClient({
 });
 
 /**
- * ReactQueryWrapper component.
- * Provides a QueryClientProvider with a pre-configured QueryClient to its children.
+ * ReactQueryWrapper component that provides a QueryClientProvider with a pre-configured QueryClient to its children.
  *
- * @component
- * @param {PropsWithChildren} props - The component props.
- * @param {React.ReactNode} props.children - The child components to be wrapped.
- * @returns {JSX.Element} The wrapped children with QueryClientProvider.
+ * This component wraps the application with React Query's QueryClientProvider,
+ * enabling efficient data fetching and state management capabilities.
+ *
+ * @param props - The properties for the ReactQueryWrapper component.
+ * @returns The QueryClientProvider component with the provided QueryClient and children.
+ *
+ * @example
+ * ```tsx
+ * <ReactQueryWrapper>
+ *   <YourApp />
+ * </ReactQueryWrapper>
+ * ```
  */
-export const ReactQueryWrapper: FC<PropsWithChildren> = ({ children }) => {
+export function ReactQueryWrapper({ children }: PropsWithChildren) {
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
-};
+}
