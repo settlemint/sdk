@@ -69,7 +69,7 @@
     "next-auth": "4.24.7",
     "next-runtime-env": "3.2.2",
     "next-themes": "0.3.0",
-    "openapi-fetch": "0.11.2",
+    "openapi-fetch": "0.12.0",
     "openapi-typescript": "7.3.3",
     "ora": "8.1.0",
     "path-to-regexp": "7.1.0",
