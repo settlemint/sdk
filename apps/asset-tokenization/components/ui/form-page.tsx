@@ -13,7 +13,7 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
   children,
 }) => {
   const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form } = useMultiFormStep();
-  const [fieldState, setFieldState] = useQueryState("zod", parseAsJson<Record<string, unknown>>());
+  const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
   const [isValid, setIsValid] = useState(true);
 
@@ -43,8 +43,6 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
     const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
     page === currentStep && setFieldState(fieldState);
   }, [fields, fieldValues, setFieldState, page, currentStep]); // Added 'currentStep' to the dependency array
-
-  console.log("fieldState", fieldState);
 
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>
