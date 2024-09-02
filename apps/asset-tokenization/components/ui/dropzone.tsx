@@ -1,7 +1,16 @@
 "use client";
 
 import { Cross2Icon } from "@radix-ui/react-icons";
-import { Check, CloudUpload, File, FileSymlink, FileText, Image, LoaderCircle, TriangleAlert } from "lucide-react";
+import {
+  CheckIcon,
+  CloudUploadIcon,
+  FileIcon,
+  FileSymlinkIcon,
+  FileTextIcon,
+  ImageIcon,
+  LoaderCircleIcon,
+  TriangleAlertIcon,
+} from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import ReactDropzone from "react-dropzone";
 import { useToast } from "./../hooks/use-toast";
@@ -54,10 +63,10 @@ function truncateFileName(fileName: string): string {
 }
 
 function fileToIcon(file_type: string): React.ReactNode {
-  if (file_type.includes("application")) return <FileText />;
-  if (file_type.includes("text")) return <FileText />;
-  if (file_type.includes("image")) return <Image />;
-  return <File />;
+  if (file_type.includes("application")) return <FileTextIcon />;
+  if (file_type.includes("text")) return <FileTextIcon />;
+  if (file_type.includes("image")) return <ImageIcon />;
+  return <FileIcon />;
 }
 
 const extensions = {
@@ -160,18 +169,18 @@ export function Dropzone({ label }: { label: string }) {
             {action.is_error ? (
               <Badge variant="destructive" className="flex gap-2">
                 <span>Error Uploading File</span>
-                <TriangleAlert />
+                <TriangleAlertIcon />
               </Badge>
             ) : action.isUploaded ? (
               <Badge variant="default" className="flex gap-2 bg-green-500">
                 <span>Done</span>
-                <Check />
+                <CheckIcon />
               </Badge>
             ) : action.isUploading ? (
               <Badge variant="default" className="flex gap-2">
                 <span>Uploading</span>
                 <span className="animate-spin">
-                  <LoaderCircle />
+                  <LoaderCircleIcon />
                 </span>
               </Badge>
             ) : (
@@ -230,14 +239,14 @@ export function Dropzone({ label }: { label: string }) {
             {isHover ? (
               <>
                 <div className="justify-center flex text-6xl">
-                  <FileSymlink />
+                  <FileSymlinkIcon />
                 </div>
                 <h3 className="text-center font-medium text-md">Yes, right here</h3>
               </>
             ) : (
               <>
                 <div className="justify-center flex text-6xl">
-                  <CloudUpload />
+                  <CloudUploadIcon />
                 </div>
                 <h3 className="text-center font-medium text-md">{label}</h3>
               </>

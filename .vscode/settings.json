@@ -95,5 +95,6 @@
   },
   "emmet.includeLanguages": {
     "typescript.handlebars": "typescript"
-  }
+  },
+  "typescript.tsserver.experimental.useVsCodeWatcher": false
 }
