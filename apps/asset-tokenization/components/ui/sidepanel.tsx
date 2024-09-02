@@ -26,7 +26,7 @@ const SidePanel = ({ children }: { children: React.ReactNode }) => {
       <button
         type="button"
         onClick={togglePanel}
-        className="fixed right-6 top-6 bg-blue-500 text-white px-4 py-2 rounded-md"
+        className="fixed right-[330px] top-[9px] bg-blue-500 text-white px-4 py-2 rounded-md"
       >
         Start Wizard
       </button>

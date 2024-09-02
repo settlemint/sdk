@@ -1,5 +1,6 @@
 "use client";
 
+import { parseAsInteger, useQueryState } from "nuqs";
 import { createContext, useCallback, useContext, useRef, useState } from "react";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -20,7 +21,7 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
   children,
   form,
 }: React.PropsWithChildren<{ form: UseFormReturn<TFieldValues> }>) => {
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
   const [totalSteps, setTotalSteps] = useState(1);
   const pageCounterRef = useRef(1);
 
@@ -36,6 +37,7 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
   }, []);
 
   console.log("form", form.formState.errors);
+  console.log("currentStep", currentStep);
 
   return (
     <FormMultiStepContext.Provider

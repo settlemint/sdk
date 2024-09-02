@@ -32,7 +32,6 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
     append({ walletAddress: "", amount: 0, ID: "" } as FieldArray<T, ArrayPath<T>>);
   };
 
-  // If fields is empty, render a single input set
   const renderFields = fields.length > 0 ? fields : [{ id: "initial" }];
 
   return (
