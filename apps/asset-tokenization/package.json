@@ -47,6 +47,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "forge:dependencies": "cd contracts && forge soldeer update",
     "forge:build": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts forge build",
     "forge:test": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts forge test",
     "forge:deploy": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts forge create src/AssetERC1155.sol:AssetERC1155",

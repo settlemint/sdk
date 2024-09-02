@@ -3,8 +3,12 @@
   "ui": "tui",
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
+    "forge:dependencies": {
+      "inputs": ["contracts/foundry.toml"],
+      "outputs": ["contracts/dependencies/**"]
+    },
     "build": {
-      "dependsOn": ["codegen", "^build"],
+      "dependsOn": ["forge:dependencies", "codegen", "^build", "forge:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
