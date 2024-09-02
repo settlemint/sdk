@@ -33,10 +33,7 @@ const FEATURES = [
  */
 export function PublicFeatures() {
   return (
-    <section
-      className="w-full py-12 md:py-24 lg:py-32 bg-[url('/background-lm.svg')] bg-cover bg-center"
-      aria-labelledby="features-heading"
-    >
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-cover bg-center" aria-labelledby="features-heading">
       <div className="container px-4 md:px-6">
         <div className="text-center space-y-4">
           <div className="space-y-2">
