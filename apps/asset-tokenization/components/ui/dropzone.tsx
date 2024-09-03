@@ -12,6 +12,7 @@ import {
   TriangleAlertIcon,
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { useFormState } from "react-dom";
 import ReactDropzone from "react-dropzone";
 import { useToast } from "./../hooks/use-toast";
 import { Badge } from "./badge";
@@ -74,7 +75,12 @@ const extensions = {
   application: ["pdf"],
 };
 
-export function Dropzone({ label }: { label: string }) {
+export function Dropzone({
+  label,
+  name,
+  action,
+}: { label: string; name: string; action: (state: unknown, formData: FormData) => void }) {
+  const [state, formAction] = useFormState(action, null);
   const { toast } = useToast();
   const [isHover, setIsHover] = useState<boolean>(false);
   const [actions, setActions] = useState<Action[]>([]);
@@ -111,6 +117,9 @@ export function Dropzone({ label }: { label: string }) {
       });
     }
     setActions(temp);
+    const formData = new FormData();
+    data.forEach((file) => formData.append(name, file));
+    formAction(formData);
   };
   const handleHover = (): void => setIsHover(true);
   const handleExitHover = (): void => setIsHover(false);

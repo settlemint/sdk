@@ -1,5 +1,6 @@
 "use client";
 
+import { uploadFile } from "@/actions/upload.action";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dropzone } from "@/components/ui/dropzone";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -90,7 +91,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                       <FormItem>
                         <FormLabel>Token Logo</FormLabel>
                         <FormControl>
-                          <Dropzone label="Click, or drop your logo here" />
+                          <Dropzone label="Click, or drop your logo here" name={field.name} action={uploadFile} />
                         </FormControl>
                         <FormDescription>This is the logo of the token</FormDescription>
                         <FormMessage />
@@ -141,7 +142,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                       <FormItem>
                         <FormLabel>Upload CSV file</FormLabel>
                         <FormControl>
-                          <Dropzone label="Click, or drop your CSV file here" />
+                          <Dropzone label="Click, or drop your CSV file here" name={field.name} action={uploadFile} />
                         </FormControl>
                         <FormDescription>
                           You can upload a csv file with the wallet addresses for the initial distribution of the token
@@ -257,7 +258,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                       <FormItem>
                         <FormLabel>Upload documentation files</FormLabel>
                         <FormControl>
-                          <Dropzone label="Click, or drop your documents here" />
+                          <Dropzone label="Click, or drop your documents here" name={field.name} action={uploadFile} />
                         </FormControl>
                         <FormDescription>You can upload documentation files for the token</FormDescription>
                         <FormMessage />
