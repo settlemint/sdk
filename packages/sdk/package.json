@@ -56,7 +56,7 @@
     "@graphql-codegen/typescript": "4.0.9",
     "@graphql-codegen/typescript-graphql-request": "6.2.0",
     "@graphql-codegen/typescript-operations": "4.2.3",
-    "@inquirer/prompts": "5.3.8",
+    "@inquirer/prompts": "5.4.0",
     "@npmcli/package-json": "5.2.0",
     "@tanstack/react-query": "5.53.3",
     "@web3modal/siwe": "5.1.4",
