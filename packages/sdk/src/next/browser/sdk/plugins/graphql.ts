@@ -1,5 +1,4 @@
 import { GraphQLClient } from "graphql-request";
-import { env } from "next-runtime-env";
 
 type GraphQLClientType = "portal" | "thegraph" | "hasura";
 
@@ -26,9 +25,9 @@ export function createGraphqlClient(type: GraphQLClientType): GraphQLClient {
     throw new Error(`Invalid GraphQL client type: ${type}`);
   }
 
-  if (!env("NEXT_PUBLIC_SETTLEMINT_APP_URL")) {
-    throw new Error("SETTLEMINT_APP_URL environment variable is not defined");
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
+    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL environment variable is not defined");
   }
 
-  return new GraphQLClient(`${env("NEXT_PUBLIC_SETTLEMINT_APP_URL")}/proxy/${type}/graphql`);
+  return new GraphQLClient(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/${type}/graphql`);
 }

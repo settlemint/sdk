@@ -1,15 +1,16 @@
 "use client";
 
 import { settlemint } from "@/lib/settlemint";
-import { RainbowKitProvider, getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { type GetSiweMessageOptions, RainbowKitSiweNextAuthProvider } from "@rainbow-me/rainbowkit-siwe-next-auth";
+import { RainbowKitProvider, darkTheme, getDefaultConfig, lightTheme } from "@rainbow-me/rainbowkit";
+import { RainbowKitSiweNextAuthProvider } from "@rainbow-me/rainbowkit-siwe-next-auth";
 import "@rainbow-me/rainbowkit/styles.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider, useTheme } from "next-themes";
 import type { PropsWithChildren } from "react";
 import { WagmiProvider } from "wagmi";
+import { hashFn } from "wagmi/query";
 
 interface SettleMintProviderProps {
   session: Session | null;
@@ -18,24 +19,34 @@ interface SettleMintProviderProps {
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
+      gcTime: 1_000 * 60 * 60 * 24, // 24 hours
       staleTime: 60 * 1000, // 1 minute
+      structuralSharing: false, // TODO: https://github.com/wevm/wagmi/issues/4233
+      refetchOnWindowFocus: false,
+      queryKeyHashFn: hashFn,
     },
   },
 });
 
-const getSiweMessageOptions: GetSiweMessageOptions = () => ({
-  statement: "Sign in to the SettleMint Asset Tokenization Starter Kit",
-});
-
 export function SettleMintProvider({ children, session }: PropsWithChildren<SettleMintProviderProps>) {
   const wagmiConfig = getDefaultConfig(settlemint.node.wagmi);
+  const { theme } = useTheme();
+
   return (
     <SessionProvider session={session} refetchInterval={0}>
       <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true} disableTransitionOnChange={true}>
         <WagmiProvider config={wagmiConfig} reconnectOnMount={true}>
           <QueryClientProvider client={queryClient}>
-            <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
-              <RainbowKitProvider {...wagmiConfig}>{children}</RainbowKitProvider>
+            <RainbowKitSiweNextAuthProvider>
+              <RainbowKitProvider
+                {...wagmiConfig}
+                theme={{
+                  lightMode: lightTheme({ fontStack: "system" }),
+                  darkMode: darkTheme({ fontStack: "system" }),
+                }}
+              >
+                {children}
+              </RainbowKitProvider>
             </RainbowKitSiweNextAuthProvider>
           </QueryClientProvider>
         </WagmiProvider>

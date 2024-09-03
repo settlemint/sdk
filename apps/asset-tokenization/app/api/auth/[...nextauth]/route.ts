@@ -1,5 +1,5 @@
 import { settlemint } from "@/lib/settlemint";
-import NextAuth, { type DefaultSession } from "next-auth";
+import NextAuth, { type AuthOptions, type DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getCsrfToken } from "next-auth/react";
 import { parseSiweMessage } from "viem/siwe";
@@ -12,7 +12,8 @@ declare module "next-auth" {
   }
 }
 
-const handler = NextAuth({
+export const authOptions: AuthOptions = {
+  debug: process.env.NODE_ENV !== "production",
   pages: {
     signIn: "/auth",
   },
@@ -79,6 +80,8 @@ const handler = NextAuth({
       return session;
     },
   },
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

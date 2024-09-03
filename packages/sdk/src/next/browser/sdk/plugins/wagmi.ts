@@ -1,5 +1,4 @@
 import type { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { env } from "next-runtime-env";
 import type { Chain, Prettify, TransportConfig } from "viem";
 import { http } from "wagmi";
 
@@ -45,12 +44,12 @@ export type WagmiConfigParameters = Prettify<{
 export function createWagmiConfig(parameters: WagmiConfigParameters): Parameters<typeof getDefaultConfig>[0] {
   const config: Parameters<typeof getDefaultConfig>[0] = {
     ...parameters.config,
-    projectId: env("NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID") ?? "",
+    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "",
     chains: [parameters.chain],
     transports: {
       ...(parameters.config?.transports ?? {}),
       [parameters.chain.id]: http(
-        `${env("NEXT_PUBLIC_SETTLEMINT_APP_URL")}/proxy/node/jsonrpc`,
+        `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`,
         parameters.config?.transportConfig,
       ),
     },

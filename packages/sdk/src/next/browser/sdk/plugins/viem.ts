@@ -1,5 +1,4 @@
 import type { Address } from "abitype";
-import { env } from "next-runtime-env";
 import type { Prettify } from "viem";
 import {
   http,
@@ -56,12 +55,12 @@ export function createViemPublicClient<
 >(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
 
-  if (!env("NEXT_PUBLIC_SETTLEMINT_APP_URL")) {
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
     throw new Error("SETTLEMINT_APP_URL is not defined");
   }
 
   return createPublicClient({
-    transport: http(`${env("NEXT_PUBLIC_SETTLEMINT_APP_URL")}/proxy/node/jsonrpc`, {
+    transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, {
       ...transportConfig,
     }),
     chain,
@@ -94,12 +93,10 @@ export function createViemWalletClient<
 >(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
 
-  if (!env("NEXT_PUBLIC_SETTLEMINT_APP_URL")) {
-    throw new Error("SETTLEMINT_APP_URL is not defined");
-  }
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) throw new Error("SETTLEMINT_APP_URL is not defined");
 
   return createWalletClient({
-    transport: http(`${env("NEXT_PUBLIC_SETTLEMINT_APP_URL")}/proxy/node/jsonrpc`, {
+    transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, {
       ...transportConfig,
     }),
     chain,

@@ -53,8 +53,8 @@ export function activeBrowserConfig(config: Config): BrowserApplicationConfigEnv
 function parseBrowserConfig(config: Config) {
   return BrowserConfigEnvSchema.parse({
     ...config,
-    appUrl: process.env.SETTLEMINT_APP_URL,
-    walletConnectProjectId: process.env.WALLET_CONNECT_PROJECT_ID,
+    appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
   });
 }
 

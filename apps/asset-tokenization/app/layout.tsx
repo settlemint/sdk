@@ -1,8 +1,8 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { SettleMintProvider } from "@/components/providers/settlemint-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import { PublicEnvScript, env } from "next-runtime-env";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
 import "./globals.css";
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: env("NEXT_PUBLIC_SETTLEMINT_APP_URL"),
+    url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
     siteName: "SettleMint Asset Tokenization Starter Kit",
   },
   other: {
@@ -39,13 +39,10 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <PublicEnvScript />
-      </head>
       <body className={cn("min-h-screen bg-custom-background-sidebar font-sans antialiased", fontSans.variable)}>
         <SettleMintProvider session={session}>{children}</SettleMintProvider>
       </body>

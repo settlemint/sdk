@@ -64,10 +64,10 @@ export const BrowserConfigEnvSchema = ConfigSchema.extend({
 export const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
-  SETTLEMINT_APP_URL: z.string().url().optional(),
+  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
   NEXTAUTH_URL: z.string().url().optional(),
   SETTLEMINT_AUTH_SECRET: z.string().min(32).optional(),
-  WALLET_CONNECT_PROJECT_ID: z.string(),
+  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string(),
 });
 
 /**

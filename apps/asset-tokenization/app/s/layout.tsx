@@ -1,3 +1,4 @@
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Logo } from "@/components/public/logo";
 import { SidebarNavigation } from "@/components/secure/sidebar/sidebar-navigation";
 import { getServerSession } from "next-auth/next";
@@ -7,7 +8,7 @@ import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
 
 export default async function SecureLayout({ children }: PropsWithChildren) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const pathname = headers().get("x-current-path") || "/s";
 
   if (!session?.user.address) {

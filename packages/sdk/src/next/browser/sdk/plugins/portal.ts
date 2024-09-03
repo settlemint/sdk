@@ -1,4 +1,3 @@
-import { env } from "next-runtime-env";
 import createClient from "openapi-fetch";
 
 interface PortalClientConfig {
@@ -34,12 +33,12 @@ interface PortalClientConfig {
  * ```
  */
 export function createPortalRestClient<PortalRestPaths extends {}>(): ReturnType<typeof createClient<PortalRestPaths>> {
-  if (!env("NEXT_PUBLIC_SETTLEMINT_APP_URL")) {
-    throw new Error("SETTLEMINT_APP_URL is not defined");
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
+    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined");
   }
 
   const pcfg: PortalClientConfig = {
-    baseUrl: `${env("NEXT_PUBLIC_SETTLEMINT_APP_URL")}/proxy/portal/rest`,
+    baseUrl: `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/portal/rest`,
   };
 
   return createClient<PortalRestPaths>(pcfg);

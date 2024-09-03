@@ -1,7 +1,4 @@
 import { withSettleMint } from "@settlemint/sdk/node";
-import { makeEnvPublic } from "next-runtime-env";
-
-makeEnvPublic(["SETTLEMINT_APP_URL", "WALLET_CONNECT_PROJECT_ID"]);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
