@@ -1,8 +1,6 @@
-import { settlemint } from "@/lib/settlemint";
 import NextAuth, { type AuthOptions, type DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { getCsrfToken } from "next-auth/react";
-import { parseSiweMessage } from "viem/siwe";
+import { SiweMessage } from "siwe";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -34,26 +32,21 @@ export const authOptions: AuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          if (!credentials?.message) {
-            return null;
-          }
-          const { message, signature } = credentials;
-          const parsedMessage = parseSiweMessage(message as string);
+          const siwe = new SiweMessage(JSON.parse(credentials?.message || "{}"));
+          const nextAuthUrl = new URL(process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL ?? "");
 
-          const isValid = await settlemint.node.viem.publicClient.verifySiweMessage({
-            message: message as string,
-            signature: signature as `0x${string}`,
-            nonce: await getCsrfToken({ req }),
+          const result = await siwe.verify({
+            signature: credentials?.signature || "",
+            domain: nextAuthUrl.host,
           });
 
-          if (isValid) {
+          if (result.success) {
             return {
-              id: `${parsedMessage.address}`,
+              id: siwe.address,
             };
           }
-
           return null;
-        } catch (e) {
+        } catch {
           return null;
         }
       },
@@ -70,13 +63,7 @@ export const authOptions: AuthOptions = {
       if (!token.sub) {
         return session;
       }
-
-      console.log("token", token);
-
       session.user.address = token.sub;
-
-      console.log("session", session);
-
       return session;
     },
   },

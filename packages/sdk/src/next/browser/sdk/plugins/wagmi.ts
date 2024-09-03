@@ -1,5 +1,6 @@
 import type { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import type { Chain, Prettify, TransportConfig } from "viem";
+import { mainnet } from "viem/chains";
 import { http } from "wagmi";
 
 /**
@@ -45,7 +46,7 @@ export function createWagmiConfig(parameters: WagmiConfigParameters): Parameters
   const config: Parameters<typeof getDefaultConfig>[0] = {
     ...parameters.config,
     projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "",
-    chains: [parameters.chain],
+    chains: [parameters.chain, mainnet], // mainnet is needed otherwise our custom chain will not work
     transports: {
       ...(parameters.config?.transports ?? {}),
       [parameters.chain.id]: http(
