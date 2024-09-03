@@ -10,7 +10,7 @@ export default async function SecureLayout({ children }: PropsWithChildren) {
   const session = await getServerSession();
   const pathname = headers().get("x-current-path") || "/s";
 
-  if (!session) {
+  if (!session?.user.address) {
     redirect(`/auth?rd=${encodeURIComponent(pathname)}`);
   }
 

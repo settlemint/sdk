@@ -1,3 +1,5 @@
+import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
+
 export function ConnectButton() {
-  return <w3m-button />;
+  return <RainbowConnectButton />;
 }

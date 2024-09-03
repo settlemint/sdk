@@ -5,8 +5,8 @@ import type { PropsWithChildren } from "react";
 // This layout ensures that authenticated users are redirected to the secure area
 export default async function UnauthenticatedLayout({ children }: PropsWithChildren) {
   const session = await getServerSession();
-
-  if (session) {
+  console.log("session2", session);
+  if (session?.user.address) {
     redirect("/s");
   }
 

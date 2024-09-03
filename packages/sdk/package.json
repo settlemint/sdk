@@ -58,6 +58,8 @@
     "@graphql-codegen/typescript-operations": "4.2.3",
     "@inquirer/prompts": "5.3.8",
     "@npmcli/package-json": "5.2.0",
+    "@rainbow-me/rainbowkit": "^2.1.5",
+    "@rainbow-me/rainbowkit-siwe-next-auth": "^0.4.1",
     "@tanstack/react-query": "5.53.2",
     "@web3modal/siwe": "5.1.4",
     "commander": "12.1.0",

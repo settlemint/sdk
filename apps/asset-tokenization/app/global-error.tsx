@@ -3,6 +3,7 @@
 import { ErrorComponent } from "@/components/global/error";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { env } from "next-runtime-env";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree } from "next/font/google";
 
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    url: env("NEXT_PUBLIC_SETTLEMINT_APP_URL"),
     siteName: "SettleMint Asset Tokenization Starter Kit",
   },
   other: {

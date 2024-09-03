@@ -31,7 +31,7 @@ export function connectCommand(): Command {
       )
       .option(
         "-au, --app-url <url>",
-        "The development url to your application, defaults to http://localhost:3000 (NEXT_PUBLIC_SETTLEMINT_APP_URL environment variable)",
+        "The development url to your application, defaults to http://localhost:3000 (SETTLEMINT_APP_URL environment variable)",
       )
       .option("-w, --workspace <id>", "The id of the workspace to use (SETTLEMINT_WORKSPACE environment variable)")
       .option(
@@ -72,11 +72,11 @@ export function connectCommand(): Command {
       )
       .option(
         "-c, --session-secret <secret>",
-        "The secret to use to encrypt the session, 32 characters (NEXTAUTH_SECRET environment variable)",
+        "The secret to use to encrypt the session, 32 characters (SETTLEMINT_AUTH_SECRET environment variable)",
       )
       .option(
         "-wc, --wallet-connect <id>",
-        "The project id to use for Wallet Connect (NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID environment variable)",
+        "The project id to use for Wallet Connect (WALLET_CONNECT_PROJECT_ID environment variable)",
       )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
@@ -229,7 +229,7 @@ export function connectCommand(): Command {
             if (selectedFramework === "nextjs") {
               selectedAppUrl = await coerceText({
                 type: "text",
-                envValue: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+                envValue: process.env.SETTLEMINT_APP_URL,
                 cliParamValue: appUrl,
                 defaultValue: "http://localhost:3000",
                 configValue: cfg?.appUrl,
@@ -241,7 +241,7 @@ export function connectCommand(): Command {
 
               selectedSessionSecret = await coerceText({
                 type: "password",
-                envValue: process.env.NEXTAUTH_SECRET,
+                envValue: process.env.SETTLEMINT_AUTH_SECRET,
                 cliParamValue: sessionSecret,
                 configValue: cfg?.sessionSecret ?? randomBytes(16).toString("hex"),
                 validate: (value) => (value?.trim() ?? "").length === 32,
@@ -253,7 +253,7 @@ export function connectCommand(): Command {
 
               selectedWalletConnectProjectId = await coerceText({
                 type: "text",
-                envValue: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+                envValue: process.env.WALLET_CONNECT_PROJECT_ID,
                 cliParamValue: walletConnect,
                 configValue: cfg?.walletConnectProjectId,
                 validate: (value) => (value?.trim() ?? "").length > 0,
@@ -392,11 +392,11 @@ export function connectCommand(): Command {
               task: async () => {
                 await createEnv({
                   SETTLEMINT_PAT_TOKEN: personalAccessToken,
-                  NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
+                  SETTLEMINT_APP_URL: selectedAppUrl,
                   NEXTAUTH_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
-                  NEXTAUTH_SECRET: selectedSessionSecret,
-                  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
+                  SETTLEMINT_AUTH_SECRET: selectedSessionSecret,
+                  WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
                 });
               },
               stopMessage: ".env.local file created or updated",

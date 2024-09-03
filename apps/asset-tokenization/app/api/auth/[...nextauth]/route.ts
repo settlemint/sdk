@@ -1,25 +1,24 @@
 import { settlemint } from "@/lib/settlemint";
-import NextAuth from "next-auth";
+import NextAuth, { type DefaultSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import { getCsrfToken } from "next-auth/react";
 import { parseSiweMessage } from "viem/siwe";
 
 declare module "next-auth" {
-  interface Session {
+  interface Session extends DefaultSession {
     user: {
       address: string;
-      chainId: number;
     };
   }
 }
 
 const handler = NextAuth({
-  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/auth",
   },
   providers: [
     CredentialsProvider({
-      name: "Ethereum",
+      name: "Wallet",
       credentials: {
         message: {
           label: "Message",
@@ -32,7 +31,7 @@ const handler = NextAuth({
           placeholder: "0x0",
         },
       },
-      async authorize(credentials) {
+      async authorize(credentials, req) {
         try {
           if (!credentials?.message) {
             return null;
@@ -43,11 +42,12 @@ const handler = NextAuth({
           const isValid = await settlemint.node.viem.publicClient.verifySiweMessage({
             message: message as string,
             signature: signature as `0x${string}`,
+            nonce: await getCsrfToken({ req }),
           });
 
           if (isValid) {
             return {
-              id: `${parsedMessage.chainId}:${parsedMessage.address}`,
+              id: `${parsedMessage.address}`,
             };
           }
 
@@ -63,18 +63,18 @@ const handler = NextAuth({
     maxAge: 30 * 24 * 60 * 60, // 30 days
     updateAge: 24 * 60 * 60, // 24 hours
   },
+  secret: process.env.SETTLEMINT_AUTH_SECRET,
   callbacks: {
     session({ session, token }) {
       if (!token.sub) {
         return session;
       }
 
-      const [chainId, address] = token.sub.split(":");
+      console.log("token", token);
 
-      if (chainId && address) {
-        session.user.address = address;
-        session.user.chainId = Number.parseInt(chainId, 10);
-      }
+      session.user.address = token.sub;
+
+      console.log("session", session);
 
       return session;
     },
