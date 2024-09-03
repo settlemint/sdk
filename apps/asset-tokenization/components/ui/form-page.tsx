@@ -30,6 +30,7 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
     name: fields,
   });
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     for (const field of fields) {
       page === currentStep && fieldState?.[field] && form.trigger(field);
