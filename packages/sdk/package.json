@@ -59,7 +59,7 @@
     "@inquirer/prompts": "5.4.0",
     "@npmcli/package-json": "5.2.0",
     "@tanstack/react-query": "5.53.3",
-    "@web3modal/siwe": "5.1.4",
+    "@web3modal/siwe": "5.1.5",
     "commander": "12.1.0",
     "cross-spawn": "7.0.3",
     "dotenv": "16.4.5",
