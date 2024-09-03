@@ -1,6 +1,7 @@
 "use client";
 
 import { NumericInput } from "@/components/ui/input-numeric";
+import { parseAsJson, useQueryState } from "nuqs";
 import type { ArrayPath, Control, FieldArray, FieldValues, Path } from "react-hook-form";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "./button";
@@ -21,7 +22,13 @@ const componentMap: Record<ComponentType, React.ElementType> = {
   NumericInput,
 };
 
+interface FieldItem extends Record<string, unknown> {
+  id: string;
+}
+
 export function RepeatableForm<T extends FieldValues>({ control, name, components }: RepeatableFormProps<T>) {
+  const [_, setState] = useQueryState("state", parseAsJson<T>());
+
   const { fields, append, remove } = useFieldArray({
     control,
     name,
@@ -29,14 +36,14 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
   const { register } = useFormContext();
 
   const addItem = () => {
-    append({ walletAddress: "", amount: 0, ID: "" } as FieldArray<T, ArrayPath<T>>);
+    append({} as FieldArray<T, ArrayPath<T>>);
   };
 
   const renderFields = fields.length > 0 ? fields : [{ id: "initial" }];
 
   return (
     <div className="RepeatableForm">
-      {renderFields.map((field, index) => (
+      {renderFields.map((field: FieldItem, index) => (
         <div key={field.id} className="flex flex-col mb-4 gap-y-3">
           {components.map((component) => {
             const ComponentType = componentMap[component.type];
@@ -58,7 +65,19 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
             ) : (
               <div />
             )}
-            <Button onClick={() => remove(index)} type="button" className="w-fit">
+            <Button
+              onClick={() => {
+                renderFields.length === 1 && addItem();
+                remove(index);
+                setState((prev) => {
+                  const newState = { ...prev };
+                  delete newState?.[name];
+                  return newState;
+                });
+              }}
+              type="button"
+              className="w-fit"
+            >
               Remove
             </Button>
           </div>

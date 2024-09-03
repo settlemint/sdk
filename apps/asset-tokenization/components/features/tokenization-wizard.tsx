@@ -19,12 +19,14 @@ import {
   tokenizationWizardDefaultValues,
 } from "./tokenization-wizard.validator";
 
-export interface TokenizationWizardProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface TokenizationWizardProps extends React.HTMLAttributes<HTMLDivElement> {
+  defaultValues: Partial<TokenizationWizardSchema>;
+}
 
-export function TokenizationWizard({ className, ...props }: TokenizationWizardProps) {
+export function TokenizationWizard({ className, defaultValues, ...props }: TokenizationWizardProps) {
   const form = useForm<TokenizationWizardSchema>({
     resolver: zodResolver(TokenizationWizardValidator),
-    defaultValues: tokenizationWizardDefaultValues,
+    defaultValues: defaultValues ?? tokenizationWizardDefaultValues,
     mode: "all",
   });
 
