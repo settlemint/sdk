@@ -118,7 +118,9 @@ export function Dropzone({
     }
     setActions(temp);
     const formData = new FormData();
-    data.forEach((file) => formData.append(name, file));
+    for (const file of data) {
+      formData.append(name, file);
+    }
     formAction(formData);
   };
   const handleHover = (): void => setIsHover(true);
