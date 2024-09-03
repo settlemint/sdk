@@ -23,7 +23,7 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
     }
   }, [registerFormPage]);
 
-  const page = pageRef.current ?? 1;
+  const page = pageRef.current ?? currentStep ?? 1;
 
   const fieldValues = useWatch({
     control: form.control,
@@ -31,18 +31,24 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
   });
 
   useEffect(() => {
-    const isValid = fields.every((field) => {
+    for (const field of fields) {
+      page === currentStep && fieldState?.[field] && form.trigger(field);
+    }
+  }, []);
+
+  useEffect(() => {
+    const validFields = fields.map((field) => {
       const fieldState = form.getFieldState(field);
-      const fieldValue = form.getValues(field);
-      return typeof fieldValue === "boolean" ? !fieldState.invalid : fieldState.isDirty && !fieldState.invalid;
+      return !fieldState.invalid;
     });
-    setIsValid(isValid);
-  }, [fields, form]);
+    const isValid = validFields.every((isValid) => isValid);
+    page === currentStep && setIsValid(isValid);
+  }, [fields, form, page, currentStep]);
 
   useEffect(() => {
     const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
     page === currentStep && setFieldState(fieldState);
-  }, [fields, fieldValues, setFieldState, page, currentStep]); // Added 'currentStep' to the dependency array
+  }, [fields, fieldValues, setFieldState, page, currentStep]);
 
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>
