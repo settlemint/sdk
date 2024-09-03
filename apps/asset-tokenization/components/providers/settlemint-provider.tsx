@@ -40,6 +40,7 @@ export function SettleMintProvider({ children, session }: PropsWithChildren<Sett
             <RainbowKitSiweNextAuthProvider>
               <RainbowKitProvider
                 {...wagmiConfig}
+                showRecentTransactions={true}
                 theme={{
                   lightMode: lightTheme({ fontStack: "system" }),
                   darkMode: darkTheme({ fontStack: "system" }),
