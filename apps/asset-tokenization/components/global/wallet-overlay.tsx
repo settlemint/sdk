@@ -62,7 +62,7 @@ export function WalletOverlay() {
             },
             rpcUrls: [chain.rpcUrls.default.http[0]],
             blockExplorerUrls: [chain.blockExplorers?.default.url || "https://etherscan.io"],
-            iconUrls: [`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/apple-icon.png`],
+            iconUrls: [`${process.env.SETTLEMINT_APP_URL}/apple-icon.png`],
           },
         ],
       });

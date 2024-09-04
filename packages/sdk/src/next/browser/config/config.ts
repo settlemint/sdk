@@ -53,8 +53,8 @@ export function activeBrowserConfig(config: Config): BrowserApplicationConfigEnv
 function parseBrowserConfig(config: Config) {
   return BrowserConfigEnvSchema.parse({
     ...config,
-    appUrl: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
-    walletConnectProjectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+    appUrl: process.env.SETTLEMINT_APP_URL,
+    walletConnectProjectId: process.env.WALLET_CONNECT_PROJECT_ID,
   });
 }
 
@@ -84,7 +84,7 @@ function getEnvironment(cfg: ReturnType<typeof parseBrowserConfig>): string {
 function validateEnvironment(env: string, applications: Record<string, unknown>): void {
   if (!env || Object.keys(applications).length === 0) {
     throw new Error(
-      "No environment found, either set SETTLEMINT_APPLICATION or define a default environment in your .settlemintrc.json file",
+      "No environment found, either set SETTLEMINT_APPLICATION or define a default environment in your settlemint.config.mjs file",
     );
   }
 }

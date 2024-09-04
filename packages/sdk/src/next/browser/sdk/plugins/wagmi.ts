@@ -44,11 +44,11 @@ export function createWagmiConfig(parameters: WagmiParams) {
 
   return {
     ...wconfig,
-    projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "",
+    projectId: process.env.WALLET_CONNECT_PROJECT_ID ?? "",
     chains: [chain] as [Chain, ...Chain[]],
     transports: {
       ...(wconfig?.transports ?? {}),
-      [chain.id]: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, transportConfig),
+      [chain.id]: http(`${process.env.SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, transportConfig),
     },
     ssr: true,
   };

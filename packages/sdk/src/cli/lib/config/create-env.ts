@@ -4,7 +4,6 @@ import { type Env, EnvSchema } from "@/common/config/schemas";
 import { findProjectRoot } from "@/common/path";
 import { config as dotEnvConfig, parse } from "dotenv";
 import { merge } from "ts-deepmerge";
-import { format } from "./utils";
 
 export async function createEnv(env: Partial<Env>) {
   const projectRoot = findProjectRoot(process.cwd());
@@ -31,3 +30,7 @@ export async function createEnv(env: Partial<Env>) {
     override: true,
   });
 }
+
+export const escapeNewlines = (str: string) => str.replace(/\n/g, "\\n");
+
+export const format = (key: string, value: string) => `${key}=${escapeNewlines(value)}`;

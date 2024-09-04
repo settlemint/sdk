@@ -4,5 +4,5 @@ import { Main } from "@/components/secure/main";
 const breadcrumbItems: BreadcrumbItemType[] = [{ label: "Dashboard" }];
 
 export default function WalletHome() {
-  return <Main breadcrumbItems={breadcrumbItems}>xxx</Main>;
+  return <Main breadcrumbItems={breadcrumbItems}>{JSON.stringify(process.env.SETTLEMINT_CONFIG)}</Main>;
 }
