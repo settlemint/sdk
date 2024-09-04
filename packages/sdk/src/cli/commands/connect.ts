@@ -12,6 +12,8 @@ import type { ConfigEnv } from "@/common/config/schemas";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
 
+// TODO: Select an explorer for custom networks (and put it in the chain codegen)
+
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
  * This command initializes the setup of the SettleMint SDK in the user's project.

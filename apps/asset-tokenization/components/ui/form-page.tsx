@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { parseAsJson, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import { useWatch } from "react-hook-form"; // Add this import
 import { useMultiFormStep } from "./form-multistep";
@@ -12,6 +13,7 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
   children,
 }) => {
   const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form } = useMultiFormStep();
+  const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
   const [isValid, setIsValid] = useState(true);
 
@@ -21,23 +23,33 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
     }
   }, [registerFormPage]);
 
-  const page = pageRef.current ?? 1;
+  const page = pageRef.current ?? currentStep ?? 1;
 
-  const watchedFields = useWatch({
+  const fieldValues = useWatch({
     control: form.control,
     name: fields,
   });
 
-  console.log("Watched Fields:", fields, watchedFields);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    for (const field of fields) {
+      page === currentStep && fieldState?.[field] && form.trigger(field);
+    }
+  }, []);
 
   useEffect(() => {
-    const isValid = fields.every((field) => {
+    const validFields = fields.map((field) => {
       const fieldState = form.getFieldState(field);
-      const fieldValue = form.getValues(field);
-      return typeof fieldValue === "boolean" ? !fieldState.invalid : fieldState.isDirty && !fieldState.invalid;
+      return !fieldState.invalid;
     });
-    setIsValid(isValid);
-  }, [fields, form]);
+    const isValid = validFields.every((isValid) => isValid);
+    page === currentStep && setIsValid(isValid);
+  }, [fields, form, page, currentStep]);
+
+  useEffect(() => {
+    const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
+    page === currentStep && setFieldState(fieldState);
+  }, [fields, fieldValues, setFieldState, page, currentStep]);
 
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>

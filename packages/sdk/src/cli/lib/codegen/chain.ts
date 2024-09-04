@@ -74,7 +74,7 @@ export const chain = defineChain({
     default: {
       http: [${framework === "nextjs" ? "`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`" : `"${nodeUrl}"`}],
     },
-  },
+  }
 });
 `,
       );

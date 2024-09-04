@@ -3,10 +3,11 @@
 import * as Dialog from "@radix-ui/react-dialog";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { parseAsBoolean, useQueryState } from "nuqs";
+import { useEffect } from "react";
 
 const SidePanel = ({ children }: { children: React.ReactNode }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useQueryState("isOpen", parseAsBoolean.withDefault(false));
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "auto";

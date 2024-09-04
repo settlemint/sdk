@@ -1,10 +1,12 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { SettleMintProvider } from "@/components/providers/settlemint-provider";
+import { getConfig } from "@/lib/settlemint";
 import { cn } from "@/lib/utils";
+import "@rainbow-me/rainbowkit/styles.css";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
+import { headers } from "next/headers";
+import { cookieToInitialState } from "wagmi";
 import "./globals.css";
 
 const fontSans = FontSans({
@@ -39,12 +41,13 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerSession(authOptions);
+  const wConfig = getConfig();
+  const initialState = cookieToInitialState(wConfig, headers().get("cookie"));
 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
-        <SettleMintProvider session={session}>{children}</SettleMintProvider>
+        <SettleMintProvider initialState={initialState}>{children}</SettleMintProvider>
       </body>
     </html>
   );

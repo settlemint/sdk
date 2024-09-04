@@ -36,9 +36,6 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
     return pageNumber;
   }, []);
 
-  console.log("form", form.formState.errors);
-  console.log("currentStep", currentStep);
-
   return (
     <FormMultiStepContext.Provider
       value={{
