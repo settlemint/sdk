@@ -48,7 +48,7 @@ export function SettleMintProvider({ children, initialState }: PropsWithChildren
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
-      <WagmiProvider config={wConfig} initialState={initialState}>
+      <WagmiProvider config={wConfig} initialState={initialState} reconnectOnMount={true}>
         <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
           <ReactQueryStreamedHydration>
             <RainbowKitProvider
