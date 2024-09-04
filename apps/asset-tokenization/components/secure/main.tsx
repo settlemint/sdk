@@ -9,7 +9,7 @@ interface MainProps extends PropsWithChildren {
 export function Main({ children, breadcrumbItems }: MainProps) {
   return (
     <div className="flex flex-col">
-      <SecureHeader items={[{ label: "Asset Tokenization", href: "/s/dashboard" }, ...(breadcrumbItems ?? [])]} />
+      <SecureHeader items={[{ label: "Asset Tokenization", href: "/wallet" }, ...(breadcrumbItems ?? [])]} />
       <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6 bg-accent rounded-tl-[14px]">{children}</main>
     </div>
   );

@@ -9,9 +9,6 @@ const navItems: Record<string, NavItemType[]> = {
   main: [
     { icon: <LineChart className="h-4 w-4" />, label: "Dashboard", href: "/wallet" },
     { icon: <ShoppingCart className="h-4 w-4" />, label: "Orders", href: "/wallet/orders", badge: 6 },
-    // { icon: <Package className="h-4 w-4" />, label: "Products", href: "/s/products" },
-    // { icon: <Users className="h-4 w-4" />, label: "Customers", href: "/s/customers" },
-    // { icon: <LineChart className="h-4 w-4" />, label: "Analytics", href: "/s/analytics" },
   ],
   footer: [
     {
@@ -19,7 +16,6 @@ const navItems: Record<string, NavItemType[]> = {
       label: "Docs",
       href: "https://console.settlemint.com/documentation",
     },
-    // { icon: <Settings className="h-4 w-4" />, label: "Settings", href: "/s/settings" },
   ],
 };
 
