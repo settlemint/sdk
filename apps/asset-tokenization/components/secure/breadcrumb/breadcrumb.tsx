@@ -7,7 +7,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { type BreadcrumbItemType, EllipsisDropdown } from "./ellipsis-dropdown";
 
 interface ProcessedBreadcrumbItems {
@@ -73,12 +73,10 @@ export default function SecureBreadcrumb({ items }: SecureBreadcrumbProps) {
     <Breadcrumb>
       <BreadcrumbList>
         {visibleItems.map((item, index) => (
-          <>
+          <Fragment key={item ? item.label : `ellipsis-${index}`}>
             {index > 0 && <BreadcrumbSeparator />}
-            <BreadcrumbItem key={item ? item.label : `ellipsis-${index}`}>
-              {renderBreadcrumbItem(item, collapsedItems)}
-            </BreadcrumbItem>
-          </>
+            <BreadcrumbItem>{renderBreadcrumbItem(item, collapsedItems)}</BreadcrumbItem>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

@@ -1,9 +1,8 @@
-import { ClientProvider } from "@/components/providers/ClientProvider";
-import { settlemint } from "@/lib/settlemint";
+import { SettleMintProvider } from "@/components/providers/settlemint-provider";
+import { getConfig } from "@/lib/settlemint";
 import { cn } from "@/lib/utils";
+import "@rainbow-me/rainbowkit/styles.css";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { PublicEnvScript } from "next-runtime-env";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
 import { headers } from "next/headers";
@@ -42,18 +41,13 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerSession();
-  const initialState = cookieToInitialState(settlemint.node.wagmi.wagmiConfig, headers().get("cookie"));
+  const wConfig = getConfig();
+  const initialState = cookieToInitialState(wConfig, headers().get("cookie"));
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <PublicEnvScript />
-      </head>
-      <body className={cn("min-h-screen bg-custom-background-sidebar font-sans antialiased", fontSans.variable)}>
-        <ClientProvider session={session} initialState={initialState}>
-          {children}
-        </ClientProvider>
+      <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
+        <SettleMintProvider initialState={initialState}>{children}</SettleMintProvider>
       </body>
     </html>
   );

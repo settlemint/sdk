@@ -12,8 +12,3 @@ export default (request: NextRequest) => {
 
   return NextResponse.next({ headers });
 };
-
-// Optional: Configure which paths this middleware will run on
-export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
-};

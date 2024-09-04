@@ -20,6 +20,7 @@ You carefully provide accurate, factual, thoughtful answers, and excel at reason
 - Use functional components with TypeScript interfaces.
 - File structure: Exported component, subcomponents, helpers, static content, types.
 - For commander-js commands, do not type the action params, they are automatically inferred.
+- For wagmi, use version 2 only! And note that useNetwork and useSwitchNetwork are not available in wagmi v2, use useChainId and useSwitchChain instead.
 
 ### Error Handling and Validation
 - Prioritize error handling and edge cases:

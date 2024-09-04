@@ -38,7 +38,7 @@ export type ViemConfig<
  * @template TRpcSchema - The RPC schema type (optional)
  * @param parameters - Configuration parameters for the public client
  * @returns A public client instance for making blockchain requests
- * @throws {Error} If NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined in the environment
+ * @throws {Error} If SETTLEMINT_APP_URL is not defined in the environment
  *
  * @example
  * ```typescript
@@ -56,7 +56,7 @@ export function createViemPublicClient<
   const { chain, transportConfig, ...rest } = parameters;
 
   if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
-    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined");
+    throw new Error("SETTLEMINT_APP_URL is not defined");
   }
 
   return createPublicClient({
@@ -76,7 +76,7 @@ export function createViemPublicClient<
  * @template TRpcSchema - The RPC schema type (optional)
  * @param parameters - Configuration parameters for the wallet client
  * @returns A wallet client instance for making blockchain transactions
- * @throws {Error} If NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined in the environment
+ * @throws {Error} If SETTLEMINT_APP_URL is not defined in the environment
  *
  * @example
  * ```typescript
@@ -93,9 +93,7 @@ export function createViemWalletClient<
 >(parameters: ViemConfig<TChain, TAccount, TRpcSchema>) {
   const { chain, transportConfig, ...rest } = parameters;
 
-  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) {
-    throw new Error("NEXT_PUBLIC_SETTLEMINT_APP_URL is not defined");
-  }
+  if (!process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL) throw new Error("SETTLEMINT_APP_URL is not defined");
 
   return createWalletClient({
     transport: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, {

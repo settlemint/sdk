@@ -10,13 +10,13 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [{ href: "https://console.settlemint.com/documentation", label: "Docs" }];
 
-export function PublicHeader({ children }: PropsWithChildren) {
+export function PublicHeader({ children, noNavButton }: PropsWithChildren<{ noNavButton?: boolean }>) {
   return (
-    <header className="container px-4 lg:px-6 h-14 flex items-center justify-between py-4 mt-4">
+    <header className="px-4 lg:px-6 h-16 flex items-center justify-between py-4">
       <Link href="/" className="flex items-center" aria-label="SettleMint Asset Tokenization Starterkit">
         <Logo />
       </Link>
-      <PublicNavigation navItems={NAV_ITEMS} />
+      <PublicNavigation navItems={NAV_ITEMS} noNavButton={noNavButton} />
       {children}
     </header>
   );

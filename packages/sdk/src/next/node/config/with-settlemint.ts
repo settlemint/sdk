@@ -52,7 +52,6 @@ export function withSettleMint<C extends NextConfig>(
     async rewrites() {
       const existingRewrites = await getExistingRewrites(nextConfig);
       const newRewrites = generateRewrites(cfg);
-
       return mergeRewrites(existingRewrites, newRewrites);
     },
   } as C;
