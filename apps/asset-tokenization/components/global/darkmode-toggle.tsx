@@ -27,6 +27,7 @@ export function DarkModeToggle({ variant = "outline", className }: DarkModeToggl
 
   const handleSetTheme = useCallback(
     (newTheme: string) => {
+      console.log("newTheme", newTheme);
       setTheme(newTheme);
     },
     [setTheme],
