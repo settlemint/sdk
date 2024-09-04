@@ -43,7 +43,11 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
           <CardDescription>Issue a new token.</CardDescription>
         </CardHeader>
         <CardContent>
-          <FormMultiStepProvider form={form}>
+          <FormMultiStepProvider
+            form={form}
+            defaultValues={tokenizationWizardDefaultValues}
+            config={{ useLocalStorageState: true, useQueryState: true, queryStateScope: "formPage" }}
+          >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                 <FormPage title="Introduction" fields={[]}>

@@ -1,5 +1,6 @@
 "use client";
 
+import type { TokenizationWizardFormPageFields } from "@/components/features/tokenization-wizard.validator";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { parseAsJson, useQueryState } from "nuqs";
@@ -7,12 +8,16 @@ import { useEffect, useRef, useState } from "react";
 import { useWatch } from "react-hook-form"; // Add this import
 import { useMultiFormStep } from "./form-multistep";
 
-export const FormPage: React.FC<{ title?: string; fields: string[]; children: React.ReactNode }> = ({
+export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
   title,
-  fields = [],
+  fields,
   children,
+}: {
+  title?: string;
+  fields: T;
+  children: React.ReactNode;
 }) => {
-  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form } = useMultiFormStep();
+  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, defaultValues } = useMultiFormStep();
   const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
   const [isValid, setIsValid] = useState(true);
