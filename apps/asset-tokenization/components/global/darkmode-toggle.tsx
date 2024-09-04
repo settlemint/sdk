@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { Skeleton } from "../ui/skeleton";
 
 interface DarkModeToggleProps {
   variant?: ButtonProps["variant"];
@@ -24,6 +25,7 @@ const themeOptions = [
 
 export function DarkModeToggle({ variant = "outline", className }: DarkModeToggleProps) {
   const { setTheme, theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   const handleSetTheme = useCallback(
     (newTheme: string) => {
@@ -32,6 +34,14 @@ export function DarkModeToggle({ variant = "outline", className }: DarkModeToggl
     },
     [setTheme],
   );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <Skeleton className={`h-10 w-10 rounded-md ${className}`} />;
+  }
 
   return (
     <DropdownMenu>
