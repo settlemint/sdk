@@ -27,7 +27,7 @@ const FormMultiStepContext = createContext<FormMultiStepContextType<Record<strin
 export const FormMultiStepProvider = <TFieldValues extends Record<string, unknown>>({
   children,
   form,
-  config = { useLocalStorageState: false, useQueryState: false },
+  config = { useLocalStorageState: false, useQueryState: false, useQueryStateComponent: "FormPage" },
 }: React.PropsWithChildren<{
   form: UseFormReturn<TFieldValues>;
   config: FormMultiStepConfig;
