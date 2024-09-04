@@ -45,7 +45,6 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
         <CardContent>
           <FormMultiStepProvider
             form={form}
-            defaultValues={tokenizationWizardDefaultValues}
             config={{ useLocalStorageState: true, useQueryState: true, queryStateScope: "formPage" }}
           >
             <Form {...form}>

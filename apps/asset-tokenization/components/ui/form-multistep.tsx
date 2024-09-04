@@ -20,7 +20,6 @@ interface FormMultiStepContextType<TFieldValues extends Record<string, unknown>>
   registerFormPage: () => number;
   form: UseFormReturn<TFieldValues>;
   config: FormMultiStepConfig;
-  defaultValues: TFieldValues;
 }
 
 const FormMultiStepContext = createContext<FormMultiStepContextType<Record<string, unknown>> | undefined>(undefined);
@@ -29,11 +28,9 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
   children,
   form,
   config = { useLocalStorageState: false, useQueryState: false },
-  defaultValues,
 }: React.PropsWithChildren<{
   form: UseFormReturn<TFieldValues>;
   config: FormMultiStepConfig;
-  defaultValues: TFieldValues;
 }>) => {
   const [currentStep, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
   const [totalSteps, setTotalSteps] = useState(1);
@@ -62,7 +59,6 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
         registerFormPage,
         form: form as UseFormReturn<Record<string, unknown>>,
         config,
-        defaultValues,
       }}
     >
       {children}

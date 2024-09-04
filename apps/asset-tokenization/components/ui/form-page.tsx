@@ -17,7 +17,8 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
   fields: T;
   children: React.ReactNode;
 }) => {
-  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, defaultValues } = useMultiFormStep();
+  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form } = useMultiFormStep();
+
   const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
   const [isValid, setIsValid] = useState(true);
