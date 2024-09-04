@@ -7,7 +7,7 @@ import type { UseFormReturn } from "react-hook-form";
 type FormMultiStepConfig = {
   useLocalStorageState?: boolean;
   useQueryState?: boolean;
-  queryStateScope?: "form" | "formPage";
+  useQueryStateComponent?: "Form" | "FormPage";
 };
 
 interface FormMultiStepContextType<TFieldValues extends Record<string, unknown>> {

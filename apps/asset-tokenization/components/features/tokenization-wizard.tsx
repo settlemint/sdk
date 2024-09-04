@@ -45,7 +45,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
         <CardContent>
           <FormMultiStepProvider
             form={form}
-            config={{ useLocalStorageState: true, useQueryState: true, queryStateScope: "formPage" }}
+            config={{ useLocalStorageState: true, useQueryState: true, useQueryStateComponent: "FormPage" }}
           >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
