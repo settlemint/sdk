@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DarkModeToggle } from "../global/darkmode-toggle";
+import { ThemeToggle } from "../global/theme-toggle";
 
 interface NavItem {
   href: string;
@@ -15,7 +15,7 @@ interface PublicNavigationProps {
 export function PublicNavigation({ navItems, noNavButton }: PublicNavigationProps) {
   return (
     <nav className="ml-auto flex items-center gap-4 sm:gap-6">
-      <DarkModeToggle variant="ghost" className="text-foreground" />
+      <ThemeToggle variant="ghost" className="text-foreground" />
       {navItems.map(({ href, label }) => (
         <Link key={href} href={href} passHref legacyBehavior>
           <Button variant="ghost" className="text-foreground">
@@ -24,7 +24,7 @@ export function PublicNavigation({ navItems, noNavButton }: PublicNavigationProp
         </Link>
       ))}
       {!noNavButton && (
-        <Link href="/s" passHref legacyBehavior>
+        <Link href="/wallet" passHref legacyBehavior>
           <Button>Go to the dApp</Button>
         </Link>
       )}

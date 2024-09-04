@@ -25,7 +25,7 @@ export default async function SecureLayout({ children }: PropsWithChildren) {
         <div className="flex h-full max-h-screen flex-col gap-2">
           <div className="flex h-16 items-center justify-left px-3 py-2 lg:h-[64px] lg:px-4">
             <Link href="/s/dashboard" className="flex items-center gap-2 font-semibold">
-              <Logo className="h-7 w-auto" />
+              <Logo />
             </Link>
           </div>
           <div className="flex-1 overflow-auto py-2">

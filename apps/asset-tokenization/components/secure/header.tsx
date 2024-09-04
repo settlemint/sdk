@@ -1,6 +1,5 @@
 import { MobileNavigation } from "@/components/secure/sidebar/modile-navigation";
 import { ConnectButton } from "../global/connect-button";
-import { DarkModeToggle } from "../global/darkmode-toggle";
 import SecureBreadcrumb from "./breadcrumb/breadcrumb";
 import type { BreadcrumbItemType } from "./breadcrumb/ellipsis-dropdown";
 
@@ -14,7 +13,6 @@ export function SecureHeader({ items }: SecureHeaderProps) {
       <MobileNavigation />
       <SecureBreadcrumb items={items} />
       <div className="ml-auto flex items-center space-x-2">
-        <DarkModeToggle variant="ghost" />
         <ConnectButton />
       </div>
     </header>
