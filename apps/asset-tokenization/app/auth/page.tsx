@@ -24,7 +24,7 @@ export default function Auth() {
         </div>
       </div>
       <div className="hidden lg:block h-full bg-cover bg-center">
-        <div className="flex flex-col items-center justify-center h-full bg-[url('/background-lm.svg')] dark:bg-[url('/background-dm.svg')]">
+        <div className="flex flex-col items-center justify-center h-full">
           <Logo variant="vertical" className="w-1/2" />
           <div className="text-xl font-bold">Asset Tokenization Starter Kit</div>
         </div>

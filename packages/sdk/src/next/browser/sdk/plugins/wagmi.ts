@@ -11,16 +11,14 @@ type RainbowWagmiConfig = Prettify<Parameters<typeof getDefaultConfig>["0"]>;
 /**
  * Parameters for configuring Wagmi
  */
-export type WagmiConfigParameters = Prettify<{
-  chain: Chain;
-  config: Prettify<
-    Omit<Partial<RainbowWagmiConfig>, "chains" | "appName" | "appIcon"> & {
-      appName: string;
-      appIcon: string;
-      transportConfig: TransportConfig;
-    }
-  >;
-}>;
+export type WagmiParams = Prettify<
+  Omit<RainbowWagmiConfig, "chains"> & {
+    transportConfig?: TransportConfig;
+    chain: Chain;
+  }
+>;
+
+export type WagmiConfig = Prettify<Omit<WagmiParams, "chain">>;
 
 /**
  * Creates a Wagmi configuration object.
@@ -42,17 +40,15 @@ export type WagmiConfigParameters = Prettify<{
  * });
  * ```
  */
-export function createWagmiConfig(parameters: WagmiConfigParameters): Parameters<typeof getDefaultConfig>[0] {
+export function createWagmiConfig(parameters: WagmiParams): Parameters<typeof getDefaultConfig>[0] {
+  const { chain, transportConfig, ...wconfig } = parameters;
   const config: Parameters<typeof getDefaultConfig>[0] = {
-    ...parameters.config,
+    ...wconfig,
     projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID ?? "",
-    chains: [parameters.chain, mainnet], // mainnet is needed otherwise our custom chain will not work
+    chains: [chain, mainnet], // mainnet is needed otherwise our custom chain will not work
     transports: {
-      ...(parameters.config?.transports ?? {}),
-      [parameters.chain.id]: http(
-        `${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`,
-        parameters.config?.transportConfig,
-      ),
+      ...(wconfig?.transports ?? {}),
+      [chain.id]: http(`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, transportConfig),
     },
     ssr: true,
   };
