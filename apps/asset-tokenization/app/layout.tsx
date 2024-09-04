@@ -1,6 +1,7 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { SettleMintProvider } from "@/components/providers/settlemint-provider";
 import { cn } from "@/lib/utils";
+import "@rainbow-me/rainbowkit/styles.css";
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";

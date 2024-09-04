@@ -3,13 +3,6 @@ import { Main } from "@/components/secure/main";
 
 const breadcrumbItems: BreadcrumbItemType[] = [{ label: "Dashboard" }];
 
-export default function SecureHome() {
-  return (
-    <Main breadcrumbItems={breadcrumbItems}>
-      {/* <SidePanel>
-        <TokenizationWizard />
-      </SidePanel> */}
-      xxx
-    </Main>
-  );
+export default function WalletHome() {
+  return <Main breadcrumbItems={breadcrumbItems}>xxx</Main>;
 }

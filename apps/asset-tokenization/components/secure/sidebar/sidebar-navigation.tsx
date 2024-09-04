@@ -1,3 +1,4 @@
+import { DisconnectButton } from "@/components/global/disconnect-button";
 import { ThemeToggle } from "@/components/global/theme-toggle";
 import { cn } from "@/lib/utils";
 import { HelpCircle, LineChart, ShoppingCart } from "lucide-react";
@@ -38,9 +39,7 @@ export function SidebarNavigation({ variant = "sidebar" }: { variant?: "sidebar"
         />
         <div className={cn("grid grid-cols-4 gap-2 px-2 mt-8")}>
           <ThemeToggle />
-          {/* <ThemeToggle />
-          <ThemeToggle />
-          <ThemeToggle /> */}
+          <DisconnectButton />
         </div>
       </div>
     </div>
