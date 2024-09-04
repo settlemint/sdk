@@ -10,7 +10,7 @@ export async function createWagmiConfig() {
     importLine: "",
     sdkLine: {
       node: {
-        wagmi: "sdkGenerator.createWagmiConfig({ ...config?.wagmi, chain })",
+        wagmi: "sdkGenerator.createWagmiConfig({ ...config.wagmi, chain })",
       },
     },
   };

@@ -62,7 +62,9 @@ import { defineChain } from "viem";
 
 export const chain = defineChain({
   id: ${chainId},
-  name: "settlemint-${chainId}",
+  name: "SettleMint-${chainId}", // TODO: use the name of the chain from the platform
+  iconUrl: \`\$\{process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/apple-icon.png\`,
+  iconBackground: '#fff',
   nativeCurrency: {
     decimals: 18,
     name: "SettleMint",
@@ -72,7 +74,7 @@ export const chain = defineChain({
     default: {
       http: [${framework === "nextjs" ? "`${process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL}/proxy/node/jsonrpc`" : `"${nodeUrl}"`}],
     },
-  },
+  }
 });
 `,
       );

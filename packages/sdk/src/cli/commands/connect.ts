@@ -12,6 +12,8 @@ import type { ConfigEnv } from "@/common/config/schemas";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
 
+// TODO: Select an explorer for custom networks (and put it in the chain codegen)
+
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
  * This command initializes the setup of the SettleMint SDK in the user's project.
@@ -72,7 +74,7 @@ export function connectCommand(): Command {
       )
       .option(
         "-c, --session-secret <secret>",
-        "The secret to use to encrypt the session, 32 characters (NEXTAUTH_SECRET environment variable)",
+        "The secret to use to encrypt the session, 32 characters (SETTLEMINT_AUTH_SECRET environment variable)",
       )
       .option(
         "-wc, --wallet-connect <id>",
@@ -241,7 +243,7 @@ export function connectCommand(): Command {
 
               selectedSessionSecret = await coerceText({
                 type: "password",
-                envValue: process.env.NEXTAUTH_SECRET,
+                envValue: process.env.SETTLEMINT_AUTH_SECRET,
                 cliParamValue: sessionSecret,
                 configValue: cfg?.sessionSecret ?? randomBytes(16).toString("hex"),
                 validate: (value) => (value?.trim() ?? "").length === 32,
@@ -395,7 +397,7 @@ export function connectCommand(): Command {
                   NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
                   NEXTAUTH_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
-                  NEXTAUTH_SECRET: selectedSessionSecret,
+                  SETTLEMINT_AUTH_SECRET: selectedSessionSecret,
                   NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
                 });
               },

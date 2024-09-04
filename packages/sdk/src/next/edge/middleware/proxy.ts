@@ -22,7 +22,7 @@ export function proxyMiddleware(request: NextRequest) {
   if (isProxyRoute(request)) {
     const response = NextResponse.next();
     response.headers.delete("Authorization");
-    response.headers.set("x-auth-token", process.env.SETTLEMINT_PAT ?? "");
+    response.headers.set("x-auth-token", process.env.SETTLEMINT_PAT_TOKEN ?? "");
     if (isHasuraProxyRoute(request)) {
       response.headers.set("x-hasura-admin-secret", process.env.SETTLEMINT_HASURA_ADMIN_SECRET ?? "");
     }

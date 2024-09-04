@@ -40,7 +40,7 @@
     "/tsconfig.json"
   ],
   "scripts": {
-    "dev": "next dev --port 3330",
+    "dev": "next dev --turbo --port 3330",
     "connect": "op run --env-file=\".env.connect.1p\" -- bun run --bun ../../packages/sdk/src/cli/cli.ts connect",
     "codegen": "bun run --bun ../../packages/sdk/src/cli/cli.ts codegen",
     "deploy": "cd contracts && bun run --bun ../../../packages/sdk/src/cli/cli.ts scs hardhat deploy remote",
@@ -96,7 +96,7 @@
     "input-otp": "1.2.4",
     "lucide-react": "0.438.0",
     "next": "14.2.7",
-    "next-auth": "4.24.7",
+    "next-loading-box": "^1.0.1",
     "next-themes": "0.3.0",
     "nuqs": "1.19.0",
     "pino-pretty": "11.2.2",
