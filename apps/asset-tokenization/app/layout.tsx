@@ -1,9 +1,7 @@
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { SettleMintProvider } from "@/components/providers/settlemint-provider";
 import { cn } from "@/lib/utils";
 import "@rainbow-me/rainbowkit/styles.css";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
 import "./globals.css";
@@ -40,12 +38,10 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerSession(authOptions);
-
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
-        <SettleMintProvider session={session}>{children}</SettleMintProvider>
+        <SettleMintProvider>{children}</SettleMintProvider>
       </body>
     </html>
   );
