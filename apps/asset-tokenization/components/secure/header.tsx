@@ -13,7 +13,7 @@ export function SecureHeader({ items }: SecureHeaderProps) {
       <MobileNavigation />
       <SecureBreadcrumb items={items} />
       <div className="ml-auto flex items-center space-x-2">
-        <ConnectButton accountStatus="avatar" chainStatus="none" />
+        <ConnectButton accountStatus="avatar" chainStatus="icon" />
       </div>
     </header>
   );
