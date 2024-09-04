@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    url: process.env.SETTLEMINT_APP_URL,
     siteName: "SettleMint Asset Tokenization Starter Kit",
   },
   other: {

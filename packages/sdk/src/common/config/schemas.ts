@@ -64,10 +64,9 @@ export const BrowserConfigEnvSchema = ConfigSchema.extend({
 export const EnvSchema = z.object({
   SETTLEMINT_PAT_TOKEN: z.string(),
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
-  NEXT_PUBLIC_SETTLEMINT_APP_URL: z.string().url().optional(),
-  NEXTAUTH_URL: z.string().url().optional(),
+  SETTLEMINT_APP_URL: z.string().url().optional(),
   SETTLEMINT_AUTH_SECRET: z.string().min(32).optional(),
-  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: z.string(),
+  WALLET_CONNECT_PROJECT_ID: z.string(),
 });
 
 /**
@@ -91,6 +90,13 @@ export const BrowserApplicationConfigEnvSchema = ApplicationConfigSchema.extend(
 export type ConfigEnv = z.infer<typeof ConfigEnvSchema>;
 export type BrowserConfigEnv = z.infer<typeof BrowserConfigEnvSchema>;
 export type Config = z.infer<typeof ConfigSchema>;
+export type ApplicationConfig = z.infer<typeof ApplicationConfigSchema>;
 export type Env = z.infer<typeof EnvSchema>;
 export type ApplicationConfigEnv = z.infer<typeof ApplicationConfigEnvSchema>;
 export type BrowserApplicationConfigEnv = z.infer<typeof BrowserApplicationConfigEnvSchema>;
+
+declare global {
+  namespace NodeJS {
+    interface ProcessEnv extends Env {}
+  }
+}
