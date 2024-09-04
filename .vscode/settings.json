@@ -96,5 +96,6 @@
   "emmet.includeLanguages": {
     "typescript.handlebars": "typescript"
   },
-  "typescript.tsserver.experimental.useVsCodeWatcher": false
+  "typescript.tsserver.experimental.useVsCodeWatcher": false,
+  "bun.debugTerminal.enabled": true
 }

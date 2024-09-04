@@ -4,6 +4,7 @@
     "biomejs.biome",
     "graphql.vscode-graphql-syntax",
     "apollographql.vscode-apollo",
-    "andrejunges.handlebars"
+    "andrejunges.handlebars",
+    "oven.bun-vscode"
   ]
 }
