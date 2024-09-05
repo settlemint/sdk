@@ -51,6 +51,7 @@ sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(createCommand());
 sdkcli.addCommand(forgeCommand());
 sdkcli.addCommand(customDeploymentCommand());
+
 /**
  * Parses command line arguments and executes the appropriate command.
  * Handles any errors that occur during execution.

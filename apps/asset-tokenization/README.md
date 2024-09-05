@@ -188,7 +188,7 @@ Describe any integrations that this application needs to make. Provide detailed 
 Connect the project to the SettleMint application.
 
 ```bash
-bun @settlemint/sdk connect
+bunx @settlemint/sdk connect
 bunx @settlemint/sdk codegen
 ```
 
