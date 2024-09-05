@@ -25,7 +25,7 @@
       "args": [
         "custom-deployment",
         "update",
-        "--imagePath",
+        "--image-path",
         "ghcr.io/settlemint/starterkit-asset-tokenization:main",
         "--port",
         "3000"

@@ -10,7 +10,7 @@ import { Command } from "@commander-js/extra-typings";
 export function customDeploymentUpdateCommand() {
   const update = new Command("update")
     .description("Update a custom deployment")
-    .option("-ip, --imagePath <IMAGE_PATH>", "Path to the container image")
+    .option("-ip, --image-path <IMAGE_PATH>", "Path to the container image")
     .option("-p, --port <PORT>", "Port the container image exposes")
     .action(async ({ imagePath, port }) => {
       printAsciiArt();
@@ -45,7 +45,7 @@ export function customDeploymentUpdateCommand() {
           });
         },
         stopMessage:
-          "Updating custom deployment setting finished, check the SettleMint platform for the deployment status",
+          "Updating custom deployment settings finished, check the SettleMint platform for the deployment status",
       });
 
       printOutro("The custom deployment has been updated!");

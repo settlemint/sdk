@@ -189,8 +189,8 @@ Describe any integrations that this application needs to make. Provide detailed 
 Connect the project to the SettleMint application.
 
 ```bash
-bunx settlemint connect
-bunx settlemint codegen
+bun @settlemint/sdk connect
+bunx @settlemint/sdk codegen
 ```
 
 Generate a secret authentication key for the application:
@@ -200,9 +200,6 @@ bunx auth secret
 ```
 
 Create the [following schema](https://authjs.dev/getting-started/adapters/hasura#migrations) in Hasura and select `Track all the tables and relationships` when you do
-
-
-## Development
 
 ### Hasura
 
@@ -251,3 +248,13 @@ bun run hasura:console
 ```
 
 When modifying the schema or inserting data, check the migration checkbox to generate a new migration file. This will be saved in the `./database/migrations` folder. Commit these files into GIT.
+
+### Custom Deployment
+
+To update the custom deployment, run the following command:
+
+```bash
+bunx @settlemint/sdk custom-deployment update --image-path <image-path> --port <port>
+```
+
+Replace `<image-path>` with the path to the container image you want to use for the custom deployment (eg g) and `<port>` with the port exposed by the docker image (by default this will be `3000`).
