@@ -14,7 +14,7 @@ export function PublicHero() {
           <div className="space-x-4">
             <div className="flex justify-center backdrop-blur-2xl static w-auto rounded-xl border bg-muted p-4 overflow-x-auto">
               <code className="font-mono font-bold whitespace-nowrap">
-                bunx @settlemint/sdk create -t asset-tokenization
+                bunx @settlemint/sdk-cli create -t asset-tokenization
               </code>
             </div>
           </div>

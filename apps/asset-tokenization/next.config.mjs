@@ -1,5 +1,5 @@
 import { paraglide } from "@inlang/paraglide-next/plugin";
-import { withSettleMint } from "@settlemint/sdk/node";
+import { withSettleMint } from "@settlemint/sdk-next/node";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

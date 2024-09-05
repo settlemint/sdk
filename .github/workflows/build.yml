@@ -157,11 +157,31 @@ jobs:
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
-      - name: Publish SDK package
+      - name: Publish SDK Next package
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/sdk/package.json
+          package: ./packages/next/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Publish SDK Cli package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/cli/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Publish SDK Config package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/config/package.json
           access: public
           provenance: false
           strategy: all
@@ -199,7 +219,10 @@ jobs:
             return 1
           }
 
-          wait_for_package "@settlemint/sdk" "$VERSION"
+          wait_for_package "@settlemint/sdk-cli" "$VERSION"
+          wait_for_package "@settlemint/sdk-config" "$VERSION"
+          wait_for_package "@settlemint/sdk-next" "$VERSION"
+          wait_for_package "@settlemint/starterkit-asset-tokenization" "$VERSION"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -248,7 +271,9 @@ jobs:
                 # 📦 Packages
                 | Package | Version |
                 | ------- | -------------------- |
-                | SDK | `@settlemint/sdk@${{ env.VERSION }}` |
+                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
+                | SDK Config | `@settlemint/sdk-config@${{ env.VERSION }}` |
+                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
 
                 # 🚀 Starterkits
                 | Use Case | NPM | Docker |

@@ -1,5 +1,5 @@
 import { middleware as i18nMiddleware } from "@/lib/i18n";
-import { proxyMiddleware } from "@settlemint/sdk/edge";
+import { proxyMiddleware } from "@settlemint/sdk-next/edge";
 import type { NextRequest } from "next/server";
 
 export default (request: NextRequest) => {
