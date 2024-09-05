@@ -1,14 +1,7 @@
 import { Logo } from "@/components/public/logo";
 import { PublicNavigation } from "@/components/public/navigation";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import type { PropsWithChildren } from "react";
-
-interface NavItem {
-  href: string;
-  label: string;
-}
-
-const NAV_ITEMS: NavItem[] = [{ href: "https://console.settlemint.com/documentation", label: "Docs" }];
 
 export function PublicHeader({ children, noNavButton }: PropsWithChildren<{ noNavButton?: boolean }>) {
   return (
@@ -16,7 +9,7 @@ export function PublicHeader({ children, noNavButton }: PropsWithChildren<{ noNa
       <Link href="/" className="flex items-center" aria-label="SettleMint Asset Tokenization Starterkit">
         <Logo />
       </Link>
-      <PublicNavigation navItems={NAV_ITEMS} noNavButton={noNavButton} />
+      <PublicNavigation noNavButton={noNavButton} />
       {children}
     </header>
   );

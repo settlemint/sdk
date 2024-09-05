@@ -32,6 +32,7 @@
     "connect": "turbo connect",
     "codegen": "turbo codegen",
     "deploy": "turbo deploy",
+    "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose"
   },
   "devDependencies": {

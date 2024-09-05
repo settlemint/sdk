@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "bradlc.vscode-tailwindcss",
+    "graphql.vscode-graphql-syntax",
+    "apollographql.vscode-apollo",
+    "inlang.vs-code-extension"
+  ]
+}

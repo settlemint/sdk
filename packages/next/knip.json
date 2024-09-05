@@ -1,0 +1,6 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreDependencies": [],
+  "ignore": ["dist/**"],
+  "entry": ["src/browser/browser.ts", "src/edge/edge.ts", "src/node/node.ts"]
+}
