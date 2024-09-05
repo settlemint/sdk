@@ -1,3 +1,11 @@
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
 
@@ -30,13 +38,17 @@ export function PublicFooter() {
         </Link>
         . Functional Source License, Version 1.1, MIT Future License.
       </p>
-      <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-        {footerLinks.map(({ href, label }) => (
-          <FooterLink key={href} href={href}>
-            {label}
-          </FooterLink>
-        ))}
-      </nav>
+      <NavigationMenu className="sm:ml-auto flex gap-4 sm:gap-6">
+        <NavigationMenuList>
+          {footerLinks.map(({ href, label }) => (
+            <NavigationMenuItem key={href}>
+              <Link href={href} legacyBehavior passHref>
+                <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "text-xs")}>{label}</NavigationMenuLink>
+              </Link>
+            </NavigationMenuItem>
+          ))}
+        </NavigationMenuList>
+      </NavigationMenu>
     </footer>
   );
 }
