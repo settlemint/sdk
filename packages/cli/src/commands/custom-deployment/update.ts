@@ -1,11 +1,11 @@
-import { printAsciiArt, printCancel, printIntro, printOutro, printSpinner } from "@/cli/lib/cli-message";
-import { updateCustomDeployment } from "@/cli/lib/cluster-manager";
+import { printAsciiArt, printCancel, printIntro, printOutro, printSpinner } from "@/lib/cli-message";
+import { updateCustomDeployment } from "@/lib/cluster-manager";
+import { Command } from "@commander-js/extra-typings";
 import {
   loadSettleMintApplicationConfig,
   loadSettleMintConfig,
   loadSettleMintEnvironmentConfig,
-} from "@/common/config/loader";
-import { Command } from "@commander-js/extra-typings";
+} from "@settlemint/sdk-config/loader";
 
 export function customDeploymentUpdateCommand() {
   const update = new Command("update")
