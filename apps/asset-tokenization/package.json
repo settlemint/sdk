@@ -57,6 +57,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.0",
+    "@inlang/paraglide-next": "0.5.2",
     "@radix-ui/react-accordion": "1.2.0",
     "@radix-ui/react-alert-dialog": "1.1.1",
     "@radix-ui/react-aspect-ratio": "1.1.0",
@@ -85,12 +86,12 @@
     "@radix-ui/react-toggle": "1.1.0",
     "@radix-ui/react-toggle-group": "1.1.0",
     "@radix-ui/react-tooltip": "1.1.2",
+    "@rainbow-me/rainbowkit": "2.1.5",
+    "@settlemint/sdk-next": "workspace:*",
     "@tanstack/query-sync-storage-persister": "5.54.1",
+    "@tanstack/react-query": "5.54.1",
     "@tanstack/react-query-next-experimental": "5.54.1",
     "@tanstack/react-query-persist-client": "5.54.1",
-    "@settlemint/sdk-next": "workspace:*",
-    "@rainbow-me/rainbowkit": "2.1.5",
-    "@tanstack/react-query": "5.54.1",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "cmdk": "1.0.0",
@@ -98,6 +99,7 @@
     "embla-carousel-react": "8.2.1",
     "framer-motion": "11.5.2",
     "input-otp": "1.2.4",
+    "language-flag-colors": "^3.1.0",
     "lucide-react": "0.438.0",
     "next": "14.2.8",
     "next-loading-box": "1.0.1",
@@ -116,8 +118,7 @@
     "tailwindcss-animate": "1.0.7",
     "vaul": "0.9.2",
     "wagmi": "2.12.8",
-    "zod": "3.23.8",
-    "@inlang/paraglide-next": "0.5.2"
+    "zod": "3.23.8"
   },
   "devDependencies": {
     "@settlemint/sdk-cli": "workspace:*",
