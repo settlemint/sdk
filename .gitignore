@@ -37,7 +37,7 @@ yarn-error.log*
 .DS_Store
 *.pem
 
-
-.settlemintrc.json
+settlemint.config.mjs
+settlemint.config.mjs
 apps/asset-tokenization/contracts/ignition/deployments
 *.deployments.json

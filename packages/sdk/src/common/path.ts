@@ -32,35 +32,3 @@ export function findProjectRoot(startDir: string): string {
   // If we've reached the root without finding package.json, throw an error
   throw new Error("Unable to find project root");
 }
-
-/**
- * Finds the root directory of the project by looking for .settlemintrc.json
- *
- * @param startDir - The directory to start searching from
- * @returns The path to the project root directory containing .settlemintrc.json
- * @throws {Error} If the project root with .settlemintrc.json cannot be found
- *
- * @example
- * ```typescript
- * const configRoot = findParentConfigRoot('/path/to/current/directory');
- * console.log(configRoot); // Outputs: '/path/to/config/root'
- * ```
- */
-export function findParentConfigRoot(startDir: string): string {
-  let currentDir = startDir;
-
-  // Traverse up the directory tree until we find .settlemintrc.json or reach the root
-  while (currentDir !== parse(currentDir).root) {
-    // Check if .settlemintrc.json exists in the current directory
-    if (existsSync(join(currentDir, ".settlemintrc.json"))) {
-      // If found, return the current directory as the project root
-      return currentDir;
-    }
-
-    // Move up to the parent directory
-    currentDir = dirname(currentDir);
-  }
-
-  // If we've reached the root without finding .settlemintrc.json, throw an error
-  throw new Error("Unable to find project root with .settlemintrc.json");
-}

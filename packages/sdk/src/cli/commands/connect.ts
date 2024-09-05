@@ -1,14 +1,12 @@
-import { randomBytes } from "node:crypto";
 import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
 import { type Works, getServices } from "@/cli/lib/cluster-manager";
 import { coerceSelect, coerceText } from "@/cli/lib/coerce";
-import { config } from "@/cli/lib/config/config";
 import { createConfig } from "@/cli/lib/config/create-config";
 import { createEnv } from "@/cli/lib/config/create-env";
 import { detectFramework } from "@/cli/lib/framework";
 import { updateGitignore } from "@/cli/lib/git";
 import { getExecutor, getPkgManager } from "@/cli/lib/package-manager";
-import type { ConfigEnv } from "@/common/config/schemas";
+import { loadSettleMintConfig, loadSettleMintPartialEnvironmentConfig } from "@/common/config/loader";
 import { Command } from "@commander-js/extra-typings";
 import { greenBright } from "yoctocolors";
 
@@ -33,7 +31,7 @@ export function connectCommand(): Command {
       )
       .option(
         "-au, --app-url <url>",
-        "The development url to your application, defaults to http://localhost:3000 (NEXT_PUBLIC_SETTLEMINT_APP_URL environment variable)",
+        "The development url to your application, defaults to http://localhost:3000 (SETTLEMINT_APP_URL environment variable)",
       )
       .option("-w, --workspace <id>", "The id of the workspace to use (SETTLEMINT_WORKSPACE environment variable)")
       .option(
@@ -78,7 +76,7 @@ export function connectCommand(): Command {
       )
       .option(
         "-wc, --wallet-connect <id>",
-        "The project id to use for Wallet Connect (NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID environment variable)",
+        "The project id to use for Wallet Connect (WALLET_CONNECT_PROJECT_ID environment variable)",
       )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
@@ -105,12 +103,8 @@ export function connectCommand(): Command {
           printIntro("Setting up the SettleMint SDK in your project");
           try {
             // Attempt to load existing configuration
-            let cfg: ConfigEnv | undefined;
-            try {
-              cfg = config();
-            } catch {
-              // Invalid config, continue with undefined cfg
-            }
+            const cfg = await loadSettleMintConfig();
+            const envCfg = loadSettleMintPartialEnvironmentConfig();
 
             // Framework selection
             const selectedFramework = await detectFramework();
@@ -120,7 +114,7 @@ export function connectCommand(): Command {
               type: "password",
               envValue: process.env.SETTLEMINT_PAT_TOKEN,
               cliParamValue: pat,
-              configValue: cfg?.pat,
+              configValue: envCfg?.SETTLEMINT_PAT_TOKEN,
               validate: (value) => /^sm_pat_[a-f0-9]{16}$/.test(value?.trim() ?? ""),
               promptMessage: "Enter a Personal Access Token for authentication",
               existingMessage: "A valid Personal Access Token is already provided. Do you want to change it?",
@@ -231,33 +225,21 @@ export function connectCommand(): Command {
             if (selectedFramework === "nextjs") {
               selectedAppUrl = await coerceText({
                 type: "text",
-                envValue: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+                envValue: process.env.SETTLEMINT_APP_URL,
                 cliParamValue: appUrl,
                 defaultValue: "http://localhost:3000",
-                configValue: cfg?.appUrl,
+                configValue: envCfg?.SETTLEMINT_APP_URL,
                 validate: (value) => !!new URL(value ?? "").toString(),
                 promptMessage: "Enter the development URL of your application instance",
                 existingMessage: "A valid application URL is already provided. Do you want to change it?",
                 invalidMessage: "Invalid application instance URL. Please enter a valid URL.",
               });
 
-              selectedSessionSecret = await coerceText({
-                type: "password",
-                envValue: process.env.SETTLEMINT_AUTH_SECRET,
-                cliParamValue: sessionSecret,
-                configValue: cfg?.sessionSecret ?? randomBytes(16).toString("hex"),
-                validate: (value) => (value?.trim() ?? "").length === 32,
-                promptMessage: "Enter a secret to encrypt the session",
-                existingMessage:
-                  "A valid session secret is already provided or was auto generated for you. Do you want to change it?",
-                invalidMessage: "Invalid session secret",
-              });
-
               selectedWalletConnectProjectId = await coerceText({
                 type: "text",
-                envValue: process.env.NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID,
+                envValue: process.env.WALLET_CONNECT_PROJECT_ID,
                 cliParamValue: walletConnect,
-                configValue: cfg?.walletConnectProjectId,
+                configValue: envCfg?.WALLET_CONNECT_PROJECT_ID,
                 validate: (value) => (value?.trim() ?? "").length > 0,
                 promptMessage:
                   "Enter the Wallet Connect project id, get one for free at https://cloud.walletconnect.com",
@@ -394,18 +376,17 @@ export function connectCommand(): Command {
               task: async () => {
                 await createEnv({
                   SETTLEMINT_PAT_TOKEN: personalAccessToken,
-                  NEXT_PUBLIC_SETTLEMINT_APP_URL: selectedAppUrl,
-                  NEXTAUTH_URL: selectedAppUrl,
+                  SETTLEMINT_APP_URL: selectedAppUrl,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
                   SETTLEMINT_AUTH_SECRET: selectedSessionSecret,
-                  NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
+                  WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
                 });
               },
               stopMessage: ".env.local file created or updated",
             });
 
             await printSpinner({
-              startMessage: "Creating or updating the .settlemintrc.json config file",
+              startMessage: "Creating or updating the settlemint.config.mjs config file",
               task: async () => {
                 await createConfig({
                   defaultApplication: selectedDefaultApplication,
@@ -437,7 +418,7 @@ export function connectCommand(): Command {
                   },
                 });
               },
-              stopMessage: ".settlemintrc.json config file created or updated",
+              stopMessage: "settlemint.config.mjs config file created or updated",
             });
 
             await printSpinner({

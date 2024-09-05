@@ -11,6 +11,7 @@ export default function WalletHome({ searchParams }: { searchParams: SearchParam
   const parsedParams = searchParamsCache.parse(searchParams);
   return (
     <Main breadcrumbItems={breadcrumbItems}>
+      <div>{JSON.stringify(process.env.SETTLEMINT_CONFIG)}</div>
       <SidePanel>
         <TokenizationWizard defaultValues={parsedParams.state} />
       </SidePanel>

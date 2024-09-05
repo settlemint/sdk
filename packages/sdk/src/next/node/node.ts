@@ -1,1 +1,1 @@
-export { withSettleMint } from "./config/with-settlemint";
+export { withSettleMint } from "./next/with-settlemint";

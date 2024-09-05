@@ -89,7 +89,9 @@ export async function coerceSelect<Value>(params: Prettify<CoerceSelectParams<Va
 
   // Helper function to check if a value is a valid option
   const isValidOption = (value: Value | undefined) =>
-    value !== undefined && validate(value) && choices.some((choice) => "value" in choice && choice.value === value);
+    value !== undefined &&
+    validate(value) &&
+    choices.some((choice) => typeof choice === "object" && "value" in choice && choice.value === value);
 
   // Check environment and CLI values first
   for (const value of [envValue, cliParamValue]) {
