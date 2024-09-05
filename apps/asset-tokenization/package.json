@@ -86,7 +86,7 @@
     "@radix-ui/react-tooltip": "1.1.2",
     "@settlemint/sdk": "workspace:*",
     "@tanstack/react-query": "5.54.1",
-    "@web3modal/wagmi": "5.1.5",
+    "@web3modal/wagmi": "5.1.6",
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "cmdk": "1.0.0",
