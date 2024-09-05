@@ -2,9 +2,14 @@
 
 import { parseAsInteger, useQueryState } from "nuqs";
 import { createContext, useCallback, useContext, useRef, useState } from "react";
-import type { UseFormReturn } from "react-hook-form";
 
-interface FormMultiStepContextType<TFieldValues extends Record<string, unknown>> {
+type FormMultiStepConfig = {
+  useLocalStorageState?: boolean;
+  useQueryState?: boolean;
+  useQueryStateComponent?: "Form" | "FormPage";
+};
+
+interface FormMultiStepContextType {
   currentStep: number;
   nextStep: () => void;
   prevStep: () => void;
@@ -12,15 +17,23 @@ interface FormMultiStepContextType<TFieldValues extends Record<string, unknown>>
   totalSteps: number;
   setTotalSteps: React.Dispatch<React.SetStateAction<number>>;
   registerFormPage: () => number;
-  form: UseFormReturn<TFieldValues>;
+  config: FormMultiStepConfig;
 }
 
-const FormMultiStepContext = createContext<FormMultiStepContextType<Record<string, unknown>> | undefined>(undefined);
+interface FormMultiStepProviderProps extends React.PropsWithChildren {
+  config: FormMultiStepConfig;
+}
 
-export const FormMultiStepProvider = <TFieldValues extends Record<string, unknown>>({
+const FormMultiStepContext = createContext<FormMultiStepContextType | undefined>(undefined);
+
+export const FormMultiStepProvider = ({
   children,
-  form,
-}: React.PropsWithChildren<{ form: UseFormReturn<TFieldValues> }>) => {
+  config = {
+    useLocalStorageState: false,
+    useQueryState: false,
+    useQueryStateComponent: "FormPage",
+  },
+}: FormMultiStepProviderProps) => {
   const [currentStep, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
   const [totalSteps, setTotalSteps] = useState(1);
   const pageCounterRef = useRef(1);
@@ -46,7 +59,7 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
         totalSteps,
         setTotalSteps,
         registerFormPage,
-        form: form as UseFormReturn<Record<string, unknown>>,
+        config,
       }}
     >
       {children}
@@ -54,12 +67,10 @@ export const FormMultiStepProvider = <TFieldValues extends Record<string, unknow
   );
 };
 
-export const useMultiFormStep = <
-  TFieldValues extends Record<string, unknown>,
->(): FormMultiStepContextType<TFieldValues> => {
+export const useMultiFormStep = (): FormMultiStepContextType => {
   const context = useContext(FormMultiStepContext);
   if (!context) {
     throw new Error("useMultiFormStep must be used within a FormMultiStepProvider");
   }
-  return context as FormMultiStepContextType<TFieldValues>;
+  return context;
 };

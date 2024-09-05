@@ -3,19 +3,28 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { parseAsJson, useQueryState } from "nuqs";
-import { useEffect, useRef, useState } from "react";
-import { useWatch } from "react-hook-form"; // Add this import
+import { useEffect, useMemo, useRef } from "react";
+import { type FieldPath, type FieldValues, type UseFormReturn, useWatch } from "react-hook-form"; // Add this import
 import { useMultiFormStep } from "./form-multistep";
 
-export const FormPage: React.FC<{ title?: string; fields: string[]; children: React.ReactNode }> = ({
+export const FormPage = <
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   title,
+  form,
   fields = [],
   children,
+}: {
+  title?: string;
+  form: UseFormReturn<TFieldValues>;
+  fields?: TName[];
+  children: React.ReactNode;
 }) => {
-  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form } = useMultiFormStep();
+  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage } = useMultiFormStep();
+
   const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
-  const [isValid, setIsValid] = useState(true);
 
   useEffect(() => {
     if (pageRef.current === null) {
@@ -37,13 +46,15 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
     }
   }, []);
 
-  useEffect(() => {
-    const validFields = fields.map((field) => {
+  const isValid = useMemo(() => {
+    if (page !== currentStep) {
+      return true;
+    }
+    const isInvalid = fields.some((field) => {
       const fieldState = form.getFieldState(field);
-      return !fieldState.invalid;
+      return fieldState.invalid;
     });
-    const isValid = validFields.every((isValid) => isValid);
-    page === currentStep && setIsValid(isValid);
+    return !isInvalid;
   }, [fields, form, page, currentStep]);
 
   useEffect(() => {
@@ -52,7 +63,11 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
   }, [fields, fieldValues, setFieldState, page, currentStep]);
 
   return (
-    <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>
+    <div
+      className={`${cn("FormPage space-y-4", {
+        hidden: page !== currentStep,
+      })}`}
+    >
       {title && <h3>{title}</h3>}
       {children}
       <div className="flex gap-x-4 !mt-16 justify-end">
@@ -71,7 +86,6 @@ export const FormPage: React.FC<{ title?: string; fields: string[]; children: Re
         >
           Continue
         </Button>
-
         <Button type="submit" className={cn({ hidden: currentStep !== totalSteps })} disabled={!form.formState.isValid}>
           Submit
         </Button>
