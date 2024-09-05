@@ -256,4 +256,4 @@ To update the custom deployment, run the following command:
 bunx @settlemint/sdk custom-deployment update --image-path <image-path> --port <port>
 ```
 
-Replace `<image-path>` with the path to the container image you want to use for the custom deployment (eg g) and `<port>` with the port exposed by the docker image (by default this will be `3000`).
+Replace `<image-path>` with the path to the container image you want to use for the custom deployment (eg ghcr.io/my-org/asset-tokenization:latest) and `<port>` with the port exposed by the docker image (by default this will be `3000`).
