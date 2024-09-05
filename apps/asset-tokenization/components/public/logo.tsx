@@ -1,7 +1,4 @@
-"use client";
-
-import { useTheme } from "next-themes";
-import Image from "next/image";
+import { cn } from "@/lib/utils";
 import type { PropsWithChildren } from "react";
 
 interface LogoProps {
@@ -10,11 +7,24 @@ interface LogoProps {
 }
 
 export function Logo({ className = "", variant = "horizontal" }: PropsWithChildren<LogoProps>) {
-  const { resolvedTheme } = useTheme();
-
-  const logoVariant = variant === "vertical" ? "v" : variant === "icon" ? "i" : "h";
-  const themeMode = resolvedTheme === "dark" ? "dm" : "lm";
-  const src = `/settlemint-logo-${logoVariant}-${themeMode}.svg`;
-
-  return <Image src={src} width={200} height={200} alt="SettleMint" className={className} priority />;
+  return (
+    <div
+      className={cn(
+        "bg-no-repeat bg-left bg-contain",
+        {
+          "w-36 h-12": variant === "horizontal",
+          "w-24 h-24": variant === "vertical",
+          "w-12 h-12": variant === "icon",
+        },
+        {
+          "bg-[url('/settlemint-logo-h-lm.svg')] dark:bg-[url('/settlemint-logo-h-dm.svg')]": variant === "horizontal",
+          "bg-[url('/settlemint-logo-v-lm.svg')] dark:bg-[url('/settlemint-logo-v-dm.svg')]": variant === "vertical",
+          "bg-[url('/settlemint-logo-i-lm.svg')] dark:bg-[url('/settlemint-logo-i-dm.svg')]": variant === "icon",
+        },
+        className,
+      )}
+      role="img"
+      aria-label="SettleMint Logo"
+    />
+  );
 }

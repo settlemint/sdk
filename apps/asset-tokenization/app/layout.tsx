@@ -1,13 +1,9 @@
-import { ClientProvider } from "@/components/providers/ClientProvider";
-import { settlemint } from "@/lib/settlemint";
+import { SettleMintProvider } from "@/components/providers/settlemint-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { PublicEnvScript } from "next-runtime-env";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
 import { headers } from "next/headers";
-import { cookieToInitialState } from "wagmi";
 import "./globals.css";
 
 const fontSans = FontSans({
@@ -24,7 +20,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: process.env.NEXT_PUBLIC_SETTLEMINT_APP_URL,
+    url: process.env.SETTLEMINT_APP_URL,
     siteName: "SettleMint Asset Tokenization Starter Kit",
   },
   other: {
@@ -42,18 +38,12 @@ interface RootLayoutProps {
 }
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getServerSession();
-  const initialState = cookieToInitialState(settlemint.node.wagmi.wagmiConfig, headers().get("cookie"));
+  const cookie = headers().get("cookie");
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <head>
-        <PublicEnvScript />
-      </head>
-      <body className={cn("min-h-screen bg-custom-background-sidebar font-sans antialiased", fontSans.variable)}>
-        <ClientProvider session={session} initialState={initialState}>
-          {children}
-        </ClientProvider>
+      <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
+        <SettleMintProvider cookie={cookie}>{children}</SettleMintProvider>
       </body>
     </html>
   );

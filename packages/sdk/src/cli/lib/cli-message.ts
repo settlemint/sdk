@@ -62,7 +62,9 @@ export const promptSelect = async <Value>(options: Prettify<PromtSelectOptions<V
     printCancel(`${options.message}: no choices provided for selection.`);
   }
 
-  const choices = Array.isArray(options.choices) ? [...options.choices] : options.choices;
+  const choices = options.choices.map((choice) =>
+    typeof choice === "string" ? { value: choice as Value, name: choice } : choice,
+  );
 
   if (options.noneOption && Array.isArray(choices)) {
     choices.unshift({ value: undefined, name: "None" });

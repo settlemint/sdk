@@ -13,8 +13,8 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
     "connect": {
-      "inputs": [".settlemintrc.json", ".env.local"],
-      "outputs": [".settlemintrc.json", ".env.local"]
+      "inputs": ["settlemint.config.mjs", ".env.local"],
+      "outputs": ["settlemint.config.mjs", ".env.local"]
     },
     "forge:build": {
       "dependsOn": ["connect"],

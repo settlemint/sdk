@@ -1,7 +1,11 @@
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/cli/lib/cli-message";
-import { config } from "@/cli/lib/config/config";
+import {
+  loadSettleMintApplicationConfig,
+  loadSettleMintConfig,
+  loadSettleMintEnvironmentConfig,
+} from "@/common/config/loader";
 import { findProjectRoot } from "@/common/path";
 import { Command } from "@commander-js/extra-typings";
 import { merge } from "ts-deepmerge";
@@ -51,27 +55,18 @@ export function codegenCommand(): Command {
 
         try {
           // Fetch the configuration
-          const cfg = config();
-
-          // Check if configuration exists
+          const cfg = await loadSettleMintConfig();
           if (!cfg) {
             throw new Error("No configuration found");
           }
-
-          const { pat, defaultApplication, applications } = cfg;
-
-          // Check if environments are defined in the configuration
-          if (!applications || Object.keys(applications).length === 0) {
-            throw new Error("No environments found in configuration");
+          const appCfg = await loadSettleMintApplicationConfig(application);
+          if (!appCfg) {
+            throw new Error("No application configuration found");
           }
 
-          // Determine the environment to use
-          const environmentConfig =
-            applications[process.env.SETTLEMINT_APPLICATION ?? application ?? defaultApplication.id];
-          if (!environmentConfig) {
-            throw new Error("No environment found");
-          }
-          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc, nodeJsonRpcDeploy } = environmentConfig;
+          const envCfg = loadSettleMintEnvironmentConfig();
+
+          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc, nodeJsonRpcDeploy } = appCfg;
 
           await printSpinner({
             startMessage: "Generating SettleMint SDK",
@@ -89,7 +84,7 @@ export function codegenCommand(): Command {
                   createRestClient({
                     settleMintDir,
                     restURL: portalRest,
-                    personalAccessToken: pat,
+                    personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
                   }),
                 );
               }
@@ -100,7 +95,7 @@ export function codegenCommand(): Command {
                     framework: cfg.framework,
                     type: "portal",
                     gqlUrl: portalGql,
-                    personalAccessToken: pat,
+                    personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
                   }),
                 );
               }
@@ -111,19 +106,19 @@ export function codegenCommand(): Command {
                     framework: cfg.framework,
                     type: "thegraph",
                     gqlUrl: thegraphGql,
-                    personalAccessToken: pat,
+                    personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
                   }),
                 );
               }
-              if (hasuraGql) {
+              if (hasuraGql && envCfg.SETTLEMINT_HASURA_GQL_ADMIN_SECRET) {
                 sdkParts.push(
                   createGqlClient({
                     settleMintDir,
                     framework: cfg.framework,
                     type: "hasura",
                     gqlUrl: hasuraGql,
-                    personalAccessToken: pat,
-                    hasuraAdminSecret: cfg.hasuraAdminSecret ?? "",
+                    personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
+                    hasuraAdminSecret: envCfg.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
                   }),
                 );
               }
@@ -132,7 +127,7 @@ export function codegenCommand(): Command {
                   createChainConfig({
                     framework: cfg.framework,
                     nodeUrl: nodeJsonRpc,
-                    personalAccessToken: pat,
+                    personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
                   }),
                 );
               }
@@ -170,7 +165,7 @@ export function codegenCommand(): Command {
 import { sdkGenerator, type ViemConfig, type WagmiConfig } from "@settlemint/sdk/browser";
 ${importLines.filter((line) => line.trim() !== "").join("\n")}
 
-export const connectSettlemint = (config?: {viem?: ViemConfig, wagmi?: WagmiConfig}) => (${JSON.stringify(
+export const connectSettlemint = (config: {viem?: ViemConfig, wagmi: WagmiConfig}) => (${JSON.stringify(
                   settlemintObject,
                   null,
                   2,

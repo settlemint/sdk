@@ -1,9 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { printAsciiArt, printCancel, printIntro, printOutro, printSpinner, promptSelect } from "@/cli/lib/cli-message";
-import { readSettlemintConfig } from "@/cli/lib/config/read-config";
 import { runCli } from "@/cli/lib/run-cli";
-import { activeServerConfig } from "@/next/node/config/config";
+import { loadSettleMintApplicationConfig } from "@/common/config/loader";
 import { Command } from "@commander-js/extra-typings";
 
 export function forgeCreateCommand() {
@@ -76,12 +75,11 @@ export function forgeCreateCommand() {
     printAsciiArt();
     printIntro("Deploying the smart contract");
 
-    const config = readSettlemintConfig(true);
-    if (!config) {
-      printCancel("No .settlemintrc.json file found");
+    const app = await loadSettleMintApplicationConfig();
+    if (!app) {
+      printCancel("No application configuration found");
       process.exit(1);
     }
-    const app = activeServerConfig(config);
 
     const nodeUrl = app.nodeJsonRpcDeploy;
     if (!nodeUrl) {

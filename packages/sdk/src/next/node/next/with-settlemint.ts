@@ -1,29 +1,25 @@
+import { loadSettleMintApplicationConfig } from "@/common/config/loader";
+import type { ApplicationConfig } from "@/common/config/schemas";
 import type { NextConfig } from "next";
 import type { Rewrite } from "next/dist/lib/load-custom-routes";
-import { readSettlemintConfig } from "../../../cli/lib/config/read-config";
-import { activeServerConfig } from "./config";
 
-export interface WithSettleMintOptions {
+interface WithSettleMintOptions {
   disabled?: boolean;
   output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
 }
 
 /**
  * Modifies the passed in Next.js configuration with SettleMint-specific settings
+ *
  * @param nextConfig - The original Next.js configuration
  * @param options - Options for customizing the SettleMint configuration
- * @returns The modified Next.js configuration
+ * @returns A Promise that resolves to the modified Next.js configuration
  * @throws {Error} If the SettleMint configuration cannot be read or processed
- *
- * @example
- * ```typescript
- * const modifiedConfig = withSettleMint(nextConfig, { output: 'standalone' });
- * ```
  */
-export function withSettleMint<C extends NextConfig>(
+export async function withSettleMint<C extends NextConfig>(
   nextConfig: C,
   { disabled = false, output }: WithSettleMintOptions = {},
-): C {
+): Promise<C> {
   if (disabled) return nextConfig;
 
   const baseConfig = {
@@ -31,30 +27,33 @@ export function withSettleMint<C extends NextConfig>(
     output: output ?? nextConfig.output ?? "standalone",
   };
 
-  const config = readSettlemintConfig();
-  if (!config) return baseConfig;
+  const config = await loadSettleMintApplicationConfig();
 
-  const cfg = activeServerConfig(config);
-  if (!cfg) return baseConfig;
+  if (!config) {
+    console.warn("No SettleMint application config found, using normal Next.js config");
+    return nextConfig;
+  }
 
   return {
     ...baseConfig,
-    poweredByHeader: false,
-    reactStrictMode: true,
-    async headers() {
-      return [
-        {
-          source: "/(.*)",
-          headers: [{ key: "X-Frame-Options", value: "DENY" }],
-        },
-      ];
+    env: {
+      ...nextConfig.env,
+      SETTLEMINT_APP_URL: process.env.SETTLEMINT_APP_URL,
+      WALLET_CONNECT_PROJECT_ID: process.env.WALLET_CONNECT_PROJECT_ID,
     },
     async rewrites() {
-      const existingRewrites = await getExistingRewrites(nextConfig);
-      const newRewrites = generateRewrites(cfg);
-
+      const existingRewrites = await getExistingRewrites(baseConfig);
+      const newRewrites = generateRewrites(config);
       return mergeRewrites(existingRewrites, newRewrites);
     },
+    headers: async () => [
+      {
+        source: "/(.*)",
+        headers: [{ key: "X-Frame-Options", value: "DENY" }],
+      },
+    ],
+    poweredByHeader: false,
+    reactStrictMode: true,
   } as C;
 }
 
@@ -72,7 +71,7 @@ function getExistingRewrites(nextConfig: NextConfig) {
  * @param cfg - The active server configuration
  * @returns An array of new rewrites
  */
-function generateRewrites(cfg: ReturnType<typeof activeServerConfig>) {
+function generateRewrites(cfg: ApplicationConfig): Rewrite[] {
   const rewriteConfigs = [
     { condition: cfg.thegraphGql, source: "/proxy/thegraph/graphql", destination: cfg.thegraphGql },
     { condition: cfg.hasuraGql, source: "/proxy/hasura/graphql", destination: cfg.hasuraGql },
@@ -81,10 +80,9 @@ function generateRewrites(cfg: ReturnType<typeof activeServerConfig>) {
     { condition: cfg.nodeJsonRpc, source: "/proxy/node/jsonrpc", destination: cfg.nodeJsonRpc },
   ];
 
-  return rewriteConfigs.reduce((acc, { condition, source, destination }) => {
-    if (condition && destination) acc.push({ source, destination });
-    return acc;
-  }, [] as Rewrite[]);
+  return rewriteConfigs
+    .filter(({ condition, destination }) => condition && destination)
+    .map(({ source, destination }) => ({ source, destination })) as Rewrite[];
 }
 
 /**
