@@ -1,6 +1,5 @@
 import { createWriteStream, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-// TODO
 import { type PackageManager, getExecutor, getPkgManager } from "@/cli/lib/package-manager";
 import { findProjectRoot } from "@/common/path";
 import spawn from "cross-spawn";

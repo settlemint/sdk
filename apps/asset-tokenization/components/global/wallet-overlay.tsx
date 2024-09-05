@@ -23,23 +23,21 @@ export function WalletOverlay() {
   const { switchChain } = useSwitchChain();
   const chainId = useChainId();
   const chains = settlemint.node.wagmi.chains;
-  const [isDisconnecting, setIsDisconnecting] = useState(false);
 
   useEffect(() => {
-    if (!isConnected && !isDisconnecting && !isConnecting && openConnectModal) {
-      console.log("Opening connect modal", isDisconnecting);
+    if (!isConnected && !isConnecting && openConnectModal) {
       openConnectModal();
     }
-  }, [isConnected, isConnecting, openConnectModal, isDisconnecting]);
+  }, [isConnected, isConnecting, openConnectModal]);
 
   useEffect(() => {
     if (isConnected && chainId !== undefined) {
       const isConnectedToSupportedChain = chains.some((chain) => chain.id === chainId);
-      setShowUnsupportedChainModal(!isConnectedToSupportedChain && !isDisconnecting);
+      setShowUnsupportedChainModal(!isConnectedToSupportedChain);
     } else {
       setShowUnsupportedChainModal(false);
     }
-  }, [isConnected, chainId, chains, isDisconnecting]);
+  }, [isConnected, chainId, chains]);
 
   const addChainToWallet = async (chain: (typeof chains)[number]) => {
     if (!walletClient) {

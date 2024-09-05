@@ -12,7 +12,7 @@ type Autocomplete<U extends T, T = string> = U | (T & Record<never, never>);
 /**
  * Object containing utility functions for working with paths
  */
-export const paths = {
+const paths = {
   /**
    * Converts a path string to a regular expression
    * @param path - The path string to convert
@@ -48,7 +48,7 @@ type RouteMatcherWithNextTypedRoutes = Autocomplete<WithPathPatternWildcard<Next
 /**
  * Union type for possible route matcher parameters
  */
-export type RouteMatcherParam =
+type RouteMatcherParam =
   | Array<RegExp | RouteMatcherWithNextTypedRoutes>
   | RegExp
   | RouteMatcherWithNextTypedRoutes

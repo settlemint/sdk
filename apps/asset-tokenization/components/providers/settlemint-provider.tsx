@@ -1,15 +1,16 @@
 "use client";
 
-import { getConfig } from "@/lib/settlemint";
-import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowkit";
+import { settlemint } from "@/lib/settlemint";
+import { RainbowKitProvider, darkTheme, getDefaultConfig, lightTheme } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { QueryClient, isServer } from "@tanstack/react-query";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { structuralSharing } from "@wagmi/core/query";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
-import { type State, WagmiProvider, deserialize, serialize } from "wagmi";
+import { WagmiProvider, cookieToInitialState, deserialize, serialize } from "wagmi";
 import { hashFn } from "wagmi/query";
 
 function makeQueryClient() {
@@ -17,7 +18,7 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         gcTime: 1_000 * 60 * 60 * 24, // 24 hours
-        structuralSharing: false, // TODO: https://github.com/wevm/wagmi/issues/4233
+        structuralSharing, // https://github.com/wevm/wagmi/issues/4233
         queryKeyHashFn: hashFn,
       },
     },
@@ -42,9 +43,10 @@ const persister = createSyncStoragePersister({
   deserialize,
 });
 
-export function SettleMintProvider({ children, initialState }: PropsWithChildren<{ initialState?: State }>) {
+export function SettleMintProvider({ children, cookie }: PropsWithChildren<{ cookie?: string | null }>) {
   const queryClient = getQueryClient();
-  const wConfig = getConfig();
+  const wConfig = getDefaultConfig(settlemint.node.wagmi);
+  const initialState = cookieToInitialState(wConfig, cookie);
 
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
