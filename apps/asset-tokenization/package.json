@@ -53,9 +53,13 @@
     "forge:create": "cd contracts && bun run --bun ../../../packages/cli/src/cli.ts forge create src/AssetERC1155.sol:AssetERC1155",
     "hasura:migrate": "cd database && hasura metadata apply && hasura migrate apply --all-databases && hasura metadata reload",
     "hasura:console": "cd database && hasura console",
-    "translate": "inlang machine translate --force --project ./project.inlang"
+    "translate": "inlang machine translate --force --project ./project.inlang",
+    "subgraph:codegen": "cd contracts/subgraph && bun run --bun ../../../../packages/cli/src/cli.ts subgraph codegen",
+    "subgraph:build": "cd contracts/subgraph && bun run --bun ../../../../packages/cli/src/cli.ts subgraph build"
   },
   "dependencies": {
+    "@graphprotocol/graph-cli": "0.81.0",
+    "@graphprotocol/graph-ts": "^0.35.1",
     "@hookform/resolvers": "3.9.0",
     "@inlang/paraglide-next": "0.5.2",
     "@radix-ui/react-accordion": "1.2.0",
@@ -121,6 +125,7 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
+    "matchstick-as": "0.5.0",
     "@settlemint/sdk-cli": "workspace:*",
     "@inlang/cli": "^2.18.1",
     "@inlang/paraglide-js": "1.11.2",

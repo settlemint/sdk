@@ -19,6 +19,7 @@ import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../package.json";
 import { forgeCommand } from "./commands/forge";
+import { subgraphCommand } from "./commands/subgraph";
 import { printCancel } from "./lib/cli-message";
 
 // Load environment variables from .env.local and .env files
@@ -49,6 +50,7 @@ sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(createCommand());
 sdkcli.addCommand(forgeCommand());
+sdkcli.addCommand(subgraphCommand());
 
 /**
  * Parses command line arguments and executes the appropriate command.

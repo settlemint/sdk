@@ -8,7 +8,8 @@
       "apps/asset-tokenization/.settlemint",
       "apps/asset-tokenization/contracts/artifacts",
       "./.settlemint",
-      "./contracts/artifacts"
+      "./contracts/artifacts",
+      "apps/asset-tokenization/contracts/subgraph"
     ]
   },
   "linter": {

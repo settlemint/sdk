@@ -17,9 +17,7 @@
       { "name": "accounts", "type": "address[]", "internalType": "address[]" },
       { "name": "ids", "type": "uint256[]", "internalType": "uint256[]" }
     ],
-    "outputs": [
-      { "name": "", "type": "uint256[]", "internalType": "uint256[]" }
-    ],
+    "outputs": [{ "name": "", "type": "uint256[]", "internalType": "uint256[]" }],
     "stateMutability": "view"
   },
   {
@@ -152,18 +150,14 @@
   {
     "type": "function",
     "name": "setURI",
-    "inputs": [
-      { "name": "newuri", "type": "string", "internalType": "string" }
-    ],
+    "inputs": [{ "name": "newuri", "type": "string", "internalType": "string" }],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
   {
     "type": "function",
     "name": "supportsInterface",
-    "inputs": [
-      { "name": "interfaceId", "type": "bytes4", "internalType": "bytes4" }
-    ],
+    "inputs": [{ "name": "interfaceId", "type": "bytes4", "internalType": "bytes4" }],
     "outputs": [{ "name": "", "type": "bool", "internalType": "bool" }],
     "stateMutability": "view"
   },
@@ -184,9 +178,7 @@
   {
     "type": "function",
     "name": "transferOwnership",
-    "inputs": [
-      { "name": "newOwner", "type": "address", "internalType": "address" }
-    ],
+    "inputs": [{ "name": "newOwner", "type": "address", "internalType": "address" }],
     "outputs": [],
     "stateMutability": "nonpayable"
   },
@@ -380,9 +372,7 @@
   {
     "type": "error",
     "name": "ERC1155InvalidApprover",
-    "inputs": [
-      { "name": "approver", "type": "address", "internalType": "address" }
-    ]
+    "inputs": [{ "name": "approver", "type": "address", "internalType": "address" }]
   },
   {
     "type": "error",
@@ -395,23 +385,17 @@
   {
     "type": "error",
     "name": "ERC1155InvalidOperator",
-    "inputs": [
-      { "name": "operator", "type": "address", "internalType": "address" }
-    ]
+    "inputs": [{ "name": "operator", "type": "address", "internalType": "address" }]
   },
   {
     "type": "error",
     "name": "ERC1155InvalidReceiver",
-    "inputs": [
-      { "name": "receiver", "type": "address", "internalType": "address" }
-    ]
+    "inputs": [{ "name": "receiver", "type": "address", "internalType": "address" }]
   },
   {
     "type": "error",
     "name": "ERC1155InvalidSender",
-    "inputs": [
-      { "name": "sender", "type": "address", "internalType": "address" }
-    ]
+    "inputs": [{ "name": "sender", "type": "address", "internalType": "address" }]
   },
   {
     "type": "error",
@@ -426,15 +410,11 @@
   {
     "type": "error",
     "name": "OwnableInvalidOwner",
-    "inputs": [
-      { "name": "owner", "type": "address", "internalType": "address" }
-    ]
+    "inputs": [{ "name": "owner", "type": "address", "internalType": "address" }]
   },
   {
     "type": "error",
     "name": "OwnableUnauthorizedAccount",
-    "inputs": [
-      { "name": "account", "type": "address", "internalType": "address" }
-    ]
+    "inputs": [{ "name": "account", "type": "address", "internalType": "address" }]
   }
 ]
