@@ -66,7 +66,7 @@ export const promptSelect = async <Value>(options: Prettify<PromtSelectOptions<V
     typeof choice === "string" ? { value: choice as Value, name: choice } : choice,
   );
 
-  if (options.noneOption && Array.isArray(choices)) {
+  if (options.noneOption) {
     choices.unshift({ value: undefined, name: "None" });
   }
 

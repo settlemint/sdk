@@ -75,10 +75,6 @@ export function connectCommand(): Command {
         "The id of the custom deployment where the application will be deployed to (SETTLEMINT_CUSTOM_DEPLOYMENT_ID environment variable)",
       )
       .option(
-        "-c, --session-secret <secret>",
-        "The secret to use to encrypt the session, 32 characters (SETTLEMINT_AUTH_SECRET environment variable)",
-      )
-      .option(
         "-wc, --wallet-connect <id>",
         "The project id to use for Wallet Connect (WALLET_CONNECT_PROJECT_ID environment variable)",
       )
@@ -100,7 +96,6 @@ export function connectCommand(): Command {
           application,
           childWorkspace,
           defaultApplication,
-          sessionSecret,
           walletConnect,
           customDeployment,
         }) => {
@@ -350,14 +345,14 @@ export function connectCommand(): Command {
 
             const customDeploymentId = await coerceSelect({
               choices: selectedApplication.customDeployments.map((customDeployment) => ({
-                value: customDeployment.id,
+                value: customDeployment.uniqueName,
                 name: `${customDeployment.name} (${customDeployment.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_CUSTOM_DEPLOYMENT_ID,
               cliParamValue: customDeployment,
               configValue: configApplication?.customDeploymentId,
-              validate: (value) => selectedApplication.customDeployments.some((svc) => svc.id === value),
+              validate: (value) => selectedApplication.customDeployments.some((svc) => svc.uniqueName === value),
               message: "Select a custom deployment",
               existingMessage: "A valid custom deployment is already provided. Do you want to change it?",
             });
