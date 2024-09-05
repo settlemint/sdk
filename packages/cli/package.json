@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "@commander-js/extra-typings": "^12",
+    "@graphprotocol/graph-cli": "^0.81",
     "@graphql-codegen/cli": "^5",
     "@graphql-codegen/schema-ast": "^4",
     "@graphql-codegen/typescript": "^4",

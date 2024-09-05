@@ -40,7 +40,7 @@ interface SpinnerOptions<R> {
 }
 
 export const printSpinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
-  const spinner = yoctoSpinner().start(options.startMessage);
+  const spinner = yoctoSpinner({ text: options.startMessage }).start();
   try {
     const result = await options.task();
     spinner.success(options.stopMessage);

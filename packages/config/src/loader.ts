@@ -1,5 +1,6 @@
 import { existsSync } from "node:fs";
 import { join } from "node:path";
+import { findProjectRoot } from "./path";
 import { type ApplicationConfig, type Config, ConfigSchema, type Env, EnvSchema } from "./schemas";
 
 export async function loadSettleMintApplicationConfig(application?: string): Promise<ApplicationConfig | undefined> {
@@ -10,7 +11,7 @@ export async function loadSettleMintApplicationConfig(application?: string): Pro
 }
 
 export async function loadSettleMintConfig(): Promise<Config | undefined> {
-  const currentDir = process.cwd();
+  const currentDir = findProjectRoot(process.cwd());
   const configPath = join(currentDir, "settlemint.config.mjs");
   if (existsSync(configPath)) {
     try {

@@ -1,0 +1,8 @@
+{
+  "mainnet": {
+    "AssetERC1155": {
+      "address": "0x83133A0977Fa35ED7262F5Cf01153FdDC6eE3ad4",
+      "startBlock": 0
+    }
+  }
+}
