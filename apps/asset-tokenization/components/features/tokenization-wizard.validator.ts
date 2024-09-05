@@ -67,4 +67,10 @@ export const tokenizationWizardDefaultValues: TokenizationWizardSchema = {
   currency: "",
   DocumentationFileUploads: [],
   adminWalletAddresses: [],
-};
+} as const;
+
+export type TokenizationWizardFormPageFields = keyof typeof tokenizationWizardDefaultValues;
+
+export const tokenizationWizardFormPageFields: TokenizationWizardFormPageFields[] = Object.keys(
+  tokenizationWizardDefaultValues,
+) as TokenizationWizardFormPageFields[];

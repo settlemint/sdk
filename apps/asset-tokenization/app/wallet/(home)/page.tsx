@@ -7,10 +7,11 @@ import { type SearchParams, createSearchParamsCache, parseAsInteger, parseAsJson
 const breadcrumbItems: BreadcrumbItemType[] = [{ label: "Dashboard" }];
 const searchParamsCache = createSearchParamsCache({ currentStep: parseAsInteger.withDefault(1), state: parseAsJson() });
 
-export default async function SecureDashboard({ searchParams }: { searchParams: SearchParams }) {
+export default function WalletHome({ searchParams }: { searchParams: SearchParams }) {
   const parsedParams = searchParamsCache.parse(searchParams);
   return (
     <Main breadcrumbItems={breadcrumbItems}>
+      <div>{JSON.stringify(process.env.SETTLEMINT_CONFIG)}</div>
       <SidePanel>
         <TokenizationWizard defaultValues={parsedParams.state} />
       </SidePanel>

@@ -41,8 +41,10 @@ export const FormPage = <
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    for (const field of fields) {
-      page === currentStep && fieldState?.[field] && form.trigger(field);
+    if (config.useQueryState) {
+      for (const field of fields) {
+        page === currentStep && fieldState?.[field] && form.trigger(field);
+      }
     }
   }, []);
 
@@ -58,9 +60,11 @@ export const FormPage = <
   }, [fields, form, page, currentStep]);
 
   useEffect(() => {
-    const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
-    page === currentStep && setFieldState(fieldState);
-  }, [fields, fieldValues, setFieldState, page, currentStep]);
+    if (config.useQueryState) {
+      const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
+      page === currentStep && setFieldState(fieldState);
+    }
+  }, [fields, fieldValues, setFieldState, page, currentStep, config.useQueryState]);
 
   return (
     <div

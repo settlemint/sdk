@@ -15,7 +15,7 @@ export function MobileNavigation() {
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="flex flex-col">
-        <Link href="/s/dashboard" className="flex items-center gap-2 text-lg font-semibold mb-4">
+        <Link href="/wallet" className="flex items-center gap-2 text-lg font-semibold mb-4">
           <Logo />
         </Link>
         <SidebarNavigation variant="mobile" />
