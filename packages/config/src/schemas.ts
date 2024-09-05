@@ -8,12 +8,16 @@ const ApplicationConfigSchema = z.object({
     id: z.string(),
     displayName: z.string(),
   }),
+  // TODO: some more structure here would be nice
   portalGql: z.string().url().optional(),
   portalRest: z.string().url().optional(),
   thegraphGql: z.string().url().optional(),
+  thegraphIpfs: z.string().url().optional(),
   hasuraGql: z.string().url().optional(),
   nodeJsonRpc: z.string().url().optional(),
   nodeJsonRpcDeploy: z.string().url().optional(),
+  ipfsUrl: z.string().url().optional(),
+  ipfsPinningUrl: z.string().url().optional(),
 });
 
 /**

@@ -1,6 +1,7 @@
 // Type definitions for various services
+type StorageSvc = { apiUrl: string; pinningUrl: string; name: string; uniqueName: string };
 type NodeSvc = { rpcUrl: string; name: string; chainId: number; uniqueName: string };
-type GraphSvc = { gqlUrl: string; name: string; uniqueName: string };
+type GraphSvc = { gqlUrl: string; ipfsUrl?: string; name: string; uniqueName: string };
 type PortalSvc = { gqlUrl: string; restUrl: string; name: string; uniqueName: string };
 type HasuraSvc = { gqlUrl: string; name: string; adminSecret: string; uniqueName: string };
 
@@ -13,6 +14,7 @@ type Appl = {
   graphs: GraphSvc[]; // List of Graph services
   hasuras: HasuraSvc[]; // List of Hasura services
   nodes: NodeSvc[]; // List of Node services
+  storages: StorageSvc[]; // List of Storage services
 };
 
 // Type definition for Workspace

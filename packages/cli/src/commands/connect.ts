@@ -69,9 +69,10 @@ export function connectCommand(): Command {
         "-nd, --node-json-rpc-deploy <url>",
         "The url to the node rpc api for deployment (SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY environment variable)",
       )
+      .option("-s, --storage-api <url>", "The url to the storage api (SETTLEMINT_STORAGE_API_URL environment variable)")
       .option(
-        "-c, --session-secret <secret>",
-        "The secret to use to encrypt the session, 32 characters (SETTLEMINT_AUTH_SECRET environment variable)",
+        "-sp, --storage-pinning <url>",
+        "The url to the storage pinning api (SETTLEMINT_STORAGE_PINNING_URL environment variable)",
       )
       .option(
         "-wc, --wallet-connect <id>",
@@ -95,7 +96,8 @@ export function connectCommand(): Command {
           application,
           childWorkspace,
           defaultApplication,
-          sessionSecret,
+          storageApi,
+          storagePinning,
           walletConnect,
         }) => {
           printAsciiArt();
@@ -137,7 +139,7 @@ export function connectCommand(): Command {
             const services = await printSpinner({
               startMessage: "Fetching services",
               task: async () => {
-                return getServices({ instance: instanceUrl, pat: personalAccessToken });
+                return await getServices({ instance: instanceUrl, pat: personalAccessToken });
               },
               stopMessage: "Services fetched",
             });
@@ -296,6 +298,11 @@ export function connectCommand(): Command {
               existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
             });
 
+            // The Graph IPFS URL selection based on the selected GraphQL URL
+            const thegraphIpfsUrl = selectedApplication.graphs.find(
+              (graph) => graph.gqlUrl === thegraphGqlUrl,
+            )?.ipfsUrl;
+
             // Hasura URL selection
             const hasuras = selectedApplication.hasuras.map((hasura) => ({
               value: { gqlUrl: hasura.gqlUrl, adminSecret: hasura.adminSecret },
@@ -340,6 +347,34 @@ export function connectCommand(): Command {
               message: "Select a blockchain node for deployment",
               existingMessage:
                 "A valid blockchain node URL for deployment is already provided. Do you want to change it?",
+            });
+
+            const selectedStorageUrl = await coerceSelect({
+              choices: selectedApplication.storages.map((storage) => ({
+                value: storage.apiUrl,
+                label: `${storage.name} (${storage.uniqueName})`,
+              })),
+              noneOption: true,
+              envValue: process.env.SETTLEMINT_STORAGE_API_URL,
+              cliParamValue: storageApi,
+              configValue: configApplication?.ipfsUrl,
+              validate: (value) => !!new URL(value ?? "").toString(),
+              message: "Select an IPFS storage service",
+              existingMessage: "A valid IPFS storage service URL is already provided. Do you want to change it?",
+            });
+
+            const selectedStoragePinningUrl = await coerceSelect({
+              choices: selectedApplication.storages.map((storage) => ({
+                value: storage.pinningUrl,
+                label: `${storage.name} (${storage.uniqueName})`,
+              })),
+              noneOption: true,
+              envValue: process.env.SETTLEMINT_STORAGE_PINNING_URL,
+              cliParamValue: storagePinning,
+              configValue: configApplication?.ipfsPinningUrl,
+              validate: (value) => !!new URL(value ?? "").toString(),
+              message: "Select an IPFS pinning service",
+              existingMessage: "A valid IPFS pinning service URL is already provided. Do you want to change it?",
             });
 
             const possibleApplications = cfg?.applications ?? {};
@@ -410,9 +445,12 @@ export function connectCommand(): Command {
                       portalGql: portalGqlUrl,
                       portalRest: portalRestUrl,
                       thegraphGql: thegraphGqlUrl,
+                      thegraphIpfs: thegraphIpfsUrl,
                       hasuraGql: hasuraUrl?.gqlUrl,
                       nodeJsonRpc: nodeUrl,
                       nodeJsonRpcDeploy: nodeDeployUrl,
+                      ipfsUrl: selectedStorageUrl,
+                      ipfsPinningUrl: selectedStoragePinningUrl,
                     },
                   },
                 });
