@@ -1,6 +1,6 @@
 import type { getDefaultConfig } from "@rainbow-me/rainbowkit";
 import type { Chain, Prettify, TransportConfig } from "viem";
-import { http } from "wagmi";
+import { http, cookieStorage, createStorage } from "wagmi";
 
 /**
  * Configuration type for Web3Modal
@@ -51,5 +51,8 @@ export function createWagmiConfig(parameters: WagmiParams) {
       [chain.id]: http(`${process.env.SETTLEMINT_APP_URL}/proxy/node/jsonrpc`, transportConfig),
     },
     ssr: true,
+    storage: createStorage({
+      storage: cookieStorage,
+    }),
   };
 }
