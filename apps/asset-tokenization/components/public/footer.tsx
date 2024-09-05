@@ -11,7 +11,7 @@ import * as m from "@/paraglide/messages.js";
 
 const CURRENT_YEAR = new Date().getFullYear();
 
-const footerLinks = [
+const footerLinks = () => [
   {
     href: "https://console.settlemint.com/documentation/docs/terms-and-policies/terms-of-service/",
     label: m.awful_dirty_marten_drip(),
@@ -38,7 +38,7 @@ export function PublicFooter() {
       </p>
       <NavigationMenu className="sm:ml-auto flex gap-4 sm:gap-6">
         <NavigationMenuList>
-          {footerLinks.map(({ href, label }) => (
+          {footerLinks().map(({ href, label }) => (
             <NavigationMenuItem key={href}>
               <Link href={href} legacyBehavior passHref>
                 <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), "text-xs")}>{label}</NavigationMenuLink>
