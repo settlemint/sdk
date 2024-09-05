@@ -63,11 +63,7 @@ export function ThemeToggle({ variant = "outline", size = "icon", className }: T
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         {themeOptions.map(({ value, label }) => (
-          <DropdownMenuItem
-            key={value}
-            onClick={() => handleSetTheme(value)}
-            className={theme === value ? "bg-accent" : ""}
-          >
+          <DropdownMenuItem key={value} onClick={() => handleSetTheme(value)}>
             {label}
           </DropdownMenuItem>
         ))}
