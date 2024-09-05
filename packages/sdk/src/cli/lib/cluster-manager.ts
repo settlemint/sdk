@@ -60,3 +60,31 @@ export async function getServices({ instance, pat }: { instance: string; pat: st
   const services = await result.json();
   return services as Works[];
 }
+
+export async function updateCustomDeployment({
+  instance,
+  pat,
+  id,
+  data,
+}: {
+  instance: string;
+  pat: string;
+  id: string;
+  data: { imagePath: string; port: number };
+}) {
+  const result = await fetch(`${instance}/cm/sdk/custom-deployment/${encodeURIComponent(id)}/update-image`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": pat,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!result.ok) {
+    throw new Error(`Failed to update custom deployment. Status: ${result.status}`);
+  }
+
+  const updatedCustomDeployment = (await result.json()) as Promise<CustomDeploymentSvc>;
+  return updatedCustomDeployment;
+}

@@ -15,6 +15,25 @@
       "watchMode": true,
       "strictEnv": false,
       "stopOnEntry": false
+    },
+    {
+      "type": "bun",
+      "internalConsoleOptions": "openOnSessionStart",
+      "request": "launch",
+      "name": "SDK: Update Custom Deployment",
+      "program": "../../packages/sdk/src/cli/cli.ts",
+      "args": [
+        "custom-deployment",
+        "update",
+        "--imagePath",
+        "ghcr.io/settlemint/starterkit-asset-tokenization:main",
+        "--port",
+        "3000"
+      ],
+      "cwd": "${workspaceFolder}/apps/asset-tokenization",
+      "watchMode": true,
+      "strictEnv": false,
+      "stopOnEntry": false
     }
   ]
 }

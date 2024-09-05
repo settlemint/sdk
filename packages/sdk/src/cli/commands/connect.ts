@@ -345,14 +345,14 @@ export function connectCommand(): Command {
 
             const customDeploymentId = await coerceSelect({
               choices: selectedApplication.customDeployments.map((customDeployment) => ({
-                value: customDeployment.uniqueName,
+                value: customDeployment.id,
                 name: `${customDeployment.name} (${customDeployment.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_CUSTOM_DEPLOYMENT_ID,
               cliParamValue: customDeployment,
               configValue: configApplication?.customDeploymentId,
-              validate: (value) => selectedApplication.customDeployments.some((svc) => svc.uniqueName === value),
+              validate: (value) => selectedApplication.customDeployments.some((svc) => svc.id === value),
               message: "Select a custom deployment",
               existingMessage: "A valid custom deployment is already provided. Do you want to change it?",
             });
