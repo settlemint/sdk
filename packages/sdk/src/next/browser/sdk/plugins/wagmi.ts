@@ -10,7 +10,7 @@ type RainbowWagmiConfig = Prettify<Parameters<typeof getDefaultConfig>["0"]>;
 /**
  * Parameters for configuring Wagmi
  */
-export type WagmiParams = Prettify<
+type WagmiParams = Prettify<
   Omit<RainbowWagmiConfig, "chains" | "projectId"> & {
     transportConfig?: TransportConfig;
     chain: Chain;

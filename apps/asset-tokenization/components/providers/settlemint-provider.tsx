@@ -7,6 +7,7 @@ import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persist
 import { QueryClient, isServer } from "@tanstack/react-query";
 import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experimental";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
+import { structuralSharing } from "@wagmi/core/query";
 import { ThemeProvider } from "next-themes";
 import type { PropsWithChildren } from "react";
 import { WagmiProvider, cookieToInitialState, deserialize, serialize } from "wagmi";
@@ -17,7 +18,7 @@ function makeQueryClient() {
     defaultOptions: {
       queries: {
         gcTime: 1_000 * 60 * 60 * 24, // 24 hours
-        structuralSharing: false, // TODO: https://github.com/wevm/wagmi/issues/4233
+        structuralSharing, // https://github.com/wevm/wagmi/issues/4233
         queryKeyHashFn: hashFn,
       },
     },

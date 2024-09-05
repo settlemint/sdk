@@ -3,7 +3,7 @@ import type { ApplicationConfig } from "@/common/config/schemas";
 import type { NextConfig } from "next";
 import type { Rewrite } from "next/dist/lib/load-custom-routes";
 
-export interface WithSettleMintOptions {
+interface WithSettleMintOptions {
   disabled?: boolean;
   output?: "standalone" | "export" | "static" | "server" | "experimental-server" | "experimental-static";
 }
