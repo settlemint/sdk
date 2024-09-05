@@ -2,8 +2,8 @@ import { Logo } from "@/components/public/logo";
 import { SidebarNavigation } from "@/components/secure/sidebar/sidebar-navigation";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Link } from "@/lib/i18n";
 import { Menu } from "lucide-react";
-import Link from "next/link";
 
 export function MobileNavigation() {
   return (

@@ -1,0 +1,96 @@
+{
+  "editor.inlineSuggest.enabled": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "editor.tabSize": 2,
+  "git.enableSmartCommit": true,
+  "editor.defaultFormatter": "biomejs.biome",
+  "editor.codeActionsOnSave": {
+    "quickfix.biome": "explicit",
+    "source.organizeImports.biome": "explicit",
+    "source.organizeImports": "explicit"
+  },
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "workbench.tree.renderIndentGuides": "always",
+  "workbench.colorCustomizations": {
+    "tree.indentGuidesStroke": "#05ef3c9c"
+  },
+  "errorLens.fontStyleItalic": true,
+  "editor.fontWeight": "normal",
+  "editor.minimap.enabled": false,
+  "redhat.telemetry.enabled": false,
+  "workbench.editor.enablePreview": false,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.ts": "${capture}.js, ${capture}.typegen.ts, ${capture}.spec.ts",
+    "*.js": "${capture}.js.map, ${capture}.min.js, ${capture}.d.ts",
+    "*.cjs": "${capture}.cjs.map, ${capture}.min.cjs, ${capture}.d.cts",
+    "*.jsx": "${capture}.js",
+    "*.tsx": "${capture}.ts, ${capture}.typegen.ts",
+    "tsconfig.json": "tsconfig.*.json",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
+    "*.mts": "${capture}.typegen.ts",
+    "*.cts": "${capture}.typegen.ts"
+  },
+  "typescript.tsserver.maxTsServerMemory": 16384,
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "editor.formatOnSave": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.stickyScroll.enabled": true,
+  "githubPullRequests.pullBranch": "never",
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.inlayHints.variableTypes.enabled": true,
+  "typescript.preferences.preferTypeOnlyAutoImports": true,
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "typescript.inlayHints.enumMemberValues.enabled": true,
+  "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.inlayHints.parameterTypes.enabled": true,
+  "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
+  "editor.codeLens": true,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "trailing-spaces.trimOnSave": true,
+  "workbench.tree.enableStickyScroll": true,
+  "git.openRepositoryInParentFolders": "never",
+  "codesnap.realLineNumbers": true,
+  "codesnap.showWindowTitle": true,
+  "codesnap.shutterAction": "copy",
+  "codesnap.transparentBackground": true,
+  "codesnap.backgroundColor": "#282828",
+  "editor.wordWrap": "on",
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "[graphql]": {
+    "editor.formatOnSave": true
+  },
+  "workbench.editor.customLabels.patterns": {
+    "**/app/**/page.tsx": "${dirname(1)}/${dirname} <page>",
+    "**/app/**/layout.tsx": "${dirname(1)}/${dirname} <layout>",
+    "**/app/**/route.ts": "${dirname(1)}/${dirname} <route>",
+    "**/components/**/index.tsx": "${dirname(1)}/${dirname} <component>"
+  },
+  "[solidity]": {
+    "editor.defaultFormatter": "JuanBlanco.solidity"
+  },
+  "solidity.formatter": "forge",
+  "solidity.packageDefaultDependenciesContractsDirectory": "src",
+  "solidity.packageDefaultDependenciesDirectory": "lib",
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}

@@ -1,7 +1,7 @@
 import { WalletOverlay } from "@/components/global/wallet-overlay";
 import { Logo } from "@/components/public/logo";
 import { SidebarNavigation } from "@/components/secure/sidebar/sidebar-navigation";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import type { PropsWithChildren } from "react";
 
 export default async function WalletLayout({ children }: PropsWithChildren) {

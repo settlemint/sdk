@@ -6,7 +6,8 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
+import * as m from "@/paraglide/messages.js";
 import { ThemeToggle } from "../global/theme-toggle";
 
 interface NavItem {
@@ -15,16 +16,19 @@ interface NavItem {
 }
 
 interface PublicNavigationProps {
-  navItems: NavItem[];
   noNavButton?: boolean;
 }
 
-export function PublicNavigation({ navItems, noNavButton }: PublicNavigationProps) {
+const navItems: () => NavItem[] = () => [
+  { href: "https://console.settlemint.com/documentation", label: m.alive_last_starfish_find() },
+];
+
+export function PublicNavigation({ noNavButton }: PublicNavigationProps) {
   return (
     <NavigationMenu>
       <NavigationMenuList>
         <ThemeToggle variant="ghost" className="text-foreground" />
-        {navItems.map(({ href, label }) => (
+        {navItems().map(({ href, label }) => (
           <NavigationMenuItem key={href}>
             <Link href={href} legacyBehavior passHref>
               <NavigationMenuLink className={navigationMenuTriggerStyle()}>{label}</NavigationMenuLink>

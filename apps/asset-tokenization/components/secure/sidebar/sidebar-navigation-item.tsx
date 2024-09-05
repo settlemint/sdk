@@ -2,8 +2,8 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "@/lib/i18n";
+import { usePathname } from "@/lib/i18n";
 import type { MouseEventHandler, ReactNode } from "react";
 
 export interface NavItemType {

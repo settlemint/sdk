@@ -6,7 +6,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import { Fragment, useMemo } from "react";
 import { type BreadcrumbItemType, EllipsisDropdown } from "./ellipsis-dropdown";
 
