@@ -52,13 +52,3 @@ export function PublicFooter() {
     </footer>
   );
 }
-
-// {
-//   /* <nav className="sm:ml-auto flex gap-4 sm:gap-6">
-// {footerLinks.map(({ href, label }) => (
-//   <FooterLink key={href} href={href}>
-//     {label}
-//   </FooterLink>
-// ))}
-// </nav> */
-// }
