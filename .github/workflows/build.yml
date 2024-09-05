@@ -149,6 +149,9 @@ jobs:
 
           echo "Updated version to $VERSION"
 
+      - name: Run translate
+        run: bunx turbo translate
+
       - name: Run tests and checks
         run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
         env:
