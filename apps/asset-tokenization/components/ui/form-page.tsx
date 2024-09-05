@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { parseAsJson, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
-import { useWatch } from "react-hook-form"; // Add this import
+import { useWatch } from "react-hook-form";
 import { useMultiFormStep } from "./form-multistep";
 
 export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
@@ -17,7 +17,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
   fields: T;
   children: React.ReactNode;
 }) => {
-  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form } = useMultiFormStep();
+  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, config } = useMultiFormStep();
 
   const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
@@ -38,8 +38,10 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    for (const field of fields) {
-      page === currentStep && fieldState?.[field] && form.trigger(field);
+    if (config.useQueryState) {
+      for (const field of fields) {
+        page === currentStep && fieldState?.[field] && form.trigger(field);
+      }
     }
   }, []);
 
@@ -53,9 +55,11 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
   }, [fields, form, page, currentStep]);
 
   useEffect(() => {
-    const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
-    page === currentStep && setFieldState(fieldState);
-  }, [fields, fieldValues, setFieldState, page, currentStep]);
+    if (config.useQueryState) {
+      const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
+      page === currentStep && setFieldState(fieldState);
+    }
+  }, [fields, fieldValues, setFieldState, page, currentStep, config.useQueryState]);
 
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>
