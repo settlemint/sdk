@@ -85,6 +85,6 @@ export async function updateCustomDeployment({
     throw new Error(`Failed to update custom deployment. Status: ${result.status}`);
   }
 
-  const updatedCustomDeployment = (await result.json()) as Promise<CustomDeploymentSvc>;
-  return updatedCustomDeployment;
+  return (await result.json()) as Promise<CustomDeploymentSvc>;
+
 }
