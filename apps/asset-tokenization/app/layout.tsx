@@ -1,5 +1,7 @@
 import { SettleMintProvider } from "@/components/providers/settlemint-provider";
 import { cn } from "@/lib/utils";
+import { languageTag } from "@/paraglide/runtime.js";
+import { LanguageProvider } from "@inlang/paraglide-next";
 import type { Metadata } from "next";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
 import { Figtree as FontSans } from "next/font/google";
@@ -41,10 +43,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   const cookie = headers().get("cookie");
 
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
-        <SettleMintProvider cookie={cookie}>{children}</SettleMintProvider>
-      </body>
-    </html>
+    <LanguageProvider>
+      <html lang={languageTag()} suppressHydrationWarning>
+        <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
+          <SettleMintProvider cookie={cookie}>{children}</SettleMintProvider>
+        </body>
+      </html>
+    </LanguageProvider>
   );
 }

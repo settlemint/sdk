@@ -115,7 +115,8 @@
     "tailwindcss-animate": "1.0.7",
     "vaul": "0.9.2",
     "wagmi": "2.12.8",
-    "zod": "3.23.8"
+    "zod": "3.23.8",
+    "@inlang/paraglide-next": "0.5.2"
   },
   "devDependencies": {
     "@types/node": "22.5.4",
@@ -125,7 +126,8 @@
     "postcss": "8.4.45",
     "tailwindcss": "3.4.10",
     "typescript": "5.5.4",
-    "eslint-config-next": "14.2.8"
+    "eslint-config-next": "14.2.8",
+    "@inlang/paraglide-js": "1.11.2"
   },
   "peerDependencies": {}
 }

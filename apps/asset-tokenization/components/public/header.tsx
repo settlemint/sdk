@@ -1,6 +1,7 @@
 import { Logo } from "@/components/public/logo";
 import { PublicNavigation } from "@/components/public/navigation";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
+import * as m from "@/paraglide/messages.js";
 import type { PropsWithChildren } from "react";
 
 interface NavItem {
@@ -8,7 +9,9 @@ interface NavItem {
   label: string;
 }
 
-const NAV_ITEMS: NavItem[] = [{ href: "https://console.settlemint.com/documentation", label: "Docs" }];
+const NAV_ITEMS: NavItem[] = [
+  { href: "https://console.settlemint.com/documentation", label: m.alive_last_starfish_find() },
+];
 
 export function PublicHeader({ children, noNavButton }: PropsWithChildren<{ noNavButton?: boolean }>) {
   return (

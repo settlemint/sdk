@@ -1,7 +1,7 @@
 "use client";
 
+import { useRouter } from "@/lib/i18n";
 import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useAccount, useDisconnect } from "wagmi";
 import { Button, type ButtonProps } from "../ui/button";

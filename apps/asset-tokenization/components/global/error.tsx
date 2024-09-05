@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import type { PropsWithChildren } from "react";
 import CrossIcon from "./icons/cross";
 

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import type { PropsWithChildren } from "react";
 
 export interface BreadcrumbItemType {

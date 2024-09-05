@@ -1,5 +1,6 @@
+import { middleware as i18nMiddleware } from "@/lib/i18n";
 import { proxyMiddleware } from "@settlemint/sdk/edge";
-import { type NextRequest, NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
 export default (request: NextRequest) => {
   const proxyResponse = proxyMiddleware(request);
@@ -7,8 +8,18 @@ export default (request: NextRequest) => {
     return proxyResponse;
   }
 
-  const headers = new Headers(request.headers);
-  headers.set("x-current-path", request.nextUrl.pathname);
+  return i18nMiddleware(request);
+};
 
-  return NextResponse.next({ headers });
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     */
+    "/((?!api|_next/static|_next/image|favicon.ico).*)",
+  ],
 };

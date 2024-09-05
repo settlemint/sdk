@@ -6,7 +6,7 @@ import {
   NavigationMenuList,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import Link from "next/link";
+import { Link } from "@/lib/i18n";
 import { ThemeToggle } from "../global/theme-toggle";
 
 interface NavItem {

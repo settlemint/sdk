@@ -1,9 +1,4 @@
-const HERO_CONTENT = {
-  title: "Unlock the Power of Asset Tokenization",
-  description:
-    "This starterkit is pre-configured to leverage your SettleMint application and provide an easy way to get started with your own asset tokenization solution.",
-  command: "bunx @settlemint/sdk create -t asset-tokenization",
-};
+import * as m from "@/paraglide/messages.js";
 
 export function PublicHero() {
   return (
@@ -12,12 +7,9 @@ export function PublicHero() {
         <div className="flex flex-col items-center space-y-4 text-center">
           <div className="space-y-2">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-              Unlock the Power of Asset Tokenization
+              {m.arable_orange_ant_persist()}
             </h1>
-            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">
-              This starterkit is pre-configured to leverage your SettleMint application and provide an easy way to get
-              started with your own asset tokenization solution.
-            </p>
+            <p className="mx-auto max-w-[700px] text-muted-foreground md:text-xl">{m.kind_mean_iguana_agree()}</p>
           </div>
           <div className="space-x-4">
             <div className="flex justify-center backdrop-blur-2xl static w-auto rounded-xl border bg-muted p-4 overflow-x-auto">

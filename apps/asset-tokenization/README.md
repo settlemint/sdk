@@ -90,11 +90,10 @@ These can be extended with custom methods to support more involved use cases lik
 > Describe the purpose of the application and a list of all the sections, pages and forms that are needed. Include all relevant business logic that needs to be implemented. Flow charts and wireframes are preferred.
 
 - Public pages
-    - Homepage template
-    - Redirect to private section ( if setting is set)
+    - [x] Homepage template
 
 - Private pages
-    - Authentication screen
+    - [x] Authentication modals
     - New Tokenization Wizard
       - Intro page
       - Terms and conditions
