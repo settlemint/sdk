@@ -31,6 +31,8 @@
     "lint": "turbo lint",
     "connect": "turbo connect",
     "codegen": "turbo codegen",
+    "subgraph:codegen": "turbo subgraph:codegen",
+    "subgraph:build": "turbo subgraph:build",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose"

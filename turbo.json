@@ -8,7 +8,7 @@
       "outputs": ["contracts/dependencies/**"]
     },
     "build": {
-      "dependsOn": ["forge:dependencies", "codegen", "^build", "forge:build"],
+      "dependsOn": ["forge:dependencies", "codegen", "^build", "forge:build", "subgraph:build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
@@ -33,6 +33,16 @@
     },
     "format": {
       "dependsOn": ["//#format:biome"]
+    },
+    "subgraph:codegen": {
+      "dependsOn": ["forge:build"],
+      "inputs": ["apps/asset-tokenization/contracts/subgraph/**"],
+      "outputs": ["apps/asset-tokenization/contracts/subgraph/generated/**"]
+    },
+    "subgraph:build": {
+      "dependsOn": ["subgraph:codegen"],
+      "inputs": ["apps/asset-tokenization/contracts/subgraph/**"],
+      "outputs": ["apps/asset-tokenization/contracts/subgraph/build/**"]
     },
     "//#knip": {
       "cache": false
