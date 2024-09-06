@@ -50,6 +50,9 @@
       "persistent": true
     },
     "test": {},
-    "test:coverage": {}
+    "test:coverage": {},
+    "translate": {
+      "inputs": ["messages/**"]
+    }
   }
 }

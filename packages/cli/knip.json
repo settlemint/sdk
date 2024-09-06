@@ -1,0 +1,13 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "ignoreDependencies": [
+    "@graphql-codegen/schema-ast",
+    "@graphql-codegen/typescript",
+    "@graphql-codegen/typescript-graphql-request",
+    "@graphql-codegen/typescript-operations",
+    "commander",
+    "graphql"
+  ],
+  "ignore": ["dist/**"],
+  "entry": ["src/cli.ts"]
+}

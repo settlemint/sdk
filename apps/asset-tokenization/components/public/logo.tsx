@@ -24,7 +24,7 @@ export function Logo({ className = "", variant = "horizontal" }: PropsWithChildr
         className,
       )}
       role="img"
-      aria-label="SettleMint Logo"
+      aria-label="SettleMint"
     />
   );
 }
