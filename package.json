@@ -40,7 +40,7 @@
     "lefthook": "1.7.15",
     "turbo": "2.1.1",
     "typescript": "5.5.4",
-    "knip": "5.29.2",
+    "knip": "5.30.0",
     "@types/bun": "1.1.8",
     "@arethetypeswrong/cli": "0.16.1",
     "publint": "0.2.10",
