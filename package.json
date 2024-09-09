@@ -42,7 +42,7 @@
     "typescript": "5.5.4",
     "knip": "5.30.0",
     "@types/bun": "1.1.8",
-    "@arethetypeswrong/cli": "0.16.1",
+    "@arethetypeswrong/cli": "0.16.2",
     "publint": "0.2.10",
     "tsup": "8.2.4"
   },
