@@ -1,11 +1,8 @@
 # DEPENDENCIES
 FROM oven/bun:1.1.26-alpine AS dependencies
 
-RUN apk update && apk add --no-cache python3 make g++ gcc curl
+RUN apk update && apk add --no-cache python3 make g++ gcc curl bash
 RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
-
-RUN which hasura
-RUN hasura version
 
 COPY package.json .
 RUN bun install
