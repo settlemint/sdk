@@ -1,5 +1,5 @@
 # DEPENDENCIES
-FROM oven/bun:1.1.26-alpine AS dependencies
+FROM oven/bun:1.1.27-alpine AS dependencies
 
 RUN apk add --no-cache python3 make g++ gcc
 
@@ -15,7 +15,7 @@ COPY . .
 RUN bun run build
 
 # RUNTIME
-FROM oven/bun:1.1.26-alpine
+FROM oven/bun:1.1.27-alpine
 LABEL org.opencontainers.image.source="https://github.com/settlemint/sdk"
 
 ENV NEXT_TELEMETRY_DISABLED 1
