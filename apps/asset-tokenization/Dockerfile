@@ -1,8 +1,7 @@
 # DEPENDENCIES
 FROM oven/bun:1.1.26-alpine AS dependencies
 
-RUN apk update && apk add --no-cache python3 make g++ gcc curl bash
-RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
+RUN apk add --no-cache python3 make g++ gcc
 
 COPY package.json .
 RUN bun install
@@ -18,6 +17,9 @@ RUN bun run build
 # RUNTIME
 FROM oven/bun:1.1.26-alpine
 LABEL org.opencontainers.image.source="https://github.com/settlemint/sdk"
+
+RUN apk add --force-overwrite --no-cache curl
+RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
