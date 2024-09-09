@@ -4,6 +4,9 @@ FROM oven/bun:1.1.26-alpine AS dependencies
 RUN apk update && apk add --no-cache python3 make g++ gcc curl
 RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
 
+RUN which hasura
+RUN hasura version
+
 COPY package.json .
 RUN bun install
 
@@ -28,11 +31,8 @@ COPY --from=build --chmod=0777  /home/bun/app/.next/static ./.next/static
 
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
-RUN echo $PATH
-ENV PATH="$PATH:/usr/local/bin"
-RUN echo $PATH
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
+# ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["server.js"]
