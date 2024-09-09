@@ -21,7 +21,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
 
   const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const pageRef = useRef<number | null>(null);
-  const [isValid, setIsValid] = useState(true);
+  const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
     if (pageRef.current === null) {
@@ -39,9 +39,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (config.useQueryState) {
-      for (const field of fields) {
-        page === currentStep && fieldState?.[field] && form.trigger(field);
-      }
+      //  page === currentStep && form.trigger(fields);
     }
   }, []);
 
@@ -50,8 +48,15 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
       const fieldState = form.getFieldState(field);
       return !fieldState.invalid;
     });
+
+    const dirtyFields = fields.map((field) => {
+      const fieldState = form.getFieldState(field);
+      return fieldState.isDirty;
+    });
+
     const isValid = validFields.every((isValid) => isValid);
-    page === currentStep && setIsValid(isValid);
+    const isDirty = dirtyFields.length > 0 ? dirtyFields.some((isDirty) => isDirty) : true;
+    page === currentStep && setIsValid(isValid && isDirty);
   }, [fields, form, page, currentStep]);
 
   useEffect(() => {
