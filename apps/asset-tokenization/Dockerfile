@@ -20,8 +20,6 @@ LABEL org.opencontainers.image.source="https://github.com/settlemint/sdk"
 
 RUN apk add --no-cache curl
 RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
-# Create .hasura directory structure
-RUN hasura version
 
 ENV NEXT_TELEMETRY_DISABLED 1
 
@@ -35,5 +33,5 @@ ENV HOSTNAME "0.0.0.0"
 
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
-#ENTRYPOINT ["/docker-entrypoint.sh"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["server.js"]
