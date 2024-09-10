@@ -19,8 +19,11 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
 }) => {
   const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, config } = useMultiFormStep();
 
-  const [fieldState, setFieldState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
+  const [state, setState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
+
   const pageRef = useRef<number | null>(null);
+  const page = pageRef.current ?? currentStep ?? 1;
+
   const [isValid, setIsValid] = useState(false);
 
   useEffect(() => {
@@ -29,8 +32,6 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
     }
   }, [registerFormPage]);
 
-  const page = pageRef.current ?? currentStep ?? 1;
-
   const fieldValues = useWatch({
     control: form.control,
     name: fields,
@@ -38,33 +39,54 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    if (config.useQueryState) {
-      //  page === currentStep && form.trigger(fields);
+    const navigationEntry = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+    const navigationType = navigationEntry?.type;
+
+    if (navigationType === "reload") {
+      console.log("RELOAD");
+      const validFields = fields.map((field) => {
+        const fieldState = form.getFieldState(field);
+        console.log("FIELD STATE", fieldState);
+        return !fieldState.invalid;
+      });
+      console.log("VALID FIELDS", validFields);
+      const isValid = validFields.every((isValid) => isValid);
+      console.log("ISVALID", isValid);
+      console.log("TRIGGER FIELDS", form.trigger(fields));
+
+      page === currentStep && form.trigger(fields);
+      page === currentStep && setIsValid(isValid);
     }
   }, []);
 
   useEffect(() => {
-    const validFields = fields.map((field) => {
-      const fieldState = form.getFieldState(field);
-      return !fieldState.invalid;
-    });
+    const navigationEntry = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
+    const navigationType = navigationEntry?.type;
 
-    const dirtyFields = fields.map((field) => {
-      const fieldState = form.getFieldState(field);
-      return fieldState.isDirty;
-    });
+    if (navigationType === "navigate") {
+      console.log("NAVIGATE");
+      const validFields = fields.map((field) => {
+        const fieldState = form.getFieldState(field);
+        return !fieldState.invalid;
+      });
 
-    const isValid = validFields.every((isValid) => isValid);
-    const isDirty = dirtyFields.length > 0 ? dirtyFields.some((isDirty) => isDirty) : true;
-    page === currentStep && setIsValid(isValid && isDirty);
+      const dirtyFields = fields.map((field) => {
+        const fieldState = form.getFieldState(field);
+        return fieldState.isDirty;
+      });
+
+      const isValid = validFields.every((isValid) => isValid);
+      const isDirty = dirtyFields.length > 0 ? dirtyFields.every((isDirty) => isDirty) : true;
+      page === currentStep && setIsValid(isValid && isDirty);
+    }
   }, [fields, form, page, currentStep]);
 
   useEffect(() => {
     if (config.useQueryState) {
       const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
-      page === currentStep && setFieldState(fieldState);
+      page === currentStep && setState((prevState) => ({ ...prevState, ...fieldState }));
     }
-  }, [fields, fieldValues, setFieldState, page, currentStep, config.useQueryState]);
+  }, [fields, fieldValues, setState, page, currentStep, config.useQueryState]);
 
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>

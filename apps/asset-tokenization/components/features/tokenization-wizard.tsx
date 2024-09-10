@@ -25,6 +25,8 @@ export interface TokenizationWizardProps extends React.HTMLAttributes<HTMLDivEle
 }
 
 export function TokenizationWizard({ className, defaultValues, ...props }: TokenizationWizardProps) {
+  console.log("defaultValues", { ...tokenizationWizardDefaultValues, ...defaultValues });
+
   const form = useForm<TokenizationWizardSchema>({
     resolver: zodResolver(TokenizationWizardValidator),
     defaultValues: { ...tokenizationWizardDefaultValues, ...defaultValues },

@@ -9,6 +9,7 @@ const searchParamsCache = createSearchParamsCache({ currentStep: parseAsInteger.
 
 export default function WalletHome({ searchParams }: { searchParams: SearchParams }) {
   const parsedParams = searchParamsCache.parse(searchParams);
+  console.log("parsedParams", parsedParams);
   return (
     <Main breadcrumbItems={breadcrumbItems}>
       <div>{JSON.stringify(process.env.SETTLEMINT_CONFIG)}</div>
