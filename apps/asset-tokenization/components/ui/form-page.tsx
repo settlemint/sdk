@@ -19,7 +19,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
 }) => {
   const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, config } = useMultiFormStep();
 
-  const [state, setState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
+  const [_, setState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const [isNavigate, setIsNavigate] = useState(true);
   const pageRef = useRef<number | null>(null);
   const page = pageRef.current ?? currentStep ?? 1;
@@ -94,7 +94,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
       const isDirty = dirtyFields.length > 0 ? dirtyFields.every((isDirty) => isDirty) : true;
       page === currentStep && setIsValid(isValid && isDirty);
     }
-  }, [fields, form, page, currentStep, state]);
+  }, [fields, form, page, currentStep]);
 
   useEffect(() => {
     if (config.useQueryState) {
@@ -116,9 +116,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
           className={cn({ hidden: currentStep === totalSteps })}
           disabled={(!isValid && isNavigate) || (!isValidPage && !isNavigate)}
           onClick={() => {
-            if (isValid) {
-              nextStep();
-            }
+            nextStep();
           }}
         >
           Continue
