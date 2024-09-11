@@ -1,23 +1,27 @@
 "use client";
 
-import type { TokenizationWizardFormPageFields } from "@/components/features/tokenization-wizard.validator";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { parseAsJson, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
-import { useWatch } from "react-hook-form";
+import { type FieldPath, type FieldValues, type UseFormReturn, useWatch } from "react-hook-form";
 import { useMultiFormStep } from "./form-multistep";
 
-export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
+export const FormPage = <
+  TFieldValues extends FieldValues,
+  TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>,
+>({
   title,
-  fields,
+  form,
+  fields = [],
   children,
 }: {
   title?: string;
-  fields: T;
+  form: UseFormReturn<TFieldValues>;
+  fields?: TName[];
   children: React.ReactNode;
 }) => {
-  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, config } = useMultiFormStep();
+  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, config } = useMultiFormStep();
 
   const [_, setState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const [isNavigate, setIsNavigate] = useState(true);
@@ -96,12 +100,13 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
     }
   }, [fields, form, page, currentStep]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (config.useQueryState) {
       const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
       page === currentStep && setState((prevState) => ({ ...prevState, ...fieldState }));
     }
-  }, [fields, fieldValues, setState, page, currentStep, config.useQueryState]);
+  }, [fieldValues, setState, page, currentStep, config.useQueryState]);
 
   return (
     <div className={`${cn("FormPage space-y-4", { hidden: page !== currentStep })}`}>

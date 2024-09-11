@@ -25,8 +25,6 @@ export interface TokenizationWizardProps extends React.HTMLAttributes<HTMLDivEle
 }
 
 export function TokenizationWizard({ className, defaultValues, ...props }: TokenizationWizardProps) {
-  console.log("defaultValues", { ...tokenizationWizardDefaultValues, ...defaultValues });
-
   const form = useForm<TokenizationWizardSchema>({
     resolver: zodResolver(TokenizationWizardValidator),
     defaultValues: { ...tokenizationWizardDefaultValues, ...defaultValues },
@@ -46,18 +44,17 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
         </CardHeader>
         <CardContent>
           <FormMultiStepProvider
-            form={form}
             config={{ useLocalStorageState: true, useQueryState: true, useQueryStateComponent: "FormPage" }}
           >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormPage title="Introduction" fields={[]}>
+                <FormPage form={form} title="Introduction">
                   <div>INTROPAGE</div>
                 </FormPage>
-                <FormPage title="Terms & Conditions" fields={[]}>
+                <FormPage form={form} title="Terms & Conditions">
                   <div>TERMS & CONDITIONS</div>
                 </FormPage>
-                <FormPage title="Token Information" fields={["tokenName", "tokenSymbol"]}>
+                <FormPage form={form} title="Token Information" fields={["tokenName", "tokenSymbol"]}>
                   {/* Token Name */}
                   <FormField
                     control={form.control}
@@ -104,7 +101,11 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token Economics" fields={["tokenMaxSupply", "tokenHasMaxSupply", "walletEntries"]}>
+                <FormPage
+                  form={form}
+                  title="Token Economics"
+                  fields={["tokenMaxSupply", "tokenHasMaxSupply", "walletEntries"]}
+                >
                   {/* Token Has Max Supply */}
                   <FormField
                     control={form.control}
@@ -184,7 +185,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token Documentation" fields={["currency"]}>
+                <FormPage form={form} title="Token Documentation" fields={["currency"]}>
                   {/* Category */}
                   <FormField
                     control={form.control}
@@ -271,7 +272,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token administrators" fields={[]}>
+                <FormPage form={form} title="Token administrators">
                   {/* Token administrators */}
                   <FormField
                     control={form.control}
@@ -296,7 +297,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Review" fields={[]}>
+                <FormPage form={form} title="Review">
                   <div>Review</div>
                 </FormPage>
               </form>
