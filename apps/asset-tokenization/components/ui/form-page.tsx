@@ -20,7 +20,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
   const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, form, config } = useMultiFormStep();
 
   const [state, setState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
-
+  const [isNavigate, setIsNavigate] = useState(true);
   const pageRef = useRef<number | null>(null);
   const page = pageRef.current ?? currentStep ?? 1;
 
@@ -37,24 +37,39 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
     name: fields,
   });
 
+  const isValidPage =
+    page === currentStep &&
+    fields
+      .map((field) => {
+        const fieldState = form.getFieldState(field);
+        return !fieldState.invalid;
+      })
+      .every((isValid) => isValid);
+
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    setIsNavigate(false);
     const navigationEntry = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
     const navigationType = navigationEntry?.type;
-
-    if (navigationType === "reload") {
-      console.log("RELOAD");
+    async function triggerFields() {
+      page === currentStep && (await form.trigger(fields));
       const validFields = fields.map((field) => {
         const fieldState = form.getFieldState(field);
-        console.log("FIELD STATE", fieldState);
         return !fieldState.invalid;
       });
-      console.log("VALID FIELDS", validFields);
       const isValid = validFields.every((isValid) => isValid);
-      console.log("ISVALID", isValid);
-      console.log("TRIGGER FIELDS", form.trigger(fields));
+      return isValid;
+    }
 
-      page === currentStep && form.trigger(fields);
+    if (navigationType === "reload") {
+      triggerFields().then((isValid) => {
+        page === currentStep && setIsValid(isValid);
+      });
+      const validFields = fields.map((field) => {
+        const fieldState = form.getFieldState(field);
+        return !fieldState.invalid;
+      });
+      const isValid = validFields.every((isValid) => isValid);
       page === currentStep && setIsValid(isValid);
     }
   }, []);
@@ -64,7 +79,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
     const navigationType = navigationEntry?.type;
 
     if (navigationType === "navigate") {
-      console.log("NAVIGATE");
+      setIsNavigate(true);
       const validFields = fields.map((field) => {
         const fieldState = form.getFieldState(field);
         return !fieldState.invalid;
@@ -79,7 +94,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
       const isDirty = dirtyFields.length > 0 ? dirtyFields.every((isDirty) => isDirty) : true;
       page === currentStep && setIsValid(isValid && isDirty);
     }
-  }, [fields, form, page, currentStep]);
+  }, [fields, form, page, currentStep, state]);
 
   useEffect(() => {
     if (config.useQueryState) {
@@ -99,7 +114,7 @@ export const FormPage = <T extends TokenizationWizardFormPageFields[]>({
         <Button
           type="button"
           className={cn({ hidden: currentStep === totalSteps })}
-          disabled={!isValid}
+          disabled={(!isValid && isNavigate) || (!isValidPage && !isNavigate)}
           onClick={() => {
             if (isValid) {
               nextStep();
