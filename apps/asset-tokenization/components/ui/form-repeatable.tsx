@@ -1,5 +1,6 @@
 "use client";
 
+import { useMultiFormStep } from "@/components/ui/form-multistep";
 import { NumericInput } from "@/components/ui/input-numeric";
 import { parseAsJson, useQueryState } from "nuqs";
 import type { ArrayPath, Control, FieldArray, FieldValues, Path } from "react-hook-form";
@@ -27,7 +28,8 @@ interface FieldItem extends Record<string, unknown> {
 }
 
 export function RepeatableForm<T extends FieldValues>({ control, name, components }: RepeatableFormProps<T>) {
-  const [_, setState] = useQueryState("state", parseAsJson<T>());
+  const [state, setState] = useQueryState("state", parseAsJson<T>());
+  const { config } = useMultiFormStep();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -67,13 +69,17 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
             )}
             <Button
               onClick={() => {
-                renderFields.length === 1 && addItem();
+                // renderFields.length === 1 && addItem();
+                //       renderFields.length === 1 && setIsCleared((prev) => !prev);
                 remove(index);
-                setState((prev) => {
-                  const newState = { ...prev };
-                  delete newState?.[name];
-                  return newState;
-                });
+                config.useQueryState &&
+                  setState((prev) => {
+                    console.log("state", state);
+                    const newState = { ...prev };
+                    delete newState?.[name];
+                    console.log("newState", prev, newState);
+                    return newState;
+                  });
               }}
               type="button"
               className="w-fit"

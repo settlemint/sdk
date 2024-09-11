@@ -1,5 +1,6 @@
 "use client";
 
+import { uploadFile } from "@/actions/upload.action";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dropzone } from "@/components/ui/dropzone";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -26,7 +27,7 @@ export interface TokenizationWizardProps extends React.HTMLAttributes<HTMLDivEle
 export function TokenizationWizard({ className, defaultValues, ...props }: TokenizationWizardProps) {
   const form = useForm<TokenizationWizardSchema>({
     resolver: zodResolver(TokenizationWizardValidator),
-    defaultValues: defaultValues ?? tokenizationWizardDefaultValues,
+    defaultValues: { ...tokenizationWizardDefaultValues, ...defaultValues },
     mode: "all",
   });
 
@@ -42,16 +43,18 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
           <CardDescription>Issue a new token.</CardDescription>
         </CardHeader>
         <CardContent>
-          <FormMultiStepProvider form={form}>
+          <FormMultiStepProvider
+            config={{ useLocalStorageState: true, useQueryState: true, useQueryStateComponent: "FormPage" }}
+          >
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormPage title="Introduction" fields={[]}>
+                <FormPage form={form} title="Introduction">
                   <div>INTROPAGE</div>
                 </FormPage>
-                <FormPage title="Terms & Conditions" fields={[]}>
+                <FormPage form={form} title="Terms & Conditions">
                   <div>TERMS & CONDITIONS</div>
                 </FormPage>
-                <FormPage title="Token Information" fields={["tokenName", "tokenSymbol"]}>
+                <FormPage form={form} title="Token Information" fields={["tokenName", "tokenSymbol"]}>
                   {/* Token Name */}
                   <FormField
                     control={form.control}
@@ -90,7 +93,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                       <FormItem>
                         <FormLabel>Token Logo</FormLabel>
                         <FormControl>
-                          <Dropzone label="Click, or drop your logo here" />
+                          <Dropzone label="Click, or drop your logo here" name={field.name} action={uploadFile} />
                         </FormControl>
                         <FormDescription>This is the logo of the token</FormDescription>
                         <FormMessage />
@@ -98,7 +101,11 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token Economics" fields={["tokenMaxSupply", "tokenHasMaxSupply", "walletEntries"]}>
+                <FormPage
+                  form={form}
+                  title="Token Economics"
+                  fields={["tokenMaxSupply", "tokenHasMaxSupply", "walletEntries"]}
+                >
                   {/* Token Has Max Supply */}
                   <FormField
                     control={form.control}
@@ -141,7 +148,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                       <FormItem>
                         <FormLabel>Upload CSV file</FormLabel>
                         <FormControl>
-                          <Dropzone label="Click, or drop your CSV file here" />
+                          <Dropzone label="Click, or drop your CSV file here" name={field.name} action={uploadFile} />
                         </FormControl>
                         <FormDescription>
                           You can upload a csv file with the wallet addresses for the initial distribution of the token
@@ -178,7 +185,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token Documentation" fields={["currency"]}>
+                <FormPage form={form} title="Token Documentation" fields={["currency"]}>
                   {/* Category */}
                   <FormField
                     control={form.control}
@@ -257,7 +264,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                       <FormItem>
                         <FormLabel>Upload documentation files</FormLabel>
                         <FormControl>
-                          <Dropzone label="Click, or drop your documents here" />
+                          <Dropzone label="Click, or drop your documents here" name={field.name} action={uploadFile} />
                         </FormControl>
                         <FormDescription>You can upload documentation files for the token</FormDescription>
                         <FormMessage />
@@ -265,7 +272,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Token administrators" fields={[]}>
+                <FormPage form={form} title="Token administrators">
                   {/* Token administrators */}
                   <FormField
                     control={form.control}
@@ -290,7 +297,7 @@ export function TokenizationWizard({ className, defaultValues, ...props }: Token
                     )}
                   />
                 </FormPage>
-                <FormPage title="Review" fields={[]}>
+                <FormPage form={form} title="Review">
                   <div>Review</div>
                 </FormPage>
               </form>
