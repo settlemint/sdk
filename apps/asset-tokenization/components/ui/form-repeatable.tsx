@@ -1,8 +1,8 @@
 "use client";
 
+import { useMultiFormStep } from "@/components/ui/form-multistep";
 import { NumericInput } from "@/components/ui/input-numeric";
 import { parseAsJson, useQueryState } from "nuqs";
-import { useState } from "react";
 import type { ArrayPath, Control, FieldArray, FieldValues, Path } from "react-hook-form";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Button } from "./button";
@@ -29,13 +29,13 @@ interface FieldItem extends Record<string, unknown> {
 
 export function RepeatableForm<T extends FieldValues>({ control, name, components }: RepeatableFormProps<T>) {
   const [state, setState] = useQueryState("state", parseAsJson<T>());
+  const { config } = useMultiFormStep();
 
   const { fields, append, remove } = useFieldArray({
     control,
     name,
   });
   const { register } = useFormContext();
-  const [isCleared, setIsCleared] = useState(false);
 
   const addItem = () => {
     append({} as FieldArray<T, ArrayPath<T>>);
@@ -72,13 +72,14 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
                 // renderFields.length === 1 && addItem();
                 //       renderFields.length === 1 && setIsCleared((prev) => !prev);
                 remove(index);
-                setState((prev) => {
-                  console.log("state", state);
-                  const newState = { ...prev };
-                  delete newState?.[name];
-                  console.log("newState", prev, newState);
-                  return newState;
-                });
+                config.useQueryState &&
+                  setState((prev) => {
+                    console.log("state", state);
+                    const newState = { ...prev };
+                    delete newState?.[name];
+                    console.log("newState", prev, newState);
+                    return newState;
+                  });
               }}
               type="button"
               className="w-fit"

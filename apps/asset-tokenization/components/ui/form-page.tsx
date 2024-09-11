@@ -21,7 +21,7 @@ export const FormPage = <
   fields?: TName[];
   children: React.ReactNode;
 }) => {
-  const { currentStep, nextStep, prevStep, totalSteps, registerFormPage, config } = useMultiFormStep();
+  const { currentStep, nextStep, prevStep, goToStep, totalSteps, registerFormPage, config } = useMultiFormStep();
 
   const [_, setState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
   const [isNavigate, setIsNavigate] = useState(true);
@@ -75,6 +75,9 @@ export const FormPage = <
       });
       const isValid = validFields.every((isValid) => isValid);
       page === currentStep && setIsValid(isValid);
+      if (config.useQueryState && config.useQueryStateComponent === "FormPage" && !isValid) {
+        goToStep(0);
+      }
     }
   }, []);
 

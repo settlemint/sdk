@@ -19,9 +19,6 @@ interface FormMultiStepContextType {
   registerFormPage: () => number;
   config: FormMultiStepConfig;
 }
-interface FormMultiStepProviderProps extends React.PropsWithChildren {
-  config: FormMultiStepConfig;
-}
 
 const FormMultiStepContext = createContext<FormMultiStepContextType | undefined>(undefined);
 
