@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { parseAsJson, useQueryState } from "nuqs";
+import { parseAsInteger, parseAsJson, useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 import { type FieldPath, type FieldValues, type UseFormReturn, useWatch } from "react-hook-form";
 import { useMultiFormStep } from "./form-multistep";
@@ -27,6 +27,8 @@ export const FormPage = <
   const [isNavigate, setIsNavigate] = useState(true);
   const pageRef = useRef<number | null>(null);
   const page = pageRef.current ?? currentStep ?? 1;
+
+  const [_currentStep, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
 
   const [isValid, setIsValid] = useState(false);
 
@@ -66,6 +68,9 @@ export const FormPage = <
     }
 
     if (navigationType === "reload") {
+      if (config.useQueryState && config.useQueryStateComponent === "FormPage") {
+        setCurrentStep(1);
+      }
       triggerFields().then((isValid) => {
         page === currentStep && setIsValid(isValid);
       });
@@ -75,9 +80,6 @@ export const FormPage = <
       });
       const isValid = validFields.every((isValid) => isValid);
       page === currentStep && setIsValid(isValid);
-      if (config.useQueryState && config.useQueryStateComponent === "FormPage" && !isValid) {
-        goToStep(0);
-      }
     }
   }, []);
 
