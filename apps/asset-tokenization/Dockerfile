@@ -16,7 +16,7 @@ RUN bun run build
 FROM oven/bun:1.1.27-alpine
 LABEL org.opencontainers.image.source="https://github.com/settlemint/sdk"
 
-RUN apk add --no-cache curl libstdc++ libstdc++6
+RUN apk add --no-cache curl libstdc++
 RUN curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | sh
 RUN hasura update-cli
 
