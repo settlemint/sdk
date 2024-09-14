@@ -124,7 +124,7 @@
     "@settlemint/sdk-cli": "workspace:*",
     "@inlang/cli": "2.18.1",
     "@inlang/paraglide-js": "1.11.2",
-    "@types/node": "22.5.4",
+    "@types/node": "22.5.5",
     "@types/react": "18.3.5",
     "@types/react-dom": "18.3.0",
     "eslint": "8.57.0",
