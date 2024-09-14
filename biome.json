@@ -5,6 +5,7 @@
   },
   "files": {
     "ignore": [
+      ".vscode/launch.json",
       "apps/asset-tokenization/.settlemint",
       "apps/asset-tokenization/contracts/artifacts",
       "./.settlemint",

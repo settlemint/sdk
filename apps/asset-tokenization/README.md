@@ -188,8 +188,8 @@ Describe any integrations that this application needs to make. Provide detailed 
 Connect the project to the SettleMint application.
 
 ```bash
-bunx settlemint connect
-bunx settlemint codegen
+bunx @settlemint/sdk connect
+bunx @settlemint/sdk codegen
 ```
 
 Generate a secret authentication key for the application:
@@ -199,9 +199,6 @@ bunx auth secret
 ```
 
 Create the [following schema](https://authjs.dev/getting-started/adapters/hasura#migrations) in Hasura and select `Track all the tables and relationships` when you do
-
-
-## Development
 
 ### Hasura
 
@@ -250,3 +247,25 @@ bun run hasura:console
 ```
 
 When modifying the schema or inserting data, check the migration checkbox to generate a new migration file. This will be saved in the `./database/migrations` folder. Commit these files into GIT.
+
+### Custom Deployment
+
+Custom deployments allow you to create and deploy your own container images on the SettleMint platform.
+
+To update the custom deployment, run the following command:
+
+```bash
+bunx @settlemint/sdk custom-deployment update --image-path <image-path> --port <port>
+```
+
+Replace `<image-path>` with the path to the container image you want to use for the custom deployment (eg ghcr.io/my-org/asset-tokenization:latest) and `<port>` with the port exposed by the docker image (by default this will be `3000`).
+
+In the Custom Deployment following environment variables must be set:
+
+| Environment Variable | Description | Example |
+|----------------------|-------------|---------|
+| SETTLEMINT_PAT_TOKEN | Personal Access Token for authenticating with SettleMint services | sm_pat_x9f2k7m1p3q5r8t0 |
+| SETTLEMINT_HASURA_GQL_ADMIN_SECRET | Admin secret for securing Hasura GraphQL API access | 8b3c1a9e5d7f2h4j6l0 |
+| SETTLEMINT_HASURA_GQL_ENDPOINT | Endpoint URL for the Hasura GraphQL API | https://hasura-e60f.gke-europe.settlemint.com |
+| NEXTAUTH_SECRET | Secret key used by NextAuth for session encryption and security | super_random_secret_key_9876 |
+| WALLET_CONNECT_PROJECT_ID | Project ID for WalletConnect integration | 2e4f6h8j0l1n3p5r7t9 |

@@ -59,7 +59,7 @@ export interface PromtSelectOptions<Value> extends SelectOptions<Value> {
 
 export const promptSelect = async <Value>(options: Prettify<PromtSelectOptions<Value>>): Promise<Value | undefined> => {
   if (!options.choices || options.choices.length === 0) {
-    printCancel("No choices provided for selection.");
+    printCancel(`${options.message}: no choices provided for selection.`);
   }
 
   const choices = options.choices.map((choice) =>

@@ -1,0 +1,39 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "bun",
+      "internalConsoleOptions": "openOnSessionStart",
+      "request": "launch",
+      "name": "SDK: Connect",
+      "program": "../../packages/sdk/src/cli/cli.ts",
+      "args": ["connect"],
+      "cwd": "${workspaceFolder}/apps/asset-tokenization",
+      "watchMode": true,
+      "strictEnv": false,
+      "stopOnEntry": false
+    },
+    {
+      "type": "bun",
+      "internalConsoleOptions": "openOnSessionStart",
+      "request": "launch",
+      "name": "SDK: Update Custom Deployment",
+      "program": "../../packages/sdk/src/cli/cli.ts",
+      "args": [
+        "custom-deployment",
+        "update",
+        "--image-path",
+        "ghcr.io/settlemint/starterkit-asset-tokenization:main",
+        "--port",
+        "3000"
+      ],
+      "cwd": "${workspaceFolder}/apps/asset-tokenization",
+      "watchMode": true,
+      "strictEnv": false,
+      "stopOnEntry": false
+    }
+  ]
+}

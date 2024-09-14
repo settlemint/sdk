@@ -18,6 +18,7 @@ import { createCommand } from "@/commands/create";
 import { Command } from "@commander-js/extra-typings";
 import dotenv from "dotenv";
 import pkg from "../package.json";
+import { customDeploymentCommand } from "./commands/custom-deployment";
 import { forgeCommand } from "./commands/forge";
 import { printCancel } from "./lib/cli-message";
 
@@ -49,6 +50,7 @@ sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(createCommand());
 sdkcli.addCommand(forgeCommand());
+sdkcli.addCommand(customDeploymentCommand());
 
 /**
  * Parses command line arguments and executes the appropriate command.

@@ -3,7 +3,14 @@ type NodeSvc = { rpcUrl: string; name: string; chainId: number; uniqueName: stri
 type GraphSvc = { gqlUrl: string; name: string; uniqueName: string };
 type PortalSvc = { gqlUrl: string; restUrl: string; name: string; uniqueName: string };
 type HasuraSvc = { gqlUrl: string; name: string; adminSecret: string; uniqueName: string };
-
+type CustomDeploymentSvc = {
+  id: string;
+  name: string;
+  port: number;
+  uniqueName: string;
+  url?: string;
+  imagePath: string;
+};
 // Type definition for Application
 // Represents an application with its associated services
 type Appl = {
@@ -13,6 +20,7 @@ type Appl = {
   graphs: GraphSvc[]; // List of Graph services
   hasuras: HasuraSvc[]; // List of Hasura services
   nodes: NodeSvc[]; // List of Node services
+  customDeployments: CustomDeploymentSvc[]; // List of Custom Deployment services
 };
 
 // Type definition for Workspace
@@ -51,4 +59,32 @@ export async function getServices({ instance, pat }: { instance: string; pat: st
   // Parse and return the fetched services
   const services = await result.json();
   return services as Works[];
+}
+
+export async function updateCustomDeployment({
+  instance,
+  pat,
+  id,
+  data,
+}: {
+  instance: string;
+  pat: string;
+  id: string;
+  data: { imagePath: string; port: number };
+}) {
+  const result = await fetch(`${instance}/cm/sdk/custom-deployment/${encodeURIComponent(id)}/update-image`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": pat,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!result.ok) {
+    const errorResponse: { message: string; error: string; statusCode: number } = await result.json();
+    throw new Error(`Failed to update custom deployment. ${errorResponse.message}`);
+  }
+
+  return (await result.json()) as Promise<CustomDeploymentSvc>;
 }

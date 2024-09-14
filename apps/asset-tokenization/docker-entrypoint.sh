@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -eo pipefail
 
 # Function to log messages
@@ -9,28 +9,28 @@ log() {
 # Function to apply migrations
 apply_migrations() {
     log "Applying Hasura migrations..."
-    if hasura migrate apply --all-databases; then
+    if hasura migrate apply --skip-update-check --admin-secret "$SETTLEMINT_HASURA_GQL_ADMIN_SECRET" --endpoint "$SETTLEMINT_HASURA_GQL_ENDPOINT/$SETTLEMINT_PAT_TOKEN" --all-databases; then
         log "Migrations applied successfully."
     else
         log "Error applying migrations. Exiting."
-        exit 1
+        # exit 1
     fi
 }
 
 # Function to apply metadata
 apply_metadata() {
     log "Applying Hasura metadata..."
-    if hasura metadata apply; then
+    if hasura metadata apply --skip-update-check --admin-secret "$SETTLEMINT_HASURA_GQL_ADMIN_SECRET" --endpoint "$SETTLEMINT_HASURA_GQL_ENDPOINT/$SETTLEMINT_PAT_TOKEN"; then
         log "Metadata applied successfully."
     else
         log "Error applying metadata. Exiting."
-        exit 1
+        # exit 1
     fi
 }
 
 # Main execution
-if [ -d "./database" ]; then
-    cd ./database || { log "Failed to change to database directory. Exiting."; exit 1; }
+if [ -d "/database" ]; then
+    cd /database || { log "Failed to change to database directory. Exiting."; exit 1; }
 
     MIGRATIONS_DIR="./migrations"
     METADATA_DIR="./metadata"

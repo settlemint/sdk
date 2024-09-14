@@ -70,8 +70,8 @@ export function connectCommand(): Command {
         "The url to the node rpc api for deployment (SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY environment variable)",
       )
       .option(
-        "-c, --session-secret <secret>",
-        "The secret to use to encrypt the session, 32 characters (SETTLEMINT_AUTH_SECRET environment variable)",
+        "-cd, --custom-deployment <id>",
+        "The id of the custom deployment where the application will be deployed to (SETTLEMINT_CUSTOM_DEPLOYMENT_ID environment variable)",
       )
       .option(
         "-wc, --wallet-connect <id>",
@@ -95,8 +95,8 @@ export function connectCommand(): Command {
           application,
           childWorkspace,
           defaultApplication,
-          sessionSecret,
           walletConnect,
+          customDeployment,
         }) => {
           printAsciiArt();
           printIntro("Setting up the SettleMint SDK in your project");
@@ -151,12 +151,12 @@ export function connectCommand(): Command {
             const selectedWorkspace = await coerceSelect({
               choices: services.map((service) => ({
                 value: service,
-                label: service.name,
+                name: service.name,
               })),
               envValue: services.find((svc) => svc.id === process.env.SETTLEMINT_WORKSPACE),
               cliParamValue: services.find((svc) => svc.id === workspace),
               configValue: services.find((svc) => svc.id === cfg?.workspace.id),
-              validate: (value) => !!services.find((svc) => svc.id === value?.id),
+              validate: (value) => services.some((svc) => svc.id === value?.id),
               message: "Select a top level workspace",
               existingMessage: "A valid top level workspace is already provided. Do you want to change it?",
             });
@@ -177,14 +177,14 @@ export function connectCommand(): Command {
               ];
               const choices = list.map((childWorkspace) => ({
                 value: childWorkspace,
-                label: childWorkspace.name,
+                name: childWorkspace.name,
               }));
               selectedChildWorkspace = await coerceSelect({
                 choices,
                 envValue: list.find((svc) => svc.id === process.env.SETTLEMINT_CHILD_WORKSPACE),
                 cliParamValue: list.find((svc) => svc.id === childWorkspace),
                 configValue: list.find((svc) => svc.id === cfg?.childWorkspace?.id),
-                validate: (value) => !!list.find((svc) => svc.id === value?.id),
+                validate: (value) => list.some((svc) => svc.id === value?.id),
                 message: "Select a child workspace",
                 existingMessage: "A valid child workspace is already provided. Do you want to change it?",
               });
@@ -204,10 +204,10 @@ export function connectCommand(): Command {
 
             // Application selection
             const selectedApplication = await coerceSelect({
-              choices: lowestWorkspace.applications.map((app) => ({ value: app, label: app.name })),
+              choices: lowestWorkspace.applications.map((app) => ({ value: app, name: app.name })),
               envValue: lowestWorkspace.applications.find((svc) => svc.id === process.env.SETTLEMINT_APPLICATION),
               cliParamValue: lowestWorkspace.applications.find((svc) => svc.id === application),
-              validate: (value) => !!lowestWorkspace.applications.find((svc) => svc.id === value?.id),
+              validate: (value) => lowestWorkspace.applications.some((svc) => svc.id === value?.id),
               message: "Select an application",
               existingMessage: "A valid application is already provided. Do you want to change it?",
             });
@@ -253,7 +253,7 @@ export function connectCommand(): Command {
             const portalRestUrl = await coerceSelect({
               choices: selectedApplication.portals.map((portal) => ({
                 value: portal.restUrl,
-                label: `${portal.name} (${portal.uniqueName})`,
+                name: `${portal.name} (${portal.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_PORTAL_REST_URL,
@@ -269,7 +269,7 @@ export function connectCommand(): Command {
             const portalGqlUrl = await coerceSelect({
               choices: selectedApplication.portals.map((portal) => ({
                 value: portal.gqlUrl,
-                label: `${portal.name} (${portal.uniqueName})`,
+                name: `${portal.name} (${portal.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_PORTAL_GQL_URL,
@@ -285,7 +285,7 @@ export function connectCommand(): Command {
             const thegraphGqlUrl = await coerceSelect({
               choices: selectedApplication.graphs.map((graph) => ({
                 value: graph.gqlUrl,
-                label: `${graph.name} (${graph.uniqueName})`,
+                name: `${graph.name} (${graph.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_THE_GRAPH_GQL_URL,
@@ -299,7 +299,7 @@ export function connectCommand(): Command {
             // Hasura URL selection
             const hasuras = selectedApplication.hasuras.map((hasura) => ({
               value: { gqlUrl: hasura.gqlUrl, adminSecret: hasura.adminSecret },
-              label: `${hasura.name} (${hasura.uniqueName})`,
+              name: `${hasura.name} (${hasura.uniqueName})`,
             }));
             const hasuraUrl = await coerceSelect({
               choices: hasuras,
@@ -316,7 +316,7 @@ export function connectCommand(): Command {
             const nodeUrl = await coerceSelect({
               choices: selectedApplication.nodes.map((node) => ({
                 value: node.rpcUrl,
-                label: `${node.name} (${node.uniqueName})`,
+                name: `${node.name} (${node.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_NODE_JSON_RPC_URL,
@@ -330,7 +330,7 @@ export function connectCommand(): Command {
             const nodeDeployUrl = await coerceSelect({
               choices: selectedApplication.nodes.map((node) => ({
                 value: node.rpcUrl,
-                label: `${node.name} (${node.uniqueName})`,
+                name: `${node.name} (${node.uniqueName})`,
               })),
               noneOption: true,
               envValue: process.env.SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY,
@@ -340,6 +340,20 @@ export function connectCommand(): Command {
               message: "Select a blockchain node for deployment",
               existingMessage:
                 "A valid blockchain node URL for deployment is already provided. Do you want to change it?",
+            });
+
+            const customDeploymentId = await coerceSelect({
+              choices: selectedApplication.customDeployments.map((customDeployment) => ({
+                value: customDeployment.id,
+                name: `${customDeployment.name} (${customDeployment.uniqueName})`,
+              })),
+              noneOption: true,
+              envValue: process.env.SETTLEMINT_CUSTOM_DEPLOYMENT_ID,
+              cliParamValue: customDeployment,
+              configValue: configApplication?.customDeploymentId,
+              validate: (value) => selectedApplication.customDeployments.some((svc) => svc.id === value),
+              message: "Select a custom deployment",
+              existingMessage: "A valid custom deployment is already provided. Do you want to change it?",
             });
 
             const possibleApplications = cfg?.applications ?? {};
@@ -413,6 +427,7 @@ export function connectCommand(): Command {
                       hasuraGql: hasuraUrl?.gqlUrl,
                       nodeJsonRpc: nodeUrl,
                       nodeJsonRpcDeploy: nodeDeployUrl,
+                      customDeploymentId,
                     },
                   },
                 });

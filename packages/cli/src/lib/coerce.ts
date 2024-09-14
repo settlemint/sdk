@@ -123,7 +123,7 @@ export async function coerceSelect<Value>(params: Prettify<CoerceSelectParams<Va
 
   // Prompt for select input
   const selectedValue = await promptSelect({
-    choices: choices,
+    choices,
     message,
     noneOption,
   });

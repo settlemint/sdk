@@ -14,6 +14,7 @@ const ApplicationConfigSchema = z.object({
   hasuraGql: z.string().url().optional(),
   nodeJsonRpc: z.string().url().optional(),
   nodeJsonRpcDeploy: z.string().url().optional(),
+  customDeploymentId: z.string().optional(),
 });
 
 /**

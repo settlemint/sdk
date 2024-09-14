@@ -4,6 +4,7 @@
     "biomejs.biome",
     "graphql.vscode-graphql-syntax",
     "apollographql.vscode-apollo",
-    "inlang.vs-code-extension"
+    "inlang.vs-code-extension",
+    "oven.bun-vscode"
   ]
 }
