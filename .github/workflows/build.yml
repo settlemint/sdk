@@ -46,22 +46,6 @@ jobs:
             ./.turbo
             ~/.bun/install/cache
 
-      # - name: Launch docker-compose services
-      #   shell: bash
-      #   run: |
-      #     if [[ -f docker-compose.yml ]]; then
-      #       docker compose -f docker-compose.yml up -d --wait
-      #     fi
-
-      # - name: Install Hasura CLI
-      #   run: curl -L https://github.com/hasura/graphql-engine/raw/stable/cli/get.sh | bash
-
-      # - name: Apply Hasura migrations
-      #   working-directory: apps/asset-tokenization/database
-      #   run: |
-      #     hasura migrate apply --all-databases
-      #     hasura metadata apply
-
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -73,18 +57,8 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Foundry
-        uses: foundry-rs/foundry-toolchain@v1
-        with:
-          version: nightly
-
       - name: Install Bun dependencies
         run: bun install
-
-      - name: Install Foundry dependencies
-        working-directory: apps/asset-tokenization/contracts
-        run: |
-          forge soldeer update
 
       - name: Setup 1Password
         uses: settlemint/setup-op@main
@@ -149,9 +123,6 @@ jobs:
 
           echo "Updated version to $VERSION"
 
-      - name: Run translate
-        run: bunx turbo translate
-
       - name: Run tests and checks
         run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
         env:
@@ -187,81 +158,6 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - name: Publish Asset Tokenization package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./apps/asset-tokenization/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Wait for NPM packages to be published
-        run: |
-          wait_for_package() {
-            package=$1
-            version=$2
-            max_attempts=30
-            attempt=1
-
-            while [ $attempt -le $max_attempts ]; do
-              if npm view $package@$version version &>/dev/null; then
-                echo "$package@$version is now available on NPM"
-                return 0
-              fi
-              echo "Waiting for $package@$version to be available on NPM (attempt $attempt/$max_attempts)"
-              sleep 10
-              attempt=$((attempt + 1))
-            done
-
-            echo "Timeout: $package@$version is not available on NPM after $max_attempts attempts"
-            return 1
-          }
-
-          wait_for_package "@settlemint/sdk-cli" "$VERSION"
-          wait_for_package "@settlemint/sdk-config" "$VERSION"
-          wait_for_package "@settlemint/sdk-next" "$VERSION"
-          wait_for_package "@settlemint/starterkit-asset-tokenization" "$VERSION"
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to DockerHub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASS }}
-
-      - name: Generate Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: |
-            ghcr.io/settlemint/starterkit-asset-tokenization
-          tags: |
-            type=schedule
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}}
-            type=sha
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: ./apps/asset-tokenization
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          provenance: mode=max
-          sbom: true
-
       - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' }}
         uses: taoliujun/action-unique-comment@v1
@@ -274,11 +170,6 @@ jobs:
                 | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
                 | SDK Config | `@settlemint/sdk-config@${{ env.VERSION }}` |
                 | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
-
-                # 🚀 Starterkits
-                | Use Case | NPM | Docker |
-                | ------- | -------------------- | --- |
-                | Asset tokenization | `@settlemint/starterkit-asset-tokenization@${{ env.VERSION }}` | `ghcr.io/settlemint/starterkit-asset-tokenization:${{ env.VERSION }}` |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@v5

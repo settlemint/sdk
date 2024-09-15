@@ -41,3 +41,5 @@ settlemint.config.mjs
 settlemint.config.mjs
 apps/asset-tokenization/contracts/ignition/deployments
 *.deployments.json
+
+.idea
