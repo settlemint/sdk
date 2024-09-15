@@ -1,6 +1,7 @@
 import { forgeBuildCommand } from "@/commands/forge/build";
 import { Command } from "@commander-js/extra-typings";
 import { forgeCreateCommand } from "./forge/create";
+import { forgeFormatCommand } from "./forge/format";
 import { forgeTestCommand } from "./forge/test";
 
 /**
@@ -15,6 +16,7 @@ export function forgeCommand() {
   scs.addCommand(forgeBuildCommand());
   scs.addCommand(forgeCreateCommand());
   scs.addCommand(forgeTestCommand());
+  scs.addCommand(forgeFormatCommand());
 
   return scs;
 }
