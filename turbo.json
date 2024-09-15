@@ -8,7 +8,7 @@
       "outputs": ["contracts/dependencies/**"]
     },
     "build": {
-      "dependsOn": ["forge:dependencies", "codegen", "^build", "forge:build"],
+      "dependsOn": ["codegen", "^build"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
