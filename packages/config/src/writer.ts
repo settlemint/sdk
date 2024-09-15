@@ -27,7 +27,8 @@ export async function createEnv(env: Partial<Env>) {
   let dotEnv: Partial<Env> = {};
   try {
     const parsedEnv = parse(readFileSync(envPath, "utf-8"));
-    dotEnv = EnvSchema.partial().parse(parsedEnv);
+    const partialEnvSchema = EnvSchema.partial();
+    dotEnv = partialEnvSchema.parse(parsedEnv);
   } catch (e) {
     // Ignore if file does not exist or is invalid
   }
