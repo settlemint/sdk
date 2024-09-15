@@ -38,7 +38,11 @@ type WithPathPatternWildcard<T> = `${T & string}(.*)`;
 /**
  * Extracts the string type from Link href prop
  */
-type NextTypedRoute<T = Parameters<typeof Link>["0"]["href"]> = T extends string ? T : never;
+type NextTypedRoute<T = Parameters<typeof Link>[0]> = T extends { href: infer H }
+  ? H extends string
+    ? H
+    : never
+  : never;
 
 /**
  * Type for route matcher that supports Next.js typed routes
