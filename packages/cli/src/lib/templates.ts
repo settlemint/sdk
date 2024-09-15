@@ -6,7 +6,7 @@ import { version } from "../../package.json";
 /**
  * Array of available templates for project creation.
  */
-export const templates = [{ value: "asset-tokenization", label: "Asset Tokenization" }] as const;
+export const templates = [{ value: "@settlemint/starterkit-asset-tokenization", label: "Asset Tokenization" }] as const;
 
 /**
  * Checks if the given project name is a valid package name.
@@ -116,8 +116,16 @@ export async function downloadAndExtractNpmPackage(
   // Create target directory if it doesn't exist
   mkdirSync(targetDir, { recursive: true });
 
+  // Fetch the latest version from npm registry
+  const response = await fetch(`https://registry.npmjs.org/${template}`);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  const data = await response.json();
+  const latestVersion = data["dist-tags"].latest;
+
   // Download and extract the package using giget
-  await downloadTemplate(`https://registry.npmjs.org/${template}/-/${template}-${version}.tgz`, {
+  await downloadTemplate(`https://registry.npmjs.org/${template}/-/${template}-${latestVersion}.tgz`, {
     dir: targetDir,
     force: true,
   });
