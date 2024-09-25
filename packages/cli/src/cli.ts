@@ -25,7 +25,7 @@ import { printCancel } from "./lib/cli-message";
 // Load environment variables from .env.local and .env files
 // Override existing env vars with those found in the files
 dotenv.config({
-  path: [".env.local", "../.env.local", ".env", "../.env"],
+  path: [".env.development", "../.env.development", ".env.local", "../.env.local", ".env", "../.env"],
   override: true,
 });
 
