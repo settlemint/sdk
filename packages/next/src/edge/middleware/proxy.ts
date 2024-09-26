@@ -24,7 +24,7 @@ export function proxyMiddleware(request: NextRequest) {
     response.headers.delete("Authorization");
     response.headers.set("x-auth-token", process.env.SETTLEMINT_PAT_TOKEN ?? "");
     if (isHasuraProxyRoute(request)) {
-      response.headers.set("x-hasura-admin-secret", process.env.SETTLEMINT_HASURA_ADMIN_SECRET ?? "");
+      response.headers.set("x-hasura-admin-secret", process.env.SETTLEMINT_HASURA_GQL_ADMIN_SECRET ?? "");
     }
     return response;
   }
