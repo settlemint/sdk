@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { createRouteMatcher } from "../utils/route-matcher";
 
 const isProxyRoute = createRouteMatcher(["/proxy/(.*)"]);
-const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura"]);
+const isHasuraProxyRoute = createRouteMatcher(["/proxy/hasura", "/proxy/hasura/(.*)"]);
 
 /**
  * Middleware function to handle proxy requests
