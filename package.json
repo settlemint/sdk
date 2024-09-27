@@ -41,7 +41,7 @@
     "lefthook": "1.7.17",
     "turbo": "2.1.2",
     "typescript": "5.6.2",
-    "knip": "5.30.5",
+    "knip": "5.30.6",
     "@types/bun": "1.1.10",
     "@arethetypeswrong/cli": "0.16.4",
     "publint": "0.2.11",
