@@ -11,6 +11,7 @@ const ApplicationConfigSchema = z.object({
   portalGql: z.string().url().optional(),
   portalRest: z.string().url().optional(),
   thegraphGql: z.string().url().optional(),
+  subgraphName: z.string().optional(),
   hasuraGql: z.string().url().optional(),
   nodeJsonRpc: z.string().url().optional(),
   nodeJsonRpcDeploy: z.string().url().optional(),

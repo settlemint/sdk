@@ -180,16 +180,6 @@ export const connectSettlemint = (config: {viem?: ViemConfig, wagmi: WagmiConfig
             stopMessage: "SettleMint SDK generated",
           });
 
-          // if (existsSync("./contracts")) {
-          //   await printSpinner({
-          //     startMessage: "Generating the wagmi hooks",
-          //     task: async () => {
-          //       await runWagmiCli("generate --config ./.settlemint/wagmi/wagmi.config.ts");
-          //     },
-          //     stopMessage: "wagmi hooks generated",
-          //   });
-          // }
-
           printNote(greenBright("Read the documentation to learn how to use the generated SDK <link here>"));
 
           // Display completion message

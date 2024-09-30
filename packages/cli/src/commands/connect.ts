@@ -58,6 +58,7 @@ export function connectCommand(): Command {
         "-tg, --the-graph-gql <url>",
         "The url to the graph gql api (SETTLEMINT_THE_GRAPH_GQL_URL environment variable)",
       )
+      .option("-ds, --default-subgraph", "Use the default subgraph (starterkits)")
       .option(
         "-h, --hasura-gql <url>",
         "The url to the hasura gql api (SETTLEMINT_HASURA_GQL_URL environment variable)",
@@ -65,10 +66,6 @@ export function connectCommand(): Command {
       .option(
         "-n, --node-json-rpc <url>",
         "The url to the node rpc api (SETTLEMINT_NODE_JSON_RPC_URL environment variable)",
-      )
-      .option(
-        "-nd, --node-json-rpc-deploy <url>",
-        "The url to the node rpc api for deployment (SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY environment variable)",
       )
       .option(
         "-cd, --custom-deployment <id>",
@@ -95,13 +92,13 @@ export function connectCommand(): Command {
           theGraphGql,
           hasuraGql,
           nodeJsonRpc,
-          nodeJsonRpcDeploy,
           workspace,
           application,
           childWorkspace,
           defaultApplication,
           authSecret,
           userWallet,
+          defaultSubgraph,
           customDeployment,
         }) => {
           printAsciiArt();
@@ -287,11 +284,16 @@ export function connectCommand(): Command {
             });
 
             // The Graph GraphQL URL selection
+            let subgraphName: string | undefined;
             const thegraphGqlUrl = await coerceSelect({
-              choices: selectedApplication.graphs.map((graph) => ({
-                value: graph.gqlUrl,
-                name: `${graph.name} (${graph.uniqueName})`,
-              })),
+              choices: selectedApplication.graphs.map((graph) => {
+                const baseUrl = graph.gqlUrl.split("/");
+                subgraphName = baseUrl.pop();
+                return {
+                  value: baseUrl.join("/"),
+                  name: `${graph.name} (${graph.uniqueName})`,
+                };
+              }),
               noneOption: true,
               envValue: process.env.SETTLEMINT_THE_GRAPH_GQL_URL,
               cliParamValue: theGraphGql,
@@ -300,6 +302,27 @@ export function connectCommand(): Command {
               message: "Select your The Graph instance",
               existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
             });
+
+            if (thegraphGqlUrl && subgraphName) {
+              subgraphName = await coerceSelect({
+                choices: [
+                  {
+                    value: subgraphName,
+                    name: `Custom subgraph (${subgraphName})`,
+                  },
+                  {
+                    value: "starterkits",
+                    name: "Default subgraph (starterkits)",
+                  },
+                ],
+                noneOption: false,
+                cliParamValue: defaultSubgraph ? "starterkits" : subgraphName,
+                configValue: configApplication?.subgraphName,
+                validate: (value) => !!new URL(value ?? "").toString(),
+                message: "Select the subgraph to use",
+                existingMessage: "A valid subgraph is already provided. Do you want to change it?",
+              });
+            }
 
             // Hasura URL selection
             const hasuras = selectedApplication.hasuras.map((hasura) => ({
@@ -330,21 +353,6 @@ export function connectCommand(): Command {
               validate: (value) => !!new URL(value ?? "").toString(),
               message: "Select a blockchain node or loadbalancer",
               existingMessage: "A valid blockchain node URL is already provided. Do you want to change it?",
-            });
-
-            const nodeDeployUrl = await coerceSelect({
-              choices: selectedApplication.nodes.map((node) => ({
-                value: node.rpcUrl,
-                name: `${node.name} (${node.uniqueName})`,
-              })),
-              noneOption: true,
-              envValue: process.env.SETTLEMINT_NODE_JSON_RPC_URL_DEPLOY,
-              cliParamValue: nodeJsonRpcDeploy,
-              configValue: configApplication?.nodeJsonRpcDeploy,
-              validate: (value) => !!new URL(value ?? "").toString(),
-              message: "Select a blockchain node for deployment",
-              existingMessage:
-                "A valid blockchain node URL for deployment is already provided. Do you want to change it?",
             });
 
             const customDeploymentId = await coerceSelect({
@@ -442,9 +450,9 @@ export function connectCommand(): Command {
                       portalGql: portalGqlUrl,
                       portalRest: portalRestUrl,
                       thegraphGql: thegraphGqlUrl,
+                      subgraphName,
                       hasuraGql: hasuraUrl?.gqlUrl,
                       nodeJsonRpc: nodeUrl,
-                      nodeJsonRpcDeploy: nodeDeployUrl,
                       customDeploymentId,
                       userWallet: userWalletName,
                     },
