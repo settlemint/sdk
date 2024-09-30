@@ -114,7 +114,7 @@ export async function coerceSelect<Value>(params: Prettify<CoerceSelectParams<Va
         typeof value === "string"
           ? value
           : value && typeof value === "object"
-            ? ((value as { name?: string }).name ?? "")
+            ? ((value as { name?: string }).name ?? (value as { gqlUrl?: string }).gqlUrl ?? "")
             : ""
       })`,
       default: false,

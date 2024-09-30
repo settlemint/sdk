@@ -340,11 +340,6 @@ export function connectCommand(): Command {
               name: `${hasura.name} (${hasura.uniqueName})`,
             }));
 
-            console.log(
-              hasuras,
-              configApplication?.hasuraGql,
-              hasuras.find((h) => h.value.gqlUrl === configApplication?.hasuraGql)?.value,
-            );
             const hasuraUrl = await coerceSelect({
               choices: hasuras,
               noneOption: true,
