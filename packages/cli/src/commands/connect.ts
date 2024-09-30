@@ -58,7 +58,7 @@ export function connectCommand(): Command {
         "-tg, --the-graph-gql <url>",
         "The url to the graph gql api (SETTLEMINT_THE_GRAPH_GQL_URL environment variable)",
       )
-      .option("-ds, --default-subgraph", "Use the default subgraph (starterkits)")
+      .option("-sub, --subgraph <name>", "The name of the subgraph to use (SETTLEMINT_SUBGRAPH environment variable)")
       .option(
         "-h, --hasura-gql <url>",
         "The url to the hasura gql api (SETTLEMINT_HASURA_GQL_URL environment variable)",
@@ -98,7 +98,7 @@ export function connectCommand(): Command {
           defaultApplication,
           authSecret,
           userWallet,
-          defaultSubgraph,
+          subgraph,
           customDeployment,
         }) => {
           printAsciiArt();
@@ -326,7 +326,8 @@ export function connectCommand(): Command {
                   },
                 ],
                 noneOption: false,
-                cliParamValue: defaultSubgraph ? "starterkits" : undefined,
+                cliParamValue: subgraph,
+                envValue: process.env.SETTLEMINT_SUBGRAPH,
                 configValue: configApplication?.subgraphName,
                 validate: (value) => !!value?.trim(),
                 message: "Select the subgraph to use",
