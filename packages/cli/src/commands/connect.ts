@@ -284,13 +284,10 @@ export function connectCommand(): Command {
             });
 
             // The Graph GraphQL URL selection
-            let subgraphName: string | undefined;
             const thegraphGqlUrl = await coerceSelect({
               choices: selectedApplication.graphs.map((graph) => {
-                const baseUrl = graph.gqlUrl.split("/");
-                subgraphName = baseUrl.pop();
                 return {
-                  value: baseUrl.join("/"),
+                  value: graph.gqlUrl,
                   name: `${graph.name} (${graph.uniqueName})`,
                 };
               }),
@@ -303,12 +300,13 @@ export function connectCommand(): Command {
               existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
             });
 
-            if (thegraphGqlUrl && subgraphName) {
+            let subgraphName: string | undefined;
+            if (thegraphGqlUrl) {
               subgraphName = await coerceSelect({
                 choices: [
                   {
-                    value: subgraphName,
-                    name: `Custom subgraph (${subgraphName})`,
+                    value: thegraphGqlUrl.split("/").pop(),
+                    name: `Custom subgraph (${thegraphGqlUrl.split("/").pop()})`,
                   },
                   {
                     value: "starterkits",
@@ -316,7 +314,7 @@ export function connectCommand(): Command {
                   },
                 ],
                 noneOption: false,
-                cliParamValue: defaultSubgraph ? "starterkits" : subgraphName,
+                cliParamValue: defaultSubgraph ? "starterkits" : undefined,
                 configValue: configApplication?.subgraphName,
                 validate: (value) => !!value?.trim(),
                 message: "Select the subgraph to use",
