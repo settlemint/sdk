@@ -87,6 +87,10 @@ export async function coerceSelect<Value>(params: Prettify<CoerceSelectParams<Va
   const { message, noneOption, choices, envValue, cliParamValue, configValue, validate, existingMessage, skipCoerce } =
     params;
 
+  if (!choices || choices.length === 0) {
+    return undefined;
+  }
+
   // Helper function to check if a value is a valid option
   const isValidOption = (value: Value | undefined) =>
     value !== undefined &&
@@ -110,7 +114,7 @@ export async function coerceSelect<Value>(params: Prettify<CoerceSelectParams<Va
         typeof value === "string"
           ? value
           : value && typeof value === "object"
-            ? (value as { name?: string }).name ?? ""
+            ? ((value as { name?: string }).name ?? "")
             : ""
       })`,
       default: false,

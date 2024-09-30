@@ -247,8 +247,8 @@ export function connectCommand(): Command {
                 defaultValue: randomString(32),
                 validate: (value) => (value?.trim() ?? "").length === 32,
                 promptMessage: "Enter a secret for authentication",
-                existingMessage: "A valid secret is already provided. Do you want to change it?",
-                invalidMessage: "Invalid secret",
+                existingMessage: "A valid authentication secret is already provided. Do you want to change it?",
+                invalidMessage: "Invalid authentication secret",
               });
             }
 
