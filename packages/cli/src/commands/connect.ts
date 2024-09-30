@@ -371,8 +371,8 @@ export function connectCommand(): Command {
               cliParamValue: userWallet,
               configValue: configApplication?.userWallet,
               validate: (value) => !!new URL(value ?? "").toString(),
-              message: "Select your The Graph instance",
-              existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
+              message: "Select a HD private key to manage your user wallets",
+              existingMessage: "A valid HD private key for user wallets is already provided. Do you want to change it?",
             });
 
             const possibleApplications = cfg?.applications ?? {};
