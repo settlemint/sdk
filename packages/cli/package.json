@@ -57,7 +57,7 @@
     "@graphql-codegen/typescript-graphql-request": "^6",
     "@graphql-codegen/typescript-operations": "^4",
     "@inquirer/prompts": "^6.0.0",
-    "@npmcli/package-json": "^5",
+    "@npmcli/package-json": "^6.0.0",
     "@settlemint/sdk-config": "workspace:*",
     "commander": "^12",
     "cross-spawn": "^7",
