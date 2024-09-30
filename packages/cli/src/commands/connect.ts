@@ -186,7 +186,7 @@ export function connectCommand(): Command {
                 choices,
                 envValue: list.find((svc) => svc.id === process.env.SETTLEMINT_CHILD_WORKSPACE),
                 cliParamValue: list.find((svc) => svc.id === childWorkspace),
-                configValue: list.find((svc) => svc.id === cfg?.childWorkspace?.id),
+                configValue: list.find((svc) => svc.id === cfg?.workspace?.id || svc.id === cfg?.childWorkspace?.id),
                 validate: (value) => list.some((svc) => svc.id === value?.id),
                 message: "Select a child workspace",
                 existingMessage: "A valid child workspace is already provided. Do you want to change it?",
@@ -318,7 +318,7 @@ export function connectCommand(): Command {
                 noneOption: false,
                 cliParamValue: defaultSubgraph ? "starterkits" : subgraphName,
                 configValue: configApplication?.subgraphName,
-                validate: (value) => !!new URL(value ?? "").toString(),
+                validate: (value) => !!value?.trim(),
                 message: "Select the subgraph to use",
                 existingMessage: "A valid subgraph is already provided. Do you want to change it?",
               });
