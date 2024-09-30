@@ -116,7 +116,7 @@ export function codegenCommand(): Command {
                     settleMintDir,
                     framework: cfg.framework,
                     type: "hasura",
-                    gqlUrl: process.env.LOCAL_HASURA ?? hasuraGql,
+                    gqlUrl: hasuraGql,
                     personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
                     hasuraAdminSecret: envCfg.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
                   }),
