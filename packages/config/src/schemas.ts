@@ -15,6 +15,7 @@ const ApplicationConfigSchema = z.object({
   nodeJsonRpc: z.string().url().optional(),
   nodeJsonRpcDeploy: z.string().url().optional(),
   customDeploymentId: z.string().optional(),
+  userWallet: z.string().optional(),
 });
 
 /**
@@ -48,7 +49,6 @@ export const EnvSchema = z.object({
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
   SETTLEMINT_APP_URL: z.string().url().optional(),
   SETTLEMINT_AUTH_SECRET: z.string().min(32).optional(),
-  WALLET_CONNECT_PROJECT_ID: z.string().optional(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;

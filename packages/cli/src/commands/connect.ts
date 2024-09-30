@@ -4,6 +4,7 @@ import { coerceSelect, coerceText } from "@/lib/coerce";
 import { detectFramework } from "@/lib/framework";
 import { updateGitignore } from "@/lib/git";
 import { getExecutor, getPkgManager } from "@/lib/package-manager";
+import { randomString } from "@/lib/random";
 import { Command } from "@commander-js/extra-typings";
 import { loadSettleMintConfig, loadSettleMintPartialEnvironmentConfig } from "@settlemint/sdk-config/loader";
 import { createConfig, createEnv } from "@settlemint/sdk-config/writer";
@@ -74,8 +75,12 @@ export function connectCommand(): Command {
         "The id of the custom deployment where the application will be deployed to (SETTLEMINT_CUSTOM_DEPLOYMENT_ID environment variable)",
       )
       .option(
-        "-wc, --wallet-connect <id>",
-        "The project id to use for Wallet Connect (WALLET_CONNECT_PROJECT_ID environment variable)",
+        "-as, --auth-secret <secret>",
+        "The secret to use for authentication (SETTLEMINT_AUTH_SECRET environment variable, default is 32 random characters)",
+      )
+      .option(
+        "-uw, --user-wallet <name>",
+        "The name of the user wallet to use for the application (SETTLEMINT_USER_WALLET environment variable)",
       )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
@@ -95,7 +100,8 @@ export function connectCommand(): Command {
           application,
           childWorkspace,
           defaultApplication,
-          walletConnect,
+          authSecret,
+          userWallet,
           customDeployment,
         }) => {
           printAsciiArt();
@@ -219,8 +225,7 @@ export function connectCommand(): Command {
 
             // Application URL input (only for Next.js)
             let selectedAppUrl: string | undefined;
-            let selectedSessionSecret: string | undefined;
-            let selectedWalletConnectProjectId: string | undefined;
+            let selectedAuthSecret: string | undefined;
             if (selectedFramework === "nextjs") {
               selectedAppUrl = await coerceText({
                 type: "text",
@@ -234,16 +239,16 @@ export function connectCommand(): Command {
                 invalidMessage: "Invalid application instance URL. Please enter a valid URL.",
               });
 
-              selectedWalletConnectProjectId = await coerceText({
-                type: "text",
-                envValue: process.env.WALLET_CONNECT_PROJECT_ID,
-                cliParamValue: walletConnect,
-                configValue: envCfg?.WALLET_CONNECT_PROJECT_ID,
-                validate: (value) => (value?.trim() ?? "").length > 0,
-                promptMessage:
-                  "Enter the Wallet Connect project id, get one for free at https://cloud.walletconnect.com",
-                existingMessage: "A valid Wallet Connect project id is already provided. Do you want to change it?",
-                invalidMessage: "Invalid Wallet Connect project id. Please enter a valid project id.",
+              selectedAuthSecret = await coerceText({
+                type: "password",
+                envValue: process.env.SETTLEMINT_AUTH_SECRET,
+                cliParamValue: authSecret,
+                configValue: envCfg?.SETTLEMINT_AUTH_SECRET,
+                defaultValue: randomString(32),
+                validate: (value) => (value?.trim() ?? "").length === 32,
+                promptMessage: "Enter a secret for authentication",
+                existingMessage: "A valid secret is already provided. Do you want to change it?",
+                invalidMessage: "Invalid secret",
               });
             }
 
@@ -356,6 +361,20 @@ export function connectCommand(): Command {
               existingMessage: "A valid custom deployment is already provided. Do you want to change it?",
             });
 
+            const userWalletName = await coerceSelect({
+              choices: selectedApplication.userWallets.map((uw) => ({
+                value: uw.uniqueName,
+                name: `${uw.name} (${uw.uniqueName})`,
+              })),
+              noneOption: true,
+              envValue: process.env.SETTLEMINT_USER_WALLET,
+              cliParamValue: userWallet,
+              configValue: configApplication?.userWallet,
+              validate: (value) => !!new URL(value ?? "").toString(),
+              message: "Select your The Graph instance",
+              existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
+            });
+
             const possibleApplications = cfg?.applications ?? {};
             if (!possibleApplications[selectedApplication.id]) {
               possibleApplications[selectedApplication.id] = {
@@ -388,11 +407,10 @@ export function connectCommand(): Command {
               startMessage: "Creating or updating the .env.local file",
               task: async () => {
                 await createEnv({
-                  SETTLEMINT_PAT_TOKEN: personalAccessToken,
                   SETTLEMINT_APP_URL: selectedAppUrl,
+                  SETTLEMINT_AUTH_SECRET: selectedAuthSecret,
+                  SETTLEMINT_PAT_TOKEN: personalAccessToken,
                   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
-                  SETTLEMINT_AUTH_SECRET: selectedSessionSecret,
-                  WALLET_CONNECT_PROJECT_ID: selectedWalletConnectProjectId,
                 });
               },
               stopMessage: ".env.local file created or updated",
@@ -428,6 +446,7 @@ export function connectCommand(): Command {
                       nodeJsonRpc: nodeUrl,
                       nodeJsonRpcDeploy: nodeDeployUrl,
                       customDeploymentId,
+                      userWallet: userWalletName,
                     },
                   },
                 });

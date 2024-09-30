@@ -3,6 +3,7 @@ type NodeSvc = { rpcUrl: string; name: string; chainId: number; uniqueName: stri
 type GraphSvc = { gqlUrl: string; name: string; uniqueName: string };
 type PortalSvc = { gqlUrl: string; restUrl: string; name: string; uniqueName: string };
 type HasuraSvc = { gqlUrl: string; name: string; adminSecret: string; uniqueName: string };
+type UserWalletSvc = { name: string; uniqueName: string };
 type CustomDeploymentSvc = {
   id: string;
   name: string;
@@ -21,6 +22,7 @@ type Appl = {
   hasuras: HasuraSvc[]; // List of Hasura services
   nodes: NodeSvc[]; // List of Node services
   customDeployments: CustomDeploymentSvc[]; // List of Custom Deployment services
+  userWallets: UserWalletSvc[]; // List of User Wallet services
 };
 
 // Type definition for Workspace
