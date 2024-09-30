@@ -376,7 +376,7 @@ export function connectCommand(): Command {
               envValue: process.env.SETTLEMINT_USER_WALLET,
               cliParamValue: userWallet,
               configValue: configApplication?.userWallet,
-              validate: (value) => !!new URL(value ?? "").toString(),
+              validate: (value) => !!value?.trim(),
               message: "Select a HD private key to manage your user wallets",
               existingMessage: "A valid HD private key for user wallets is already provided. Do you want to change it?",
             });
