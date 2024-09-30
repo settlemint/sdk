@@ -41,7 +41,6 @@ export async function coerceText(options: CoerceTextOptions): Promise<string> {
   // Determine the initial value
   const value = envValue ?? cliParamValue ?? configValue ?? defaultValue;
 
-  console.log(!skipCoerce, value, validate(value));
   // If a valid value exists and coercion is not skipped, prompt for confirmation
   if (!skipCoerce && value && validate(value)) {
     const change = await confirm({

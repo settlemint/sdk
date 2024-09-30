@@ -230,7 +230,10 @@ export function connectCommand(): Command {
                 cliParamValue: appUrl,
                 defaultValue: "http://localhost:3000",
                 configValue: envCfg?.SETTLEMINT_APP_URL,
-                validate: (value) => !!new URL(value ?? "").toString(),
+                validate: (value) => {
+                  if (!value) return false;
+                  return !!new URL(value).toString();
+                },
                 promptMessage: "Enter the development URL of your application instance",
                 existingMessage: "A valid application URL is already provided. Do you want to change it?",
                 invalidMessage: "Invalid application instance URL. Please enter a valid URL.",
@@ -261,7 +264,10 @@ export function connectCommand(): Command {
               envValue: process.env.SETTLEMINT_PORTAL_REST_URL,
               cliParamValue: portalRest,
               configValue: configApplication?.portalRest,
-              validate: (value) => !!new URL(value ?? "").toString(),
+              validate: (value) => {
+                if (!value) return false;
+                return !!new URL(value).toString();
+              },
               message: "Select your Smart Contract Set Portal instance (REST API)",
               existingMessage:
                 "A valid Smart Contract Set Portal instance URL for REST is already provided. Do you want to change it?",
@@ -277,7 +283,10 @@ export function connectCommand(): Command {
               envValue: process.env.SETTLEMINT_PORTAL_GQL_URL,
               cliParamValue: portalGql,
               configValue: configApplication?.portalGql,
-              validate: (value) => !!new URL(value ?? "").toString(),
+              validate: (value) => {
+                if (!value) return false;
+                return !!new URL(value).toString();
+              },
               message: "Select your Smart Contract Set Portal instance (GraphQL API)",
               existingMessage:
                 "A valid Smart Contract Set Portal instance URL for GraphQL is already provided. Do you want to change it?",
@@ -295,7 +304,10 @@ export function connectCommand(): Command {
               envValue: process.env.SETTLEMINT_THE_GRAPH_GQL_URL,
               cliParamValue: theGraphGql,
               configValue: configApplication?.thegraphGql,
-              validate: (value) => !!new URL(value ?? "").toString(),
+              validate: (value) => {
+                if (!value) return false;
+                return !!new URL(value).toString();
+              },
               message: "Select your The Graph instance",
               existingMessage: "A valid The Graph URL is already provided. Do you want to change it?",
             });
@@ -333,7 +345,10 @@ export function connectCommand(): Command {
               envValue: hasuras.find((h) => h.value.gqlUrl === process.env.SETTLEMINT_HASURA_GQL_URL)?.value,
               cliParamValue: hasuras.find((h) => h.value.gqlUrl === hasuraGql)?.value,
               configValue: hasuras.find((h) => h.value.gqlUrl === configApplication?.hasuraGql)?.value,
-              validate: (value) => !!new URL(value?.gqlUrl ?? "").toString(),
+              validate: (value) => {
+                if (!value?.gqlUrl) return false;
+                return !!new URL(value.gqlUrl).toString();
+              },
               message: "Select your Hasura instance",
               existingMessage: "A valid Hasura URL is already provided. Do you want to change it?",
             });
@@ -348,7 +363,10 @@ export function connectCommand(): Command {
               envValue: process.env.SETTLEMINT_NODE_JSON_RPC_URL,
               cliParamValue: nodeJsonRpc,
               configValue: configApplication?.nodeJsonRpc,
-              validate: (value) => !!new URL(value ?? "").toString(),
+              validate: (value) => {
+                if (!value) return false;
+                return !!new URL(value).toString();
+              },
               message: "Select a blockchain node or loadbalancer",
               existingMessage: "A valid blockchain node URL is already provided. Do you want to change it?",
             });
