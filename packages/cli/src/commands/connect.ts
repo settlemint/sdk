@@ -79,6 +79,14 @@ export function connectCommand(): Command {
         "-uw, --user-wallet <name>",
         "The name of the user wallet to use for the application (SETTLEMINT_USER_WALLET environment variable)",
       )
+      .option(
+        "-ip, --ipfs <name>",
+        "The url of the ipfs storage to use for the application (SETTLEMINT_IPFS environment variable)",
+      )
+      .option(
+        "-mi, --minio <name>",
+        "The name of the minio storage to use for the application (SETTLEMINT_MINIO environment variable)",
+      )
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
@@ -100,6 +108,8 @@ export function connectCommand(): Command {
           userWallet,
           subgraph,
           customDeployment,
+          ipfs,
+          minio,
         }) => {
           printAsciiArt();
           printIntro("Setting up the SettleMint SDK in your project");
@@ -373,6 +383,42 @@ export function connectCommand(): Command {
               existingMessage: "A valid blockchain node URL is already provided. Do you want to change it?",
             });
 
+            const ipfses = selectedApplication.ipfsStorages.map((i) => ({
+              value: { apiUrl: i.apiUrl, pinningUrl: i.pinningUrl },
+              name: `${i.name} (${i.uniqueName})`,
+            }));
+            const ipfsUrl = await coerceSelect({
+              choices: ipfses,
+              noneOption: true,
+              envValue: ipfses.find((h) => h.value.apiUrl === process.env.SETTLEMINT_IPFS)?.value,
+              cliParamValue: ipfses.find((h) => h.value.apiUrl === ipfs)?.value,
+              configValue: ipfses.find((h) => h.value.apiUrl === configApplication?.ipfs)?.value,
+              validate: (value) => {
+                if (!value?.apiUrl) return false;
+                return !!new URL(value.apiUrl).toString();
+              },
+              message: "Select your IPFS instance",
+              existingMessage: "A valid IPFS URL is already provided. Do you want to change it?",
+            });
+
+            const minios = selectedApplication.minioStorages.map((i) => ({
+              value: { s3Url: i.s3Url, secretKey: i.secretKey, accessKey: i.accessKey },
+              name: `${i.name} (${i.uniqueName})`,
+            }));
+            const minioUrl = await coerceSelect({
+              choices: minios,
+              noneOption: true,
+              envValue: minios.find((h) => h.value.s3Url === process.env.SETTLEMINT_MINIO)?.value,
+              cliParamValue: minios.find((h) => h.value.s3Url === minio)?.value,
+              configValue: minios.find((h) => h.value.s3Url === configApplication?.minio)?.value,
+              validate: (value) => {
+                if (!value?.s3Url) return false;
+                return !!new URL(value.s3Url).toString();
+              },
+              message: "Select your Minio instance",
+              existingMessage: "A valid Minio URL is already provided. Do you want to change it?",
+            });
+
             const customDeploymentId = await coerceSelect({
               choices: selectedApplication.customDeployments.map((customDeployment) => ({
                 value: customDeployment.id,
@@ -436,7 +482,9 @@ export function connectCommand(): Command {
                   SETTLEMINT_APP_URL: selectedAppUrl,
                   SETTLEMINT_AUTH_SECRET: selectedAuthSecret,
                   SETTLEMINT_PAT_TOKEN: personalAccessToken,
-                  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret ?? undefined,
+                  SETTLEMINT_HASURA_GQL_ADMIN_SECRET: hasuraUrl?.adminSecret,
+                  SETTLEMINT_MINIO_SECRET_KEY: minioUrl?.secretKey,
+                  SETTLEMINT_MINIO_ACCESS_KEY: minioUrl?.accessKey,
                 });
               },
               stopMessage: ".env.local file created or updated",
@@ -473,6 +521,9 @@ export function connectCommand(): Command {
                       nodeJsonRpc: nodeUrl,
                       customDeploymentId,
                       userWallet: userWalletName,
+                      ipfs: ipfsUrl?.apiUrl,
+                      ipfsPinning: ipfsUrl?.pinningUrl,
+                      minio: minioUrl?.s3Url,
                     },
                   },
                 });

@@ -4,6 +4,21 @@ type GraphSvc = { gqlUrl: string; name: string; uniqueName: string };
 type PortalSvc = { gqlUrl: string; restUrl: string; name: string; uniqueName: string };
 type HasuraSvc = { gqlUrl: string; name: string; adminSecret: string; uniqueName: string };
 type UserWalletSvc = { name: string; uniqueName: string };
+type IpfsStorageSvc = {
+  apiUrl: string;
+  pinningUrl: string;
+  name: string;
+  uniqueName: string;
+};
+
+type MinioStorageSvc = {
+  s3Url: string;
+  accessKey: string;
+  secretKey: string;
+  name: string;
+  uniqueName: string;
+};
+
 type CustomDeploymentSvc = {
   id: string;
   name: string;
@@ -22,6 +37,8 @@ type Appl = {
   hasuras: HasuraSvc[]; // List of Hasura services
   nodes: NodeSvc[]; // List of Node services
   customDeployments: CustomDeploymentSvc[]; // List of Custom Deployment services
+  ipfsStorages: IpfsStorageSvc[]; // List of IPFS Storage services
+  minioStorages: MinioStorageSvc[]; // List of Minio Storage services
   userWallets: UserWalletSvc[]; // List of User Wallet services
 };
 
