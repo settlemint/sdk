@@ -67,3 +67,7 @@ export function setCache<T>(key: string, data: T, options: Partial<CacheOptions>
 
   cacheStore.set(key, { data, expiry });
 }
+
+export function invalidateCache(key: string): void {
+  cacheStore.delete(key);
+}
