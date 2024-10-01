@@ -45,11 +45,25 @@ export function createSettleMintClient() {
       url.pathname += `/${validate(SearchKeySchema, searchKey)}`;
     }
 
-    const response = await fetch(url.toString(), {
+    let response = await fetch(url.toString(), {
       headers: { "x-auth-token": validatedEnv.SETTLEMINT_ACCESS_TOKEN },
     });
 
     if (!response.ok) {
+      const retryCount = 3;
+      const retryDelay = 1000;
+
+      for (let i = 0; i < retryCount; i++) {
+        await new Promise((resolve) => setTimeout(resolve, retryDelay));
+        response = await fetch(url, {
+          headers: { "x-auth-token": validatedEnv.SETTLEMINT_ACCESS_TOKEN },
+        });
+        if (response.ok) break;
+      }
+
+      if (!response.ok) {
+        throw new Error(`API request failed after ${retryCount} retries: ${response.status} ${response.statusText}`);
+      }
       throw new Error(`API request failed: ${response.status} ${response.statusText}`);
     }
 
