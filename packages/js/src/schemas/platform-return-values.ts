@@ -1,6 +1,5 @@
-import { EthereumAddressSchema, EthereumPublicKeySchema } from "@/schemas/shared";
+import { EthereumAddressSchema, EthereumPublicKeySchema, UniqueNameSchema, UrlSchema } from "@/schemas/shared";
 import { z } from "zod";
-import { UniqueNameSchema, UrlSchema } from "./shared";
 
 const BasePlatformReturnValueSchema = z.object({
   uniqueName: UniqueNameSchema,
