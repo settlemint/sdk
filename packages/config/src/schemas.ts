@@ -13,6 +13,9 @@ const ApplicationConfigSchema = z.object({
   thegraphGql: z.string().url().optional(),
   subgraphName: z.string().optional(),
   hasuraGql: z.string().url().optional(),
+  ipfs: z.string().url().optional(),
+  ipfsPinning: z.string().url().optional(),
+  minio: z.string().url().optional(),
   nodeJsonRpc: z.string().url().optional(),
   nodeJsonRpcDeploy: z.string().url().optional(),
   customDeploymentId: z.string().optional(),
@@ -50,6 +53,8 @@ export const EnvSchema = z.object({
   SETTLEMINT_HASURA_GQL_ADMIN_SECRET: z.string().optional(),
   SETTLEMINT_APP_URL: z.string().url().optional(),
   SETTLEMINT_AUTH_SECRET: z.string().min(32).optional(),
+  SETTLEMINT_MINIO_ACCESS_KEY: z.string().optional(),
+  SETTLEMINT_MINIO_SECRET_KEY: z.string().optional(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
