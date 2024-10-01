@@ -44,6 +44,7 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.1.7",
     "@settlemint/sdk-config": "workspace:*",
     "abitype": "^1",
     "graphql-request": "^7",
