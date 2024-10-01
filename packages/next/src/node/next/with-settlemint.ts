@@ -77,7 +77,7 @@ function generateRewrites(cfg: ApplicationConfig): Rewrite[] {
     {
       condition: cfg.hasuraGql,
       source: "/proxy/hasura/graphql",
-      destination: process.env.LOCAL_HASURA ?? cfg.hasuraGql,
+      destination: cfg.hasuraGql,
     },
     { condition: cfg.portalRest, source: "/proxy/portal/rest/:path*", destination: `${cfg.portalRest}/:path*` },
     { condition: cfg.portalGql, source: "/proxy/portal/graphql", destination: cfg.portalGql },
