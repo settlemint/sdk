@@ -87,7 +87,7 @@ export function createSettleMintClient() {
     },
   });
 
-  const resources = {
+  return {
     blockchainNetwork: createResourceHandler<BlockchainNetworkReturnValue>(
       "blockchain-network",
       BlockchainNetworkReturnValueSchema,
@@ -109,6 +109,4 @@ export function createSettleMintClient() {
       CustomDeploymentReturnValueSchema,
     ),
   };
-
-  return resources;
 }
