@@ -1,6 +1,7 @@
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { printAsciiArt, printCancel, printIntro, printNote, printOutro, printSpinner } from "@/lib/cli-message";
+import { createMinioS3Client } from "@/lib/codegen/minio";
 import { Command } from "@commander-js/extra-typings";
 import {
   loadSettleMintApplicationConfig,
@@ -66,7 +67,7 @@ export function codegenCommand(): Command {
 
           const envCfg = loadSettleMintEnvironmentConfig();
 
-          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc, nodeJsonRpcDeploy } = appCfg;
+          const { portalRest, portalGql, thegraphGql, hasuraGql, nodeJsonRpc, nodeJsonRpcDeploy, minio } = appCfg;
 
           await printSpinner({
             startMessage: "Generating SettleMint SDK",
@@ -116,11 +117,14 @@ export function codegenCommand(): Command {
                     settleMintDir,
                     framework: cfg.framework,
                     type: "hasura",
-                    gqlUrl: process.env.LOCAL_HASURA ?? hasuraGql,
+                    gqlUrl: hasuraGql,
                     personalAccessToken: envCfg.SETTLEMINT_PAT_TOKEN,
                     hasuraAdminSecret: envCfg.SETTLEMINT_HASURA_GQL_ADMIN_SECRET,
                   }),
                 );
+              }
+              if (minio) {
+                sdkParts.push(createMinioS3Client());
               }
               if (nodeJsonRpc || nodeJsonRpcDeploy) {
                 sdkParts.push(
@@ -165,7 +169,7 @@ export function codegenCommand(): Command {
 import { sdkGenerator, type ViemConfig, type WagmiConfig } from "@settlemint/sdk-next/browser";
 ${importLines.filter((line) => line.trim() !== "").join("\n")}
 
-export const connectSettlemint = (config: {viem?: ViemConfig, wagmi: WagmiConfig}) => (${JSON.stringify(
+export const connectSettlemint = (config: {viem?: ViemConfig, wagmi: WagmiConfig, minio?: {endPoint: string}}) => (${JSON.stringify(
                   settlemintObject,
                   null,
                   2,

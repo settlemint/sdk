@@ -2,6 +2,7 @@ import { createGraphqlClient } from "@/browser/sdk/plugins/graphql";
 import { createPortalRestClient } from "@/browser/sdk/plugins/portal";
 import { createViemPublicClient, createViemWalletClient } from "@/browser/sdk/plugins/viem";
 import { createWagmiConfig } from "@/browser/sdk/plugins/wagmi";
+import { createMinioS3Client } from "./plugins/minio";
 
 /**
  * A collection of functions for generating various SDK components.
@@ -16,4 +17,5 @@ export const sdkGenerator = {
   createViemPublicClient,
   createViemWalletClient,
   createWagmiConfig,
+  createMinioS3Client,
 } as const;

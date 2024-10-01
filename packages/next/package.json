@@ -44,11 +44,12 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@rainbow-me/rainbowkit": "^2",
+    "@rainbow-me/rainbowkit": "^2.1.7",
     "@settlemint/sdk-config": "workspace:*",
     "abitype": "^1",
     "graphql-request": "^7",
     "graphql-tag": "^2",
+    "minio": "^8.0.1",
     "openapi-fetch": "^0.12",
     "path-to-regexp": "^7",
     "viem": "^2",
