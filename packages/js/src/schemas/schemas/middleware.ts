@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { WsApplPlatformReturnValueSchema } from "../ws-appl-platform";
 import { UrlSchema } from "./url";
+import { WsApplPlatformReturnValueSchema } from "./ws-appl-platform";
 
 export const BaseMiddlewareSchema = WsApplPlatformReturnValueSchema.extend({
   serviceSubType: z.string(),

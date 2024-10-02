@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { WsApplPlatformReturnValueSchema } from "../ws-appl-platform";
 import { EthereumAddressSchema, EthereumPublicKeySchema } from "./ethereum";
+import { WsApplPlatformReturnValueSchema } from "./ws-appl-platform";
 
 export const BasePrivateKeySchema = WsApplPlatformReturnValueSchema.extend({
   serviceSubType: z.string(),

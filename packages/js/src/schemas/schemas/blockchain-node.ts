@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { WsApplPlatformReturnValueSchema } from "../ws-appl-platform";
 import { UniqueNameSchema } from "./unique-name";
 import { UrlSchema } from "./url";
+import { WsApplPlatformReturnValueSchema } from "./ws-appl-platform";
 
 export const BlockchainNodeReturnValueSchema = WsApplPlatformReturnValueSchema.extend({
   serviceSubType: z.string(),
