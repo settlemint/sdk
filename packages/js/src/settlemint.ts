@@ -1,5 +1,7 @@
 import { getCache, invalidateCache, setCache } from "@/helpers/cache";
 import {
+  type ApplicationReturnValue,
+  ApplicationReturnValueSchema,
   type BlockchainNetworkReturnValue,
   BlockchainNetworkReturnValueSchema,
   type BlockchainNodeReturnValue,
@@ -14,11 +16,16 @@ import {
   MiddlewareReturnValueSchema,
   type PrivateKeyReturnValue,
   PrivateKeyReturnValueSchema,
+  SearchKeySchema,
+  type ServiceType,
+  ServiceTypeSchema,
+  SettleMintClientEnvSchema,
   type StorageReturnValue,
   StorageReturnValueSchema,
-} from "@/schemas/platform-return-values";
-import { SettleMintClientEnvSchema } from "@/schemas/settlemint-client-env";
-import { SearchKeySchema, type ServiceType, ServiceTypeSchema, type UniqueName } from "@/schemas/shared";
+  type UniqueName,
+  type WorkspaceReturnValue,
+  WorkspaceReturnValueSchema,
+} from "@/schemas/schemas";
 import { validate } from "@/schemas/validator";
 import { type ZodSchema, z } from "zod";
 
@@ -138,7 +145,7 @@ export function createSettleMintClient() {
     updateSchema?: ZodSchema<U>,
   ) => ({
     list: async (): Promise<T[]> => validate(z.array(schema), await fetchData<T[]>(type)),
-    get: async (uniqueName?: string): Promise<T> => {
+    get: async (uniqueName?: UniqueName): Promise<T> => {
       const searchKey = uniqueName ?? defaultSearchKey;
       return validate(schema, await fetchData<T>(type, searchKey));
     },
@@ -151,6 +158,16 @@ export function createSettleMintClient() {
   });
 
   return {
+    workspace: createResourceHandler<WorkspaceReturnValue, never>(
+      "workspace",
+      WorkspaceReturnValueSchema,
+      validatedEnv.SETTLEMINT_DEFAULT_WORKSPACE,
+    ),
+    application: createResourceHandler<ApplicationReturnValue, never>(
+      "application",
+      ApplicationReturnValueSchema,
+      validatedEnv.SETTLEMINT_DEFAULT_APPLICATION,
+    ),
     blockchainNetwork: createResourceHandler<BlockchainNetworkReturnValue, never>(
       "blockchain-network",
       BlockchainNetworkReturnValueSchema,
@@ -194,3 +211,6 @@ export function createSettleMintClient() {
     ),
   };
 }
+
+export * as schemas from "./schemas/schemas";
+export * as schemaValidator from "./schemas/validator";

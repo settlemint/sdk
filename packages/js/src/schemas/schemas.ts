@@ -1,18 +1,74 @@
-import { EthereumAddressSchema, EthereumPublicKeySchema, UniqueNameSchema, UrlSchema } from "@/schemas/shared";
 import { z } from "zod";
+
+export const AccessTokenSchema = z.string().regex(/^btp_pat_.*|btp_aat_.*$/);
+
+export const UniqueNameSchema = z.string().regex(/^[a-z-]+-[a-z0-9]{5}$/);
+export type UniqueName = z.infer<typeof UniqueNameSchema>;
+
+export const SearchKeySchema = z.string().regex(/^[a-z0-9]{5}$/);
+
+export const UrlSchema = z.string().url();
+
+export const ServiceTypeSchema = z.enum([
+  "workspace",
+  "application",
+  "blockchain-network",
+  "blockchain-node",
+  "smart-contract-set",
+  "middleware",
+  "integration-tool",
+  "storage",
+  "private-key",
+  "insights",
+  "custom-deployment",
+]);
+export type ServiceType = z.infer<typeof ServiceTypeSchema>;
+
+export const EthereumAddressSchema = z.string().regex(/^0x[a-fA-F0-9]{40}$/);
+
+export const EthereumPublicKeySchema = z.string().regex(/^0x[a-fA-F0-9]{64}$/);
+
+export const SettleMintClientEnvSchema = z.object({
+  SETTLEMINT_ACCESS_TOKEN: AccessTokenSchema,
+  SETTLEMINT_INSTANCE: UrlSchema,
+  SETTLEMINT_DEFAULT_BLOCKCHAIN_NETWORK: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_BLOCKCHAIN_NODE: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_STORAGE: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_PRIVATE_KEY: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_INTEGRATION_TOOL: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_MIDDLEWARE: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_CUSTOM_DEPLOYMENT: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_INSIGHTS: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_WORKSPACE: UniqueNameSchema.optional(),
+  SETTLEMINT_DEFAULT_APPLICATION: UniqueNameSchema.optional(),
+});
 
 const BasePlatformReturnValueSchema = z.object({
   uniqueName: UniqueNameSchema,
   displayName: z.string(),
-  serviceSubType: z.string(),
 });
 
-export const BlockchainNetworkReturnValueSchema = BasePlatformReturnValueSchema.extend({
+export const WorkspaceReturnValueSchema = BasePlatformReturnValueSchema.extend({});
+export type WorkspaceReturnValue = z.infer<typeof WorkspaceReturnValueSchema>;
+
+export const ApplicationReturnValueSchema = BasePlatformReturnValueSchema.extend({
+  workspace: UniqueNameSchema,
+});
+export type ApplicationReturnValue = z.infer<typeof ApplicationReturnValueSchema>;
+
+const WsApplPlatformReturnValueSchema = BasePlatformReturnValueSchema.extend({
+  workspace: UniqueNameSchema,
+  application: UniqueNameSchema,
+});
+
+export const BlockchainNetworkReturnValueSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   chainId: z.string(),
 });
 export type BlockchainNetworkReturnValue = z.infer<typeof BlockchainNetworkReturnValueSchema>;
 
-export const BlockchainNodeReturnValueSchema = BasePlatformReturnValueSchema.extend({
+export const BlockchainNodeReturnValueSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   network: UniqueNameSchema,
   endpoints: z.object({
     base: UrlSchema,
@@ -23,7 +79,8 @@ export const BlockchainNodeReturnValueSchema = BasePlatformReturnValueSchema.ext
 });
 export type BlockchainNodeReturnValue = z.infer<typeof BlockchainNodeReturnValueSchema>;
 
-const BaseMiddlewareSchema = BasePlatformReturnValueSchema.extend({
+const BaseMiddlewareSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   endpoints: z.object({
     base: UrlSchema,
   }),
@@ -56,7 +113,8 @@ export const MiddlewareReturnValueSchema = z.union([
 
 export type MiddlewareReturnValue = z.infer<typeof MiddlewareReturnValueSchema>;
 
-const BaseIntegrationToolSchema = BasePlatformReturnValueSchema.extend({
+const BaseIntegrationToolSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   endpoints: z.object({
     base: UrlSchema,
   }),
@@ -76,7 +134,8 @@ const HasuraIntegrationToolSchema = BaseIntegrationToolSchema.extend({
 export const IntegrationToolReturnValueSchema = z.union([HasuraIntegrationToolSchema, BaseIntegrationToolSchema]);
 export type IntegrationToolReturnValue = z.infer<typeof IntegrationToolReturnValueSchema>;
 
-const BaseStorageSchema = BasePlatformReturnValueSchema.extend({
+const BaseStorageSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   endpoints: z.object({
     base: UrlSchema,
   }),
@@ -111,7 +170,9 @@ const MinioStorageSchema = BaseStorageSchema.extend({
 export const StorageReturnValueSchema = z.union([IpfsStorageSchema, MinioStorageSchema, BaseStorageSchema]);
 export type StorageReturnValue = z.infer<typeof StorageReturnValueSchema>;
 
-const BasePrivateKeySchema = BasePlatformReturnValueSchema.extend({});
+const BasePrivateKeySchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
+});
 
 const HdPrivateKeySchema = BasePrivateKeySchema.extend({
   serviceSubType: z.literal("HD_ECDSA_P256"),
@@ -126,7 +187,8 @@ const EcdsaPrivateKeySchema = BasePrivateKeySchema.extend({
 export const PrivateKeyReturnValueSchema = z.union([HdPrivateKeySchema, EcdsaPrivateKeySchema, BasePrivateKeySchema]);
 export type PrivateKeyReturnValue = z.infer<typeof PrivateKeyReturnValueSchema>;
 
-export const InsightsReturnValueSchema = BasePlatformReturnValueSchema.extend({
+export const InsightsReturnValueSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   protocol: z.string(),
   endpoints: z.object({
     base: UrlSchema,
@@ -134,7 +196,8 @@ export const InsightsReturnValueSchema = BasePlatformReturnValueSchema.extend({
 });
 export type InsightsReturnValue = z.infer<typeof InsightsReturnValueSchema>;
 
-export const CustomDeploymentReturnValueSchema = BasePlatformReturnValueSchema.extend({
+export const CustomDeploymentReturnValueSchema = WsApplPlatformReturnValueSchema.extend({
+  serviceSubType: z.string(),
   protocol: z.string(),
   endpoints: z.object({
     base: UrlSchema,
