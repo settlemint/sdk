@@ -25,8 +25,8 @@ import {
   type UniqueName,
   type WorkspaceReturnValue,
   WorkspaceReturnValueSchema,
+  validate,
 } from "@/schemas/schemas";
-import { validate } from "@/schemas/validator";
 import { type ZodSchema, z } from "zod";
 
 /**
@@ -211,6 +211,3 @@ export function createSettleMintClient() {
     ),
   };
 }
-
-export * as schemas from "./schemas/schemas";
-export * as schemaValidator from "./schemas/validator";
