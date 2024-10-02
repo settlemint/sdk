@@ -26,7 +26,6 @@ const ApplicationConfigSchema = z.object({
  * Schema for the main configuration.
  */
 export const ConfigSchema = z.object({
-  framework: z.string(),
   instance: z.string().url(),
   workspace: z.object({
     id: z.string(),
