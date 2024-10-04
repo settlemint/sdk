@@ -34,7 +34,7 @@ query getMiddleware($id: ID!) {
 
 export const middlewareList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId ?? options?.applicationId);
+    const id = validate(IdSchema, applicationId);
     const {
       middlewares: { items },
     } = await gqlClient.request(getMiddlewares, { id });
@@ -44,7 +44,7 @@ export const middlewareList = (gqlClient: GraphQLClient, options: SettleMintClie
 
 export const middlewareRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (middlewareId: Id) => {
-    const id = validate(IdSchema, middlewareId ?? options?.middlewareId);
+    const id = validate(IdSchema, middlewareId);
     const { middleware } = await gqlClient.request(getBlockchainNetwork, { id });
     return middleware;
   };

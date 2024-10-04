@@ -34,7 +34,7 @@ query getBlockchainNetwork($id: ID!) {
 
 export const blockchainNetworkList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId ?? options?.applicationId);
+    const id = validate(IdSchema, applicationId);
     const {
       blockchainNetworks: { items },
     } = await gqlClient.request(getBlockchainNetworks, { id });
@@ -44,7 +44,7 @@ export const blockchainNetworkList = (gqlClient: GraphQLClient, options: SettleM
 
 export const blockchainNetworkRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (blockchainNetworkId: Id) => {
-    const id = validate(IdSchema, blockchainNetworkId ?? options?.blockchainNetworkId);
+    const id = validate(IdSchema, blockchainNetworkId);
     const { blockchainNetwork } = await gqlClient.request(getBlockchainNetwork, { id });
     return blockchainNetwork;
   };

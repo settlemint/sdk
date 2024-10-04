@@ -34,7 +34,7 @@ query getInsights($id: ID!) {
 
 export const insightsList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId ?? options?.applicationId);
+    const id = validate(IdSchema, applicationId);
     const {
       insightsList: { items },
     } = await gqlClient.request(getInsightss, { id });
@@ -44,7 +44,7 @@ export const insightsList = (gqlClient: GraphQLClient, options: SettleMintClient
 
 export const insightsRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (insightsId: Id) => {
-    const id = validate(IdSchema, insightsId ?? options?.insightsId);
+    const id = validate(IdSchema, insightsId);
     const { insights } = await gqlClient.request(getBlockchainNetwork, { id });
     return insights;
   };

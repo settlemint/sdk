@@ -34,7 +34,7 @@ query getPrivateKey($id: ID!) {
 
 export const privateKeyList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId ?? options?.applicationId);
+    const id = validate(IdSchema, applicationId);
     const {
       privateKeys: { items },
     } = await gqlClient.request(getPrivateKeys, { id });
@@ -44,7 +44,7 @@ export const privateKeyList = (gqlClient: GraphQLClient, options: SettleMintClie
 
 export const privatekeyRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (privatekeyId: Id) => {
-    const id = validate(IdSchema, privatekeyId ?? options?.privateKeyId);
+    const id = validate(IdSchema, privatekeyId);
     const { privateKey } = await gqlClient.request(getBlockchainNetwork, { id });
     return privateKey;
   };

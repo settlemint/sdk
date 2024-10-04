@@ -34,7 +34,7 @@ query getCustomDeployment($id: ID!) {
 
 export const customdeploymentList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId ?? options?.applicationId);
+    const id = validate(IdSchema, applicationId);
     const {
       customDeployments: { items },
     } = await gqlClient.request(getCustomDeployments, { id });
@@ -44,7 +44,7 @@ export const customdeploymentList = (gqlClient: GraphQLClient, options: SettleMi
 
 export const customdeploymentRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (customdeploymentId: Id) => {
-    const id = validate(IdSchema, customdeploymentId ?? options?.customDeploymentId);
+    const id = validate(IdSchema, customdeploymentId);
     const { customDeployment } = await gqlClient.request(getBlockchainNetwork, { id });
     return customDeployment;
   };

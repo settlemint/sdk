@@ -36,8 +36,8 @@ export const workspaceList = (gqlClient: GraphQLClient, options: SettleMintClien
 };
 
 export const workspaceRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
-  return async (workspaceId?: Id) => {
-    const id = validate(IdSchema, workspaceId ?? options?.workspaceId);
+  return async (workspaceId: Id) => {
+    const id = validate(IdSchema, workspaceId);
     const { workspace } = await gqlClient.request(getWorkspace, { id });
     return workspace;
   };

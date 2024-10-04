@@ -34,7 +34,7 @@ query getIntegration($id: ID!) {
 
 export const integrationToolList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId ?? options?.applicationId);
+    const id = validate(IdSchema, applicationId);
     const {
       integrations: { items },
     } = await gqlClient.request(getIntegrations, { id });
@@ -44,7 +44,7 @@ export const integrationToolList = (gqlClient: GraphQLClient, options: SettleMin
 
 export const integrationToolRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
   return async (integrationId: Id) => {
-    const id = validate(IdSchema, integrationId ?? options?.integrationId);
+    const id = validate(IdSchema, integrationId);
     const { integration } = await gqlClient.request(getBlockchainNetwork, { id });
     return integration;
   };

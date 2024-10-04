@@ -16,16 +16,6 @@ export type Id = z.infer<typeof IdSchema>;
 export const SettleMintClientOptionsSchema = z.object({
   accessToken: AccessTokenSchema,
   instance: UrlSchema,
-  workspaceId: IdSchema.optional(),
-  applicationId: IdSchema.optional(),
-  blockchainNetworkId: IdSchema.optional(),
-  blockchainNodeId: IdSchema.optional(),
-  middlewareId: IdSchema.optional(),
-  integrationId: IdSchema.optional(),
-  storageId: IdSchema.optional(),
-  privateKeyId: IdSchema.optional(),
-  insightsId: IdSchema.optional(),
-  customDeploymentId: IdSchema.optional(),
 });
 export type SettleMintClientOptions = z.infer<typeof SettleMintClientOptionsSchema>;
 
