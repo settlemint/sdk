@@ -51,7 +51,6 @@
   "typescript.inlayHints.propertyDeclarationTypes.enabled": true,
   "typescript.inlayHints.variableTypes.enabled": true,
   "typescript.suggest.completeFunctionCalls": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.tsserver.experimental.enableProjectDiagnostics": true,
   "typescript.tsserver.maxTsServerMemory": 16384,
   "typescript.tsserver.watchOptions": {
@@ -66,5 +65,7 @@
     "**/app/**/route.ts": "${dirname(1)}/${dirname} <route>",
     "**/components/**/index.tsx": "${dirname(1)}/${dirname} <component>"
   },
-  "workbench.tree.enableStickyScroll": true
+  "workbench.tree.enableStickyScroll": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
 }

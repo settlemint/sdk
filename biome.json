@@ -9,7 +9,9 @@
       "apps/asset-tokenization/.settlemint",
       "apps/asset-tokenization/contracts/artifacts",
       "./.settlemint",
-      "./contracts/artifacts"
+      "./contracts/artifacts",
+      "graphql-env.d.ts",
+      "graphql-cache.d.ts"
     ]
   },
   "linter": {

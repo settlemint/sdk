@@ -16,7 +16,16 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "@0no-co/graphqlsp",
+        "schema": "https://console-release.settlemint.com/api/graphql",
+        "tadaOutputLocation": "./src/helpers/graphql-env.d.ts",
+        "tadaTurboLocation": "./src/helpers/graphql-cache.d.ts",
+        "trackFieldUsage": false
+      }
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]
