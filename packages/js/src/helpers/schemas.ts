@@ -1,10 +1,7 @@
 import { ZodError, type ZodSchema, z } from "zod";
 
-export const AccessTokenSchema = z.string().regex(/^btp_pat_.*|btp_aat_.*$/);
-export type AccessToken = z.infer<typeof AccessTokenSchema>;
-
-export const UrlSchema = z.string().url();
-export type UrlType = z.infer<typeof UrlSchema>;
+const AccessTokenSchema = z.string().regex(/^btp_pat_.*|btp_aat_.*$/);
+const UrlSchema = z.string().url();
 
 export const IdSchema = z.union([
   z
