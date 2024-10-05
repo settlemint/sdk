@@ -1,3 +1,8 @@
+/**
+ * This module provides the main functionality for creating and interacting with the SettleMint client.
+ * It includes functions for creating the client and exporting various types used throughout the application.
+ */
+
 import { type SettleMintClientOptions, SettleMintClientOptionsSchema, validate } from "@/helpers/schemas";
 import { GraphQLClient } from "graphql-request";
 import { blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network";
@@ -17,6 +22,19 @@ if (typeof window !== "undefined") {
   );
 }
 
+/**
+ * Creates a SettleMint client with the provided options.
+ *
+ * @param options - The options for creating the SettleMint client.
+ * @returns An object containing various methods to interact with SettleMint resources.
+ * @throws Will throw an error if the options are invalid or if called in a browser environment.
+ *
+ * @example
+ * const client = createSettleMintClient({
+ *   accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
+ *   instance: 'https://console.settlemint.com'
+ * });
+ */
 export function createSettleMintClient(options: SettleMintClientOptions) {
   const validatedOptions = validate(SettleMintClientOptionsSchema, options);
 
@@ -65,3 +83,13 @@ export function createSettleMintClient(options: SettleMintClientOptions) {
     },
   };
 }
+
+export type { BlockchainNetwork } from "./fetchers/blockchain-network";
+export type { BlockchainNode } from "./fetchers/blockchain-node";
+export type { CustomDeployment } from "./fetchers/custom-deployment";
+export type { Insights } from "./fetchers/insights";
+export type { IntegrationTool } from "./fetchers/integration-tool";
+export type { Middleware } from "./fetchers/middleware";
+export type { PrivateKey } from "./fetchers/private-key";
+export type { Storage } from "./fetchers/storage";
+export type { Application, Workspace } from "./fetchers/workspace";

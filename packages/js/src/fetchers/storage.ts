@@ -1,7 +1,10 @@
-import { graphql } from "@/helpers/graphql";
+import { type ResultOf, graphql } from "@/helpers/graphql";
 import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas";
 import type { GraphQLClient } from "graphql-request";
 
+/**
+ * GraphQL fragment for the Storage type.
+ */
 const StorageFragment = graphql(`
   fragment Storage on Storage {
     id
@@ -19,6 +22,14 @@ const StorageFragment = graphql(`
   }
 `);
 
+/**
+ * Represents a storage item with its details.
+ */
+export type Storage = ResultOf<typeof StorageFragment>;
+
+/**
+ * GraphQL query to fetch storages for a given application.
+ */
 const getStorages = graphql(
   `
 query getStorages($id: ID!) {
@@ -31,7 +42,10 @@ query getStorages($id: ID!) {
   [StorageFragment],
 );
 
-const getBlockchainNetwork = graphql(
+/**
+ * GraphQL query to fetch a specific storage by its ID.
+ */
+const getStorage = graphql(
   `
 query getStorage($id: ID!) {
   storage(entityId: $id) {
@@ -42,7 +56,22 @@ query getStorage($id: ID!) {
   [StorageFragment],
 );
 
-export const storageList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
+/**
+ * Creates a function to list storage items for a given application.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes an application ID and returns a list of storage items.
+ * @throws Will throw an error if the application ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const storageItems = await client.storage.list('applicationId');
+ */
+export const storageList = (
+  gqlClient: GraphQLClient,
+  options: SettleMintClientOptions,
+): ((applicationId: Id) => Promise<Storage[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
     const {
@@ -52,10 +81,25 @@ export const storageList = (gqlClient: GraphQLClient, options: SettleMintClientO
   };
 };
 
-export const storageRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
+/**
+ * Creates a function to read a specific storage item.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes a storage ID and returns the storage item details.
+ * @throws Will throw an error if the storage ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const storageItem = await client.storage.read('storageId');
+ */
+export const storageRead = (
+  gqlClient: GraphQLClient,
+  options: SettleMintClientOptions,
+): ((storageId: Id) => Promise<Storage>) => {
   return async (storageId: Id) => {
     const id = validate(IdSchema, storageId);
-    const { storage } = await gqlClient.request(getBlockchainNetwork, { id });
+    const { storage } = await gqlClient.request(getStorage, { id });
     return storage;
   };
 };

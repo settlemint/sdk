@@ -1,7 +1,10 @@
-import { graphql } from "@/helpers/graphql";
+import { type ResultOf, graphql } from "@/helpers/graphql";
 import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas";
 import type { GraphQLClient } from "graphql-request";
 
+/**
+ * Fragment for the BlockchainNode type.
+ */
 const BlockchainNodeFragment = graphql(`
   fragment BlockchainNode on BlockchainNode {
     id
@@ -19,6 +22,14 @@ const BlockchainNodeFragment = graphql(`
   }
 `);
 
+/**
+ * Represents a blockchain node with its details.
+ */
+export type BlockchainNode = ResultOf<typeof BlockchainNodeFragment>;
+
+/**
+ * GraphQL query to fetch blockchain nodes for a given application.
+ */
 const getBlockchainNodes = graphql(
   `
 query getBlockchainNodes($id: ID!) {
@@ -31,7 +42,10 @@ blockchainNodes(applicationId: $id) {
   [BlockchainNodeFragment],
 );
 
-const getBlockchainNetwork = graphql(
+/**
+ * GraphQL query to fetch a specific blockchain node by its ID.
+ */
+const getBlockchainNode = graphql(
   `
 query getBlockchainNode($id: ID!) {
   blockchainNode(entityId: $id) {
@@ -42,7 +56,22 @@ query getBlockchainNode($id: ID!) {
   [BlockchainNodeFragment],
 );
 
-export const blockchainNodeList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
+/**
+ * Creates a function to list blockchain nodes for a given application.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes an application ID and returns a list of blockchain nodes.
+ * @throws Will throw an error if the application ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const nodes = await client.blockchainNode.list('applicationId');
+ */
+export const blockchainNodeList = (
+  gqlClient: GraphQLClient,
+  options: SettleMintClientOptions,
+): ((applicationId: Id) => Promise<BlockchainNode[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
     const {
@@ -52,10 +81,25 @@ export const blockchainNodeList = (gqlClient: GraphQLClient, options: SettleMint
   };
 };
 
-export const blockchainNodeRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
+/**
+ * Creates a function to read a specific blockchain node.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes a blockchain node ID and returns the node details.
+ * @throws Will throw an error if the blockchain node ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const node = await client.blockchainNode.read('nodeId');
+ */
+export const blockchainNodeRead = (
+  gqlClient: GraphQLClient,
+  options: SettleMintClientOptions,
+): ((blockchainNodeId: Id) => Promise<BlockchainNode>) => {
   return async (blockchainNodeId: Id) => {
     const id = validate(IdSchema, blockchainNodeId);
-    const { blockchainNode } = await gqlClient.request(getBlockchainNetwork, { id });
+    const { blockchainNode } = await gqlClient.request(getBlockchainNode, { id });
     return blockchainNode;
   };
 };

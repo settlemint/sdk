@@ -1,7 +1,10 @@
-import { graphql } from "@/helpers/graphql";
+import { type ResultOf, graphql } from "@/helpers/graphql";
 import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas";
 import type { GraphQLClient } from "graphql-request";
 
+/**
+ * GraphQL fragment for the Integration type.
+ */
 const IntegrationFragment = graphql(`
   fragment Integration on Integration {
     id
@@ -19,6 +22,14 @@ const IntegrationFragment = graphql(`
   }
 `);
 
+/**
+ * Represents integration tools with their details.
+ */
+export type IntegrationTool = ResultOf<typeof IntegrationFragment>;
+
+/**
+ * GraphQL query to fetch integrations for a given application.
+ */
 const getIntegrations = graphql(
   `
 query getIntegrations($id: ID!) {
@@ -31,7 +42,10 @@ query getIntegrations($id: ID!) {
   [IntegrationFragment],
 );
 
-const getBlockchainNetwork = graphql(
+/**
+ * GraphQL query to fetch a specific integration by its ID.
+ */
+const getIntegration = graphql(
   `
 query getIntegration($id: ID!) {
   integration(entityId: $id) {
@@ -42,7 +56,22 @@ query getIntegration($id: ID!) {
   [IntegrationFragment],
 );
 
-export const integrationToolList = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
+/**
+ * Creates a function to list integration tools for a given application.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes an application ID and returns a list of integration tools.
+ * @throws Will throw an error if the application ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const integrationTools = await client.integrationTool.list('applicationId');
+ */
+export const integrationToolList = (
+  gqlClient: GraphQLClient,
+  options: SettleMintClientOptions,
+): ((applicationId: Id) => Promise<IntegrationTool[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
     const {
@@ -52,10 +81,25 @@ export const integrationToolList = (gqlClient: GraphQLClient, options: SettleMin
   };
 };
 
-export const integrationToolRead = (gqlClient: GraphQLClient, options: SettleMintClientOptions) => {
+/**
+ * Creates a function to read a specific integration tool.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes an integration tool ID and returns the tool details.
+ * @throws Will throw an error if the integration tool ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const integrationTool = await client.integrationTool.read('integrationToolId');
+ */
+export const integrationToolRead = (
+  gqlClient: GraphQLClient,
+  options: SettleMintClientOptions,
+): ((integrationId: Id) => Promise<IntegrationTool>) => {
   return async (integrationId: Id) => {
     const id = validate(IdSchema, integrationId);
-    const { integration } = await gqlClient.request(getBlockchainNetwork, { id });
+    const { integration } = await gqlClient.request(getIntegration, { id });
     return integration;
   };
 };
