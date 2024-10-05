@@ -6,6 +6,16 @@ const IntegrationFragment = graphql(`
   fragment Integration on Integration {
     id
     name
+    endpoints {
+      id
+      label
+      displayValue
+    }
+    credentials {
+      id
+      label
+      displayValue
+    }
   }
 `);
 

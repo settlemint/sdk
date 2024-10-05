@@ -6,6 +6,16 @@ const CustomDeploymentFragment = graphql(`
   fragment CustomDeployment on CustomDeployment {
     id
     name
+    endpoints {
+      id
+      label
+      displayValue
+    }
+    credentials {
+      id
+      label
+      displayValue
+    }
   }
 `);
 

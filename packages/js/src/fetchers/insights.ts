@@ -6,6 +6,16 @@ const InsightsFragment = graphql(`
   fragment Insights on Insights {
     id
     name
+    endpoints {
+      id
+      label
+      displayValue
+    }
+    credentials {
+      id
+      label
+      displayValue
+    }
   }
 `);
 

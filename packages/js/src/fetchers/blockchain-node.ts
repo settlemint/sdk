@@ -6,6 +6,16 @@ const BlockchainNodeFragment = graphql(`
   fragment BlockchainNode on BlockchainNode {
     id
     name
+    endpoints {
+      id
+      label
+      displayValue
+    }
+    credentials {
+      id
+      label
+      displayValue
+    }
   }
 `);
 

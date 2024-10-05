@@ -6,6 +6,16 @@ const MiddlewareFragment = graphql(`
   fragment Middleware on Middleware {
     id
     name
+    endpoints {
+      id
+      label
+      displayValue
+    }
+    credentials {
+      id
+      label
+      displayValue
+    }
   }
 `);
 

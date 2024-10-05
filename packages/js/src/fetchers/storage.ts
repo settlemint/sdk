@@ -6,6 +6,16 @@ const StorageFragment = graphql(`
   fragment Storage on Storage {
     id
     name
+    endpoints {
+      id
+      label
+      displayValue
+    }
+    credentials {
+      id
+      label
+      displayValue
+    }
   }
 `);
 
