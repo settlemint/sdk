@@ -82,6 +82,7 @@ jobs:
             VERSION="${OLD_VERSION}-main$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
             echo "TAG=main" >> $GITHUB_ENV
             echo "CONSOLE_GRAPHQL=https://console-release.settlemint.com/api/graphql" >> $GITHUB_ENV
+          else
             VERSION="${OLD_VERSION}-pr$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
             echo "TAG=pr" >> $GITHUB_ENV
             echo "CONSOLE_GRAPHQL=https://console-release.settlemint.com/api/graphql" >> $GITHUB_ENV
