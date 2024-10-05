@@ -44,12 +44,12 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@0no-co/graphqlsp": "^1.12.16"
+    "@0no-co/graphqlsp": "1.12.16"
   },
   "dependencies": {
-    "gql.tada": "^1.8.9",
-    "graphql-request": "^7.1.0",
-    "zod": "^3.23.8"
+    "gql.tada": "1.8.10",
+    "graphql-request": "7.1.0",
+    "zod": "3.23.8"
   },
   "peerDependencies": {},
   "engines": {
