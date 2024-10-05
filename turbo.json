@@ -52,7 +52,9 @@
     "test": {
       "dependsOn": ["^build"]
     },
-    "test:coverage": {},
+    "test:coverage": {
+      "dependsOn": ["^build"]
+    },
     "translate": {
       "inputs": ["messages/**"]
     }
