@@ -57,7 +57,12 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {},
-  "dependencies": { "@antfu/ni": "^0.23.0" },
+  "dependencies": {
+    "@antfu/ni": "^0.23",
+    "@dotenvx/dotenvx": "^1",
+    "deepmerge-ts": "^7",
+    "find-up": "^7"
+  },
   "peerDependencies": {},
   "engines": {
     "node": ">=20"

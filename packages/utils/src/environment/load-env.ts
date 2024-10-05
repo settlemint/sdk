@@ -1,0 +1,61 @@
+import { join } from "node:path";
+import { projectRoot } from "@/filesystem.js";
+import { type DotEnv, DotEnvSchema, validate } from "@/validation.js";
+import dotenvx from "@dotenvx/dotenvx";
+import type { DotenvParseOutput } from "dotenv";
+
+/**
+ * Loads environment variables from .env files.
+ * To enable encryption with dotenvx (https://www.dotenvx.com/docs) run `bunx dotenvx encrypt`
+ *
+ * @returns A promise that resolves to the validated environment variables.
+ * @throws Will throw an error if validation fails.
+ *
+ * @example
+ * const env = await loadEnv();
+ * console.log(env.SETTLEMINT_INSTANCE);
+ */
+export async function loadEnv(): Promise<DotEnv> {
+  return loadEnvironmentEnv(true);
+}
+
+/**
+ * Loads environment variables for a specific environment.
+ *
+ * @param environment - The environment to load variables for.
+ * @param validateEnv - Whether to validate the environment variables.
+ * @returns A promise that resolves to the environment variables, either validated or raw.
+ * @throws Will throw an error if validation fails when validateEnv is true.
+ */
+export async function loadEnvironmentEnv<T extends boolean = true>(
+  validateEnv: T,
+  environment?: string,
+): Promise<T extends true ? DotEnv : DotenvParseOutput> {
+  const projectDir = await projectRoot();
+
+  const paths: string[] = [
+    `.env.${process.env.NODE_ENV}.local`,
+    ".env.local",
+    ...(environment ? [`.env.${environment}.local`, `.env.${environment}`] : []),
+    `.env.${process.env.NODE_ENV}`,
+    ".env",
+  ].map((file) => join(projectDir, file));
+
+  let { parsed } = dotenvx.config({ path: paths });
+
+  if (!parsed) {
+    parsed = {};
+  }
+
+  const envToUse = environment || parsed.SETTLEMINT_ENVIRONMENT;
+
+  if (envToUse && envToUse !== environment) {
+    return loadEnvironmentEnv(validateEnv, envToUse);
+  }
+
+  if (validateEnv) {
+    return validate(DotEnvSchema, parsed);
+  }
+
+  return parsed as T extends true ? DotEnv : DotenvParseOutput;
+}

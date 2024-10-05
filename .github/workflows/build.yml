@@ -172,31 +172,11 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-      - name: Publish SDK Next package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/next/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
       - name: Publish SDK Cli package
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/cli/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Config package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/config/package.json
           access: public
           provenance: false
           strategy: all
@@ -212,8 +192,6 @@ jobs:
                 | Package | Version |
                 | ------- | -------------------- |
                 | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
-                | SDK Config | `@settlemint/sdk-config@${{ env.VERSION }}` |
-                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
                 | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |
                 | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |
                 | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
