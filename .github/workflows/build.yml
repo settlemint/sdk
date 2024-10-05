@@ -214,6 +214,10 @@ jobs:
                 | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
                 | SDK Config | `@settlemint/sdk-config@${{ env.VERSION }}` |
                 | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
+                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |
+                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |
+                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
+                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@v5
