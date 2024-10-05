@@ -2,16 +2,24 @@ import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { projectRoot } from "@/filesystem.js";
 import type { DotEnv } from "@/validation.js";
+import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";
-import { loadEnvironmentEnv } from "./load-env.js";
 
-export async function writeEnv(env: DotEnv, environment: string) {
+export async function writeEnv(env: Partial<DotEnv>, environment: string, secrets: boolean) {
   const projectDir = await projectRoot();
+  const envFile = join(projectDir, secrets ? `.env.${environment}.local` : `.env.${environment}`);
 
-  const currentEnv = await loadEnvironmentEnv(false, environment);
+  let { parsed: currentEnv } = config({
+    path: envFile,
+    logLevel: "error",
+  });
+
+  if (!currentEnv) {
+    currentEnv = {};
+  }
+
   const mergedEnv = deepmerge(currentEnv, env);
 
-  const envFile = join(projectDir, `.env.${environment}`);
   writeFileSync(envFile, stringify(mergedEnv));
 }
 

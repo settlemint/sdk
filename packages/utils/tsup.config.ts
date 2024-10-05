@@ -37,5 +37,9 @@ export default defineConfig(({ watch }) => {
       entry: ["src/environment.ts"],
       ...sharedConfig,
     },
+    {
+      entry: ["src/terminal.ts"],
+      ...sharedConfig,
+    },
   ];
 });

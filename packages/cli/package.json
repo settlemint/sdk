@@ -48,7 +48,9 @@
   "devDependencies": {},
   "dependencies": {
     "@commander-js/extra-typings": "^12",
-    "enquirer": "^2"
+    "@settlemint/sdk-utils": "workspace:*",
+    "inquirer": "^11",
+    "yoctocolors": "^2"
   },
   "peerDependencies": {},
   "engines": {

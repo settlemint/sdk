@@ -61,7 +61,9 @@
     "@antfu/ni": "^0.23",
     "@dotenvx/dotenvx": "^1",
     "deepmerge-ts": "^7",
-    "find-up": "^7"
+    "find-up": "^7",
+    "yocto-spinner": "^0.1",
+    "yoctocolors": "^2"
   },
   "peerDependencies": {},
   "engines": {

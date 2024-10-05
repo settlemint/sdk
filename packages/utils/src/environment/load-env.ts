@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import { projectRoot } from "@/filesystem.js";
 import { type DotEnv, DotEnvSchema, validate } from "@/validation.js";
-import dotenvx from "@dotenvx/dotenvx";
+import { config } from "@dotenvx/dotenvx";
 import type { DotenvParseOutput } from "dotenv";
 
 /**
@@ -15,8 +15,10 @@ import type { DotenvParseOutput } from "dotenv";
  * const env = await loadEnv();
  * console.log(env.SETTLEMINT_INSTANCE);
  */
-export async function loadEnv(): Promise<DotEnv> {
-  return loadEnvironmentEnv(true);
+export async function loadEnv<T extends boolean = true>(
+  validateEnv?: T,
+): Promise<T extends true ? DotEnv : DotenvParseOutput> {
+  return loadEnvironmentEnv(validateEnv ?? true);
 }
 
 /**
@@ -34,14 +36,14 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   const projectDir = await projectRoot();
 
   const paths: string[] = [
-    `.env.${process.env.NODE_ENV}.local`,
+    `.env.${process.env.NODE_ENV ?? "development"}.local`,
     ".env.local",
     ...(environment ? [`.env.${environment}.local`, `.env.${environment}`] : []),
-    `.env.${process.env.NODE_ENV}`,
+    `.env.${process.env.NODE_ENV ?? "development"}`,
     ".env",
   ].map((file) => join(projectDir, file));
 
-  let { parsed } = dotenvx.config({ path: paths });
+  let { parsed } = config({ path: paths, logLevel: "error" });
 
   if (!parsed) {
     parsed = {};
