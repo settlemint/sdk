@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { insightsList, insightsRead } from "./insights";
+import { insightsList, insightsRead } from "./insights.js";
 
 describe("Insights Fetchers", () => {
   const mockGqlClient = {

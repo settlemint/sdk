@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { customdeploymentList, customdeploymentRead } from "./custom-deployment";
+import { customdeploymentList, customdeploymentRead } from "./custom-deployment.js";
 
 describe("Custom Deployment Fetchers", () => {
   const mockGqlClient = {

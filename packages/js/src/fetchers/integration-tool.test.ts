@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { integrationToolList, integrationToolRead } from "./integration-tool";
+import { integrationToolList, integrationToolRead } from "./integration-tool.js";
 
 describe("Integration Tool Fetchers", () => {
   const mockGqlClient = {

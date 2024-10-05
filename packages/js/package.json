@@ -22,14 +22,15 @@
   },
   "files": ["dist"],
   "exports": {
-    "./*": {
+    "./package.json": "./package.json",
+    ".": {
       "import": {
-        "types": "./dist/*.d.ts",
-        "default": "./dist/*.mjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "./dist/*.d.cts",
-        "default": "./dist/*.cjs"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },

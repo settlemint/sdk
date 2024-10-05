@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { middlewareList, middlewareRead } from "./middleware";
+import { middlewareList, middlewareRead } from "./middleware.js";
 
 describe("Middleware Fetchers", () => {
   const mockGqlClient = {

@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { blockchainNetworkList, blockchainNetworkRead } from "./blockchain-network";
+import { blockchainNetworkList, blockchainNetworkRead } from "./blockchain-network.js";
 
 describe("Blockchain Network Fetchers", () => {
   const mockGqlClient = {

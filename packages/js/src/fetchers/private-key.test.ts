@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { privateKeyList, privatekeyRead } from "./private-key";
+import { privateKeyList, privatekeyRead } from "./private-key.js";
 
 describe("Private Key Fetchers", () => {
   const mockGqlClient = {

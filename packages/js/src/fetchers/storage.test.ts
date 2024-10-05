@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { storageList, storageRead } from "./storage";
+import { storageList, storageRead } from "./storage.js";
 
 describe("Storage Fetchers", () => {
   const mockGqlClient = {

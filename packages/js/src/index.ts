@@ -3,17 +3,17 @@
  * It includes functions for creating the client and exporting various types used throughout the application.
  */
 
-import { type SettleMintClientOptions, SettleMintClientOptionsSchema, validate } from "@/helpers/schemas";
 import { GraphQLClient } from "graphql-request";
-import { blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network";
-import { blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node";
-import { customdeploymentList, customdeploymentRead } from "./fetchers/custom-deployment";
-import { insightsList, insightsRead } from "./fetchers/insights";
-import { integrationToolList, integrationToolRead } from "./fetchers/integration-tool";
-import { middlewareList, middlewareRead } from "./fetchers/middleware";
-import { privateKeyList, privatekeyRead } from "./fetchers/private-key";
-import { storageList, storageRead } from "./fetchers/storage";
-import { workspaceList, workspaceRead } from "./fetchers/workspace";
+import { blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
+import { blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
+import { customdeploymentList, customdeploymentRead } from "./fetchers/custom-deployment.js";
+import { insightsList, insightsRead } from "./fetchers/insights.js";
+import { integrationToolList, integrationToolRead } from "./fetchers/integration-tool.js";
+import { middlewareList, middlewareRead } from "./fetchers/middleware.js";
+import { privateKeyList, privatekeyRead } from "./fetchers/private-key.js";
+import { storageList, storageRead } from "./fetchers/storage.js";
+import { workspaceList, workspaceRead } from "./fetchers/workspace.js";
+import { type SettleMintClientOptions, SettleMintClientOptionsSchema, validate } from "./helpers/schemas.js";
 
 // Ensure this code only runs on the server
 if (typeof window !== "undefined") {
@@ -84,12 +84,12 @@ export function createSettleMintClient(options: SettleMintClientOptions) {
   };
 }
 
-export type { BlockchainNetwork } from "./fetchers/blockchain-network";
-export type { BlockchainNode } from "./fetchers/blockchain-node";
-export type { CustomDeployment } from "./fetchers/custom-deployment";
-export type { Insights } from "./fetchers/insights";
-export type { IntegrationTool } from "./fetchers/integration-tool";
-export type { Middleware } from "./fetchers/middleware";
-export type { PrivateKey } from "./fetchers/private-key";
-export type { Storage } from "./fetchers/storage";
-export type { Application, Workspace } from "./fetchers/workspace";
+export type { BlockchainNetwork } from "./fetchers/blockchain-network.js";
+export type { BlockchainNode } from "./fetchers/blockchain-node.js";
+export type { CustomDeployment } from "./fetchers/custom-deployment.js";
+export type { Insights } from "./fetchers/insights.js";
+export type { IntegrationTool } from "./fetchers/integration-tool.js";
+export type { Middleware } from "./fetchers/middleware.js";
+export type { PrivateKey } from "./fetchers/private-key.js";
+export type { Storage } from "./fetchers/storage.js";
+export type { Application, Workspace } from "./fetchers/workspace.js";

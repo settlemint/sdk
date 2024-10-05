@@ -1,5 +1,5 @@
-import { type ResultOf, graphql } from "@/helpers/graphql";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas";
+import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
 import type { GraphQLClient } from "graphql-request";
 
 /**

@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { workspaceList, workspaceRead } from "./workspace";
+import { workspaceList, workspaceRead } from "./workspace.js";
 
 describe("Workspace Fetchers", () => {
   const mockGqlClient = {

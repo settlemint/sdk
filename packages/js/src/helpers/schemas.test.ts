@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { ZodError } from "zod";
-import { IdSchema, SettleMintClientOptionsSchema, validate } from "./schemas";
+import { IdSchema, SettleMintClientOptionsSchema, validate } from "./schemas.js";
 
 describe("Schemas", () => {
   describe("IdSchema", () => {
