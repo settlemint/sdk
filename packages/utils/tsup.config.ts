@@ -14,7 +14,19 @@ const sharedConfig: Options = {
 export default defineConfig(({ watch }) => {
   return [
     {
-      entry: ["src/settlemint.ts"],
+      entry: ["src/package-manager.ts"],
+      ...sharedConfig,
+    },
+    {
+      entry: ["src/validation.ts"],
+      ...sharedConfig,
+    },
+    {
+      entry: ["src/filesystem.ts"],
+      ...sharedConfig,
+    },
+    {
+      entry: ["src/runtime.ts"],
       ...sharedConfig,
     },
   ];

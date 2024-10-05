@@ -3,6 +3,8 @@
  * It includes functions for creating the client and exporting various types used throughout the application.
  */
 
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
+import { validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
 import { blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
 import { blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
@@ -13,14 +15,7 @@ import { middlewareList, middlewareRead } from "./fetchers/middleware.js";
 import { privateKeyList, privatekeyRead } from "./fetchers/private-key.js";
 import { storageList, storageRead } from "./fetchers/storage.js";
 import { workspaceList, workspaceRead } from "./fetchers/workspace.js";
-import { type SettleMintClientOptions, SettleMintClientOptionsSchema, validate } from "./helpers/schemas.js";
-
-// Ensure this code only runs on the server
-if (typeof window !== "undefined") {
-  throw new Error(
-    "SettleMint client can only be used on the server as including it in the browser will expose your access token.",
-  );
-}
+import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
 
 /**
  * Creates a SettleMint client with the provided options.
@@ -35,8 +30,10 @@ if (typeof window !== "undefined") {
  *   instance: 'https://console.settlemint.com'
  * });
  */
-export function createSettleMintClient(options: SettleMintClientOptions) {
-  const validatedOptions = validate(SettleMintClientOptionsSchema, options);
+export function createSettleMintClient(options: ClientOptions) {
+  ensureServer();
+
+  const validatedOptions = validate(ClientOptionsSchema, options);
 
   const gqlClient = new GraphQLClient(`${validatedOptions.instance}/api/graphql`, {
     headers: {

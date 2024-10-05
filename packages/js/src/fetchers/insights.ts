@@ -1,5 +1,6 @@
+import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
+import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
@@ -70,7 +71,7 @@ query getInsights($id: ID!) {
  */
 export const insightsList = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((applicationId: Id) => Promise<Insights[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
@@ -95,7 +96,7 @@ export const insightsList = (
  */
 export const insightsRead = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((insightsId: Id) => Promise<Insights>) => {
   return async (insightsId: Id) => {
     const id = validate(IdSchema, insightsId);

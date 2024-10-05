@@ -1,5 +1,6 @@
+import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
+import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
@@ -60,7 +61,7 @@ query getPrivateKey($id: ID!) {
  */
 export const privateKeyList = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((applicationId: Id) => Promise<PrivateKey[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
@@ -85,7 +86,7 @@ export const privateKeyList = (
  */
 export const privatekeyRead = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((privatekeyId: Id) => Promise<PrivateKey>) => {
   return async (privatekeyId: Id) => {
     const id = validate(IdSchema, privatekeyId);

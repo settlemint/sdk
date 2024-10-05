@@ -14,7 +14,7 @@ const sharedConfig: Options = {
 export default defineConfig(({ watch }) => {
   return [
     {
-      entry: ["src/settlemint.ts"],
+      entry: ["src/hasura.ts"],
       ...sharedConfig,
     },
   ];

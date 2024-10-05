@@ -77,12 +77,14 @@ jobs:
           if [[ $GITHUB_REF_SLUG =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             VERSION=$(echo $GITHUB_REF_SLUG | sed 's/^v//')
             echo "TAG=latest" >> $GITHUB_ENV
+            echo "CONSOLE_GRAPHQL=https://console.settlemint.com/api/graphql" >> $GITHUB_ENV
           elif [[ $GITHUB_REF_NAME == "main" ]]; then
             VERSION="${OLD_VERSION}-main$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
             echo "TAG=main" >> $GITHUB_ENV
-          else
+            echo "CONSOLE_GRAPHQL=https://console-release.settlemint.com/api/graphql" >> $GITHUB_ENV
             VERSION="${OLD_VERSION}-pr$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
             echo "TAG=pr" >> $GITHUB_ENV
+            echo "CONSOLE_GRAPHQL=https://console-release.settlemint.com/api/graphql" >> $GITHUB_ENV
           fi
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Updating version to $VERSION"
@@ -127,12 +129,43 @@ jobs:
         run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          CONSOLE_GRAPHQL: ${{ env.CONSOLE_GRAPHQL }}
 
       - name: Publish SDK JS package
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
           package: ./packages/js/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Publish SDK Utils package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/utils/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Publish SDK Hasura package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/hasura/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Publish SDK The Graph package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/thegraph/package.json
           access: public
           provenance: false
           strategy: all
@@ -187,5 +220,5 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
-          file_pattern: 'package.json'
+          file_pattern: 'package.json schema.graphql'
 

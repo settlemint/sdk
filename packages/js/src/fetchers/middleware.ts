@@ -1,5 +1,6 @@
+import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
+import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
@@ -70,7 +71,7 @@ query getMiddleware($id: ID!) {
  */
 export const middlewareList = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((applicationId: Id) => Promise<Middleware[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
@@ -95,7 +96,7 @@ export const middlewareList = (
  */
 export const middlewareRead = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((middlewareId: Id) => Promise<Middleware>) => {
   return async (middlewareId: Id) => {
     const id = validate(IdSchema, middlewareId);

@@ -1,5 +1,6 @@
+import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
+import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
@@ -70,7 +71,7 @@ query getBlockchainNode($id: ID!) {
  */
 export const blockchainNodeList = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((applicationId: Id) => Promise<BlockchainNode[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
@@ -95,7 +96,7 @@ export const blockchainNodeList = (
  */
 export const blockchainNodeRead = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((blockchainNodeId: Id) => Promise<BlockchainNode>) => {
   return async (blockchainNodeId: Id) => {
     const id = validate(IdSchema, blockchainNodeId);
