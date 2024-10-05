@@ -35,16 +35,6 @@
         "types": "./dist/hasura.d.cts",
         "default": "./dist/hasura.cjs"
       }
-    },
-    "./codegen": {
-      "import": {
-        "types": "./dist/codegen.d.ts",
-        "default": "./dist/codegen.mjs"
-      },
-      "require": {
-        "types": "./dist/codegen.d.cts",
-        "default": "./dist/codegen.cjs"
-      }
     }
   },
   "scripts": {

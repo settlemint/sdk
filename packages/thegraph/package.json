@@ -21,29 +21,19 @@
     "email": "support@settlemint.com"
   },
   "files": ["dist"],
-  "main": "./dist/hasura.cjs",
-  "module": "./dist/hasura.mjs",
-  "types": "./dist/hasura.d.ts",
+  "main": "./dist/thegraph.cjs",
+  "module": "./dist/thegraph.mjs",
+  "types": "./dist/thegraph.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/hasura.d.ts",
-        "default": "./dist/hasura.mjs"
+        "types": "./dist/thegraph.d.ts",
+        "default": "./dist/thegraph.mjs"
       },
       "require": {
-        "types": "./dist/hasura.d.cts",
-        "default": "./dist/hasura.cjs"
-      }
-    },
-    "./codegen": {
-      "import": {
-        "types": "./dist/codegen.d.ts",
-        "default": "./dist/codegen.mjs"
-      },
-      "require": {
-        "types": "./dist/codegen.d.cts",
-        "default": "./dist/codegen.cjs"
+        "types": "./dist/thegraph.d.cts",
+        "default": "./dist/thegraph.cjs"
       }
     }
   },
