@@ -1,5 +1,6 @@
+import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
+import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
@@ -70,7 +71,7 @@ query getStorage($id: ID!) {
  */
 export const storageList = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((applicationId: Id) => Promise<Storage[]>) => {
   return async (applicationId: Id) => {
     const id = validate(IdSchema, applicationId);
@@ -95,7 +96,7 @@ export const storageList = (
  */
 export const storageRead = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((storageId: Id) => Promise<Storage>) => {
   return async (storageId: Id) => {
     const id = validate(IdSchema, storageId);

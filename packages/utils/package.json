@@ -1,5 +1,5 @@
 {
-  "name": "@settlemint/sdk-js",
+  "name": "@settlemint/sdk-utils",
   "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
   "version": "0.0.1",
   "type": "module",
@@ -14,31 +14,40 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/settlemint/sdk.git",
-    "directory": "packages/js"
+    "directory": "packages/codegen"
   },
   "bugs": {
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
   "files": ["dist"],
-  "main": "./dist/settlemint.cjs",
-  "module": "./dist/settlemint.mjs",
-  "types": "./dist/settlemint.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/settlemint.d.ts",
-        "default": "./dist/settlemint.mjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "./dist/settlemint.d.cts",
-        "default": "./dist/settlemint.cjs"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./*": {
+      "import": {
+        "types": "./dist/*.d.ts",
+        "default": "./dist/*.mjs"
+      },
+      "require": {
+        "types": "./dist/*.d.cts",
+        "default": "./dist/*.cjs"
       }
     }
   },
   "scripts": {
-    "codegen": "gql-tada generate-schema ${CONSOLE_GRAPHQL:-https://console.settlemint.com/api/graphql}",
     "build": "tsup-node",
     "dev": "tsup-node --watch",
     "publint": "publint run --strict",
@@ -47,15 +56,8 @@
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@0no-co/graphqlsp": "1.12.16"
-  },
-  "dependencies": {
-    "gql.tada": "^1",
-    "graphql-request": "^7",
-    "zod": "^3",
-    "@settlemint/sdk-utils": "workspace:*"
-  },
+  "devDependencies": {},
+  "dependencies": { "@antfu/ni": "^0.23.0" },
   "peerDependencies": {},
   "engines": {
     "node": ">=20"

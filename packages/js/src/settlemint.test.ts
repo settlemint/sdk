@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createSettleMintClient } from "./index.js";
+import { createSettleMintClient } from "./settlemint.js";
 
 // Mock the GraphQLClient
 

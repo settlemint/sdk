@@ -1,5 +1,6 @@
+import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, type SettleMintClientOptions, validate } from "@/helpers/schemas.js";
+import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
@@ -83,10 +84,7 @@ const getWorkspace = graphql(
  * const client = createSettleMintClient({ ... });
  * const workspaces = await client.workspace.list();
  */
-export const workspaceList = (
-  gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
-): (() => Promise<Workspace[]>) => {
+export const workspaceList = (gqlClient: GraphQLClient, options: ClientOptions): (() => Promise<Workspace[]>) => {
   return async () => {
     const { workspaces } = await gqlClient.request(getWorkspacesAndApplications);
     return workspaces;
@@ -107,7 +105,7 @@ export const workspaceList = (
  */
 export const workspaceRead = (
   gqlClient: GraphQLClient,
-  options: SettleMintClientOptions,
+  options: ClientOptions,
 ): ((workspaceId: Id) => Promise<Workspace>) => {
   return async (workspaceId: Id) => {
     const id = validate(IdSchema, workspaceId);
