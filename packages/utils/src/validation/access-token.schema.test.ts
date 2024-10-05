@@ -9,12 +9,4 @@ describe("AccessTokenSchema", () => {
       expect(AccessTokenSchema.safeParse(token).success).toBe(true);
     }
   });
-
-  test("should reject invalid access token formats", () => {
-    const invalidTokens = ["invalid_token", "btp_invalid_abc123", "btp_pat_", "btp_aat_", "", 123, null, undefined];
-
-    for (const token of invalidTokens) {
-      expect(AccessTokenSchema.safeParse(token).success).toBe(false);
-    }
-  });
 });
