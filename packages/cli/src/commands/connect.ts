@@ -1,10 +1,13 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { applicationPrompt } from "./connect/application.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
+import { workspacePrompt } from "./connect/workspace.prompt";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -30,10 +33,22 @@ export function connectCommand(): Command {
         const accessToken = await accessTokenPrompt(env);
         const instance = await instancePrompt(env);
 
+        const settlemint = createSettleMintClient({
+          accessToken,
+          instance,
+        });
+
+        const workspaces = await settlemint.workspace.list();
+
+        const workspace = await workspacePrompt(env, workspaces);
+        const application = await applicationPrompt(env, workspace.applications);
+
         await writeEnvSpinner(
           {
             SETTLEMINT_ACCESS_TOKEN: accessToken,
             SETTLEMINT_INSTANCE: instance,
+            SETTLEMINT_WORKSPACE: workspace.id,
+            SETTLEMINT_APPLICATION: application.id,
           },
           environment,
         );

@@ -24,6 +24,8 @@ export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string)
       await writeEnv(
         {
           SETTLEMINT_INSTANCE: env.SETTLEMINT_INSTANCE,
+          SETTLEMINT_WORKSPACE: env.SETTLEMINT_WORKSPACE,
+          SETTLEMINT_APPLICATION: env.SETTLEMINT_APPLICATION,
         },
         environment,
         false,
