@@ -49,7 +49,9 @@
       "cache": false,
       "persistent": true
     },
-    "test": {},
+    "test": {
+      "dependsOn": ["^build"]
+    },
     "test:coverage": {},
     "translate": {
       "inputs": ["messages/**"]
