@@ -12,15 +12,15 @@ import {
 export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
- * Creates a Hasura client for client-side use.
+ * Creates a Portal client for client-side use.
  *
- * @param options - The client options for configuring the Hasura client.
+ * @param options - The client options for configuring the Portal client.
  * @param requestConfig - Optional configuration for GraphQL requests.
  * @returns An object containing the GraphQL client and the initialized graphql function.
  * @throws Will throw an error if the options fail validation.
  *
  * @example
- * const { client, graphql } = createHasuraClient<{
+ * const { client, graphql } = createPortalClient<{
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
@@ -28,10 +28,10 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
  *     JSON: Record<string, unknown>;
  *   };
  * }>({
- *   instance: 'https://your-hasura-instance.com',
+ *   instance: 'https://your-portal-instance.com',
  * });
  */
-export function createHasuraClient<const Setup extends AbstractSetupSchema>(
+export function createPortalClient<const Setup extends AbstractSetupSchema>(
   options: ClientOptions,
   requestConfig?: RequestConfig,
 ) {
@@ -40,21 +40,21 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
   const graphql = initGraphQLTada<Setup>();
 
   return {
-    client: new GraphQLClient(`${validatedOptions.instance}/v1/graphql`, requestConfig),
+    client: new GraphQLClient(validatedOptions.instance, requestConfig),
     graphql,
   };
 }
 
 /**
- * Creates a Hasura client for server-side use with additional authentication.
+ * Creates a Portal client for server-side use with additional authentication.
  *
- * @param options - The server client options for configuring the Hasura client.
+ * @param options - The server client options for configuring the Portal client.
  * @param requestConfig - Optional configuration for GraphQL requests.
  * @returns An object containing the GraphQL client and the initialized graphql function.
  * @throws Will throw an error if not called on the server or if the options fail validation.
  *
  * @example
- * const { client, graphql } = createServerHasuraClient<{
+ * const { client, graphql } = createServerPortalClient<{
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
@@ -62,12 +62,12 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
  *     JSON: Record<string, unknown>;
  *   };
  * }>({
- *   instance: 'https://your-hasura-instance.com',
+ *   instance: 'https://your-portal-instance.com',
  *   accessToken: 'your-access-token',
  *   adminSecret: 'your-admin-secret',
  * });
  */
-export function createServerHasuraClient<const Setup extends AbstractSetupSchema>(
+export function createServerPortalClient<const Setup extends AbstractSetupSchema>(
   options: ServerClientOptions,
   requestConfig?: RequestConfig,
 ) {
@@ -82,7 +82,6 @@ export function createServerHasuraClient<const Setup extends AbstractSetupSchema
       headers: {
         ...requestConfig?.headers,
         "x-auth-token": validatedOptions.accessToken,
-        "x-hasura-admin-secret": validatedOptions.adminSecret,
       },
     }),
     graphql,

@@ -162,6 +162,16 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
+      - name: Publish SDK Portal package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/portal/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
       - name: Publish SDK The Graph package
         uses: JS-DevTools/npm-publish@v3
         with:
@@ -193,6 +203,7 @@ jobs:
                 | ------- | -------------------- |
                 | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
                 | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |
+                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |
                 | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |
                 | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
                 | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` |
