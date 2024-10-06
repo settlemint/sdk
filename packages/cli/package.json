@@ -1,7 +1,7 @@
 {
   "name": "@settlemint/sdk-cli",
   "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "type": "module",
   "private": false,
   "license": "FSL-1.1-MIT",
@@ -52,8 +52,8 @@
     "@inquirer/input": "^3",
     "@inquirer/password": "^3",
     "@inquirer/select": "^3",
-    "@settlemint/sdk-js": "workspace:*",
-    "@settlemint/sdk-utils": "workspace:*",
+    "@settlemint/sdk-js": "0.5.0",
+    "@settlemint/sdk-utils": "0.5.0",
     "is-in-ci": "^1.0.0",
     "yoctocolors": "^2"
   },

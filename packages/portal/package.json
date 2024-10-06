@@ -1,7 +1,7 @@
 {
   "name": "@settlemint/sdk-portal",
   "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
-  "version": "0.0.1",
+  "version": "0.5.0",
   "type": "module",
   "private": false,
   "license": "FSL-1.1-MIT",
@@ -48,7 +48,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@settlemint/sdk-utils": "workspace:*",
+    "@settlemint/sdk-utils": "0.5.0",
     "graphql-request": "^7",
     "zod": "^3"
   },
