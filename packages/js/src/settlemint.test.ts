@@ -5,7 +5,7 @@ import { createSettleMintClient } from "./settlemint.js";
 
 describe("createSettleMintClient", () => {
   const validOptions = {
-    accessToken: "btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx",
+    accessToken: "sm_aat_xxxxxxxxxxxxxxxxxxxxxxxx",
     instance: "https://console.settlemint.com",
   };
 

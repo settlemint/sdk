@@ -6,7 +6,7 @@ describe("Schemas", () => {
   describe("ClientOptionsSchema", () => {
     test("should validate valid client options", () => {
       const validOptions = {
-        accessToken: "btp_pat_validtoken",
+        accessToken: "sm_pat_validtoken",
         instance: "https://example.com",
       };
       expect(() => ClientOptionsSchema.parse(validOptions)).not.toThrow();
@@ -22,7 +22,7 @@ describe("Schemas", () => {
 
     test("should reject invalid URL", () => {
       const invalidOptions = {
-        accessToken: "btp_pat_validtoken",
+        accessToken: "sm_pat_validtoken",
         instance: "not-a-url",
       };
       expect(() => ClientOptionsSchema.parse(invalidOptions)).toThrow(ZodError);
