@@ -2,7 +2,7 @@ import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
- * Schema for validating client options for the Hasura client.
+ * Schema for validating client options for the The Graph client.
  */
 export const ClientOptionsSchema = z.object({
   instance: UrlSchema,
@@ -14,7 +14,7 @@ export const ClientOptionsSchema = z.object({
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Schema for validating server client options for the Hasura client.
+ * Schema for validating server client options for the The Graph client.
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({

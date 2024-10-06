@@ -32,7 +32,7 @@
         "default": "./dist/portal.mjs"
       },
       "require": {
-        "types": "./dist/portal.d.ts",
+        "types": "./dist/portal.d.cts",
         "default": "./dist/portal.cjs"
       }
     }
