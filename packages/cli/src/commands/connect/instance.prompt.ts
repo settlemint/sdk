@@ -1,4 +1,4 @@
-import { input } from "@inquirer/prompts";
+import input from "@inquirer/input";
 import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -13,18 +13,29 @@ import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validati
  * const instanceUrl = await instancePrompt(env);
  * console.log(instanceUrl); // Output: https://example.settlemint.com or user input
  */
-export async function instancePrompt(env: Partial<DotEnv>) {
-  return input({
-    message: "What is the URL of your SettleMint instance?",
-    default: env.SETTLEMINT_INSTANCE ?? "https://console.settlemint.com",
-    required: true,
-    validate(value) {
-      try {
-        validate(UrlSchema, value);
-        return true;
-      } catch (error) {
-        return "Invalid URL";
-      }
+export async function instancePrompt(env: Partial<DotEnv>, accept: boolean) {
+  const defaultInstance = env.SETTLEMINT_INSTANCE ?? "https://console.settlemint.com";
+  const defaultPossible = accept && defaultInstance;
+
+  return input(
+    {
+      message: "What is the URL of your SettleMint instance?",
+      default: defaultInstance,
+      required: true,
+      validate(value) {
+        try {
+          validate(UrlSchema, value);
+          return true;
+        } catch (error) {
+          return "Invalid URL";
+        }
+      },
     },
+    { signal: defaultPossible ? AbortSignal.timeout(0) : undefined },
+  ).catch((error) => {
+    if (error.name === "AbortPromptError") {
+      return defaultInstance;
+    }
+    throw error;
   });
 }

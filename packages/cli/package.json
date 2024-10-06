@@ -48,9 +48,12 @@
   "devDependencies": {},
   "dependencies": {
     "@commander-js/extra-typings": "^12",
-    "@settlemint/sdk-utils": "workspace:*",
+    "@inquirer/confirm": "^4",
+    "@inquirer/input": "^3",
+    "@inquirer/password": "^3",
+    "@inquirer/select": "^3",
     "@settlemint/sdk-js": "workspace:*",
-    "inquirer": "^11",
+    "@settlemint/sdk-utils": "workspace:*",
     "yoctocolors": "^2"
   },
   "peerDependencies": {},

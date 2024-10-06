@@ -6,6 +6,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { bold, italic, underline } from "yoctocolors";
 import { applicationPrompt } from "./connect/application.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
 import { servicesSpinner } from "./connect/services.spinner";
@@ -24,16 +25,17 @@ export function connectCommand(): Command {
     new Command("connect")
       // Add options for various configuration parameters
       .option("-e, --environment <environment>", "The name of your environment, defaults to development", "development")
+      .option("-a, --accept", "Accept the default and previously set values")
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
-      .action(async ({ environment }) => {
-        intro(`Connecting your dApp's ${environment} environment to SettleMint`);
+      .action(async ({ environment, accept }) => {
+        intro(`Connecting your dApp's ${italic(underline(bold(environment)))} environment to SettleMint`);
 
         const env: Partial<DotEnv> = await loadEnv(false);
 
-        const accessToken = await accessTokenPrompt(env);
-        const instance = await instancePrompt(env);
+        const accessToken = await accessTokenPrompt(env, !!accept);
+        const instance = await instancePrompt(env, !!accept);
 
         const settlemint = createSettleMintClient({
           accessToken,
@@ -42,8 +44,8 @@ export function connectCommand(): Command {
 
         const workspaces = await workspaceSpinner(settlemint);
 
-        const workspace = await workspacePrompt(env, workspaces);
-        const application = await applicationPrompt(env, workspace.applications);
+        const workspace = await workspacePrompt(env, workspaces, !!accept);
+        const application = await applicationPrompt(env, workspace?.applications ?? [], !!accept);
 
         const {
           blockchainNetworks,
@@ -56,16 +58,16 @@ export function connectCommand(): Command {
           customDeployment,
         } = await servicesSpinner(settlemint, application);
 
-        console.log({
-          blockchainNetworks,
-          blockchainNodes,
-          middleware,
-          integrationTool,
-          storage,
-          privateKey,
-          insights,
-          customDeployment,
-        });
+        // console.log({
+        //   blockchainNetworks,
+        //   blockchainNodes,
+        //   middleware,
+        //   integrationTool,
+        //   storage,
+        //   privateKey,
+        //   insights,
+        //   customDeployment,
+        // });
 
         await writeEnvSpinner(
           {

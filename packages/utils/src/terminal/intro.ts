@@ -1,7 +1,7 @@
-import { inverse, magentaBright } from "yoctocolors";
+import { magentaBright } from "yoctocolors";
 
 export const intro = (msg: string) => {
   console.log("");
-  console.log(inverse(magentaBright(msg)));
+  console.log(magentaBright(msg));
   console.log("");
 };

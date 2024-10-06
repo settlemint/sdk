@@ -1,6 +1,6 @@
-import { password } from "@inquirer/prompts";
+import confirm from "@inquirer/confirm";
+import password from "@inquirer/password";
 import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
-
 /**
  * Prompts the user for the access token of their SettleMint application.
  * If the access token is already present in the environment variables and valid,
@@ -15,12 +15,22 @@ import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/
  * const accessToken = await accessTokenPrompt(env);
  * console.log(accessToken); // Output: your-access-token or user input
  */
-export async function accessTokenPrompt(env: Partial<DotEnv>) {
-  let accessToken: string;
-  try {
-    accessToken = validate(AccessTokenSchema, env.SETTLEMINT_ACCESS_TOKEN);
-  } catch (error) {
-    accessToken = await password({
+export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean) {
+  const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  const defaultPossible = accept && defaultAccessToken;
+
+  if (defaultAccessToken) {
+    if (defaultPossible) {
+      return defaultAccessToken;
+    }
+    const answer = await confirm({ message: "Continue with your previously configured access token?" });
+    if (answer) {
+      return defaultAccessToken;
+    }
+  }
+
+  return password(
+    {
       message: "What is the access token for your application in SettleMint?",
       validate(value) {
         try {
@@ -30,7 +40,7 @@ export async function accessTokenPrompt(env: Partial<DotEnv>) {
           return "Invalid access token";
         }
       },
-    });
-  }
-  return accessToken;
+    },
+    { signal: accept ? AbortSignal.timeout(0) : undefined },
+  );
 }
