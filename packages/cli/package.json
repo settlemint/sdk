@@ -54,6 +54,7 @@
     "@inquirer/select": "^3",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
+    "is-in-ci": "^1.0.0",
     "yoctocolors": "^2"
   },
   "peerDependencies": {},

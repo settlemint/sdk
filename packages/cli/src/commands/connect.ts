@@ -6,6 +6,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import isInCi from "is-in-ci";
 import { bold, italic, underline } from "yoctocolors";
 import { applicationPrompt } from "./connect/application.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
@@ -34,8 +35,8 @@ export function connectCommand(): Command {
 
         const env: Partial<DotEnv> = await loadEnv(false);
 
-        const accessToken = await accessTokenPrompt(env, !!accept);
-        const instance = await instancePrompt(env, !!accept);
+        const accessToken = await accessTokenPrompt(env, !!accept || isInCi);
+        const instance = await instancePrompt(env, !!accept || isInCi);
 
         const settlemint = createSettleMintClient({
           accessToken,
@@ -44,8 +45,8 @@ export function connectCommand(): Command {
 
         const workspaces = await workspaceSpinner(settlemint);
 
-        const workspace = await workspacePrompt(env, workspaces, !!accept);
-        const application = await applicationPrompt(env, workspace?.applications ?? [], !!accept);
+        const workspace = await workspacePrompt(env, workspaces, !!accept || isInCi);
+        const application = await applicationPrompt(env, workspace?.applications ?? [], !!accept || isInCi);
 
         const {
           blockchainNetworks,
