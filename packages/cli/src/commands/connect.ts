@@ -1,4 +1,5 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -7,6 +8,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import { applicationPrompt } from "./connect/application.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
+import { servicesSpinner } from "./connect/services.spinner";
 import { workspacePrompt } from "./connect/workspace.prompt";
 
 /**
@@ -38,10 +40,32 @@ export function connectCommand(): Command {
           instance,
         });
 
-        const workspaces = await settlemint.workspace.list();
+        const workspaces = await workspaceSpinner(settlemint);
 
         const workspace = await workspacePrompt(env, workspaces);
         const application = await applicationPrompt(env, workspace.applications);
+
+        const {
+          blockchainNetworks,
+          blockchainNodes,
+          middleware,
+          integrationTool,
+          storage,
+          privateKey,
+          insights,
+          customDeployment,
+        } = await servicesSpinner(settlemint, application);
+
+        console.log({
+          blockchainNetworks,
+          blockchainNodes,
+          middleware,
+          integrationTool,
+          storage,
+          privateKey,
+          insights,
+          customDeployment,
+        });
 
         await writeEnvSpinner(
           {
