@@ -45,7 +45,12 @@ describe("Middleware Fetchers", () => {
       const list = middlewareList(mockGqlClient, mockOptions);
       const result = await list("123e4567-e89b-12d3-a456-426614174002");
 
-      expect(result).toEqual(mockResponse.middlewares.items);
+      expect(result).toEqual(
+        mockResponse.middlewares.items.map((item) => ({
+          ...item,
+          interface: "SMART_CONTRACT_PORTAL", // Add this line
+        })),
+      );
       expect(mockGqlClient.request).toHaveBeenCalledTimes(1);
       expect(mockGqlClient.request).toHaveBeenCalledWith(expect.anything(), {
         id: "123e4567-e89b-12d3-a456-426614174002",
@@ -81,7 +86,10 @@ describe("Middleware Fetchers", () => {
       const read = middlewareRead(mockGqlClient, mockOptions);
       const result = await read("123e4567-e89b-12d3-a456-426614174003");
 
-      expect(result).toEqual(mockResponse.middleware);
+      expect(result).toEqual({
+        ...mockResponse.middleware,
+        interface: "SMART_CONTRACT_PORTAL",
+      });
       expect(mockGqlClient.request).toHaveBeenCalledTimes(1);
       expect(mockGqlClient.request).toHaveBeenCalledWith(expect.anything(), {
         id: "123e4567-e89b-12d3-a456-426614174003",

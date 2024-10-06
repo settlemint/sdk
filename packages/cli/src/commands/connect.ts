@@ -9,8 +9,10 @@ import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { bold, italic, underline } from "yoctocolors";
 import { applicationPrompt } from "./connect/application.prompt";
+import { hasuraPrompt } from "./connect/hasura.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
 import { servicesSpinner } from "./connect/services.spinner";
+import { theGraphPrompt } from "./connect/thegraph.prompt";
 import { workspacePrompt } from "./connect/workspace.prompt";
 
 /**
@@ -59,16 +61,11 @@ export function connectCommand(): Command {
           customDeployment,
         } = await servicesSpinner(settlemint, application);
 
-        // console.log({
-        //   blockchainNetworks,
-        //   blockchainNodes,
-        //   middleware,
-        //   integrationTool,
-        //   storage,
-        //   privateKey,
-        //   insights,
-        //   customDeployment,
-        // });
+        const hasura = await hasuraPrompt(env, integrationTool, !!accept || isInCi);
+
+        const thegraph = await theGraphPrompt(env, middleware, !!accept || isInCi);
+
+        console.log(thegraph);
 
         await writeEnvSpinner(
           {
@@ -76,6 +73,16 @@ export function connectCommand(): Command {
             SETTLEMINT_INSTANCE: instance,
             SETTLEMINT_WORKSPACE: workspace.id,
             SETTLEMINT_APPLICATION: application.id,
+            SETTLEMINT_HASURA: hasura.id,
+            SETTLEMINT_HASURA_ENDPOINT: hasura.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
+            SETTLEMINT_HASURA_ADMIN_SECRET: hasura.credentials.find((credential) => credential.id === "admin-secret")
+              ?.displayValue,
+            SETTLEMINT_THEGRAPH: thegraph.id,
+            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph.endpoints.find((endpoint) => endpoint.id === "graphql")
+              ?.displayValue,
+            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: thegraph.endpoints.find(
+              (endpoint) => endpoint.id === "default-subgraph-graphql",
+            )?.displayValue,
           },
           environment,
         );

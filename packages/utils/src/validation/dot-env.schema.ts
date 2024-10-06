@@ -11,6 +11,12 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_ACCESS_TOKEN: AccessTokenSchema,
   SETTLEMINT_WORKSPACE: IdSchema,
   SETTLEMINT_APPLICATION: IdSchema,
+  SETTLEMINT_HASURA: IdSchema.optional(),
+  SETTLEMINT_HASURA_ENDPOINT: UrlSchema.optional(),
+  SETTLEMINT_HASURA_ADMIN_SECRET: z.string().optional(),
+  SETTLEMINT_THEGRAPH: IdSchema.optional(),
+  SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: UrlSchema.optional(),
+  SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: UrlSchema.optional(),
 });
 
 export type DotEnv = z.infer<typeof DotEnvSchema>;

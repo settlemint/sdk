@@ -45,7 +45,12 @@ describe("Integration Tool Fetchers", () => {
       const list = integrationToolList(mockGqlClient, mockOptions);
       const result = await list("123e4567-e89b-12d3-a456-426614174002");
 
-      expect(result).toEqual(mockResponse.integrations.items);
+      expect(result).toEqual(
+        mockResponse.integrations.items.map((item) => ({
+          ...item,
+          integrationType: "INTEGRATION_STUDIO",
+        })),
+      );
       expect(mockGqlClient.request).toHaveBeenCalledTimes(1);
       expect(mockGqlClient.request).toHaveBeenCalledWith(expect.anything(), {
         id: "123e4567-e89b-12d3-a456-426614174002",
@@ -81,7 +86,10 @@ describe("Integration Tool Fetchers", () => {
       const read = integrationToolRead(mockGqlClient, mockOptions);
       const result = await read("123e4567-e89b-12d3-a456-426614174003");
 
-      expect(result).toEqual(mockResponse.integration);
+      expect(result).toEqual({
+        ...mockResponse.integration,
+        integrationType: "INTEGRATION_STUDIO",
+      });
       expect(mockGqlClient.request).toHaveBeenCalledTimes(1);
       expect(mockGqlClient.request).toHaveBeenCalledWith(expect.anything(), {
         id: "123e4567-e89b-12d3-a456-426614174003",

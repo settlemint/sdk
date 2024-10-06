@@ -26,6 +26,11 @@ export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string)
           SETTLEMINT_INSTANCE: env.SETTLEMINT_INSTANCE,
           SETTLEMINT_WORKSPACE: env.SETTLEMINT_WORKSPACE,
           SETTLEMINT_APPLICATION: env.SETTLEMINT_APPLICATION,
+          SETTLEMINT_HASURA: env.SETTLEMINT_HASURA,
+          SETTLEMINT_HASURA_ENDPOINT: env.SETTLEMINT_HASURA_ENDPOINT,
+          SETTLEMINT_THEGRAPH: env.SETTLEMINT_THEGRAPH,
+          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT,
+          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK,
         },
         environment,
         false,
@@ -34,6 +39,7 @@ export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string)
       await writeEnv(
         {
           SETTLEMINT_ACCESS_TOKEN: env.SETTLEMINT_ACCESS_TOKEN,
+          SETTLEMINT_HASURA_ADMIN_SECRET: env.SETTLEMINT_HASURA_ADMIN_SECRET,
         },
         environment,
         true,
