@@ -35,11 +35,11 @@ export function connectCommand(): Command {
       // Define the action to be executed when the command is run
       .action(async ({ environment, accept }) => {
         intro(`Connecting your dApp's ${italic(underline(bold(environment)))} environment to SettleMint`);
-
+        const autoAccept = !!accept || isInCi;
         const env: Partial<DotEnv> = await loadEnv(false);
 
-        const accessToken = await accessTokenPrompt(env, !!accept || isInCi);
-        const instance = await instancePrompt(env, !!accept || isInCi);
+        const accessToken = await accessTokenPrompt(env, autoAccept);
+        const instance = await instancePrompt(env, autoAccept);
 
         const settlemint = createSettleMintClient({
           accessToken,
@@ -48,8 +48,8 @@ export function connectCommand(): Command {
 
         const workspaces = await workspaceSpinner(settlemint);
 
-        const workspace = await workspacePrompt(env, workspaces, !!accept || isInCi);
-        const application = await applicationPrompt(env, workspace?.applications ?? [], !!accept || isInCi);
+        const workspace = await workspacePrompt(env, workspaces, autoAccept);
+        const application = await applicationPrompt(env, workspace?.applications ?? [], autoAccept);
 
         const {
           blockchainNetworks,
@@ -62,9 +62,9 @@ export function connectCommand(): Command {
           customDeployment,
         } = await servicesSpinner(settlemint, application);
 
-        const hasura = await hasuraPrompt(env, integrationTool, !!accept || isInCi);
-        const thegraph = await theGraphPrompt(env, middleware, !!accept || isInCi);
-        const portal = await portalPrompt(env, middleware, !!accept || isInCi);
+        const hasura = await hasuraPrompt(env, integrationTool, autoAccept);
+        const thegraph = await theGraphPrompt(env, middleware, autoAccept);
+        const portal = await portalPrompt(env, middleware, autoAccept);
 
         await writeEnvSpinner(
           {
