@@ -2,7 +2,12 @@ import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
-import { type ClientOptions, ClientOptionsSchema, ServerClientOptionsSchema } from "./helpers/client-options.schema.js";
+import {
+  type ClientOptions,
+  ClientOptionsSchema,
+  type ServerClientOptions,
+  ServerClientOptionsSchema,
+} from "./helpers/client-options.schema.js";
 
 export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
@@ -62,7 +67,7 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
  * });
  */
 export function createServerTheGraphClient<const Setup extends AbstractSetupSchema>(
-  options: ClientOptions,
+  options: ServerClientOptions,
   requestConfig?: RequestConfig,
 ) {
   ensureServer();
