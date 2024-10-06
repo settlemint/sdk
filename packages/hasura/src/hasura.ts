@@ -72,7 +72,7 @@ export function createServerHasuraClient<const Setup extends AbstractSetupSchema
   const graphql = initGraphQLTada<Setup>();
 
   return {
-    client: new GraphQLClient(`${validatedOptions.instance}/v1/graphql`, {
+    client: new GraphQLClient(validatedOptions.instance, {
       ...requestConfig,
       headers: {
         ...requestConfig?.headers,
