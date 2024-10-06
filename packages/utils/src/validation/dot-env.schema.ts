@@ -17,6 +17,9 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_THEGRAPH: IdSchema.optional(),
   SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: UrlSchema.optional(),
   SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: UrlSchema.optional(),
+  SETTLEMINT_PORTAL: IdSchema.optional(),
+  SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: UrlSchema.optional(),
+  SETTLEMINT_PORTAL_REST_ENDPOINT: UrlSchema.optional(),
 });
 
 export type DotEnv = z.infer<typeof DotEnvSchema>;

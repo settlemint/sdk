@@ -11,6 +11,7 @@ import { bold, italic, underline } from "yoctocolors";
 import { applicationPrompt } from "./connect/application.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
+import { portalPrompt } from "./connect/portal.prompt";
 import { servicesSpinner } from "./connect/services.spinner";
 import { theGraphPrompt } from "./connect/thegraph.prompt";
 import { workspacePrompt } from "./connect/workspace.prompt";
@@ -62,10 +63,8 @@ export function connectCommand(): Command {
         } = await servicesSpinner(settlemint, application);
 
         const hasura = await hasuraPrompt(env, integrationTool, !!accept || isInCi);
-
         const thegraph = await theGraphPrompt(env, middleware, !!accept || isInCi);
-
-        console.log(thegraph);
+        const portal = await portalPrompt(env, middleware, !!accept || isInCi);
 
         await writeEnvSpinner(
           {
@@ -73,16 +72,20 @@ export function connectCommand(): Command {
             SETTLEMINT_INSTANCE: instance,
             SETTLEMINT_WORKSPACE: workspace.id,
             SETTLEMINT_APPLICATION: application.id,
-            SETTLEMINT_HASURA: hasura.id,
-            SETTLEMINT_HASURA_ENDPOINT: hasura.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
-            SETTLEMINT_HASURA_ADMIN_SECRET: hasura.credentials.find((credential) => credential.id === "admin-secret")
+            SETTLEMINT_HASURA: hasura?.id,
+            SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
+            SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) => credential.id === "admin-secret")
               ?.displayValue,
-            SETTLEMINT_THEGRAPH: thegraph.id,
-            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph.endpoints.find((endpoint) => endpoint.id === "graphql")
+            SETTLEMINT_THEGRAPH: thegraph?.id,
+            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")
               ?.displayValue,
-            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: thegraph.endpoints.find(
+            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: thegraph?.endpoints.find(
               (endpoint) => endpoint.id === "default-subgraph-graphql",
             )?.displayValue,
+            SETTLEMINT_PORTAL: portal?.id,
+            SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "graphql")
+              ?.displayValue,
+            SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "rest")?.displayValue,
           },
           environment,
         );

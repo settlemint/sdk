@@ -6,19 +6,26 @@ export async function hasuraPrompt(
   env: Partial<DotEnv>,
   integrations: IntegrationTool[],
   accept: boolean,
-): Promise<IntegrationTool> {
-  const defaultIntegration = integrations.find((integration) => integration.id === env.SETTLEMINT_HASURA);
+): Promise<IntegrationTool | undefined> {
+  const possible = integrations.filter((integration) => integration.integrationType === "HASURA");
+
+  if (possible.length === 0) {
+    return undefined;
+  }
+
+  const defaultIntegration =
+    (possible.find((integration) => integration.id === env.SETTLEMINT_HASURA) ?? possible.length === 1)
+      ? integrations[0]
+      : undefined;
   const defaultPossible = accept && defaultIntegration;
 
-  const application = await select(
+  const hasura = await select(
     {
       message: "Which Hasura instance do you want to connect to?",
-      choices: integrations
-        .filter((integration) => integration.integrationType === "HASURA")
-        .map((integration) => ({
-          name: integration.name,
-          value: integration,
-        })),
+      choices: possible.map((integration) => ({
+        name: integration.name,
+        value: integration,
+      })),
       default: defaultIntegration,
     },
     { signal: defaultPossible ? AbortSignal.timeout(0) : undefined },
@@ -29,9 +36,9 @@ export async function hasuraPrompt(
     throw error;
   });
 
-  if (!application) {
+  if (!hasura) {
     throw new Error("No Hasura instance selected");
   }
 
-  return application;
+  return hasura;
 }
