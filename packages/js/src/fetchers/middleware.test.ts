@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { middlewareList, middlewareRead } from "./middleware.js";
+import { type Middleware, middlewareList, middlewareRead } from "./middleware.js";
 
 describe("Middleware Fetchers", () => {
   const mockGqlClient = {
@@ -20,6 +20,7 @@ describe("Middleware Fetchers", () => {
             {
               id: "123e4567-e89b-12d3-a456-426614174000",
               name: "Middleware 1",
+              interface: "SMART_CONTRACT_PORTAL",
               endpoints: [
                 { id: "endpoint1", label: "Endpoint 1", displayValue: "https://endpoint1.example.com" },
                 { id: "endpoint2", label: "Endpoint 2", displayValue: "https://endpoint2.example.com" },
@@ -32,10 +33,11 @@ describe("Middleware Fetchers", () => {
             {
               id: "123e4567-e89b-12d3-a456-426614174001",
               name: "Middleware 2",
+              interface: "SMART_CONTRACT_PORTAL",
               endpoints: [{ id: "endpoint3", label: "Endpoint 3", displayValue: "https://endpoint3.example.com" }],
               credentials: [{ id: "cred3", label: "Credential 3", displayValue: "apikey1" }],
             },
-          ],
+          ] as Middleware[],
         },
       };
       const mockGqlClient = {
@@ -45,12 +47,7 @@ describe("Middleware Fetchers", () => {
       const list = middlewareList(mockGqlClient, mockOptions);
       const result = await list("123e4567-e89b-12d3-a456-426614174002");
 
-      expect(result).toEqual(
-        mockResponse.middlewares.items.map((item) => ({
-          ...item,
-          interface: "SMART_CONTRACT_PORTAL", // Add this line
-        })),
-      );
+      expect(result).toEqual(mockResponse.middlewares.items);
       expect(mockGqlClient.request).toHaveBeenCalledTimes(1);
       expect(mockGqlClient.request).toHaveBeenCalledWith(expect.anything(), {
         id: "123e4567-e89b-12d3-a456-426614174002",
@@ -69,6 +66,7 @@ describe("Middleware Fetchers", () => {
         middleware: {
           id: "123e4567-e89b-12d3-a456-426614174003",
           name: "Middleware 1",
+          interface: "SMART_CONTRACT_PORTAL",
           endpoints: [
             { id: "endpoint1", label: "Endpoint 1", displayValue: "https://endpoint1.example.com" },
             { id: "endpoint2", label: "Endpoint 2", displayValue: "https://endpoint2.example.com" },
@@ -77,7 +75,7 @@ describe("Middleware Fetchers", () => {
             { id: "cred1", label: "Credential 1", displayValue: "username1" },
             { id: "cred2", label: "Credential 2", displayValue: "password1" },
           ],
-        },
+        } as Middleware,
       };
       const mockGqlClient = {
         request: mock(() => Promise.resolve(mockResponse)),
@@ -86,10 +84,7 @@ describe("Middleware Fetchers", () => {
       const read = middlewareRead(mockGqlClient, mockOptions);
       const result = await read("123e4567-e89b-12d3-a456-426614174003");
 
-      expect(result).toEqual({
-        ...mockResponse.middleware,
-        interface: "SMART_CONTRACT_PORTAL",
-      });
+      expect(result).toEqual(mockResponse.middleware);
       expect(mockGqlClient.request).toHaveBeenCalledTimes(1);
       expect(mockGqlClient.request).toHaveBeenCalledWith(expect.anything(), {
         id: "123e4567-e89b-12d3-a456-426614174003",

@@ -37,9 +37,5 @@ export async function theGraphPrompt(
     throw error;
   });
 
-  if (!middleware) {
-    throw new Error("No TheGraph instance selected");
-  }
-
   return middleware;
 }

@@ -34,6 +34,7 @@ export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string)
           SETTLEMINT_PORTAL: env.SETTLEMINT_PORTAL,
           SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
           SETTLEMINT_PORTAL_REST_ENDPOINT: env.SETTLEMINT_PORTAL_REST_ENDPOINT,
+          SETTLEMINT_HD_PRIVATE_KEY: env.SETTLEMINT_HD_PRIVATE_KEY,
         },
         environment,
         false,

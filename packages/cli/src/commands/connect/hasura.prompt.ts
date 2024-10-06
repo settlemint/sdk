@@ -36,9 +36,5 @@ export async function hasuraPrompt(
     throw error;
   });
 
-  if (!hasura) {
-    throw new Error("No Hasura instance selected");
-  }
-
   return hasura;
 }

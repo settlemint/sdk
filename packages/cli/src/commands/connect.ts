@@ -10,6 +10,7 @@ import isInCi from "is-in-ci";
 import { bold, italic, underline } from "yoctocolors";
 import { applicationPrompt } from "./connect/application.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
+import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
 import { portalPrompt } from "./connect/portal.prompt";
 import { servicesSpinner } from "./connect/services.spinner";
@@ -65,6 +66,7 @@ export function connectCommand(): Command {
         const hasura = await hasuraPrompt(env, integrationTool, autoAccept);
         const thegraph = await theGraphPrompt(env, middleware, autoAccept);
         const portal = await portalPrompt(env, middleware, autoAccept);
+        const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
 
         await writeEnvSpinner(
           {
@@ -86,6 +88,7 @@ export function connectCommand(): Command {
             SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "graphql")
               ?.displayValue,
             SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "rest")?.displayValue,
+            SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           },
           environment,
         );

@@ -36,9 +36,5 @@ export async function portalPrompt(
     throw error;
   });
 
-  if (!middleware) {
-    throw new Error("No Smart Contract Portal instance selected");
-  }
-
   return middleware;
 }
