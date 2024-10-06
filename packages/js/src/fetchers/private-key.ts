@@ -10,6 +10,8 @@ const PrivateKeyFragment = graphql(`
   fragment PrivateKey on PrivateKey {
     id
     name
+    uniqueName
+    privateKeyType
   }
 `);
 

@@ -17,12 +17,13 @@ export function validate<T extends ZodSchema>(schema: T, value: unknown): T["_ou
   } catch (error) {
     if (error instanceof ZodError) {
       const formattedErrors = error.errors.map((err) => `- ${err.path.join(".")}: ${err.message}`).join("\n");
-      throw new Error(`Validation error(s):\n${formattedErrors}`);
+      throw new Error(`Validation error${error.errors.length > 1 ? "s" : ""}:\n${formattedErrors}`);
     }
     throw error; // Re-throw if it's not a ZodError
   }
 }
 
 export { AccessTokenSchema, type AccessToken } from "./validation/access-token.schema.js";
+export { DotEnvSchema, type DotEnv } from "./validation/dot-env.schema.js";
 export { IdSchema, type Id } from "./validation/id.schema.js";
 export { UrlSchema, type Url } from "./validation/url.schema.js";

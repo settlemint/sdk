@@ -12,28 +12,12 @@
  * ```
  */
 
-import { codegenCommand } from "@/commands/codegen";
 import { connectCommand } from "@/commands/connect";
-import { createCommand } from "@/commands/create";
 import { Command } from "@commander-js/extra-typings";
-import dotenv from "dotenv";
+import { ascii } from "@settlemint/sdk-utils/terminal";
 import pkg from "../package.json";
-import { customDeploymentCommand } from "./commands/custom-deployment";
-import { forgeCommand } from "./commands/forge";
-import { printCancel } from "./lib/cli-message";
 
-// Load environment variables from .env.local and .env files
-// Override existing env vars with those found in the files
-dotenv.config({
-  path: [
-    ...(process.env.NODE_ENV !== "production" ? [".env.development", "../.env.development"] : []),
-    ".env.local",
-    "../.env.local",
-    ".env",
-    "../.env",
-  ],
-  override: true,
-});
+ascii();
 
 /**
  * The main Command instance for the SettleMint CLI.
@@ -53,10 +37,6 @@ sdkcli
 
 // Add commands to the CLI
 sdkcli.addCommand(connectCommand());
-sdkcli.addCommand(codegenCommand());
-sdkcli.addCommand(createCommand());
-sdkcli.addCommand(forgeCommand());
-sdkcli.addCommand(customDeploymentCommand());
 
 /**
  * Parses command line arguments and executes the appropriate command.
@@ -73,12 +53,4 @@ sdkcli.addCommand(customDeploymentCommand());
  * });
  * ```
  */
-sdkcli.parseAsync(process.argv).catch(async (reason) => {
-  // If an error occurs:
-  // 1. Cancel the current operation
-  printCancel("An unexpected error occurred. Please report it as a bug:");
-  // 2. Log the error to the console
-  console.error(reason);
-  // 3. Exit the process with an error code
-  process.exit(1);
-});
+sdkcli.parseAsync(process.argv);

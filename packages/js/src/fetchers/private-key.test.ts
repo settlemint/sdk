@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { privateKeyList, privatekeyRead } from "./private-key.js";
+import { type PrivateKey, privateKeyList, privatekeyRead } from "./private-key.js";
 
 describe("Private Key Fetchers", () => {
   const mockGqlClient = {
@@ -17,9 +17,9 @@ describe("Private Key Fetchers", () => {
       const mockResponse = {
         privateKeys: {
           items: [
-            { id: "123e4567-e89b-12d3-a456-426614174000", name: "Key 1" },
-            { id: "123e4567-e89b-12d3-a456-426614174001", name: "Key 2" },
-          ],
+            { id: "id1", name: "name1", uniqueName: "uniqueName1", privateKeyType: "HD_ECDSA_P256" },
+            { id: "id2", name: "name2", uniqueName: "uniqueName2", privateKeyType: "HD_ECDSA_P256" },
+          ] as PrivateKey[],
         },
       };
       const mockGqlClient = {
@@ -45,7 +45,12 @@ describe("Private Key Fetchers", () => {
   describe("privatekeyRead", () => {
     test("should return a specific private key", async () => {
       const mockResponse = {
-        privateKey: { id: "123e4567-e89b-12d3-a456-426614174003", name: "Key 1" },
+        privateKey: {
+          id: "id3",
+          name: "name3",
+          uniqueName: "uniqueName3",
+          privateKeyType: "HD_ECDSA_P256",
+        } as PrivateKey,
       };
       const mockGqlClient = {
         request: mock(() => Promise.resolve(mockResponse)),

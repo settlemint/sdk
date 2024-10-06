@@ -10,6 +10,7 @@ const IntegrationFragment = graphql(`
   fragment Integration on Integration {
     id
     name
+    integrationType
     endpoints {
       id
       label

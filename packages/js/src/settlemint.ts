@@ -4,18 +4,57 @@
  */
 
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import { validate } from "@settlemint/sdk-utils/validation";
+import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
-import { blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
-import { blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
-import { customdeploymentList, customdeploymentRead } from "./fetchers/custom-deployment.js";
-import { insightsList, insightsRead } from "./fetchers/insights.js";
-import { integrationToolList, integrationToolRead } from "./fetchers/integration-tool.js";
-import { middlewareList, middlewareRead } from "./fetchers/middleware.js";
-import { privateKeyList, privatekeyRead } from "./fetchers/private-key.js";
-import { storageList, storageRead } from "./fetchers/storage.js";
-import { workspaceList, workspaceRead } from "./fetchers/workspace.js";
+import { type BlockchainNetwork, blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
+import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
+import { type CustomDeployment, customdeploymentList, customdeploymentRead } from "./fetchers/custom-deployment.js";
+import { type Insights, insightsList, insightsRead } from "./fetchers/insights.js";
+import { type IntegrationTool, integrationToolList, integrationToolRead } from "./fetchers/integration-tool.js";
+import { type Middleware, middlewareList, middlewareRead } from "./fetchers/middleware.js";
+import { type PrivateKey, privateKeyList, privatekeyRead } from "./fetchers/private-key.js";
+import { type Storage, storageList, storageRead } from "./fetchers/storage.js";
+import { type Workspace, workspaceList, workspaceRead } from "./fetchers/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
+
+export interface SettlemintClient {
+  workspace: {
+    list: () => Promise<Workspace[]>;
+    read: (workspaceId: Id) => Promise<Workspace>;
+  };
+  blockchainNetwork: {
+    list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
+    read: (blockchainNetworkId: Id) => Promise<BlockchainNetwork>;
+  };
+  blockchainNode: {
+    list: (applicationId: Id) => Promise<BlockchainNode[]>;
+    read: (blockchainNodeId: Id) => Promise<BlockchainNode>;
+  };
+  middleware: {
+    list: (applicationId: Id) => Promise<Middleware[]>;
+    read: (middlewareId: Id) => Promise<Middleware>;
+  };
+  integrationTool: {
+    list: (applicationId: Id) => Promise<IntegrationTool[]>;
+    read: (integrationToolId: Id) => Promise<IntegrationTool>;
+  };
+  storage: {
+    list: (applicationId: Id) => Promise<Storage[]>;
+    read: (storageId: Id) => Promise<Storage>;
+  };
+  privateKey: {
+    list: (applicationId: Id) => Promise<PrivateKey[]>;
+    read: (privateKeyId: Id) => Promise<PrivateKey>;
+  };
+  insights: {
+    list: (applicationId: Id) => Promise<Insights[]>;
+    read: (insightsId: Id) => Promise<Insights>;
+  };
+  customDeployment: {
+    list: (applicationId: Id) => Promise<CustomDeployment[]>;
+    read: (customDeploymentId: Id) => Promise<CustomDeployment>;
+  };
+}
 
 /**
  * Creates a SettleMint client with the provided options.
@@ -30,7 +69,7 @@ import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-option
  *   instance: 'https://console.settlemint.com'
  * });
  */
-export function createSettleMintClient(options: ClientOptions) {
+export function createSettleMintClient(options: ClientOptions): SettlemintClient {
   ensureServer();
 
   const validatedOptions = validate(ClientOptionsSchema, options);

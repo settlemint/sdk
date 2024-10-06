@@ -57,7 +57,15 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {},
-  "dependencies": { "@antfu/ni": "^0.23.0" },
+  "dependencies": {
+    "@antfu/ni": "^0.23",
+    "@dotenvx/dotenvx": "^1",
+    "deepmerge-ts": "^7",
+    "environment": "^1",
+    "find-up": "^7",
+    "yocto-spinner": "^0.1",
+    "yoctocolors": "^2"
+  },
   "peerDependencies": {},
   "engines": {
     "node": ">=20"
