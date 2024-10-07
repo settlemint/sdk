@@ -48,7 +48,7 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@settlemint/sdk-utils": "0.5.0",
+    "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
     "zod": "^3"
   },

@@ -16,13 +16,14 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  *   "development"
  * );
  */
-export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string) {
+export async function writeEnvSpinner(env: Partial<DotEnv>) {
   return spinner({
-    startMessage: `Saving .env.${environment} and .env.${environment}.local files`,
-    stopMessage: `Written .env.${environment} and .env.${environment}.local file`,
+    startMessage: `Saving .env.${env.SETTLEMINT_ENVIRONMENT} and .env.${env.SETTLEMINT_ENVIRONMENT}.local files`,
+    stopMessage: `Written .env.${env.SETTLEMINT_ENVIRONMENT} and .env.${env.SETTLEMINT_ENVIRONMENT}.local file`,
     task: async () => {
       await writeEnv(
         {
+          SETTLEMINT_ENVIRONMENT: env.SETTLEMINT_ENVIRONMENT,
           SETTLEMINT_INSTANCE: env.SETTLEMINT_INSTANCE,
           SETTLEMINT_WORKSPACE: env.SETTLEMINT_WORKSPACE,
           SETTLEMINT_APPLICATION: env.SETTLEMINT_APPLICATION,
@@ -36,7 +37,6 @@ export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string)
           SETTLEMINT_PORTAL_REST_ENDPOINT: env.SETTLEMINT_PORTAL_REST_ENDPOINT,
           SETTLEMINT_HD_PRIVATE_KEY: env.SETTLEMINT_HD_PRIVATE_KEY,
         },
-        environment,
         false,
       );
 
@@ -45,7 +45,6 @@ export async function writeEnvSpinner(env: Partial<DotEnv>, environment: string)
           SETTLEMINT_ACCESS_TOKEN: env.SETTLEMINT_ACCESS_TOKEN,
           SETTLEMINT_HASURA_ADMIN_SECRET: env.SETTLEMINT_HASURA_ADMIN_SECRET,
         },
-        environment,
         true,
       );
     },

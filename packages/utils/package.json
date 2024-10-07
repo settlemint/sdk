@@ -63,6 +63,7 @@
     "deepmerge-ts": "^7",
     "environment": "^1",
     "find-up": "^7",
+    "nano-spawn": "^0.1.0",
     "yocto-spinner": "^0.1",
     "yoctocolors": "^2"
   },
