@@ -1,7 +1,7 @@
 import { gqltadaSpinner } from "@/commands/codegen/gqltada.spinner";
 import { Command } from "@commander-js/extra-typings";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { bold, italic, underline } from "yoctocolors";
 
@@ -28,7 +28,11 @@ export function codegenCommand(): Command {
 
         const env: DotEnv = await loadEnv();
 
-        await gqltadaSpinner(env);
+        try {
+          await gqltadaSpinner(env);
+        } catch (error) {
+          cancel((error as Error).message);
+        }
 
         outro("Codegen complete");
       })
