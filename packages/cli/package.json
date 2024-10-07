@@ -48,7 +48,7 @@
   "devDependencies": {},
   "dependencies": {
     "@commander-js/extra-typings": "^12",
-    "@inquirer/confirm": "^4",
+    "@inquirer/confirm": "^5.0.0",
     "@inquirer/input": "^3",
     "@inquirer/password": "^3",
     "@inquirer/select": "^3",
