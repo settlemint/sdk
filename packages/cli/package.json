@@ -51,7 +51,7 @@
     "@inquirer/confirm": "^4",
     "@inquirer/input": "^3",
     "@inquirer/password": "^3",
-    "@inquirer/select": "^3",
+    "@inquirer/select": "^4.0.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "is-in-ci": "^1.0.0",
