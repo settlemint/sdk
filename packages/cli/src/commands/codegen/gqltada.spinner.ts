@@ -126,28 +126,28 @@ async function gqltadaCodegen(options: {
       templateName = "Hasura";
       clientName = "hasura";
       fileName = "hasura";
-      output = `${templateName}-schema.graphql`;
+      output = `${fileName}-schema.graphql`;
       break;
     case "PORTAL":
       gqlEndpoint = options.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
       templateName = "Portal";
       clientName = "portal";
       fileName = "portal";
-      output = `${templateName}-schema.graphql`;
+      output = `${fileName}-schema.graphql`;
       break;
     case "THE_GRAPH":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
       templateName = "TheGraph";
       clientName = "theGraph";
       fileName = "the-graph";
-      output = `${templateName}-schema.graphql`;
+      output = `${fileName}-schema.graphql`;
       break;
     case "THE_GRAPH_FALLBACK":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK;
       templateName = "TheGraphFallback";
       clientName = "theGraphFallback";
       fileName = "the-graph-fallback";
-      output = `${templateName}-schema.graphql`;
+      output = `${fileName}-schema.graphql`;
       break;
   }
 
