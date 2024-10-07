@@ -50,7 +50,7 @@
     "@commander-js/extra-typings": "^12",
     "@inquirer/confirm": "^4",
     "@inquirer/input": "^3",
-    "@inquirer/password": "^3",
+    "@inquirer/password": "^4.0.0",
     "@inquirer/select": "^4.0.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
