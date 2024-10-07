@@ -183,7 +183,7 @@ async function codegenTheGraph(env: DotEnv) {
 
   await generateSchema({
     input: gqlEndpoint,
-    output: "portal-schema.graphql",
+    output: "the-graph-schema.graphql",
     tsconfig: undefined,
     headers: {
       "x-auth-token": accessToken,
@@ -217,7 +217,7 @@ async function codegenTheGraphFallback(env: DotEnv) {
 
   await generateSchema({
     input: gqlEndpoint,
-    output: "portal-schema.graphql",
+    output: "the-graph-fallback-schema.graphql",
     tsconfig: undefined,
     headers: {
       "x-auth-token": accessToken,
