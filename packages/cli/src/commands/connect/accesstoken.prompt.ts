@@ -41,6 +41,6 @@ export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean) {
         }
       },
     },
-    { signal: accept ? AbortSignal.timeout(0) : undefined },
+    { signal: accept ? AbortSignal.timeout(500) : undefined },
   );
 }

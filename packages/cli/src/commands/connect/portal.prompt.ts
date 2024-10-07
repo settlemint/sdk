@@ -28,7 +28,7 @@ export async function portalPrompt(
       })),
       default: defaultMiddleware,
     },
-    { signal: defaultPossible ? AbortSignal.timeout(0) : undefined },
+    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
   ).catch((error) => {
     if (error.name === "AbortPromptError") {
       return defaultMiddleware;
