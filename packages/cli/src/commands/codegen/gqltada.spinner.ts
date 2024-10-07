@@ -96,6 +96,9 @@ async function codegenHasura(env: DotEnv) {
 
   const clientTemplate = `import { createServerHasuraClient } from "@settlemint/sdk-hasura";
 import type { introspection } from "../../hasura-env.d.ts";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+
+const env = loadEnv(true, process.env.SETTLEMINT_ENVIRONMENT);
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasuraClient<{
   introspection: introspection;
@@ -105,9 +108,9 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasu
     JSON: Record<string, unknown>;
   };
 }>({
-  instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
-  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
+  instance: env.SETTLEMINT_HASURA_ENDPOINT!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+  adminSecret: env.SETTLEMINT_HASURA_ADMIN_SECRET!,
 });`;
 
   await writeTemplate(clientTemplate, "/lib/settlemint", "hasura.ts");
@@ -131,6 +134,9 @@ async function codegenPortal(env: DotEnv) {
 
   const clientTemplate = `import { createServerPortalClient } from "@settlemint/sdk-portal";
 import type { introspection } from "../../portal-env.d.ts";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+
+const env = loadEnv(true, process.env.SETTLEMINT_ENVIRONMENT);
 
 export const { client: portalClient, graphql: portalGraphql } = createServerPortalClient<{
   introspection: introspection;
@@ -140,8 +146,8 @@ export const { client: portalClient, graphql: portalGraphql } = createServerPort
     JSON: Record<string, unknown>;
   };
 }>({
-  instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });`;
 
   await writeTemplate(clientTemplate, "/lib/settlemint", "portal.ts");
@@ -192,6 +198,9 @@ async function codegenTheGraph(env: DotEnv) {
 
   const clientTemplate = `import { createServerTheGraphClient } from "@settlemint/sdk-thegraph";
 import type { introspection } from "../../the-graph-env.d.ts";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+
+const env = loadEnv(true, process.env.SETTLEMINT_ENVIRONMENT);
 
 export const { client: theGraphClient, graphql: theGraphGraphql } = createServerTheGraphClient<{
   introspection: introspection;
@@ -201,8 +210,8 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createServer
     JSON: Record<string, unknown>;
   };
 }>({
-  instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  instance: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });`;
 
   await writeTemplate(clientTemplate, "/lib/settlemint", "the-graph.ts");
@@ -226,6 +235,9 @@ async function codegenTheGraphFallback(env: DotEnv) {
 
   const clientTemplate = `import { createServerTheGraphClient } from "@settlemint/sdk-thegraph";
 import type { introspection } from "../../the-graph-fallback-env.d.ts";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+
+const env = loadEnv(true, process.env.SETTLEMINT_ENVIRONMENT);
 
 export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql } = createServerTheGraphClient<{
   introspection: introspection;
@@ -235,8 +247,8 @@ export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql 
     JSON: Record<string, unknown>;
   };
 }>({
-  instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  instance: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });`;
 
   await writeTemplate(clientTemplate, "/lib/settlemint", "the-graph-fallback.ts");

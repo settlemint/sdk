@@ -35,7 +35,8 @@ export function connectCommand(): Command {
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
       .action(async ({ environment, accept }) => {
-        intro(`Connecting your dApp's ${italic(underline(bold(environment)))} environment to SettleMint`);
+        const selectedEnvironment = process.env.SETTLEMINT_ENVIRONMENT ?? environment;
+        intro(`Connecting your dApp's ${italic(underline(bold(selectedEnvironment)))} environment to SettleMint`);
         const autoAccept = !!accept || isInCi;
         const env: Partial<DotEnv> = await loadEnv(false);
 
@@ -69,7 +70,7 @@ export function connectCommand(): Command {
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
 
         await writeEnvSpinner({
-          SETTLEMINT_ENVIRONMENT: environment,
+          SETTLEMINT_ENVIRONMENT: selectedEnvironment,
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,

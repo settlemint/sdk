@@ -22,8 +22,10 @@ export function codegenCommand(): Command {
       .description("Generate GraphQL and REST types and queries")
       // Define the action to be executed when the command is run
       .action(async ({ environment }) => {
+        const selectedEnvironment = process.env.SETTLEMINT_ENVIRONMENT ?? environment;
+
         intro(
-          `Generating GraphQL types and queries for your dApp's ${italic(underline(bold(environment)))} environment`,
+          `Generating GraphQL types and queries for your dApp's ${italic(underline(bold(selectedEnvironment)))} environment`,
         );
 
         const env: DotEnv = await loadEnv();
