@@ -59,7 +59,7 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
 
   if (validateEnv) {
     try {
-      return validate(DotEnvSchema, parsed);
+      return validate(DotEnvSchema, process.env);
     } catch (error) {
       cancel((error as Error).message);
     }
