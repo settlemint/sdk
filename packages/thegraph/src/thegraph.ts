@@ -45,6 +45,13 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
+export function createTheGraphFallbackClient<const Setup extends AbstractSetupSchema>(
+  options: ClientOptions,
+  requestConfig?: RequestConfig,
+) {
+  return createTheGraphClient(options, requestConfig);
+}
+
 /**
  * Creates a The Graph client for server-side use with additional authentication.
  *
@@ -85,6 +92,13 @@ export function createServerTheGraphClient<const Setup extends AbstractSetupSche
     }),
     graphql,
   };
+}
+
+export function createServerTheGraphFallbackClient<const Setup extends AbstractSetupSchema>(
+  options: ServerClientOptions,
+  requestConfig?: RequestConfig,
+) {
+  return createServerTheGraphClient(options, requestConfig);
 }
 
 export { readFragment } from "gql.tada";
