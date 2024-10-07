@@ -68,7 +68,7 @@ async function codegenTsconfig() {
   const graphqlspPlugin = tsconfig.config.compilerOptions.plugins.find((plugin) => plugin.name === "@0no-co/graphqlsp");
   if (graphqlspPlugin) {
     tsconfig.config.compilerOptions.plugins = tsconfig.config.compilerOptions.plugins.filter(
-      (plugin) => plugin.name === "@0no-co/graphqlsp",
+      (plugin) => plugin.name !== "@0no-co/graphqlsp",
     );
   }
   tsconfig.config.compilerOptions.plugins.push(tadaConfig);
