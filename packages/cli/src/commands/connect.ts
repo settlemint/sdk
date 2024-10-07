@@ -68,30 +68,28 @@ export function connectCommand(): Command {
         const portal = await portalPrompt(env, middleware, autoAccept);
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
 
-        await writeEnvSpinner(
-          {
-            SETTLEMINT_ACCESS_TOKEN: accessToken,
-            SETTLEMINT_INSTANCE: instance,
-            SETTLEMINT_WORKSPACE: workspace.id,
-            SETTLEMINT_APPLICATION: application.id,
-            SETTLEMINT_HASURA: hasura?.id,
-            SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
-            SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) => credential.id === "admin-secret")
-              ?.displayValue,
-            SETTLEMINT_THEGRAPH: thegraph?.id,
-            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")
-              ?.displayValue,
-            SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: thegraph?.endpoints.find(
-              (endpoint) => endpoint.id === "default-subgraph-graphql",
-            )?.displayValue,
-            SETTLEMINT_PORTAL: portal?.id,
-            SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "graphql")
-              ?.displayValue,
-            SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "rest")?.displayValue,
-            SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
-          },
-          environment,
-        );
+        await writeEnvSpinner({
+          SETTLEMINT_ENVIRONMENT: environment,
+          SETTLEMINT_ACCESS_TOKEN: accessToken,
+          SETTLEMINT_INSTANCE: instance,
+          SETTLEMINT_WORKSPACE: workspace.id,
+          SETTLEMINT_APPLICATION: application.id,
+          SETTLEMINT_HASURA: hasura?.id,
+          SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
+          SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) => credential.id === "admin-secret")
+            ?.displayValue,
+          SETTLEMINT_THEGRAPH: thegraph?.id,
+          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")
+            ?.displayValue,
+          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: thegraph?.endpoints.find(
+            (endpoint) => endpoint.id === "default-subgraph-graphql",
+          )?.displayValue,
+          SETTLEMINT_PORTAL: portal?.id,
+          SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "graphql")
+            ?.displayValue,
+          SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "rest")?.displayValue,
+          SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
+        });
 
         outro("Connected to SettleMint");
       })

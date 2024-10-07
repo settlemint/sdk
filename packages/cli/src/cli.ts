@@ -12,6 +12,7 @@
  * ```
  */
 
+import { codegenCommand } from "@/commands/codegen";
 import { connectCommand } from "@/commands/connect";
 import { Command } from "@commander-js/extra-typings";
 import { ascii } from "@settlemint/sdk-utils/terminal";
@@ -37,6 +38,7 @@ sdkcli
 
 // Add commands to the CLI
 sdkcli.addCommand(connectCommand());
+sdkcli.addCommand(codegenCommand());
 
 /**
  * Parses command line arguments and executes the appropriate command.

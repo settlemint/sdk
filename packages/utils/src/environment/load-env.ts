@@ -1,5 +1,6 @@
 import { join } from "node:path";
 import { projectRoot } from "@/filesystem.js";
+import { cancel } from "@/terminal.js";
 import { type DotEnv, DotEnvSchema, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import type { DotenvParseOutput } from "dotenv";
@@ -32,6 +33,7 @@ export async function loadEnv<T extends boolean = true>(
 export async function loadEnvironmentEnv<T extends boolean = true>(
   validateEnv: T,
   environment?: string,
+  override?: boolean,
 ): Promise<T extends true ? DotEnv : DotenvParseOutput> {
   const projectDir = await projectRoot();
 
@@ -43,20 +45,24 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
     ".env",
   ].map((file) => join(projectDir, file));
 
-  let { parsed } = config({ path: paths, logLevel: "error" });
+  let { parsed } = config({ path: paths, logLevel: "error", override: !!override });
 
   if (!parsed) {
     parsed = {};
   }
 
-  const envToUse = environment || parsed.SETTLEMINT_ENVIRONMENT;
+  const envToUse = environment || parsed.SETTLEMINT_ENVIRONMENT || "development";
 
   if (envToUse && envToUse !== environment) {
-    return loadEnvironmentEnv(validateEnv, envToUse);
+    return loadEnvironmentEnv(validateEnv, envToUse, true);
   }
 
   if (validateEnv) {
-    return validate(DotEnvSchema, parsed);
+    try {
+      return validate(DotEnvSchema, parsed);
+    } catch (error) {
+      cancel((error as Error).message);
+    }
   }
 
   return parsed as T extends true ? DotEnv : DotenvParseOutput;
