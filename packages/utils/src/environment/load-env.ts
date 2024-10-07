@@ -1,9 +1,8 @@
 import { join } from "node:path";
 import { projectRoot } from "@/filesystem.js";
 import { cancel } from "@/terminal.js";
-import { type DotEnv, DotEnvSchema, validate } from "@/validation.js";
+import { type DotEnv, type DotEnvPartial, DotEnvSchema, DotEnvSchemaPartial, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
-import type { DotenvParseOutput } from "dotenv";
 
 /**
  * Loads environment variables from .env files.
@@ -18,7 +17,7 @@ import type { DotenvParseOutput } from "dotenv";
  */
 export async function loadEnv<T extends boolean = true>(
   validateEnv?: T,
-): Promise<T extends true ? DotEnv : DotenvParseOutput> {
+): Promise<T extends true ? DotEnv : DotEnvPartial> {
   return loadEnvironmentEnv(validateEnv ?? true);
 }
 
@@ -34,7 +33,7 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   validateEnv: T,
   environment?: string,
   override?: boolean,
-): Promise<T extends true ? DotEnv : DotenvParseOutput> {
+): Promise<T extends true ? DotEnv : DotEnvPartial> {
   const projectDir = await projectRoot();
 
   const paths: string[] = [
@@ -57,13 +56,12 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
     return loadEnvironmentEnv(validateEnv, envToUse, true);
   }
 
-  if (validateEnv) {
-    try {
-      return validate(DotEnvSchema, process.env);
-    } catch (error) {
-      cancel((error as Error).message);
-    }
+  try {
+    return validate(validateEnv ? DotEnvSchema : DotEnvSchemaPartial, process.env) as T extends true
+      ? DotEnv
+      : DotEnvPartial;
+  } catch (error) {
+    cancel((error as Error).message);
+    return {} as T extends true ? DotEnv : DotEnvPartial;
   }
-
-  return parsed as T extends true ? DotEnv : DotenvParseOutput;
 }

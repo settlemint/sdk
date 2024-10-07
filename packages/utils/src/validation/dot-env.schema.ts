@@ -24,3 +24,6 @@ export const DotEnvSchema = z.object({
 });
 
 export type DotEnv = z.infer<typeof DotEnvSchema>;
+
+export const DotEnvSchemaPartial = DotEnvSchema.partial();
+export type DotEnvPartial = z.infer<typeof DotEnvSchemaPartial>;

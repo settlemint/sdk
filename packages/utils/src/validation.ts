@@ -24,6 +24,6 @@ export function validate<T extends ZodSchema>(schema: T, value: unknown): T["_ou
 }
 
 export { AccessTokenSchema, type AccessToken } from "./validation/access-token.schema.js";
-export { DotEnvSchema, type DotEnv } from "./validation/dot-env.schema.js";
+export { DotEnvSchema, DotEnvSchemaPartial, type DotEnv, type DotEnvPartial } from "./validation/dot-env.schema.js";
 export { IdSchema, type Id } from "./validation/id.schema.js";
 export { UrlSchema, type Url } from "./validation/url.schema.js";
