@@ -1,5 +1,3 @@
-import { join } from "node:path";
-import { projectRoot } from "@/filesystem.js";
 import { cancel } from "@/terminal.js";
 import { type DotEnv, type DotEnvPartial, DotEnvSchema, DotEnvSchemaPartial, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
@@ -16,9 +14,10 @@ import { config } from "@dotenvx/dotenvx";
  * console.log(env.SETTLEMINT_INSTANCE);
  */
 export async function loadEnv<T extends boolean = true>(
-  validateEnv?: T,
+  validateEnv: T,
+  prod: boolean,
 ): Promise<T extends true ? DotEnv : DotEnvPartial> {
-  return loadEnvironmentEnv(validateEnv ?? true);
+  return loadEnvironmentEnv(validateEnv, !!prod);
 }
 
 /**
@@ -31,29 +30,15 @@ export async function loadEnv<T extends boolean = true>(
  */
 export async function loadEnvironmentEnv<T extends boolean = true>(
   validateEnv: T,
-  environment?: string,
-  override?: boolean,
+  prod: boolean,
 ): Promise<T extends true ? DotEnv : DotEnvPartial> {
-  const projectDir = await projectRoot();
-
-  const paths: string[] = [
-    `.env.${process.env.NODE_ENV ?? "development"}.local`,
-    ".env.local",
-    ...(environment ? [`.env.${environment}.local`, `.env.${environment}`] : []),
-    `.env.${process.env.NODE_ENV ?? "development"}`,
-    ".env",
-  ].map((file) => join(projectDir, file));
-
-  let { parsed } = config({ path: paths, logLevel: "error", override: !!override });
+  if (prod) {
+    process.env.NODE_ENV = "production";
+  }
+  let { parsed } = config({ convention: "nextjs", logLevel: "error" });
 
   if (!parsed) {
     parsed = {};
-  }
-
-  const envToUse = environment || parsed.SETTLEMINT_ENVIRONMENT || "development";
-
-  if (envToUse && envToUse !== environment) {
-    return loadEnvironmentEnv(validateEnv, envToUse, true);
   }
 
   try {

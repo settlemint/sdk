@@ -16,14 +16,14 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  *   "development"
  * );
  */
-export async function writeEnvSpinner(env: Partial<DotEnv>) {
+export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>) {
   return spinner({
-    startMessage: `Saving .env.${env.SETTLEMINT_ENVIRONMENT} and .env.${env.SETTLEMINT_ENVIRONMENT}.local files`,
-    stopMessage: `Written .env.${env.SETTLEMINT_ENVIRONMENT} and .env.${env.SETTLEMINT_ENVIRONMENT}.local file`,
+    startMessage: "Saving .env and .env.local files",
+    stopMessage: "Written .env and .env.local file",
     task: async () => {
       await writeEnv(
+        prod,
         {
-          SETTLEMINT_ENVIRONMENT: env.SETTLEMINT_ENVIRONMENT,
           SETTLEMINT_INSTANCE: env.SETTLEMINT_INSTANCE,
           SETTLEMINT_WORKSPACE: env.SETTLEMINT_WORKSPACE,
           SETTLEMINT_APPLICATION: env.SETTLEMINT_APPLICATION,
@@ -41,8 +41,8 @@ export async function writeEnvSpinner(env: Partial<DotEnv>) {
       );
 
       await writeEnv(
+        prod,
         {
-          SETTLEMINT_ENVIRONMENT: env.SETTLEMINT_ENVIRONMENT, // needed for the filename
           SETTLEMINT_ACCESS_TOKEN: env.SETTLEMINT_ACCESS_TOKEN,
           SETTLEMINT_HASURA_ADMIN_SECRET: env.SETTLEMINT_HASURA_ADMIN_SECRET,
         },

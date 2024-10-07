@@ -5,13 +5,16 @@ import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";
 
-export async function writeEnv(env: Partial<DotEnv>, secrets: boolean) {
+export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boolean) {
   const projectDir = await projectRoot();
   const envFile = join(
     projectDir,
-    secrets ? `.env.${env.SETTLEMINT_ENVIRONMENT}.local` : `.env.${env.SETTLEMINT_ENVIRONMENT}`,
+    secrets ? `.env${prod ? ".production" : ""}.local` : `.env${prod ? ".production" : ""}`,
   );
 
+  if (prod) {
+    process.env.NODE_ENV = "production";
+  }
   let { parsed: currentEnv } = config({
     path: envFile,
     logLevel: "error",

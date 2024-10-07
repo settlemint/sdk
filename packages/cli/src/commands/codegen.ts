@@ -3,7 +3,6 @@ import { Command } from "@commander-js/extra-typings";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { bold, italic, underline } from "yoctocolors";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -16,19 +15,14 @@ import { bold, italic, underline } from "yoctocolors";
 export function codegenCommand(): Command {
   return (
     new Command("codegen")
-      // Add options for various configuration parameters
-      .option("-e, --environment <environment>", "The name of your environment, defaults to development", "development")
+      .option("--prod", "Connect to your production environment")
       // Set the command description
       .description("Generate GraphQL and REST types and queries")
       // Define the action to be executed when the command is run
-      .action(async ({ environment }) => {
-        const selectedEnvironment = process.env.SETTLEMINT_ENVIRONMENT ?? environment;
+      .action(async ({ prod }) => {
+        intro("Generating GraphQL types and queries for your dApp");
 
-        intro(
-          `Generating GraphQL types and queries for your dApp's ${italic(underline(bold(selectedEnvironment)))} environment`,
-        );
-
-        const env: DotEnv = await loadEnv();
+        const env: DotEnv = await loadEnv(true, !!prod);
 
         try {
           await gqltadaSpinner(env);

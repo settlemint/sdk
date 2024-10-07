@@ -7,7 +7,6 @@ import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
-import { bold, italic, underline } from "yoctocolors";
 import { applicationPrompt } from "./connect/application.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
 import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
@@ -28,17 +27,15 @@ import { workspacePrompt } from "./connect/workspace.prompt";
 export function connectCommand(): Command {
   return (
     new Command("connect")
-      // Add options for various configuration parameters
-      .option("-e, --environment <environment>", "The name of your environment, defaults to development", "development")
+      .option("--prod", "Connect to your production environment")
       .option("-a, --accept", "Accept the default and previously set values")
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
-      .action(async ({ environment, accept }) => {
-        const selectedEnvironment = process.env.SETTLEMINT_ENVIRONMENT ?? environment;
-        intro(`Connecting your dApp's ${italic(underline(bold(selectedEnvironment)))} environment to SettleMint`);
+      .action(async ({ accept, prod }) => {
+        intro("Connecting your dApp to SettleMint");
         const autoAccept = !!accept || isInCi;
-        const env: Partial<DotEnv> = await loadEnv(false);
+        const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
         const accessToken = await accessTokenPrompt(env, autoAccept);
         const instance = await instancePrompt(env, autoAccept);
@@ -69,8 +66,7 @@ export function connectCommand(): Command {
         const portal = await portalPrompt(env, middleware, autoAccept);
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
 
-        await writeEnvSpinner({
-          SETTLEMINT_ENVIRONMENT: selectedEnvironment,
+        await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,

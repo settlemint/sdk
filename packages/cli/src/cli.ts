@@ -15,7 +15,7 @@
 import { codegenCommand } from "@/commands/codegen";
 import { connectCommand } from "@/commands/connect";
 import { Command } from "@commander-js/extra-typings";
-import { ascii } from "@settlemint/sdk-utils/terminal";
+import { ascii, cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../package.json";
 
 ascii();
@@ -55,4 +55,6 @@ sdkcli.addCommand(codegenCommand());
  * });
  * ```
  */
-sdkcli.parseAsync(process.argv);
+sdkcli.parseAsync(process.argv).catch((reason) => {
+  cancel(reason);
+});
