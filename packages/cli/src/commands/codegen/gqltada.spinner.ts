@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { generateSchema, generateTurbo } from "@gql.tada/cli-utils";
+import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -26,25 +26,21 @@ export async function gqltadaSpinner(env: DotEnv) {
         name: "hasura",
         schema: "hasura-schema.graphql",
         tadaOutputLocation: "hasura-env.d.ts",
-        tadaTurboLocation: "hasura-cache.d.ts",
       },
       {
         name: "thegraph",
         schema: "thegraph-schema.graphql",
         tadaOutputLocation: "thegraph-env.d.ts",
-        tadaTurboLocation: "thegraph-cache.d.ts",
       },
       {
         name: "thegraph-fallback",
         schema: "thegraph-fallback-schema.graphql",
         tadaOutputLocation: "thegraph-fallback-env.d.ts",
-        tadaTurboLocation: "thegraph-fallback-cache.d.ts",
       },
       {
         name: "portal",
         schema: "portal-schema.graphql",
         tadaOutputLocation: "portal-env.d.ts",
-        tadaTurboLocation: "portal-cache.d.ts",
       },
     ],
   };
@@ -60,7 +56,6 @@ export async function gqltadaSpinner(env: DotEnv) {
           name: string;
           schema: string;
           tadaOutputLocation: string;
-          tadaTurboLocation: string;
         }[];
       }[];
     };
@@ -188,12 +183,6 @@ async function gqltadaCodegen(options: {
       output,
       tsconfig: undefined,
       headers,
-    });
-
-    await generateTurbo({
-      failOnWarn: false,
-      output: turboOutput,
-      tsconfig: undefined,
     });
   } catch (error) {
     if (options.allowToFail) {
