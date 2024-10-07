@@ -73,7 +73,7 @@ async function codegenTsconfig() {
   }
   tsconfig.config.compilerOptions.plugins.push(tadaConfig);
 
-  writeFileSync(tsconfig.path, JSON.stringify(tsconfig, null, 2), "utf8");
+  writeFileSync(tsconfig.path, JSON.stringify(tsconfig.config, null, 2), "utf8");
 }
 
 async function codegenHasura(env: DotEnv) {
