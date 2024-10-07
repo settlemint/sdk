@@ -30,12 +30,12 @@ export async function gqltadaSpinner(env: DotEnv) {
       {
         name: "thegraph",
         schema: "thegraph-schema.graphql",
-        tadaOutputLocation: "thegraph-env.d.ts",
+        tadaOutputLocation: "the-graph-env.d.ts",
       },
       {
         name: "thegraph-fallback",
         schema: "thegraph-fallback-schema.graphql",
-        tadaOutputLocation: "thegraph-fallback-env.d.ts",
+        tadaOutputLocation: "the-graph-fallback-env.d.ts",
       },
       {
         name: "portal",
@@ -115,7 +115,7 @@ async function gqltadaCodegen(options: {
   let templateName: string;
   let output: string;
   let clientName: string;
-
+  let fileName: string;
   let gqlEndpoint: string | undefined = undefined;
   let adminSecret: string | undefined = undefined;
 
@@ -125,24 +125,28 @@ async function gqltadaCodegen(options: {
       adminSecret = options.env.SETTLEMINT_HASURA_ADMIN_SECRET;
       templateName = "Hasura";
       clientName = "hasura";
+      fileName = "hasura";
       output = `${templateName}-schema.graphql`;
       break;
     case "PORTAL":
       gqlEndpoint = options.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
       templateName = "Portal";
       clientName = "portal";
+      fileName = "portal";
       output = `${templateName}-schema.graphql`;
       break;
     case "THE_GRAPH":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
       templateName = "TheGraph";
       clientName = "theGraph";
+      fileName = "the-graph";
       output = `${templateName}-schema.graphql`;
       break;
     case "THE_GRAPH_FALLBACK":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK;
       templateName = "TheGraphFallback";
       clientName = "theGraphFallback";
+      fileName = "the-graph-fallback";
       output = `${templateName}-schema.graphql`;
       break;
   }
@@ -193,7 +197,7 @@ async function gqltadaCodegen(options: {
 
     const clientTemplate = `
 import { createServer${templateName}Client } from "@settlemint/sdk-hasura";
-import type { introspection } from "../../${templateName}-env.d.ts;
+import type { introspection } from "../../${fileName}-env.d.ts";
 
 export const { client: ${clientName}Client, graphql: ${clientName}Graphql } = createServer${templateName}Client<{
   introspection: introspection;
@@ -212,7 +216,6 @@ export const { client: ${clientName}Client, graphql: ${clientName}Graphql } = cr
     const projectDir = await projectRoot();
     const codegenDir = join(projectDir, "/lib/settlemint");
     mkdirSync(codegenDir, { recursive: true });
-    const fileName = `${options.type.toLowerCase().replace(/_/g, "-")}.ts`;
     const filePath = join(codegenDir, fileName);
     if (!existsSync(filePath)) {
       writeFileSync(filePath, clientTemplate, "utf8");
