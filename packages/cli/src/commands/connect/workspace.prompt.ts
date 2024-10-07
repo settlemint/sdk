@@ -10,21 +10,17 @@ export async function workspacePrompt(
   const defaultWorkspace = workspaces.find((workspace) => workspace.id === env.SETTLEMINT_WORKSPACE);
   const defaultPossible = accept && defaultWorkspace;
 
-  const workspace = await select(
-    {
-      message: "Which workspace do you want to connect to?",
-      choices: workspaces.map((workspace) => ({
-        name: workspace.name,
-        value: workspace,
-      })),
-      default: defaultWorkspace,
-    },
-    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
-  ).catch((error) => {
-    if (error.name === "AbortPromptError") {
-      return defaultWorkspace;
-    }
-    throw error;
+  if (defaultPossible) {
+    return defaultWorkspace;
+  }
+
+  const workspace = await select({
+    message: "Which workspace do you want to connect to?",
+    choices: workspaces.map((workspace) => ({
+      name: workspace.name,
+      value: workspace,
+    })),
+    default: defaultWorkspace,
   });
 
   if (!workspace) {

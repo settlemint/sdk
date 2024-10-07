@@ -17,25 +17,21 @@ export async function instancePrompt(env: Partial<DotEnv>, accept: boolean) {
   const defaultInstance = env.SETTLEMINT_INSTANCE ?? "https://console.settlemint.com";
   const defaultPossible = accept && defaultInstance;
 
-  return input(
-    {
-      message: "What is the URL of your SettleMint instance?",
-      default: defaultInstance,
-      required: true,
-      validate(value) {
-        try {
-          validate(UrlSchema, value);
-          return true;
-        } catch (error) {
-          return "Invalid URL";
-        }
-      },
+  if (defaultPossible) {
+    return defaultInstance;
+  }
+
+  return input({
+    message: "What is the URL of your SettleMint instance?",
+    default: defaultInstance,
+    required: true,
+    validate(value) {
+      try {
+        validate(UrlSchema, value);
+        return true;
+      } catch (error) {
+        return "Invalid URL";
+      }
     },
-    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
-  ).catch((error) => {
-    if (error.name === "AbortPromptError") {
-      return defaultInstance;
-    }
-    throw error;
   });
 }

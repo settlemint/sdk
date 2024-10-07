@@ -19,21 +19,17 @@ export async function hdPrivateKeyPrompt(
       : undefined;
   const defaultPossible = accept && defaultPrivateKey;
 
-  const privateKey = await select(
-    {
-      message: "Which HD Private Key do you want to use?",
-      choices: possible.map((privateKey) => ({
-        name: privateKey.name,
-        value: privateKey,
-      })),
-      default: defaultPrivateKey,
-    },
-    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
-  ).catch((error) => {
-    if (error.name === "AbortPromptError") {
-      return defaultPrivateKey;
-    }
-    throw error;
+  if (defaultPossible) {
+    return defaultPrivateKey;
+  }
+
+  const privateKey = await select({
+    message: "Which HD Private Key do you want to use?",
+    choices: possible.map((privateKey) => ({
+      name: privateKey.name,
+      value: privateKey,
+    })),
+    default: defaultPrivateKey,
   });
 
   return privateKey;

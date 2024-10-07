@@ -19,21 +19,17 @@ export async function hasuraPrompt(
       : undefined;
   const defaultPossible = accept && defaultIntegration;
 
-  const hasura = await select(
-    {
-      message: "Which Hasura instance do you want to connect to?",
-      choices: possible.map((integration) => ({
-        name: integration.name,
-        value: integration,
-      })),
-      default: defaultIntegration,
-    },
-    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
-  ).catch((error) => {
-    if (error.name === "AbortPromptError") {
-      return defaultIntegration;
-    }
-    throw error;
+  if (defaultPossible) {
+    return defaultIntegration;
+  }
+
+  const hasura = await select({
+    message: "Which Hasura instance do you want to connect to?",
+    choices: possible.map((integration) => ({
+      name: integration.name,
+      value: integration,
+    })),
+    default: defaultIntegration,
   });
 
   return hasura;

@@ -10,21 +10,17 @@ export async function applicationPrompt(
   const defaultApplication = applications.find((application) => application.id === env.SETTLEMINT_APPLICATION);
   const defaultPossible = accept && defaultApplication;
 
-  const application = await select(
-    {
-      message: "Which application do you want to connect to?",
-      choices: applications.map((applications) => ({
-        name: applications.name,
-        value: applications,
-      })),
-      default: defaultApplication,
-    },
-    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
-  ).catch((error) => {
-    if (error.name === "AbortPromptError") {
-      return defaultApplication;
-    }
-    throw error;
+  if (defaultPossible) {
+    return defaultApplication;
+  }
+
+  const application = await select({
+    message: "Which application do you want to connect to?",
+    choices: applications.map((applications) => ({
+      name: applications.name,
+      value: applications,
+    })),
+    default: defaultApplication,
   });
 
   if (!application) {

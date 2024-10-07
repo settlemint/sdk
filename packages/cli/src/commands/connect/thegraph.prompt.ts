@@ -20,21 +20,17 @@ export async function theGraphPrompt(
 
   const defaultPossible = accept && defaultMiddleware;
 
-  const middleware = await select(
-    {
-      message: "Which The Graph instance do you want to connect to?",
-      choices: possible.map((middleware) => ({
-        name: middleware.name,
-        value: middleware,
-      })),
-      default: defaultMiddleware,
-    },
-    { signal: defaultPossible ? AbortSignal.timeout(500) : undefined },
-  ).catch((error) => {
-    if (error.name === "AbortPromptError") {
-      return defaultMiddleware;
-    }
-    throw error;
+  if (defaultPossible) {
+    return defaultMiddleware;
+  }
+
+  const middleware = await select({
+    message: "Which The Graph instance do you want to connect to?",
+    choices: possible.map((middleware) => ({
+      name: middleware.name,
+      value: middleware,
+    })),
+    default: defaultMiddleware,
   });
 
   return middleware;

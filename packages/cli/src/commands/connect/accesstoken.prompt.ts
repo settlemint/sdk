@@ -1,4 +1,3 @@
-import confirm from "@inquirer/confirm";
 import password from "@inquirer/password";
 import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
 /**
@@ -19,14 +18,8 @@ export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean) {
   const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const defaultPossible = accept && defaultAccessToken;
 
-  if (defaultAccessToken) {
-    if (defaultPossible) {
-      return defaultAccessToken;
-    }
-    const answer = await confirm({ message: "Continue with your previously configured access token?" });
-    if (answer) {
-      return defaultAccessToken;
-    }
+  if (defaultPossible) {
+    return defaultAccessToken;
   }
 
   return password(
