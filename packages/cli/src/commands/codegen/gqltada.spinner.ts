@@ -112,8 +112,9 @@ async function gqltadaCodegen(options: {
   allowToFail?: boolean;
 }) {
   const accessToken = options.env.SETTLEMINT_ACCESS_TOKEN;
-  const templateName = options.type.toLowerCase().replace(/_(\w)/g, (_, c) => c.toUpperCase());
-  const output = `${templateName}-schema.graphql`;
+  let templateName: string;
+  let output: string;
+  let clientName: string;
 
   let gqlEndpoint: string | undefined = undefined;
   let adminSecret: string | undefined = undefined;
@@ -122,15 +123,27 @@ async function gqltadaCodegen(options: {
     case "HASURA":
       gqlEndpoint = options.env.SETTLEMINT_HASURA_ENDPOINT;
       adminSecret = options.env.SETTLEMINT_HASURA_ADMIN_SECRET;
+      templateName = "Hasura";
+      clientName = "hasura";
+      output = `${templateName}-schema.graphql`;
       break;
     case "PORTAL":
       gqlEndpoint = options.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
+      templateName = "Portal";
+      clientName = "portal";
+      output = `${templateName}-schema.graphql`;
       break;
     case "THE_GRAPH":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
+      templateName = "TheGraph";
+      clientName = "theGraph";
+      output = `${templateName}-schema.graphql`;
       break;
     case "THE_GRAPH_FALLBACK":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK;
+      templateName = "TheGraphFallback";
+      clientName = "theGraphFallback";
+      output = `${templateName}-schema.graphql`;
       break;
   }
 
@@ -180,9 +193,9 @@ async function gqltadaCodegen(options: {
 
     const clientTemplate = `
 import { createServer${templateName}Client } from "@settlemint/sdk-hasura";
-import type { introspection } from "../../${templateName}.d.ts;
+import type { introspection } from "../../${templateName}-env.d.ts;
 
-export const { client: ${templateName}Client, graphql: ${templateName}Graphql } = createServer${templateName}Client<{
+export const { client: ${clientName}Client, graphql: ${clientName}Graphql } = createServer${templateName}Client<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
