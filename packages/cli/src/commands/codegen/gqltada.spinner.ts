@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
@@ -96,48 +96,41 @@ export async function gqltadaSpinner(env: DotEnv) {
     env,
   });
   await gqltadaCodegen({
-    type: "THEGRAPH",
+    type: "THE_GRAPH",
     env,
     allowToFail: true,
   });
   await gqltadaCodegen({
-    type: "THEGRAPH_FALLBACK",
+    type: "THE_GRAPH_FALLBACK",
     env,
   });
 }
 
 async function gqltadaCodegen(options: {
-  type: "HASURA" | "PORTAL" | "THEGRAPH" | "THEGRAPH_FALLBACK";
+  type: "HASURA" | "PORTAL" | "THE_GRAPH" | "THE_GRAPH_FALLBACK";
   env: DotEnv;
   allowToFail?: boolean;
 }) {
-  let gqlEndpoint: string | undefined = undefined;
-  let output: string;
-  let turboOutput: string;
-  let adminSecret: string | undefined = undefined;
   const accessToken = options.env.SETTLEMINT_ACCESS_TOKEN;
+  const templateName = options.type.toLowerCase().replace(/_(\w)/g, (_, c) => c.toUpperCase());
+  const output = `${templateName}-schema.graphql`;
+
+  let gqlEndpoint: string | undefined = undefined;
+  let adminSecret: string | undefined = undefined;
 
   switch (options.type) {
     case "HASURA":
       gqlEndpoint = options.env.SETTLEMINT_HASURA_ENDPOINT;
-      output = "hasura-schema.graphql";
-      turboOutput = "hasura-cache.d.ts";
       adminSecret = options.env.SETTLEMINT_HASURA_ADMIN_SECRET;
       break;
     case "PORTAL":
       gqlEndpoint = options.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
-      output = "portal-schema.graphql";
-      turboOutput = "portal-cache.d.ts";
       break;
-    case "THEGRAPH":
+    case "THE_GRAPH":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
-      output = "thegraph-schema.graphql";
-      turboOutput = "thegraph-cache.d.ts";
       break;
-    case "THEGRAPH_FALLBACK":
+    case "THE_GRAPH_FALLBACK":
       gqlEndpoint = options.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK;
-      output = "thegraph-fallback-schema.graphql";
-      turboOutput = "thegraph-fallback-cache.d.ts";
       break;
   }
 
@@ -184,6 +177,33 @@ async function gqltadaCodegen(options: {
       tsconfig: undefined,
       headers,
     });
+
+    const clientTemplate = `
+import { createServer${templateName}Client } from "@settlemint/sdk-hasura";
+import type { introspection } from "../../${templateName}.d.ts;
+
+export const { client: ${templateName}Client, graphql: ${templateName}Graphql } = createServer${templateName}Client<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+  };
+}>({
+  instance: process.env.SETTLEMINT_${options.type}_ENDPOINT!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  ${options.type === "HASURA" ? "adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!," : ""}
+});
+    `;
+
+    const projectDir = await projectRoot();
+    const codegenDir = join(projectDir, "/lib/settlemint");
+    mkdirSync(codegenDir, { recursive: true });
+    const fileName = `${options.type.toLowerCase().replace(/_/g, "-")}.ts`;
+    const filePath = join(codegenDir, fileName);
+    if (!existsSync(filePath)) {
+      writeFileSync(filePath, clientTemplate, "utf8");
+    }
   } catch (error) {
     if (options.allowToFail) {
       // ignore
