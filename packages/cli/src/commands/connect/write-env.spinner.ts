@@ -42,6 +42,7 @@ export async function writeEnvSpinner(env: Partial<DotEnv>) {
 
       await writeEnv(
         {
+          SETTLEMINT_ENVIRONMENT: env.SETTLEMINT_ENVIRONMENT, // needed for the filename
           SETTLEMINT_ACCESS_TOKEN: env.SETTLEMINT_ACCESS_TOKEN,
           SETTLEMINT_HASURA_ADMIN_SECRET: env.SETTLEMINT_HASURA_ADMIN_SECRET,
         },
