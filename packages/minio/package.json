@@ -32,7 +32,7 @@
         "default": "./dist/minio.mjs"
       },
       "require": {
-        "types": "./dist/minio.d.ts",
+        "types": "./dist/minio.d.cts",
         "default": "./dist/minio.cjs"
       }
     }

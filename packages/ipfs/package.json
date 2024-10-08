@@ -32,7 +32,7 @@
         "default": "./dist/ipfs.mjs"
       },
       "require": {
-        "types": "./dist/ipfs.d.ts",
+        "types": "./dist/ipfs.d.cts",
         "default": "./dist/ipfs.cjs"
       }
     }
