@@ -2,8 +2,8 @@ import { DotEnvSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type NextRequest, NextResponse } from "next/server.js";
 import { match } from "path-to-regexp";
 
-const isProxyRoute = match(["/proxy/(.*)"]);
-const isHasuraProxyRoute = match(["/proxy/hasura", "/proxy/hasura/(.*)"]);
+const isProxyRoute = match(["/proxy/*path"]);
+const isHasuraProxyRoute = match(["/proxy/hasura", "/proxy/hasura/*path"]);
 
 /**
  * Middleware function to handle proxy requests
