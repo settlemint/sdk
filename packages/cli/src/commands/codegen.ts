@@ -1,8 +1,15 @@
-import { gqltadaSpinner } from "@/commands/codegen/gqltada.spinner";
+import { codegenHasura } from "@/commands/codegen/codegen-hasura";
+import { codegenPortal } from "@/commands/codegen/codegen-portal";
+import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
+import { codegenTheGraphFallback } from "@/commands/codegen/codegen-the-graph-fallback";
+import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { Command } from "@commander-js/extra-typings";
+import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
+import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -24,7 +31,41 @@ export function codegenCommand(): Command {
 
         const env: DotEnv = await loadEnv(true, !!prod);
 
-        await gqltadaSpinner(env);
+        const { hasura, portal, thegraph, thegraphFallback } = await spinner({
+          startMessage: "Testing configured GraphQL schema",
+          task: async () => {
+            return codegenTsconfig(env);
+          },
+          stopMessage: "Tested GraphQL schemas",
+        });
+
+        const promises = [];
+        if (hasura) {
+          promises.push(codegenHasura(env));
+        }
+        if (portal) {
+          promises.push(codegenPortal(env));
+        }
+        if (thegraph) {
+          promises.push(codegenTheGraph(env));
+        }
+        if (thegraphFallback) {
+          promises.push(codegenTheGraphFallback(env));
+        }
+
+        if (shouldCodegenMinio(env)) {
+          promises.push(codegenMinio(env));
+        }
+        if (shouldCodegenIpfs(env)) {
+          promises.push(codegenIpfs(env));
+        }
+
+        await Promise.all(promises);
+
+        await generateOutput({
+          output: undefined,
+          tsconfig: undefined,
+        });
 
         outro("Codegen complete");
       })
