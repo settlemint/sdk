@@ -1,6 +1,6 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { GraphQLClient } from "graphql-request";
-import { storageList, storageRead } from "./storage.js";
+import { type Storage, storageList, storageRead } from "./storage.js";
 
 describe("Storage Fetchers", () => {
   const mockGqlClient = {
@@ -20,6 +20,7 @@ describe("Storage Fetchers", () => {
             {
               id: "123e4567-e89b-12d3-a456-426614174000",
               name: "Storage 1",
+              storageProtocol: "IPFS",
               endpoints: [
                 { id: "endpoint1", label: "Endpoint 1", displayValue: "https://endpoint1.example.com" },
                 { id: "endpoint2", label: "Endpoint 2", displayValue: "https://endpoint2.example.com" },
@@ -32,10 +33,11 @@ describe("Storage Fetchers", () => {
             {
               id: "123e4567-e89b-12d3-a456-426614174001",
               name: "Storage 2",
+              storageProtocol: "MINIO",
               endpoints: [{ id: "endpoint3", label: "Endpoint 3", displayValue: "https://endpoint3.example.com" }],
               credentials: [{ id: "cred3", label: "Credential 3", displayValue: "apikey1" }],
             },
-          ],
+          ] as Storage[],
         },
       };
       const mockGqlClient = {
@@ -64,6 +66,7 @@ describe("Storage Fetchers", () => {
         storage: {
           id: "123e4567-e89b-12d3-a456-426614174003",
           name: "Storage 1",
+          storageProtocol: "IPFS",
           endpoints: [
             { id: "endpoint1", label: "Endpoint 1", displayValue: "https://endpoint1.example.com" },
             { id: "endpoint2", label: "Endpoint 2", displayValue: "https://endpoint2.example.com" },
@@ -72,7 +75,7 @@ describe("Storage Fetchers", () => {
             { id: "cred1", label: "Credential 1", displayValue: "username1" },
             { id: "cred2", label: "Credential 2", displayValue: "password1" },
           ],
-        },
+        } as Storage,
       };
       const mockGqlClient = {
         request: mock(() => Promise.resolve(mockResponse)),

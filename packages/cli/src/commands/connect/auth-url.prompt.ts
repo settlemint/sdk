@@ -13,7 +13,7 @@ import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validati
  * const instanceUrl = await instancePrompt(env);
  * console.log(instanceUrl); // Output: https://example.settlemint.com or user input
  */
-export async function authUrlPrompt(env: Partial<DotEnv>, accept: boolean, prod: boolean) {
+export async function authUrlPrompt(env: Partial<DotEnv>, accept: boolean, prod: boolean): Promise<string> {
   const defaultAuthUrl = env.NEXTAUTH_URL ?? (prod ? undefined : "http://localhost:3000");
   const defaultPossible = accept && defaultAuthUrl;
 

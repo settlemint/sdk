@@ -1,6 +1,6 @@
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { validate } from "@settlemint/sdk-utils/validation";
-import { create } from "kubo-rpc-client";
+import { type KuboRPCClient, create } from "kubo-rpc-client";
 import {
   type ClientOptions,
   ClientOptionsSchema,
@@ -20,7 +20,7 @@ import {
  *   instance: 'https://your-ipfs-instance.com',
  * });
  */
-export function createIpfsClient(options: ClientOptions) {
+export function createIpfsClient(options: ClientOptions): { client: KuboRPCClient } {
   const validatedOptions = validate(ClientOptionsSchema, options);
 
   return {
@@ -43,7 +43,7 @@ export function createIpfsClient(options: ClientOptions) {
  *   accessToken: 'your-access-token',
  * });
  */
-export function createServerIpfsClient(options: ServerClientOptions) {
+export function createServerIpfsClient(options: ServerClientOptions): { client: KuboRPCClient } {
   ensureServer();
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 

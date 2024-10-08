@@ -1,4 +1,4 @@
-import type { SettlemintClient } from "@settlemint/sdk-js";
+import type { SettlemintClient, Workspace } from "@settlemint/sdk-js";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 
 /**
@@ -15,7 +15,7 @@ import { spinner } from "@settlemint/sdk-utils/terminal";
  *   "development"
  * );
  */
-export async function workspaceSpinner(settlemint: SettlemintClient) {
+export async function workspaceSpinner(settlemint: SettlemintClient): Promise<Workspace[]> {
   return spinner({
     startMessage: "Loading your workspaces",
     stopMessage: "Loaded your workspaces",

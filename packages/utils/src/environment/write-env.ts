@@ -5,7 +5,7 @@ import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";
 
-export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boolean) {
+export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boolean): Promise<void> {
   const projectDir = await projectRoot();
   const envFile = join(
     projectDir,

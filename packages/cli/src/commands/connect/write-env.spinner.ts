@@ -16,7 +16,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  *   "development"
  * );
  */
-export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>) {
+export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Promise<void> {
   return spinner({
     startMessage: "Saving .env and .env.local files",
     stopMessage: "Written .env and .env.local file",

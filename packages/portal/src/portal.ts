@@ -34,7 +34,7 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 export function createPortalClient<const Setup extends AbstractSetupSchema>(
   options: ClientOptions,
   requestConfig?: RequestConfig,
-) {
+): { client: GraphQLClient; graphql: initGraphQLTada<Setup> } {
   const validatedOptions = validate(ClientOptionsSchema, options);
 
   const graphql = initGraphQLTada<Setup>();
@@ -70,7 +70,7 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
 export function createServerPortalClient<const Setup extends AbstractSetupSchema>(
   options: ServerClientOptions,
   requestConfig?: RequestConfig,
-) {
+): { client: GraphQLClient; graphql: initGraphQLTada<Setup> } {
   ensureServer();
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 

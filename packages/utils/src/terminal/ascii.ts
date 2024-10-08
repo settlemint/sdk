@@ -1,6 +1,6 @@
 import { magentaBright } from "yoctocolors";
 
-export const ascii = () =>
+export const ascii = (): void =>
   console.log(
     magentaBright(`
   _________       __    __  .__            _____  .__        __

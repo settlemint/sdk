@@ -25,7 +25,7 @@ import { type ServerClientOptions, ServerClientOptionsSchema } from "./helpers/c
  *   adminSecret: 'your-admin-secret',
  * });
  */
-export function createServerMinioClient(options: ServerClientOptions) {
+export function createServerMinioClient(options: ServerClientOptions): { client: Client } {
   ensureServer();
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 

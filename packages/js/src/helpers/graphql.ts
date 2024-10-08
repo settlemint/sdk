@@ -11,7 +11,14 @@ import type { introspection } from "./graphql-env.d.ts";
  *
  * @returns A configured GraphQL client instance.
  */
-export const graphql = initGraphQLTada<{
+export const graphql: initGraphQLTada<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+  };
+}> = initGraphQLTada<{
   introspection: introspection;
   disableMasking: true;
   scalars: {

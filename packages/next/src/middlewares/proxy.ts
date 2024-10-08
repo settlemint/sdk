@@ -19,7 +19,7 @@ const isHasuraProxyRoute = match(["/proxy/hasura", "/proxy/hasura/*path"]);
  * }
  * ```
  */
-export function proxyMiddleware(request: NextRequest) {
+export function proxyMiddleware(request: NextRequest): NextResponse | undefined {
   const env = validate(DotEnvSchema, process.env);
   if (isProxyRoute(request.nextUrl.pathname)) {
     const response = NextResponse.next();
