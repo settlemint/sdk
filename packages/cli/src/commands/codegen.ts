@@ -77,7 +77,7 @@ export function codegenCommand(): Command {
           tsconfig: undefined,
         });
 
-        spinner({
+        await spinner({
           startMessage: "Installing dependencies",
           task: async () => {
             await installDependencies([...packages]);
