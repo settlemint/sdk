@@ -1,6 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { generateSchema } from "@gql.tada/cli-utils";
+import { generateOutput, generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
@@ -20,18 +20,83 @@ import { getTsconfig } from "get-tsconfig";
  * );
  */
 export async function gqltadaSpinner(env: DotEnv) {
-  await codegenTsconfig();
-  await codegenHasura(env);
-  await codegenPortal(env);
-  await codegenTheGraph(env);
-  await codegenTheGraphFallback(env);
+  const { hasura, portal, thegraph, thegraphFallback } = await codegenTsconfig(env);
+  const promises = [];
+  if (hasura) {
+    promises.push(codegenHasura(env));
+  }
+  if (portal) {
+    promises.push(codegenPortal(env));
+  }
+  if (thegraph) {
+    promises.push(codegenTheGraph(env));
+  }
+  if (thegraphFallback) {
+    promises.push(codegenTheGraphFallback(env));
+  }
+  await Promise.all(promises);
+
+  await generateOutput({
+    output: undefined,
+    tsconfig: undefined,
+  });
 }
 
-async function codegenTsconfig() {
+async function testGqlEndpoint(env: DotEnv, gqlEndpoint?: string, isHasura = false) {
+  if (!gqlEndpoint) {
+    return false;
+  }
+  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+
+  const response = await fetch(gqlEndpoint, {
+    method: "POST",
+    headers: {
+      "x-auth-token": accessToken,
+      ...(isHasura ? { "x-hasura-admin-secret": env.SETTLEMINT_HASURA_ADMIN_SECRET ?? "" } : {}),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `
+        query {
+          __schema {
+            types {
+              name
+            }
+          }
+        }
+      `,
+    }),
+  });
+
+  if (!response.ok) {
+    return false;
+  }
+
+  const data = await response.json();
+  if (data.errors) {
+    return false;
+  }
+  return true;
+}
+
+async function codegenTsconfig(env: DotEnv) {
   const tsconfig = getTsconfig();
   if (!tsconfig?.config) {
-    return;
+    return {
+      hasura: false,
+      portal: false,
+      thegraph: false,
+      thegraphFallback: false,
+    };
   }
+
+  const [hasura, portal, thegraph, thegraphFallback] = await Promise.all([
+    testGqlEndpoint(env, env.SETTLEMINT_HASURA_ENDPOINT, true),
+    testGqlEndpoint(env, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
+    testGqlEndpoint(env, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
+    testGqlEndpoint(env, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK),
+  ]);
+
   if (!tsconfig.config.compilerOptions) {
     tsconfig.config.compilerOptions = {};
   }
@@ -42,26 +107,46 @@ async function codegenTsconfig() {
   const tadaConfig = {
     name: "@0no-co/graphqlsp",
     schemas: [
-      {
-        name: "hasura",
-        schema: "hasura-schema.graphql",
-        tadaOutputLocation: "hasura-env.d.ts",
-      },
-      {
-        name: "thegraph",
-        schema: "the-graph-schema.graphql",
-        tadaOutputLocation: "the-graph-env.d.ts",
-      },
-      {
-        name: "thegraph-fallback",
-        schema: "the-graph-fallback-schema.graphql",
-        tadaOutputLocation: "the-graph-fallback-env.d.ts",
-      },
-      {
-        name: "portal",
-        schema: "portal-schema.graphql",
-        tadaOutputLocation: "portal-env.d.ts",
-      },
+      ...(hasura
+        ? [
+            {
+              name: "hasura",
+              schema: "hasura-schema.graphql",
+              tadaOutputLocation: "hasura-env.d.ts",
+              tadaTurboLocation: "hasura-cache.d.ts",
+            },
+          ]
+        : []),
+      ...(thegraph
+        ? [
+            {
+              name: "thegraph",
+              schema: "the-graph-schema.graphql",
+              tadaOutputLocation: "the-graph-env.d.ts",
+              tadaTurboLocation: "the-graph-cache.d.ts",
+            },
+          ]
+        : []),
+      ...(thegraphFallback
+        ? [
+            {
+              name: "thegraph-fallback",
+              schema: "the-graph-fallback-schema.graphql",
+              tadaOutputLocation: "the-graph-fallback-env.d.ts",
+              tadaTurboLocation: "the-graph-fallback-cache.d.ts",
+            },
+          ]
+        : []),
+      ...(portal
+        ? [
+            {
+              name: "portal",
+              schema: "portal-schema.graphql",
+              tadaOutputLocation: "portal-env.d.ts",
+              tadaTurboLocation: "portal-cache.d.ts",
+            },
+          ]
+        : []),
     ],
   };
 
@@ -74,6 +159,13 @@ async function codegenTsconfig() {
   tsconfig.config.compilerOptions.plugins.push(tadaConfig);
 
   writeFileSync(tsconfig.path, JSON.stringify(tsconfig.config, null, 2), "utf8");
+
+  return {
+    hasura: hasura,
+    portal: portal,
+    thegraph: thegraph,
+    thegraphFallback: thegraphFallback,
+  };
 }
 
 async function codegenHasura(env: DotEnv) {
@@ -148,38 +240,11 @@ export const { client: portalClient, graphql: portalGraphql } = createServerPort
 }
 
 async function codegenTheGraph(env: DotEnv) {
-  const gqlEndpoint = env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
+  const gqlEndpoint = env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK;
   if (!gqlEndpoint) {
     return;
   }
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
-
-  const response = await fetch(gqlEndpoint, {
-    method: "POST",
-    headers: {
-      "x-auth-token": accessToken,
-    },
-    body: JSON.stringify({
-      query: `
-        query {
-          __schema {
-            queryType {
-              name
-            }
-          }
-        }
-      `,
-    }),
-  });
-
-  if (!response.ok) {
-    return;
-  }
-
-  const data = await response.json();
-  if (data.errors) {
-    return;
-  }
 
   await generateSchema({
     input: gqlEndpoint,

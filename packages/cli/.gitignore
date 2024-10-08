@@ -1,2 +1,4 @@
 .env*
-*.schema.graphql
+*-schema.graphql
+*-env.d.ts
+*-cache.d.ts
