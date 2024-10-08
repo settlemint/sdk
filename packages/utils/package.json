@@ -58,6 +58,7 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "@antfu/install-pkg": "^0.4.1",
     "@antfu/ni": "^0.23",
     "@dotenvx/dotenvx": "^1",
     "deepmerge-ts": "^7",

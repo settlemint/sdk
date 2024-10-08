@@ -12,9 +12,8 @@ export async function codegenIpfs(env: DotEnv) {
   }
 
   const clientTemplate = `import { createServerIpfsClient } from "@settlemint/sdk-ipfs";
-import type { KuboRPCClient } from "kubo-rpc-client";
 
-export const { client: KuboRPCClient } = createServerIpfsClient({
+export const { client } = createServerIpfsClient({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
 });`;

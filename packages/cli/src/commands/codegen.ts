@@ -6,6 +6,7 @@ import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { installDependencies } from "@settlemint/sdk-utils/package-manager";
 import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
@@ -39,25 +40,34 @@ export function codegenCommand(): Command {
           stopMessage: "Tested GraphQL schemas",
         });
 
+        const packages = new Set<string>();
+        packages.add("@settlemint/sdk-next");
+
         const promises = [];
         if (hasura) {
           promises.push(codegenHasura(env));
+          packages.add("@settlemint/sdk-hasura");
         }
         if (portal) {
           promises.push(codegenPortal(env));
+          packages.add("@settlemint/sdk-portal");
         }
         if (thegraph) {
           promises.push(codegenTheGraph(env));
+          packages.add("@settlemint/sdk-thegraph");
         }
         if (thegraphFallback) {
           promises.push(codegenTheGraphFallback(env));
+          packages.add("@settlemint/sdk-thegraph");
         }
 
         if (shouldCodegenMinio(env)) {
           promises.push(codegenMinio(env));
+          packages.add("@settlemint/sdk-minio");
         }
         if (shouldCodegenIpfs(env)) {
           promises.push(codegenIpfs(env));
+          packages.add("@settlemint/sdk-ipfs");
         }
 
         await Promise.all(promises);
@@ -65,6 +75,14 @@ export function codegenCommand(): Command {
         await generateOutput({
           output: undefined,
           tsconfig: undefined,
+        });
+
+        spinner({
+          startMessage: "Installing dependencies",
+          task: async () => {
+            await installDependencies([...packages]);
+          },
+          stopMessage: "Installed dependencies",
         });
 
         outro("Codegen complete");
