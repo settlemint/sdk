@@ -58,12 +58,13 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@antfu/ni": "^0.23",
+    "@antfu/install-pkg": "^0.4",
     "@dotenvx/dotenvx": "^1",
     "deepmerge-ts": "^7",
     "environment": "^1",
     "find-up": "^7",
-    "nano-spawn": "^0.1.0",
+    "nano-spawn": "^0.1",
+    "package-manager-detector": "^0.2",
     "yocto-spinner": "^0.1",
     "yoctocolors": "^2"
   },
