@@ -8,6 +8,8 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { applicationPrompt } from "./connect/application.prompt";
+import { authSecretPrompt } from "./connect/auth-secret.prompt";
+import { authUrlPrompt } from "./connect/auth-url.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
 import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
@@ -66,6 +68,9 @@ export function connectCommand(): Command {
         const portal = await portalPrompt(env, middleware, autoAccept);
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
 
+        const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
+        const authSecret = await authSecretPrompt(env, autoAccept);
+
         await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
@@ -86,6 +91,8 @@ export function connectCommand(): Command {
             ?.displayValue,
           SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "rest")?.displayValue,
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
+          NEXTAUTH_URL: authUrl,
+          SETTLEMINT_AUTH_SECRET: authSecret,
         });
 
         outro("Connected to SettleMint");

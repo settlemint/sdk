@@ -1,3 +1,4 @@
+import { randomBytes } from "node:crypto";
 import confirm from "@inquirer/confirm";
 import password from "@inquirer/password";
 import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
@@ -15,26 +16,35 @@ import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/
  * const accessToken = await accessTokenPrompt(env);
  * console.log(accessToken); // Output: your-access-token or user input
  */
-export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean) {
-  const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
-  const defaultPossible = accept && defaultAccessToken;
+export async function authSecretPrompt(env: Partial<DotEnv>, accept: boolean) {
+  const defaultAuthSecret = env.SETTLEMINT_AUTH_SECRET;
+  const defaultPossible = accept && defaultAuthSecret;
 
   if (defaultPossible) {
-    return defaultAccessToken;
+    return defaultAuthSecret;
   }
 
-  if (defaultAccessToken) {
+  if (defaultAuthSecret) {
     const keep = await confirm({
-      message: "Do you want to use the existing access token?",
+      message: "Do you want to use the existing auth secret?",
       default: true,
     });
     if (keep) {
-      return defaultAccessToken;
+      return defaultAuthSecret;
     }
   }
 
+  const authSecret = randomBytes(32).toString("hex");
+  const random = await confirm({
+    message: "Do you want to use a randomly generated auth secret?",
+    default: true,
+  });
+  if (random) {
+    return authSecret;
+  }
+
   return password({
-    message: "What is the access token for your application in SettleMint?",
+    message: "What is the auth secret to encrypt your user sessions?",
     validate(value) {
       try {
         validate(AccessTokenSchema, value);

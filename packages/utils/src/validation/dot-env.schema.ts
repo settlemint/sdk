@@ -20,6 +20,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: UrlSchema.optional(),
   SETTLEMINT_PORTAL_REST_ENDPOINT: UrlSchema.optional(),
   SETTLEMINT_HD_PRIVATE_KEY: z.string().optional(),
+  SETTLEMINT_AUTH_SECRET: z.string(),
+  NEXTAUTH_URL: UrlSchema,
 });
 
 export type DotEnv = z.infer<typeof DotEnvSchema>;

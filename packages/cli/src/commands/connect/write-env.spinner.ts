@@ -36,6 +36,7 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>) {
           SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
           SETTLEMINT_PORTAL_REST_ENDPOINT: env.SETTLEMINT_PORTAL_REST_ENDPOINT,
           SETTLEMINT_HD_PRIVATE_KEY: env.SETTLEMINT_HD_PRIVATE_KEY,
+          NEXTAUTH_URL: env.NEXTAUTH_URL,
         },
         false,
       );
@@ -45,6 +46,7 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>) {
         {
           SETTLEMINT_ACCESS_TOKEN: env.SETTLEMINT_ACCESS_TOKEN,
           SETTLEMINT_HASURA_ADMIN_SECRET: env.SETTLEMINT_HASURA_ADMIN_SECRET,
+          SETTLEMINT_AUTH_SECRET: env.SETTLEMINT_AUTH_SECRET,
         },
         true,
       );
