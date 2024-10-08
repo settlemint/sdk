@@ -27,5 +27,10 @@ export default defineConfig(({ watch }) => {
       ...sharedConfig,
       outDir: "dist/components",
     },
+    {
+      entry: ["src/config/*.ts"],
+      ...sharedConfig,
+      outDir: "dist/config",
+    },
   ];
 });
