@@ -1,0 +1,59 @@
+{
+  "name": "@settlemint/sdk-ipfs",
+  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "version": "0.5.0",
+  "type": "module",
+  "private": false,
+  "license": "FSL-1.1-MIT",
+  "author": {
+    "name": "SettleMint",
+    "email": "support@settlemint.com",
+    "url": "https://settlemint.com"
+  },
+  "homepage": "https://github.com/settlemint/sdk/blob/main/packages/js/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/settlemint/sdk.git",
+    "directory": "packages/ipfs"
+  },
+  "bugs": {
+    "url": "https://github.com/settlemint/sdk/issues",
+    "email": "support@settlemint.com"
+  },
+  "files": ["dist"],
+  "main": "./dist/ipfs.cjs",
+  "module": "./dist/ipfs.mjs",
+  "types": "./dist/ipfs.d.ts",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/ipfs.d.ts",
+        "default": "./dist/ipfs.mjs"
+      },
+      "require": {
+        "types": "./dist/ipfs.d.ts",
+        "default": "./dist/ipfs.cjs"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsup-node",
+    "dev": "tsup-node --watch",
+    "publint": "publint run --strict",
+    "attw": "attw --pack .",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@settlemint/sdk-utils": "workspace:*",
+    "kubo-rpc-client": "^5",
+    "zod": "^3"
+  },
+  "peerDependencies": {},
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -202,6 +202,26 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
+      - name: Publish SDK Minio package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/minio/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+      - name: Publish SDK IPFS package
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/ipfs/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
       - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' }}
         uses: taoliujun/action-unique-comment@v1
@@ -218,6 +238,8 @@ jobs:
                 | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
                 | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` |
                 | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
+                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` |
+                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@v5

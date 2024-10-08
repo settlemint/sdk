@@ -10,6 +10,7 @@ const StorageFragment = graphql(`
   fragment Storage on Storage {
     id
     name
+    storageProtocol
     endpoints {
       id
       label

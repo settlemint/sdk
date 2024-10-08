@@ -13,6 +13,8 @@ import { authUrlPrompt } from "./connect/auth-url.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
 import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
+import { ipfsPrompt } from "./connect/ipfs.prompt";
+import { minioPrompt } from "./connect/minio.prompt";
 import { portalPrompt } from "./connect/portal.prompt";
 import { servicesSpinner } from "./connect/services.spinner";
 import { theGraphPrompt } from "./connect/thegraph.prompt";
@@ -66,6 +68,8 @@ export function connectCommand(): Command {
         const hasura = await hasuraPrompt(env, integrationTool, autoAccept);
         const thegraph = await theGraphPrompt(env, middleware, autoAccept);
         const portal = await portalPrompt(env, middleware, autoAccept);
+        const ipfs = await ipfsPrompt(env, storage, autoAccept);
+        const minio = await minioPrompt(env, storage, autoAccept);
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
 
         const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
@@ -93,6 +97,17 @@ export function connectCommand(): Command {
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           NEXTAUTH_URL: authUrl,
           SETTLEMINT_AUTH_SECRET: authSecret,
+          SETTLEMINT_MINIO: minio?.id,
+          SETTLEMINT_MINIO_ENDPOINT: minio?.endpoints.find((endpoint) => endpoint.id === "s3-api")?.displayValue,
+          SETTLEMINT_MINIO_ACCESS_KEY: minio?.credentials.find((credential) => credential.id === "access-key")
+            ?.displayValue,
+          SETTLEMINT_MINIO_SECRET_KEY: minio?.credentials.find((credential) => credential.id === "secret-key")
+            ?.displayValue,
+          SETTLEMINT_IPFS: ipfs?.id,
+          SETTLEMINT_IPFS_API_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "api")?.displayValue,
+          SETTLEMINT_IPFS_PINNING_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "cluster-pinning-api")
+            ?.displayValue,
+          SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "gateway")?.displayValue,
         });
 
         outro("Connected to SettleMint");
