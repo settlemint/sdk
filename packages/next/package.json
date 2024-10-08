@@ -55,6 +55,16 @@
         "types": "./dist/components/*.d.cts",
         "default": "./dist/components/*.cjs"
       }
+    },
+    "./config/*": {
+      "import": {
+        "types": "./dist/config/*.d.ts",
+        "default": "./dist/config/*.mjs"
+      },
+      "require": {
+        "types": "./dist/config/*.d.cts",
+        "default": "./dist/config/*.cjs"
+      }
     }
   },
   "scripts": {
