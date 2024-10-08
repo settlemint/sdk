@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { generateOutput, generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
 
@@ -20,7 +21,14 @@ import { getTsconfig } from "get-tsconfig";
  * );
  */
 export async function gqltadaSpinner(env: DotEnv) {
-  const { hasura, portal, thegraph, thegraphFallback } = await codegenTsconfig(env);
+  const { hasura, portal, thegraph, thegraphFallback } = await spinner({
+    startMessage: "Testing configured GraphQL schema",
+    task: async () => {
+      return codegenTsconfig(env);
+    },
+    stopMessage: "Tested GraphQL schemas",
+  });
+
   const promises = [];
   if (hasura) {
     promises.push(codegenHasura(env));
@@ -42,41 +50,65 @@ export async function gqltadaSpinner(env: DotEnv) {
   });
 }
 
-async function testGqlEndpoint(env: DotEnv, gqlEndpoint?: string, isHasura = false) {
+/**
+ * Tests a GraphQL endpoint with exponential retry.
+ *
+ * @param env - The environment variables.
+ * @param gqlEndpoint - The GraphQL endpoint URL.
+ * @param isHasura - Whether the endpoint is a Hasura endpoint.
+ * @param maxRetries - Maximum number of retry attempts (default: 3).
+ * @returns A boolean indicating whether the endpoint is accessible.
+ */
+async function testGqlEndpoint(env: DotEnv, gqlEndpoint?: string, isHasura = false, maxRetries = 3): Promise<boolean> {
   if (!gqlEndpoint) {
     return false;
   }
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
-  const response = await fetch(gqlEndpoint, {
-    method: "POST",
-    headers: {
-      "x-auth-token": accessToken,
-      ...(isHasura ? { "x-hasura-admin-secret": env.SETTLEMINT_HASURA_ADMIN_SECRET ?? "" } : {}),
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `
-        query {
-          __schema {
-            types {
-              name
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      const response = await fetch(gqlEndpoint, {
+        method: "POST",
+        headers: {
+          "x-auth-token": accessToken,
+          ...(isHasura ? { "x-hasura-admin-secret": env.SETTLEMINT_HASURA_ADMIN_SECRET ?? "" } : {}),
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          query: `
+            query {
+              __schema {
+                types {
+                  name
+                }
+              }
             }
-          }
-        }
-      `,
-    }),
-  });
+          `,
+        }),
+      });
 
-  if (!response.ok) {
-    return false;
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      if (data.errors) {
+        throw new Error("GraphQL errors in response");
+      }
+
+      return true; // Success
+    } catch (error) {
+      if (attempt === maxRetries - 1) {
+        return false;
+      }
+
+      // Exponential backoff
+      const delay = 2 ** attempt * 1000; // 1s, 2s, 4s
+      await new Promise((resolve) => setTimeout(resolve, delay));
+    }
   }
 
-  const data = await response.json();
-  if (data.errors) {
-    return false;
-  }
-  return true;
+  return false; // This line should never be reached, but TypeScript needs it
 }
 
 async function codegenTsconfig(env: DotEnv) {
@@ -173,6 +205,7 @@ async function codegenHasura(env: DotEnv) {
   if (!gqlEndpoint) {
     return;
   }
+
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const adminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET!;
 
@@ -210,6 +243,7 @@ async function codegenPortal(env: DotEnv) {
   if (!gqlEndpoint) {
     return;
   }
+
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   await generateSchema({
@@ -244,6 +278,7 @@ async function codegenTheGraph(env: DotEnv) {
   if (!gqlEndpoint) {
     return;
   }
+
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   await generateSchema({
@@ -278,6 +313,7 @@ async function codegenTheGraphFallback(env: DotEnv) {
   if (!gqlEndpoint) {
     return;
   }
+
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   await generateSchema({
