@@ -18,8 +18,9 @@ export default defineConfig(({ watch }) => {
       ...sharedConfig,
     },
     {
-      entry: ["src/middleware.ts"],
+      entry: ["src/middlewares/*.ts"],
       ...sharedConfig,
+      outDir: "dist/middlewares",
     },
     {
       entry: ["src/components/*.tsx"],

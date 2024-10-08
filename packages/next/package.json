@@ -36,14 +36,14 @@
         "default": "./dist/all.cjs"
       }
     },
-    "./middleware": {
+    "./middlewares/*": {
       "import": {
-        "types": "./dist/middleware.d.ts",
-        "default": "./dist/middleware.mjs"
+        "types": "./dist/middlewares/*.d.ts",
+        "default": "./dist/middlewares/*.mjs"
       },
       "require": {
-        "types": "./dist/middleware.d.cts",
-        "default": "./dist/middleware.cjs"
+        "types": "./dist/middlewares/*.d.cts",
+        "default": "./dist/middlewares/*.cjs"
       }
     },
     "./components/*": {
