@@ -24,6 +24,7 @@ export default defineConfig(({ watch }) => {
     {
       entry: ["src/components/*.tsx"],
       ...sharedConfig,
+      outDir: "dist/components",
     },
   ];
 });
