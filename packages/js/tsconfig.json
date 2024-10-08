@@ -10,6 +10,7 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
+    "isolatedDeclarations": false,
     "target": "ES2022",
     "outDir": "dist",
     "jsx": "react-jsx",

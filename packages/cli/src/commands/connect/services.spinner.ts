@@ -1,4 +1,15 @@
-import type { Application, SettlemintClient } from "@settlemint/sdk-js";
+import type {
+  Application,
+  BlockchainNetwork,
+  BlockchainNode,
+  CustomDeployment,
+  Insights,
+  IntegrationTool,
+  Middleware,
+  PrivateKey,
+  SettlemintClient,
+  Storage,
+} from "@settlemint/sdk-js";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 
 /**
@@ -15,7 +26,19 @@ import { spinner } from "@settlemint/sdk-utils/terminal";
  *   "development"
  * );
  */
-export async function servicesSpinner(settlemint: SettlemintClient, application: Application) {
+export async function servicesSpinner(
+  settlemint: SettlemintClient,
+  application: Application,
+): Promise<{
+  blockchainNetworks: BlockchainNetwork[];
+  blockchainNodes: BlockchainNode[];
+  middleware: Middleware[];
+  integrationTool: IntegrationTool[];
+  storage: Storage[];
+  privateKey: PrivateKey[];
+  insights: Insights[];
+  customDeployment: CustomDeployment[];
+}> {
   return spinner({
     startMessage: "Loading your services",
     stopMessage: "Loaded your services",

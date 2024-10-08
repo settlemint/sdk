@@ -8,7 +8,7 @@ export async function run({
   command: string;
   args: string[];
   options?: Options;
-}) {
+}): Promise<string> {
   const result = await spawn(command, args, {
     preferLocal: true,
     ...options,

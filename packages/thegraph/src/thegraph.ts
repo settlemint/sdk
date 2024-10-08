@@ -76,7 +76,7 @@ export function createTheGraphFallbackClient<const Setup extends AbstractSetupSc
 export function createServerTheGraphClient<const Setup extends AbstractSetupSchema>(
   options: ServerClientOptions,
   requestConfig?: RequestConfig,
-) {
+): { client: GraphQLClient; graphql: initGraphQLTada<Setup> } {
   ensureServer();
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 
@@ -97,7 +97,7 @@ export function createServerTheGraphClient<const Setup extends AbstractSetupSche
 export function createServerTheGraphFallbackClient<const Setup extends AbstractSetupSchema>(
   options: ServerClientOptions,
   requestConfig?: RequestConfig,
-) {
+): { client: GraphQLClient; graphql: initGraphQLTada<Setup> } {
   return createServerTheGraphClient(options, requestConfig);
 }
 

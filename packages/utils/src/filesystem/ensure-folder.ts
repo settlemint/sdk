@@ -1,7 +1,7 @@
 import { existsSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 
-export function ensureFolder(path: string) {
+export function ensureFolder(path: string): void {
   // Create the output directory if it doesn't exist
   const outputDir = dirname(path);
   if (!existsSync(outputDir)) {

@@ -15,7 +15,7 @@ import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/
  * const accessToken = await accessTokenPrompt(env);
  * console.log(accessToken); // Output: your-access-token or user input
  */
-export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean) {
+export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean): Promise<string> {
   const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const defaultPossible = accept && defaultAccessToken;
 

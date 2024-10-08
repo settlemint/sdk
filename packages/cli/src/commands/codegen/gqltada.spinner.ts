@@ -20,7 +20,7 @@ import { getTsconfig } from "get-tsconfig";
  *   "development"
  * );
  */
-export async function gqltadaSpinner(env: DotEnv) {
+export async function gqltadaSpinner(env: DotEnv): Promise<void> {
   const { hasura, portal, thegraph, thegraphFallback } = await spinner({
     startMessage: "Testing configured GraphQL schema",
     task: async () => {
