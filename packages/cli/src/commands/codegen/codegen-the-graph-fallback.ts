@@ -37,18 +37,18 @@ export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql 
   await writeTemplate(serverSideTemplate, "/lib/settlemint", "the-graph-fallback.ts");
 
   const clientSideTemplate = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
-  import type { introspection } from "../../the-graph-fallback-env.d.ts";
+import type { introspection } from "../../../the-graph-fallback-env.d.ts";
 
-  export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql } = createTheGraphClient<{
-    introspection: introspection;
-    disableMasking: true;
-    scalars: {
-      DateTime: Date;
-      JSON: Record<string, unknown>;
-    };
-  }>({
-    instance: "/proxy/thegraph-fallback/graphql",
-  });`;
+export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+  };
+}>({
+  instance: "/proxy/thegraph-fallback/graphql",
+});`;
 
   await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "the-graph-fallback.ts");
 }

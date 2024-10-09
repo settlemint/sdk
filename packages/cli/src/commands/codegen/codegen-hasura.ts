@@ -40,7 +40,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasu
   await writeTemplate(serverSideTemplate, "/lib/settlemint", "hasura.ts");
 
   const clientSideTemplate = `import { createHasuraClient } from "@settlemint/sdk-hasura";
-import type { introspection } from "../../hasura-env.d.ts";
+import type { introspection } from "../../../hasura-env.d.ts";
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
   introspection: introspection;

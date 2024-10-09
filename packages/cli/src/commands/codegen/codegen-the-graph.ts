@@ -37,18 +37,18 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createServer
   await writeTemplate(serverSideTemplate, "/lib/settlemint", "the-graph.ts");
 
   const clientSideTemplate = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
-  import type { introspection } from "../../the-graph-env.d.ts";
+import type { introspection } from "../../../the-graph-env.d.ts";
 
-  export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
-    introspection: introspection;
-    disableMasking: true;
-    scalars: {
-      DateTime: Date;
-      JSON: Record<string, unknown>;
-    };
-  }>({
-    instance: "/proxy/thegraph/graphql",
-  });`;
+export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+  };
+}>({
+  instance: "/proxy/thegraph/graphql",
+});`;
 
   await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "the-graph.ts");
 }
