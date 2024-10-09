@@ -1,11 +1,11 @@
-import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
+import { AccessTokenSchema, UrlOrPathSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
  * Schema for validating client options for the Portal client.
  */
 export const ClientOptionsSchema = z.object({
-  instance: UrlSchema,
+  instance: UrlOrPathSchema,
 });
 
 /**
@@ -18,6 +18,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({
+  instance: UrlSchema,
   accessToken: AccessTokenSchema,
 });
 
