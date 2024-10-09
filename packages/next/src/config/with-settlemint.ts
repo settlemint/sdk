@@ -44,6 +44,7 @@ export async function withSettleMint<C extends NextConfig>(
     ],
     poweredByHeader: false,
     reactStrictMode: true,
+    compress: false,
   } as C;
 }
 
