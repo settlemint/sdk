@@ -38,9 +38,10 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
   const validatedOptions = validate(ClientOptionsSchema, options);
 
   const graphql = initGraphQLTada<Setup>();
+  const fullUrl = new URL(validatedOptions.instance, window.location.origin).toString();
 
   return {
-    client: new GraphQLClient(validatedOptions.instance, requestConfig),
+    client: new GraphQLClient(fullUrl, requestConfig),
     graphql,
   };
 }
