@@ -21,7 +21,7 @@ export async function codegenHasura(env: DotEnv) {
     },
   });
 
-  const clientTemplate = `import { createServerHasuraClient } from "@settlemint/sdk-hasura";
+  const serverSideTemplate = `import { createServerHasuraClient } from "@settlemint/sdk-hasura";
 import type { introspection } from "../../hasura-env.d.ts";
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasuraClient<{
@@ -37,5 +37,21 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasu
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
 });`;
 
-  await writeTemplate(clientTemplate, "/lib/settlemint", "hasura.ts");
+  await writeTemplate(serverSideTemplate, "/lib/settlemint", "hasura.ts");
+
+  const clientSideTemplate = `import { createHasuraClient } from "@settlemint/sdk-hasura";
+import type { introspection } from "../../hasura-env.d.ts";
+
+export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+  };
+}>({
+  instance: "/proxy/hasura/graphql",
+});`;
+
+  await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "hasura.ts");
 }

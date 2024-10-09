@@ -19,7 +19,7 @@ export async function codegenTheGraphFallback(env: DotEnv) {
     },
   });
 
-  const clientTemplate = `import { createServerTheGraphClient } from "@settlemint/sdk-thegraph";
+  const serverSideTemplate = `import { createServerTheGraphClient } from "@settlemint/sdk-thegraph";
 import type { introspection } from "../../the-graph-fallback-env.d.ts";
 
 export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql } = createServerTheGraphClient<{
@@ -34,5 +34,21 @@ export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql 
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
 });`;
 
-  await writeTemplate(clientTemplate, "/lib/settlemint", "the-graph-fallback.ts");
+  await writeTemplate(serverSideTemplate, "/lib/settlemint", "the-graph-fallback.ts");
+
+  const clientSideTemplate = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
+  import type { introspection } from "../../the-graph-fallback-env.d.ts";
+
+  export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql } = createTheGraphClient<{
+    introspection: introspection;
+    disableMasking: true;
+    scalars: {
+      DateTime: Date;
+      JSON: Record<string, unknown>;
+    };
+  }>({
+    instance: "/proxy/thegraph-fallback/graphql",
+  });`;
+
+  await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "the-graph-fallback.ts");
 }
