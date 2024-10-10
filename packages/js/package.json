@@ -48,7 +48,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@0no-co/graphqlsp": "1.12.16"
+    "@0no-co/graphqlsp": "^1"
   },
   "dependencies": {
     "gql.tada": "^1",
