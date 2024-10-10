@@ -110,6 +110,9 @@ interface AbstractClusterService implements AbstractEntity {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -260,6 +263,9 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -869,6 +875,9 @@ type ArbitrumBlockchainNetwork implements AbstractClusterService & AbstractEntit
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -1020,6 +1029,9 @@ type ArbitrumBlockchainNode implements AbstractClusterService & AbstractEntity &
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -1166,6 +1178,9 @@ type ArbitrumGoerliBlockchainNetwork implements AbstractClusterService & Abstrac
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -1318,6 +1333,9 @@ type ArbitrumGoerliBlockchainNode implements AbstractClusterService & AbstractEn
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -1464,6 +1482,9 @@ type ArbitrumSepoliaBlockchainNetwork implements AbstractClusterService & Abstra
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -1616,6 +1637,9 @@ type ArbitrumSepoliaBlockchainNode implements AbstractClusterService & AbstractE
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -1756,6 +1780,9 @@ type AttestationIndexerMiddleware implements AbstractClusterService & AbstractEn
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -1979,6 +2006,9 @@ type AvalancheBlockchainNetwork implements AbstractClusterService & AbstractEnti
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -2132,6 +2162,9 @@ type AvalancheBlockchainNode implements AbstractClusterService & AbstractEntity 
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -2289,6 +2322,9 @@ type AvalancheFujiBlockchainNetwork implements AbstractClusterService & Abstract
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -2442,6 +2478,9 @@ type AvalancheFujiBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -2892,6 +2931,9 @@ type BesuIbftv2BlockchainNetwork implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -3058,6 +3100,9 @@ type BesuIbftv2BlockchainNode implements AbstractClusterService & AbstractEntity
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -3194,6 +3239,9 @@ type BesuMiddleware implements AbstractClusterService & AbstractEntity & Middlew
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -3345,6 +3393,9 @@ type BesuQBFTBlockchainNetwork implements AbstractClusterService & AbstractEntit
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -3511,6 +3562,9 @@ type BesuQBFTBlockchainNode implements AbstractClusterService & AbstractEntity &
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -3906,6 +3960,9 @@ type BlockchainExplorer implements AbstractClusterService & AbstractEntity & Ins
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -4045,6 +4102,9 @@ interface BlockchainNetwork implements AbstractClusterService & AbstractEntity {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -4285,6 +4345,9 @@ interface BlockchainNode implements AbstractClusterService & AbstractEntity {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -4483,6 +4546,9 @@ type BscBlockchainNode implements AbstractClusterService & AbstractEntity & Bloc
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -4629,6 +4695,9 @@ type BscPoWBlockchainNetwork implements AbstractClusterService & AbstractEntity 
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -4787,6 +4856,9 @@ type BscPoWTestnetBlockchainNetwork implements AbstractClusterService & Abstract
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -4937,6 +5009,9 @@ type BscTestnetBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -5268,6 +5343,9 @@ type CordaBlockchainNetwork implements AbstractClusterService & AbstractEntity &
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -5419,6 +5497,9 @@ type CordaBlockchainNode implements AbstractClusterService & AbstractEntity & Bl
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -5555,6 +5636,9 @@ type CordappSmartContractSet implements AbstractClusterService & AbstractEntity 
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -5816,11 +5900,20 @@ input CreateMultiServiceCustomDeploymentArgs {
   """Custom domains for the deployment"""
   customDomains: [String!]
 
+  """Disable authentication for the custom deployment"""
+  disableAuth: Boolean = true
+
   """Disk space in MiB"""
   diskSpace: Int
 
   """Environment variables for the custom deployment"""
   environmentVariables: JSON
+
+  """Access token for image credentials"""
+  imageCredentialsAccessToken: String
+
+  """Username for image credentials"""
+  imageCredentialsUsername: String
 
   """The name of the Docker image"""
   imageName: String!
@@ -6179,6 +6272,7 @@ type CustomDeployment implements AbstractClusterService & AbstractEntity {
   """Credentials of cluster service"""
   credentials: [ClusterServiceCredentials!]!
   customDomains: [CustomDomain!]
+  customDomainsStatus: [CustomDomainStatus!]
 
   """Date and time when the entity was deleted, if applicable"""
   deletedAt: DateTime
@@ -6189,11 +6283,14 @@ type CustomDeployment implements AbstractClusterService & AbstractEntity {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
   """DNS config for custom domains"""
-  dnsConfig: CustomDomainDnsConfig
+  dnsConfig: [CustomDomainDnsConfig!]
 
   """Endpoints of cluster service"""
   endpoints: [ClusterServiceEndpoints!]!
@@ -6212,6 +6309,12 @@ type CustomDeployment implements AbstractClusterService & AbstractEntity {
 
   """Unique identifier of the entity"""
   id: ID!
+
+  """Access token for image credentials"""
+  imageCredentialsAccessToken: String
+
+  """Username for image credentials"""
+  imageCredentialsUsername: String
 
   """Image name for the custom deployment"""
   imageName: String!
@@ -6347,11 +6450,29 @@ type CustomDomain implements AbstractEntity {
 
 """Configuration for custom domain DNS settings"""
 type CustomDomainDnsConfig {
-  """The type of DNS record, either CNAME or A"""
+  """Indicates whether the dns config applies to a top-level domain"""
+  topLevelDomain: Boolean!
+
+  """The type of DNS record, either CNAME or ALIAS"""
   type: String!
 
   """The value of the DNS record"""
   value: String!
+}
+
+"""Represents the status of a custom domain"""
+type CustomDomainStatus {
+  """Error message if DNS configuration failed, null if successful"""
+  dnsErrorMessage: String
+
+  """The domain name associated with this custom domain status"""
+  domain: String!
+
+  """Indicates whether the DNS is properly configured for the domain"""
+  isDnsConfigured: Boolean!
+
+  """Indicates whether the domain is a top-level domain"""
+  isTopLevelDomain: Boolean!
 }
 
 input CustomJwtConfigurationInput {
@@ -6531,6 +6652,9 @@ type EVMLoadBalancer implements AbstractClusterService & AbstractEntity & LoadBa
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -6712,6 +6836,9 @@ type FabricBlockchainNode implements AbstractClusterService & AbstractEntity & B
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
   downloadConnectionProfileUri: String!
@@ -6855,6 +6982,9 @@ type FabricLoadBalancer implements AbstractClusterService & AbstractEntity & Loa
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -7009,6 +7139,9 @@ type FabricRaftBlockchainNetwork implements AbstractClusterService & AbstractEnt
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -7172,6 +7305,9 @@ type FabricSmartContractSet implements AbstractClusterService & AbstractEntity &
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -7337,6 +7473,9 @@ type FantomMainnetBlockchainNetwork implements AbstractClusterService & Abstract
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -7488,6 +7627,9 @@ type FantomMainnetBlockchainNode implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -7634,6 +7776,9 @@ type FantomTestnetBlockchainNetwork implements AbstractClusterService & Abstract
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -7785,6 +7930,9 @@ type FantomTestnetBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -7946,6 +8094,9 @@ type FireflyFabconnectMiddleware implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -8087,6 +8238,9 @@ type GethBlockchainNode implements AbstractClusterService & AbstractEntity & Blo
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -8234,6 +8388,9 @@ type GethCliqueBlockchainNetwork implements AbstractClusterService & AbstractEnt
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -8394,6 +8551,9 @@ type GethCliqueBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -8689,6 +8849,9 @@ type GethGoerliBlockchainNetwork implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -8840,6 +9003,9 @@ type GethGoerliBlockchainNode implements AbstractClusterService & AbstractEntity
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -8986,6 +9152,9 @@ type GethPoSRinkebyBlockchainNetwork implements AbstractClusterService & Abstrac
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -9144,6 +9313,9 @@ type GethPoWBlockchainNetwork implements AbstractClusterService & AbstractEntity
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -9295,6 +9467,9 @@ type GethRinkebyBlockchainNode implements AbstractClusterService & AbstractEntit
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -9441,6 +9616,9 @@ type GethVenidiumBlockchainNetwork implements AbstractClusterService & AbstractE
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -9593,6 +9771,9 @@ type GethVenidiumBlockchainNode implements AbstractClusterService & AbstractEnti
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -9726,6 +9907,9 @@ type GraphMiddleware implements AbstractClusterService & AbstractEntity & Middle
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -9866,6 +10050,9 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -10005,6 +10192,9 @@ type Hasura implements AbstractClusterService & AbstractEntity & Integration {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -10140,6 +10330,9 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -10290,6 +10483,9 @@ type HederaMainnetBlockchainNetwork implements AbstractClusterService & Abstract
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -10442,6 +10638,9 @@ type HederaMainnetBlockchainNode implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -10588,6 +10787,9 @@ type HederaTestnetBlockchainNetwork implements AbstractClusterService & Abstract
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -10740,6 +10942,9 @@ type HederaTestnetBlockchainNode implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -10886,6 +11091,9 @@ type HoleskyBlockchainNetwork implements AbstractClusterService & AbstractEntity
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -11038,6 +11246,9 @@ type HoleskyBlockchainNode implements AbstractClusterService & AbstractEntity & 
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -11175,6 +11386,9 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -11314,6 +11528,9 @@ type HyperledgerExplorer implements AbstractClusterService & AbstractEntity & In
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -11450,6 +11667,9 @@ type IPFSStorage implements AbstractClusterService & AbstractEntity & Storage {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -11589,6 +11809,9 @@ interface Insights implements AbstractClusterService & AbstractEntity {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -11814,6 +12037,9 @@ interface Integration implements AbstractClusterService & AbstractEntity {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -11961,6 +12187,9 @@ type IntegrationStudio implements AbstractClusterService & AbstractEntity & Inte
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -12125,6 +12354,9 @@ interface LoadBalancer implements AbstractClusterService & AbstractEntity {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -12295,6 +12527,9 @@ interface Middleware implements AbstractClusterService & AbstractEntity {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -12457,6 +12692,9 @@ type MinioStorage implements AbstractClusterService & AbstractEntity & Storage {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -12828,11 +13066,20 @@ type Mutation {
     """Custom domains for the deployment"""
     customDomains: [String!]
 
+    """Disable authentication for the custom deployment"""
+    disableAuth: Boolean = true
+
     """Disk space in MiB"""
     diskSpace: Int
 
     """Environment variables for the custom deployment"""
     environmentVariables: JSON
+
+    """Access token for image credentials"""
+    imageCredentialsAccessToken: String
+
+    """Username for image credentials"""
+    imageCredentialsUsername: String
 
     """The name of the Docker image"""
     imageName: String!
@@ -13530,11 +13777,20 @@ type Mutation {
     """Custom domains for the deployment"""
     customDomains: [String!]
 
+    """Disable authentication for the custom deployment"""
+    disableAuth: Boolean = true
+
     """The unique identifier of the entity"""
     entityId: ID!
 
     """Environment variables for the custom deployment"""
     environmentVariables: JSON
+
+    """Access token for image credentials"""
+    imageCredentialsAccessToken: String
+
+    """Username for image credentials"""
+    imageCredentialsUsername: String
 
     """The name of the Docker image"""
     imageName: String
@@ -14437,6 +14693,9 @@ type OptimismBlockchainNetwork implements AbstractClusterService & AbstractEntit
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -14588,6 +14847,9 @@ type OptimismBlockchainNode implements AbstractClusterService & AbstractEntity &
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -14734,6 +14996,9 @@ type OptimismGoerliBlockchainNetwork implements AbstractClusterService & Abstrac
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -14886,6 +15151,9 @@ type OptimismGoerliBlockchainNode implements AbstractClusterService & AbstractEn
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -15032,6 +15300,9 @@ type OptimismSepoliaBlockchainNetwork implements AbstractClusterService & Abstra
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -15184,6 +15455,9 @@ type OptimismSepoliaBlockchainNode implements AbstractClusterService & AbstractE
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -15320,6 +15594,9 @@ type OtterscanBlockchainExplorer implements AbstractClusterService & AbstractEnt
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -15617,6 +15894,9 @@ type PolygonAmoyBlockchainNetwork implements AbstractClusterService & AbstractEn
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -15768,6 +16048,9 @@ type PolygonAmoyBlockchainNode implements AbstractClusterService & AbstractEntit
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -15914,6 +16197,9 @@ type PolygonBlockchainNetwork implements AbstractClusterService & AbstractEntity
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -16066,6 +16352,9 @@ type PolygonBlockchainNode implements AbstractClusterService & AbstractEntity & 
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -16206,6 +16495,9 @@ type PolygonEdgeBlockchainNode implements AbstractClusterService & AbstractEntit
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -16527,6 +16819,9 @@ type PolygonEdgePoABlockchainNetwork implements AbstractClusterService & Abstrac
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -16690,6 +16985,9 @@ type PolygonMumbaiBlockchainNetwork implements AbstractClusterService & Abstract
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -16841,6 +17139,9 @@ type PolygonMumbaiBlockchainNode implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -16987,6 +17288,9 @@ type PolygonSupernetBlockchainNetwork implements AbstractClusterService & Abstra
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -17150,6 +17454,9 @@ type PolygonSupernetBlockchainNode implements AbstractClusterService & AbstractE
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -17316,6 +17623,9 @@ type PolygonZkEvmBlockchainNetwork implements AbstractClusterService & AbstractE
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -17467,6 +17777,9 @@ type PolygonZkEvmBlockchainNode implements AbstractClusterService & AbstractEnti
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -17613,6 +17926,9 @@ type PolygonZkEvmTestnetBlockchainNetwork implements AbstractClusterService & Ab
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -17765,6 +18081,9 @@ type PolygonZkEvmTestnetBlockchainNode implements AbstractClusterService & Abstr
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -17898,6 +18217,9 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -18845,6 +19167,9 @@ type QuorumQBFTBlockchainNetwork implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -19010,6 +19335,9 @@ type QuorumQBFTBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -19406,6 +19734,9 @@ type SepoliaBlockchainNetwork implements AbstractClusterService & AbstractEntity
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -19556,6 +19887,9 @@ type SepoliaBlockchainNode implements AbstractClusterService & AbstractEntity & 
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -19718,6 +20052,9 @@ type SmartContractPortalMiddleware implements AbstractClusterService & AbstractE
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -19940,6 +20277,9 @@ interface SmartContractSet implements AbstractClusterService & AbstractEntity {
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -20107,6 +20447,9 @@ type SoliditySmartContractSet implements AbstractClusterService & AbstractEntity
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -20253,6 +20596,9 @@ type SoneiumMinatoBlockchainNetwork implements AbstractClusterService & Abstract
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -20405,6 +20751,9 @@ type SoneiumMinatoBlockchainNode implements AbstractClusterService & AbstractEnt
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -20534,6 +20883,9 @@ interface Storage implements AbstractClusterService & AbstractEntity {
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -20809,6 +21161,9 @@ type TezosBlockchainNetwork implements AbstractClusterService & AbstractEntity &
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -20953,6 +21308,9 @@ type TezosBlockchainNode implements AbstractClusterService & AbstractEntity & Bl
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -21106,6 +21464,9 @@ type TezosSmartContractSet implements AbstractClusterService & AbstractEntity & 
   """Destroy job identifier"""
   destroyJob: String
 
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
   """Disk space in GB"""
   diskSpace: Int
 
@@ -21249,6 +21610,9 @@ type TezosTestnetBlockchainNetwork implements AbstractClusterService & AbstractE
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
@@ -21394,6 +21758,9 @@ type TezosTestnetBlockchainNode implements AbstractClusterService & AbstractEnti
 
   """Destroy job identifier"""
   destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
 
   """Disk space in GB"""
   diskSpace: Int
