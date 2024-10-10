@@ -108,6 +108,8 @@ export function connectCommand(): Command {
           SETTLEMINT_IPFS_PINNING_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "cluster-pinning-api")
             ?.displayValue,
           SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "gateway")?.displayValue,
+          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: "0x5e771e1417100000000000000000000000000001",
+          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: "0x5e771e1417100000000000000000000000000002",
         });
 
         outro("Connected to SettleMint");
