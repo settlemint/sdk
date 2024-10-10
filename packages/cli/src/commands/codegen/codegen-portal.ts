@@ -35,4 +35,20 @@ export const { client: portalClient, graphql: portalGraphql } = createServerPort
 });`;
 
   await writeTemplate(clientTemplate, "/lib/settlemint", "portal.ts");
+
+  const clientSideTemplate = `import { createPortalClient } from "@settlemint/sdk-portal";
+import type { introspection } from "../../../portal-env.d.ts";
+
+export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+  };
+}>({
+  instance: "/proxy/portal/graphql",
+});`;
+
+  await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "portal.ts");
 }
