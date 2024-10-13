@@ -12,6 +12,7 @@ const PrivateKeyFragment = graphql(`
     name
     uniqueName
     privateKeyType
+    status
   }
 `);
 

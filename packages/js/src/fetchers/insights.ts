@@ -10,6 +10,7 @@ const InsightsFragment = graphql(`
   fragment Insights on Insights {
     id
     name
+    status
     endpoints {
       id
       label

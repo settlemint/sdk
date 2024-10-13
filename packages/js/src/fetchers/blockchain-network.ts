@@ -10,6 +10,7 @@ const BlockchainNetworkFragment = graphql(`
   fragment BlockchainNetwork on BlockchainNetwork {
     id
     name
+    status
   }
 `);
 

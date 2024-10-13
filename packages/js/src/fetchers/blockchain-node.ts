@@ -10,6 +10,7 @@ const BlockchainNodeFragment = graphql(`
   fragment BlockchainNode on BlockchainNode {
     id
     name
+    status
     endpoints {
       id
       label
