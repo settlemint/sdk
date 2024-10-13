@@ -57,6 +57,17 @@ query getCustomDeployment($id: ID!) {
   [CustomDeploymentFragment],
 );
 
+const editCustomDeployment = graphql(
+  `
+mutation EditCustomDeployment($entityId: ID!, $imageTag: String) {
+  editCustomDeployment(entityId: $entityId, imageTag: $imageTag) {
+    ...CustomDeployment
+  }
+}
+`,
+  [CustomDeploymentFragment],
+);
+
 /**
  * Creates a function to list custom deployments for a given application.
  *
@@ -102,5 +113,16 @@ export const customdeploymentRead = (
     const id = validate(IdSchema, customdeploymentId);
     const { customDeployment } = await gqlClient.request(getCustomDeployment, { id });
     return customDeployment;
+  };
+};
+
+export const customdeploymentUpdate = (
+  gqlClient: GraphQLClient,
+  options: ClientOptions,
+): ((customdeploymentId: Id, imageTag: string) => Promise<CustomDeployment>) => {
+  return async (customdeploymentId: Id, imageTag: string) => {
+    const id = validate(IdSchema, customdeploymentId);
+    const { editCustomDeployment: cd } = await gqlClient.request(editCustomDeployment, { entityId: id, imageTag });
+    return cd;
   };
 };

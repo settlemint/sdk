@@ -1,14 +1,14 @@
-/**
- * This module provides the main functionality for creating and interacting with the SettleMint client.
- * It includes functions for creating the client and exporting various types used throughout the application.
- */
-
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
 import { type BlockchainNetwork, blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
 import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
-import { type CustomDeployment, customdeploymentList, customdeploymentRead } from "./fetchers/custom-deployment.js";
+import {
+  type CustomDeployment,
+  customdeploymentList,
+  customdeploymentRead,
+  customdeploymentUpdate,
+} from "./fetchers/custom-deployment.js";
 import { type Insights, insightsList, insightsRead } from "./fetchers/insights.js";
 import { type IntegrationTool, integrationToolList, integrationToolRead } from "./fetchers/integration-tool.js";
 import { type Middleware, middlewareList, middlewareRead } from "./fetchers/middleware.js";
@@ -53,6 +53,7 @@ export interface SettlemintClient {
   customDeployment: {
     list: (applicationId: Id) => Promise<CustomDeployment[]>;
     read: (customDeploymentId: Id) => Promise<CustomDeployment>;
+    update: (customDeploymentId: Id, imageTag: string) => Promise<CustomDeployment>;
   };
 }
 
@@ -116,6 +117,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     customDeployment: {
       list: customdeploymentList(gqlClient, options),
       read: customdeploymentRead(gqlClient, options),
+      update: customdeploymentUpdate(gqlClient, options),
     },
   };
 }
