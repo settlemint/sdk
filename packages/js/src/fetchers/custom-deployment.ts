@@ -10,6 +10,7 @@ const CustomDeploymentFragment = graphql(`
   fragment CustomDeployment on CustomDeployment {
     id
     name
+    status
     endpoints {
       id
       label

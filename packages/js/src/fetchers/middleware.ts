@@ -10,6 +10,7 @@ const MiddlewareFragment = graphql(`
   fragment Middleware on Middleware {
     id
     name
+    status
     interface
     endpoints {
       id
