@@ -25,10 +25,16 @@ export async function hasuraPrompt(
 
   const hasura = await select({
     message: "Which Hasura instance do you want to connect to?",
-    choices: possible.map((integration) => ({
-      name: integration.name,
-      value: integration,
-    })),
+    choices: [
+      ...possible.map((integration) => ({
+        name: integration.name,
+        value: integration,
+      })),
+      {
+        name: "None",
+        value: undefined,
+      },
+    ],
     default: defaultIntegration,
   });
 

@@ -10,6 +10,7 @@ import isInCi from "is-in-ci";
 import { applicationPrompt } from "./connect/application.prompt";
 import { authSecretPrompt } from "./connect/auth-secret.prompt";
 import { authUrlPrompt } from "./connect/auth-url.prompt";
+import { customDeploymentPrompt } from "./connect/custom-deployment.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
 import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
 import { instancePrompt } from "./connect/instance.prompt";
@@ -71,6 +72,7 @@ export function connectCommand(): Command {
         const ipfs = await ipfsPrompt(env, storage, autoAccept);
         const minio = await minioPrompt(env, storage, autoAccept);
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
+        const cDeployment = await customDeploymentPrompt(env, customDeployment, autoAccept);
 
         const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
         const authSecret = await authSecretPrompt(env, autoAccept);
@@ -110,6 +112,9 @@ export function connectCommand(): Command {
           SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "gateway")?.displayValue,
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: "0x5e771e1417100000000000000000000000000001",
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: "0x5e771e1417100000000000000000000000000002",
+          SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
+          SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) => endpoint.id === "internal")
+            ?.displayValue,
         });
 
         outro("Connected to SettleMint");

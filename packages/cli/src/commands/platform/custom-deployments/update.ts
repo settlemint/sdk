@@ -13,19 +13,23 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  *
  * @returns {Command} The configured 'connect' command
  */
-export function customDeploymentsUpdateCommand(): Command<[id: string, tag: string], { prod?: boolean }> {
+export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?: boolean; wait?: boolean }> {
   return new Command("custom-deployment")
     .alias("custom-deployments")
     .alias("cd")
-    .argument("<id>", "The ID of the custom deployment to update")
     .argument("<tag>", "The tag to update the custom deployment to")
     .option("--prod", "Connect to your production environment")
     .option("--wait", "Wait for the custom deployment to be redeployed")
     .description("Update a custom deployment in the SettleMint platform")
-    .action(async (id, tag, { prod, wait }) => {
+    .action(async (tag, { prod, wait }) => {
       intro("Updating custom deployment in the SettleMint platform");
 
       const env: DotEnv = await loadEnv(true, !!prod);
+
+      const id = env.SETTLEMINT_CUSTOM_DEPLOYMENT;
+      if (!id) {
+        throw new Error("No custom deployment configured");
+      }
 
       const settlemint = createSettleMintClient({
         accessToken: env.SETTLEMINT_ACCESS_TOKEN,

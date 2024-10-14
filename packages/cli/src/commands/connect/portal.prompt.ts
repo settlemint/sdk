@@ -25,10 +25,16 @@ export async function portalPrompt(
 
   const middleware = await select({
     message: "Which Smart Contract Portal instance do you want to connect to?",
-    choices: possible.map((middleware) => ({
-      name: middleware.name,
-      value: middleware,
-    })),
+    choices: [
+      ...possible.map((middleware) => ({
+        name: middleware.name,
+        value: middleware,
+      })),
+      {
+        name: "None",
+        value: undefined,
+      },
+    ],
     default: defaultMiddleware,
   });
 
