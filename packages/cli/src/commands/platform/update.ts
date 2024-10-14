@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { customDeploymentsUpdateCommand } from "./custom-deployments/edit";
+import { customDeploymentsUpdateCommand } from "./custom-deployments/update";
 
 /**
  * Creates and returns the 'custom-deployments' command for the SettleMint SDK.
@@ -8,10 +8,9 @@ import { customDeploymentsUpdateCommand } from "./custom-deployments/edit";
  *
  * @returns {Command} The configured 'custom-deployments' command
  */
-export function customDeploymentsCommand(): Command {
-  return new Command("custom-deployments")
-    .alias("cd")
-    .option("--prod", "Connect to your production environment")
-    .description("Manage custom deployments in the SettleMint platform")
+export function updateCommand(): Command {
+  return new Command("update")
+    .alias("u")
+    .description("Update a resource in the SettleMint platform")
     .addCommand(customDeploymentsUpdateCommand());
 }

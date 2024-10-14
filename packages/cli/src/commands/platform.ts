@@ -1,4 +1,4 @@
-import { customDeploymentsCommand } from "@/commands/platform/custom-deployments";
+import { updateCommand } from "@/commands/platform/update";
 import { Command } from "@commander-js/extra-typings";
 
 /**
@@ -9,8 +9,5 @@ import { Command } from "@commander-js/extra-typings";
  * @returns {Command} The configured 'platform' command
  */
 export function platformCommand(): Command {
-  return new Command("platform")
-    .option("--prod", "Connect to your production environment")
-    .description("Manage SettleMint platform resources")
-    .addCommand(customDeploymentsCommand());
+  return new Command("platform").description("Manage SettleMint platform resources").addCommand(updateCommand());
 }
