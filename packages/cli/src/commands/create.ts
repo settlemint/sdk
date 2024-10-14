@@ -6,15 +6,9 @@ import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import {
-  downloadAndExtractNpmPackage,
-  emptyDir,
-  formatTargetDir,
-  isEmpty,
-  setName,
-  templates,
-} from "@settlemint/sdk-utils/package-manager";
+import { emptyDir, formatTargetDir, isEmpty, setName, templates } from "@settlemint/sdk-utils/package-manager";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { downloadAndExtractNpmPackage } from "./create/download-extract";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK CLI.

@@ -54,6 +54,7 @@
     "@inquirer/select": "^4",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
+    "giget": "^1",
     "get-tsconfig": "^4",
     "is-in-ci": "^1",
     "yoctocolors": "^2"
