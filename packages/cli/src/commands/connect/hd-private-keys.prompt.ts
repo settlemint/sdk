@@ -25,10 +25,16 @@ export async function hdPrivateKeyPrompt(
 
   const privateKey = await select({
     message: "Which HD Private Key do you want to use?",
-    choices: possible.map((privateKey) => ({
-      name: privateKey.name,
-      value: privateKey,
-    })),
+    choices: [
+      ...possible.map((privateKey) => ({
+        name: privateKey.name,
+        value: privateKey,
+      })),
+      {
+        name: "None",
+        value: undefined,
+      },
+    ],
     default: defaultPrivateKey,
   });
 

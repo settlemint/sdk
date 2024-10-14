@@ -23,10 +23,16 @@ export async function ipfsPrompt(
 
   const minio = await select({
     message: "Which IPFS instance do you want to connect to?",
-    choices: possible.map((storage) => ({
-      name: storage.name,
-      value: storage,
-    })),
+    choices: [
+      ...possible.map((storage) => ({
+        name: storage.name,
+        value: storage,
+      })),
+      {
+        name: "None",
+        value: undefined,
+      },
+    ],
     default: defaultStorage,
   });
 

@@ -26,10 +26,16 @@ export async function theGraphPrompt(
 
   const middleware = await select({
     message: "Which The Graph instance do you want to connect to?",
-    choices: possible.map((middleware) => ({
-      name: middleware.name,
-      value: middleware,
-    })),
+    choices: [
+      ...possible.map((middleware) => ({
+        name: middleware.name,
+        value: middleware,
+      })),
+      {
+        name: "None",
+        value: undefined,
+      },
+    ],
     default: defaultMiddleware,
   });
 
