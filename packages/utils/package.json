@@ -56,13 +56,17 @@
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/npmcli__package-json": "^4"
+  },
   "dependencies": {
     "@antfu/install-pkg": "^0.4",
     "@dotenvx/dotenvx": "^1",
+    "@npmcli/package-json": "^6",
     "deepmerge-ts": "^7",
     "environment": "^1",
     "find-up": "^7",
+    "giget": "^1",
     "nano-spawn": "^0.1",
     "package-manager-detector": "^0.2",
     "yocto-spinner": "^0.1",
