@@ -17,6 +17,7 @@ import { connectCommand } from "@/commands/connect";
 import { Command } from "@commander-js/extra-typings";
 import { ascii, cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../package.json";
+import { platformCommand } from "./commands/platform";
 
 ascii();
 
@@ -39,6 +40,7 @@ sdkcli
 // Add commands to the CLI
 sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
+sdkcli.addCommand(platformCommand());
 
 /**
  * Parses command line arguments and executes the appropriate command.
