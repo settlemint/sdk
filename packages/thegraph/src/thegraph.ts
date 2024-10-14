@@ -38,7 +38,10 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   const validatedOptions = validate(ClientOptionsSchema, options);
 
   const graphql = initGraphQLTada<Setup>();
-  const fullUrl = new URL(validatedOptions.instance, window.location.origin).toString();
+  const fullUrl = new URL(
+    validatedOptions.instance,
+    process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
+  ).toString();
 
   return {
     client: new GraphQLClient(fullUrl, requestConfig),
