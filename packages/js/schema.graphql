@@ -13491,6 +13491,12 @@ type Mutation {
     """Application Name"""
     name: String!
 
+    """Provider of the cluster service"""
+    provider: String
+
+    """Region of the cluster service"""
+    region: String
+
     """Use Case ID"""
     useCaseId: String
 
@@ -18435,7 +18441,8 @@ type ProductSpecRequests {
 type Query {
   application(applicationId: ID!): Application!
   applicationAccessTokens(
-    applicationId: String!
+    """The ID of the application to list the access tokens for"""
+    applicationId: ID!
 
     """Maximum number of items to return"""
     limit: Int
