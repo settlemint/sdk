@@ -28,6 +28,11 @@ export const { client: portalClient, graphql: portalGraphql } = createServerPort
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
@@ -45,6 +50,11 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: "/proxy/portal/graphql",

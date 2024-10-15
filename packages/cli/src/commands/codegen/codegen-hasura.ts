@@ -30,6 +30,11 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasu
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
@@ -48,6 +53,11 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: "/proxy/hasura/graphql",

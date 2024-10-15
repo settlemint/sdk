@@ -28,6 +28,11 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createServer
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,
@@ -45,6 +50,11 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGra
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: "/proxy/thegraph/graphql",

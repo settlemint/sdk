@@ -17,6 +17,11 @@ export const graphql: initGraphQLTada<{
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }> = initGraphQLTada<{
   introspection: introspection;
@@ -24,6 +29,11 @@ export const graphql: initGraphQLTada<{
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>();
 

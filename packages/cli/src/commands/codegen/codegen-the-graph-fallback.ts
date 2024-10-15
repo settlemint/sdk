@@ -28,6 +28,11 @@ export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql 
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK!,
@@ -45,6 +50,11 @@ export const { client: theGraphFallbackClient, graphql: theGraphFallbackGraphql 
   scalars: {
     DateTime: Date;
     JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: number;
   };
 }>({
   instance: "/proxy/thegraph-fallback/graphql",
