@@ -711,15 +711,18 @@ type Application {
 type ApplicationAccessToken {
   """The blockchain network scope of the token"""
   blockchainNetworkScope: BlockchainNetworkScope!
+  blockchainNetworks: [BlockchainNetwork!]!
 
   """The blockchain node scope of the token"""
   blockchainNodeScope: BlockchainNodeScope!
+  blockchainNodes: [BlockchainNode!]!
 
   """Date and time when the entity was created"""
   createdAt: DateTime!
 
   """The custom deployment scope of the token"""
   customDeploymentScope: CustomDeploymentScope!
+  customDeployments: [CustomDeployment!]!
 
   """Date and time when the entity was deleted, if applicable"""
   deletedAt: DateTime
@@ -729,30 +732,36 @@ type ApplicationAccessToken {
 
   """Unique identifier of the entity"""
   id: ID!
+  insights: [Insights!]!
 
   """The insights scope of the token"""
   insightsScope: InsightsScope!
 
   """The integration scope of the token"""
   integrationScope: IntegrationScope!
+  integrations: [Integration!]!
 
   """The last used date of the token"""
   lastUsedAt: DateTime
 
   """The load balancer scope of the token"""
   loadBalancerScope: LoadBalancerScope!
+  loadBalancers: [LoadBalancer!]!
 
   """The middleware scope of the token"""
   middlewareScope: MiddlewareScope!
+  middlewares: [Middleware!]!
 
   """The name of the application access token"""
   name: String!
 
   """The smart contract set scope of the token"""
   smartContractSetScope: SmartContractSetScope!
+  smartcontractSets: [SmartContractSet!]!
 
   """The storage scope of the token"""
   storageScope: StorageScope!
+  storages: [Storage!]!
 
   """The unique token string"""
   token: String!
@@ -3916,6 +3925,9 @@ type Billing {
 
   """Date and time when the entity was last updated"""
   updatedAt: DateTime!
+
+  """Date when the usage excel was last sent"""
+  usageExcelSent: DateTime!
 
   """Get cost breakdown for workspace"""
   workspaceCosts(subtractMonth: Int! = 0): WorkspaceCostsInfo!
