@@ -32,7 +32,7 @@ const skeletonSizes = {
 } as const;
 
 export function ThemeToggle({ variant = "outline", size = "icon", className }: ThemeToggleProps) {
-  const { setTheme, theme, resolvedTheme } = useTheme();
+  const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   const handleSetTheme = useCallback(
