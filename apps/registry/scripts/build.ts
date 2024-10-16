@@ -90,6 +90,7 @@ const registries = [
       "@tanstack/query-sync-storage-persister",
       "@tanstack/react-query-next-experimental",
       "@tanstack/react-query-persist-client",
+      "@tanstack/react-query-devtools",
     ],
     devDependencies: ["@tanstack/eslint-plugin-query"],
     registryDependencies: [],
