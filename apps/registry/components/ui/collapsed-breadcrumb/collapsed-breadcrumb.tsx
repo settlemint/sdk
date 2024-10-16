@@ -90,7 +90,10 @@ export default function CollapsedBreadcrumbs({
     return null;
   }
 
-  const { visibleItems, collapsedItems } = useMemo(() => processBreadcrumbItems(items, maxVisibleItems), [items]);
+  const { visibleItems, collapsedItems } = useMemo(
+    () => processBreadcrumbItems(items, maxVisibleItems),
+    [items, maxVisibleItems],
+  );
   const visibleBreadcrumbs = visibleItems.map((item, i) => {
     if (i === visibleItems.length - 1 && item?.href) {
       return { label: item.label };
