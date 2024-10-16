@@ -8,7 +8,7 @@
       "outputs": ["contracts/dependencies/**"]
     },
     "build": {
-      "dependsOn": ["codegen", "^build"],
+      "dependsOn": ["codegen", "^build", "registry"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
@@ -42,6 +42,9 @@
     },
     "attw": {
       "dependsOn": ["build"]
+    },
+    "registry": {
+      "outputs": ["public/*.json"]
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {

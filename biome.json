@@ -21,7 +21,8 @@
       "a11y": {
         "useHtmlLang": "warn",
         "useButtonType": "warn",
-        "useAriaPropsForRole": "warn"
+        "useAriaPropsForRole": "warn",
+        "useFocusableInteractive": "warn"
       },
       "security": {
         "noDangerouslySetInnerHtml": "warn"
