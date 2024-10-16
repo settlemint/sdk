@@ -86,14 +86,15 @@ export default function CollapsedBreadcrumbs({
   maxVisibleItems,
   linkComponent: LinkComponent = Link,
 }: BreadcrumbsProps) {
-  if (items.length === 0) {
-    return null;
-  }
-
   const { visibleItems, collapsedItems } = useMemo(
     () => processBreadcrumbItems(items, maxVisibleItems),
     [items, maxVisibleItems],
   );
+
+  if (items.length === 0) {
+    return null;
+  }
+
   const visibleBreadcrumbs = visibleItems.map((item, i) => {
     if (i === visibleItems.length - 1 && item?.href) {
       return { label: item.label };
