@@ -11,6 +11,16 @@ export default function Home() {
       </div>
       <div>
         <div className="mt-8 mb-8 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+          <h2 className="text-lg font-bold">Query Client Provider</h2>
+          <div className="mt-8 mb-8">
+            <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto">
+              <code className="text-xs text-gray-800 dark:text-gray-200">
+                bunx shadcn@latest add https://console.settlemint.com/registry/query-client.json
+              </code>
+            </pre>
+          </div>
+        </div>
+        <div className="mt-8 mb-8 border border-gray-200 dark:border-gray-700 rounded-md p-4">
           <h2 className="text-lg font-bold">Collapsed Breadcrumb</h2>
           <div className="mt-8 mb-8">
             <CollapsedBreadcrumb

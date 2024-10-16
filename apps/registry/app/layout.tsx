@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/ui/dark-mode/theme-provider";
+import { QueryClientProvider } from "@/components/ui/query-client/query-client-provider";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import type { ViewportLayout } from "next/dist/lib/metadata/types/extra-types";
@@ -38,7 +39,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
     <html lang="en" suppressHydrationWarning>
       <body className={cn("RootLayout min-h-screen font-sans antialiased", fontSans.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem={true}>
-          {children}
+          <QueryClientProvider>{children}</QueryClientProvider>
         </ThemeProvider>
       </body>
     </html>
