@@ -26,6 +26,7 @@ export interface BreadcrumbItemType {
 /**
  * Processes breadcrumb items to determine which should be visible and which should be collapsed.
  * @param items - The array of breadcrumb items to process.
+ * @param maxVisibleItems - The maximum number of items to display visibly.
  * @returns An object containing visible items and collapsed items.
  */
 function processBreadcrumbItems(items: BreadcrumbItemType[], maxVisibleItems: number): ProcessedBreadcrumbItems {
@@ -47,22 +48,17 @@ function processBreadcrumbItems(items: BreadcrumbItemType[], maxVisibleItems: nu
  * Renders a single breadcrumb item.
  * @param item - The breadcrumb item to render.
  * @param collapsedItems - The array of collapsed items (used for the ellipsis dropdown).
- * @param LinkComponent - The Link component to use for rendering the breadcrumb item.
  * @returns The rendered breadcrumb item.
  */
-function renderBreadcrumbItem(
-  item: BreadcrumbItemType | null,
-  collapsedItems: BreadcrumbItemType[],
-  LinkComponent: React.ComponentType<React.ComponentProps<typeof Link>>,
-) {
+function renderBreadcrumbItem(item: BreadcrumbItemType | null, collapsedItems: BreadcrumbItemType[]) {
   if (!item) {
-    return <EllipsisDropdown items={collapsedItems} linkComponent={LinkComponent} />;
+    return <EllipsisDropdown items={collapsedItems} />;
   }
 
   if (item.href) {
     return (
       <BreadcrumbLink asChild>
-        <LinkComponent href={item.href}>{item.label}</LinkComponent>
+        <Link href={item.href}>{item.label}</Link>
       </BreadcrumbLink>
     );
   }
@@ -73,7 +69,6 @@ function renderBreadcrumbItem(
 interface BreadcrumbsProps {
   maxVisibleItems: number;
   items: BreadcrumbItemType[];
-  linkComponent?: React.ComponentType<React.ComponentProps<typeof Link>>;
 }
 
 /**
@@ -81,11 +76,7 @@ interface BreadcrumbsProps {
  * @param props - The component props.
  * @returns The rendered Breadcrumb component.
  */
-export default function CollapsedBreadcrumbs({
-  items,
-  maxVisibleItems,
-  linkComponent: LinkComponent = Link,
-}: BreadcrumbsProps) {
+export default function CollapsedBreadcrumbs({ items, maxVisibleItems }: BreadcrumbsProps) {
   const { visibleItems, collapsedItems } = useMemo(
     () => processBreadcrumbItems(items, maxVisibleItems),
     [items, maxVisibleItems],
@@ -109,7 +100,7 @@ export default function CollapsedBreadcrumbs({
           return (
             <Fragment key={item ? item.label : `ellipsis-${index}`}>
               {index > 0 && <BreadcrumbSeparator />}
-              <BreadcrumbItem>{renderBreadcrumbItem(item, collapsedItems, LinkComponent)}</BreadcrumbItem>
+              <BreadcrumbItem>{renderBreadcrumbItem(item, collapsedItems)}</BreadcrumbItem>
             </Fragment>
           );
         })}
@@ -120,7 +111,6 @@ export default function CollapsedBreadcrumbs({
 
 interface EllipsisDropdownProps {
   items: BreadcrumbItemType[];
-  linkComponent: React.ComponentType<React.ComponentProps<typeof Link>>;
 }
 
 /**
@@ -128,7 +118,7 @@ interface EllipsisDropdownProps {
  * @param props - The component props.
  * @returns The rendered EllipsisDropdown component.
  */
-export function EllipsisDropdown({ items, linkComponent: LinkComponent }: EllipsisDropdownProps) {
+export function EllipsisDropdown({ items }: EllipsisDropdownProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -138,7 +128,7 @@ export function EllipsisDropdown({ items, linkComponent: LinkComponent }: Ellips
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2">
         {items.map(({ label, href }) => (
-          <EllipsisDropdownItem key={label} href={href ?? "#"} linkComponent={LinkComponent}>
+          <EllipsisDropdownItem key={label} href={href ?? "#"}>
             {label}
           </EllipsisDropdownItem>
         ))}
@@ -150,7 +140,6 @@ export function EllipsisDropdown({ items, linkComponent: LinkComponent }: Ellips
 interface EllipsisDropdownItemProps {
   href: string;
   children: React.ReactNode;
-  linkComponent: React.ComponentType<React.ComponentProps<typeof Link>>;
 }
 
 /**
@@ -158,13 +147,13 @@ interface EllipsisDropdownItemProps {
  * @param props - The component props.
  * @returns The rendered EllipsisDropdownItem component.
  */
-function EllipsisDropdownItem({ href, children, linkComponent: LinkComponent }: EllipsisDropdownItemProps) {
+function EllipsisDropdownItem({ href, children }: EllipsisDropdownItemProps) {
   return (
-    <LinkComponent
+    <Link
       href={href}
       className="block px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors"
     >
       {children}
-    </LinkComponent>
+    </Link>
   );
 }
