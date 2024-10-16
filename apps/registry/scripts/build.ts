@@ -22,6 +22,24 @@ const registries = [
     meta: {},
     docs: "",
   },
+  {
+    name: "dark-mode",
+    description: "Dark mode",
+    files: [
+      {
+        type: "registry:ui",
+        path: new Glob("./components/ui/dark-mode/**/*"),
+        targetFunction: (path: string) => path.replace("components/ui/dark-mode", "components/ui/dark-mode"),
+      },
+    ],
+    dependencies: ["lucide-react", "next-themes"],
+    devDependencies: [],
+    registryDependencies: ["button", "dropdown-menu", "skeleton"],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
   // {
   //   name: "asset-tokenization",
   //   description: "Asset tokenization",

@@ -11,7 +11,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { Fragment, useMemo } from "react";
 
 interface ProcessedBreadcrumbItems {
@@ -29,14 +28,18 @@ export interface BreadcrumbItemType {
  * @param items - The array of breadcrumb items to process.
  * @returns An object containing visible items and collapsed items.
  */
-function processBreadcrumbItems(items: BreadcrumbItemType[]): ProcessedBreadcrumbItems {
-  if (items.length <= 3) {
+function processBreadcrumbItems(items: BreadcrumbItemType[], maxVisibleItems: number): ProcessedBreadcrumbItems {
+  if (items.length <= maxVisibleItems) {
     return { visibleItems: items, collapsedItems: [] };
   }
 
   return {
-    visibleItems: [items[0], null, items[items.length - 2], items[items.length - 1]],
-    collapsedItems: items.slice(1, -2),
+    visibleItems: [
+      items[0],
+      null, // placeholder for ellipsis
+      ...items.slice(-maxVisibleItems),
+    ],
+    collapsedItems: items.slice(1, -maxVisibleItems),
   };
 }
 
@@ -52,7 +55,7 @@ function renderBreadcrumbItem(
   collapsedItems: BreadcrumbItemType[],
   LinkComponent: React.ComponentType<React.ComponentProps<typeof Link>>,
 ) {
-  if (item === null) {
+  if (!item) {
     return <EllipsisDropdown items={collapsedItems} linkComponent={LinkComponent} />;
   }
 
@@ -68,6 +71,7 @@ function renderBreadcrumbItem(
 }
 
 interface BreadcrumbsProps {
+  maxVisibleItems: number;
   items: BreadcrumbItemType[];
   linkComponent?: React.ComponentType<React.ComponentProps<typeof Link>>;
 }
@@ -77,20 +81,27 @@ interface BreadcrumbsProps {
  * @param props - The component props.
  * @returns The rendered Breadcrumb component.
  */
-export default function CollapsedBreadcrumbs({ items, linkComponent: LinkComponent = Link }: BreadcrumbsProps) {
-  const pathname = usePathname();
+export default function CollapsedBreadcrumbs({
+  items,
+  maxVisibleItems,
+  linkComponent: LinkComponent = Link,
+}: BreadcrumbsProps) {
+  if (items.length === 0) {
+    return null;
+  }
 
-  const breadcrumbItems = useMemo(() => {
-    const currentPageItem = items.find((item) => item.href === pathname);
-    return currentPageItem ? [items[0], currentPageItem] : [items[0]];
-  }, [items, pathname]);
-
-  const { visibleItems, collapsedItems } = useMemo(() => processBreadcrumbItems(breadcrumbItems), [breadcrumbItems]);
+  const { visibleItems, collapsedItems } = useMemo(() => processBreadcrumbItems(items, maxVisibleItems), [items]);
+  const visibleBreadcrumbs = visibleItems.map((item, i) => {
+    if (i === visibleItems.length - 1 && item?.href) {
+      return { label: item.label };
+    }
+    return item;
+  });
 
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        {visibleItems.map((item, index) => {
+        {visibleBreadcrumbs.map((item, index) => {
           return (
             <Fragment key={item ? item.label : `ellipsis-${index}`}>
               {index > 0 && <BreadcrumbSeparator />}
