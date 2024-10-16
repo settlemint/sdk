@@ -1,6 +1,7 @@
 import { AddressAvatar } from "@/components/ui/address-avatar/address-avatar";
 import CollapsedBreadcrumb from "@/components/ui/collapsed-breadcrumb/collapsed-breadcrumb";
 import { ThemeToggle } from "@/components/ui/dark-mode/theme-toggle";
+import { DataTable } from "@/components/ui/data-table/data-table";
 
 export default function Home() {
   return (
@@ -83,6 +84,42 @@ export default function Home() {
             <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto">
               <code className="text-xs text-gray-800 dark:text-gray-200">
                 bunx shadcn@latest add https://console.settlemint.com/registry/address-avatar.json
+              </code>
+            </pre>
+          </div>
+        </div>
+        <div className="mt-8 mb-8 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+          <h2 className="text-lg font-bold">Data table</h2>
+          <div className="mt-8 mb-8 flex flex-wrap gap-4">
+            <DataTable
+              columns={[
+                {
+                  accessorKey: "name",
+                  header: "Name",
+                },
+                {
+                  accessorKey: "email",
+                  header: "Email",
+                },
+              ]}
+              data={[
+                {
+                  name: "John Doe",
+                  email: "john.doe@example.com",
+                },
+                {
+                  name: "Jane Doe",
+                  email: "jane.doe@example.com",
+                },
+              ]}
+              filterPlaceholder="Search"
+              filterColumn="name"
+            />
+          </div>
+          <div className="mt-8 mb-8">
+            <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto">
+              <code className="text-xs text-gray-800 dark:text-gray-200">
+                bunx shadcn@latest add https://console.settlemint.com/registry/data-table.json
               </code>
             </pre>
           </div>
