@@ -4,6 +4,23 @@ import type { registryItemSchema } from "./schema";
 
 const registries = [
   {
+    name: "all",
+    description: "All components",
+    files: [],
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [
+      "https://console-release.settlemint.com/registry/collapsed-breadcrumb.json",
+      "https://console-release.settlemint.com/registry/dark-mode.json",
+      "https://console-release.settlemint.com/registry/address-avatar.json",
+      "https://console-release.settlemint.com/registry/query-client.json",
+    ],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
+  {
     name: "collapsed-breadcrumb",
     description: "Collapsed breadcrumb",
     files: [
