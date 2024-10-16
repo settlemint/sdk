@@ -46,7 +46,7 @@ COPY --from=build --chmod=0777  /app/public public
 COPY --from=build --chmod=0777  /app/.next/standalone ./
 COPY --from=build --chmod=0777  /app/.next/static ./.next/static
 
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
 
 CMD ["server.js"]
