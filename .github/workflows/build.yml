@@ -132,7 +132,6 @@ jobs:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           CONSOLE_GRAPHQL: ${{ env.CONSOLE_GRAPHQL }}
 
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -163,6 +162,7 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
           provenance: mode=max
           sbom: true
 
