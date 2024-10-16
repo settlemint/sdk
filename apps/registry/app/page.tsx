@@ -1,3 +1,4 @@
+import { AddressAvatar } from "@/components/ui/address-avatar/address-avatar";
 import CollapsedBreadcrumb from "@/components/ui/collapsed-breadcrumb/collapsed-breadcrumb";
 import { ThemeToggle } from "@/components/ui/dark-mode/theme-toggle";
 
@@ -46,6 +47,22 @@ export default function Home() {
             <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto">
               <code className="text-xs text-gray-800 dark:text-gray-200">
                 bunx shadcn@latest add https://console.settlemint.com/registry/dark-mode.json
+              </code>
+            </pre>
+          </div>
+        </div>
+        <div className="mt-8 mb-8 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+          <h2 className="text-lg font-bold">Address avatar</h2>
+          <div className="mt-8 mb-8 flex flex-wrap gap-4">
+            <AddressAvatar address="0x0d1d4e623d10f9fba5db95830f7d449b28135b2e" />
+            <AddressAvatar address="0x0d1d4e623d10f9fba5db95830f7d449b28135b2e" variant="small" />
+            <AddressAvatar address="0x0d1d4e623d10f9fba5db95830f7d449b28135b2e" badge />
+            <AddressAvatar email="test@example.com" />
+          </div>
+          <div className="mt-8 mb-8">
+            <pre className="bg-gray-100 dark:bg-gray-800 p-3 rounded-md overflow-x-auto">
+              <code className="text-xs text-gray-800 dark:text-gray-200">
+                bunx shadcn@latest add https://console.settlemint.com/registry/address-avatar.json
               </code>
             </pre>
           </div>

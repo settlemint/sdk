@@ -40,6 +40,24 @@ const registries = [
     meta: {},
     docs: "",
   },
+  {
+    name: "address-avatar",
+    description: "Address avatar",
+    files: [
+      {
+        type: "registry:ui",
+        path: new Glob("./components/ui/address-avatar/**/*"),
+        targetFunction: (path: string) => path.replace("components/ui/address-avatar", "components/ui/address-avatar"),
+      },
+    ],
+    dependencies: ["@tanstack/react-query", "react-awesome-gravatar", "viem", "react-jazzicon"],
+    devDependencies: [],
+    registryDependencies: ["avatar", "skeleton"],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
   // {
   //   name: "asset-tokenization",
   //   description: "Asset tokenization",
