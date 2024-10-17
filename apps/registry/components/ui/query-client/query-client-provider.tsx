@@ -7,7 +7,11 @@ import { ReactQueryStreamedHydration } from "@tanstack/react-query-next-experime
 import { persistQueryClient } from "@tanstack/react-query-persist-client";
 import type { PropsWithChildren } from "react";
 
-function makeQueryClient() {
+/**
+ * Creates and configures a new QueryClient instance.
+ * @returns A new QueryClient instance.
+ */
+function makeQueryClient(): QueryClient {
   const client = new QueryClient({
     defaultOptions: {
       queries: {
@@ -32,7 +36,11 @@ function makeQueryClient() {
 
 let browserQueryClient: QueryClient | undefined = undefined;
 
-function getQueryClient() {
+/**
+ * Gets or creates a QueryClient instance.
+ * @returns A QueryClient instance.
+ */
+function getQueryClient(): QueryClient {
   if (isServer) {
     return makeQueryClient();
   }
@@ -42,6 +50,11 @@ function getQueryClient() {
   return browserQueryClient;
 }
 
+/**
+ * Provides a QueryClient context for the application.
+ * @param props - The component props.
+ * @returns The QueryClientProvider component.
+ */
 export function QueryClientProvider({ children }: PropsWithChildren) {
   const queryClient = getQueryClient();
 

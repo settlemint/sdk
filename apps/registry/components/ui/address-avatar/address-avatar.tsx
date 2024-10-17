@@ -10,6 +10,13 @@ import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 import { http, type Address, createPublicClient } from "viem";
 import { mainnet } from "viem/chains";
 
+/**
+ * Props for the AddressAvatar component.
+ * @property {string | null} [address] - The Ethereum address to generate an avatar for.
+ * @property {string | null} [email] - The email address to generate a Gravatar for.
+ * @property {boolean} [badge] - Whether to show a badge on the avatar.
+ * @property {'big' | 'small'} [variant='big'] - The size variant of the avatar.
+ */
 interface AddressAvatarProps extends HTMLAttributes<HTMLDivElement> {
   address?: string | null;
   email?: string | null;
@@ -20,6 +27,10 @@ interface AddressAvatarProps extends HTMLAttributes<HTMLDivElement> {
 /**
  * AddressAvatar component displays an avatar based on the provided address or email.
  * It shows a skeleton loader while the avatar is being fetched and fades in the actual image when loaded.
+ *
+ * @param {AddressAvatarProps} props - The component props.
+ * @param {React.Ref<HTMLDivElement>} ref - The ref to be forwarded to the root element.
+ * @returns {JSX.Element} The rendered AddressAvatar component.
  */
 export const AddressAvatar = forwardRef<HTMLDivElement, AddressAvatarProps>(
   ({ address, email, className, badge, variant = "big", ...props }, ref) => {

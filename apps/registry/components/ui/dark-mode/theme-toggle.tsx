@@ -12,18 +12,30 @@ import { MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 import { useCallback, useEffect, useState } from "react";
 
+/**
+ * Props for the ThemeToggle component.
+ */
 interface ThemeToggleProps {
+  /** The variant of the button. */
   variant?: ButtonProps["variant"];
+  /** The size of the button. */
   size?: ButtonProps["size"];
+  /** Additional CSS classes to apply to the button. */
   className?: string;
 }
 
+/**
+ * Array of theme options available for selection.
+ */
 const themeOptions = [
   { value: "light", label: "Light" },
   { value: "dark", label: "Dark" },
   { value: "system", label: "System" },
 ] as const;
 
+/**
+ * Mapping of button sizes to skeleton sizes.
+ */
 const skeletonSizes = {
   icon: "h-10 w-10",
   default: "h-10 w-16",
@@ -31,10 +43,19 @@ const skeletonSizes = {
   lg: "h-11 w-20",
 } as const;
 
+/**
+ * A component that allows users to toggle between different theme options.
+ * @param props - The component props.
+ * @returns A dropdown menu for theme selection.
+ */
 export function ThemeToggle({ variant = "outline", size = "icon", className }: ThemeToggleProps) {
   const { setTheme, resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
+  /**
+   * Handles setting a new theme.
+   * @param newTheme - The new theme to set.
+   */
   const handleSetTheme = useCallback(
     (newTheme: string) => {
       console.log("newTheme", newTheme);
