@@ -14,7 +14,7 @@ FROM build-deps AS build
 ENV SKIP_TYPE_CHECKING=yes
 
 COPY --chmod=0777 . .
-RUN bun run build
+RUN bun run registry:build
 
 # TILT
 FROM cgr.dev/chainguard/node-lts:latest-dev AS tilt
