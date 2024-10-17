@@ -142,8 +142,18 @@ jobs:
       - name: Run tests and checks
         run: bunx turbo format lint build registry:build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
         env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          CONSOLE_GRAPHQL: ${{ env.CONSOLE_GRAPHQL }}
+          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
+          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
+          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
+          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
+          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
+          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
+          SETTLEMINT_AUTH_SECRET: ${{ secrets.SETTLEMINT_AUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
+          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
 
       - name: Make index
         if: ${{ matrix.pkg == 'registry' }}
