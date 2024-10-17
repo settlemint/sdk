@@ -7,8 +7,8 @@
     "registry:build": "next build",
     "registry:start": "next start",
     "registry:lint": "next lint",
-    "registry:connect": "pwd; bun run ../../packages/cli/src/cli.ts connect -a",
-    "registry:codegen": "pwd; bun run ../../packages/cli/src/cli.ts codegen"
+    "registry:connect": "bun ../../packages/cli/src/cli.ts connect -a",
+    "registry:codegen": "bun ../../packages/cli/src/cli.ts codegen"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
