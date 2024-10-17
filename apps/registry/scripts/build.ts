@@ -23,6 +23,25 @@ const registries = [
     docs: "",
   },
   {
+    name: "all-staging",
+    description: "All components",
+    files: [],
+    dependencies: [],
+    devDependencies: [],
+    registryDependencies: [
+      "https://settlemint.github.io/sdk/collapsed-breadcrumb.json",
+      "https://settlemint.github.io/sdk/dark-mode.json",
+      "https://settlemint.github.io/sdk/address-avatar.json",
+      "https://settlemint.github.io/sdk/query-client.json",
+      "https://settlemint.github.io/sdk/data-table.json",
+      "https://settlemint.github.io/sdk/evm-address.json",
+    ],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
+  {
     name: "collapsed-breadcrumb",
     description: "Collapsed breadcrumb",
     files: [
