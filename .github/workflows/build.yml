@@ -152,7 +152,7 @@ jobs:
           cd apps/registry/public
           echo "<html><body><h1>Registry Files</h1><ul>" > index.html
           for file in *.json; do
-            echo "<li>bunx shadcn-ui@latest add $file (<a href=\"$file\">$file</a>)</li>" >> index.html
+            echo "<li>bunx shadcn-ui@latest add https://settlemint.github.io/sdk/$file (<a href=\"$file\">$file</a>)</li>" >> index.html
           done
           echo "</ul></body></html>" >> index.html
           cd ../../..
