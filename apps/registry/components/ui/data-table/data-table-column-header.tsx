@@ -10,12 +10,27 @@ import { cn } from "@/lib/utils";
 import type { Column } from "@tanstack/react-table";
 import { ArrowDownUp, BadgeCheck, EyeOff, SortAsc, SortDesc } from "lucide-react";
 
+/**
+ * Props for the DataTableColumnHeader component.
+ * @template TData The type of data in the table.
+ * @template TValue The type of value in the column.
+ */
 interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes<HTMLDivElement> {
+  /** The column object from react-table. */
   column: Column<TData, TValue>;
+  /** The title of the column. */
   title: string;
+  /** Indicates if the column is verified. */
   isVerified?: boolean;
 }
 
+/**
+ * Renders a header for a data table column with sorting and visibility options.
+ * @template TData The type of data in the table.
+ * @template TValue The type of value in the column.
+ * @param props The component props.
+ * @returns The rendered DataTableColumnHeader component.
+ */
 export function DataTableColumnHeader<TData, TValue>({
   column,
   title,

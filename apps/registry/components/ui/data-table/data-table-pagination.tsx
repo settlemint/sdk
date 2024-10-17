@@ -4,10 +4,21 @@ import type { PaginationState, Table } from "@tanstack/react-table";
 import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import { useMemo } from "react";
 
+/**
+ * Props for the DataTablePagination component.
+ * @template TData The type of data in the table.
+ */
 interface DataTablePaginationProps<TData> {
+  /** The table instance from react-table. */
   table: Table<TData>;
 }
 
+/**
+ * Renders pagination controls for a data table.
+ * @template TData The type of data in the table.
+ * @param props The component props.
+ * @returns The rendered DataTablePagination component.
+ */
 export function DataTablePagination<TData>({ table }: DataTablePaginationProps<TData>) {
   const pagination: PaginationState = table.getState().pagination;
   const pageCount = table.getPageCount();

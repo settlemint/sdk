@@ -18,15 +18,33 @@ import { useEffect, useState } from "react";
 import { DataTableFilter } from "./data-table-filter";
 import { DataTablePagination } from "./data-table-pagination";
 
+/**
+ * Props for the DataTable component.
+ * @template TData The type of data in the table.
+ * @template TValue The type of values in the table cells.
+ */
 interface DataTableProps<TData, TValue> {
+  /** The column definitions for the table. */
   columns: ColumnDef<TData, TValue>[];
+  /** The data to be displayed in the table. */
   data: TData[];
+  /** The placeholder text for the filter input. */
   filterPlaceholder: string;
+  /** The column to be used for filtering. */
   filterColumn: string;
+  /** Whether to show pagination controls. */
   isPagination?: boolean;
+  /** Whether to show search functionality. */
   isSearch?: boolean;
 }
 
+/**
+ * A reusable data table component with sorting, filtering, and pagination.
+ * @template TData The type of data in the table.
+ * @template TValue The type of values in the table cells.
+ * @param props The component props.
+ * @returns The rendered DataTable component.
+ */
 export function DataTable<TData, TValue>({
   columns,
   data,
