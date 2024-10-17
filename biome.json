@@ -12,7 +12,8 @@
       "./contracts/artifacts",
       "graphql-env.d.ts",
       "graphql-cache.d.ts",
-      "apps/registry/public"
+      "apps/registry/public",
+      "packages/js/schema.graphql"
     ]
   },
   "linter": {
