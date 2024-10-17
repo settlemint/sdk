@@ -140,7 +140,7 @@ jobs:
           echo "Updated version to $VERSION"
 
       - name: Run tests and checks
-        run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
+        run: bunx turbo format lint build registry:build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           CONSOLE_GRAPHQL: ${{ env.CONSOLE_GRAPHQL }}
