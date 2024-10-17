@@ -8,7 +8,8 @@
     "registry:start": "next start",
     "registry:lint": "next lint",
     "registry:connect": "bun ../../packages/cli/src/cli.ts connect -a",
-    "registry:codegen": "bun ../../packages/cli/src/cli.ts codegen"
+    "registry:codegen": "bun ../../packages/cli/src/cli.ts codegen",
+    "registry": "bun run scripts/build.ts"
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
