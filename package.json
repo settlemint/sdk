@@ -1,5 +1,5 @@
 {
-  "name": "sdk",
+  "name": "@settlemint/registry",
   "version": "0.6.5",
   "private": true,
   "license": "FSL-1.1-MIT",

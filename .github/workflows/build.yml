@@ -33,6 +33,19 @@ jobs:
   test:
     name: Test and Build
     runs-on: namespace-profile-sdk
+    strategy:
+      matrix:
+        pkg:
+          - "cli"
+          - "hasura"
+          - "ipfs"
+          - "js"
+          - "minio"
+          - "next"
+          - "portal"
+          - "thegraph"
+          - "utils"
+          - "registry"
     steps:
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
@@ -127,12 +140,33 @@ jobs:
           echo "Updated version to $VERSION"
 
       - name: Run tests and checks
-        run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose
+        run: bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/${{ matrix.pkg }}
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
           CONSOLE_GRAPHQL: ${{ env.CONSOLE_GRAPHQL }}
 
+      - name: Make index
+        if: ${{ matrix.pkg == 'registry' }}
+        run: |
+          echo "Creating index.html with list of JSON files in apps/registry/public/"
+          cd apps/registry/public
+          echo "<html><body><h1>Registry Files</h1><ul>" > index.html
+          for file in *.json; do
+            echo "<li>bunx shadcn-ui@latest add $file (<a href=\"$file\">$file</a>)</li>" >> index.html
+          done
+          echo "</ul></body></html>" >> index.html
+          cd ../../..
+          echo "Created index.html in apps/registry/public/"
+
+      - name: Upload static files as artifact
+        if: ${{ matrix.pkg == 'registry' }}
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/registry/public
+
       - name: Login to GitHub Container Registry
+        if: ${{ matrix.pkg == 'registry' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -140,12 +174,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to DockerHub
+        if: ${{ matrix.pkg == 'registry' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
 
       - name: Generate Docker metadata
+        if: ${{ matrix.pkg == 'registry' }}
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -156,6 +192,7 @@ jobs:
             type=raw,value=${{ env.VERSION }}
 
       - name: Build and push Docker image
+        if: ${{ matrix.pkg == 'registry' }}
         uses: docker/build-push-action@v6
         with:
           context: ./apps/registry
@@ -167,97 +204,18 @@ jobs:
           sbom: true
 
       - name: Publish SDK JS package
+        if: ${{ matrix.pkg != 'registry' }}
         uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/js/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Utils package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/utils/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Hasura package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/hasura/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Portal package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/portal/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK The Graph package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/thegraph/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Cli package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/cli/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Next package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/next/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK Minio package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/minio/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
-      - name: Publish SDK IPFS package
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/ipfs/package.json
+          package: ./packages/${{ matrix.pkg }}/package.json
           access: public
           provenance: false
           strategy: all
           tag: ${{ env.TAG }}
 
       - name: Create or update PR comment
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name == 'pull_request' && matrix.pkg == 'registry' }}
         uses: taoliujun/action-unique-comment@v1
         with:
             uniqueIdentifier: ${{ github.workflow }}
@@ -277,9 +235,20 @@ jobs:
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@v5
-        if: ${{ env.TAG == 'latest' }}
+        if: ${{ env.TAG == 'latest' && matrix.pkg == 'registry' }}
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
           file_pattern: 'package.json **/schema.graphql'
 
+  deploy:
+    if: ${{ github.event_name != 'pull_request' }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
