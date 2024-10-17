@@ -45,6 +45,134 @@ jobs:
           - "portal"
           - "thegraph"
           - "utils"
+    steps:
+      - name: Checkout repository
+        uses: namespacelabs/nscloud-checkout-action@v5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Setup caches
+        uses: namespacelabs/nscloud-cache-action@v1
+        with:
+          path: |
+            ./.turbo
+            ~/.bun/install/cache
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: package.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install Bun dependencies
+        run: bun install
+
+      - name: Setup 1Password
+        uses: settlemint/setup-op@main
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          version: 2.29.0
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v4
+
+      - name: Update package versions
+        id: package-version
+        run: |
+          OLD_VERSION=$(jq -r '.version' package.json)
+          echo "Old version: $OLD_VERSION"
+          if [[ $GITHUB_REF_SLUG =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            VERSION=$(echo $GITHUB_REF_SLUG | sed 's/^v//')
+            echo "TAG=latest" >> $GITHUB_ENV
+            echo "CONSOLE_GRAPHQL=https://console.settlemint.com/api/graphql" >> $GITHUB_ENV
+          elif [[ $GITHUB_REF_NAME == "main" ]]; then
+            VERSION="${OLD_VERSION}-main$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
+            echo "TAG=main" >> $GITHUB_ENV
+            echo "CONSOLE_GRAPHQL=https://console-release.settlemint.com/api/graphql" >> $GITHUB_ENV
+          else
+            VERSION="${OLD_VERSION}-pr$(echo $GITHUB_SHA_SHORT | sed 's/^v//')"
+            echo "TAG=pr" >> $GITHUB_ENV
+            echo "CONSOLE_GRAPHQL=https://console-release.settlemint.com/api/graphql" >> $GITHUB_ENV
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "Updating version to $VERSION"
+          jq --arg version "$VERSION" '.version = $version' package.json > package.json.tmp && mv package.json.tmp package.json
+
+          update_package_json() {
+            local dir="$1"
+            local version="$2"
+            echo "Updating $dir/package.json version to $version and updating workspace dependencies"
+            jq --arg version "$version" '
+              .version = $version |
+              (.dependencies) |= with_entries(if .value == "workspace:*" then .value = $version else . end) |
+              (.devDependencies) |= with_entries(if .value == "workspace:*" then .value = $version else . end) |
+              (.peerDependencies) |= with_entries(if .value == "workspace:*" then .value = $version else . end)
+            ' "$dir/package.json" > "$dir/package.json.tmp" && mv "$dir/package.json.tmp" "$dir/package.json" || {
+              echo "Error updating $dir/package.json"
+              cat "$dir/package.json.tmp"
+              exit 1
+            }
+          }
+
+          if [ -z "$VERSION" ]; then
+            echo "Error: VERSION is not set"
+            exit 1
+          fi
+
+          for dir in ./packages/*; do
+            if [ -f "$dir/package.json" ]; then
+              update_package_json "$dir" "$VERSION"
+            fi
+          done
+
+          for dir in ./apps/*; do
+            if [ -f "$dir/package.json" ]; then
+              update_package_json "$dir" "$VERSION"
+            fi
+          done
+
+          echo "Updated version to $VERSION"
+
+      - name: Run tests and checks
+        run: bunx turbo format lint build registry:build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
+        env:
+          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
+          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
+          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
+          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
+          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
+          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
+          SETTLEMINT_AUTH_SECRET: ${{ secrets.SETTLEMINT_AUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
+          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
+
+      - name: Publish SDK JS package
+        if: ${{ matrix.pkg != 'registry' }}
+        uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./packages/${{ matrix.pkg }}/package.json
+          access: public
+          provenance: false
+          strategy: all
+          tag: ${{ env.TAG }}
+
+  registry:
+    name: Test and Build Registry
+    runs-on: namespace-profile-sdk
+    needs:
+      - test
+    strategy:
+      matrix:
+        pkg:
           - "registry"
     steps:
       - name: Checkout repository
@@ -213,17 +341,6 @@ jobs:
           provenance: mode=max
           sbom: true
 
-      - name: Publish SDK JS package
-        if: ${{ matrix.pkg != 'registry' }}
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/${{ matrix.pkg }}/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
-
       - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' && matrix.pkg == 'registry' }}
         uses: taoliujun/action-unique-comment@v1
@@ -257,7 +374,8 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: test
+    needs:
+      - registry
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
