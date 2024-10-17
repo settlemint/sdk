@@ -11,7 +11,8 @@
       "./.settlemint",
       "./contracts/artifacts",
       "graphql-env.d.ts",
-      "graphql-cache.d.ts"
+      "graphql-cache.d.ts",
+      "apps/registry/public"
     ]
   },
   "linter": {
