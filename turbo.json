@@ -4,7 +4,7 @@
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
     "registry:build": {
-      "dependsOn": ["^build", "registry:codegen"],
+      "dependsOn": ["^build", "registry:codegen", "registry"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
