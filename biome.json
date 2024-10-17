@@ -13,7 +13,8 @@
       "graphql-env.d.ts",
       "graphql-cache.d.ts",
       "apps/registry/public",
-      "packages/js/schema.graphql"
+      "packages/js/schema.graphql",
+      "apps/registry/*.d.ts"
     ]
   },
   "linter": {
