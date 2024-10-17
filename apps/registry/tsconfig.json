@@ -16,6 +16,29 @@
     "plugins": [
       {
         "name": "next"
+      },
+      {
+        "name": "@0no-co/graphqlsp",
+        "schemas": [
+          {
+            "name": "hasura",
+            "schema": "hasura-schema.graphql",
+            "tadaOutputLocation": "hasura-env.d.ts",
+            "tadaTurboLocation": "hasura-cache.d.ts"
+          },
+          {
+            "name": "thegraph-fallback",
+            "schema": "the-graph-fallback-schema.graphql",
+            "tadaOutputLocation": "the-graph-fallback-env.d.ts",
+            "tadaTurboLocation": "the-graph-fallback-cache.d.ts"
+          },
+          {
+            "name": "portal",
+            "schema": "portal-schema.graphql",
+            "tadaOutputLocation": "portal-env.d.ts",
+            "tadaTurboLocation": "portal-cache.d.ts"
+          }
+        ]
       }
     ],
     "paths": {
