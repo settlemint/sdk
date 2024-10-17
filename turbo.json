@@ -3,26 +3,27 @@
   "ui": "tui",
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
-    "forge:dependencies": {
-      "inputs": ["contracts/foundry.toml"],
-      "outputs": ["contracts/dependencies/**"]
-    },
-    "build": {
-      "dependsOn": ["codegen", "^build", "registry"],
+    "registry:build": {
+      "dependsOn": ["^build", "registry:codegen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
-    "connect": {
+    "build": {
+      "dependsOn": ["^build", "codegen"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
+    },
+    "registry:connect": {
+      "dependsOn": ["^build"],
       "inputs": ["settlemint.config.mjs", ".env.local"],
       "outputs": ["settlemint.config.mjs", ".env.local"]
     },
-    "forge:build": {
-      "dependsOn": ["connect"],
-      "inputs": ["contracts/src/**", "contracts/deployments/*.args.txt"],
-      "outputs": ["contracts/deployments/*.deployments.json", "contracts/out/**"]
+    "registry:codegen": {
+      "dependsOn": ["registry:connect"],
+      "inputs": ["graphql/**"],
+      "outputs": [".settlemint/**"]
     },
     "codegen": {
-      "dependsOn": ["connect", "forge:build"],
       "inputs": ["graphql/**"],
       "outputs": [".settlemint/**"]
     },

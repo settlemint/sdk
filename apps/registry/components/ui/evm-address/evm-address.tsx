@@ -1,34 +1,22 @@
 import { AddressAvatar } from "@/components/ui/address-avatar/address-avatar";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { shortHex } from "@/lib/hex";
-import { formatTokenValue } from "@/lib/number";
 import Link from "next/link";
+import type { PropsWithChildren } from "react";
 
-/**
- * Represents a balance of a token.
- */
-export type Balance = {
-  /** The value of the balance. */
-  value: string;
-  /** The name of the token. */
-  name: string | null;
-  /** The symbol of the token. */
-  symbol: string | null;
-};
+interface EvmAddressProps extends PropsWithChildren {
+  /** The EVM address to display. */
+  address: string;
+  /** The URL of the blockchain explorer (optional). */
+  explorerUrl?: string;
+}
 
 /**
  * Renders an EVM address with a hover card displaying additional information.
  * @param props - The component props.
- * @param props.address - The EVM address to display.
- * @param props.explorerUrl - The URL of the blockchain explorer (optional).
- * @param props.balances - An array of token balances associated with the address.
  * @returns The rendered EvmAddress component.
  */
-export function EvmAddress({
-  address,
-  balances,
-  explorerUrl,
-}: { address: string; explorerUrl?: string; balances: Balance[] }) {
+export function EvmAddress({ address, explorerUrl, children }: EvmAddressProps) {
   return (
     <HoverCard>
       <HoverCardTrigger>
@@ -57,35 +45,8 @@ export function EvmAddress({
             </div>
           </h4>
         </div>
-        <div className="mt-2">
-          <BalanceDisplay balances={balances} />
-        </div>
+        {children}
       </HoverCardContent>
     </HoverCard>
-  );
-}
-
-/**
- * Renders a display of token balances.
- * @param props - The component props.
- * @param props.balances - An array of token balances to display.
- * @returns The rendered BalanceDisplay component.
- */
-function BalanceDisplay({
-  balances,
-}: {
-  balances: Balance[];
-}) {
-  return (
-    <dl className="text-sm">
-      {balances.map((balance) => (
-        <div key={balance.symbol} className="flex items-center justify-between">
-          <dt className="text-muted-foreground">{balance.name}:</dt>
-          <dd>
-            {formatTokenValue(Number.parseFloat(balance.value), 2)} {balance.symbol}
-          </dd>
-        </div>
-      ))}
-    </dl>
   );
 }
