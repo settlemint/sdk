@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1440" height="900" viewBox="0 0 1440 900">
+  <defs>
+    <linearGradient id="linear-gradient" x1="0.5" y1="0.515" x2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#346eee"/>
+      <stop offset="1" stop-color="#89d6a2"/>
+    </linearGradient>
+    <clipPath id="clip-path">
+      <rect id="Rectangle" width="1440" height="900" fill="url(#linear-gradient)"/>
+    </clipPath>
+    <linearGradient id="linear-gradient-3" x1="0.491" y1="0.496" x2="0.499" y2="0.005" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="Mask_Group_4" data-name="Mask Group 4" clip-path="url(#clip-path)">
+    <rect id="Rectangle-2" data-name="Rectangle" width="1440" height="900" fill="url(#linear-gradient)"/>
+    <path id="Polygon_Copy" data-name="Polygon Copy" d="M460.292,0,920.585,265.75v531.5L460.293,1063,0,797.25V265.75Z" transform="matrix(-0.966, -0.259, 0.259, -0.966, 444.875, 1018.522)" fill="url(#linear-gradient-3)"/>
+    <path id="Polygon_Copy-2" data-name="Polygon Copy" d="M531.5,0,991.792,265.75v531.5L531.5,1063,71.207,797.25V265.75Z" transform="matrix(0.966, 0.259, -0.259, 0.966, 926.344, 33.04)" fill="url(#linear-gradient-3)"/>
+  </g>
+</svg>
