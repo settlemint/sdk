@@ -1,7 +1,7 @@
 # BUILD DEPENDENCIES
 FROM cgr.dev/chainguard/node-lts:latest-dev AS build-deps
 
-COPY --from=oven/bun:1.1.30-alpine --chmod=0777 /usr/local/bin/bun /bin/bun
+COPY --from=oven/bun:1.1.31-alpine --chmod=0777 /usr/local/bin/bun /bin/bun
 ENV BUN_RUNTIME_TRANSPILER_CACHE_PATH=0
 ENV BUN_INSTALL_BIN=/bin
 
@@ -19,7 +19,7 @@ RUN bun run registry:build
 # TILT
 FROM cgr.dev/chainguard/node-lts:latest-dev AS tilt
 
-COPY --from=oven/bun:1.1.30-alpine --chmod=0777 /usr/local/bin/bun /bin/bun
+COPY --from=oven/bun:1.1.31-alpine --chmod=0777 /usr/local/bin/bun /bin/bun
 ENV BUN_RUNTIME_TRANSPILER_CACHE_PATH=0
 ENV BUN_INSTALL_BIN=/usr/local/bin
 ENV NEXT_TELEMETRY_DISABLED=1
