@@ -33,7 +33,7 @@ export function SignUpForm({ provider }: { provider: string }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmitWithAction} className="space-y-6">
+      <form onSubmit={handleSubmitWithAction} className="space-y-4">
         <FormField
           control={form.control}
           name="username"

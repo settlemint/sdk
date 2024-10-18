@@ -5,6 +5,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useHookFormAction } from "@next-safe-action/adapter-react-hook-form/hooks";
+import Link from "next/link";
 import { signInAction } from "../actions/sign-in";
 import { signInActionSchema } from "../schemas/sign-in-schema";
 
@@ -32,7 +33,7 @@ export function SignInForm({ provider }: { provider: string }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={handleSubmitWithAction} className="space-y-8">
+      <form onSubmit={handleSubmitWithAction} className="space-y-4">
         <FormField
           control={form.control}
           name="username"
@@ -51,7 +52,12 @@ export function SignInForm({ provider }: { provider: string }) {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="flex items-center">
+                Password
+                <Link href="/auth/forgot-password" className="ml-auto inline-block text-sm underline">
+                  Forgot your password?
+                </Link>
+              </FormLabel>
               <FormControl>
                 <Input type="password" {...field} />
               </FormControl>
