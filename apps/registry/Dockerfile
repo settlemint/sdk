@@ -6,7 +6,16 @@ ENV BUN_RUNTIME_TRANSPILER_CACHE_PATH=0
 ENV BUN_INSTALL_BIN=/bin
 
 COPY --chmod=0777 package.json .
-RUN bun install
+RUN set -e; \
+  for i in 1 2 3; do \
+    bun install --force --no-cache && break || \
+    if [ $i -lt 3 ]; then \
+      echo "bun install failed, retrying in 10 seconds..." && \
+      sleep 10; \
+    else \
+      echo "bun install failed after 3 attempts" && exit 1; \
+    fi \
+  done
 
 # BUILD
 FROM build-deps AS build
