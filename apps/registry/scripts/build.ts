@@ -10,7 +10,7 @@ const registries = [
       {
         type: "registry:page",
         path: new Glob("./app/asset-tokenization/(home)/**/*"),
-        targetFunction: (path: string) => path.replace("app/(home)", "app/(home)"),
+        targetFunction: (path: string) => path.replace("app/asset-tokenization/(home)", "app/(home)"),
       },
     ],
     dependencies: ["lucide-react"],
@@ -82,7 +82,7 @@ const registries = [
       {
         type: "registry:page",
         path: new Glob("./app/asset-tokenization/(home)/**/*"),
-        targetFunction: (path: string) => path.replace("app/(home)", "app/(home)"),
+        targetFunction: (path: string) => path.replace("app/asset-tokenization/(home)", "app/(home)"),
       },
     ],
     dependencies: ["lucide-react"],
