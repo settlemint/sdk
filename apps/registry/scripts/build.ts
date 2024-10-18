@@ -223,6 +223,11 @@ const registries = [
         path: new Glob("./middleware.ts"),
         targetFunction: (path: string) => path.replace("middleware", "middleware"),
       },
+      {
+        type: "registry:lib",
+        path: new Glob("./public/placeholders/**/*"),
+        targetFunction: (path: string) => path.replace("public/placeholders", "public/placeholders"),
+      },
     ],
     dependencies: [
       "next-safe-action",
