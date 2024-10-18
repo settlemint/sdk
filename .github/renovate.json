@@ -30,7 +30,6 @@
   "packageRules": [
     {
       "matchPaths": ["apps/**"],
-      "excludePaths": ["packages/**"],
       "rangeStrategy": "pin"
     }
   ],
