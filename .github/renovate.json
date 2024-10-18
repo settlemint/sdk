@@ -27,7 +27,13 @@
       "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
     }
   ],
-  "packageRules": [],
+  "packageRules": [
+    {
+      "matchPaths": ["apps/**"],
+      "excludePaths": ["packages/**"],
+      "rangeStrategy": "pin"
+    }
+  ],
   "hostRules": [
     {
       "timeout": 3000000
