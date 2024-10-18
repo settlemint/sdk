@@ -235,6 +235,7 @@ const registries = [
       "lucide-react",
       "@types/bcryptjs",
       "@settlemint/sdk-cli",
+      "path-to-regexp",
     ],
     registryDependencies: ["button", "form", "input", "card"],
     tailwind: {},
