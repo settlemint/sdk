@@ -218,6 +218,11 @@ const registries = [
         path: new Glob("./lib/auth*.ts"),
         targetFunction: (path: string) => path.replace("lib/auth", "lib/auth"),
       },
+      {
+        type: "registry:lib",
+        path: new Glob("./middleware.ts"),
+        targetFunction: (path: string) => path.replace("middleware", "middleware"),
+      },
     ],
     dependencies: [
       "next-safe-action",
