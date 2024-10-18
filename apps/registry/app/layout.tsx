@@ -1,4 +1,5 @@
 import { ThemeProvider } from "@/components/ui/dark-mode/theme-provider";
+import { QueryClientProvider } from "@/components/ui/query-client/query-client-provider";
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import type { Viewport } from "next";
@@ -23,7 +24,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          {children}
+          <QueryClientProvider>{children}</QueryClientProvider>
         </ThemeProvider>
       </body>
     </html>
