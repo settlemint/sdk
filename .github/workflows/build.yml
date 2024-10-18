@@ -198,15 +198,6 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install Bun dependencies
-        run: bun install
-
-      - name: Setup 1Password
-        uses: settlemint/setup-op@main
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          version: 2.29.0
-
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
 
@@ -266,6 +257,65 @@ jobs:
           done
 
           echo "Updated version to $VERSION"
+
+      - name: Check if packages are published
+        run: |
+          echo "Checking if packages are published..."
+          MAX_ATTEMPTS=30
+          DELAY=10
+          ATTEMPT=1
+
+          check_package() {
+            local package=$1
+            local version=$2
+            echo "Checking $package@$version..."
+            if npm view "$package@$version" version &>/dev/null; then
+              echo "$package@$version is published."
+              return 0
+            else
+              echo "$package@$version is not yet published."
+              return 1
+            fi
+          }
+
+          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+            ALL_PUBLISHED=true
+
+            for dir in ./packages/*; do
+              if [ -f "$dir/package.json" ]; then
+                PACKAGE_NAME=$(jq -r .name "$dir/package.json")
+                PACKAGE_VERSION=$(jq -r .version "$dir/package.json")
+
+                if ! check_package "$PACKAGE_NAME" "$PACKAGE_VERSION"; then
+                  ALL_PUBLISHED=false
+                  break
+                fi
+              fi
+            done
+
+            if $ALL_PUBLISHED; then
+              echo "All packages are published."
+              break
+            fi
+
+            if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+              echo "Timeout: Not all packages were published within the expected time."
+              exit 1
+            fi
+
+            echo "Waiting for 10 seconds before next check (Attempt $ATTEMPT/$MAX_ATTEMPTS)..."
+            sleep $DELAY
+            ATTEMPT=$((ATTEMPT + 1))
+          done
+
+      - name: Install Bun dependencies
+        run: bun install
+
+      - name: Setup 1Password
+        uses: settlemint/setup-op@main
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          version: 2.29.0
 
       - name: Run tests and checks
         run: bunx turbo format lint build registry:build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
