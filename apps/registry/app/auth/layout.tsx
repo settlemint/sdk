@@ -1,3 +1,4 @@
+import placeholder from "@/public/placeholders/placeholder.svg";
 import Image from "next/image";
 import type { PropsWithChildren } from "react";
 
@@ -9,11 +10,9 @@ export default function AuthLayout({ children }: PropsWithChildren) {
       </div>
       <div className="hidden bg-muted lg:block relative">
         <Image
-          src="/placeholders/placeholder.svg"
+          src={placeholder}
           alt="Placeholder Image"
-          layout="fill"
-          objectFit="cover"
-          className="object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 w-full h-full object-cover object-center dark:brightness-[0.2] dark:grayscale"
         />
       </div>
     </div>
