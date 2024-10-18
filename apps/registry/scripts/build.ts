@@ -281,6 +281,21 @@ const registries = [
         path: new Glob("./tailwind.config.ts"),
         targetFunction: (path: string) => path.replace("tailwind.config", "tailwind.config"),
       },
+      {
+        type: "registry:page",
+        path: new Glob("./app/apple-icon.png"),
+        targetFunction: (path: string) => path.replace("app/apple-icon", "app/apple-icon"),
+      },
+      {
+        type: "registry:page",
+        path: new Glob("./app/favicon.ico"),
+        targetFunction: (path: string) => path.replace("app/favicon", "app/favicon"),
+      },
+      {
+        type: "registry:page",
+        path: new Glob("./app/icon.svg"),
+        targetFunction: (path: string) => path.replace("app/icon", "app/icon"),
+      },
     ],
     dependencies: [],
     registryDependencies: [],
