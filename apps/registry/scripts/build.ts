@@ -166,6 +166,43 @@ const registries = [
     meta: {},
     docs: "",
   },
+  {
+    name: "auth",
+    description: "Authentication",
+    files: [
+      {
+        type: "registry:page",
+        path: new Glob("./app/auth/**/*"),
+        targetFunction: (path: string) => path.replace("app/auth", "app/auth"),
+      },
+      {
+        type: "registry:lib",
+        path: new Glob("./lib/safe-action.ts"),
+        targetFunction: (path: string) => path.replace("lib/safe-action", "lib/safe-action"),
+      },
+      {
+        type: "registry:lib",
+        path: new Glob("./lib/auth*.ts"),
+        targetFunction: (path: string) => path.replace("lib/auth", "lib/auth"),
+      },
+    ],
+    dependencies: [
+      "next-safe-action",
+      "next-auth@beta",
+      "bcryptjs",
+      "zod",
+      "@hookform/resolvers",
+      "@next-safe-action/adapter-react-hook-form",
+      "zod-form-data",
+      "lucide-react",
+    ],
+    devDependencies: ["@types/bcryptjs"],
+    registryDependencies: ["button", "form", "input", "card"],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
   // {
   //   name: "asset-tokenization",
   //   description: "Asset tokenization",
