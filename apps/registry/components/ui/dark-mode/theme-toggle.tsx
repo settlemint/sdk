@@ -58,7 +58,6 @@ export function ThemeToggle({ variant = "outline", size = "icon", className }: T
    */
   const handleSetTheme = useCallback(
     (newTheme: string) => {
-      console.log("newTheme", newTheme);
       setTheme(newTheme);
     },
     [setTheme],

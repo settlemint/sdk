@@ -14,7 +14,7 @@ export function Logo({ className = "", variant = "horizontal" }: PropsWithChildr
         {
           "w-36 h-12": variant === "horizontal",
           "w-24 h-24": variant === "vertical",
-          "w-12 h-12": variant === "icon",
+          "w-8 h-8": variant === "icon",
         },
         {
           "bg-[url('/logos/settlemint-logo-h-lm.svg')] dark:bg-[url('/logos/settlemint-logo-h-dm.svg')]":

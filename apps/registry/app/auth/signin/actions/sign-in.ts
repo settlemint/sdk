@@ -11,7 +11,7 @@ export const signInAction = actionClient.schema(signInActionSchema).action(async
     const { provider, ...formData } = parsedInput;
     return await signIn(provider, {
       ...formData,
-      redirectTo: "/wallet",
+      redirectTo: "/issuer/dashboard",
     });
   } catch (error) {
     if (error instanceof AuthError) {

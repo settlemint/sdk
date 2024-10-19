@@ -67,16 +67,12 @@ export const AddressAvatar = forwardRef<HTMLDivElement, AddressAvatarProps>(
 
     return (
       <div className="relative">
-        <Avatar
-          ref={ref}
-          className={cn("cursor-pointer relative", variant === "big" ? "w-10 h-10" : "w-6 h-6", className)}
-          {...props}
-        >
-          <AvatarFallback>
+        <Avatar ref={ref} className={cn(variant === "big" ? "w-10 h-10" : "w-6 h-6", className)} {...props}>
+          <AvatarFallback className={cn(variant === "big" ? "w-10 h-10" : "w-6 h-6", className)}>
             {!address && (
               <Skeleton className={cn("rounded-full absolute inset-0", imageLoaded ? "opacity-0" : "opacity-100")} />
             )}
-            {address && <Jazzicon diameter={variant === "big" ? 40 : 20} seed={jsNumberForAddress(address)} />}
+            {address && <Jazzicon diameter={variant === "big" ? 60 : 40} seed={jsNumberForAddress(address)} />}
           </AvatarFallback>
           {avatar?.avatar && (
             <AvatarImage
