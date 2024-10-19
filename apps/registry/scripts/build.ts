@@ -9,8 +9,13 @@ const registries = [
     files: [
       {
         type: "registry:page",
-        path: new Glob("./app/asset-tokenization/(home)/**/*"),
-        targetFunction: (path: string) => path.replace("app/asset-tokenization/(home)", "app/(home)"),
+        path: new Glob("./app/asset-tokenization/**/*"),
+        targetFunction: (path: string) => path.replace("app/asset-tokenization", "app"),
+      },
+      {
+        type: "registry:lib",
+        path: new Glob("./next.config.mjs"),
+        targetFunction: (path: string) => path.replace("next.config.mjs", "next.config.mjs"),
       },
     ],
     dependencies: ["lucide-react"],
@@ -18,6 +23,11 @@ const registries = [
       "sheet",
       "navigation-menu",
       "button",
+      "badge",
+      "collapsible",
+      "separator",
+      "sidebar",
+      "tooltip",
       "https://console-release.settlemint.com/registry/collapsed-breadcrumb.json",
       "https://console-release.settlemint.com/registry/dark-mode.json",
       "https://console-release.settlemint.com/registry/address-avatar.json",
@@ -81,8 +91,13 @@ const registries = [
     files: [
       {
         type: "registry:page",
-        path: new Glob("./app/asset-tokenization/(home)/**/*"),
-        targetFunction: (path: string) => path.replace("app/asset-tokenization/(home)", "app/(home)"),
+        path: new Glob("./app/asset-tokenization/**/*"),
+        targetFunction: (path: string) => path.replace("app/asset-tokenization", "app"),
+      },
+      {
+        type: "registry:lib",
+        path: new Glob("./next.config.mjs"),
+        targetFunction: (path: string) => path.replace("next.config.mjs", "next.config.mjs"),
       },
     ],
     dependencies: ["lucide-react"],
@@ -90,6 +105,11 @@ const registries = [
       "sheet",
       "navigation-menu",
       "button",
+      "badge",
+      "collapsible",
+      "separator",
+      "sidebar",
+      "tooltip",
       "https://settlemint.github.io/sdk/collapsed-breadcrumb.json",
       "https://settlemint.github.io/sdk/dark-mode.json",
       "https://settlemint.github.io/sdk/address-avatar.json",
@@ -233,6 +253,11 @@ const registries = [
         type: "registry:page",
         path: new Glob("./app/auth/**/*"),
         targetFunction: (path: string) => path.replace("app/auth", "app/auth"),
+      },
+      {
+        type: "registry:page",
+        path: new Glob("./app/api/auth/**/*"),
+        targetFunction: (path: string) => path.replace("app/api/auth", "app/api/auth"),
       },
       {
         type: "registry:lib",

@@ -3,6 +3,7 @@ import { QueryClientProvider } from "@/components/ui/query-client/query-client-p
 import { fontSans } from "@/lib/fonts";
 import { cn } from "@/lib/utils";
 import type { Viewport } from "next";
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 export { metadata } from "@/lib/site-config";
 
@@ -23,9 +24,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={cn("min-h-screen font-sans antialiased", fontSans.variable)}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-          <QueryClientProvider>{children}</QueryClientProvider>
-        </ThemeProvider>
+        <SessionProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+            <QueryClientProvider>{children}</QueryClientProvider>
+          </ThemeProvider>
+        </SessionProvider>
       </body>
     </html>
   );

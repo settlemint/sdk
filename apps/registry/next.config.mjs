@@ -1,8 +1,16 @@
+import { withSettleMint } from "@settlemint/sdk-next/config/with-settlemint";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "standalone",
-  basePath: "/registry",
-  compress: false,
+  reactStrictMode: true,
+  webpack: (config) => {
+    config.externals.push("pino-pretty", "lokijs", "encoding", "debug");
+    config.resolve.fallback = { fs: false, net: false, tls: false };
+    config.performance = {
+      hints: false,
+    };
+    return config;
+  },
 };
 
-export default nextConfig;
+export default withSettleMint(nextConfig);

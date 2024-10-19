@@ -73,7 +73,7 @@ export const signUpAction = actionClient.schema(signUpActionSchema).action(async
       });
     }
 
-    return await signIn(provider, { ...formData, redirectTo: "/wallet" });
+    return await signIn(provider, { ...formData, redirectTo: "/issuer/dashboard" });
   } catch (error) {
     if (error instanceof AuthError) {
       return redirect(`/auth/error?error=${error.type}`);

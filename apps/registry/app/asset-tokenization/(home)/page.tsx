@@ -74,7 +74,8 @@ const MobileNav: FC = () => (
           {menuItems.map((item) => (
             <NavItem key={item.href} {...item} />
           ))}
-          <NavItem href="/dapp" label="To the dAPP" className="font-extrabold" />
+          <NavItem href="/issuer/dashboard" label="Issuer Portal" />
+          <NavItem href="/portfolio/dashboard" label="My Portfolio" className="font-extrabold" />
         </NavigationMenuList>
       </NavigationMenu>
     </SheetContent>
@@ -91,10 +92,11 @@ export default function Home() {
         <DesktopNav />
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
+            <NavItem href="/issuer/dashboard" label="Issuer Portal" />
             <NavigationMenuItem>
-              <Link href="/dapp" passHref legacyBehavior>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  <Button>To the dAPP</Button>
+              <Link href="/portfolio/dashboard" passHref legacyBehavior>
+                <NavigationMenuLink>
+                  <Button>My Portfolio</Button>
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>

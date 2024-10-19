@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { match } from "path-to-regexp";
 import { authConfig } from "./lib/auth-config";
 
-const isUserAuthenticatedRoute = match(["/wallet", "/wallet/*path"]);
+const isUserAuthenticatedRoute = match(["/issuer", "/issuer/*path"]);
 
 const { auth } = NextAuth({
   ...authConfig,

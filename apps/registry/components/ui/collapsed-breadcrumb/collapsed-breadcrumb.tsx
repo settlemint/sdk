@@ -11,7 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import Link from "next/link";
-import { Fragment, useMemo } from "react";
+import type React from "react";
+import { Fragment, type ReactNode, createContext, useContext, useEffect, useMemo, useState } from "react";
 
 interface ProcessedBreadcrumbItems {
   visibleItems: (BreadcrumbItemType | null)[];
@@ -68,7 +69,6 @@ function renderBreadcrumbItem(item: BreadcrumbItemType | null, collapsedItems: B
 
 interface BreadcrumbsProps {
   maxVisibleItems: number;
-  items: BreadcrumbItemType[];
 }
 
 /**
@@ -76,13 +76,15 @@ interface BreadcrumbsProps {
  * @param props - The component props.
  * @returns The rendered Breadcrumb component.
  */
-export default function CollapsedBreadcrumbs({ items, maxVisibleItems }: BreadcrumbsProps) {
+export default function CollapsedBreadcrumbs({ maxVisibleItems }: BreadcrumbsProps) {
+  const { breadcrumbItems } = useCollapsedBreadcrumb();
+
   const { visibleItems, collapsedItems } = useMemo(
-    () => processBreadcrumbItems(items, maxVisibleItems),
-    [items, maxVisibleItems],
+    () => processBreadcrumbItems(breadcrumbItems, maxVisibleItems),
+    [maxVisibleItems, breadcrumbItems],
   );
 
-  if (items.length === 0) {
+  if (breadcrumbItems.length === 0) {
     return null;
   }
 
@@ -156,4 +158,43 @@ function EllipsisDropdownItem({ href, children }: EllipsisDropdownItemProps) {
       {children}
     </Link>
   );
+}
+
+interface CollapsedBreadcrumbContextType {
+  breadcrumbItems: BreadcrumbItemType[];
+  setItems: React.Dispatch<React.SetStateAction<BreadcrumbItemType[]>>;
+}
+
+const CollapsedBreadcrumbContext = createContext<CollapsedBreadcrumbContextType | undefined>(undefined);
+
+export function useCollapsedBreadcrumb() {
+  const context = useContext(CollapsedBreadcrumbContext);
+  if (!context) {
+    throw new Error("useCollapsedBreadcrumb must be used within a CollapsedBreadcrumbProvider");
+  }
+  return context;
+}
+
+interface CollapsedBreadcrumbProviderProps {
+  children: ReactNode;
+}
+
+export function CollapsedBreadcrumbProvider({ children }: CollapsedBreadcrumbProviderProps) {
+  const [breadcrumbItems, setItems] = useState<BreadcrumbItemType[]>([]);
+
+  return (
+    <CollapsedBreadcrumbContext.Provider value={{ breadcrumbItems, setItems }}>
+      {children}
+    </CollapsedBreadcrumbContext.Provider>
+  );
+}
+
+export function BreadcrumbSetter({ items }: { items: BreadcrumbItemType[] }) {
+  const { setItems } = useCollapsedBreadcrumb();
+
+  useEffect(() => {
+    setItems(items);
+  }, [setItems, items]);
+
+  return null;
 }
