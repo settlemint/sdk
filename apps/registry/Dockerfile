@@ -1,11 +1,10 @@
 # BUILD DEPENDENCIES
-FROM cgr.dev/chainguard/node-lts:latest-dev AS build-deps
+FROM oven/bun:1.1.31-alpine AS build
 
-COPY --from=oven/bun:1.1.31-alpine --chmod=0777 /usr/local/bin/bun /bin/bun
-ENV BUN_RUNTIME_TRANSPILER_CACHE_PATH=0
-ENV BUN_INSTALL_BIN=/bin
+RUN mkdir -p /app
+WORKDIR /app
 
-COPY --chmod=0777 package.json .
+COPY package.json .
 RUN set -e; \
   for i in 1 2 3; do \
     bun install --force --no-cache && break || \
@@ -17,34 +16,11 @@ RUN set -e; \
     fi \
   done
 
-# BUILD
-FROM build-deps AS build
-
-ENV SKIP_TYPE_CHECKING=yes
-
 COPY --chmod=0777 . .
 RUN bun run registry:build
 
-# TILT
-FROM cgr.dev/chainguard/node-lts:latest-dev AS tilt
-
-COPY --from=oven/bun:1.1.31-alpine --chmod=0777 /usr/local/bin/bun /bin/bun
-ENV BUN_RUNTIME_TRANSPILER_CACHE_PATH=0
-ENV BUN_INSTALL_BIN=/usr/local/bin
-ENV NEXT_TELEMETRY_DISABLED=1
-
-USER root
-
-RUN mkdir -p /.cache && \
-  chmod -R 777 /.cache && \
-  mkdir -p /app && \
-  chmod -R 777 /app
-
-COPY --from=build-deps --chmod=0777  /app /app
-COPY --chmod=0777 . /app
-
 # RUN
-FROM cgr.dev/chainguard/node-lts:latest AS prod
+FROM node:22.10.0-alpine3.20 AS prod
 
 LABEL org.opencontainers.image.source="https://github.com/settlemint/btp"
 
