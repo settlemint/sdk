@@ -273,6 +273,7 @@ jobs:
               echo "$package@$version is published."
               return 0
             else
+              npm view "$package@$version" version
               echo "$package@$version is not yet published."
               return 1
             fi
