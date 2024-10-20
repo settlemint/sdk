@@ -42,7 +42,7 @@ export function DataTableColumnHeader<TData, TValue>({
   }
 
   return (
-    <div className={cn("flex items-center space-x-2", type === "numeric" && "justify-end", className)}>
+    <div className={cn("flex items-center space-x-2 px-4 py-0", type === "numeric" && "justify-end", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button

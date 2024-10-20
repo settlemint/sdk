@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
           <DataTableFilter table={table} placeholder={filterPlaceholder} column={filterColumn} />
         )}
       </div>
-      <div className="w-full bg-sidebar text-sidebar-foreground rounded-md p-2">
+      <div className="w-full bg-card shadow-sm text-sidebar-foreground rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
