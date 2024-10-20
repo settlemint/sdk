@@ -19,7 +19,6 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
     accessToken: AccessTokenSchema,
   }),
   z.object({
-    instance: UrlOrPathSchema,
     runtime: z.literal("browser"),
   }),
 ]);
@@ -37,10 +36,10 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @throws Will throw an error if called on the client side when runtime is set to "server".
  */
 function getFullUrl(options: ClientOptions): string {
-  return runsOnServer
+  return options.runtime === "server"
     ? new URL(options.instance).toString()
     : new URL(
-        options.instance,
+        "/proxy/portal/graphql",
         process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
       ).toString();
 }
