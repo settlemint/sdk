@@ -17,7 +17,7 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
     instance: UrlOrPathSchema,
     runtime: z.literal("server"),
     accessToken: AccessTokenSchema,
-    adminToken: z.string(),
+    adminSecret: z.string(),
   }),
   z.object({
     instance: UrlOrPathSchema,
@@ -74,7 +74,7 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
       ...(validatedOptions.runtime === "server" && {
         headers: {
           "x-auth-token": validatedOptions.accessToken,
-          "x-hasura-admin-secret": validatedOptions.adminToken,
+          "x-hasura-admin-secret": validatedOptions.adminSecret,
         },
       }),
     }),
