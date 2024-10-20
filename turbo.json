@@ -25,7 +25,7 @@
     },
     "codegen": {
       "inputs": ["graphql/**"],
-      "outputs": [".settlemint/**"]
+      "outputs": [".settlemint/**", "schema.graphql"]
     },
     "//#lint:biome": {
       "dependsOn": ["//#format:biome"]

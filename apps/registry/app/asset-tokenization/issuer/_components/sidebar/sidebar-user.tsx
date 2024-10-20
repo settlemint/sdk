@@ -15,7 +15,7 @@ import {
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { Skeleton } from "@/components/ui/skeleton";
 import { shortHex } from "@/lib/hex";
-import { portalClient, portalGraphql } from "@/lib/settlemint/clientside/portal";
+import { portalClient, portalGraphql } from "@/lib/settlemint/portal";
 import { useQuery } from "@tanstack/react-query";
 import { BringToFront, ChevronsUpDown, LogOut, Moon, Sun } from "lucide-react";
 import { useSession } from "next-auth/react";

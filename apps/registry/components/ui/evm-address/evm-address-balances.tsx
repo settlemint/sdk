@@ -1,10 +1,10 @@
 "use client";
 
 import { formatTokenValue } from "@/lib/number";
-import { theGraphFallbackClient, theGraphFallbackGraphql } from "@/lib/settlemint/clientside/the-graph-fallback";
+import { theGraphClient, theGraphGraphql } from "@/lib/settlemint/the-graph";
 import { useSuspenseQuery } from "@tanstack/react-query";
 
-const EvmAddressBalancesQuery = theGraphFallbackGraphql(`
+const EvmAddressBalancesQuery = theGraphGraphql(`
   query AddressBalances($account: String!) {
     erc20Balances(where: {account: $account}) {
       value
@@ -26,7 +26,7 @@ export function EvmAddressBalances({ address }: { address: string }) {
   const { data: balances } = useSuspenseQuery({
     queryKey: ["evm-address-balances", address],
     queryFn: async () => {
-      const response = await theGraphFallbackClient.request(EvmAddressBalancesQuery, {
+      const response = await theGraphClient.request(EvmAddressBalancesQuery, {
         account: address,
       });
       if (!response?.erc20Balances) {

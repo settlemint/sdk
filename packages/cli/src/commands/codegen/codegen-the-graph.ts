@@ -3,7 +3,7 @@ import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function codegenTheGraph(env: DotEnv) {
-  const gqlEndpoint = env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK;
+  const gqlEndpoint = env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
   if (!gqlEndpoint) {
     return;
   }
@@ -22,7 +22,7 @@ export async function codegenTheGraph(env: DotEnv) {
   const template = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
 import type { introspection } from "../../the-graph-env.d.ts";
 
-export const { client: theGraphClient, graphql: theGraphGraphql } = createServerTheGraphClient<{
+export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {

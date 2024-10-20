@@ -1,4 +1,4 @@
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import type { AccessToken } from "@settlemint/sdk-utils/validation";
 
 /**
  * Tests a GraphQL endpoint with exponential retry.
@@ -10,7 +10,8 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  * @returns A boolean indicating whether the endpoint is accessible.
  */
 export async function testGqlEndpoint(
-  env: DotEnv,
+  accessToken: AccessToken,
+  hasuraAdminSecret?: string,
   gqlEndpoint?: string,
   isHasura = false,
   maxRetries = 3,
@@ -18,7 +19,6 @@ export async function testGqlEndpoint(
   if (!gqlEndpoint) {
     return false;
   }
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
@@ -26,7 +26,7 @@ export async function testGqlEndpoint(
         method: "POST",
         headers: {
           "x-auth-token": accessToken,
-          ...(isHasura ? { "x-hasura-admin-secret": env.SETTLEMINT_HASURA_ADMIN_SECRET ?? "" } : {}),
+          ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
           "Content-Type": "application/json",
         },
         body: JSON.stringify({

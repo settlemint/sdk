@@ -22,7 +22,7 @@ export async function codegenPortal(env: DotEnv) {
   const template = `import { createPortalClient } from "@settlemint/sdk-portal";
 import type { introspection } from "../../portal-env.d.ts";
 
-export const { client: portalClient, graphql: portalGraphql } = createServerPortalClient<{
+export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {

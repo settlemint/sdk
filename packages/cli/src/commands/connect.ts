@@ -1,3 +1,4 @@
+import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
@@ -77,6 +78,12 @@ export function connectCommand(): Command {
         const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
         const authSecret = await authSecretPrompt(env, autoAccept);
 
+        const theGraph = await testGqlEndpoint(
+          accessToken,
+          undefined,
+          thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
+        );
+
         await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
@@ -87,10 +94,8 @@ export function connectCommand(): Command {
           SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) => credential.id === "admin-secret")
             ?.displayValue,
           SETTLEMINT_THEGRAPH: thegraph?.id,
-          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")
-            ?.displayValue,
-          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK: thegraph?.endpoints.find(
-            (endpoint) => endpoint.id === "default-subgraph-graphql",
+          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find(
+            (endpoint) => endpoint.id === (theGraph ? "graphql" : "default-subgraph-graphql"),
           )?.displayValue,
           SETTLEMINT_PORTAL: portal?.id,
           SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "graphql")

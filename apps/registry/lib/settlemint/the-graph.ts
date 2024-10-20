@@ -1,7 +1,7 @@
-import { createPortalClient } from "@settlemint/sdk-portal";
-import type { introspection } from "../../portal-env.d.ts";
+import { createTheGraphClient } from "@settlemint/sdk-thegraph";
+import type { introspection } from "../../the-graph-env.d.ts";
 
-export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
@@ -14,6 +14,6 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
     Timestamp: number;
   };
 }>({
-  instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+  instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
 });

@@ -10,15 +10,18 @@ export async function codegenTsconfig(env: DotEnv) {
       hasura: false,
       portal: false,
       thegraph: false,
-      thegraphFallback: false,
     };
   }
 
-  const [hasura, portal, thegraph, thegraphFallback] = await Promise.all([
-    testGqlEndpoint(env, env.SETTLEMINT_HASURA_ENDPOINT, true),
-    testGqlEndpoint(env, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
-    testGqlEndpoint(env, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
-    testGqlEndpoint(env, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK),
+  const [hasura, portal, thegraph] = await Promise.all([
+    testGqlEndpoint(
+      env.SETTLEMINT_ACCESS_TOKEN,
+      env.SETTLEMINT_HASURA_ADMIN_SECRET,
+      env.SETTLEMINT_HASURA_ENDPOINT,
+      true,
+    ),
+    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
+    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
   ]);
 
   if (!tsconfig.config.compilerOptions) {
@@ -51,16 +54,6 @@ export async function codegenTsconfig(env: DotEnv) {
             },
           ]
         : []),
-      ...(thegraphFallback
-        ? [
-            {
-              name: "thegraph-fallback",
-              schema: "the-graph-fallback-schema.graphql",
-              tadaOutputLocation: "the-graph-fallback-env.d.ts",
-              tadaTurboLocation: "the-graph-fallback-cache.d.ts",
-            },
-          ]
-        : []),
       ...(portal
         ? [
             {
@@ -88,6 +81,5 @@ export async function codegenTsconfig(env: DotEnv) {
     hasura: hasura,
     portal: portal,
     thegraph: thegraph,
-    thegraphFallback: thegraphFallback,
   };
 }

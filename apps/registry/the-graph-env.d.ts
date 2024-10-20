@@ -57,7 +57,7 @@ export type introspection_types = {
  * instead save to a .ts instead of a .d.ts file.
  */
 export type introspection = {
-  name: 'thegraph-fallback';
+  name: 'thegraph';
   query: 'Query';
   mutation: never;
   subscription: 'Subscription';

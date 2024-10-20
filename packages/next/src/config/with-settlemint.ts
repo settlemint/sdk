@@ -70,11 +70,6 @@ function generateRewrites(env: DotEnv): Rewrite[] {
       destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT,
     },
     {
-      condition: !!env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK,
-      source: "/proxy/thegraph-fallback/graphql",
-      destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT_FALLBACK,
-    },
-    {
       condition: !!env.SETTLEMINT_HASURA_ENDPOINT,
       source: "/proxy/hasura/graphql",
       destination: env.SETTLEMINT_HASURA_ENDPOINT,

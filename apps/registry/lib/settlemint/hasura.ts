@@ -1,7 +1,7 @@
-import { createServerHasuraClient } from "@settlemint/sdk-hasura";
+import { createHasuraClient } from "@settlemint/sdk-hasura";
 import type { introspection } from "../../hasura-env.d.ts";
 
-export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasuraClient<{
+export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
@@ -15,6 +15,6 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasu
   };
 }>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
-  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!, // undefined in browser, by design to not leak the secrets
 });

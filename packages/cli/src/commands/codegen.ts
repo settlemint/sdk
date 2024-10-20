@@ -31,7 +31,7 @@ export function codegenCommand(): Command {
 
         const env: DotEnv = await loadEnv(true, !!prod);
 
-        const { hasura, portal, thegraph, thegraphFallback } = await spinner({
+        const { hasura, portal, thegraph } = await spinner({
           startMessage: "Testing configured GraphQL schema",
           task: async () => {
             return codegenTsconfig(env);

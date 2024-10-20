@@ -27,10 +27,10 @@
             "tadaTurboLocation": "hasura-cache.d.ts"
           },
           {
-            "name": "thegraph-fallback",
-            "schema": "the-graph-fallback-schema.graphql",
-            "tadaOutputLocation": "the-graph-fallback-env.d.ts",
-            "tadaTurboLocation": "the-graph-fallback-cache.d.ts"
+            "name": "thegraph",
+            "schema": "the-graph-schema.graphql",
+            "tadaOutputLocation": "the-graph-env.d.ts",
+            "tadaTurboLocation": "the-graph-cache.d.ts"
           },
           {
             "name": "portal",

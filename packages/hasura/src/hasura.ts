@@ -1,14 +1,13 @@
-import { ensureServer, runsOnServer } from "@settlemint/sdk-utils/runtime";
+import { runsOnServer } from "@settlemint/sdk-utils/runtime";
 import { AccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
-import { registerUrql } from "@urql/next/rsc";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
-import { type Client, cacheExchange, createClient, fetchExchange } from "urql";
+import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
 /**
  * Options for configuring the URQL client, excluding 'url' and 'exchanges'.
  */
-export type UrqlOptions = Omit<ConstructorParameters<typeof Client>[0], "url" | "exchanges">;
+export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
  * Schema for validating client options for the Portal client.
@@ -18,7 +17,7 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
     instance: UrlOrPathSchema,
     runtime: z.literal("server"),
     accessToken: AccessTokenSchema,
-    adminSecret: z.string(),
+    adminToken: z.string(),
   }),
   z.object({
     instance: UrlOrPathSchema,
@@ -39,12 +38,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @throws Will throw an error if called on the client side when runtime is set to "server".
  */
 function getFullUrl(options: ClientOptions): string {
-  const isServer = options.runtime === "server";
-  if (isServer) {
-    ensureServer();
-  }
-
-  return isServer
+  return runsOnServer
     ? new URL(options.instance).toString()
     : new URL(
         options.instance,
@@ -61,10 +55,10 @@ function getFullUrl(options: ClientOptions): string {
  * @throws Will throw an error if the options fail validation.
  */
 export function createHasuraClient<const Setup extends AbstractSetupSchema>(
-  options: Omit<ClientOptions, "runtime">,
-  clientOptions?: UrqlOptions,
+  options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,
+  clientOptions?: RequestConfig,
 ): {
-  client: Client;
+  client: GraphQLClient;
   graphql: initGraphQLTada<Setup>;
 } {
   const validatedOptions = validate(ClientOptionsSchema, {
@@ -74,34 +68,16 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
   const graphql = initGraphQLTada<Setup>();
   const fullUrl = getFullUrl(validatedOptions);
 
-  const { getClient } = registerUrql(() =>
-    createClient({
+  return {
+    client: new GraphQLClient(fullUrl, {
       ...clientOptions,
-      url: fullUrl,
-      fetchSubscriptions: true,
-      exchanges: [cacheExchange, fetchExchange],
       ...(validatedOptions.runtime === "server" && {
-        fetchOptions: () => {
-          return {
-            ...(typeof clientOptions?.fetchOptions === "function"
-              ? clientOptions.fetchOptions()
-              : clientOptions?.fetchOptions),
-            headers: {
-              ...(typeof clientOptions?.fetchOptions === "function"
-                ? clientOptions.fetchOptions().headers
-                : clientOptions?.fetchOptions?.headers),
-              "x-auth-token": validatedOptions.accessToken,
-              "x-hasura-admin-secret": validatedOptions.adminSecret,
-            },
-            cache: "no-store",
-          };
+        headers: {
+          "x-auth-token": validatedOptions.accessToken,
+          "x-hasura-admin-secret": validatedOptions.adminToken,
         },
       }),
     }),
-  );
-
-  return {
-    client: getClient(),
     graphql,
   };
 }
