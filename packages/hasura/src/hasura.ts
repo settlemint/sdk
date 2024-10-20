@@ -1,94 +1,107 @@
-import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import { validate } from "@settlemint/sdk-utils/validation";
+import { ensureServer, runsOnServer } from "@settlemint/sdk-utils/runtime";
+import { AccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
+import { registerUrql } from "@urql/next/rsc";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
-import { GraphQLClient } from "graphql-request";
-import {
-  type ClientOptions,
-  ClientOptionsSchema,
-  type ServerClientOptions,
-  ServerClientOptionsSchema,
-} from "./helpers/client-options.schema.js";
-
-export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
+import { type Client, cacheExchange, createClient, fetchExchange } from "urql";
+import { z } from "zod";
 
 /**
- * Creates a Hasura client for client-side use.
- *
- * @param options - The client options for configuring the Hasura client.
- * @param requestConfig - Optional configuration for GraphQL requests.
- * @returns An object containing the GraphQL client and the initialized graphql function.
- * @throws Will throw an error if the options fail validation.
- *
- * @example
- * const { client, graphql } = createHasuraClient<{
- *   introspection: introspection;
- *   disableMasking: true;
- *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *   };
- * }>({
- *   instance: 'https://your-hasura-instance.com',
- * });
+ * Options for configuring the URQL client, excluding 'url' and 'exchanges'.
  */
-export function createHasuraClient<const Setup extends AbstractSetupSchema>(
-  options: ClientOptions,
-  requestConfig?: RequestConfig,
-): { client: GraphQLClient; graphql: initGraphQLTada<Setup> } {
-  const validatedOptions = validate(ClientOptionsSchema, options);
+export type UrqlOptions = Omit<ConstructorParameters<typeof Client>[0], "url" | "exchanges">;
 
-  const graphql = initGraphQLTada<Setup>();
-  const fullUrl = new URL(
-    validatedOptions.instance,
-    process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
-  ).toString();
+/**
+ * Schema for validating client options for the Portal client.
+ */
+export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
+  z.object({
+    instance: UrlOrPathSchema,
+    runtime: z.literal("server"),
+    accessToken: AccessTokenSchema,
+    adminSecret: z.string(),
+  }),
+  z.object({
+    instance: UrlOrPathSchema,
+    runtime: z.literal("browser"),
+  }),
+]);
 
-  return {
-    client: new GraphQLClient(fullUrl, requestConfig),
-    graphql,
-  };
+/**
+ * Type definition for client options derived from the ClientOptionsSchema.
+ */
+export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
+
+/**
+ * Constructs the full URL for the Portal client based on the provided options.
+ *
+ * @param options - The client options for configuring the Portal client.
+ * @returns The full URL as a string.
+ * @throws Will throw an error if called on the client side when runtime is set to "server".
+ */
+function getFullUrl(options: ClientOptions): string {
+  const isServer = options.runtime === "server";
+  if (isServer) {
+    ensureServer();
+  }
+
+  return isServer
+    ? new URL(options.instance).toString()
+    : new URL(
+        options.instance,
+        process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
+      ).toString();
 }
 
 /**
- * Creates a Hasura client for server-side use with additional authentication.
+ * Creates a Portal client using URQL
  *
- * @param options - The server client options for configuring the Hasura client.
- * @param requestConfig - Optional configuration for GraphQL requests.
- * @returns An object containing the GraphQL client and the initialized graphql function.
- * @throws Will throw an error if not called on the server or if the options fail validation.
- *
- * @example
- * const { client, graphql } = createServerHasuraClient<{
- *   introspection: introspection;
- *   disableMasking: true;
- *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *   };
- * }>({
- *   instance: 'https://your-hasura-instance.com',
- *   accessToken: 'your-access-token',
- *   adminSecret: 'your-admin-secret',
- * });
+ * @param options - The client options for configuring the Portal client.
+ * @param clientOptions - Optional configuration for the URQL client.
+ * @returns An object containing the URQL client and the initialized graphql function.
+ * @throws Will throw an error if the options fail validation.
  */
-export function createServerHasuraClient<const Setup extends AbstractSetupSchema>(
-  options: ServerClientOptions,
-  requestConfig?: RequestConfig,
-): { client: GraphQLClient; graphql: initGraphQLTada<Setup> } {
-  ensureServer();
-  const validatedOptions = validate(ServerClientOptionsSchema, options);
-
+export function createHasuraClient<const Setup extends AbstractSetupSchema>(
+  options: Omit<ClientOptions, "runtime">,
+  clientOptions?: UrqlOptions,
+): {
+  client: Client;
+  graphql: initGraphQLTada<Setup>;
+} {
+  const validatedOptions = validate(ClientOptionsSchema, {
+    ...options,
+    runtime: runsOnServer ? "server" : "browser",
+  });
   const graphql = initGraphQLTada<Setup>();
+  const fullUrl = getFullUrl(validatedOptions);
+
+  const { getClient } = registerUrql(() =>
+    createClient({
+      ...clientOptions,
+      url: fullUrl,
+      fetchSubscriptions: true,
+      exchanges: [cacheExchange, fetchExchange],
+      ...(validatedOptions.runtime === "server" && {
+        fetchOptions: () => {
+          return {
+            ...(typeof clientOptions?.fetchOptions === "function"
+              ? clientOptions.fetchOptions()
+              : clientOptions?.fetchOptions),
+            headers: {
+              ...(typeof clientOptions?.fetchOptions === "function"
+                ? clientOptions.fetchOptions().headers
+                : clientOptions?.fetchOptions?.headers),
+              "x-auth-token": validatedOptions.accessToken,
+              "x-hasura-admin-secret": validatedOptions.adminSecret,
+            },
+            cache: "no-store",
+          };
+        },
+      }),
+    }),
+  );
 
   return {
-    client: new GraphQLClient(validatedOptions.instance, {
-      ...requestConfig,
-      headers: {
-        ...requestConfig?.headers,
-        "x-auth-token": validatedOptions.accessToken,
-        "x-hasura-admin-secret": validatedOptions.adminSecret,
-      },
-    }),
+    client: getClient(),
     graphql,
   };
 }

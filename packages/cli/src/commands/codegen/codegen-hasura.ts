@@ -21,31 +21,8 @@ export async function codegenHasura(env: DotEnv) {
     },
   });
 
-  const serverSideTemplate = `import { createServerHasuraClient } from "@settlemint/sdk-hasura";
+  const template = `import { createHasuraClient } from "@settlemint/sdk-hasura";
 import type { introspection } from "../../hasura-env.d.ts";
-
-export const { client: hasuraClient, graphql: hasuraGraphql } = createServerHasuraClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: number;
-  };
-}>({
-  instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
-  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
-});`;
-
-  await writeTemplate(serverSideTemplate, "/lib/settlemint", "hasura.ts");
-
-  const clientSideTemplate = `import { createHasuraClient } from "@settlemint/sdk-hasura";
-import type { introspection } from "../../../hasura-env.d.ts";
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
   introspection: introspection;
@@ -60,8 +37,10 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
     Timestamp: number;
   };
 }>({
-  instance: "/proxy/hasura/graphql",
+  instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!, // undefined in browser, by design to not leak the secrets
 });`;
 
-  await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "hasura.ts");
+  await writeTemplate(template, "/lib/settlemint", "hasura.ts");
 }

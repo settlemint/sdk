@@ -19,7 +19,7 @@ export async function codegenTheGraph(env: DotEnv) {
     },
   });
 
-  const serverSideTemplate = `import { createServerTheGraphClient } from "@settlemint/sdk-thegraph";
+  const template = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
 import type { introspection } from "../../the-graph-env.d.ts";
 
 export const { client: theGraphClient, graphql: theGraphGraphql } = createServerTheGraphClient<{
@@ -36,29 +36,8 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createServer
   };
 }>({
   instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
 });`;
 
-  await writeTemplate(serverSideTemplate, "/lib/settlemint", "the-graph.ts");
-
-  const clientSideTemplate = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
-import type { introspection } from "../../../the-graph-env.d.ts";
-
-export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: number;
-  };
-}>({
-  instance: "/proxy/thegraph/graphql",
-});`;
-
-  await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "the-graph.ts");
+  await writeTemplate(template, "/lib/settlemint", "the-graph.ts");
 }

@@ -1,1 +1,1 @@
-export { ensureServer } from "./runtime/ensure-server.js";
+export { ensureBrowser, ensureServer, runsInBrowser, runsOnServer } from "./runtime/ensure-server.js";

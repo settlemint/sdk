@@ -19,7 +19,7 @@ export async function codegenPortal(env: DotEnv) {
     },
   });
 
-  const clientTemplate = `import { createServerPortalClient } from "@settlemint/sdk-portal";
+  const template = `import { createPortalClient } from "@settlemint/sdk-portal";
 import type { introspection } from "../../portal-env.d.ts";
 
 export const { client: portalClient, graphql: portalGraphql } = createServerPortalClient<{
@@ -36,29 +36,8 @@ export const { client: portalClient, graphql: portalGraphql } = createServerPort
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
 });`;
 
-  await writeTemplate(clientTemplate, "/lib/settlemint", "portal.ts");
-
-  const clientSideTemplate = `import { createPortalClient } from "@settlemint/sdk-portal";
-import type { introspection } from "../../../portal-env.d.ts";
-
-export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: number;
-  };
-}>({
-  instance: "/proxy/portal/graphql",
-});`;
-
-  await writeTemplate(clientSideTemplate, "/lib/settlemint/clientside", "portal.ts");
+  await writeTemplate(template, "/lib/settlemint", "portal.ts");
 }

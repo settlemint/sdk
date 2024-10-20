@@ -1,7 +1,6 @@
 import { codegenHasura } from "@/commands/codegen/codegen-hasura";
 import { codegenPortal } from "@/commands/codegen/codegen-portal";
 import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
-import { codegenTheGraphFallback } from "@/commands/codegen/codegen-the-graph-fallback";
 import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
@@ -56,11 +55,6 @@ export function codegenCommand(): Command {
           promises.push(codegenTheGraph(env));
           packages.add("@settlemint/sdk-thegraph");
         }
-        if (thegraphFallback) {
-          promises.push(codegenTheGraphFallback(env));
-          packages.add("@settlemint/sdk-thegraph");
-        }
-
         if (shouldCodegenMinio(env)) {
           promises.push(codegenMinio(env));
           packages.add("@settlemint/sdk-minio");

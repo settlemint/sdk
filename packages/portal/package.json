@@ -49,7 +49,8 @@
   "devDependencies": {},
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
-    "graphql-request": "^7",
+    "@urql/next": "^1",
+    "urql": "^4",
     "zod": "^3"
   },
   "peerDependencies": {},
