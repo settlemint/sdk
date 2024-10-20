@@ -7,6 +7,7 @@ import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-col
 import { formatTokenValue } from "@/lib/number";
 import { theGraphClient, theGraphGraphql } from "@/lib/settlemint/the-graph";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { FolderOpen } from "lucide-react";
 import Link from "next/link";
 
 const ListAllTokens = theGraphGraphql(`
@@ -85,16 +86,21 @@ export function TokenTable() {
             const { id } = row.original;
 
             return (
-              <Link prefetch={false} href={`/wallet/tokens/${id}/details`}>
-                <Button variant="outline">Details</Button>
-              </Link>
+              <div className="flex items-center space-x-2 px-4 py-2 justify-end">
+                <Link prefetch={false} href={`/issuer/tokens/${id}/details`}>
+                  <Button variant="outline">
+                    <FolderOpen className="w-4 h-4" />
+                    Details
+                  </Button>
+                </Link>
+              </div>
             );
           },
         },
       ]}
       data={tokens.data.erc20Contracts ?? []}
       filterColumn="name"
-      filterPlaceholder="Search by token name.."
+      filterPlaceholder="Search by token name..."
     />
   );
 }

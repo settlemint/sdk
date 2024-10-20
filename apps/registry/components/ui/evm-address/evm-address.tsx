@@ -9,6 +9,8 @@ interface EvmAddressProps extends PropsWithChildren {
   address: string;
   /** The URL of the blockchain explorer (optional). */
   explorerUrl?: string;
+  prefixLength?: number;
+  suffixLength?: number;
 }
 
 /**
@@ -16,13 +18,13 @@ interface EvmAddressProps extends PropsWithChildren {
  * @param props - The component props.
  * @returns The rendered EvmAddress component.
  */
-export function EvmAddress({ address, explorerUrl, children }: EvmAddressProps) {
+export function EvmAddress({ address, explorerUrl, children, prefixLength = 6, suffixLength = 4 }: EvmAddressProps) {
   return (
     <HoverCard>
       <HoverCardTrigger>
         <div className="flex items-center space-x-2">
-          <AddressAvatar address={address} variant="small" />
-          <span>{shortHex(address)}</span>
+          <AddressAvatar address={address} variant="tiny" />
+          <span>{shortHex(address, prefixLength, suffixLength)}</span>
         </div>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">

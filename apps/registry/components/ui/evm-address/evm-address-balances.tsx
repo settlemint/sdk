@@ -38,6 +38,14 @@ export function EvmAddressBalances({ address }: { address: string }) {
     staleTime: 5000,
   });
 
+  if (balances.length === 0) {
+    return (
+      <div className="mt-2">
+        <p className="text-sm">This address has no token balances.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="mt-2">
       <dl className="text-sm">

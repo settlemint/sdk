@@ -21,7 +21,7 @@ interface AddressAvatarProps extends HTMLAttributes<HTMLDivElement> {
   address?: string | null;
   email?: string | null;
   badge?: boolean;
-  variant?: "big" | "small";
+  variant?: "big" | "small" | "tiny";
 }
 
 /**
@@ -67,12 +67,23 @@ export const AddressAvatar = forwardRef<HTMLDivElement, AddressAvatarProps>(
 
     return (
       <div className="relative">
-        <Avatar ref={ref} className={cn(variant === "big" ? "w-10 h-10" : "w-6 h-6", className)} {...props}>
-          <AvatarFallback className={cn(variant === "big" ? "w-10 h-10" : "w-6 h-6", className)}>
+        <Avatar
+          ref={ref}
+          className={cn(variant === "big" ? "w-10 h-10" : variant === "small" ? "w-6 h-6" : "w-4 h-4", className)}
+          {...props}
+        >
+          <AvatarFallback
+            className={cn(variant === "big" ? "w-10 h-10" : variant === "small" ? "w-6 h-6" : "w-4 h-4", className)}
+          >
             {!address && (
               <Skeleton className={cn("rounded-full absolute inset-0", imageLoaded ? "opacity-0" : "opacity-100")} />
             )}
-            {address && <Jazzicon diameter={variant === "big" ? 60 : 40} seed={jsNumberForAddress(address)} />}
+            {address && (
+              <Jazzicon
+                diameter={variant === "big" ? 60 : variant === "small" ? 40 : 20}
+                seed={jsNumberForAddress(address)}
+              />
+            )}
           </AvatarFallback>
           {avatar?.avatar && (
             <AvatarImage
