@@ -261,7 +261,7 @@ jobs:
       - name: Check if packages are published
         run: |
           echo "Checking if packages are published..."
-          MAX_ATTEMPTS=30
+          MAX_ATTEMPTS=60
           DELAY=10
           ATTEMPT=1
 
