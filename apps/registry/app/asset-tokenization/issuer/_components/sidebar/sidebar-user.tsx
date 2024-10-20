@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { shortHex } from "@/lib/hex";
 import { portalClient, portalGraphql } from "@/lib/settlemint/clientside/portal";
 import { useQuery } from "@tanstack/react-query";
@@ -31,11 +32,28 @@ const GetPendingTransactions = portalGraphql(`
   }
 `);
 
+function SkeletonNavUser() {
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <SidebarMenuButton size="lg">
+          <Skeleton className="h-8 w-8 rounded-lg" />
+          <div className="grid flex-1 text-left text-sm leading-tight">
+            <Skeleton className="h-4 w-24" />
+            <Skeleton className="h-3 w-20" />
+          </div>
+          <Skeleton className="ml-auto h-4 w-4" />
+        </SidebarMenuButton>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
+}
+
 export function NavUser() {
+  const { status, data: session } = useSession();
   const { isMobile } = useSidebar();
-  const session = useSession();
-  const wallet = session.data?.user.wallet as Address | undefined;
-  const email = session.data?.user.email;
+  const wallet = session?.user.wallet as Address | undefined;
+  const email = session?.user.email;
   const { setTheme, resolvedTheme } = useTheme();
 
   const { data: pendingCount } = useQuery({
@@ -55,6 +73,10 @@ export function NavUser() {
   const handleSignOut = useCallback(async () => {
     await signOutAction({});
   }, []);
+
+  if (status === "loading") {
+    return <SkeletonNavUser />;
+  }
 
   return (
     <SidebarMenu>
