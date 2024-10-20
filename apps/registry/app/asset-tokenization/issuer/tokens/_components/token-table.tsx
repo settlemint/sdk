@@ -94,7 +94,7 @@ export function TokenTable() {
       ]}
       data={tokens.data.erc20Contracts ?? []}
       filterColumn="name"
-      filterPlaceholder="Search by name"
+      filterPlaceholder="Search by token name.."
     />
   );
 }

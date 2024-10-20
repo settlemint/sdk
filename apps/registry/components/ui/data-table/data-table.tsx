@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { DataTableFilter } from "./data-table-filter";
 import { DataTablePagination } from "./data-table-pagination";
+import { DataTableVisibility } from "./data-table-visibility";
 
 /**
  * Props for the DataTable component.
@@ -79,6 +80,7 @@ export function DataTable<TData, TValue>({
         {data.length > 0 && isSearch && (
           <DataTableFilter table={table} placeholder={filterPlaceholder} column={filterColumn} />
         )}
+        <DataTableVisibility table={table} />
       </div>
       <div className="w-full bg-card shadow-sm text-sidebar-foreground rounded-md border">
         <Table>
