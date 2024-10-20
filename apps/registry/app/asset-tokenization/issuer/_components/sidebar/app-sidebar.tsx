@@ -2,7 +2,7 @@
 
 import { SidebarLogo } from "@/components/ui/logo/sidebar-logo";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-import { ChartNoAxesCombined, Frame, SquareTerminal } from "lucide-react";
+import { ChartNoAxesCombined, Coins, Frame } from "lucide-react";
 import { SidebarNavigation } from "./sidebar-navigation";
 import { NavUser } from "./sidebar-user";
 
@@ -24,16 +24,21 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   icon: ChartNoAxesCombined,
                 },
                 {
-                  title: "Playground",
-                  url: "#",
-                  icon: SquareTerminal,
-                  items: [
-                    {
-                      title: "History",
-                      url: "#",
-                    },
-                  ],
+                  title: "Tokens",
+                  url: "/issuer/tokens",
+                  icon: Coins,
                 },
+                // {
+                //   title: "Playground",
+                //   url: "#",
+                //   icon: SquareTerminal,
+                //   items: [
+                //     {
+                //       title: "History",
+                //       url: "#",
+                //     },
+                //   ],
+                // },
               ],
             },
             {

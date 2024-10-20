@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import type { Column } from "@tanstack/react-table";
-import { ArrowDownUp, BadgeCheck, EyeOff, SortAsc, SortDesc } from "lucide-react";
+import { ArrowDownUp, EyeOff, SortAsc, SortDesc } from "lucide-react";
 
 /**
  * Props for the DataTableColumnHeader component.
@@ -20,8 +20,8 @@ interface DataTableColumnHeaderProps<TData, TValue> extends React.HTMLAttributes
   column: Column<TData, TValue>;
   /** The title of the column. */
   title: string;
-  /** Indicates if the column is verified. */
-  isVerified?: boolean;
+  /** The type of the column. */
+  type?: "default" | "numeric";
 }
 
 /**
@@ -35,18 +35,22 @@ export function DataTableColumnHeader<TData, TValue>({
   column,
   title,
   className,
-  isVerified,
+  type = "default",
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort()) {
-    return <div className={cn(className)}>{title}</div>;
+    return <div className={cn(className, type === "numeric" && "text-right")}>{title}</div>;
   }
 
   return (
-    <div className={cn("flex items-center space-x-2", className)}>
+    <div className={cn("flex items-center space-x-2", type === "numeric" && "justify-end", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="-ml-3 h-8 data-[state=open]:bg-accent">
-            <span>{title}</span>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn("-ml-3 h-8 data-[state=open]:bg-accent", type === "numeric" && "ml-auto")}
+          >
+            <span className="capitalize">{title}</span>
             {column.getIsSorted() === "desc" ? (
               <SortDesc className="ml-2 h-4 w-4" />
             ) : column.getIsSorted() === "asc" ? (
@@ -72,7 +76,6 @@ export function DataTableColumnHeader<TData, TValue>({
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-      {isVerified && <BadgeCheck className="h-4 w-4 text-green-700" />}
     </div>
   );
 }

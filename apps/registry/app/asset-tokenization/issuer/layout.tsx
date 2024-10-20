@@ -22,7 +22,7 @@ export default function IssuerLayout({
               <CollapsedBreadcrumbs maxVisibleItems={2} />
             </div>
           </header>
-          <main className="p-4 pt-0">{children}</main>
+          <main className="flex-1 space-y-4 p-8 pt-6">{children}</main>
         </SidebarInset>
       </SidebarProvider>
     </CollapsedBreadcrumbProvider>

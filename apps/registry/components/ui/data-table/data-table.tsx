@@ -13,8 +13,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { Loader } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DataTableFilter } from "./data-table-filter";
 import { DataTablePagination } from "./data-table-pagination";
 
@@ -56,11 +55,6 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   const table = useReactTable({
     data,
@@ -79,17 +73,6 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
   });
 
-  if (!hydrated) {
-    return (
-      <div className="flex justify-center text-center align-middle p-[100px]">
-        <div className="">
-          <Loader className="h-8 w-8 animate-spin" />
-          <span className="text-sm text-gray-600 relative -left-2">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="DataTable p-1">
       <div className="flex py-2 mb-2">
@@ -97,7 +80,7 @@ export function DataTable<TData, TValue>({
           <DataTableFilter table={table} placeholder={filterPlaceholder} column={filterColumn} />
         )}
       </div>
-      <div className="rounded-md border">
+      <div className="w-full bg-sidebar text-sidebar-foreground rounded-md p-2">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

@@ -28,7 +28,7 @@ export function DataTableFilter<TData>({ table, placeholder, column }: DataTable
       placeholder={placeholder}
       value={(table.getColumn(column)?.getFilterValue() as string) ?? ""}
       onChange={(event) => table.getColumn(column)?.setFilterValue(event.target.value)}
-      className="max-w-sm "
+      className="max-w-sm bg-sidebar"
     />
   );
 }
