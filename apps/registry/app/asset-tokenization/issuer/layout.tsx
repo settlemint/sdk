@@ -13,8 +13,8 @@ export default function IssuerLayout({
   return (
     <CollapsedBreadcrumbProvider>
       <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
+        <AppSidebar className="group-data-[side=left]:border-r-0" />
+        <SidebarInset className="bg-sidebar">
           <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
             <div className="flex items-center gap-2 px-4">
               <SidebarTrigger className="-ml-1" />
@@ -22,7 +22,7 @@ export default function IssuerLayout({
               <CollapsedBreadcrumbs maxVisibleItems={2} />
             </div>
           </header>
-          <main className="flex-1 space-y-4 p-8 pt-6">{children}</main>
+          <div className="flex-1 space-y-4 p-8 pt-6 rounded-tl-lg bg-background">{children}</div>
         </SidebarInset>
       </SidebarProvider>
     </CollapsedBreadcrumbProvider>
