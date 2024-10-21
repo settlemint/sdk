@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const CreateTokenSchema = z.object({
-  tokenName: z.string().min(2),
-  tokenSymbol: z.string().min(2),
+  tokenName: z.string(),
+  tokenSymbol: z.string(),
   tokenLogo: z
     .instanceof(File)
     .refine((file) => file.type.startsWith("image/"), {

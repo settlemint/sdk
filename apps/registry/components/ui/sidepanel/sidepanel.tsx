@@ -1,5 +1,3 @@
-"use client";
-
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import type React from "react";
 import type { ReactNode } from "react";

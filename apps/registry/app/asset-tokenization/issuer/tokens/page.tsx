@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { BreadcrumbSetter } from "@/components/ui/collapsed-breadcrumb/collapsed-breadcrumb";
 import { SidePanel } from "@/components/ui/sidepanel/sidepanel";
 import { type SearchParams, createSearchParamsCache, parseAsInteger, parseAsJson, parseAsString } from "nuqs/server";
-import { v4 as uuidv4 } from "uuid";
 import { TokenTable } from "./_components/token-table";
 import { CreateTokenForm } from "./_forms/create-token-form";
 
@@ -37,7 +36,7 @@ export default function IssuerTokens({ searchParams }: WalletTokenPageProps) {
             </div>
           }
         >
-          <CreateTokenForm defaultValues={parsedParams.state} formId={parsedParams.formId || uuidv4()} />
+          <CreateTokenForm defaultValues={parsedParams.state} formId={parsedParams.formId || "create-token-form"} />
         </SidePanel>
       </div>
       <TokenTable />

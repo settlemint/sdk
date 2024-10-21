@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
 import { Cross2Icon } from "@radix-ui/react-icons";
 import {
   CheckIcon,
@@ -14,6 +13,7 @@ import {
 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import ReactDropzone from "react-dropzone";
+import { toast } from "sonner";
 import { useLocalStorage } from "usehooks-ts";
 import { v4 as uuidv4 } from "uuid";
 import { useMultiFormStep } from "./form-multistep";
@@ -86,7 +86,7 @@ export function Dropzone({
   multiple = true,
 }: DropzoneProps) {
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
-  const { toast } = useToast();
+
   const [isHover, setIsHover] = useState<boolean>(false);
   const [_multiple, setMultiple] = useState<boolean>(Boolean(multiple));
   const [actions, setActions] = useState<Action[]>([]);
@@ -183,10 +183,7 @@ export function Dropzone({
                 action.file_name === file.name ? { ...action, isUploaded: true, isUploading: false, id } : action,
               ),
             );
-            toast({
-              title: "Success",
-              description: `Upload file ${file.name} successfully`,
-            });
+            toast.success(`Upload file ${file.name} successfully`);
 
             const localStorageFiles = JSON.parse(localStorage.getItem("files") ?? "{}")[formId] ?? {};
             const localStorageState = {
@@ -207,11 +204,7 @@ export function Dropzone({
                 action.file_name === file.name ? { ...action, is_error: true, isUploading: false, id } : action,
               ),
             );
-            toast({
-              variant: "destructive",
-              title: "Error",
-              description: `Failed to upload ${file.name}`,
-            });
+            toast.error(`Failed to upload ${file.name}`);
           }
         };
 
@@ -227,21 +220,13 @@ export function Dropzone({
             return rest;
           });
 
-          toast({
-            variant: "destructive",
-            title: "Error",
-            description: `Failed to upload ${file.name}`,
-          });
+          toast.error(`Failed to upload ${file.name}`);
         };
 
         xhr.send(file);
       } catch (error) {
         console.error("Upload error:", error);
-        toast({
-          title: "Upload Failed",
-          description: "There was an error initiating your upload.",
-          variant: "destructive",
-        });
+        toast.error("There was an error initiating your upload.");
       }
     }
   };
@@ -286,17 +271,10 @@ export function Dropzone({
       setActions(actions.filter((elt) => elt !== action));
       setFiles(files.filter((elt) => elt.name !== action.file_name));
 
-      toast({
-        title: "Success",
-        description: `File ${action.file_name} deleted successfully`,
-      });
+      toast.success(`File ${action.file_name} deleted successfully`);
     } catch (error) {
       console.error("Error deleting file:", error);
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: `Failed to delete ${action.file_name}`,
-      });
+      toast.error(`Failed to delete ${action.file_name}`);
     }
   };
 
@@ -315,8 +293,6 @@ export function Dropzone({
   }, []);
 
   const fileuploads = Array.from(new Map([...storageStateActions, ...actions].map((item) => [item.id, item])).values());
-
-  console.log("FILEUPLOADS", Array.from(fileuploads).length);
 
   return (
     <div className="Dropzone">
@@ -388,21 +364,11 @@ export function Dropzone({
           multiple={_multiple}
           onDropRejected={() => {
             handleExitHover();
-            toast({
-              variant: "destructive",
-              title: "Error uploading your file(s)",
-              description: "Allowed Files: Audio, Video and Images.",
-              duration: 5000,
-            });
+            toast.error("Error uploading your file(s). Allowed Files: Audio, Video and Images.");
           }}
           onError={() => {
             handleExitHover();
-            toast({
-              variant: "destructive",
-              title: "Error uploading your file(s)",
-              description: "Allowed Files: Audio, Video and Images.",
-              duration: 5000,
-            });
+            toast.error("Error uploading your file(s). Allowed Files: Audio, Video and Images.");
           }}
         >
           {({ getRootProps, getInputProps }) => (
