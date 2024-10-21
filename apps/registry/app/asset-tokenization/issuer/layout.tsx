@@ -3,6 +3,7 @@ import CollapsedBreadcrumbs, {
 } from "@/components/ui/collapsed-breadcrumb/collapsed-breadcrumb";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { Toaster } from "sonner";
 import { AppSidebar } from "./_components/sidebar/app-sidebar";
 
 export default function IssuerLayout({
@@ -22,7 +23,10 @@ export default function IssuerLayout({
               <CollapsedBreadcrumbs maxVisibleItems={2} />
             </div>
           </header>
-          <div className="flex-1 space-y-4 p-8 pt-6 rounded-tl-lg bg-background">{children}</div>
+          <div className="flex-1 space-y-4 p-8 pt-6 rounded-tl-lg bg-background">
+            {children}
+            <Toaster richColors />
+          </div>
         </SidebarInset>
       </SidebarProvider>
     </CollapsedBreadcrumbProvider>
