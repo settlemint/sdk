@@ -35,7 +35,7 @@ export function TokenCharts({ token }: { token?: string }) {
             setSelectedInterval(value as "hour" | "day");
           }}
         >
-          <SelectTrigger className="h-8 w-[100px] text-sm bg-sidebar">
+          <SelectTrigger className="h-8 w-[100px] text-sm bg-card">
             <SelectValue placeholder={selectedInterval} />
           </SelectTrigger>
           <SelectContent side="top">

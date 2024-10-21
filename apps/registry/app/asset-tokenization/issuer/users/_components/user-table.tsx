@@ -4,29 +4,28 @@ import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table/data-table";
 import { DataTableColumnCell } from "@/components/ui/data-table/data-table-column-cell";
 import { DataTableColumnHeader } from "@/components/ui/data-table/data-table-column-header";
-import { formatTokenValue } from "@/lib/number";
-import { theGraphClient, theGraphGraphql } from "@/lib/settlemint/the-graph";
+import { EvmAddress } from "@/components/ui/evm-address/evm-address";
+import { EvmAddressBalances } from "@/components/ui/evm-address/evm-address-balances";
+import { hasuraClient, hasuraGraphql } from "@/lib/settlemint/hasura";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { FolderOpen } from "lucide-react";
 import Link from "next/link";
 
-const ListAllTokens = theGraphGraphql(`
-query ListAllTokens {
-  erc20Contracts {
-    id
-    name
-    symbol
-    totalSupply
-    decimals
+const ListAllUsers = hasuraGraphql(`
+query ListAllUsers {
+  starterkit_wallets(order_by: {email: asc}) {
+    email
+    role
+    wallet
   }
 }
 `);
 
-export function TokenTable() {
+export function UsersTable() {
   const tokens = useSuspenseQuery({
-    queryKey: ["all-tokens"],
+    queryKey: ["all-users"],
     queryFn: () => {
-      return theGraphClient.request(ListAllTokens, {});
+      return hasuraClient.request(ListAllUsers, {});
     },
   });
 
@@ -34,9 +33,9 @@ export function TokenTable() {
     <DataTable
       columns={[
         {
-          accessorKey: "name",
+          accessorKey: "email",
           header: ({ column }) => {
-            return <DataTableColumnHeader column={column} title="name" />;
+            return <DataTableColumnHeader column={column} title="Email" />;
           },
           cell: ({ getValue }) => {
             const value = getValue<string>();
@@ -44,9 +43,9 @@ export function TokenTable() {
           },
         },
         {
-          accessorKey: "symbol",
+          accessorKey: "role",
           header: ({ column }) => {
-            return <DataTableColumnHeader column={column} title="Symbol" />;
+            return <DataTableColumnHeader column={column} title="Role" />;
           },
           cell: ({ getValue }) => {
             const value = getValue<string>();
@@ -54,35 +53,33 @@ export function TokenTable() {
           },
         },
         {
-          accessorKey: "decimals",
+          accessorKey: "wallet",
           header: ({ column }) => {
-            return <DataTableColumnHeader column={column} title="Decimals" type="numeric" />;
-          },
-          cell: ({ getValue }) => {
-            const value = getValue<string>();
-            return <DataTableColumnCell value={value} type="numeric" />;
-          },
-        },
-        {
-          accessorKey: "totalSupply",
-          header: ({ column }) => {
-            return <DataTableColumnHeader column={column} title="Total Supply" type="numeric" />;
+            return <DataTableColumnHeader column={column} title="Address" />;
           },
           cell: ({ getValue }) => {
             const value = getValue<string>();
             return (
-              <DataTableColumnCell value={formatTokenValue(Number.parseFloat(value.toString()), 2)} type="numeric" />
+              <DataTableColumnCell
+                value={
+                  value ? (
+                    <EvmAddress address={value} prefixLength={100}>
+                      <EvmAddressBalances address={value} />
+                    </EvmAddress>
+                  ) : null
+                }
+              />
             );
           },
         },
         {
           id: "actions",
           cell: ({ row }) => {
-            const { id } = row.original;
+            const { email } = row.original;
 
             return (
               <div className="flex items-center space-x-2 px-4 py-2 justify-end">
-                <Link prefetch={false} href={`/issuer/tokens/${id}/details`}>
+                <Link prefetch={false} href={`/issuer/users/${email}/details`}>
                   <Button variant="outline">
                     <FolderOpen className="w-4 h-4" />
                     Details
@@ -93,9 +90,9 @@ export function TokenTable() {
           },
         },
       ]}
-      data={tokens.data.erc20Contracts ?? []}
-      filterColumn="name"
-      filterPlaceholder="Search by token name..."
+      data={tokens.data.starterkit_wallets ?? []}
+      filterColumn="email"
+      filterPlaceholder="Search by email..."
     />
   );
 }

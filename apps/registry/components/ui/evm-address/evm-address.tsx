@@ -24,7 +24,7 @@ export function EvmAddress({ address, explorerUrl, children, prefixLength = 6, s
       <HoverCardTrigger>
         <div className="flex items-center space-x-2">
           <AddressAvatar address={address} variant="tiny" />
-          <span>{shortHex(address, prefixLength, suffixLength)}</span>
+          <span className="font-mono">{shortHex(address, prefixLength, suffixLength)}</span>
         </div>
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
@@ -32,7 +32,7 @@ export function EvmAddress({ address, explorerUrl, children, prefixLength = 6, s
           <h4 className="text-sm font-semibold grid grid-cols-[auto,1fr] gap-x-2 items-start">
             <AddressAvatar address={address} className="row-span-2" />
             <div className="flex flex-col">
-              <span>{shortHex(address, 12, 8)}</span>
+              <span className="font-mono">{shortHex(address, 12, 8)}</span>
               {explorerUrl && (
                 <Link
                   prefetch={false}

@@ -2,7 +2,7 @@
 
 import { SidebarLogo } from "@/components/ui/logo/sidebar-logo";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
-import { ChartNoAxesCombined, Coins, Frame } from "lucide-react";
+import { ChartNoAxesCombined, Coins, Users } from "lucide-react";
 import { SidebarNavigation } from "./sidebar-navigation";
 import { NavUser } from "./sidebar-user";
 
@@ -42,12 +42,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               ],
             },
             {
-              title: "Projects",
+              title: "Platform Management",
               items: [
                 {
-                  title: "Design Engineering",
-                  url: "#",
-                  icon: Frame,
+                  title: "Users",
+                  url: "/issuer/users",
+                  icon: Users,
                 },
               ],
             },
