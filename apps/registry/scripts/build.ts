@@ -278,6 +278,40 @@ const registries = [
     docs: "",
   },
   {
+    name: "input-numeric",
+    description: "Numeric input",
+    files: [
+      {
+        type: "registry:ui",
+        path: new Glob("./components/ui/input-numeric/**/*"),
+        targetFunction: (path: string) => path.replace("components/ui/input-numeric", "components/ui/input-numeric"),
+      },
+    ],
+    dependencies: ["react-hook-form"],
+    registryDependencies: ["input"],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
+  {
+    name: "sidepanel",
+    description: "Sidepanel",
+    files: [
+      {
+        type: "registry:ui",
+        path: new Glob("./components/ui/sidepanel/**/*"),
+        targetFunction: (path: string) => path.replace("components/ui/sidepanel", "components/ui/sidepanel"),
+      },
+    ],
+    dependencies: [],
+    registryDependencies: ["sheet"],
+    tailwind: {},
+    cssVars: {},
+    meta: {},
+    docs: "",
+  },
+  {
     name: "auth",
     description: "Authentication",
     files: [
