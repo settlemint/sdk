@@ -27,6 +27,7 @@ export function UsersTable() {
     queryFn: () => {
       return hasuraClient.request(ListAllUsers, {});
     },
+    refetchInterval: 2000,
   });
 
   return (

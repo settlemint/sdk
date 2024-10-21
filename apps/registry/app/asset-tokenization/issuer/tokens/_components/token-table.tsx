@@ -28,6 +28,7 @@ export function TokenTable() {
     queryFn: () => {
       return theGraphClient.request(ListAllTokens, {});
     },
+    refetchInterval: 2000,
   });
 
   return (
