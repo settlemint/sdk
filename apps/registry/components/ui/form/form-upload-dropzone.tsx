@@ -11,7 +11,7 @@ import {
   TriangleAlertIcon,
   X,
 } from "lucide-react";
-import { useCallback, useEffect, useId, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ReactDropzone from "react-dropzone";
 import { toast } from "sonner";
 import { useLocalStorage } from "usehooks-ts";
@@ -78,7 +78,6 @@ function fileToIcon(file_type: string): React.ReactNode {
 export function Dropzone({
   label,
   name,
-  uploadDir,
   accept = { images: [".jpg", ".jpeg", ".png", ".webp"], text: [".pdf"] },
   maxSize,
   maxFiles,
@@ -87,18 +86,18 @@ export function Dropzone({
   const [uploadProgress, setUploadProgress] = useState<Record<string, number>>({});
 
   const [isHover, setIsHover] = useState<boolean>(false);
-  const [_multiple, setMultiple] = useState<boolean>(Boolean(multiple));
+  const [_multiple] = useState<boolean>(Boolean(multiple));
   const [actions, setActions] = useState<Action[]>([]);
-  const [isReady, setIsReady] = useState<boolean>(false);
+  const [, setIsReady] = useState<boolean>(false);
   const [files, setFiles] = useState<Array<File>>([]);
-  const [isDone, setIsDone] = useState<boolean>(false);
+  const [, setIsDone] = useState<boolean>(false);
   const [activeUploads, setActiveUploads] = useState<Record<string, XMLHttpRequest>>({});
-  const { config, formId } = useMultiFormStep();
-  const [storageState, setStorageState] = useLocalStorage<Record<string, unknown>>(
+  const { formId } = useMultiFormStep();
+  const [storageState] = useLocalStorage<Record<string, unknown>>(
     "files",
     JSON.parse(typeof window !== "undefined" ? (localStorage.getItem("files") ?? "{}") : "{}"),
   );
-  const [isNavigate, setIsNavigate] = useState(true);
+  const [, setIsNavigate] = useState(true);
 
   const [storageStateActions, setStorageStateActions] = useState<Action[]>(
     Object.values(storageState[formId] ?? {}).map(
@@ -117,13 +116,15 @@ export function Dropzone({
     ),
   );
 
+  const generateUniqueId = () => `${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
   const handleUpload = async (files: Array<File>): Promise<void> => {
     handleExitHover();
     setFiles((prevFiles) => [...prevFiles, ...files]);
     const _actions: Action[] = [...storageStateActions];
 
     for (const file of files) {
-      const id = useId();
+      const id = generateUniqueId();
       (file as File & { id: string }).id = id;
       _actions.push({
         id,
@@ -215,6 +216,7 @@ export function Dropzone({
           );
 
           setActiveUploads((prev) => {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { [id]: _, ...rest } = prev;
             return rest;
           });
@@ -251,6 +253,7 @@ export function Dropzone({
     if (activeUploads[action.id]) {
       activeUploads[action.id].abort();
       setActiveUploads((prev) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { [action.id]: _, ...rest } = prev;
         return rest;
       });

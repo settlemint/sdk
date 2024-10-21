@@ -32,12 +32,14 @@ export const FormMultiStepProvider = ({
   formId: string;
 }>) => {
   const [currentStep, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
-  const [_, setFormId] = useQueryState("formId", parseAsString.withDefault(formId));
+  const [, setFormId] = useQueryState("formId", parseAsString.withDefault(formId));
   const [totalSteps, setTotalSteps] = useState<number>(1);
   const pageCounterRef = useRef(1);
 
   if (config.useLocalStorageState === false) {
-    typeof window !== "undefined" && window.localStorage.removeItem("state");
+    if (typeof window !== "undefined") {
+      window.localStorage.removeItem("state");
+    }
   }
 
   useEffect(() => {

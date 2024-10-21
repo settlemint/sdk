@@ -33,8 +33,8 @@ interface FieldItem extends Record<string, unknown> {
 }
 
 export function RepeatableForm<T extends FieldValues>({ control, name, components }: RepeatableFormProps<T>) {
-  const [queryState, setQueryState] = useQueryState("state", parseAsJson<T>());
-  const [storageState, setStorageState] = useLocalStorage<Record<string, unknown>>("state", {});
+  const [, setQueryState] = useQueryState("state", parseAsJson<T>());
+  const [, setStorageState] = useLocalStorage<Record<string, unknown>>("state", {});
   const { config } = useMultiFormStep();
 
   const { fields, append, remove } = useFieldArray({
@@ -76,18 +76,20 @@ export function RepeatableForm<T extends FieldValues>({ control, name, component
             <Button
               onClick={() => {
                 remove(index);
-                config.useQueryState &&
+                if (config.useQueryState) {
                   setQueryState((prev) => {
                     const newState = { ...prev };
                     delete newState?.[name];
                     return newState;
                   });
-                config.useLocalStorageState &&
+                }
+                if (config.useLocalStorageState) {
                   setStorageState((prev) => {
                     const newState = { ...prev };
                     delete newState?.[name];
                     return newState;
                   });
+                }
               }}
               type="button"
               className="w-fit"

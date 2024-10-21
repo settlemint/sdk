@@ -37,13 +37,13 @@ export const FormPage = <
     ? [SheetClose, { asChild: true }]
     : [React.Fragment, {}];
 
-  const [queryState, setQueryState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
-  const [storageState, setStorageState] = useLocalStorage<Record<string, unknown>>("state", {});
+  const [, setQueryState] = useQueryState("state", parseAsJson<Record<string, unknown>>());
+  const [, setStorageState] = useLocalStorage<Record<string, unknown>>("state", {});
   const [isNavigate, setIsNavigate] = useState(true);
   const pageRef = useRef<number | null>(null);
   const page = pageRef.current ?? currentStep ?? 1;
 
-  const [_currentStep, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
+  const [, setCurrentStep] = useQueryState("currentStep", parseAsInteger.withDefault(1));
 
   const [isValid, setIsValid] = useState(false);
 
@@ -73,7 +73,9 @@ export const FormPage = <
     const navigationEntry = window.performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming;
     const navigationType = navigationEntry?.type;
     async function triggerFields() {
-      page === currentStep && (await form.trigger(fields));
+      if (page === currentStep) {
+        await form.trigger(fields);
+      }
       const validFields = fields.map((field) => {
         const fieldState = form.getFieldState(field);
         return !fieldState.invalid;
@@ -87,15 +89,20 @@ export const FormPage = <
         setCurrentStep(1);
       }
       triggerFields().then((isValid) => {
-        page === currentStep && setIsValid(isValid);
+        if (page === currentStep) {
+          setIsValid(isValid);
+        }
       });
       const validFields = fields.map((field) => {
         const fieldState = form.getFieldState(field);
         return !fieldState.invalid;
       });
       const isValid = validFields.every((isValid) => isValid);
-      page === currentStep && setIsValid(isValid);
+      if (page === currentStep) {
+        setIsValid(isValid);
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -116,7 +123,9 @@ export const FormPage = <
 
       const isValid = validFields.every((isValid) => isValid);
       const isDirty = dirtyFields.length > 0 ? dirtyFields.every((isDirty) => isDirty) : true;
-      page === currentStep && setIsValid(isValid && isDirty);
+      if (page === currentStep) {
+        setIsValid(isValid && isDirty);
+      }
     }
   }, [fields, form, page, currentStep]);
 
@@ -124,18 +133,22 @@ export const FormPage = <
   useEffect(() => {
     if (config.useQueryState) {
       const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
-      page === currentStep && setQueryState((prevState) => ({ ...prevState, ...fieldState }));
+      if (page === currentStep) {
+        setQueryState((prevState) => ({ ...prevState, ...fieldState }));
+      }
     }
     if (config.useLocalStorageState) {
       const fieldState = Object.fromEntries(fields.map((key, index) => [key, fieldValues[index]]));
-      page === currentStep &&
+      if (page === currentStep) {
         setStorageState((prevState) => {
           return {
             ...prevState,
             ...fieldState,
           };
         });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fieldValues, setQueryState, page, currentStep, config.useQueryState]);
 
   return (
