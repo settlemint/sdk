@@ -12897,7 +12897,7 @@ type Mutation {
 
     """Validity period of the access token"""
     validityPeriod: AccessTokenValidityPeriod!
-  ): ApplicationAccessToken!
+  ): String!
 
   """Creates a new BlockchainNetwork service"""
   createBlockchainNetwork(
@@ -14491,16 +14491,16 @@ type Mutation {
   updateApplication(updateApplicationParams: ApplicationUpdateInput!): Application!
   updateApplicationAccessToken(
     """Unique identifier of the application"""
-    applicationId: ID!
+    applicationId: ID
 
     """Scope for blockchain network access"""
-    blockchainNetworkScope: BlockchainNetworkScopeInputType!
+    blockchainNetworkScope: BlockchainNetworkScopeInputType
 
     """Scope for blockchain node access"""
-    blockchainNodeScope: BlockchainNodeScopeInputType!
+    blockchainNodeScope: BlockchainNodeScopeInputType
 
     """Scope for custom deployment access"""
-    customDeploymentScope: CustomDeploymentScopeInputType!
+    customDeploymentScope: CustomDeploymentScopeInputType
 
     """Expiration date of the access token"""
     expirationDate: DateTime
@@ -14509,28 +14509,28 @@ type Mutation {
     id: ID!
 
     """Scope for insights access"""
-    insightsScope: InsightsScopeInputType!
+    insightsScope: InsightsScopeInputType
 
     """Scope for integration access"""
-    integrationScope: IntegrationScopeInputType!
+    integrationScope: IntegrationScopeInputType
 
     """Scope for load balancer access"""
-    loadBalancerScope: LoadBalancerScopeInputType!
+    loadBalancerScope: LoadBalancerScopeInputType
 
     """Scope for middleware access"""
-    middlewareScope: MiddlewareScopeInputType!
+    middlewareScope: MiddlewareScopeInputType
 
     """Name of the application access token"""
-    name: String!
+    name: String
 
     """Scope for smart contract set access"""
-    smartContractSetScope: SmartContractSetScopeInputType!
+    smartContractSetScope: SmartContractSetScopeInputType
 
     """Scope for storage access"""
-    storageScope: StorageScopeInputType!
+    storageScope: StorageScopeInputType
 
     """Validity period of the access token"""
-    validityPeriod: AccessTokenValidityPeriod!
+    validityPeriod: AccessTokenValidityPeriod
   ): ApplicationAccessToken!
   updateBilling(disableAutoCollection: Boolean!, free: Boolean, hidePricing: Boolean!, workspaceId: ID!): Billing!
 
