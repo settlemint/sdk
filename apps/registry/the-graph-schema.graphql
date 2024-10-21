@@ -1469,6 +1469,9 @@ type TokenVolumeStats {
   """The timestamp of the aggregation"""
   timestamp: Timestamp!
 
+  """The token this aggregation is for"""
+  token: ERC20Contract!
+
   """The total number of transfers in the aggregation period"""
   totalTransfers: Int!
 
@@ -1489,6 +1492,8 @@ input TokenVolumeStats_filter {
   timestamp_gte: Timestamp
   timestamp_lte: Timestamp
   timestamp_in: [Timestamp!]
+  token: String
+  token_: ERC20Contract_filter
 
   """Filter for the block changed event."""
   _change_block: BlockChangedFilter
