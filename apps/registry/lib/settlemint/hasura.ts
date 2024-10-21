@@ -11,7 +11,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
     Int8: string;
     BigInt: string;
     BigDecimal: string;
-    Timestamp: number;
+    Timestamp: string;
   };
 }>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
