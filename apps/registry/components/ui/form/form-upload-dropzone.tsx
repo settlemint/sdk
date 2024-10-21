@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Cross2Icon } from "@radix-ui/react-icons";
 import {
   CheckIcon,
   CloudUploadIcon,
@@ -10,12 +9,12 @@ import {
   FileTextIcon,
   ImageIcon,
   TriangleAlertIcon,
+  X,
 } from "lucide-react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import ReactDropzone from "react-dropzone";
 import { toast } from "sonner";
 import { useLocalStorage } from "usehooks-ts";
-import { v4 as uuidv4 } from "uuid";
 import { useMultiFormStep } from "./form-multistep";
 
 interface DropzoneProps {
@@ -124,7 +123,7 @@ export function Dropzone({
     const _actions: Action[] = [...storageStateActions];
 
     for (const file of files) {
-      const id = uuidv4();
+      const id = useId();
       (file as File & { id: string }).id = id;
       _actions.push({
         id,
@@ -333,7 +332,7 @@ export function Dropzone({
               aria-label="Delete file"
               type="button"
             >
-              <Cross2Icon />
+              <X />
             </button>
 
             {action.isUploading && (

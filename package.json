@@ -59,5 +59,12 @@
     "lefthook",
     "secp256k1",
     "utf-8-validate"
-  ]
+  ],
+  "dependencies": {
+    "nuqs": "^1.20.0",
+    "react-dropzone": "^14.2.10",
+    "sonner": "^1.5.0",
+    "usehooks-ts": "^3.1.0",
+    "uuid": "^10.0.0"
+  }
 }
