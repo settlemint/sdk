@@ -32,7 +32,7 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
     Int8: string;
     BigInt: string;
     BigDecimal: string;
-    Timestamp: number;
+    Timestamp: string;
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,

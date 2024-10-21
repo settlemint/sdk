@@ -21,7 +21,7 @@ export const graphql: initGraphQLTada<{
     Int8: string;
     BigInt: string;
     BigDecimal: string;
-    Timestamp: number;
+    Timestamp: string;
   };
 }> = initGraphQLTada<{
   introspection: introspection;
@@ -33,7 +33,7 @@ export const graphql: initGraphQLTada<{
     Int8: string;
     BigInt: string;
     BigDecimal: string;
-    Timestamp: number;
+    Timestamp: string;
   };
 }>();
 

@@ -11,7 +11,7 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGra
     Int8: string;
     BigInt: string;
     BigDecimal: string;
-    Timestamp: number;
+    Timestamp: string;
   };
 }>({
   instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,

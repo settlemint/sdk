@@ -2,6 +2,7 @@
 
 import { Card } from "@/components/ui/card";
 import { BreadcrumbSetter } from "@/components/ui/collapsed-breadcrumb/collapsed-breadcrumb";
+import { TokenCharts } from "@/components/ui/token-charts/token-charts";
 import { formatTokenValue } from "@/lib/number";
 import { useParams } from "next/navigation";
 import { useTokenDetails } from "../_queries/token-details";
@@ -59,6 +60,7 @@ export default function WalletTokenDetailsPage() {
             ))}
         </dl>
       </Card>
+      <TokenCharts token={address} />
     </>
   );
 }
