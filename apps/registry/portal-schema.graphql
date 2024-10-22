@@ -18,6 +18,35 @@ type CreateWalletOutput {
   name: String
 }
 
+input CreateWalletVerificationInput {
+  """OTP verification settings. Provide this for OTP verification."""
+  otp: OTPSettingsInput
+
+  """PINCODE verification settings. Provide this for PINCODE verification."""
+  pincode: PincodeSettingsInput
+}
+
+"""Output for creating a wallet verification"""
+type CreateWalletVerificationOutput {
+  """Unique identifier of the created wallet verification"""
+  id: String
+
+  """Name of the created wallet verification"""
+  name: String
+
+  """Additional parameters of the created wallet verification"""
+  parameters: JSON
+
+  """Type of the created wallet verification"""
+  verificationType: WalletVerificationType
+}
+
+"""Output for deleting a wallet verification"""
+type DeleteWalletVerificationOutput {
+  """Indicates whether the wallet verification was successfully deleted"""
+  success: Boolean
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -237,6 +266,57 @@ type Mutation {
     """Information about the wallet to be created"""
     walletInfo: CreateWalletInfoInput!
   ): CreateWalletOutput
+
+  """Create a new verification for a specific user wallet"""
+  createWalletVerification(
+    """The Ethereum address of the user wallet"""
+    userWalletAddress: String!
+    verificationInfo: CreateWalletVerificationInput!
+  ): CreateWalletVerificationOutput
+
+  """Removes a specific verification method from a user's wallet"""
+  deleteWalletVerification(
+    """Ethereum address of the user's wallet"""
+    userWalletAddress: String!
+
+    """Unique identifier of the verification to delete"""
+    verificationId: String!
+  ): DeleteWalletVerificationOutput
+}
+
+"""Algorithm used for OTP verification"""
+enum OTPAlgorithm {
+  SHA1
+  SHA3_224
+  SHA3_256
+  SHA3_384
+  SHA3_512
+  SHA224
+  SHA256
+  SHA384
+  SHA512
+}
+
+input OTPSettingsInput {
+  """The algorithm for OTP verification"""
+  algorithm: OTPAlgorithm
+
+  """The number of digits for OTP verification"""
+  digits: Int
+
+  """The name of the OTP verification"""
+  name: String!
+
+  """The period (in seconds) for OTP verification"""
+  period: Int
+}
+
+input PincodeSettingsInput {
+  """The name of the PINCODE verification"""
+  name: String!
+
+  """The pincode for PINCODE verification"""
+  pincode: String!
 }
 
 type Query {
@@ -358,6 +438,20 @@ type Query {
     """Transaction hash"""
     transactionHash: String!
   ): TransactionOutput
+
+  """
+  Generates and returns challenges for all or specific verification methods of a user's wallet
+  """
+  getWalletVerificationChallenges(
+    """Ethereum address of the user's wallet"""
+    userWalletAddress: String!
+  ): [WalletVerificationChallenge!]
+
+  """Retrieves all active verification methods for a user's wallet"""
+  getWalletVerifications(
+    """Ethereum address of the user's wallet"""
+    userWalletAddress: String!
+  ): [WalletVerification!]
 }
 
 type StarterKitERC20 {
@@ -909,4 +1003,34 @@ type TransactionsPaginatedOutput {
   """Total number of results"""
   count: Int!
   records: [TransactionOutput!]!
+}
+
+"""Wallet verification details"""
+type WalletVerification {
+  """Unique identifier of the verification"""
+  id: String
+
+  """Name of the verification"""
+  name: String
+
+  """Type of the created wallet verification"""
+  verificationType: WalletVerificationType
+}
+
+"""Wallet verification challenge"""
+type WalletVerificationChallenge {
+  """Challenge object"""
+  challenge: JSON
+
+  """Name of the verification"""
+  name: String
+
+  """Type of the created wallet verification"""
+  verificationType: WalletVerificationType
+}
+
+"""Verification type"""
+enum WalletVerificationType {
+  OTP
+  PINCODE
 }
