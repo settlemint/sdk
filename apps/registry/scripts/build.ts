@@ -28,6 +28,7 @@ const registries = [
       "@settlemint/sdk-minio",
       "@settlemint/sdk-portal",
       "@settlemint/sdk-thegraph",
+      "babel-plugin-react-compiler",
     ],
     registryDependencies: [
       "sheet",
@@ -80,6 +81,7 @@ const registries = [
       "@settlemint/sdk-minio",
       "@settlemint/sdk-portal",
       "@settlemint/sdk-thegraph",
+      "babel-plugin-react-compiler",
     ],
     registryDependencies: [
       "sheet",
