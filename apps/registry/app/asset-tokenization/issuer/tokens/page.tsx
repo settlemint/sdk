@@ -11,12 +11,12 @@ const searchParamsCache = createSearchParamsCache({
   formId: parseAsString.withDefault(""),
 });
 
-interface WalletTokenPageProps {
-  searchParams: SearchParams;
+interface IssuerTokensPageProps {
+  searchParams: Promise<SearchParams>;
 }
 
-export default function IssuerTokens({ searchParams }: WalletTokenPageProps) {
-  const parsedParams = searchParamsCache.parse(searchParams);
+export default async function IssuerTokens({ searchParams }: IssuerTokensPageProps) {
+  const parsedParams = searchParamsCache.parse(await searchParams);
   return (
     <>
       <BreadcrumbSetter
