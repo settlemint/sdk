@@ -16,7 +16,7 @@ bunx shadcn@latest init
 Install the asset-tokenization template
 
 ```bash
-bunx shadcn@latest add https://settlemint.github.io/sdk/asset-tokenization-staging.json
+bunx shadcn@latest add https://settlemint.github.io/sdk/asset-tokenization.json
 ```
 
 Remove some NextJS cruft
