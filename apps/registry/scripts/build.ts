@@ -14,11 +14,11 @@ const registries = [
       },
       {
         type: "registry:lib",
-        path: new Glob("./next.config.mjs"),
-        targetFunction: (path: string) => path.replace("next.config.mjs", "next.config.mjs"),
+        path: new Glob("./next.config.*"),
+        targetFunction: (path: string) => path.replace("next.config", "next.config"),
       },
     ],
-    dependencies: ["lucide-react", "sonner"],
+    dependencies: ["lucide-react", "sonner", "@settlemint/sdk-next"],
     registryDependencies: [
       "sheet",
       "navigation-menu",
@@ -106,11 +106,11 @@ const registries = [
       },
       {
         type: "registry:lib",
-        path: new Glob("./next.config.mjs"),
-        targetFunction: (path: string) => path.replace("next.config.mjs", "next.config.mjs"),
+        path: new Glob("./next.config.*"),
+        targetFunction: (path: string) => path.replace("next.config", "next.config"),
       },
     ],
-    dependencies: ["lucide-react", "sonner"],
+    dependencies: ["lucide-react", "sonner", "@settlemint/sdk-next"],
     registryDependencies: [
       "sheet",
       "navigation-menu",

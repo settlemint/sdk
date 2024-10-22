@@ -5,7 +5,7 @@ import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import { installDependencies } from "@settlemint/sdk-utils/package-manager";
 import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
@@ -74,7 +74,7 @@ export function codegenCommand(): Command {
         await spinner({
           startMessage: "Installing dependencies",
           task: async () => {
-            await installDependencies([...packages].filter((packageName) => !isPackageInstalled(packageName)));
+            await installDependencies([...packages]);
           },
           stopMessage: "Installed dependencies",
         });

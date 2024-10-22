@@ -76,7 +76,7 @@
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit"
   },
-  "devDependencies": { "@types/react": "^18" },
+  "devDependencies": { "@types/react": ">=18" },
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
     "path-to-regexp": "^8"
