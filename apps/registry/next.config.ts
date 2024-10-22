@@ -1,7 +1,7 @@
 import { withSettleMint } from "@settlemint/sdk-next/config/with-settlemint";
+import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   eslint: {
     ignoreDuringBuilds: true,
@@ -13,6 +13,9 @@ const nextConfig = {
       hints: false,
     };
     return config;
+  },
+  experimental: {
+    reactCompiler: true,
   },
 };
 
