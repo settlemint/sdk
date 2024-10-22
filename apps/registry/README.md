@@ -3,7 +3,7 @@
 Create a new Next.js project, all defaults are fine.
 
 ```bash
-bunx create-next-app@latest
+bunx create-next-app@latest --reset
 cd <project-name>
 ```
 

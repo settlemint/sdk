@@ -331,6 +331,22 @@ jobs:
             ATTEMPT=$((ATTEMPT + 1))
           done
 
+      - name: Run connect and codegen
+        run: bunx turbo registry:connect registry:codegen --env-mode=loose
+        env:
+          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
+          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
+          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
+          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
+          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
+          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
+          SETTLEMINT_AUTH_SECRET: ${{ secrets.SETTLEMINT_AUTH_SECRET }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
+          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
