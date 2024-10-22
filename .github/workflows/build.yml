@@ -221,6 +221,9 @@ jobs:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Install Bun dependencies
+        run: bun install
+
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v4
 
