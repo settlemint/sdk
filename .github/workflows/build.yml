@@ -30,8 +30,8 @@ permissions:
   statuses: write
 
 jobs:
-  test:
-    name: Test and Build
+  packages:
+    name: SDK packages
     runs-on: namespace-profile-sdk
     strategy:
       matrix:
@@ -154,6 +154,26 @@ jobs:
           SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
           SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
 
+      - name: Make index
+        if: ${{ matrix.pkg == 'cli' }}
+        run: |
+          echo "Creating index.html with list of JSON files in apps/registry/public/"
+          cd apps/registry/public
+          echo "<html><head><title>Registry Files</title><script src='https://cdn.tailwindcss.com'></script></head><body class='bg-gray-100 dark:bg-gray-900'><div class='container mx-auto px-4 py-8 max-w-3xl'><h1 class='text-3xl font-bold mb-6 text-gray-800 dark:text-white border-b-2 border-blue-500 pb-2'>Registry Files</h1><ul class='space-y-4'>" > index.html
+          for file in *.json; do
+            echo "<li class='bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300'><span class='font-mono text-sm text-gray-600 dark:text-gray-400'>bunx shadcn@latest add</span> <a href='https://settlemint.github.io/sdk/$file' class='text-blue-600 dark:text-blue-400 hover:underline'>https://settlemint.github.io/sdk/$file</a></span></li>" >> index.html
+          done
+          echo "</ul></div><script>if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.classList.add('dark') }</script></body></html>" >> index.html
+          cd ../../..
+          echo "Created index.html in apps/registry/public/"
+
+      - name: Upload static files as artifact
+        if: ${{ matrix.pkg == 'cli' }}
+        id: deployment
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/registry/public
+
       - name: Publish SDK JS package
         if: ${{ matrix.pkg != 'registry' }}
         uses: JS-DevTools/npm-publish@v3
@@ -165,15 +185,38 @@ jobs:
           strategy: all
           tag: ${{ env.TAG }}
 
-  registry:
-    name: Test and Build Registry
+      - name: Create or update PR comment
+        if: ${{ github.event_name == 'pull_request' && matrix.pkg == 'cli' }}
+        uses: taoliujun/action-unique-comment@v1
+        with:
+            uniqueIdentifier: ${{ github.workflow }}
+            body: |
+                # 📦 Packages
+                | Package | Version |
+                | ------- | -------------------- |
+                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
+                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |
+                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |
+                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |
+                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
+                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` |
+                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
+                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` |
+                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` |
+
+      - name: Auto-commit updated package versions
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: ${{ env.TAG == 'latest' && matrix.pkg == 'cli' }}
+        with:
+          commit_message: "chore: update package versions [skip ci]"
+          branch: main
+          file_pattern: 'package.json **/schema.graphql'
+
+  docker:
+    name: Build docker container
     runs-on: namespace-profile-sdk
     needs:
-      - test
-    strategy:
-      matrix:
-        pkg:
-          - "registry"
+      - packages
     steps:
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
@@ -308,53 +351,13 @@ jobs:
             ATTEMPT=$((ATTEMPT + 1))
           done
 
-      - name: Install Bun dependencies
-        run: bun install
-
-      - name: Setup 1Password
-        uses: settlemint/setup-op@main
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          version: 2.29.0
-
-      - name: Run tests and checks
-        run: bunx turbo format lint build registry:build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
-        env:
-          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
-          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
-          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
-          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
-          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
-          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
-          SETTLEMINT_AUTH_SECRET: ${{ secrets.SETTLEMINT_AUTH_SECRET }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
-          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
-          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
-
-      - name: Make index
-        if: ${{ matrix.pkg == 'registry' }}
-        run: |
-          echo "Creating index.html with list of JSON files in apps/registry/public/"
-          cd apps/registry/public
-          echo "<html><head><title>Registry Files</title><script src='https://cdn.tailwindcss.com'></script></head><body class='bg-gray-100 dark:bg-gray-900'><div class='container mx-auto px-4 py-8 max-w-3xl'><h1 class='text-3xl font-bold mb-6 text-gray-800 dark:text-white border-b-2 border-blue-500 pb-2'>Registry Files</h1><ul class='space-y-4'>" > index.html
-          for file in *.json; do
-            echo "<li class='bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300'><span class='font-mono text-sm text-gray-600 dark:text-gray-400'>bunx shadcn@latest add</span> <a href='https://settlemint.github.io/sdk/$file' class='text-blue-600 dark:text-blue-400 hover:underline'>https://settlemint.github.io/sdk/$file</a> <span class='text-gray-500 dark:text-gray-400'>(<a href='$file' class='text-blue-600 dark:text-blue-400 hover:underline'>$file</a>)</span></li>" >> index.html
-          done
-          echo "</ul></div><script>if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.classList.add('dark') }</script></body></html>" >> index.html
-          cd ../../..
-          echo "Created index.html in apps/registry/public/"
-
       - name: Upload static files as artifact
-        if: ${{ matrix.pkg == 'registry' }}
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
           path: apps/registry/public
 
       - name: Login to GitHub Container Registry
-        if: ${{ matrix.pkg == 'registry' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -362,14 +365,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to DockerHub
-        if: ${{ matrix.pkg == 'registry' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
 
       - name: Generate Docker metadata
-        if: ${{ matrix.pkg == 'registry' }}
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -380,7 +381,6 @@ jobs:
             type=raw,value=${{ env.VERSION }}
 
       - name: Build and push Docker image
-        if: ${{ matrix.pkg == 'registry' }}
         uses: docker/build-push-action@v6
         with:
           context: ./apps/registry
@@ -391,33 +391,6 @@ jobs:
           provenance: mode=max
           sbom: true
 
-      - name: Create or update PR comment
-        if: ${{ github.event_name == 'pull_request' && matrix.pkg == 'registry' }}
-        uses: taoliujun/action-unique-comment@v1
-        with:
-            uniqueIdentifier: ${{ github.workflow }}
-            body: |
-                # 📦 Packages
-                | Package | Version |
-                | ------- | -------------------- |
-                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
-                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |
-                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |
-                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |
-                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
-                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` |
-                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
-                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` |
-                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` |
-
-      - name: Auto-commit updated package versions
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: ${{ env.TAG == 'latest' && matrix.pkg == 'registry' }}
-        with:
-          commit_message: "chore: update package versions [skip ci]"
-          branch: main
-          file_pattern: 'package.json **/schema.graphql'
-
   deploy:
     if: ${{ github.event_name != 'pull_request' && !startsWith(github.ref, 'refs/tags/') }}
     environment:
@@ -425,7 +398,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs:
-      - registry
+      - packages
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
