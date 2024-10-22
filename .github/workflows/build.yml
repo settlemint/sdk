@@ -127,7 +127,7 @@ jobs:
           echo "Updated version to $VERSION"
 
       - name: Run tests and checks
-        run: bunx turbo format lint build attw publint registry test:coverage npm-publish --env-mode=loose
+        run: bunx turbo format lint build attw publint registry test:coverage publish-npm --env-mode=loose
         env:
           SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
           SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
