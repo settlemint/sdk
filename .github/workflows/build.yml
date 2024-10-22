@@ -332,7 +332,7 @@ jobs:
           done
 
       - name: Run connect and codegen
-        run: bunx turbo registry:connect registry:codegen --env-mode=loose
+        run: bunx turbo build registry:connect registry:codegen --env-mode=loose
         env:
           SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
           SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
