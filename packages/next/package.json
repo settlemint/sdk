@@ -81,7 +81,7 @@
     "@settlemint/sdk-utils": "workspace:*",
     "path-to-regexp": "^8"
   },
-  "peerDependencies": { "next": ">=14", "react": ">=18" },
+  "peerDependencies": { "next": ">=15", "react": ">=18" },
   "engines": {
     "node": ">=20"
   }
