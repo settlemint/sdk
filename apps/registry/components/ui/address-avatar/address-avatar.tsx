@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { type HTMLAttributes, forwardRef, useState } from "react";
 import { getGravatarUrl } from "react-awesome-gravatar";
-import Jazzicon, { jsNumberForAddress } from "react-jazzicon";
 import { http, type Address, createPublicClient } from "viem";
 import { mainnet } from "viem/chains";
 
@@ -75,15 +74,7 @@ export const AddressAvatar = forwardRef<HTMLDivElement, AddressAvatarProps>(
           <AvatarFallback
             className={cn(variant === "big" ? "w-10 h-10" : variant === "small" ? "w-6 h-6" : "w-4 h-4", className)}
           >
-            {!address && (
-              <Skeleton className={cn("rounded-full absolute inset-0", imageLoaded ? "opacity-0" : "opacity-100")} />
-            )}
-            {address && (
-              <Jazzicon
-                diameter={variant === "big" ? 60 : variant === "small" ? 40 : 20}
-                seed={jsNumberForAddress(address)}
-              />
-            )}
+            <Skeleton className={cn("rounded-full absolute inset-0", imageLoaded ? "opacity-0" : "opacity-100")} />
           </AvatarFallback>
           {avatar?.avatar && (
             <AvatarImage
