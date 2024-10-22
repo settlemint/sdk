@@ -33,18 +33,6 @@ jobs:
   packages:
     name: SDK packages
     runs-on: namespace-profile-sdk
-    strategy:
-      matrix:
-        pkg:
-          - "cli"
-          - "hasura"
-          - "ipfs"
-          - "js"
-          - "minio"
-          - "next"
-          - "portal"
-          - "thegraph"
-          - "utils"
     steps:
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
@@ -139,7 +127,7 @@ jobs:
           echo "Updated version to $VERSION"
 
       - name: Run tests and checks
-        run: bunx turbo format lint build registry:build attw publint test:coverage --concurrency=100% --summarize --env-mode=loose --filter=@settlemint/sdk-${{ matrix.pkg }}
+        run: bunx turbo format lint build attw publint registry test:coverage npm-publish --env-mode=loose
         env:
           SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
           SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
@@ -155,7 +143,6 @@ jobs:
           SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
 
       - name: Make index
-        if: ${{ matrix.pkg == 'cli' }}
         run: |
           echo "Creating index.html with list of JSON files in apps/registry/public/"
           cd apps/registry/public
@@ -168,22 +155,10 @@ jobs:
           echo "Created index.html in apps/registry/public/"
 
       - name: Upload static files as artifact
-        if: ${{ matrix.pkg == 'cli' }}
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
           path: apps/registry/public
-
-      - name: Publish SDK JS package
-        if: ${{ matrix.pkg != 'registry' }}
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./packages/${{ matrix.pkg }}/package.json
-          access: public
-          provenance: false
-          strategy: all
-          tag: ${{ env.TAG }}
 
       - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' && matrix.pkg == 'cli' }}
@@ -206,7 +181,7 @@ jobs:
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@v5
-        if: ${{ env.TAG == 'latest' && matrix.pkg == 'cli' }}
+        if: ${{ env.TAG == 'latest' }}
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main

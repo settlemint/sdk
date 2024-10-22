@@ -44,7 +44,8 @@
     "attw": "attw --pack .",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "publish-npm": "bun publish --tag ${TAG} --access public"
   },
   "devDependencies": {},
   "dependencies": {

@@ -27,6 +27,9 @@
       "inputs": ["graphql/**"],
       "outputs": [".settlemint/**", "schema.graphql"]
     },
+    "npm-publish": {
+      "dependsOn": ["build"]
+    },
     "//#lint:biome": {
       "dependsOn": ["//#format:biome"]
     },
