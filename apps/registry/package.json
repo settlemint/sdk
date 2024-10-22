@@ -1,12 +1,12 @@
 {
-  "name": "registry",
+  "name": "@settlemint/sdk-registry",
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "registry:dev": "next dev --turbo",
+    "registry:build": "next build",
+    "registry:start": "next start",
+    "registry:lint": "next lint",
     "manual:connect": "bun ../../packages/cli/src/cli.ts connect",
     "registry:connect": "bun ../../packages/cli/src/cli.ts connect -a",
     "registry:codegen": "bun ../../packages/cli/src/cli.ts codegen",
