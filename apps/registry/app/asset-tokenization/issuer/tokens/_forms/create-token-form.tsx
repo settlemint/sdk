@@ -101,7 +101,7 @@ export function CreateTokenForm({ className, defaultValues, formId, ...props }: 
 
   return (
     <div className="TokenizationWizard container mt-8">
-      <Card className="w-full">
+      <Card>
         <CardHeader>
           <CardTitle>Create a new token</CardTitle>
           <CardDescription>Issue a new token.</CardDescription>
