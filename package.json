@@ -31,6 +31,7 @@
     "registry:codegen": "turbo registry:codegen",
     "codegen": "turbo codegen",
     "registry": "turbo registry",
+    "publish-npm": "turbo publish-npm",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize",
