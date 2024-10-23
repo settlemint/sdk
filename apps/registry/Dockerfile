@@ -10,7 +10,7 @@ RUN bun install
 FROM deps AS build
 
 COPY --chmod=0777 . .
-RUN bun run registry:build
+RUN bun run build
 
 # RUN
 FROM node:22.10.0-alpine3.20 AS prod
