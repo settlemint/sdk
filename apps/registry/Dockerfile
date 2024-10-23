@@ -1,20 +1,13 @@
 # BUILD DEPENDENCIES
-FROM oven/bun:1.1.32-alpine AS build
+FROM oven/bun:1.1.32-alpine AS deps
 
 RUN mkdir -p /app
 WORKDIR /app
 
 COPY package.json .
-RUN set -e; \
-  for i in 1 2 3; do \
-    bun install --force --no-cache && break || \
-    if [ $i -lt 3 ]; then \
-      echo "bun install failed, retrying in 10 seconds..." && \
-      sleep 10; \
-    else \
-      echo "bun install failed after 3 attempts" && exit 1; \
-    fi \
-  done
+RUN bun install
+
+FROM deps AS build
 
 COPY --chmod=0777 . .
 RUN bun run registry:build

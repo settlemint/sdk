@@ -43,3 +43,4 @@ apps/asset-tokenization/contracts/ignition/deployments
 *.deployments.json
 
 .idea
+apps/ro

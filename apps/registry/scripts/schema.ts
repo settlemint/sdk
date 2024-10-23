@@ -23,6 +23,8 @@ export const registryItemTypeSchema = z.enum([
   "registry:page",
 ]);
 
+export type RegistryItemFileType = z.infer<typeof registryItemTypeSchema>;
+
 export const registryItemFileSchema = z.object({
   path: z.string(),
   content: z.string().optional(),
@@ -50,7 +52,6 @@ export const registryItemSchema = z.object({
   type: registryItemTypeSchema,
   description: z.string().optional(),
   dependencies: z.array(z.string()).optional(),
-  devDependencies: z.array(z.string()).optional(),
   registryDependencies: z.array(z.string()).optional(),
   files: z.array(registryItemFileSchema).optional(),
   tailwind: registryItemTailwindSchema.optional(),
@@ -89,7 +90,6 @@ export const registryBaseColorSchema = z.object({
 
 export const registryResolvedItemsTreeSchema = registryItemSchema.pick({
   dependencies: true,
-  devDependencies: true,
   files: true,
   tailwind: true,
   cssVars: true,
