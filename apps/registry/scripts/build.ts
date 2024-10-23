@@ -27,6 +27,8 @@ async function compileBlocks() {
   const kits = new Glob("*");
   const pages = new Glob("**/*.tsx");
 
+  const all: string[] = [];
+
   console.log(`Compiling themes in ${themeDir}`);
   for await (const themePath of themes.scan({ cwd: themeDir, onlyFiles: true })) {
     console.log(` - ${themePath}`);
@@ -34,6 +36,7 @@ async function compileBlocks() {
     const file = Bun.file(join(themeDir, themePath));
     const raw = await file.json();
     Bun.write(join(process.cwd(), `public/${name}.json`), JSON.stringify(raw, null, 2));
+    all.push(`https://settlemint.github.io/sdk/${name}.json`);
   }
 
   console.log(`Compiling libs in ${libDir}`);
@@ -65,6 +68,7 @@ async function compileBlocks() {
     };
 
     Bun.write(join(process.cwd(), `public/${component.name}.json`), JSON.stringify(component, null, 2));
+    all.push(`https://settlemint.github.io/sdk/${component.name}.json`);
   }
 
   console.log(`Compiling blocks in ${blockDir}`);
@@ -96,6 +100,7 @@ async function compileBlocks() {
     };
 
     Bun.write(join(process.cwd(), `public/${component.name}.json`), JSON.stringify(component, null, 2));
+    all.push(`https://settlemint.github.io/sdk/${component.name}.json`);
   }
 
   console.log(`Compiling pages in ${pageDir}`);
@@ -142,7 +147,20 @@ async function compileBlocks() {
     };
 
     Bun.write(join(process.cwd(), `public/${component.name}.json`), JSON.stringify(component, null, 2));
+    all.push(`https://settlemint.github.io/sdk/${component.name}.json`);
   }
+
+  Bun.write(
+    join(process.cwd(), "public/all.json"),
+    JSON.stringify({
+      name: "all",
+      description: "All components",
+      type: "registry:component",
+      registryDependencies: all,
+      dependencies: [],
+      files: [],
+    }),
+  );
 }
 
 compileBlocks()
