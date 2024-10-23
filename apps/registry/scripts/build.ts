@@ -170,11 +170,12 @@ async function compileFile({
 
   let description = "";
   if (sourceFile.getVariableDeclaration("description")) {
-    description = sourceFile
-      .getVariableDeclaration("description")
-      .getInitializerOrThrow()
-      .asKindOrThrow(SyntaxKind.StringLiteral)
-      .getLiteralValue();
+    description =
+      sourceFile
+        .getVariableDeclaration("description")
+        ?.getInitializer()
+        ?.asKind(SyntaxKind.StringLiteral)
+        ?.getLiteralValue() ?? "";
   }
 
   const imports = new Map<
