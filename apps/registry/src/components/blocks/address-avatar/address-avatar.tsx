@@ -29,17 +29,22 @@ interface AddressAvatarProps extends HTMLAttributes<HTMLDivElement> {
 
 async function getEnsAvatarUrl(address?: string | null) {
   if (address) {
-    const publicClient = createPublicClient({
-      chain: mainnet,
-      transport: http(),
-    });
+    try {
+      const publicClient = createPublicClient({
+        chain: mainnet,
+        transport: http(),
+      });
 
-    const ensName = await publicClient.getEnsName({
-      address: address as Address,
-    });
+      const ensName = await publicClient.getEnsName({
+        address: address as Address,
+      });
 
-    if (ensName) {
-      return `https://metadata.ens.domains/mainnet/avatar/${ensName}`;
+      if (ensName) {
+        return `https://metadata.ens.domains/mainnet/avatar/${ensName}`;
+      }
+    } catch (error) {
+      console.debug(error);
+      return undefined;
     }
   }
 
