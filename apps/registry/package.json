@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "registry": "./scripts/build"
+    "registry": "bun ./scripts/build"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
