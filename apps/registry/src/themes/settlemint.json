@@ -2,6 +2,7 @@
   "name": "settlemint",
   "description": "The color scheme of Settlemint",
   "type": "registry:theme",
+  "dependencies": ["@settlemint/sdk-cli"],
   "cssVars": {
     "light": {
       "background": "223 88% 97%",
