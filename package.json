@@ -45,7 +45,7 @@
     "knip": "5.33.3",
     "@types/bun": "1.1.12",
     "@arethetypeswrong/cli": "0.16.4",
-    "publint": "0.2.11",
+    "publint": "0.2.12",
     "tsup": "8.3.0"
   },
   "engines": {
