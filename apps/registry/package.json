@@ -25,7 +25,7 @@
     "@radix-ui/react-separator": "1.1.0",
     "@radix-ui/react-slot": "1.1.0",
     "@radix-ui/react-tooltip": "1.1.3",
-    "@settlemint/sdk-hasura": "0.6.11",
+    "@settlemint/sdk-hasura": "0.6.14",
     "@settlemint/sdk-ipfs": "0.6.11",
     "@settlemint/sdk-minio": "0.6.11",
     "@settlemint/sdk-portal": "0.6.11",
