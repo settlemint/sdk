@@ -1,5 +1,5 @@
 # BUILD DEPENDENCIES
-FROM oven/bun:1.1.32-alpine AS deps
+FROM oven/bun:1.1.33-alpine AS deps
 
 RUN mkdir -p /app
 WORKDIR /app
