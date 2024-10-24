@@ -43,7 +43,7 @@
     "turbo": "2.2.3",
     "typescript": "5.6.3",
     "knip": "5.33.3",
-    "@types/bun": "1.1.11",
+    "@types/bun": "1.1.12",
     "@arethetypeswrong/cli": "0.16.4",
     "publint": "0.2.11",
     "tsup": "8.3.0"
