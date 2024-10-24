@@ -34,6 +34,7 @@ export function createServerMinioClient(options: ServerClientOptions): { client:
       endPoint: new URL(validatedOptions.instance).host,
       accessKey: validatedOptions.accessKey,
       secretKey: validatedOptions.secretKey,
+      region: "eu-central-1",
     }),
   };
 }
