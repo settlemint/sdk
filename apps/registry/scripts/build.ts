@@ -9,6 +9,7 @@ const blockDir = "src/components/blocks";
 const libDir = "src/lib";
 const themeDir = "src/themes";
 const pageDir = "src/app";
+const hooksDir = "src/hooks";
 
 const project = new Project({
   compilerOptions: {},
@@ -23,6 +24,7 @@ async function compileBlocks() {
   const blocks = new Glob("*");
   const components = new Glob("*.ts*");
   const libs = new Glob("*.ts");
+  const hooks = new Glob("*.ts*");
   const themes = new Glob("*.json");
   const kits = new Glob("*");
   const pages = new Glob("**/*.tsx");
@@ -37,6 +39,38 @@ async function compileBlocks() {
     const raw = await file.json();
     Bun.write(join(process.cwd(), `public/${name}.json`), JSON.stringify(raw, null, 2));
     all.push(`https://settlemint.github.io/sdk/${name}.json`);
+  }
+
+  console.log(`Compiling hooks in ${hooksDir}`);
+  for await (const hookPath of hooks.scan({ cwd: hooksDir, onlyFiles: true })) {
+    if (hookPath === "use-mobile.tsx") continue;
+    console.log(` - ${hookPath}`);
+    const name = hookPath.replace(".ts", "");
+    let description = "";
+    const dependencies = new Set<string>();
+    const files: { path: string; content: string; type: string; target: string }[] = [];
+
+    const compiled = await compileFile({
+      type: "registry:hook",
+      basePath: hooksDir,
+      componentPath: "",
+      filepath: hookPath,
+    });
+    description = compiled.description;
+    for (const dep of compiled.registryDependencies) dependencies.add(dep);
+    for (const dep of compiled.dependencies) dependencies.add(dep);
+    files.push(compiled.file);
+
+    const component = {
+      name,
+      description,
+      type: "registry:hook",
+      dependencies: Array.from(dependencies),
+      files,
+    };
+
+    Bun.write(join(process.cwd(), `public/${component.name}.json`), JSON.stringify(component, null, 2));
+    all.push(`https://settlemint.github.io/sdk/${component.name}.json`);
   }
 
   console.log(`Compiling libs in ${libDir}`);
@@ -255,7 +289,7 @@ async function compileFile({
       path: filepath,
       content: raw,
       type: type,
-      target: join(componentPath, filepath),
+      target: join(basePath.replace("src/", ""), componentPath, filepath),
     },
   };
 }

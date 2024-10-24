@@ -40,11 +40,53 @@ And fix shadcn not setting the content array in tailwind.config.ts:
   content: ["./{,src/}app/**/*.{js,ts,jsx,tsx,mdx}", "./{,src/}components/**/*.{js,ts,jsx,tsx,mdx}"],
 ```
 
+Install Biome for linting and formatting:
+
+```bash
+bun add -D @biomejs/biome
+bun pm trust --all
+```
+
+And place this config file in the root of the project:
+
+```json
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "files": {
+    "ignore": [
+      "src/components/ui/**/*"
+    ]
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true
+    }
+  },
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "attributePosition": "auto",
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 120
+  },
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  }
+}
+```
+
 Install the components you need
 
 ```bash
-bunx shadcn@latest add https://settlemint.github.io/sdk/settlemint.json
-bunx shadcn@latest add https://settlemint.github.io/sdk/<component>.json
+bunx shadcn@latest add https://settlemint.github.io/sdk/all.json -o -y
 ```
 
 Connect to your SettleMint application
