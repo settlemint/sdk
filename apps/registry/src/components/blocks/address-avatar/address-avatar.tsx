@@ -50,15 +50,12 @@ export const AddressAvatar = forwardRef<HTMLDivElement, AddressAvatarProps>(
             return { ensName, avatar: `https://metadata.ens.domains/mainnet/avatar/${ensName}` };
           }
         }
-        if (email) {
-          const avatarUrl = getGravatarUrl(email ?? "", {
-            default: "identicon",
-            size: 400,
-          });
+        const avatarUrl = getGravatarUrl(email ?? address ?? "", {
+          default: "identicon",
+          size: 400,
+        });
 
-          return { avatar: avatarUrl };
-        }
-        return null;
+        return { avatar: avatarUrl };
       },
     });
 
