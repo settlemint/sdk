@@ -28,6 +28,7 @@ async function compileBlocks() {
   const themes = new Glob("*.json");
   const kits = new Glob("*");
   const pages = new Glob("**/*.tsx");
+  const logos = new Glob("*.svg");
 
   const all: string[] = [];
 
@@ -122,6 +123,22 @@ async function compileBlocks() {
       for (const dep of compiled.registryDependencies) registryDependencies.add(dep);
       for (const dep of compiled.dependencies) dependencies.add(dep);
       files.push(compiled.file);
+    }
+
+    if (name === "logo") {
+      for await (const filepath of logos.scan({ cwd: "public/logos", onlyFiles: true })) {
+        console.log(`   - (logo) ${filepath}`);
+        const compiled = await compileFile({
+          type: "registry:page",
+          basePath: "public/logos",
+          componentPath: "",
+          filepath,
+        });
+        description = compiled.description;
+        for (const dep of compiled.registryDependencies) registryDependencies.add(dep);
+        for (const dep of compiled.dependencies) dependencies.add(dep);
+        files.push(compiled.file);
+      }
     }
 
     const component = {
