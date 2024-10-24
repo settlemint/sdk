@@ -241,6 +241,16 @@ async function compileFile({
 
   for (const node of sourceFile.getImportDeclarations()) {
     const mod = node.getModuleSpecifier().getLiteralValue();
+    const defaultImport = node.getDefaultImport();
+
+    if (defaultImport) {
+      imports.set(defaultImport.getText(), {
+        module: mod,
+        text: node.getText(),
+        isDefault: true,
+      });
+    }
+
     for (const item of node.getNamedImports()) {
       imports.set(item.getText(), {
         module: mod,
@@ -256,6 +266,7 @@ async function compileFile({
 
   const dependencies = new Set<string>();
   for (const { module } of Array.from(imports.values())
+    .filter(({ module }) => module !== "react")
     .filter(({ module }) => !module.startsWith("@/"))
     .filter(({ module }) => {
       if (module.startsWith("@")) {
