@@ -41,6 +41,7 @@ export async function codegenTsconfig(env: DotEnv) {
               schema: "hasura-schema.graphql",
               tadaOutputLocation: "hasura-env.d.ts",
               tadaTurboLocation: "hasura-cache.d.ts",
+              trackFieldUsage: false,
             },
           ]
         : []),
@@ -51,6 +52,7 @@ export async function codegenTsconfig(env: DotEnv) {
               schema: "the-graph-schema.graphql",
               tadaOutputLocation: "the-graph-env.d.ts",
               tadaTurboLocation: "the-graph-cache.d.ts",
+              trackFieldUsage: false,
             },
           ]
         : []),
@@ -61,6 +63,7 @@ export async function codegenTsconfig(env: DotEnv) {
               schema: "portal-schema.graphql",
               tadaOutputLocation: "portal-env.d.ts",
               tadaTurboLocation: "portal-cache.d.ts",
+              trackFieldUsage: false,
             },
           ]
         : []),
