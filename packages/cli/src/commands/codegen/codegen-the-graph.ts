@@ -20,7 +20,7 @@ export async function codegenTheGraph(env: DotEnv) {
   });
 
   const template = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
-import type { introspection } from "../../the-graph-env.d.ts";
+import type { introspection } from "@schemas/the-graph-env";
 
 export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
   introspection: introspection;

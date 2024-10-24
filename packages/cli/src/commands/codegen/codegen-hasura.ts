@@ -22,7 +22,7 @@ export async function codegenHasura(env: DotEnv) {
   });
 
   const template = `import { createHasuraClient } from "@settlemint/sdk-hasura";
-import type { introspection } from "../../hasura-env.d.ts";
+import type { introspection } from "@schemas/hasura-env";
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
   introspection: introspection;

@@ -75,6 +75,11 @@ export async function codegenTsconfig(env: DotEnv) {
   }
   tsconfig.config.compilerOptions.plugins.push(tadaConfig);
 
+  if (!tsconfig.config.compilerOptions.paths) {
+    tsconfig.config.compilerOptions.paths = {};
+  }
+  tsconfig.config.compilerOptions.paths["@schemas/*"] = ["./*.d.ts"];
+
   writeFileSync(tsconfig.path, JSON.stringify(tsconfig.config, null, 2), "utf8");
 
   return {
