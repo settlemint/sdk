@@ -1,16 +1,8 @@
 import { AddressAvatar } from "@/components/blocks/address-avatar/address-avatar";
-import { CollapsedBreadcrumbSetter } from "@/components/blocks/collapsed-breadcrumb/collapsed-breadcrumb-setter";
 
 export default function AddressAvatarPage() {
   return (
     <>
-      <CollapsedBreadcrumbSetter
-        items={[
-          { label: "Home", href: "/" },
-          { label: "Blocks", href: "/blocks" },
-          { label: "Address Avatar", href: "/blocks/address-avatar" },
-        ]}
-      />
       <h1 className="text-2xl font-bold">Address Avatar</h1>
       <div className="grid grid-cols-2 gap-4 mt-4">
         <div>

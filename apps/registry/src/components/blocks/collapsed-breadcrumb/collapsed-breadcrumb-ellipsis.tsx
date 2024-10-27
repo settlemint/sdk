@@ -1,12 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 import type { PropsWithChildren } from "react";
-import type { BreadcrumbItemType } from "./collapsed-breadcrumb";
-import { EllipsisDropdownItem } from "./collapsed-breadcrumb-ellipsis-item";
 
 interface EllipsisDropdownProps extends PropsWithChildren {
-  items: BreadcrumbItemType[];
+  items: {
+    label: string;
+    href?: string;
+  }[];
   className?: string;
 }
 
@@ -18,8 +20,8 @@ export function EllipsisDropdown({ items, className }: EllipsisDropdownProps) {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="link"
-          className={cn("h-auto p-0 font-normal", className)}
+          variant="ghost"
+          className={cn("h-auto py-0 px-2 font-normal", className)}
           aria-label="Toggle hidden breadcrumb items"
         >
           …
@@ -27,9 +29,16 @@ export function EllipsisDropdown({ items, className }: EllipsisDropdownProps) {
       </PopoverTrigger>
       <PopoverContent className="w-56 p-2">
         {items.map(({ label, href }) => (
-          <EllipsisDropdownItem key={label} href={href ?? "#"}>
+          <Link
+            key={label}
+            href={href ?? ""}
+            className={cn(
+              "block px-2 py-1 text-sm hover:bg-accent hover:text-accent-foreground rounded transition-colors",
+              className,
+            )}
+          >
             {label}
-          </EllipsisDropdownItem>
+          </Link>
         ))}
       </PopoverContent>
     </Popover>
