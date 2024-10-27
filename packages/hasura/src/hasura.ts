@@ -40,7 +40,7 @@ function getFullUrl(options: ClientOptions): string {
   return options.runtime === "server"
     ? new URL(options.instance).toString()
     : new URL(
-        "/proxy/portal/graphql",
+        "/proxy/hasura/graphql",
         process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
       ).toString();
 }
