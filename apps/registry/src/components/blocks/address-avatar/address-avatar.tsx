@@ -73,13 +73,11 @@ export const AddressAvatar = forwardRef<HTMLDivElement, AddressAvatarProps>(
           >
             <Skeleton className={cn("rounded-full absolute inset-0", imageLoaded ? "opacity-0" : "opacity-100")} />
           </AvatarFallback>
-          {avatar?.avatar && (
-            <AvatarImage
-              src={avatar.avatar}
-              className={cn("transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
-              onLoad={() => setImageLoaded(true)}
-            />
-          )}
+          <AvatarImage
+            src={avatar.avatar}
+            className={cn("transition-opacity duration-300", imageLoaded ? "opacity-100" : "opacity-0")}
+            onLoad={() => setImageLoaded(true)}
+          />
         </Avatar>
         {indicator && (
           <span className="absolute -top-0.5 -right-0.5  flex h-3 w-3">
