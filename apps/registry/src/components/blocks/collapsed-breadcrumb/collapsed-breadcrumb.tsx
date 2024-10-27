@@ -10,98 +10,47 @@ import {
 import Link from "next/link";
 import { Fragment } from "react";
 
-export interface BreadcrumbItemType {
-  label: string;
-  href?: string;
-}
-
 interface BreadcrumbsProps {
   maxVisibleItems?: number;
   className?: string;
   routeSegments: string[];
 }
 
-interface ProcessedBreadcrumbItems {
-  visibleItems: (BreadcrumbItemType | null)[];
-  collapsedItems: BreadcrumbItemType[];
-}
-
-function capitalizeLabel(route: string): string {
-  return route
-    .split(/[-_]/)
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(" ");
-}
-
-function processBreadcrumbItems(items: BreadcrumbItemType[], maxVisibleItems: number): ProcessedBreadcrumbItems {
-  if (items.length <= maxVisibleItems) {
-    return { visibleItems: items, collapsedItems: [] };
-  }
-
-  return {
-    visibleItems: [
-      items[0],
-      null, // placeholder for ellipsis
-      ...items.slice(-(maxVisibleItems - 1)),
-    ],
-    collapsedItems: items.slice(1, -maxVisibleItems + 1),
-  };
-}
-
-function renderBreadcrumbItem(item: BreadcrumbItemType | null, collapsedItems: BreadcrumbItemType[]) {
-  if (!item) {
-    return <EllipsisDropdown items={collapsedItems} />;
-  }
-
-  if (item.href) {
-    return (
-      <BreadcrumbLink asChild>
-        <Link href={item.href}>{item.label}</Link>
-      </BreadcrumbLink>
-    );
-  }
-
-  return <BreadcrumbPage>{item.label}</BreadcrumbPage>;
-}
-
-/**
- * Renders a breadcrumb component with collapsible items.
- * @param props - The component props.
- * @returns The rendered Breadcrumb component.
- */
 export default function CollapsedBreadcrumbs({ maxVisibleItems = 3, className, routeSegments }: BreadcrumbsProps) {
-  if (routeSegments.length === 0) {
-    return null;
-  }
+  if (!routeSegments.length) return null;
 
-  const breadcrumbItems = routeSegments.reduce<BreadcrumbItemType[]>((items, route, index) => {
-    const isLastItem = index === routeSegments.length - 1;
-    const href = !isLastItem
-      ? items.length === 0
-        ? `/${route}`
-        : `${items[items.length - 1].href}/${route}`
-      : undefined;
+  const items = routeSegments.map((route, index) => ({
+    label: route
+      .split(/[-_]/)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(" "),
+    href: index < routeSegments.length - 1 ? `/${routeSegments.slice(0, index + 1).join("/")}` : undefined,
+  }));
 
-    items.push({
-      label: capitalizeLabel(route),
-      href,
-    });
-    return items;
-  }, []);
-
-  const { visibleItems, collapsedItems } = processBreadcrumbItems(breadcrumbItems, maxVisibleItems);
+  const visibleItems =
+    items.length <= maxVisibleItems
+      ? items
+      : [items[0], { label: "...", items: items.slice(1, -maxVisibleItems + 1) }, ...items.slice(-maxVisibleItems + 1)];
 
   return (
     <Breadcrumb className={className}>
       <BreadcrumbList>
-        {visibleItems.map((item, index) => {
-          return (
-            <Fragment key={item ? item.label : `ellipsis-${index}`}>
-              {index > 0 && <BreadcrumbSeparator />}
-              <BreadcrumbItem>{renderBreadcrumbItem(item, collapsedItems)}</BreadcrumbItem>
-            </Fragment>
-          );
-        })}
+        {visibleItems.map((item, index) => (
+          <Fragment key={item.label}>
+            {index > 0 && <BreadcrumbSeparator />}
+            <BreadcrumbItem>
+              {"items" in item ? (
+                <EllipsisDropdown items={item.items} />
+              ) : item.href ? (
+                <BreadcrumbLink asChild>
+                  <Link href={item.href}>{item.label}</Link>
+                </BreadcrumbLink>
+              ) : (
+                <BreadcrumbPage>{item.label}</BreadcrumbPage>
+              )}
+            </BreadcrumbItem>
+          </Fragment>
+        ))}
       </BreadcrumbList>
     </Breadcrumb>
   );

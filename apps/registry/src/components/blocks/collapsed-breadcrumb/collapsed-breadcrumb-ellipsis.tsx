@@ -3,10 +3,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { PropsWithChildren } from "react";
-import type { BreadcrumbItemType } from "./collapsed-breadcrumb";
 
 interface EllipsisDropdownProps extends PropsWithChildren {
-  items: BreadcrumbItemType[];
+  items: {
+    label: string;
+    href?: string;
+  }[];
   className?: string;
 }
 
