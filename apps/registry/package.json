@@ -10,7 +10,7 @@
     "registry": "bun ./scripts/build.ts"
   },
   "dependencies": {
-    "@hookform/resolvers": "3.9.0",
+    "@hookform/resolvers": "3.9.1",
     "@next-safe-action/adapter-react-hook-form": "1.0.13",
     "@radix-ui/react-avatar": "1.1.1",
     "@radix-ui/react-collapsible": "1.1.1",
