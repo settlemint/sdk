@@ -24,7 +24,6 @@ export async function withSettleMint<C extends NextConfig>(
 
   const baseConfig = {
     ...nextConfig,
-    output: output ?? nextConfig.output ?? "standalone",
   };
 
   const env = validate(DotEnvSchema, process.env);
