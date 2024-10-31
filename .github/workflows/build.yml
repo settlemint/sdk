@@ -166,7 +166,7 @@ jobs:
           path: apps/registry/public
 
       - name: Create or update PR comment
-        if: ${{ github.event_name == 'pull_request' && matrix.pkg == 'cli' }}
+        if: ${{ github.event_name == 'pull_request' }}
         uses: taoliujun/action-unique-comment@v1
         with:
             uniqueIdentifier: ${{ github.workflow }}
@@ -193,6 +193,7 @@ jobs:
           file_pattern: 'package.json **/schema.graphql'
 
       - name: Login to GitHub Container Registry
+        if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -200,12 +201,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to DockerHub
+        if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_PASS }}
 
       - name: Generate Docker metadata
+        if: ${{ github.event_name != 'pull_request' }}
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -216,6 +219,7 @@ jobs:
             type=raw,value=${{ env.VERSION }}
 
       - name: Check if packages are published
+        if: ${{ github.event_name != 'pull_request' }}
         run: |
           echo "Checking if packages are published..."
           MAX_ATTEMPTS=120
@@ -266,6 +270,7 @@ jobs:
           done
 
       - name: Build and push Docker image
+        if: ${{ github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v6
         with:
           context: ./apps/registry
