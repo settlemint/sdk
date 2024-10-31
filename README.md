@@ -32,13 +32,13 @@ First we will create a new Next JS project using the following command.
 
 ```bash
 # Using npx
-npx @settlemint/sdk@latest create
+npx @settlemint/sdk-cli@latest create
 
 # Using bun
-bunx @settlemint/sdk@latest create
+bunx @settlemint/sdk-cli@latest create
 
 # Using pnpm
-pnpm dlx @settlemint/sdk@latest create
+pnpm dlx @settlemint/sdk-cli@latest create
 ```
 
 Then following the next steps in your terminal.
