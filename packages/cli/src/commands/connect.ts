@@ -117,6 +117,7 @@ export function connectCommand(): Command {
           SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "gateway")?.displayValue,
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: "0x5e771e1417100000000000000000000000000001",
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: "0x5e771e1417100000000000000000000000000002",
+          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: "0x5e771e1417100000000000000000000000000003",
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
           SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) => endpoint.id === "internal")
             ?.displayValue,
