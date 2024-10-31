@@ -25,10 +25,11 @@ export async function downloadAndExtractNpmPackage(template: Template["value"], 
     throw new Error(`HTTP error! status: ${response.status}`);
   }
   const data = await response.json();
-  const latestVersion = data["dist-tags"].latest;
+  const latestVersion = data["dist-tags"].latest as string;
+  const tarball = data.versions[latestVersion].dist.tarball as string;
 
   // Download and extract the package using giget
-  await downloadTemplate(`https://registry.npmjs.org/${template}/-/${template}-${latestVersion}.tgz`, {
+  await downloadTemplate(tarball, {
     dir: targetDir,
     force: true,
   });
