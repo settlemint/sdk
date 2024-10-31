@@ -26,7 +26,6 @@ export async function downloadAndExtractNpmPackage(template: Template["value"], 
   }
   const data = await response.json();
   const latestVersion = data["dist-tags"].latest as string;
-  console.log(latestVersion);
   const tarball = data.versions[latestVersion].dist.tarball as string;
 
   // Download and extract the package using giget
