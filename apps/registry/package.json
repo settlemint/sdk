@@ -56,7 +56,7 @@
     "tailwindcss-animate": "1.0.7",
     "ts-morph": "24.0.0",
     "usehooks-ts": "3.1.0",
-    "viem": "2.21.37",
+    "viem": "2.21.40",
     "zod": "3.23.8"
   },
   "devDependencies": {
