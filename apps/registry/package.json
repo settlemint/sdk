@@ -45,12 +45,12 @@
     "next-safe-action": "7.9.9",
     "next-themes": "0.3.0",
     "nuqs": "2.1.1",
-    "react": "rc",
+    "react": "19.0.0-rc-28668d39-20241023",
     "react-awesome-gravatar": "2.0.3",
-    "react-dom": "rc",
+    "react-dom": "19.0.0-rc-28668d39-20241023",
     "react-dropzone": "14.2.10",
     "react-hook-form": "7.53.1",
-    "react-is": "rc",
+    "react-is": "19.0.0-rc-28668d39-20241023",
     "sonner": "1.5.0",
     "tailwind-merge": "2.5.4",
     "tailwindcss-animate": "1.0.7",
@@ -74,7 +74,7 @@
   },
   "peerDependencies": {},
   "overrides": {
-    "react-is": "rc"
+    "react-is": "19.0.0-rc-28668d39-20241023"
   },
   "trustedDependencies": ["@biomejs/biome"]
 }
