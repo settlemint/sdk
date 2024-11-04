@@ -1,5 +1,5 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
-import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
@@ -73,6 +73,46 @@ const getWorkspace = graphql(
   [WorkspaceFragment, ApplicationFragment],
 );
 
+const createWorkspace = graphql(
+  `
+  mutation CreateWorkspace(
+    $addressLine1: String
+    $addressLine2: String
+    $city: String
+    $companyName: String
+    $country: String
+    $name: String!
+    $parentId: String
+    $paymentMethodId: String
+    $postalCode: String
+    $taxIdType: String
+    $taxIdValue: String
+  ) {
+    createWorkspace(
+      addressLine1: $addressLine1
+      addressLine2: $addressLine2
+      city: $city
+      companyName: $companyName
+      country: $country
+      name: $name
+      parentId: $parentId
+      paymentMethodId: $paymentMethodId
+      postalCode: $postalCode
+      taxIdType: $taxIdType
+      taxIdValue: $taxIdValue
+    ) {
+      ...Workspace
+      applications {
+        ...Application
+      }
+    }
+  }
+`,
+  [WorkspaceFragment, ApplicationFragment],
+);
+
+export type CreateWorkspaceArgs = VariablesOf<typeof createWorkspace>;
+
 /**
  * Creates a function to list all workspaces and their applications.
  *
@@ -110,6 +150,27 @@ export const workspaceRead = (
   return async (workspaceId: Id) => {
     const id = validate(IdSchema, workspaceId);
     const { workspace } = await gqlClient.request(getWorkspace, { id });
+    return workspace;
+  };
+};
+
+/**
+ * Creates a function to create a new workspace.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes workspace creation arguments and returns a promise resolving to the created workspace.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const workspace = await client.workspace.create({
+ *   name: 'My Workspace',
+ *   description: 'A new workspace'
+ * });
+ */
+export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (createWorkspaceArgs: CreateWorkspaceArgs) => {
+    const { createWorkspace: workspace } = await gqlClient.request(createWorkspace, createWorkspaceArgs);
     return workspace;
   };
 };

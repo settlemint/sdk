@@ -8,10 +8,22 @@
       "type": "bun",
       "internalConsoleOptions": "openOnSessionStart",
       "request": "launch",
+      "name": "SDK: Create",
+      "program": "../../packages/cli/src/cli.ts",
+      "args": ["create"],
+      "cwd": "${workspaceFolder}/apps/registry",
+      "watchMode": true,
+      "strictEnv": false,
+      "stopOnEntry": false,
+    },
+    {
+      "type": "bun",
+      "internalConsoleOptions": "openOnSessionStart",
+      "request": "launch",
       "name": "SDK: Connect",
-      "program": "../../packages/sdk/src/cli/cli.ts",
-      "args": ["connect"],
-      "cwd": "${workspaceFolder}/apps/asset-tokenization",
+      "program": "../../packages/cli/src/cli.ts",
+      "args": ["connect", "--accept"],
+      "cwd": "${workspaceFolder}/apps/registry",
       "watchMode": true,
       "strictEnv": false,
       "stopOnEntry": false
@@ -34,6 +46,14 @@
       "watchMode": true,
       "strictEnv": false,
       "stopOnEntry": false
+    },
+    {
+      "type": "bun",
+      "internalConsoleOptions": "openOnSessionStart",
+      "request": "attach",
+      "name": "SDK: Attach to process",
+      "url": "ws://localhost:6499/",
+      "stopOnEntry": true
     }
   ]
 }

@@ -28,3 +28,11 @@
 
 ## Getting started
 
+## Debugging
+
+```bash
+bun --inspect-wait=localhost:6499/ packages/cli/src/cli.ts create
+
+# Run from the directory created by the create command
+bun --inspect-wait=localhost:6499/ ../packages/cli/src/cli.ts connect
+```

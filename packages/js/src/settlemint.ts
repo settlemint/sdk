@@ -14,13 +14,20 @@ import { type IntegrationTool, integrationToolList, integrationToolRead } from "
 import { type Middleware, middlewareList, middlewareRead } from "./fetchers/middleware.js";
 import { type PrivateKey, privateKeyList, privatekeyRead } from "./fetchers/private-key.js";
 import { type Storage, storageList, storageRead } from "./fetchers/storage.js";
-import { type Workspace, workspaceList, workspaceRead } from "./fetchers/workspace.js";
+import {
+  type CreateWorkspaceArgs,
+  type Workspace,
+  workspaceCreate,
+  workspaceList,
+  workspaceRead,
+} from "./fetchers/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
 
 export interface SettlemintClient {
   workspace: {
     list: () => Promise<Workspace[]>;
     read: (workspaceId: Id) => Promise<Workspace>;
+    create: (args: CreateWorkspaceArgs) => Promise<Workspace>;
   };
   blockchainNetwork: {
     list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
@@ -85,6 +92,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     workspace: {
       list: workspaceList(gqlClient, options),
       read: workspaceRead(gqlClient, options),
+      create: workspaceCreate(gqlClient, options),
     },
     blockchainNetwork: {
       list: blockchainNetworkList(gqlClient, options),

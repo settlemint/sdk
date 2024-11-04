@@ -31,8 +31,13 @@ export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boo
 
 const quote = /[\s"'#]/;
 
-function stringifyPair([key, val]: [string, unknown]): string {
-  if (!val) return `${key}=""`;
+function stringifyPair([key, val]: [string, unknown]): string | undefined {
+  if (val === undefined) {
+    return undefined;
+  }
+  if (val === null) {
+    return `${key}=""`;
+  }
 
   const type = typeof val;
   if (type === "string") {
@@ -52,5 +57,6 @@ function stringify(obj: Record<string, unknown>): string {
   return Object.entries(obj)
     .sort(([a], [b]) => a.localeCompare(b))
     .map(stringifyPair)
+    .filter((value) => value !== undefined)
     .join("\n");
 }

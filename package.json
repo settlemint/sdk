@@ -25,7 +25,7 @@
     "publint": "turbo publint",
     "attw": "turbo attw",
     "build": "turbo build",
-    "dev": "turbo dev --concurrency=100%",
+    "dev": "turbo dev --concurrency=11",
     "lint": "turbo lint",
     "registry:connect": "turbo registry:connect",
     "registry:codegen": "turbo registry:codegen",
