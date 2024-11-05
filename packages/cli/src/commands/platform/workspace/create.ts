@@ -85,7 +85,7 @@ export function workspaceCreateCommand(): Command<[name: string], { prod?: boole
           stopMessage: "Workspace created",
         });
 
-        outro(`Workspace ${workspace.name} (${workspace.id}) created successfully`);
+        outro(`Workspace ${workspace.name} created successfully`);
 
         if (isDefault) {
           await writeEnvSpinner(!!prod, {

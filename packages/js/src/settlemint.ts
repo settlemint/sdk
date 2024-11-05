@@ -18,6 +18,7 @@ import {
   type CreateWorkspaceArgs,
   type Workspace,
   workspaceCreate,
+  workspaceDelete,
   workspaceList,
   workspaceRead,
 } from "./fetchers/workspace.js";
@@ -28,6 +29,7 @@ export interface SettlemintClient {
     list: () => Promise<Workspace[]>;
     read: (workspaceId: Id) => Promise<Workspace>;
     create: (args: CreateWorkspaceArgs) => Promise<Workspace>;
+    delete: (id: string) => Promise<Workspace>;
   };
   blockchainNetwork: {
     list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
@@ -93,6 +95,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       list: workspaceList(gqlClient, options),
       read: workspaceRead(gqlClient, options),
       create: workspaceCreate(gqlClient, options),
+      delete: workspaceDelete(gqlClient, options),
     },
     blockchainNetwork: {
       list: blockchainNetworkList(gqlClient, options),

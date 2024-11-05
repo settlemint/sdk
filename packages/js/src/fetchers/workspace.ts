@@ -113,6 +113,20 @@ const createWorkspace = graphql(
 
 export type CreateWorkspaceArgs = VariablesOf<typeof createWorkspace>;
 
+const deleteWorkspace = graphql(
+  `
+  mutation deleteWorkspace($id: ID!) {
+    deleteWorkspace(workspaceId: $id) {
+      ...Workspace
+      applications {
+        ...Application
+      }
+    }
+  }
+`,
+  [WorkspaceFragment, ApplicationFragment],
+);
+
 /**
  * Creates a function to list all workspaces and their applications.
  *
@@ -171,6 +185,25 @@ export const workspaceRead = (
 export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (createWorkspaceArgs: CreateWorkspaceArgs) => {
     const { createWorkspace: workspace } = await gqlClient.request(createWorkspace, createWorkspaceArgs);
+    return workspace;
+  };
+};
+
+/**
+ * Creates a function to delete a workspace.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes a workspace ID and returns a promise resolving to the deleted workspace.
+ * @throws Will throw an error if the workspace ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const workspace = await client.workspace.delete('workspaceId');
+ */
+export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (id: string) => {
+    const { deleteWorkspace: workspace } = await gqlClient.request(deleteWorkspace, { id });
     return workspace;
   };
 };

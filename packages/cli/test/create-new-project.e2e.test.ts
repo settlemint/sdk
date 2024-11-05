@@ -15,6 +15,9 @@ afterAll(async () => {
     return;
   }
   try {
+    await runCommand(["platform", "delete", "workspace", "--accept", "default"], { cwd: projectDir });
+  } catch (err) {}
+  try {
     await rmdir(projectDir, { recursive: true });
     await rmdir(resolve(projectDir, "../", "unknown"), { recursive: true });
   } catch (err) {
@@ -35,7 +38,7 @@ describe("Setup a project using the SDK", () => {
       ["platform", "create", "workspace", `${WORKSPACE_NAME}`, "--accept", "--default"],
       { cwd: projectDir },
     );
-    expect(workspaceOutput).toMatch(new RegExp(`Workspace ${WORKSPACE_NAME} \(.*?\) created successfully`, "gm"));
+    expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
   });
 
   test.skip("Connect starter kit", async () => {
@@ -44,5 +47,13 @@ describe("Setup a project using the SDK", () => {
 
   test.skip("Codegen starter kit", async () => {
     await $`bun packages/cli/src/cli.ts codegen`;
+  });
+
+  test("Delete created resources on the platform", async () => {
+    const { output: deleteWorkspaceOutput } = await runCommand(
+      ["platform", "delete", "workspace", "--accept", "default"],
+      { cwd: projectDir },
+    );
+    expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
   });
 });
