@@ -9,7 +9,7 @@ import { Command } from "@commander-js/extra-typings";
  * @returns {Command} The configured 'create' command with its subcommands
  */
 export function createCommand(): Command {
-  return new Command("update")
+  return new Command("create")
     .alias("u")
     .description("Create a resource in the SettleMint platform")
     .addCommand(workspaceCreateCommand());
