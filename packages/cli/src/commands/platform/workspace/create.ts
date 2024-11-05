@@ -1,8 +1,12 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
 
 /**
  * Creates and returns the 'workspace' command for the SettleMint SDK.
@@ -15,6 +19,8 @@ export function workspaceCreateCommand(): Command<[name: string], { prod?: boole
   return new Command("workspace")
     .alias("w")
     .argument("<name>", "The name of the workspace")
+    .option("-a, --accept", "Accept the default and previously set values")
+    .option("-d, --default", "Save this workspace as the default one in your .env file")
     .option("--prod", "Connect to your production environment")
     .option("--description <description>", "Description of the workspace")
     .option("--tax-id-value <taxIdValue>", "Tax ID value")
@@ -31,6 +37,8 @@ export function workspaceCreateCommand(): Command<[name: string], { prod?: boole
       async (
         name,
         {
+          accept,
+          default: isDefault,
           prod,
           taxIdValue,
           taxIdType,
@@ -46,11 +54,15 @@ export function workspaceCreateCommand(): Command<[name: string], { prod?: boole
       ) => {
         intro("Creating workspace in the SettleMint platform");
 
-        const env: DotEnv = await loadEnv(true, !!prod);
+        const autoAccept = !!accept || isInCi;
+        const env: Partial<DotEnv> = await loadEnv(false, !!prod);
+
+        const accessToken = await accessTokenPrompt(env, autoAccept);
+        const instance = await instancePrompt(env, autoAccept);
 
         const settlemint = createSettleMintClient({
-          accessToken: env.SETTLEMINT_ACCESS_TOKEN,
-          instance: env.SETTLEMINT_INSTANCE,
+          accessToken,
+          instance,
         });
 
         const workspace = await spinner({
@@ -73,7 +85,15 @@ export function workspaceCreateCommand(): Command<[name: string], { prod?: boole
           stopMessage: "Workspace created",
         });
 
-        outro(`Workspace ${workspace.name} created successfully`);
+        outro(`Workspace ${workspace.name} (${workspace.id}) created successfully`);
+
+        if (isDefault) {
+          await writeEnvSpinner(!!prod, {
+            SETTLEMINT_ACCESS_TOKEN: accessToken,
+            SETTLEMINT_INSTANCE: instance,
+            SETTLEMINT_WORKSPACE: workspace.id,
+          });
+        }
       },
     );
 }

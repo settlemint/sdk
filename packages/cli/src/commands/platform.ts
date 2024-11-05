@@ -1,3 +1,4 @@
+import { createCommand } from "@/commands/platform/create";
 import { updateCommand } from "@/commands/platform/update";
 import { Command } from "@commander-js/extra-typings";
 
@@ -9,5 +10,8 @@ import { Command } from "@commander-js/extra-typings";
  * @returns {Command} The configured 'platform' command
  */
 export function platformCommand(): Command {
-  return new Command("platform").description("Manage SettleMint platform resources").addCommand(updateCommand());
+  return new Command("platform")
+    .description("Manage SettleMint platform resources")
+    .addCommand(createCommand())
+    .addCommand(updateCommand());
 }

@@ -10,7 +10,7 @@ import { Command } from "@commander-js/extra-typings";
  */
 export function createCommand(): Command {
   return new Command("create")
-    .alias("u")
+    .alias("c")
     .description("Create a resource in the SettleMint platform")
     .addCommand(workspaceCreateCommand());
 }

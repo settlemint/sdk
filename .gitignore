@@ -45,3 +45,7 @@ apps/asset-tokenization/contracts/ignition/deployments
 .idea
 apps/ro
 apps/registry/public/*.json
+
+# Testing
+packages/cli/test/starter-kit-demo
+packages/cli/test/unknown
