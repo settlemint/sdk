@@ -2,8 +2,8 @@ import { resolve } from "node:path";
 import { $ } from "bun";
 
 const DEFAULT_ENV = {
-  SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN ?? "sm_pat_5918178ae3a77be3",
-  SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE ?? "https://jan.settlemint.be",
+  SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN,
+  SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE,
 };
 
 export async function runCommand(command: string[], options: { env?: Record<string, string>; cwd?: string } = {}) {

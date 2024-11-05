@@ -28,11 +28,17 @@
 
 ## Getting started
 
-## Debugging
+First we will create a new Next JS project using the following command.
 
 ```bash
-bun --inspect-wait=localhost:6499/ packages/cli/src/cli.ts create
+# Using npx
+npx @settlemint/sdk-cli@latest create
 
-# Run from the directory created by the create command
-bun --inspect-wait=localhost:6499/ ../packages/cli/src/cli.ts connect
+# Using bun
+bunx @settlemint/sdk-cli@latest create
+
+# Using pnpm
+pnpm dlx @settlemint/sdk-cli@latest create
 ```
+
+Then following the next steps in your terminal.
