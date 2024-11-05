@@ -54,6 +54,16 @@
       "name": "SDK: Attach to process",
       "url": "ws://localhost:6499/",
       "stopOnEntry": true
-    }
+    },
+    {
+      "type": "bun",
+      "internalConsoleOptions": "neverOpen",
+      "request": "launch",
+      "name": "Debug File",
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "watchMode": false
+    },
   ]
 }

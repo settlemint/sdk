@@ -34,7 +34,7 @@
     "publish-npm": "turbo publish-npm",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
-    "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=100% --summarize",
+    "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=11 --summarize",
     "postinstall": "lefthook install"
   },
   "devDependencies": {
