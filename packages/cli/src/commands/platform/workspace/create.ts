@@ -1,11 +1,17 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { Command, Option } from "@commander-js/extra-typings";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import type { DotEnv } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import isInCi from "is-in-ci";
 
 /**
  * Creates and returns the 'workspace' command for the SettleMint SDK.
  * This command creates a new workspace in the SettleMint platform.
  * It takes a name and optional description for the workspace.
- *
- * @returns {Command} The configured 'workspace' command
  */
 export function workspaceCreateCommand() {
   const cmd = new Command("workspace")
@@ -27,12 +33,12 @@ Examples:
     .option("-a, --accept", "Accept the default values")
     .option("-d, --default", "Save as default workspace")
     .option("--prod", "Connect to production environment")
-    .option("--line1 <line1>", "Address line 1")
-    .option("--line2 <line2>", "Address line 2")
-    .option("--city <city>", "City")
-    .option("--postal-code <code>", "Postal code")
-    .option("--country <country>", "Country")
-    .option("--name <name>", "Company name")
+    .requiredOption("--company-name <companyName>", "Company name")
+    .requiredOption("--address-line-1 <addressLine1>", "Address line 1")
+    .option("--address-line-2 <addressLine2>", "Address line 2")
+    .requiredOption("--city <city>", "City")
+    .requiredOption("--postal-code <code>", "Postal code")
+    .requiredOption("--country <country>", "Country")
     .option("--tax-id-value <value>", "Tax ID value")
     .addOption(
       new Option(
@@ -121,6 +127,70 @@ Examples:
         "ve_rif",
         "vn_tin",
       ]),
+    )
+    .option("--payment-method-id <paymentMethodId>", "Payment method ID")
+    .option("--parent-id <parentId>", "Parent workspace ID")
+    .action(
+      async (
+        name,
+        {
+          accept,
+          default: isDefault,
+          prod,
+          taxIdValue,
+          taxIdType,
+          postalCode,
+          paymentMethodId,
+          parentId,
+          country,
+          companyName,
+          city,
+          addressLine2,
+          addressLine1,
+        },
+      ) => {
+        intro("Creating workspace in the SettleMint platform");
+
+        const autoAccept = !!accept || isInCi;
+        const env: Partial<DotEnv> = await loadEnv(false, !!prod);
+
+        const accessToken = await accessTokenPrompt(env, autoAccept);
+        const instance = await instancePrompt(env, autoAccept);
+        const settlemint = createSettleMintClient({
+          accessToken,
+          instance,
+        });
+
+        const workspace = await spinner({
+          startMessage: "Creating workspace",
+          task: async () => {
+            return settlemint.workspace.create({
+              name,
+              taxIdValue,
+              taxIdType,
+              postalCode,
+              paymentMethodId,
+              parentId,
+              country,
+              companyName,
+              city,
+              addressLine2,
+              addressLine1,
+            });
+          },
+          stopMessage: "Workspace created",
+        });
+
+        outro(`Workspace ${workspace.name} created successfully`);
+
+        if (isDefault) {
+          await writeEnvSpinner(!!prod, {
+            SETTLEMINT_ACCESS_TOKEN: accessToken,
+            SETTLEMINT_INSTANCE: instance,
+            SETTLEMINT_WORKSPACE: workspace.id,
+          });
+        }
+      },
     );
 
   return cmd;

@@ -11,10 +11,8 @@ import isInCi from "is-in-ci";
  * Creates and returns the 'workspace' command for the SettleMint SDK.
  * This command creates a new workspace in the SettleMint platform.
  * It takes a name and optional description for the workspace.
- *
- * @returns {Command} The configured 'workspace' command
  */
-export function workspaceDeleteCommand(): Command<[name: string], { prod?: boolean; description?: string }> {
+export function workspaceDeleteCommand() {
   return new Command("workspace")
     .alias("w")
     .argument("<id>", "The id of the workspace, use 'default' to delete the default one from your .env file")

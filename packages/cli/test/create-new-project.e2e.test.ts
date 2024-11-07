@@ -35,7 +35,28 @@ describe("Setup a project using the SDK", () => {
 
   test("Create necessary resources on the platform", async () => {
     const { output: workspaceOutput } = await runCommand(
-      ["platform", "create", "workspace", `${WORKSPACE_NAME}`, "--accept", "--default"],
+      [
+        "platform",
+        "create",
+        "workspace",
+        `${WORKSPACE_NAME}`,
+        "--company-name",
+        "Test Company",
+        "--tax-id-type",
+        "eu_vat",
+        "--tax-id-value",
+        "BE0123456789",
+        "--address-line-1",
+        "123 Test St",
+        "--city",
+        "Test City",
+        "--postal-code",
+        "12345",
+        "--country",
+        "BE",
+        "--accept",
+        "--default",
+      ],
       { cwd: projectDir },
     );
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);

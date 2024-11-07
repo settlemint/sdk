@@ -8,17 +8,40 @@ describe("workspaceCreateCommand", () => {
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      workspaceCreateCommand().action((args, options) => {
-        commandArgs = args;
-        commandOptions = options;
-      }),
+      workspaceCreateCommand()
+        .exitOverride()
+        .action((args, options) => {
+          commandArgs = args;
+          commandOptions = options;
+        }),
     );
-    program.parse(["node", "test", "workspace", "test-workspace", "--accept"]);
+    program.parse([
+      "node",
+      "test",
+      "workspace",
+      "test-workspace",
+      "--accept",
+      "--company-name",
+      "Test Company",
+      "--address-line-1",
+      "123 Main St",
+      "--city",
+      "Brussels",
+      "--postal-code",
+      "1000",
+      "--country",
+      "BE",
+    ]);
 
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-workspace");
     expect(commandOptions).toEqual({
       accept: true,
+      companyName: "Test Company",
+      addressLine1: "123 Main St",
+      city: "Brussels",
+      postalCode: "1000",
+      country: "BE",
     });
   });
 
@@ -27,48 +50,25 @@ describe("workspaceCreateCommand", () => {
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      workspaceCreateCommand().action((args, options) => {
-        commandArgs = args;
-        commandOptions = options;
-      }),
+      workspaceCreateCommand()
+        .exitOverride()
+        .action((args, options) => {
+          commandArgs = args;
+          commandOptions = options;
+        }),
     );
     program.parse([
       "node",
       "test",
       "workspace",
       "test-workspace",
-      "--name",
+      "--company-name",
       "Test Company",
       "--tax-id-type",
       "eu_vat",
       "--tax-id-value",
       "BE0123456789",
-    ]);
-
-    expect(commandArgs).toBe("test-workspace");
-    expect(commandOptions).toEqual({
-      name: "Test Company",
-      taxIdType: "eu_vat",
-      taxIdValue: "BE0123456789",
-    });
-  });
-
-  test("executes command with address details", () => {
-    let commandOptions: Record<string, unknown> = {};
-    let commandArgs = "";
-    const program = new Command();
-    program.addCommand(
-      workspaceCreateCommand().action((args, options) => {
-        commandArgs = args;
-        commandOptions = options;
-      }),
-    );
-    program.parse([
-      "node",
-      "test",
-      "workspace",
-      "test-workspace",
-      "--line1",
+      "--address-line-1",
       "123 Test St",
       "--city",
       "Test City",
@@ -80,7 +80,10 @@ describe("workspaceCreateCommand", () => {
 
     expect(commandArgs).toBe("test-workspace");
     expect(commandOptions).toEqual({
-      line1: "123 Test St",
+      companyName: "Test Company",
+      taxIdType: "eu_vat",
+      taxIdValue: "BE0123456789",
+      addressLine1: "123 Test St",
       city: "Test City",
       postalCode: "12345",
       country: "BE",

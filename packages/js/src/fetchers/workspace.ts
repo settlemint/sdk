@@ -202,7 +202,8 @@ export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions
  * const workspace = await client.workspace.delete('workspaceId');
  */
 export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
-  return async (id: string) => {
+  return async (workspaceId: string) => {
+    const id = validate(IdSchema, workspaceId);
     const { deleteWorkspace: workspace } = await gqlClient.request(deleteWorkspace, { id });
     return workspace;
   };
