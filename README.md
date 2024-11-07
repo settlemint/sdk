@@ -43,9 +43,7 @@ bun --inspect-wait=localhost:6499/ ../packages/cli/src/cli.ts connect
 
 ### e2e tests
 
-### Setup
-
-Create a ".env" file in the test folder of this project.
+Create a ".env" file in the root folder of this project.
 
 ```env
 SETTLEMINT_ACCESS_TOKEN="sm_pat_xxx"

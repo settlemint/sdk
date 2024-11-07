@@ -5,7 +5,7 @@ import { Command, Option } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 /**
@@ -181,15 +181,16 @@ Examples:
           stopMessage: "Workspace created",
         });
 
-        outro(`Workspace ${workspace.name} created successfully`);
-
         if (isDefault) {
           await writeEnvSpinner(!!prod, {
             SETTLEMINT_ACCESS_TOKEN: accessToken,
             SETTLEMINT_INSTANCE: instance,
             SETTLEMINT_WORKSPACE: workspace.id,
           });
+          note(`Workspace ${workspace.name} set as default`);
         }
+
+        outro(`Workspace ${workspace.name} created successfully`);
       },
     );
 

@@ -36,7 +36,7 @@
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=11 --summarize",
     "postinstall": "lefthook install",
-    "test:e2e": "cd test && bun test"
+    "test:e2e": "bun test test/*.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
