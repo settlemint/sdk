@@ -26,17 +26,12 @@ afterAll(async () => {
 });
 
 describe("Setup a project using the SDK", () => {
-  test(
-    "Create a starter kit project",
-    async () => {
-      const { cwd, output } = await runCommand(["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME]);
-      projectDir = join(cwd, PROJECT_NAME);
-      expect((await stat(join(cwd, PROJECT_NAME))).isDirectory()).toBeTruthy();
-      expect(output).toInclude("Your project is ready to go!");
-      await $`bun install`.cwd(projectDir);
-    },
-    { timeout: 60_000 },
-  );
+  test("Create a starter kit project", async () => {
+    const { cwd, output } = await runCommand(["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME]);
+    projectDir = join(cwd, PROJECT_NAME);
+    expect((await stat(join(cwd, PROJECT_NAME))).isDirectory()).toBeTruthy();
+    expect(output).toInclude("Your project is ready to go!");
+  });
 
   test("Create necessary resources on the platform", async () => {
     const { output: workspaceOutput } = await runCommand(
@@ -75,14 +70,19 @@ describe("Setup a project using the SDK", () => {
     await $`bun packages/cli/src/cli.ts codegen`;
   });
 
-  test.skip("Build starter kit", async () => {
-    await $`bun lint`.cwd(projectDir);
-    await $`bun run build`.cwd(projectDir);
-  });
+  test.skip(
+    "Build starter kit",
+    async () => {
+      await $`bun install`.cwd(projectDir);
+      await $`bun lint`.cwd(projectDir);
+      await $`bun run build`.cwd(projectDir);
+    },
+    { timeout: 60_000 },
+  );
 
   test("Delete created resources on the platform", async () => {
     const { output: deleteWorkspaceOutput } = await runCommand(
-      ["platform", "delete", "workspace", "--accept", "default"],
+      ["platform", "delete", "workspace", "--accept", "--force", "default"],
       { cwd: projectDir },
     );
     expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
