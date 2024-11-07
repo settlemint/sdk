@@ -67,7 +67,7 @@ jobs:
           version: 2.29.0
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v4
+        uses: rlespinasse/github-slug-action@v5
 
       - name: Update package versions
         id: package-version
