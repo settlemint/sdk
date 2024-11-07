@@ -3,7 +3,7 @@ on:
     - cron: '0 0 * * *' # runs every night Sun-Fri at 2AM (time difference with GHA! + 2hr)
   workflow_dispatch:
 
-name: E2E Nightly
+name: E2E
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
