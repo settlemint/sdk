@@ -1,0 +1,53 @@
+on:
+  schedule:
+    - cron: '0 0 * * *' # runs every night Sun-Fri at 2AM (time difference with GHA! + 2hr)
+  workflow_dispatch:
+
+name: E2E Nightly
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  id-token: write
+  issues: write
+  discussions: write
+  packages: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+jobs:
+  e2e:
+    name: E2E
+    runs-on: namespace-profile-sdk
+    steps:
+      - name: Checkout repository
+        uses: namespacelabs/nscloud-checkout-action@v5
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Setup caches
+        uses: namespacelabs/nscloud-cache-action@v1
+        with:
+          path: |
+            ./.turbo
+            ~/.bun/install/cache
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version-file: package.json
+
+      - name: Install Bun dependencies
+        run: bun install
+
+      - name: Run the E2E tests
+        run: bun test:e2e

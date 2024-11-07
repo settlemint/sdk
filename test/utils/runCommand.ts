@@ -8,7 +8,7 @@ const DEFAULT_ENV = {
 
 export async function runCommand(command: string[], options: { env?: Record<string, string>; cwd?: string } = {}) {
   const cwd = options.cwd ?? resolve(__dirname, "../");
-  const out = await $`bun ${resolve(__dirname, "../../src/cli.ts")} ${command}`.cwd(cwd).env({
+  const out = await $`bun ${resolve(__dirname, "../../packages/cli/src/cli.ts")} ${command}`.cwd(cwd).env({
     ...DEFAULT_ENV,
     ...(options.env ?? {}),
   });
