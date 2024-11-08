@@ -1,6 +1,12 @@
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
+import {
+  type Application,
+  type CreateApplicationArgs,
+  applicationCreate,
+  applicationDelete,
+} from "./fetchers/application.js";
 import { type BlockchainNetwork, blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
 import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
 import {
@@ -29,7 +35,11 @@ export interface SettlemintClient {
     list: () => Promise<Workspace[]>;
     read: (workspaceId: Id) => Promise<Workspace>;
     create: (args: CreateWorkspaceArgs) => Promise<Workspace>;
-    delete: (id: string) => Promise<Workspace>;
+    delete: (id: Id) => Promise<Workspace>;
+  };
+  application: {
+    create: (args: CreateApplicationArgs) => Promise<Application>;
+    delete: (id: Id) => Promise<Application>;
   };
   blockchainNetwork: {
     list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
@@ -97,6 +107,10 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       create: workspaceCreate(gqlClient, options),
       delete: workspaceDelete(gqlClient, options),
     },
+    application: {
+      create: applicationCreate(gqlClient, options),
+      delete: applicationDelete(gqlClient, options),
+    },
     blockchainNetwork: {
       list: blockchainNetworkList(gqlClient, options),
       read: blockchainNetworkRead(gqlClient, options),
@@ -133,6 +147,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
   };
 }
 
+export type { Application } from "./fetchers/application.js";
 export type { BlockchainNetwork } from "./fetchers/blockchain-network.js";
 export type { BlockchainNode } from "./fetchers/blockchain-node.js";
 export type { CustomDeployment } from "./fetchers/custom-deployment.js";
@@ -141,4 +156,4 @@ export type { IntegrationTool } from "./fetchers/integration-tool.js";
 export type { Middleware } from "./fetchers/middleware.js";
 export type { PrivateKey } from "./fetchers/private-key.js";
 export type { Storage } from "./fetchers/storage.js";
-export type { Application, Workspace } from "./fetchers/workspace.js";
+export type { Workspace } from "./fetchers/workspace.js";
