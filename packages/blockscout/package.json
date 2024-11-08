@@ -47,9 +47,14 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0"
   },
+  "devDependencies": {},
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
     "zod": "^3"
+  },
+  "peerDependencies": {},
+  "engines": {
+    "node": ">=20"
   }
 }
