@@ -51,7 +51,7 @@ export function createCommand(): Command {
           emptyDir(projectDir);
         }
 
-        const selectedTemplate = await templatePrompt(templates);
+        const selectedTemplate = await templatePrompt(templates, template);
 
         if (!selectedTemplate) {
           cancel("No template selected. Please select a template to continue.");

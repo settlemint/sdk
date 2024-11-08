@@ -28,3 +28,17 @@
 
 ## Getting started
 
+First we will create a new Next JS project using the following command.
+
+```bash
+# Using npx
+npx @settlemint/sdk-cli@latest create
+
+# Using bun
+bunx @settlemint/sdk-cli@latest create
+
+# Using pnpm
+pnpm dlx @settlemint/sdk-cli@latest create
+```
+
+Then following the next steps in your terminal.

@@ -14,11 +14,10 @@ import { z } from "zod";
  * const instanceUrl = await instancePrompt(env);
  * console.log(instanceUrl); // Output: https://example.settlemint.com or user input
  */
-export async function namePrompt(env: Partial<DotEnv>, argument?: string, accept?: boolean): Promise<string> {
+export async function namePrompt(env: Partial<DotEnv>, argument?: string): Promise<string> {
   const defaultInstance = env.SETTLEMINT_NEW_PROJECT_NAME ?? argument;
-  const defaultPossible = accept && defaultInstance;
 
-  if (defaultPossible) {
+  if (defaultInstance) {
     return defaultInstance;
   }
 

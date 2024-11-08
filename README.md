@@ -26,19 +26,26 @@
   <br />
 </div>
 
-## Getting started
+## Local development
 
-First we will create a new Next JS project using the following command.
+### Debugging
+
+To debug with interactive input you need to start the command from the terminal and then attach the debugger.
 
 ```bash
-# Using npx
-npx @settlemint/sdk-cli@latest create
+bun --inspect-wait=localhost:6499/ packages/cli/src/cli.ts create
+# Attach the debugger using the "SDK: Attach to process" configuration
 
-# Using bun
-bunx @settlemint/sdk-cli@latest create
-
-# Using pnpm
-pnpm dlx @settlemint/sdk-cli@latest create
+# Run from the directory created by the create command
+bun --inspect-wait=localhost:6499/ ../packages/cli/src/cli.ts connect
+# Attach the debugger using the "SDK: Attach to process" configuration
 ```
 
-Then following the next steps in your terminal.
+### e2e tests
+
+Create a ".env" file in the root folder of this project.
+
+```env
+SETTLEMINT_ACCESS_TOKEN="sm_pat_xxx"
+SETTLEMINT_INSTANCE="https://me.settlemint.be"
+```
