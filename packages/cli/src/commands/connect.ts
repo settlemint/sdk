@@ -11,6 +11,7 @@ import isInCi from "is-in-ci";
 import { applicationPrompt } from "./connect/application.prompt";
 import { authSecretPrompt } from "./connect/auth-secret.prompt";
 import { authUrlPrompt } from "./connect/auth-url.prompt";
+import { blockscoutPrompt } from "./connect/blockscout.prompt";
 import { customDeploymentPrompt } from "./connect/custom-deployment.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
 import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
@@ -56,16 +57,10 @@ export function connectCommand(): Command {
         const workspace = await workspacePrompt(env, workspaces, autoAccept);
         const application = await applicationPrompt(env, workspace?.applications ?? [], autoAccept);
 
-        const {
-          blockchainNetworks,
-          blockchainNodes,
-          middleware,
-          integrationTool,
-          storage,
-          privateKey,
-          insights,
-          customDeployment,
-        } = await servicesSpinner(settlemint, application);
+        const { middleware, integrationTool, storage, privateKey, insights, customDeployment } = await servicesSpinner(
+          settlemint,
+          application,
+        );
 
         const hasura = await hasuraPrompt(env, integrationTool, autoAccept);
         const thegraph = await theGraphPrompt(env, middleware, autoAccept);
@@ -74,6 +69,7 @@ export function connectCommand(): Command {
         const minio = await minioPrompt(env, storage, autoAccept);
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
         const cDeployment = await customDeploymentPrompt(env, customDeployment, autoAccept);
+        const blockscout = await blockscoutPrompt(env, insights, autoAccept);
 
         const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
         const authSecret = await authSecretPrompt(env, autoAccept);
@@ -120,6 +116,9 @@ export function connectCommand(): Command {
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: "0x5e771e1417100000000000000000000000000003",
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
           SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) => endpoint.id === "internal")
+            ?.displayValue,
+          SETTLEMINT_BLOCKSCOUT: blockscout?.id,
+          SETTLEMINT_BLOCKSCOUT_ENDPOINT: blockscout?.endpoints.find((endpoint) => endpoint.id === "interface")
             ?.displayValue,
         });
 
