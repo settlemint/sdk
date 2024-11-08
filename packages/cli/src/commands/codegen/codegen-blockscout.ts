@@ -165,7 +165,9 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
-});`;
+});
+
+export const blockscoutUiEndpoint = process.env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT!;`;
 
   await writeTemplate(template, "/lib/settlemint", "blockscout.ts");
 }

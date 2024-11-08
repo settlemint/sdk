@@ -123,6 +123,7 @@ export function connectCommand(): Command {
           SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: blockscoutEndpoint
             ? `${blockscoutEndpoint}/api/v1/graphql`
             : undefined,
+          SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: blockscoutEndpoint,
         });
 
         outro("Connected to SettleMint");
