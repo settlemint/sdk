@@ -3,7 +3,7 @@ import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
 export async function codegenBlockscout(env: DotEnv) {
-  const endpoint = env.SETTLEMINT_BLOCKSCOUT_ENDPOINT;
+  const endpoint = env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT;
   if (!endpoint) {
     return;
   }

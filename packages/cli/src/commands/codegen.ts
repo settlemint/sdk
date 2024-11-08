@@ -39,7 +39,7 @@ export function codegenCommand(): Command {
           stopMessage: "Tested GraphQL schemas",
         });
 
-        const promises = [];
+        const promises: Promise<void>[] = [];
         if (hasura) {
           promises.push(codegenHasura(env));
         }

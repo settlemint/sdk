@@ -89,9 +89,9 @@ function generateRewrites(env: DotEnv): Rewrite[] {
       destination: env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT,
     },
     {
-      condition: !!env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+      condition: !!env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
       source: "/proxy/blockscout/graphql",
-      destination: env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+      destination: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
     },
   ];
 

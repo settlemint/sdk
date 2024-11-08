@@ -23,7 +23,7 @@ export async function codegenTsconfig(env: DotEnv) {
     ),
     testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
     testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
-    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_BLOCKSCOUT_ENDPOINT),
+    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
   ]);
 
   if (!tsconfig.config.compilerOptions) {

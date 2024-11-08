@@ -80,6 +80,8 @@ export function connectCommand(): Command {
           thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
         );
 
+        const blockscoutEndpoint = blockscout?.endpoints.find((endpoint) => endpoint.id === "interface")?.displayValue;
+
         await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
@@ -118,8 +120,9 @@ export function connectCommand(): Command {
           SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) => endpoint.id === "internal")
             ?.displayValue,
           SETTLEMINT_BLOCKSCOUT: blockscout?.id,
-          SETTLEMINT_BLOCKSCOUT_ENDPOINT: blockscout?.endpoints.find((endpoint) => endpoint.id === "interface")
-            ?.displayValue,
+          SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: blockscoutEndpoint
+            ? `${blockscoutEndpoint}/api/v1/graphql`
+            : undefined,
         });
 
         outro("Connected to SettleMint");
