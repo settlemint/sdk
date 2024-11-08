@@ -183,6 +183,7 @@ jobs:
                 | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
                 | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` |
                 | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` |
+                | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@v5

@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "0.6.20",
+  "version": "0.6.22",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -25,7 +25,7 @@
     "publint": "turbo publint",
     "attw": "turbo attw",
     "build": "turbo build",
-    "dev": "turbo dev --concurrency=11",
+    "dev": "turbo dev --concurrency=12",
     "lint": "turbo lint",
     "registry:connect": "turbo registry:connect",
     "registry:codegen": "turbo registry:codegen",
@@ -34,7 +34,7 @@
     "publish-npm": "turbo publish-npm",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
-    "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=11 --summarize",
+    "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
     "test:e2e": "bun test test/*.ts"
   },
