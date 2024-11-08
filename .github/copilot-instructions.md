@@ -223,6 +223,13 @@ const nextConfig: NextConfig = {
             "tadaOutputLocation": "portal-env.d.ts",
             "tadaTurboLocation": "portal-cache.d.ts",
             "trackFieldUsage": false
+          },
+          {
+            "name": "blockscout",
+            "schema": "blockscout-schema.graphql",
+            "tadaOutputLocation": "blockscout-env.d.ts",
+            "tadaTurboLocation": "blockscout-cache.d.ts",
+            "trackFieldUsage": false
           }
         ]
       }
