@@ -7,6 +7,7 @@ import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
 
@@ -30,7 +31,7 @@ export function codegenCommand(): Command {
 
         const env: DotEnv = await loadEnv(true, !!prod);
 
-        const { hasura, portal, thegraph } = await spinner({
+        const { hasura, portal, thegraph, blockscout } = await spinner({
           startMessage: "Testing configured GraphQL schema",
           task: async () => {
             return codegenTsconfig(env);
@@ -47,6 +48,9 @@ export function codegenCommand(): Command {
         }
         if (thegraph) {
           promises.push(codegenTheGraph(env));
+        }
+        if (blockscout) {
+          promises.push(codegenBlockscout(env));
         }
         if (shouldCodegenMinio(env)) {
           promises.push(codegenMinio(env));

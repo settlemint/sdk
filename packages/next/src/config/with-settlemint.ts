@@ -88,6 +88,11 @@ function generateRewrites(env: DotEnv): Rewrite[] {
       source: "/proxy/ipfs/gateway",
       destination: env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT,
     },
+    {
+      condition: !!env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+      source: "/proxy/blockscout/graphql",
+      destination: env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+    },
   ];
 
   return rewriteConfigs

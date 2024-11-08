@@ -10,10 +10,11 @@ export async function codegenTsconfig(env: DotEnv) {
       hasura: false,
       portal: false,
       thegraph: false,
+      blockscout: false,
     };
   }
 
-  const [hasura, portal, thegraph] = await Promise.all([
+  const [hasura, portal, thegraph, blockscout] = await Promise.all([
     testGqlEndpoint(
       env.SETTLEMINT_ACCESS_TOKEN,
       env.SETTLEMINT_HASURA_ADMIN_SECRET,
@@ -22,6 +23,7 @@ export async function codegenTsconfig(env: DotEnv) {
     ),
     testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
     testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
+    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_BLOCKSCOUT_ENDPOINT),
   ]);
 
   if (!tsconfig.config.compilerOptions) {
@@ -67,6 +69,17 @@ export async function codegenTsconfig(env: DotEnv) {
             },
           ]
         : []),
+      ...(blockscout
+        ? [
+            {
+              name: "blockscout",
+              schema: "blockscout-schema.graphql",
+              tadaOutputLocation: "blockscout-env.d.ts",
+              tadaTurboLocation: "blockscout-cache.d.ts",
+              trackFieldUsage: false,
+            },
+          ]
+        : []),
     ],
   };
 
@@ -86,8 +99,9 @@ export async function codegenTsconfig(env: DotEnv) {
   writeFileSync(tsconfig.path, JSON.stringify(tsconfig.config, null, 2), "utf8");
 
   return {
-    hasura: hasura,
-    portal: portal,
-    thegraph: thegraph,
+    hasura,
+    portal,
+    thegraph,
+    blockscout,
   };
 }
