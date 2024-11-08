@@ -75,13 +75,11 @@ const { client, graphql } = createBlockscoutClient({
 // Define your query using the type-safe graphql template literal
 const query = graphql(`
   query GetTransaction($hash: String!) {
-    {
-      transaction(hash: $hash) {
-        hash
-        blockNumber
-        value
-        gasUsed
-      }
+    transaction(hash: $hash) {
+      hash
+      blockNumber
+      value
+      gasUsed
     }
   }
 `);
