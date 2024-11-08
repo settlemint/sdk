@@ -30,7 +30,6 @@
 
 - [About](#about)
 - [API Reference](#api-reference)
-- [Examples](#examples)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -40,14 +39,7 @@ The SettleMint Blockscout SDK provides a seamless way to interact with Blockscou
 
 For detailed information about using Blockscout with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/insights/).
 
-
 ## API Reference
-
-Comprehensive documentation of all available API endpoints, methods, and parameters. Find detailed information about request/response formats and authentication.
-
-## Examples
-
-# API Examples
 
 ### Creating a Blockscout Client
 
