@@ -49,5 +49,8 @@ jobs:
       - name: Install Bun dependencies
         run: bun install
 
+      - name: Run build
+        run: bunx turbo build
+
       - name: Run the E2E tests
         run: bun test:e2e
