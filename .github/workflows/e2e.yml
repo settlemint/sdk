@@ -54,3 +54,6 @@ jobs:
 
       - name: Run the E2E tests
         run: bun test:e2e
+        env:
+          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
