@@ -94,8 +94,8 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
 
   const validatedOptions = validate(ClientOptionsSchema, options);
 
-  const baseUrl = new URL(validatedOptions.instance);
-  const gqlClient = new GraphQLClient(`${baseUrl.origin}${baseUrl.pathname}api/graphql`, {
+  const baseUrl = new URL(validatedOptions.instance).toString().replace(/\/$/, "");
+  const gqlClient = new GraphQLClient(`${baseUrl}/api/graphql`, {
     headers: {
       "x-auth-token": validatedOptions.accessToken,
     },
