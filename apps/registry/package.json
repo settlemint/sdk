@@ -50,7 +50,7 @@
     "react-awesome-gravatar": "2.0.3",
     "react-dom": "19.0.0-rc-28668d39-20241023",
     "react-dropzone": "14.3.5",
-    "react-hook-form": "7.53.1",
+    "react-hook-form": "7.53.2",
     "react-is": "19.0.0-rc-28668d39-20241023",
     "sonner": "1.7.0",
     "tailwind-merge": "2.5.4",
