@@ -11,6 +11,12 @@ const BlockchainNetworkFragment = graphql(`
     id
     name
     status
+    blockchainNodes {
+      ... on BesuQBFTBlockchainNode {
+        id
+        name
+      }
+    }
   }
 `);
 

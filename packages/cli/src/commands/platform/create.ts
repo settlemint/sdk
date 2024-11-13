@@ -1,3 +1,4 @@
+import { blockchainNetworkCreateCommand } from "@/commands/platform/blockchain-network/create";
 import { workspaceCreateCommand } from "@/commands/platform/workspace/create";
 import { Command } from "@commander-js/extra-typings";
 import { applicationCreateCommand } from "./application/create";
@@ -13,5 +14,6 @@ export function createCommand(): Command {
     .alias("c")
     .description("Create a resource in the SettleMint platform")
     .addCommand(workspaceCreateCommand())
-    .addCommand(applicationCreateCommand());
+    .addCommand(applicationCreateCommand())
+    .addCommand(blockchainNetworkCreateCommand());
 }

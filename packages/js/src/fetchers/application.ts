@@ -11,6 +11,7 @@ export const ApplicationFragment = graphql(`
   fragment Application on Application {
     id
     name
+    workspace { id }
   }
 `);
 

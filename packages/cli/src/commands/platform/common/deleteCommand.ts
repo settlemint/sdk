@@ -9,6 +9,7 @@ import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
+import type { ResourceType } from "./resourceType";
 
 /**
  * Creates a delete command for the SettleMint platform.
@@ -28,13 +29,13 @@ export function getDeleteCommand({
   mapDefaultEnv = () => ({}),
   deleteFunction,
 }: {
-  type: "application" | "workspace";
+  type: ResourceType;
   alias: string;
   envKey: keyof DotEnv;
   mapDefaultEnv?: (env: Partial<DotEnv>) => Partial<DotEnv>;
   deleteFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
 }) {
-  return new Command(type)
+  return new Command(type.split(" ").join("-"))
     .alias(alias)
     .description(
       `Delete a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to delete the default ${type} from your .env file.

@@ -68,6 +68,26 @@ describe("Setup a project using the SDK", () => {
       { cwd: projectDir },
     );
     expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
+
+    const { output: networkOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "blockchain-network",
+        "besu-qbft",
+        "test-network",
+        "--provider",
+        "gke", // TODO: from local env
+        "--region",
+        "europe", // TODO: from local env
+        "--node-name",
+        "validator-1",
+        "--accept",
+        "--default",
+      ],
+      { cwd: projectDir },
+    );
+    expect(networkOutput).toInclude("blockchain network Besu QBFT test-network created successfully");
   });
 
   test.skip("Connect starter kit", async () => {

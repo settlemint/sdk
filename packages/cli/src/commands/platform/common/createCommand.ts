@@ -8,6 +8,7 @@ import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
+import { type ResourceType, SETTLEMINT_CLIENT_MAP } from "./resourceType";
 
 type DefaultArgs = {
   accept?: true | undefined;
@@ -32,7 +33,7 @@ export function getCreateCommand({
   examples,
   execute,
 }: {
-  type: "application" | "workspace";
+  type: ResourceType;
   alias: string;
   examples: string[];
   execute: (
@@ -42,11 +43,14 @@ export function getCreateCommand({
       createFunction: (
         settlemintClient: SettlemintClient,
         env: Partial<DotEnv>,
-      ) => Promise<{ result: { id: string; name: string }; mapDefaultEnv: () => Partial<DotEnv> }>,
+      ) => Promise<{
+        result: { id: string; name: string };
+        mapDefaultEnv: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
+      }>,
     ) => void | Promise<void>,
   ) => void;
 }) {
-  const cmd = new Command(type)
+  const cmd = new Command(type.split(" ").join("-"))
     .alias(alias)
     .description(
       `Create a new ${type} in the SettleMint platform.
@@ -82,17 +86,18 @@ export function getCreateCommand({
     });
 
     if (isDefault) {
+      const defaultEnv = mapDefaultEnv();
       const newEnv: Partial<DotEnv> = {
         SETTLEMINT_ACCESS_TOKEN: accessToken,
         SETTLEMINT_INSTANCE: instance,
-        ...mapDefaultEnv(),
+        ...(defaultEnv instanceof Promise ? await defaultEnv : defaultEnv),
       };
       await writeEnvSpinner(!!prod, newEnv);
       note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
     }
 
     if (wait) {
-      await waitForCompletion(settlemint, type, result.id);
+      await waitForCompletion(settlemint, SETTLEMINT_CLIENT_MAP[type], result.id);
     }
 
     outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);
