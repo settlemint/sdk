@@ -7,7 +7,14 @@ import {
   applicationCreate,
   applicationDelete,
 } from "./fetchers/application.js";
-import { type BlockchainNetwork, blockchainNetworkList, blockchainNetworkRead } from "./fetchers/blockchain-network.js";
+import {
+  type BlockchainNetwork,
+  type CreateBlockchainNetworkArgs,
+  blockchainNetworkCreate,
+  blockchainNetworkDelete,
+  blockchainNetworkList,
+  blockchainNetworkRead,
+} from "./fetchers/blockchain-network.js";
 import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
 import {
   type CustomDeployment,
@@ -44,6 +51,8 @@ export interface SettlemintClient {
   blockchainNetwork: {
     list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
     read: (blockchainNetworkId: Id) => Promise<BlockchainNetwork>;
+    create: (args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>;
+    delete: (networkId: Id) => Promise<BlockchainNetwork>;
   };
   blockchainNode: {
     list: (applicationId: Id) => Promise<BlockchainNode[]>;
@@ -115,6 +124,8 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     blockchainNetwork: {
       list: blockchainNetworkList(gqlClient, options),
       read: blockchainNetworkRead(gqlClient, options),
+      create: blockchainNetworkCreate(gqlClient, options),
+      delete: blockchainNetworkDelete(gqlClient, options),
     },
     blockchainNode: {
       list: blockchainNodeList(gqlClient, options),

@@ -60,6 +60,20 @@ describe("Setup a project using the SDK", () => {
       { cwd: projectDir },
     );
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
+
+    const { output: applicationOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "application",
+        `${WORKSPACE_NAME}`,
+
+        "--accept",
+        "--default",
+      ],
+      { cwd: projectDir },
+    );
+    expect(applicationOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
   });
 
   test.skip("Connect starter kit", async () => {
