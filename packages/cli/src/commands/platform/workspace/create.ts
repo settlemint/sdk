@@ -1,4 +1,5 @@
 import { Option } from "@commander-js/extra-typings";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../common/createCommand";
 
 /**
@@ -10,7 +11,7 @@ export function workspaceCreateCommand() {
   return getCreateCommand({
     type: "workspace",
     alias: "w",
-    addOptionsAndExecute: (cmd, baseAction) => {
+    execute: (cmd, baseAction) => {
       cmd
         .requiredOption("--company-name <companyName>", "Company name")
         .requiredOption("--address-line-1 <addressLine1>", "Address line 1")
@@ -126,23 +127,28 @@ export function workspaceCreateCommand() {
               ...defaultArgs
             },
           ) => {
-            return baseAction({
-              ...defaultArgs,
-              createFunction: (settlemint) => {
-                return settlemint.workspace.create({
-                  name,
-                  taxIdValue,
-                  taxIdType,
-                  postalCode,
-                  paymentMethodId,
-                  parentId,
-                  country,
-                  companyName,
-                  city,
-                  addressLine2,
-                  addressLine1,
-                });
-              },
+            return baseAction(defaultArgs, async (settlemint) => {
+              const result = await settlemint.workspace.create({
+                name,
+                taxIdValue,
+                taxIdType,
+                postalCode,
+                paymentMethodId,
+                parentId,
+                country,
+                companyName,
+                city,
+                addressLine2,
+                addressLine1,
+              });
+              return {
+                result,
+                mapDefaultEnv: (): Partial<DotEnv> => {
+                  return {
+                    SETTLEMINT_WORKSPACE: result.id,
+                  };
+                },
+              };
             });
           },
         );

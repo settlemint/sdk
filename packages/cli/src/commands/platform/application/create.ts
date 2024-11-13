@@ -1,3 +1,4 @@
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../common/createCommand";
 
 /**
@@ -6,24 +7,31 @@ import { getCreateCommand } from "../common/createCommand";
  * It takes a workspace name and optional flags.
  */
 export function applicationCreateCommand() {
-  return getCreateCommand<{ workspaceId: string }>({
+  return getCreateCommand({
     type: "application",
     alias: "a",
-    addOptionsAndExecute: (cmd, baseAction) => {
+    execute: (cmd, baseAction) => {
       cmd
         .option(
           "-w, --workspace-id <workspaceId>",
           "The workspace ID to create the application in (defaults to workspace from env)",
         )
         .action(async (name, { workspaceId, ...defaultArgs }) => {
-          return baseAction({
-            ...defaultArgs,
-            createFunction: (settlemint) => {
-              return settlemint.application.create({
-                name,
-                workspaceId: workspaceId!,
-              });
-            },
+          return baseAction(defaultArgs, async (settlemint, env) => {
+            const workspace = workspaceId ?? env.SETTLEMINT_WORKSPACE!;
+            const result = await settlemint.application.create({
+              name,
+              workspaceId: workspaceId!,
+            });
+            return {
+              result,
+              mapDefaultEnv: (): Partial<DotEnv> => {
+                return {
+                  SETTLEMINT_APPLICATION: result.id,
+                  SETTLEMINT_WORKSPACE: workspace,
+                };
+              },
+            };
           });
         });
     },

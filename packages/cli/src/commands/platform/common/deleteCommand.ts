@@ -9,15 +9,28 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
 
+/**
+ * Creates a delete command for the SettleMint platform.
+ *
+ * @param options - Configuration options for the delete command
+ * @param options.type - The type of resource to delete
+ * @param options.alias - Command alias (shorthand)
+ * @param options.envKey - Environment variable key for the resource ID
+ * @param options.mapDefaultEnv - Function to map environment variables when deleting default resource
+ * @param options.deleteFunction - Function that performs the actual delete operation
+ * @returns A configured Commander command for deleting the specified resource type
+ */
 export function getDeleteCommand({
   type,
   alias,
   envKey,
+  mapDefaultEnv = () => ({}),
   deleteFunction,
 }: {
   type: "application" | "workspace";
   alias: string;
   envKey: keyof DotEnv;
+  mapDefaultEnv?: (env: Partial<DotEnv>) => Partial<DotEnv>;
   deleteFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
 }) {
   return new Command(type)
@@ -30,7 +43,11 @@ export function getDeleteCommand({
     $ bunx @settlemint/sdk-cli@latest platform delete ${type} <${type}-id>
 
     # Deletes the default ${type} in the production environment
-    $ bunx @settlemint/sdk-cli@latest platform delete ${type} default --prod`,
+    $ bunx @settlemint/sdk-cli@latest platform delete ${type} default --prod
+
+    # Force deletes the specified ${type} without confirmation
+    $ bunx @settlemint/sdk-cli@latest platform delete ${type} <${type}-id> --force
+    `,
     )
     .argument("<id>", `The id of the ${type}, use 'default' to delete the default one from your .env file`)
     .option("-a, --accept", "Accept the default and previously set values")
@@ -68,10 +85,8 @@ export function getDeleteCommand({
         const newEnv: Partial<DotEnv> = {
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
+          ...mapDefaultEnv(env),
         };
-        if (type === "application") {
-          newEnv.SETTLEMINT_WORKSPACE = env.SETTLEMINT_WORKSPACE;
-        }
         await writeEnvSpinner(!!prod, newEnv);
         note(`${type} removed as default`);
       }

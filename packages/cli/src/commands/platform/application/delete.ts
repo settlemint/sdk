@@ -10,6 +10,11 @@ export function applicationDeleteCommand() {
     type: "application",
     alias: "a",
     envKey: "SETTLEMINT_APPLICATION",
+    mapDefaultEnv: (env) => {
+      return {
+        SETTLEMINT_WORKSPACE: env.SETTLEMINT_WORKSPACE,
+      };
+    },
     deleteFunction: async (settlemint, id) => {
       return settlemint.application.delete(id);
     },

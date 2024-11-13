@@ -20,11 +20,11 @@ export async function waitForCompletion(
   while (true) {
     const resource = await settlemint[type].read(id);
 
-    if (type === "workspace") {
+    if (type === "workspace" || type === "application") {
       return true;
     }
 
-    if ((resource as { status: string }).status === "COMPLETED") {
+    if ((resource as { status?: string }).status === "COMPLETED") {
       return true;
     }
 

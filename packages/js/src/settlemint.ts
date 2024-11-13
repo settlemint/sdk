@@ -6,6 +6,8 @@ import {
   type CreateApplicationArgs,
   applicationCreate,
   applicationDelete,
+  applicationList,
+  applicationRead,
 } from "./fetchers/application.js";
 import {
   type BlockchainNetwork,
@@ -42,11 +44,13 @@ export interface SettlemintClient {
     list: () => Promise<Workspace[]>;
     read: (workspaceId: Id) => Promise<Workspace>;
     create: (args: CreateWorkspaceArgs) => Promise<Workspace>;
-    delete: (id: Id) => Promise<Workspace>;
+    delete: (workspaceId: Id) => Promise<Workspace>;
   };
   application: {
+    list: (workspaceId: Id) => Promise<Application[]>;
+    read: (applicationId: Id) => Promise<Application>;
     create: (args: CreateApplicationArgs) => Promise<Application>;
-    delete: (id: Id) => Promise<Application>;
+    delete: (applicationId: Id) => Promise<Application>;
   };
   blockchainNetwork: {
     list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
@@ -118,6 +122,8 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       delete: workspaceDelete(gqlClient, options),
     },
     application: {
+      list: applicationList(gqlClient, options),
+      read: applicationRead(gqlClient, options),
       create: applicationCreate(gqlClient, options),
       delete: applicationDelete(gqlClient, options),
     },

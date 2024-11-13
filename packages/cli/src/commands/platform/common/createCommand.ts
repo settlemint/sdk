@@ -1,6 +1,7 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -8,31 +9,41 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
-export function getCreateCommand<CreateOptions>({
+type DefaultArgs = {
+  accept?: true | undefined;
+  default?: true | undefined;
+  prod?: true | undefined;
+  wait?: true | undefined;
+};
+
+/**
+ * Creates a command for creating resources in the SettleMint platform.
+ *
+ * @param options - Configuration options for the create command
+ * @param options.type - The type of resource to create
+ * @param options.alias - Command alias (shorthand)
+ * @param options.examples - Array of example usage strings
+ * @param options.execute - Function to configure and execute the create command
+ * @returns A configured Commander command for creating the specified resource type
+ */
+export function getCreateCommand({
   type,
   alias,
   examples,
-  addOptionsAndExecute,
+  execute,
 }: {
   type: "application" | "workspace";
   alias: string;
-
   examples: string[];
-  addOptionsAndExecute: (
-    cmd: Command<
-      [string],
-      {
-        accept?: true | undefined;
-        default?: true | undefined;
-        prod?: true | undefined;
-      }
-    >,
-    baseAction: (args: {
-      accept?: true | undefined;
-      default?: true | undefined;
-      prod?: true | undefined;
-      createFunction: (settlemintClient: SettlemintClient) => Promise<{ id: string; name: string }>;
-    }) => void | Promise<void>,
+  execute: (
+    cmd: Command<[string], DefaultArgs>,
+    baseAction: (
+      defaultArgs: DefaultArgs,
+      createFunction: (
+        settlemintClient: SettlemintClient,
+        env: Partial<DotEnv>,
+      ) => Promise<{ result: { id: string; name: string }; mapDefaultEnv: () => Partial<DotEnv> }>,
+    ) => void | Promise<void>,
   ) => void;
 }) {
   const cmd = new Command(type)
@@ -46,10 +57,10 @@ export function getCreateCommand<CreateOptions>({
     .argument("<name>", `The ${type} name`)
     .option("-a, --accept", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
+    .option("-w, --wait", "Wait until deployed")
     .option("--prod", "Connect to production environment");
 
-  // Add any additional options passed in
-  addOptionsAndExecute(cmd, async ({ accept, prod, default: isDefault, createFunction }) => {
+  execute(cmd, async ({ accept, prod, default: isDefault, wait }, createFunction) => {
     intro(`Creating ${type} in the SettleMint platform`);
 
     const autoAccept = !!accept || isInCi;
@@ -62,10 +73,10 @@ export function getCreateCommand<CreateOptions>({
       instance,
     });
 
-    const result = await spinner({
+    const { result, mapDefaultEnv } = await spinner({
       startMessage: `Creating ${type}`,
       task: async () => {
-        return createFunction(settlemint);
+        return createFunction(settlemint, env);
       },
       stopMessage: `${type} created`,
     });
@@ -74,16 +85,14 @@ export function getCreateCommand<CreateOptions>({
       const newEnv: Partial<DotEnv> = {
         SETTLEMINT_ACCESS_TOKEN: accessToken,
         SETTLEMINT_INSTANCE: instance,
+        ...mapDefaultEnv(),
       };
-      if (type === "workspace") {
-        newEnv.SETTLEMINT_WORKSPACE = env.SETTLEMINT_WORKSPACE;
-      }
-      if (type === "application") {
-        newEnv.SETTLEMINT_WORKSPACE = env.SETTLEMINT_WORKSPACE; // TODO: this could be coming from create options
-        newEnv.SETTLEMINT_APPLICATION = result.id;
-      }
       await writeEnvSpinner(!!prod, newEnv);
       note(`${type} ${result.name} set as default`);
+    }
+
+    if (wait) {
+      await waitForCompletion(settlemint, type, result.id);
     }
 
     outro(`${type} ${result.name} created successfully`);

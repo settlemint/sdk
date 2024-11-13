@@ -7,6 +7,7 @@ import { runCommand } from "./utils/runCommand";
 const PROJECT_NAME = "starter-kit-demo";
 const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 const WORKSPACE_NAME = "Starter Kit Demo Workspace";
+const APPLICATION_NAME = "Starter Kit App";
 
 let projectDir: string;
 
@@ -15,6 +16,7 @@ afterAll(async () => {
     return;
   }
   try {
+    // Deleting a workspace automatically deletes all underlying resources
     await runCommand(["platform", "delete", "workspace", "--accept", "default"], { cwd: projectDir });
   } catch (err) {}
   try {
@@ -62,18 +64,10 @@ describe("Setup a project using the SDK", () => {
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
 
     const { output: applicationOutput } = await runCommand(
-      [
-        "platform",
-        "create",
-        "application",
-        `${WORKSPACE_NAME}`,
-
-        "--accept",
-        "--default",
-      ],
+      ["platform", "create", "application", `${APPLICATION_NAME}`, "--accept", "--default"],
       { cwd: projectDir },
     );
-    expect(applicationOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
+    expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
   });
 
   test.skip("Connect starter kit", async () => {
@@ -95,6 +89,11 @@ describe("Setup a project using the SDK", () => {
   );
 
   test("Delete created resources on the platform", async () => {
+    const { output: deleteApplicationOutput } = await runCommand(
+      ["platform", "delete", "application", "--accept", "--force", "default"],
+      { cwd: projectDir },
+    );
+    expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
     const { output: deleteWorkspaceOutput } = await runCommand(
       ["platform", "delete", "workspace", "--accept", "--force", "default"],
       { cwd: projectDir },

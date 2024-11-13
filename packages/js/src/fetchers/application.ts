@@ -20,6 +20,30 @@ export const ApplicationFragment = graphql(`
  */
 export type Application = ResultOf<typeof ApplicationFragment>;
 
+const listApplications = graphql(
+  `
+  query ListApplications($workspaceId: ID!) {
+    workspace (workspaceId: $workspaceId) {
+      applications {
+        ...Application
+      }
+    }
+  }
+  `,
+  [ApplicationFragment],
+);
+
+const readApplication = graphql(
+  `
+  query ReadApplication($id: ID!) {
+    application(applicationId: $id) {
+      ...Application
+    }
+  }
+  `,
+  [ApplicationFragment],
+);
+
 const createApplication = graphql(
   `
   mutation CreateApplication(
@@ -49,6 +73,38 @@ const deleteApplication = graphql(
 );
 
 export type CreateApplicationArgs = VariablesOf<typeof createApplication>;
+
+/**
+ * Lists all applications in a workspace.
+ *
+ * @param gqlClient - The GraphQL client instance used to execute the query.
+ * @param options - Configuration options for the client.
+ * @returns A function that accepts the workspace ID and returns a promise resolving to an array of applications.
+ */
+export const applicationList = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (workspaceId: Id): Promise<Application[]> => {
+    const id = validate(IdSchema, workspaceId);
+    const {
+      workspace: { applications },
+    } = await gqlClient.request(listApplications, { workspaceId: id });
+    return applications;
+  };
+};
+
+/**
+ * Reads a specific application by ID.
+ *
+ * @param gqlClient - The GraphQL client instance used to execute the query.
+ * @param options - Configuration options for the client.
+ * @returns A function that accepts the application ID and returns a promise resolving to the application details.
+ */
+export const applicationRead = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (applicationId: Id): Promise<Application> => {
+    const id = validate(IdSchema, applicationId);
+    const { application } = await gqlClient.request(readApplication, { id });
+    return application;
+  };
+};
 
 /**
  * Creates a new application.
