@@ -17,7 +17,7 @@ afterAll(async () => {
   }
   try {
     // Deleting a workspace automatically deletes all underlying resources
-    await runCommand(["platform", "delete", "workspace", "--accept", "default"], { cwd: projectDir });
+    await runCommand(["platform", "delete", "workspace", "--accept", "--force", "default"], { cwd: projectDir });
   } catch (err) {}
   try {
     await rmdir(projectDir, { recursive: true });

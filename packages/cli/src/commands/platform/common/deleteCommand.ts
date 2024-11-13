@@ -3,6 +3,7 @@ import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -78,7 +79,7 @@ export function getDeleteCommand({
         task: async () => {
           return deleteFunction(settlemint, isDefaultId ? env[envKey]! : id);
         },
-        stopMessage: `${type} deleted`,
+        stopMessage: `${capitalizeFirstLetter(type)} deleted`,
       });
 
       if (isDefaultId) {
@@ -88,9 +89,9 @@ export function getDeleteCommand({
           ...mapDefaultEnv(env),
         };
         await writeEnvSpinner(!!prod, newEnv);
-        note(`${type} removed as default`);
+        note(`${capitalizeFirstLetter(type)} removed as default`);
       }
 
-      outro(`${type} ${result.name} deleted successfully`);
+      outro(`${capitalizeFirstLetter(type)} ${result.name} deleted successfully`);
     });
 }

@@ -4,7 +4,7 @@ import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
@@ -78,7 +78,7 @@ export function getCreateCommand({
       task: async () => {
         return createFunction(settlemint, env);
       },
-      stopMessage: `${type} created`,
+      stopMessage: `${capitalizeFirstLetter(type)} created`,
     });
 
     if (isDefault) {
@@ -88,14 +88,14 @@ export function getCreateCommand({
         ...mapDefaultEnv(),
       };
       await writeEnvSpinner(!!prod, newEnv);
-      note(`${type} ${result.name} set as default`);
+      note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
     }
 
     if (wait) {
       await waitForCompletion(settlemint, type, result.id);
     }
 
-    outro(`${type} ${result.name} created successfully`);
+    outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);
   });
 
   return cmd;

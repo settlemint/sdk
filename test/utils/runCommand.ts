@@ -1,10 +1,16 @@
 import { resolve } from "node:path";
 import { $ } from "bun";
+//import {readFile} from "node:fs/promises"
 
-const DEFAULT_ENV = {
+const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN,
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE,
 };
+
+if (DEFAULT_ENV.SETTLEMINT_INSTANCE?.startsWith("https://console.k8s.orb.local")) {
+  // Disable warnings for self signed certificates
+  DEFAULT_ENV.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+}
 
 export async function runCommand(command: string[], options: { env?: Record<string, string>; cwd?: string } = {}) {
   const cwd = options.cwd ?? resolve(__dirname, "../");
@@ -20,3 +26,12 @@ export async function runCommand(command: string[], options: { env?: Record<stri
   }
   return { output, cwd };
 }
+/*
+async function getEnv() {
+  try {
+    const envFromFile = await readFile(resolve(__dirname, '.env'))
+    return JSON.parse();
+  } catch {
+    return {}
+  }
+}*/

@@ -21,7 +21,7 @@ export function applicationCreateCommand() {
             const workspace = workspaceId ?? env.SETTLEMINT_WORKSPACE!;
             const result = await settlemint.application.create({
               name,
-              workspaceId: workspaceId!,
+              workspaceId: workspace!,
             });
             return {
               result,
