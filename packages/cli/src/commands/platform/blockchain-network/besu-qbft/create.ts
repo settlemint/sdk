@@ -1,4 +1,4 @@
-import { parseNumber } from "@/utils/parseNumber";
+import { parseNumber } from "@/utils/parse-number";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/createCommand";
@@ -100,13 +100,13 @@ export function blockchainNetworkBesuQbftCreateCommand() {
     },
     examples: [
       `# Create a Besu QBFT blockchain network with required options
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network create my-network --provider gke --region europe --node-name validator-1 --accept`,
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 --accept`,
       `# Create a Besu QBFT blockchain network and save as default
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network create my-network --provider gke --region europe --node-name validator-1 -d`,
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 -d`,
       `# Create a Besu QBFT blockchain network in a specific application
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network create my-network --provider gke --region europe --node-name validator-1 --application-id 123456789`,
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 --application-id 123456789`,
       `# Create a Besu QBFT blockchain network with custom parameters
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network create my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5`,
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5`,
     ],
   });
 }

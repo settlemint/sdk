@@ -2,6 +2,7 @@ import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -50,13 +51,14 @@ export function getCreateCommand({
     ) => void | Promise<void>,
   ) => void;
 }) {
-  const cmd = new Command(type.split(" ").join("-"))
+  const cmd = new Command(sanitizeCommandName(type))
     .alias(alias)
     .description(
       `Create a new ${type} in the SettleMint platform.
 
   Examples:
-    ${examples.join("\n\n")}`,
+
+  ${examples.join("\n\n  ")}\n`,
     )
     .argument("<name>", `The ${type} name`)
     .option("-a, --accept", "Accept the default values")

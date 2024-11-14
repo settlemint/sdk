@@ -1,6 +1,7 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -35,7 +36,7 @@ export function getDeleteCommand({
   mapDefaultEnv?: (env: Partial<DotEnv>) => Partial<DotEnv>;
   deleteFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
 }) {
-  return new Command(type.split(" ").join("-"))
+  return new Command(sanitizeCommandName(type))
     .alias(alias)
     .description(
       `Delete a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to delete the default ${type} from your .env file.

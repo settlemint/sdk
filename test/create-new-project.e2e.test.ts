@@ -87,7 +87,7 @@ describe("Setup a project using the SDK", () => {
       ],
       { cwd: projectDir },
     );
-    expect(networkOutput).toInclude("blockchain network Besu QBFT test-network created successfully");
+    expect(networkOutput).toInclude("Besu QBFT test-network created successfully");
   });
 
   test.skip("Connect starter kit", async () => {
