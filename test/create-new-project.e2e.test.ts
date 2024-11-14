@@ -2,7 +2,7 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { $ } from "bun";
-import { runCommand } from "./utils/runCommand";
+import { runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
 const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
