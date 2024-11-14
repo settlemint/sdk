@@ -10,7 +10,7 @@ import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
-import type { ResourceType } from "./resourceType";
+import type { ResourceType } from "./resource-type";
 
 /**
  * Creates a delete command for the SettleMint platform.

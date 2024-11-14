@@ -1,4 +1,4 @@
-import { getDeleteCommand } from "../common/deleteCommand";
+import { getDeleteCommand } from "../common/delete-command";
 
 /**
  * Creates and returns the 'application' command for the SettleMint SDK.

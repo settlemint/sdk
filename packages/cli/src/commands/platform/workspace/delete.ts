@@ -1,4 +1,4 @@
-import { getDeleteCommand } from "@/commands/platform/common/deleteCommand";
+import { getDeleteCommand } from "@/commands/platform/common/delete-command";
 
 /**
  * Creates and returns the 'workspace' command for the SettleMint SDK.

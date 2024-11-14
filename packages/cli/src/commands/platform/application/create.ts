@@ -1,5 +1,5 @@
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { getCreateCommand } from "../common/createCommand";
+import { getCreateCommand } from "../common/create-command";
 
 /**
  * Creates and returns the 'application' command for the SettleMint SDK.

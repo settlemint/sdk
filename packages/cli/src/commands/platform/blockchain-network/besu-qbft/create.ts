@@ -1,7 +1,7 @@
 import { parseNumber } from "@/utils/parse-number";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { getCreateCommand } from "../../common/createCommand";
+import { getCreateCommand } from "../../common/create-command";
 
 /**
  * Creates and returns the 'blockchain-network besu-qbft' command for the SettleMint SDK.
