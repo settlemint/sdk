@@ -31,8 +31,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@v1
@@ -55,5 +53,5 @@ jobs:
       - name: Run the E2E tests
         run: bun test:e2e
         env:
-          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
+          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE_E2E_TESTS }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
