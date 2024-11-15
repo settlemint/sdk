@@ -1,7 +1,6 @@
 import { resolve } from "node:path";
 import { $ } from "bun";
 import { isLocalEnv } from "./is-local-env";
-//import {readFile} from "node:fs/promises"
 
 const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN,
