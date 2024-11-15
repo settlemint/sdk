@@ -45,7 +45,7 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
       });
 
       if (wait) {
-        await waitForCompletion(settlemint, "customDeployment", customDeployment.id);
+        await waitForCompletion({ settlemint, type: "custom deployment", id: customDeployment.id, action: "deploy" });
       }
 
       outro(`${customDeployment.name} updated to ${tag}`);

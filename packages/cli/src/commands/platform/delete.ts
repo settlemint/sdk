@@ -1,7 +1,6 @@
 import { workspaceDeleteCommand } from "@/commands/platform/workspace/delete";
 import { Command } from "@commander-js/extra-typings";
 import { applicationDeleteCommand } from "./application/delete";
-import { blockchainNetworkDeleteCommand } from "./blockchain-network/delete";
 
 /**
  * Creates and returns the 'delete' command for the SettleMint SDK.
@@ -14,6 +13,5 @@ export function deleteCommand(): Command {
     .alias("d")
     .description("Delete a resource in the SettleMint platform")
     .addCommand(workspaceDeleteCommand())
-    .addCommand(applicationDeleteCommand())
-    .addCommand(blockchainNetworkDeleteCommand());
+    .addCommand(applicationDeleteCommand());
 }

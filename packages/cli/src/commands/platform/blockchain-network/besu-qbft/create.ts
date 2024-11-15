@@ -11,7 +11,7 @@ import { getCreateCommand } from "../../common/create-command";
  */
 export function blockchainNetworkBesuQbftCreateCommand() {
   return getCreateCommand({
-    type: "Besu QBFT",
+    type: "besu QBFT",
     alias: "bq",
     execute: (cmd, baseAction) => {
       cmd

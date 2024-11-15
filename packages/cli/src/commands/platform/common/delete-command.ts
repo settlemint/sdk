@@ -1,6 +1,7 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
@@ -55,8 +56,9 @@ export function getDeleteCommand({
     .argument("<id>", `The id of the ${type}, use 'default' to delete the default one from your .env file`)
     .option("-a, --accept", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
+    .option("-w, --wait", "Wait until destroyed")
     .option("-f, --force", `Force delete the ${type} without confirmation`)
-    .action(async (id, { accept, prod, force }) => {
+    .action(async (id, { accept, prod, force, wait }) => {
       intro(`Deleting ${type} in the SettleMint platform`);
 
       if (!force) {
@@ -75,11 +77,12 @@ export function getDeleteCommand({
       });
 
       const isDefaultId = id === "default";
+      const serviceId = isDefaultId ? env[envKey]! : id;
 
       const result = await spinner({
         startMessage: `Deleting ${type}`,
         task: async () => {
-          return deleteFunction(settlemint, isDefaultId ? env[envKey]! : id);
+          return deleteFunction(settlemint, serviceId);
         },
         stopMessage: `${capitalizeFirstLetter(type)} deleted`,
       });
@@ -92,6 +95,10 @@ export function getDeleteCommand({
         };
         await writeEnvSpinner(!!prod, newEnv);
         note(`${capitalizeFirstLetter(type)} removed as default`);
+      }
+
+      if (wait) {
+        await waitForCompletion({ settlemint, type, id: serviceId, action: "destroy" });
       }
 
       outro(`${capitalizeFirstLetter(type)} ${result.name} deleted successfully`);

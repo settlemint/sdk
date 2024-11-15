@@ -9,7 +9,7 @@ import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
-import { type ResourceType, SETTLEMINT_CLIENT_MAP } from "./resource-type";
+import type { ResourceType } from "./resource-type";
 
 type DefaultArgs = {
   accept?: true | undefined;
@@ -99,7 +99,7 @@ export function getCreateCommand({
     }
 
     if (wait) {
-      await waitForCompletion(settlemint, SETTLEMINT_CLIENT_MAP[type], result.id);
+      await waitForCompletion({ settlemint, type, id: result.id, action: "deploy" });
     }
 
     outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);

@@ -1,5 +1,6 @@
 import { resolve } from "node:path";
 import { $ } from "bun";
+import { isLocalEnv } from "./is-local-env";
 //import {readFile} from "node:fs/promises"
 
 const DEFAULT_ENV: Record<string, string> = {
@@ -7,7 +8,7 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE,
 };
 
-if (DEFAULT_ENV.SETTLEMINT_INSTANCE?.startsWith("https://console.k8s.orb.local")) {
+if (isLocalEnv()) {
   // Disable warnings for self signed certificates
   DEFAULT_ENV.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }
