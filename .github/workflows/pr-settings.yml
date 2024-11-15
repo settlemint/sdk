@@ -27,7 +27,7 @@ jobs:
     steps:
       - name: Send GitHub Action trigger data to Slack workflow with reviewers
         if: ${{ tojson(github.event.pull_request.requested_reviewers) != '[]' && !github.event.pull_request.draft }}
-        uses: slackapi/slack-github-action@v1.27.1
+        uses: slackapi/slack-github-action@v2.0.0
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_SLACK_WEBHOOK_URL }}
         with:
@@ -37,7 +37,7 @@ jobs:
             }
       - name: Send GitHub Action trigger data to Slack workflow without reviewers
         if: ${{ !github.event.pull_request.draft }}
-        uses: slackapi/slack-github-action@v1.27.1
+        uses: slackapi/slack-github-action@v2.0.0
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.PR_SLACK_WEBHOOK_URL }}
         with:
