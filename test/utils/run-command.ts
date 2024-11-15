@@ -30,12 +30,3 @@ export async function runCommand(command: string[], options: { env?: Record<stri
   }
   return { output, cwd };
 }
-/*
-async function getEnv() {
-  try {
-    const envFromFile = await readFile(resolve(__dirname, '.env'))
-    return JSON.parse();
-  } catch {
-    return {}
-  }
-}*/

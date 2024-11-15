@@ -82,6 +82,12 @@ export function getDeleteCommand({
       const isDefaultId = id === "default";
       const serviceId = isDefaultId ? env[envKey]! : id;
 
+      if (!serviceId) {
+        throw new Error(
+          `No default ${type} found in your .env file. Please provide a valid ${type} ID or set a default ${type} first.`,
+        );
+      }
+
       const result = await spinner({
         startMessage: `Deleting ${type}`,
         task: async () => {
