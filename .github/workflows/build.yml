@@ -36,8 +36,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@v1
@@ -61,10 +59,16 @@ jobs:
         run: bun install
 
       - name: Setup 1Password
-        uses: settlemint/setup-op@main
+        uses: 1password/load-secrets-action/configure@v2
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          version: 2.29.0
+
+      - name: Load secrets
+        uses: 1password/load-secrets-action@v2
+        env:
+          DOCKERHUB_USER: op://platform/dockerhub/username
+          DOCKERHUB_PASS: op://platform/dockerhub/credential
+          NPM_TOKEN: op://platform/npmjs/credential
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v5
@@ -133,19 +137,6 @@ jobs:
 
       - name: Run tests and checks
         run: bunx turbo format lint build attw publint registry test:coverage publish-npm --env-mode=loose
-        env:
-          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
-          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
-          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
-          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
-          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
-          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
-          SETTLEMINT_AUTH_SECRET: ${{ secrets.SETTLEMINT_AUTH_SECRET }}
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
-          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
-          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
 
       - name: Make index
         run: |
@@ -205,8 +196,8 @@ jobs:
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASS }}
+          username: ${{ env.DOCKERHUB_USER }}
+          password: ${{ env.DOCKERHUB_PASS }}
 
       - name: Generate Docker metadata
         if: ${{ github.event_name != 'pull_request' }}
