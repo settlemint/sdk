@@ -51,6 +51,8 @@ export function getCreateCommand({
         env: Partial<DotEnv>,
       ) => Promise<{
         result: { id: string; name: string };
+        waitFor?: { resourceType: ResourceType; id: string; name: string };
+        resourceId?: string;
         mapDefaultEnv: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
       }>,
     ) => void | Promise<void>,
@@ -84,7 +86,7 @@ export function getCreateCommand({
       instance,
     });
 
-    const { result, mapDefaultEnv } = await spinner({
+    const { result, waitFor, mapDefaultEnv } = await spinner({
       startMessage: `Creating ${type}`,
       task: async () => {
         return createFunction(settlemint, env);
@@ -104,7 +106,16 @@ export function getCreateCommand({
     }
 
     if (wait) {
-      await waitForCompletion({ settlemint, type, id: result.id, action: "deploy" });
+      await waitForCompletion({
+        settlemint,
+        type: waitFor?.resourceType ?? type,
+        id: waitFor?.id ?? result.id,
+        action: "deploy",
+      });
+    }
+
+    if (waitFor) {
+      outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
     }
 
     outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);

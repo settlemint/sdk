@@ -98,7 +98,7 @@ describe("Setup a project using the SDK", () => {
         { cwd: projectDir },
       );
       expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
-      expect(networkOutput).toInclude("Blockchain network is deployed");
+      expect(networkOutput).toInclude("Blockchain node is deployed");
     },
     { timeout: 600_000 },
   );

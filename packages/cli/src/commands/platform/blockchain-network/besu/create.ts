@@ -77,21 +77,27 @@ export function blockchainNetworkBesuCreateCommand() {
                 type: type ?? "SHARED",
               });
 
+              const blockchainNode =
+                result.blockchainNodes.find((item) => item.name === nodeName) ?? result.blockchainNodes[0];
+
               return {
                 result,
+                waitFor: blockchainNode
+                  ? {
+                      resourceType: "blockchain node",
+                      ...blockchainNode,
+                    }
+                  : undefined,
                 mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
                   const workspaceId = applicationId
                     ? (await settlemint.application.read(applicationId)).workspace.id
                     : env.SETTLEMINT_WORKSPACE!;
-                  const blockchainNode = result.blockchainNodes.find(
-                    (item) => item.__typename === "BesuQBFTBlockchainNode" && item.name === nodeName,
-                  );
+
                   return {
                     SETTLEMINT_APPLICATION: application,
                     SETTLEMINT_WORKSPACE: workspaceId,
                     SETTLEMINT_BLOCKCHAIN_NETWORK: result.id,
-                    SETTLEMINT_BLOCKCHAIN_NODE:
-                      blockchainNode?.__typename === "BesuQBFTBlockchainNode" ? blockchainNode?.id : undefined,
+                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.id,
                   };
                 },
               };

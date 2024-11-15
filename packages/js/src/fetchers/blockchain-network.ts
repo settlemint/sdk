@@ -12,7 +12,7 @@ const BlockchainNetworkFragment = graphql(`
     name
     status
     blockchainNodes {
-      ... on BesuQBFTBlockchainNode {
+      ... on BlockchainNode {
         id
         name
       }
@@ -60,33 +60,33 @@ query getBlockchainNetwork($id: ID!) {
 const createBlockchainNetwork = graphql(
   `
   mutation createBlockchainNetwork(
-    $applicationId: ID! # "6024f484a6fdc3776cd27ad9"
-    $chainId: Int # 4444
-    $consensusAlgorithm: ConsensusAlgorithm! # "BESU_IBFTv2"
-    $contractSizeLimit: Int # 333333
-    $evmStackSize: Int # 2048
-    $gasLimit: String # "0xfffff"
-    $gasPrice: Int # 0
-    $name: String! # "my_network2"
+    $applicationId: ID!
+    $chainId: Int
+    $consensusAlgorithm: ConsensusAlgorithm!
+    $contractSizeLimit: Int
+    $evmStackSize: Int
+    $gasLimit: String
+    $gasPrice: Int
+    $name: String!
     $nodeName: String!
-    $secondsPerBlock: Int # 4
-    $provider: String! # "GKE"
-    $region: String! # "EUROPE"
-    $size: ClusterServiceSize # "SMALL"
-    $type: ClusterServiceType # "SHARED"
+    $secondsPerBlock: Int
+    $provider: String!
+    $region: String!
+    $size: ClusterServiceSize
+    $type: ClusterServiceType
     $requestsCpu: Int
     $requestsMemory: Int
     $limitCpu: Int
     $limitMemory: Int
     $diskSpace: Int
-    $batchTimeout: Float # 2 (in Seconds)
-    $maxMessageCount: Int # 500
-    $absoluteMaxBytes: Int # 10 (in MB)
-    $preferredMaxBytes: Int # 2 (in MB)
+    $batchTimeout: Float
+    $maxMessageCount: Int
+    $absoluteMaxBytes: Int
+    $preferredMaxBytes: Int
     $endorsementPolicy: FabricEndorsementPolicy
-    $maxCodeSize: Int #10485760
-    $txnSizeLimit: Int #2147483647
-    $besuIbft2Genesis: BesuIbft2GenesisInput # TODO other types
+    $maxCodeSize: Int
+    $txnSizeLimit: Int
+    $besuIbft2Genesis: BesuIbft2GenesisInput
     $besuQbftGenesis: BesuQbftGenesisInput
     $quorumGenesis: QuorumGenesisInput
     $externalNodes: [BlockchainNetworkExternalNodeInput!]
