@@ -25,6 +25,9 @@ export async function runCommand(command: string[], options: { env?: Record<stri
   if (errors) {
     console.error(errors);
   }
+  if (out.exitCode !== 0) {
+    console.error("Command failed");
+  }
   return { output, cwd };
 }
 /*

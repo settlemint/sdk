@@ -8,6 +8,7 @@ import { getCreateCommand } from "../common/create-command";
  */
 export function applicationCreateCommand() {
   return getCreateCommand({
+    name: "application",
     type: "application",
     alias: "a",
     execute: (cmd, baseAction) => {

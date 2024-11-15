@@ -7,6 +7,7 @@ import { getDeleteCommand } from "../common/delete-command";
  */
 export function applicationDeleteCommand() {
   return getDeleteCommand({
+    name: "application",
     type: "application",
     alias: "a",
     envKey: "SETTLEMINT_APPLICATION",

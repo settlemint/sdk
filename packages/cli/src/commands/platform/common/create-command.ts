@@ -22,18 +22,23 @@ type DefaultArgs = {
  * Creates a command for creating resources in the SettleMint platform.
  *
  * @param options - Configuration options for the create command
+ * @param options.name - The name of the command
  * @param options.type - The type of resource to create
  * @param options.alias - Command alias (shorthand)
- * @param options.examples - Array of example usage strings
- * @param options.execute - Function to configure and execute the create command
+ * @param options.examples - Array of example usage strings showing different ways to use the command
+ * @param options.execute - Function to configure and execute the create command, takes a Commander command instance and base action function
+ * @param options.execute.cmd - The Commander command instance to configure
+ * @param options.execute.baseAction - Base action function that handles common create functionality
  * @returns A configured Commander command for creating the specified resource type
  */
 export function getCreateCommand({
+  name,
   type,
   alias,
   examples,
   execute,
 }: {
+  name: string;
   type: ResourceType;
   alias: string;
   examples: string[];
@@ -51,7 +56,7 @@ export function getCreateCommand({
     ) => void | Promise<void>,
   ) => void;
 }) {
-  const cmd = new Command(sanitizeCommandName(type))
+  const cmd = new Command(sanitizeCommandName(name))
     .alias(alias)
     .description(
       `Create a new ${type} in the SettleMint platform.

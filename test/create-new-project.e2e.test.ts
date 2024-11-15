@@ -11,8 +11,8 @@ const WORKSPACE_NAME = "Starter Kit Demo Workspace";
 const APPLICATION_NAME = "Starter Kit App";
 const NETWORK_NAME = "Starter Kit Network";
 
-const CLUSTER_PROVIDER = isLocalEnv() ? "orbstack" : "gke";
-const CLUSTER_REGION = isLocalEnv() ? "local" : "europe";
+const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
+const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 
 let projectDir: string;
 
@@ -83,7 +83,7 @@ describe("Setup a project using the SDK", () => {
           "platform",
           "create",
           "blockchain-network",
-          "besu-qbft",
+          "besu",
           NETWORK_NAME,
           "--provider",
           CLUSTER_PROVIDER,
@@ -97,8 +97,8 @@ describe("Setup a project using the SDK", () => {
         ],
         { cwd: projectDir },
       );
-      expect(networkOutput).toInclude(`Besu QBFT ${NETWORK_NAME} created successfully`);
-      expect(networkOutput).toInclude("Besu QBFT is deployed");
+      expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
+      expect(networkOutput).toInclude("Blockchain network is deployed");
     },
     { timeout: 600_000 },
   );

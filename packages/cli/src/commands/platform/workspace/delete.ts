@@ -7,6 +7,7 @@ import { getDeleteCommand } from "@/commands/platform/common/delete-command";
  */
 export function workspaceDeleteCommand() {
   return getDeleteCommand({
+    name: "workspace",
     type: "workspace",
     alias: "w",
     envKey: "SETTLEMINT_WORKSPACE",

@@ -4,15 +4,16 @@ import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
- * Creates and returns the 'blockchain-network besu-qbft' command for the SettleMint SDK.
- * This command creates a new Besu QBFT blockchain network in a specified application.
+ * Creates and returns the 'blockchain-network besu' command for the SettleMint SDK.
+ * This command creates a new Besu blockchain network in a specified application.
  *
- * @returns A configured Commander command for creating a Besu QBFT network
+ * @returns A configured Commander command for creating a Besu network
  */
-export function blockchainNetworkBesuQbftCreateCommand() {
+export function blockchainNetworkBesuCreateCommand() {
   return getCreateCommand({
-    type: "besu QBFT",
-    alias: "bq",
+    name: "besu",
+    type: "blockchain network",
+    alias: "b",
     execute: (cmd, baseAction) => {
       cmd
         .option(
@@ -99,14 +100,14 @@ export function blockchainNetworkBesuQbftCreateCommand() {
         );
     },
     examples: [
-      `# Create a Besu QBFT blockchain network with required options
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 --accept`,
-      `# Create a Besu QBFT blockchain network and save as default
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 -d`,
-      `# Create a Besu QBFT blockchain network in a specific application
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 --application-id 123456789`,
-      `# Create a Besu QBFT blockchain network with custom parameters
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu-qbft create my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5`,
+      `# Create a Besu blockchain network with required options
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --accept`,
+      `# Create a Besu blockchain network and save as default
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 -d`,
+      `# Create a Besu blockchain network in a specific application
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --application-id 123456789`,
+      `# Create a Besu blockchain network with custom parameters
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5`,
     ],
   });
 }

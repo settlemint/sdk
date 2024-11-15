@@ -9,6 +9,7 @@ import { getCreateCommand } from "../common/create-command";
  */
 export function workspaceCreateCommand() {
   return getCreateCommand({
+    name: "workspace",
     type: "workspace",
     alias: "w",
     execute: (cmd, baseAction) => {
