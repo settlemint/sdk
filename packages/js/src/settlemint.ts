@@ -8,7 +8,7 @@ import {
   applicationDelete,
   applicationList,
   applicationRead,
-} from "./fetchers/application.js";
+} from "./graphql/application.js";
 import {
   type BlockchainNetwork,
   type CreateBlockchainNetworkArgs,
@@ -16,19 +16,19 @@ import {
   blockchainNetworkDelete,
   blockchainNetworkList,
   blockchainNetworkRead,
-} from "./fetchers/blockchain-network.js";
-import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./fetchers/blockchain-node.js";
+} from "./graphql/blockchain-network.js";
+import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./graphql/blockchain-node.js";
 import {
   type CustomDeployment,
   customdeploymentList,
   customdeploymentRead,
   customdeploymentUpdate,
-} from "./fetchers/custom-deployment.js";
-import { type Insights, insightsList, insightsRead } from "./fetchers/insights.js";
-import { type IntegrationTool, integrationToolList, integrationToolRead } from "./fetchers/integration-tool.js";
-import { type Middleware, middlewareList, middlewareRead } from "./fetchers/middleware.js";
-import { type PrivateKey, privateKeyList, privatekeyRead } from "./fetchers/private-key.js";
-import { type Storage, storageList, storageRead } from "./fetchers/storage.js";
+} from "./graphql/custom-deployment.js";
+import { type Insights, insightsList, insightsRead } from "./graphql/insights.js";
+import { type IntegrationTool, integrationToolList, integrationToolRead } from "./graphql/integration-tool.js";
+import { type Middleware, middlewareList, middlewareRead } from "./graphql/middleware.js";
+import { type PrivateKey, privateKeyList, privatekeyRead } from "./graphql/private-key.js";
+import { type Storage, storageList, storageRead } from "./graphql/storage.js";
 import {
   type CreateWorkspaceArgs,
   type Workspace,
@@ -36,7 +36,7 @@ import {
   workspaceDelete,
   workspaceList,
   workspaceRead,
-} from "./fetchers/workspace.js";
+} from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
 
 export interface SettlemintClient {
@@ -165,13 +165,13 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
   };
 }
 
-export type { Application } from "./fetchers/application.js";
-export type { BlockchainNetwork } from "./fetchers/blockchain-network.js";
-export type { BlockchainNode } from "./fetchers/blockchain-node.js";
-export type { CustomDeployment } from "./fetchers/custom-deployment.js";
-export type { Insights } from "./fetchers/insights.js";
-export type { IntegrationTool } from "./fetchers/integration-tool.js";
-export type { Middleware } from "./fetchers/middleware.js";
-export type { PrivateKey } from "./fetchers/private-key.js";
-export type { Storage } from "./fetchers/storage.js";
-export type { Workspace } from "./fetchers/workspace.js";
+export type { Application } from "./graphql/application.js";
+export type { BlockchainNetwork } from "./graphql/blockchain-network.js";
+export type { BlockchainNode } from "./graphql/blockchain-node.js";
+export type { CustomDeployment } from "./graphql/custom-deployment.js";
+export type { Insights } from "./graphql/insights.js";
+export type { IntegrationTool } from "./graphql/integration-tool.js";
+export type { Middleware } from "./graphql/middleware.js";
+export type { PrivateKey } from "./graphql/private-key.js";
+export type { Storage } from "./graphql/storage.js";
+export type { Workspace } from "./graphql/workspace.js";

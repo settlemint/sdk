@@ -52,7 +52,6 @@ export function getCreateCommand({
       ) => Promise<{
         result: { id: string; name: string };
         waitFor?: { resourceType: ResourceType; id: string; name: string };
-        resourceId?: string;
         mapDefaultEnv: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
       }>,
     ) => void | Promise<void>,
