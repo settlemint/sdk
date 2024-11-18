@@ -1,6 +1,7 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { type CommandExample, createExamples } from "@/commands/platform/utils/create-examples";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
@@ -41,7 +42,7 @@ export function getCreateCommand({
   name: string;
   type: ResourceType;
   alias: string;
-  examples: string[];
+  examples: CommandExample[];
   execute: (
     cmd: Command<[string], DefaultArgs>,
     baseAction: (
@@ -59,13 +60,7 @@ export function getCreateCommand({
 }) {
   const cmd = new Command(sanitizeCommandName(name))
     .alias(alias)
-    .description(
-      `Create a new ${type} in the SettleMint platform.
-
-  Examples:
-
-  ${examples.join("\n\n  ")}\n`,
-    )
+    .description(`Create a new ${type} in the SettleMint platform.\n${createExamples(examples)}`)
     .argument("<name>", `The ${type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)

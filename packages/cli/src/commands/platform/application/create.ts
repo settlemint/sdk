@@ -37,12 +37,18 @@ export function applicationCreateCommand() {
         });
     },
     examples: [
-      `# Create an application in a workspace
-  $ bunx @settlemint/sdk-cli@latest platform create application my-app --accept-defaults`,
-      `# Create an application and save as default
-  $ bunx @settlemint/sdk-cli@latest platform create application my-app -d`,
-      `# Create an application in a specific workspace
-  $ bunx @settlemint/sdk-cli@latest platform create application my-app --workspace-id 123456789`,
+      {
+        description: "Create an application in a workspace",
+        command: "platform create application my-app --accept-defaults",
+      },
+      {
+        description: "Create an application and save as default",
+        command: "platform create application my-app -d",
+      },
+      {
+        description: "Create an application in a specific workspace",
+        command: "platform create application my-app --workspace-id 123456789",
+      },
     ],
   });
 }

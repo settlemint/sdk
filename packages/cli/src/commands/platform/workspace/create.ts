@@ -155,12 +155,20 @@ export function workspaceCreateCommand() {
         );
     },
     examples: [
-      `# Create a workspace with company details
-  $ bunx @settlemint/sdk-cli@latest platform create workspace my-workspace --name "SettleMint" --tax-id-type eu_vat --tax-id-value BE0661674810`,
-      `# Create a workspace with address details
-  $ bunx @settlemint/sdk-cli@latest platform create workspace my-workspace --line1 "123 Main St" --city "Brussels" --postal-code "1000" --country BE`,
-      `# Create a workspace and save as default
-  $ bunx @settlemint/sdk-cli@latest platform create workspace my-workspace -d`,
+      {
+        description: "Create a workspace with company details",
+        command:
+          'platform create workspace my-workspace --name "SettleMint" --tax-id-type eu_vat --tax-id-value BE0661674810',
+      },
+      {
+        description: "Create a workspace with address details",
+        command:
+          'platform create workspace my-workspace --line1 "123 Main St" --city "Brussels" --postal-code "1000" --country BE',
+      },
+      {
+        description: "Create a workspace and save as default",
+        command: "platform create workspace my-workspace -d",
+      },
     ],
   });
 }

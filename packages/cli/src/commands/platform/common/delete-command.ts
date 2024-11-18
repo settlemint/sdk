@@ -11,6 +11,7 @@ import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
+import { createExamples } from "../utils/create-examples";
 import type { ResourceType } from "./resource-type";
 
 /**
@@ -44,17 +45,20 @@ export function getDeleteCommand({
     .alias(alias)
     .description(
       `Delete a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to delete the default ${type} from your .env file.
-
-  Examples:
-    # Deletes the specified ${type} by id
-    $ bunx @settlemint/sdk-cli@latest platform delete ${type} <${type}-id>
-
-    # Deletes the default ${type} in the production environment
-    $ bunx @settlemint/sdk-cli@latest platform delete ${type} default --prod
-
-    # Force deletes the specified ${type} without confirmation
-    $ bunx @settlemint/sdk-cli@latest platform delete ${type} <${type}-id> --force
-    `,
+${createExamples([
+  {
+    description: `Deletes the specified ${type} by id`,
+    command: `platform delete ${type} <${type}-id>`,
+  },
+  {
+    description: `Deletes the default ${type} in the production environment`,
+    command: `platform delete ${type} default --prod`,
+  },
+  {
+    description: `Force deletes the specified ${type} without confirmation`,
+    command: `platform delete ${type} <${type}-id> --force`,
+  },
+])}`,
     )
     .argument("<id>", `The id of the ${type}, use 'default' to delete the default one from your .env file`)
     .option("-a, --accept-defaults", "Accept the default and previously set values")

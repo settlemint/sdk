@@ -106,14 +106,26 @@ export function blockchainNetworkBesuCreateCommand() {
         );
     },
     examples: [
-      `# Create a Besu blockchain network with required options
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --accept-defaults`,
-      `# Create a Besu blockchain network and save as default
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 -d`,
-      `# Create a Besu blockchain network in a specific application
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --application-id 123456789`,
-      `# Create a Besu blockchain network with custom parameters
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5`,
+      {
+        description: "Create a Besu blockchain network with required options",
+        command:
+          "platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --accept-defaults",
+      },
+      {
+        description: "Create a Besu blockchain network and save as default",
+        command:
+          "platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 -d",
+      },
+      {
+        description: "Create a Besu blockchain network in a specific application",
+        command:
+          "platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --application-id 123456789",
+      },
+      {
+        description: "Create a Besu blockchain network with custom parameters",
+        command:
+          "platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
+      },
     ],
   });
 }
