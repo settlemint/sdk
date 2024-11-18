@@ -2,6 +2,7 @@ import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
+import { setNetworkDefaults } from "../defaults/blockchain-network-defaults.js";
 
 /**
  * Fragment for the BlockchainNetwork type.
@@ -211,7 +212,11 @@ export const blockchainNetworkCreate = (
   options: ClientOptions,
 ): ((args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>) => {
   return async (args: CreateBlockchainNetworkArgs) => {
-    const { createBlockchainNetwork: blockchainNetwork } = await gqlClient.request(createBlockchainNetwork, args);
+    const blockchainNetworkArgs = setNetworkDefaults(args);
+    const { createBlockchainNetwork: blockchainNetwork } = await gqlClient.request(
+      createBlockchainNetwork,
+      blockchainNetworkArgs,
+    );
     return blockchainNetwork;
   };
 };
