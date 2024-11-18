@@ -36,7 +36,7 @@ describe("workspaceCreateCommand", () => {
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-workspace");
     expect(commandOptions).toEqual({
-      accept: true,
+      acceptDefaults: true,
       companyName: "Test Company",
       addressLine1: "123 Main St",
       city: "Brussels",

@@ -28,7 +28,7 @@ describe("applicationCreateCommand", () => {
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-app");
     expect(commandOptions).toEqual({
-      accept: true,
+      acceptDefaults: true,
       workspaceId: "test-workspace-id",
     });
   });

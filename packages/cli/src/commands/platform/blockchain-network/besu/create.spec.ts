@@ -32,7 +32,7 @@ describe("besuCreateCommand", () => {
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-network");
     expect(commandOptions).toEqual({
-      accept: true,
+      acceptDefaults: true,
       provider: "gke",
       region: "europe",
       nodeName: "validator-1",
@@ -73,7 +73,7 @@ describe("besuCreateCommand", () => {
 
     expect(commandArgs).toBe("test-network");
     expect(commandOptions).toEqual({
-      accept: true,
+      acceptDefaults: true,
       provider: "gke",
       region: "europe",
       nodeName: "validator-1",
@@ -113,7 +113,7 @@ describe("besuCreateCommand", () => {
 
     expect(commandArgs).toBe("test-network");
     expect(commandOptions).toEqual({
-      accept: true,
+      acceptDefaults: true,
       provider: "gke",
       region: "europe",
       nodeName: "validator-1",
