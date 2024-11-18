@@ -38,7 +38,7 @@ export function applicationCreateCommand() {
     },
     examples: [
       `# Create an application in a workspace
-  $ bunx @settlemint/sdk-cli@latest platform create application my-app --accept`,
+  $ bunx @settlemint/sdk-cli@latest platform create application my-app --accept-defaults`,
       `# Create an application and save as default
   $ bunx @settlemint/sdk-cli@latest platform create application my-app -d`,
       `# Create an application in a specific workspace

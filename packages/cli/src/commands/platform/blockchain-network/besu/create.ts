@@ -107,7 +107,7 @@ export function blockchainNetworkBesuCreateCommand() {
     },
     examples: [
       `# Create a Besu blockchain network with required options
-  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --accept`,
+  $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 --accept-defaults`,
       `# Create a Besu blockchain network and save as default
   $ bunx @settlemint/sdk-cli@latest platform blockchain-network besu create my-network --provider gke --region europe --node-name validator-1 -d`,
       `# Create a Besu blockchain network in a specific application

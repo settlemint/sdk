@@ -2692,6 +2692,9 @@ input BesuBftGenesisConfigDataInput {
 
   """The request timeout in seconds for the BFT consensus"""
   requesttimeoutseconds: Float!
+
+  """The empty block period in seconds for the BFT consensus"""
+  xemptyblockperiodseconds: Float!
 }
 
 type BesuBftGenesisConfigDataType {
@@ -2703,6 +2706,9 @@ type BesuBftGenesisConfigDataType {
 
   """The request timeout in seconds for the BFT consensus"""
   requesttimeoutseconds: Float!
+
+  """The empty block period in seconds for the BFT consensus"""
+  xemptyblockperiodseconds: Float!
 }
 
 input BesuCliqueGenesisConfigDataInput {
@@ -6123,6 +6129,9 @@ input CreateMultiServiceInsightsArgs {
   """Advanced deployment configuration"""
   advancedDeploymentConfig: AdvancedDeploymentConfigInput
   blockchainNodeRef: String
+
+  """Disable authentication for the custom deployment"""
+  disableAuth: Boolean = false
 
   """Disk space in MiB"""
   diskSpace: Int
@@ -12148,7 +12157,6 @@ type InstantMetric {
   blockNumber: String
   chainId: String
   compute: String
-  compute7dAvgPercentage: String
   computePercentage: String
   computeQuota: String
   currentGasLimit: String
@@ -12176,7 +12184,6 @@ type InstantMetric {
   id: ID!
   isPodRunning: Boolean
   memory: String
-  memory7dAvgPercentage: String
   memoryPercentage: String
   memoryQuota: String
 
@@ -12195,7 +12202,6 @@ type InstantMetric {
   quorumNodePeers: String
   quorumNodePendingTransactions: String
   storage: String
-  storage7dAvgPercentage: String
   storagePercentage: String
   storageQuota: String
   totalBackends: String
@@ -13368,6 +13374,9 @@ type Mutation {
     """The ID of the blockchain node"""
     blockchainNode: ID
 
+    """Disable authentication for the custom deployment"""
+    disableAuth: Boolean = false
+
     """Disk space in MiB"""
     diskSpace: Int
 
@@ -14064,6 +14073,9 @@ type Mutation {
   editInsights(
     """Advanced deployment configuration for the cluster service"""
     advancedDeploymentConfig: AdvancedDeploymentConfigInput
+
+    """Disable auth for the insights"""
+    disableAuth: Boolean
 
     """The unique identifier of the entity"""
     entityId: ID!
@@ -19814,6 +19826,7 @@ type RangeMetric {
   polygonEdgeTransactionsHour: [RangeDatePoint!]!
   queuedTransactions: [RangeDatePoint!]!
   quorumTransactionsHour: [RangeDatePoint!]!
+  rpcRequestsLatency: [RangeDatePoint!]!
   rpcRequestsPerBackend: [RangeDatePoint!]!
   rpcRequestsPerMethod: [RangeDatePoint!]!
   smartContractPortalMiddlewareAverageRequestResponseTime: [RangeDatePoint!]!

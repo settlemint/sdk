@@ -57,18 +57,18 @@ export function getDeleteCommand({
     `,
     )
     .argument("<id>", `The id of the ${type}, use 'default' to delete the default one from your .env file`)
-    .option("-a, --accept", "Accept the default and previously set values")
+    .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
     .option("-w, --wait", "Wait until destroyed")
     .option("-f, --force", `Force delete the ${type} without confirmation`)
-    .action(async (id, { accept, prod, force, wait }) => {
+    .action(async (id, { acceptDefaults, prod, force, wait }) => {
       intro(`Deleting ${type} in the SettleMint platform`);
 
       if (!force) {
         await deleteConfirmationPrompt(`this ${type}`);
       }
 
-      const autoAccept = !!accept || isInCi;
+      const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
       const accessToken = await accessTokenPrompt(env, autoAccept);

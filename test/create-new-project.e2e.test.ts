@@ -22,7 +22,9 @@ afterAll(async () => {
   }
   try {
     // Deleting a workspace automatically deletes all underlying resources
-    await runCommand(["platform", "delete", "workspace", "--accept", "--force", "default"], { cwd: projectDir });
+    await runCommand(["platform", "delete", "workspace", "--accept-defaults", "--force", "default"], {
+      cwd: projectDir,
+    });
   } catch (err) {}
   try {
     await rmdir(projectDir, { recursive: true });
@@ -61,7 +63,7 @@ describe("Setup a project using the SDK", () => {
         "12345",
         "--country",
         "BE",
-        "--accept",
+        "--accept-defaults",
         "--default",
       ],
       { cwd: projectDir },
@@ -69,7 +71,7 @@ describe("Setup a project using the SDK", () => {
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
 
     const { output: applicationOutput } = await runCommand(
-      ["platform", "create", "application", `${APPLICATION_NAME}`, "--accept", "--default"],
+      ["platform", "create", "application", `${APPLICATION_NAME}`, "--accept-defaults", "--default"],
       { cwd: projectDir },
     );
     expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
@@ -91,7 +93,7 @@ describe("Setup a project using the SDK", () => {
           CLUSTER_REGION,
           "--node-name",
           "validator-1",
-          "--accept",
+          "--accept-defaults",
           "--default",
           "--wait",
         ],
@@ -123,12 +125,12 @@ describe("Setup a project using the SDK", () => {
 
   test("Delete created resources on the platform", async () => {
     const { output: deleteApplicationOutput } = await runCommand(
-      ["platform", "delete", "application", "--accept", "--force", "default"],
+      ["platform", "delete", "application", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
     );
     expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
     const { output: deleteWorkspaceOutput } = await runCommand(
-      ["platform", "delete", "workspace", "--accept", "--force", "default"],
+      ["platform", "delete", "workspace", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
     );
     expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);

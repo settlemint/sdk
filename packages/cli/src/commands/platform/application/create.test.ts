@@ -15,7 +15,15 @@ describe("applicationCreateCommand", () => {
           commandOptions = options;
         }),
     );
-    program.parse(["node", "test", "application", "test-app", "--accept", "--workspace-id", "test-workspace-id"]);
+    program.parse([
+      "node",
+      "test",
+      "application",
+      "test-app",
+      "--accept-defaults",
+      "--workspace-id",
+      "test-workspace-id",
+    ]);
 
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-app");

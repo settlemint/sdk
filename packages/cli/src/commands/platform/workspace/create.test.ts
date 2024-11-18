@@ -20,7 +20,7 @@ describe("workspaceCreateCommand", () => {
       "test",
       "workspace",
       "test-workspace",
-      "--accept",
+      "--accept-defaults",
       "--company-name",
       "Test Company",
       "--address-line-1",

@@ -12,7 +12,7 @@ import isInCi from "is-in-ci";
 import type { ResourceType } from "./resource-type";
 
 type DefaultArgs = {
-  accept?: true | undefined;
+  acceptDefaults?: true | undefined;
   default?: true | undefined;
   prod?: true | undefined;
   wait?: true | undefined;
@@ -67,15 +67,15 @@ export function getCreateCommand({
   ${examples.join("\n\n  ")}\n`,
     )
     .argument("<name>", `The ${type} name`)
-    .option("-a, --accept", "Accept the default values")
+    .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
     .option("-w, --wait", "Wait until deployed")
     .option("--prod", "Connect to production environment");
 
-  execute(cmd, async ({ accept, prod, default: isDefault, wait }, createFunction) => {
+  execute(cmd, async ({ acceptDefaults, prod, default: isDefault, wait }, createFunction) => {
     intro(`Creating ${type} in the SettleMint platform`);
 
-    const autoAccept = !!accept || isInCi;
+    const autoAccept = !!acceptDefaults || isInCi;
     const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
     const accessToken = await accessTokenPrompt(env, autoAccept);
