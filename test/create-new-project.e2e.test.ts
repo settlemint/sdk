@@ -2,11 +2,17 @@ import { afterAll, describe, expect, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { $ } from "bun";
-import { runCommand } from "./utils/runCommand";
+import { isLocalEnv } from "./utils/is-local-env";
+import { runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
 const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 const WORKSPACE_NAME = "Starter Kit Demo Workspace";
+const APPLICATION_NAME = "Starter Kit App";
+const NETWORK_NAME = "Starter Kit Network";
+
+const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
+const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 
 let projectDir: string;
 
@@ -15,7 +21,10 @@ afterAll(async () => {
     return;
   }
   try {
-    await runCommand(["platform", "delete", "workspace", "--accept", "default"], { cwd: projectDir });
+    // Deleting a workspace automatically deletes all underlying resources
+    await runCommand(["platform", "delete", "workspace", "--accept-defaults", "--force", "default"], {
+      cwd: projectDir,
+    });
   } catch (err) {}
   try {
     await rmdir(projectDir, { recursive: true });
@@ -33,7 +42,7 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Your project is ready to go!");
   });
 
-  test("Create necessary resources on the platform", async () => {
+  test("Create workspace and application on the platform", async () => {
     const { output: workspaceOutput } = await runCommand(
       [
         "platform",
@@ -54,13 +63,47 @@ describe("Setup a project using the SDK", () => {
         "12345",
         "--country",
         "BE",
-        "--accept",
+        "--accept-defaults",
         "--default",
       ],
       { cwd: projectDir },
     );
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
+
+    const { output: applicationOutput } = await runCommand(
+      ["platform", "create", "application", `${APPLICATION_NAME}`, "--accept-defaults", "--default"],
+      { cwd: projectDir },
+    );
+    expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
   });
+
+  test(
+    "Create blockchain network and node on the platform",
+    async () => {
+      const { output: networkOutput } = await runCommand(
+        [
+          "platform",
+          "create",
+          "blockchain-network",
+          "besu",
+          NETWORK_NAME,
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--node-name",
+          "validator-1",
+          "--accept-defaults",
+          "--default",
+          "--wait",
+        ],
+        { cwd: projectDir },
+      );
+      expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
+      expect(networkOutput).toInclude("Blockchain node is deployed");
+    },
+    { timeout: 600_000 },
+  );
 
   test.skip("Connect starter kit", async () => {
     await $`bun packages/cli/src/cli.ts connect`;
@@ -81,8 +124,13 @@ describe("Setup a project using the SDK", () => {
   );
 
   test("Delete created resources on the platform", async () => {
+    const { output: deleteApplicationOutput } = await runCommand(
+      ["platform", "delete", "application", "--accept-defaults", "--force", "default"],
+      { cwd: projectDir },
+    );
+    expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
     const { output: deleteWorkspaceOutput } = await runCommand(
-      ["platform", "delete", "workspace", "--accept", "--force", "default"],
+      ["platform", "delete", "workspace", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
     );
     expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);

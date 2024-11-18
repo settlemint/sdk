@@ -22,7 +22,7 @@
       "request": "launch",
       "name": "SDK: Connect",
       "program": "../../packages/cli/src/cli.ts",
-      "args": ["connect", "--accept"],
+      "args": ["connect", "--accept-defaults"],
       "cwd": "${workspaceFolder}/apps/registry",
       "watchMode": true,
       "strictEnv": false,

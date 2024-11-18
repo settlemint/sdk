@@ -2,21 +2,7 @@ import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
-
-/**
- * GraphQL fragment for the Application type.
- */
-const ApplicationFragment = graphql(`
-  fragment Application on Application {
-    id
-    name
-  }
-`);
-
-/**
- * Represents an application with its details.
- */
-export type Application = ResultOf<typeof ApplicationFragment>;
+import { ApplicationFragment } from "./application.js";
 
 /**
  * GraphQL fragment for the Workspace type.
@@ -202,7 +188,7 @@ export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions
  * const workspace = await client.workspace.delete('workspaceId');
  */
 export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
-  return async (workspaceId: string) => {
+  return async (workspaceId: Id) => {
     const id = validate(IdSchema, workspaceId);
     const { deleteWorkspace: workspace } = await gqlClient.request(deleteWorkspace, { id });
     return workspace;

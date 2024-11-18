@@ -35,13 +35,13 @@ export function connectCommand(): Command {
   return (
     new Command("connect")
       .option("--prod", "Connect to your production environment")
-      .option("-a, --accept", "Accept the default and previously set values")
+      .option("-a, --accept-defaults", "Accept the default and previously set values")
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
-      .action(async ({ accept, prod }) => {
+      .action(async ({ acceptDefaults, prod }) => {
         intro("Connecting your dApp to SettleMint");
-        const autoAccept = !!accept || isInCi;
+        const autoAccept = !!acceptDefaults || isInCi;
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
         const accessToken = await accessTokenPrompt(env, autoAccept);
