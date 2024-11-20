@@ -190,13 +190,24 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate Docker metadata
+      - name: Generate Docker metadata (registry)
         if: ${{ github.event_name != 'pull_request' }}
         id: meta
         uses: docker/metadata-action@v5
         with:
           images: |
             ghcr.io/settlemint/btp-registry
+          tags: |
+            type=raw,value=${{ env.TAG }}
+            type=raw,value=${{ env.VERSION }}
+
+      - name: Generate Docker metadata (cli)
+        if: ${{ github.event_name != 'pull_request' }}
+        id: meta2
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/settlemint/btp-sdk-cli
           tags: |
             type=raw,value=${{ env.TAG }}
             type=raw,value=${{ env.VERSION }}
@@ -252,7 +263,7 @@ jobs:
             ATTEMPT=$((ATTEMPT + 1))
           done
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (registry)
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/build-push-action@v6
         with:
@@ -260,6 +271,18 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+          provenance: mode=max
+          sbom: true
+
+      - name: Build and push Docker image (cli)
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ./packages/cli
+          push: true
+          tags: ${{ steps.meta2.outputs.tags }}
+          labels: ${{ steps.meta2.outputs.labels }}
           platforms: linux/amd64,linux/arm64
           provenance: mode=max
           sbom: true
