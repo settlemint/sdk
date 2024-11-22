@@ -32,6 +32,7 @@
     "codegen": "turbo codegen",
     "registry": "turbo registry",
     "publish-npm": "turbo publish-npm",
+    "docker": "turbo docker",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",

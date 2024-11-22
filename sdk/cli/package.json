@@ -30,7 +30,8 @@
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
-    "publish-npm": "bun publish --tag ${TAG} --access public || exit 0"
+    "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
+    "docker": "docker buildx build . --platform=linux/amd64,linux/arm64 --provenance true --sbom true -t ghcr.io/settlemint/btp-sdk-cli:${VERSION:-1.0.0-dev.$(date +%s)} -t ghcr.io/settlemint/btp-sdk-cli:${TAG:-dev} --push --progress=plain"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "12.1.0",

@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "registry": "bun ./scripts/build.ts"
+    "registry": "bun ./scripts/build.ts",
+    "docker": "docker buildx build . --platform=linux/amd64,linux/arm64 --provenance true --sbom true -t ghcr.io/settlemint/btp-registry:${VERSION:-1.0.0-dev.$(date +%s)} -t ghcr.io/settlemint/btp-registry:${TAG:-dev} --push --progress=plain"
   },
   "dependencies": {
     "@hookform/resolvers": "3.9.1",
