@@ -244,7 +244,12 @@ jobs:
 
       - name: Build docker containers
         if: ${{ github.event_name != 'pull_request' }}
-        run: bunx turbo docker --env-mode=loose
+        uses: nick-fields/retry@v2
+        with:
+          timeout_minutes: 15
+          max_attempts: 3
+          retry_wait_seconds: 30
+          command: bunx turbo docker --env-mode=loose
         env:
           TAG: ${{ env.TAG }}
           VERSION: ${{ env.VERSION }}
