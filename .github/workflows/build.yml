@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   packages:
-    name: SDK packages
+    name: Turbo Flow
     runs-on: namespace-profile-sdk
     steps:
       - name: Checkout repository
@@ -114,7 +114,7 @@ jobs:
             exit 1
           fi
 
-          for dir in ./packages/*; do
+          for dir in ./sdk/*; do
             if [ -f "$dir/package.json" ]; then
               update_package_json "$dir" "$VERSION"
             fi
@@ -154,34 +154,6 @@ jobs:
         with:
           path: apps/registry/public
 
-      - name: Create or update PR comment
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: taoliujun/action-unique-comment@v1
-        with:
-            uniqueIdentifier: ${{ github.workflow }}
-            body: |
-                # 📦 Packages
-                | Package | Version |
-                | ------- | -------------------- |
-                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |
-                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |
-                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |
-                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |
-                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |
-                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` |
-                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` |
-                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` |
-                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` |
-                | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` |
-
-      - name: Auto-commit updated package versions
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: ${{ env.TAG == 'latest' }}
-        with:
-          commit_message: "chore: update package versions [skip ci]"
-          branch: main
-          file_pattern: 'package.json **/schema.graphql'
-
       - name: Login to GitHub Container Registry
         if: ${{ github.event_name != 'pull_request' }}
         uses: docker/login-action@v3
@@ -190,27 +162,34 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate Docker metadata (registry)
-        if: ${{ github.event_name != 'pull_request' }}
-        id: meta
-        uses: docker/metadata-action@v5
+      - name: Create or update PR comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: taoliujun/action-unique-comment@v1
         with:
-          images: |
-            ghcr.io/settlemint/btp-registry
-          tags: |
-            type=raw,value=${{ env.TAG }}
-            type=raw,value=${{ env.VERSION }}
+            uniqueIdentifier: ${{ github.workflow }}
+            body: |
+                # 📦 Packages
+                | Package | NPM | Docker |
+                | ------- | -------------------- | -------------------- |
+                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |  |
+                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |  |
+                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |  |
+                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |  |
+                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |  |
+                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` | |
+                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` | |
+                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` | |
+                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` | |
+                | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` | |
+                | Registry |  | `ghcr.io/settlemint/btp-sdk-registry:${{ env.VERSION }}` |
 
-      - name: Generate Docker metadata (cli)
-        if: ${{ github.event_name != 'pull_request' }}
-        id: meta2
-        uses: docker/metadata-action@v5
+      - name: Auto-commit updated package versions
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: ${{ env.TAG == 'latest' }}
         with:
-          images: |
-            ghcr.io/settlemint/btp-sdk-cli
-          tags: |
-            type=raw,value=${{ env.TAG }}
-            type=raw,value=${{ env.VERSION }}
+          commit_message: "chore: update package versions [skip ci]"
+          branch: main
+          file_pattern: 'package.json **/schema.graphql'
 
       - name: Check if packages are published
         if: ${{ github.event_name != 'pull_request' }}
@@ -263,31 +242,15 @@ jobs:
             ATTEMPT=$((ATTEMPT + 1))
           done
 
-      - name: Build and push Docker image (registry)
+      - name: Build docker containers
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@v6
-        with:
-          context: ./apps/registry
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-          provenance: mode=max
-          sbom: true
-
-      - name: Build and push Docker image (cli)
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/build-push-action@v6
-        with:
-          context: ./packages/cli
-          push: true
-          tags: ${{ steps.meta2.outputs.tags }}
-          labels: ${{ steps.meta2.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-          provenance: mode=max
-          sbom: true
+        run: bunx turbo docker --env-mode=loose
+        env:
+          TAG: ${{ env.TAG }}
+          VERSION: ${{ env.VERSION }}
 
   deploy:
+    name: Deploy to Registry to GitHub Pages
     if: ${{ github.event_name != 'pull_request' && !startsWith(github.ref, 'refs/tags/') }}
     environment:
       name: github-pages
