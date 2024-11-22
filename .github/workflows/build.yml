@@ -31,7 +31,7 @@ permissions:
 
 jobs:
   packages:
-    name: SDK packages
+    name: Turbo Flow
     runs-on: namespace-profile-sdk
     steps:
       - name: Checkout repository
