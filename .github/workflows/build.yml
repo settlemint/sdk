@@ -203,7 +203,7 @@ jobs:
             local package=$1
             local version=$2
             echo "Checking $package@$version..."
-            if npm view "$package@$version" version &>/dev/null; then
+            if bun pm view "$package@$version" version &>/dev/null; then
               echo "$package@$version is published."
               return 0
             else
