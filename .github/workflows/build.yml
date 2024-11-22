@@ -114,7 +114,7 @@ jobs:
             exit 1
           fi
 
-          for dir in ./packages/*; do
+          for dir in ./sdk/*; do
             if [ -f "$dir/package.json" ]; then
               update_package_json "$dir" "$VERSION"
             fi
