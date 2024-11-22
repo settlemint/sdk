@@ -243,6 +243,7 @@ jobs:
           done
 
       - name: Build docker containers
+        if: ${{ github.event_name != 'pull_request' }}
         run: bunx turbo docker --env-mode=loose
         env:
           TAG: ${{ env.TAG }}
