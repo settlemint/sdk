@@ -171,7 +171,7 @@ jobs:
                 # 📦 Packages
                 | Package | NPM | Docker |
                 | ------- | -------------------- | -------------------- |
-                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` | `ghcr.io/settlemint/btp-sdk-cli:${{ env.VERSION }}` |
+                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` |  |
                 | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |  |
                 | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |  |
                 | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |  |
