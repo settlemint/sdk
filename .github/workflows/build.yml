@@ -162,6 +162,35 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Create or update PR comment
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: taoliujun/action-unique-comment@v1
+        with:
+            uniqueIdentifier: ${{ github.workflow }}
+            body: |
+                # 📦 Packages
+                | Package | NPM | Docker |
+                | ------- | -------------------- | -------------------- |
+                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` | `ghcr.io/settlemint/btp-sdk-cli:${{ env.VERSION }}` |
+                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |  |
+                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |  |
+                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |  |
+                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |  |
+                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` | |
+                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` | |
+                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` | |
+                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` | |
+                | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` | |
+                | Registry |  | `ghcr.io/settlemint/btp-sdk-registry:${{ env.VERSION }}` |
+
+      - name: Auto-commit updated package versions
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: ${{ env.TAG == 'latest' }}
+        with:
+          commit_message: "chore: update package versions [skip ci]"
+          branch: main
+          file_pattern: 'package.json **/schema.graphql'
+
       - name: Check if packages are published
         if: ${{ github.event_name != 'pull_request' }}
         run: |
@@ -218,35 +247,6 @@ jobs:
         env:
           TAG: ${{ env.TAG }}
           VERSION: ${{ env.VERSION }}
-
-      - name: Create or update PR comment
-        if: ${{ github.event_name == 'pull_request' }}
-        uses: taoliujun/action-unique-comment@v1
-        with:
-            uniqueIdentifier: ${{ github.workflow }}
-            body: |
-                # 📦 Packages
-                | Package | NPM | Docker |
-                | ------- | -------------------- | -------------------- |
-                | SDK Cli | `@settlemint/sdk-cli@${{ env.VERSION }}` | `ghcr.io/settlemint/btp-sdk-cli:${{ env.VERSION }}` |
-                | SDK The Graph | `@settlemint/sdk-thegraph@${{ env.VERSION }}` |  |
-                | SDK Portal | `@settlemint/sdk-portal@${{ env.VERSION }}` |  |
-                | SDK Hasura | `@settlemint/sdk-hasura@${{ env.VERSION }}` |  |
-                | SDK JS | `@settlemint/sdk-js@${{ env.VERSION }}` |  |
-                | SDK Utils | `@settlemint/sdk-utils@${{ env.VERSION }}` | |
-                | SDK Next | `@settlemint/sdk-next@${{ env.VERSION }}` | |
-                | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` | |
-                | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` | |
-                | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` | |
-                | Registry |  | `ghcr.io/settlemint/btp-sdk-registry:${{ env.VERSION }}` |
-
-      - name: Auto-commit updated package versions
-        uses: stefanzweifel/git-auto-commit-action@v5
-        if: ${{ env.TAG == 'latest' }}
-        with:
-          commit_message: "chore: update package versions [skip ci]"
-          branch: main
-          file_pattern: 'package.json **/schema.graphql'
 
   deploy:
     name: Deploy to Registry to GitHub Pages
