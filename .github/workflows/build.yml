@@ -139,20 +139,20 @@ jobs:
       - name: Make index
         run: |
           echo "Creating index.html with list of JSON files in apps/registry/public/"
-          cd sdk/registry/public
+          cd apps/registry/public
           echo "<html><head><title>Registry Files</title><script src='https://cdn.tailwindcss.com'></script></head><body class='bg-gray-100 dark:bg-gray-900'><div class='container mx-auto px-4 py-8 max-w-3xl'><h1 class='text-3xl font-bold mb-6 text-gray-800 dark:text-white border-b-2 border-blue-500 pb-2'>Registry Files</h1><ul class='space-y-4'>" > index.html
           for file in *.json; do
             echo "<li class='bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300'><span class='font-mono text-sm text-gray-600 dark:text-gray-400'>bunx shadcn@latest add</span> <a href='https://settlemint.github.io/sdk/$file' class='text-blue-600 dark:text-blue-400 hover:underline'>https://settlemint.github.io/sdk/$file</a></span></li>" >> index.html
           done
           echo "</ul></div><script>if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.classList.add('dark') }</script></body></html>" >> index.html
           cd ../../..
-          echo "Created index.html in sdk/registry/public/"
+          echo "Created index.html in apps/registry/public/"
 
       - name: Upload static files as artifact
         id: deployment
         uses: actions/upload-pages-artifact@v3
         with:
-          path: sdk/registry/public
+          path: apps/registry/public
 
       - name: Login to GitHub Container Registry
         if: ${{ github.event_name != 'pull_request' }}
