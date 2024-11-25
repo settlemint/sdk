@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -62,7 +62,6 @@
     "zod": "3.23.8"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
     "@types/bun": "1.1.13",
     "@types/node": "22.9.3",
     "@types/react": "18.3.12",
@@ -77,6 +76,5 @@
   "peerDependencies": {},
   "overrides": {
     "react-is": "19.0.0-rc-28668d39-20241023"
-  },
-  "trustedDependencies": ["@biomejs/biome"]
+  }
 }

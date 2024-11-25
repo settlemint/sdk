@@ -1,0 +1,27 @@
+{
+  "name": "starterkit-asset-tokenization",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "react": "19.0.0-rc-66855b96-20241106",
+    "react-dom": "19.0.0-rc-66855b96-20241106",
+    "next": "15.0.3"
+  },
+  "devDependencies": {
+    "babel-plugin-react-compiler": "latest",
+    "typescript": "^5.7.2",
+    "@types/node": "^22.9.3",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^3.4.15",
+    "eslint": "^9.15.0",
+    "eslint-config-next": "15.0.3"
+  }
+}
