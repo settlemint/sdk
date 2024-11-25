@@ -34,8 +34,21 @@ jobs:
     name: Turbo Flow
     runs-on: namespace-profile-sdk
     steps:
+      - name: Setup 1Password
+        uses: 1password/load-secrets-action/configure@v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load secrets
+        uses: 1password/load-secrets-action@v2
+        env:
+          NPM_TOKEN: op://platform/npmjs/credential
+          PAT_TOKEN: op://platform/github-commit-pat/credential
+
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@v5
+        with:
+          token: ${{ env.PAT_TOKEN }}
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@v1
@@ -58,15 +71,7 @@ jobs:
       - name: Install Bun dependencies
         run: bun install
 
-      - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@v2
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
-      - name: Load secrets
-        uses: 1password/load-secrets-action@v2
-        env:
-          NPM_TOKEN: op://platform/npmjs/credential
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@v5
