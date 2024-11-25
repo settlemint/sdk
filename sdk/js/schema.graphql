@@ -3944,6 +3944,11 @@ type BillingDto {
   stripePublishableKey: String
 }
 
+type BlockInfo {
+  hash: String!
+  number: String!
+}
+
 type BlockchainExplorer implements AbstractClusterService & AbstractEntity & Insights {
   """Advanced deployment configuration"""
   advancedDeploymentConfig: AdvancedDeploymentConfig
@@ -10281,6 +10286,7 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
   storage: StorageType
+  subgraphs: [Subgraph!]!
 
   """Type of the service"""
   type: ClusterServiceType!
@@ -21338,6 +21344,27 @@ type StripeSubscription {
 
   """Current status of the subscription"""
   status: String!
+}
+
+type Subgraph {
+  chain: String!
+  hash: String!
+  isActive: Boolean!
+  name: String!
+  namespace: String!
+  nodeId: String!
+  shard: String!
+  status: SubgraphStatus!
+  versionStatus: String!
+}
+
+type SubgraphStatus {
+  chainHeadBlock: BlockInfo!
+  earliestBlockNumber: String!
+  health: String!
+  isPaused: Boolean!
+  isSynced: Boolean!
+  latestBlock: BlockInfo!
 }
 
 type Subscription {

@@ -77,10 +77,12 @@ export function connectCommand(): Command {
         const theGraph = await testGqlEndpoint(
           accessToken,
           undefined,
-          thegraph?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
+          thegraph?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
         );
 
-        const blockscoutEndpoint = blockscout?.endpoints.find((endpoint) => endpoint.id === "interface")?.displayValue;
+        const blockscoutEndpoint = blockscout?.endpoints.find((endpoint) =>
+          endpoint.id.includes("interface"),
+        )?.displayValue;
 
         await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: accessToken,
@@ -88,37 +90,43 @@ export function connectCommand(): Command {
           SETTLEMINT_WORKSPACE: workspace.id,
           SETTLEMINT_APPLICATION: application.id,
           SETTLEMINT_HASURA: hasura?.id,
-          SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id === "graphql")?.displayValue,
-          SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) => credential.id === "admin-secret")
+          SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
             ?.displayValue,
+          SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) =>
+            credential.id.includes("admin-secret"),
+          )?.displayValue,
           SETTLEMINT_THEGRAPH: thegraph?.id,
-          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find(
-            (endpoint) => endpoint.id === (theGraph ? "graphql" : "default-subgraph-graphql"),
+          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find((endpoint) =>
+            endpoint.id.includes(theGraph ? "graphql" : "default-subgraph-graphql"),
           )?.displayValue,
           SETTLEMINT_PORTAL: portal?.id,
-          SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "graphql")
+          SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
             ?.displayValue,
-          SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id === "rest")?.displayValue,
+          SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("rest"))
+            ?.displayValue,
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           NEXTAUTH_URL: authUrl,
           SETTLEMINT_AUTH_SECRET: authSecret,
           SETTLEMINT_MINIO: minio?.id,
-          SETTLEMINT_MINIO_ENDPOINT: minio?.endpoints.find((endpoint) => endpoint.id === "s3-api")?.displayValue,
-          SETTLEMINT_MINIO_ACCESS_KEY: minio?.credentials.find((credential) => credential.id === "access-key")
+          SETTLEMINT_MINIO_ENDPOINT: minio?.endpoints.find((endpoint) => endpoint.id.includes("s3-api"))?.displayValue,
+          SETTLEMINT_MINIO_ACCESS_KEY: minio?.credentials.find((credential) => credential.id.includes("access-key"))
             ?.displayValue,
-          SETTLEMINT_MINIO_SECRET_KEY: minio?.credentials.find((credential) => credential.id === "secret-key")
+          SETTLEMINT_MINIO_SECRET_KEY: minio?.credentials.find((credential) => credential.id.includes("secret-key"))
             ?.displayValue,
           SETTLEMINT_IPFS: ipfs?.id,
-          SETTLEMINT_IPFS_API_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "api")?.displayValue,
-          SETTLEMINT_IPFS_PINNING_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "cluster-pinning-api")
+          SETTLEMINT_IPFS_API_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id.includes("api"))?.displayValue,
+          SETTLEMINT_IPFS_PINNING_ENDPOINT: ipfs?.endpoints.find((endpoint) =>
+            endpoint.id.includes("cluster-pinning-api"),
+          )?.displayValue,
+          SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id.includes("gateway"))
             ?.displayValue,
-          SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id === "gateway")?.displayValue,
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: "0x5e771e1417100000000000000000000000000001",
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: "0x5e771e1417100000000000000000000000000002",
           SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: "0x5e771e1417100000000000000000000000000003",
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
-          SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) => endpoint.id === "internal")
-            ?.displayValue,
+          SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) =>
+            endpoint.id.includes("internal"),
+          )?.displayValue,
           SETTLEMINT_BLOCKSCOUT: blockscout?.id,
           SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: blockscoutEndpoint
             ? `${blockscoutEndpoint}/api/v1/graphql`
