@@ -36,6 +36,9 @@ const getWorkspacesAndApplications = graphql(
       applications {
         ...Application
       }
+      childWorkspaces {
+        ...Workspace
+      }
     }
   }
 `,
@@ -127,7 +130,14 @@ const deleteWorkspace = graphql(
 export const workspaceList = (gqlClient: GraphQLClient, options: ClientOptions): (() => Promise<Workspace[]>) => {
   return async () => {
     const { workspaces } = await gqlClient.request(getWorkspacesAndApplications);
-    return workspaces;
+    const allWorkspaces = workspaces.reduce<Workspace[]>((acc, workspace) => {
+      acc.push(workspace);
+      if (workspace.childWorkspaces) {
+        acc.push(...workspace.childWorkspaces);
+      }
+      return acc;
+    }, []);
+    return allWorkspaces.sort((a, b) => a.name.localeCompare(b.name));
   };
 };
 
