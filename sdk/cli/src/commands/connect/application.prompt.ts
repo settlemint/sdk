@@ -14,6 +14,10 @@ export async function applicationPrompt(
     return defaultApplication;
   }
 
+  if (applications.length === 0) {
+    throw new Error("No applications found");
+  }
+
   const application = await select({
     message: "Which application do you want to connect to?",
     choices: applications.map((applications) => ({

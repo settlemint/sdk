@@ -14,6 +14,10 @@ export async function workspacePrompt(
     return defaultWorkspace;
   }
 
+  if (workspaces.length === 0) {
+    throw new Error("No workspaces found");
+  }
+
   const workspace = await select({
     message: "Which workspace do you want to connect to?",
     choices: workspaces.map((workspace) => ({

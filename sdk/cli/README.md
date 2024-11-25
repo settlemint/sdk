@@ -55,7 +55,7 @@ bun --inspect-wait=localhost:6499/ sdk/cli/src/cli.ts create
 # Attach the debugger using the "SDK: Attach to process" configuration
 
 # Run from the directory created by the create command
-bun --inspect-wait=localhost:6499/ ../sdk/cli/src/cli.ts connect
+bun --inspect-wait=localhost:6499/ sdk/cli/src/cli.ts connect
 # Attach the debugger using the "SDK: Attach to process" configuration
 ```
 
