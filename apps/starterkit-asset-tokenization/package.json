@@ -1,5 +1,5 @@
 {
-  "name": "starterkit-asset-tokenization",
+  "name": "@settlemint/starterkit-asset-tokenization",
   "version": "0.1.0",
   "private": true,
   "scripts": {
