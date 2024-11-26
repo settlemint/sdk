@@ -1,5 +1,5 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
-import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
@@ -60,6 +60,39 @@ query getIntegration($id: ID!) {
 );
 
 /**
+ * GraphQL mutation to create a new integration.
+ */
+const createIntegration = graphql(
+  `
+  mutation createIntegration(
+    $applicationId: ID!
+    $name: String!
+    $integrationType: IntegrationType!
+    $provider: String!
+    $region: String!
+    $size: ClusterServiceSize
+  ) {
+    createIntegration(
+      applicationId: $applicationId
+      name: $name
+      integrationType: $integrationType
+      provider: $provider
+      region: $region
+      size: $size
+    ) {
+      ...Integration
+    }
+  }
+`,
+  [IntegrationFragment],
+);
+
+/**
+ * Arguments for creating an integration tool.
+ */
+export type CreateIntegrationToolArgs = VariablesOf<typeof createIntegration>;
+
+/**
  * Creates a function to list integration tools for a given application.
  *
  * @param gqlClient - The GraphQL client to use for the request.
@@ -103,6 +136,33 @@ export const integrationToolRead = (
   return async (integrationId: Id) => {
     const id = validate(IdSchema, integrationId);
     const { integration } = await gqlClient.request(getIntegration, { id });
+    return integration;
+  };
+};
+
+/**
+ * Creates a function to create a new integration tool.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes integration tool creation arguments and returns the created tool.
+ * @throws Will throw an error if the arguments are invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const integrationTool = await client.integrationTool.create({
+ *   applicationId: 'appId',
+ *   name: 'My Integration',
+ *   type: 'HASURA'
+ * });
+ */
+export const integrationToolCreate = (
+  gqlClient: GraphQLClient,
+  options: ClientOptions,
+): ((args: CreateIntegrationToolArgs) => Promise<IntegrationTool>) => {
+  return async (args: CreateIntegrationToolArgs) => {
+    validate(IdSchema, args.applicationId);
+    const { createIntegration: integration } = await gqlClient.request(createIntegration, args);
     return integration;
   };
 };

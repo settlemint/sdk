@@ -1,5 +1,5 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
-import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
@@ -51,6 +51,34 @@ query getPrivateKey($id: ID!) {
 );
 
 /**
+ * GraphQL mutation to create a private key.
+ */
+const createPrivateKey = graphql(
+  `
+  mutation CreatePrivateKey(
+    $applicationId: ID!,
+    $name: String!,
+    $privateKeyType: PrivateKeyType!,
+    $provider: String!
+    $region: String!
+  ) {
+    createPrivateKey(
+      applicationId: $applicationId,
+      name: $name,
+      privateKeyType: $privateKeyType,
+      provider: $provider,
+      region: $region
+    ) {
+      ...PrivateKey
+    }
+  }
+`,
+  [PrivateKeyFragment],
+);
+
+export type CreatePrivateKeyArgs = VariablesOf<typeof createPrivateKey>;
+
+/**
  * Creates a function to list private keys for a given application.
  *
  * @param gqlClient - The GraphQL client to use for the request.
@@ -94,6 +122,26 @@ export const privatekeyRead = (
   return async (privatekeyId: Id) => {
     const id = validate(IdSchema, privatekeyId);
     const { privateKey } = await gqlClient.request(getPrivateKey, { id });
+    return privateKey;
+  };
+};
+
+/**
+ * Creates a function to create a new private key.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes private key creation arguments and returns a promise resolving to the created private key.
+ * @throws Will throw an error if the application ID is invalid.
+ *
+ */
+export const privateKeyCreate = (
+  gqlClient: GraphQLClient,
+  options: ClientOptions,
+): ((args: CreatePrivateKeyArgs) => Promise<PrivateKey>) => {
+  return async (args: CreatePrivateKeyArgs) => {
+    validate(IdSchema, args.applicationId);
+    const { createPrivateKey: privateKey } = await gqlClient.request(createPrivateKey, args);
     return privateKey;
   };
 };

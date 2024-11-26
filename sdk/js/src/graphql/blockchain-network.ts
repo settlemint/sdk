@@ -213,6 +213,7 @@ export const blockchainNetworkCreate = (
 ): ((args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>) => {
   return async (args: CreateBlockchainNetworkArgs) => {
     const blockchainNetworkArgs = setNetworkDefaults(args);
+    validate(IdSchema, blockchainNetworkArgs.applicationId);
     const { createBlockchainNetwork: blockchainNetwork } = await gqlClient.request(
       createBlockchainNetwork,
       blockchainNetworkArgs,
@@ -233,8 +234,9 @@ export const blockchainNetworkDelete = (
   options: ClientOptions,
 ): ((blockchainNetworkId: Id) => Promise<BlockchainNetwork>) => {
   return async (networkId: Id) => {
+    const id = validate(IdSchema, networkId);
     const { deleteBlockchainNetwork: blockchainNetwork } = await gqlClient.request(deleteBlockchainNetwork, {
-      blockchainNetworkId: networkId,
+      blockchainNetworkId: id,
     });
     return blockchainNetwork;
   };
