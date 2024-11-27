@@ -70,6 +70,7 @@ const createSmartContractSet = graphql(
     $provider: String!
     $region: String!
     $size: ClusterServiceSize
+    $type: ClusterServiceType
   ) {
     createSmartContractSet(
       applicationId: $applicationId,
@@ -80,6 +81,7 @@ const createSmartContractSet = graphql(
       provider: $provider,
       region: $region
       size: $size
+      type: $type
     ) {
       ...SmartContractSet
     }

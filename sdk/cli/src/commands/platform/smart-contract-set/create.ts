@@ -19,7 +19,6 @@ export function smartContractSetCreateCommand() {
         .addOption(
           new Option("--use-case <useCase>", "Use case for the smart contract set")
             .choices([
-              // TODO: use enum from graphql api schema
               "solidity-empty",
               "solidity-token-erc20",
               "solidity-token-erc1155",
@@ -57,6 +56,7 @@ export function smartContractSetCreateCommand() {
                 provider,
                 region,
                 size,
+                type,
                 useCase,
                 userId,
               });

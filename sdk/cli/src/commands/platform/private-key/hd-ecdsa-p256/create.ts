@@ -1,4 +1,4 @@
-import { addClusterServiceProviderAndRegionsArgs } from "../../common/cluster-service.args";
+import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -12,9 +12,9 @@ export function privateKeyHdCreateCommand() {
     type: "private key",
     alias: "hd",
     execute: (cmd, baseAction) => {
-      addClusterServiceProviderAndRegionsArgs(cmd)
+      addClusterServiceArgs(cmd)
         .option("--application-id <applicationId>", "Application ID")
-        .action(async (name, { applicationId, provider, region, ...defaultArgs }) => {
+        .action(async (name, { applicationId, provider, region, size, type, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
             const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
             const result = await settlemint.privateKey.create({
@@ -23,6 +23,8 @@ export function privateKeyHdCreateCommand() {
               privateKeyType: "HD_ECDSA_P256",
               provider,
               region,
+              size,
+              type,
             });
             return {
               result,

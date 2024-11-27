@@ -61,6 +61,8 @@ const createPrivateKey = graphql(
     $privateKeyType: PrivateKeyType!,
     $provider: String!
     $region: String!
+    $size: ClusterServiceSize
+    $type: ClusterServiceType
   ) {
     createPrivateKey(
       applicationId: $applicationId,
@@ -68,6 +70,8 @@ const createPrivateKey = graphql(
       privateKeyType: $privateKeyType,
       provider: $provider,
       region: $region
+      size: $size
+      type: $type
     ) {
       ...PrivateKey
     }

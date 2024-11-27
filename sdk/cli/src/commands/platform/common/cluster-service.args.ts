@@ -1,7 +1,9 @@
 import { type Command, Option, type OptionValues } from "@commander-js/extra-typings";
 
 export function addClusterServiceArgs<Args extends OptionValues>(cmd: Command<[string], Args>) {
-  return addClusterServiceProviderAndRegionsArgs(cmd)
+  return cmd
+    .requiredOption("--provider <provider>", "Network provider")
+    .requiredOption("--region <region>", "Deployment region")
     .addOption(
       new Option("--size <size>", "Network size")
         .choices(["CUSTOM", "LARGE", "MEDIUM", "SMALL"])
@@ -20,18 +22,6 @@ export function addClusterServiceArgs<Args extends OptionValues>(cmd: Command<[s
       region: string;
       size: "CUSTOM" | "LARGE" | "MEDIUM" | "SMALL" | null | undefined;
       type: "DEDICATED" | "SHARED" | null | undefined;
-    }
-  >;
-}
-
-export function addClusterServiceProviderAndRegionsArgs<Args extends OptionValues>(cmd: Command<[string], Args>) {
-  return cmd
-    .requiredOption("--provider <provider>", "Network provider")
-    .requiredOption("--region <region>", "Deployment region") as Command<
-    [string],
-    Args & {
-      provider: string;
-      region: string;
     }
   >;
 }
