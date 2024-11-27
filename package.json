@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "0.6.22",
+  "version": "0.6.24",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -37,15 +37,16 @@
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
-    "test:e2e": "bun test test/*.ts"
+    "test:e2e": "bun test test/*.ts",
+    "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "lefthook": "1.8.4",
-    "turbo": "2.3.1",
+    "turbo": "2.3.3",
     "typescript": "5.7.2",
-    "knip": "5.37.2",
-    "@types/bun": "1.1.13",
+    "knip": "5.38.1",
+    "@types/bun": "1.1.14",
     "@arethetypeswrong/cli": "0.17.0",
     "publint": "0.2.12",
     "tsup": "8.3.5"
