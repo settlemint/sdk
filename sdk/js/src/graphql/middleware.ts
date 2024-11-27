@@ -1,5 +1,5 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
-import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
@@ -60,6 +60,50 @@ query getMiddleware($id: ID!) {
 );
 
 /**
+ * GraphQL mutation to create a middleware.
+ */
+const createMiddleware = graphql(
+  `
+  mutation createMiddleware(
+    $applicationId: ID!
+    $name: String!
+    $provider: String!
+    $region: String!
+    $size: ClusterServiceSize
+    $type: ClusterServiceType
+    $interface: MiddlewareType!
+    $storageId: ID
+    $smartContractSetId: ID
+    $blockchainNodeId: ID
+    $loadBalancerId: ID
+    $abis: [SmartContractPortalMiddlewareAbiInputDto!]
+    $includePredeployedAbis: [String!]
+  ) {
+    createMiddleware(
+      applicationId: $applicationId
+      name: $name
+      provider: $provider
+      region: $region
+      size: $size
+      type: $type
+      interface: $interface
+      storageId: $storageId
+      smartContractSetId: $smartContractSetId
+      blockchainNodeId: $blockchainNodeId
+      loadBalancerId: $loadBalancerId
+      abis: $abis
+      includePredeployedAbis: $includePredeployedAbis
+    ) {
+      ...Middleware
+    }
+  }
+`,
+  [MiddlewareFragment],
+);
+
+export type CreateMiddlewareArgs = VariablesOf<typeof createMiddleware>;
+
+/**
  * Creates a function to list middlewares for a given application.
  *
  * @param gqlClient - The GraphQL client to use for the request.
@@ -103,6 +147,24 @@ export const middlewareRead = (
   return async (middlewareId: Id) => {
     const id = validate(IdSchema, middlewareId);
     const { middleware } = await gqlClient.request(getMiddleware, { id });
+    return middleware;
+  };
+};
+
+/**
+ * Creates a function to create a new middleware.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes middleware creation arguments and returns a promise resolving to the created middleware.
+ */
+export const middlewareCreate = (
+  gqlClient: GraphQLClient,
+  options: ClientOptions,
+): ((args: CreateMiddlewareArgs) => Promise<Middleware>) => {
+  return async (args: CreateMiddlewareArgs) => {
+    validate(IdSchema, args.applicationId);
+    const { createMiddleware: middleware } = await gqlClient.request(createMiddleware, args);
     return middleware;
   };
 };

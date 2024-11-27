@@ -1,4 +1,4 @@
-import { afterAll, describe, expect, test } from "bun:test";
+import { afterAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { $ } from "bun";
@@ -10,22 +10,33 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 const WORKSPACE_NAME = "Starter Kit Demo Workspace";
 const APPLICATION_NAME = "Starter Kit App";
 const NETWORK_NAME = "Starter Kit Network";
+const PRIVATE_KEY_NAME = "Starter Kit Private Key";
+const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
+const IPFS_NAME = "Starter Kit IPFS";
+const GRAPH_NAME = "Starter Kit Graph";
 
 const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 
 let projectDir: string;
+let workspaceDeleted = false;
+
+setDefaultTimeout(5 * 60_000);
 
 afterAll(async () => {
   if (!projectDir) {
     return;
   }
-  try {
-    // Deleting a workspace automatically deletes all underlying resources
-    await runCommand(["platform", "delete", "workspace", "--accept-defaults", "--force", "default"], {
-      cwd: projectDir,
-    });
-  } catch (err) {}
+  if (!workspaceDeleted) {
+    try {
+      // Deleting a workspace automatically deletes all underlying resources
+      await runCommand(["platform", "delete", "workspace", "--accept-defaults", "--force", "default"], {
+        cwd: projectDir,
+      });
+    } catch (err) {
+      console.error("Failed to delete workspace", err);
+    }
+  }
   try {
     await rmdir(projectDir, { recursive: true });
     await rmdir(resolve(projectDir, "../", "unknown"), { recursive: true });
@@ -77,51 +88,152 @@ describe("Setup a project using the SDK", () => {
     expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
   });
 
-  test(
-    "Create blockchain network and node on the platform",
-    async () => {
-      const { output: networkOutput } = await runCommand(
-        [
-          "platform",
-          "create",
-          "blockchain-network",
-          "besu",
-          NETWORK_NAME,
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--node-name",
-          "validator-1",
-          "--accept-defaults",
-          "--default",
-          "--wait",
-        ],
-        { cwd: projectDir },
-      );
-      expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
-      expect(networkOutput).toInclude("Blockchain node is deployed");
-    },
-    { timeout: 600_000 },
-  );
-
-  test.skip("Connect starter kit", async () => {
-    await $`bun packages/cli/src/cli.ts connect`;
+  test("Create blockchain network and node on the platform", async () => {
+    const { output: networkOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "blockchain-network",
+        "besu",
+        NETWORK_NAME,
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--node-name",
+        "validator-1",
+        "--accept-defaults",
+        "--default",
+        "--wait",
+      ],
+      { cwd: projectDir },
+    );
+    expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
+    expect(networkOutput).toInclude("Blockchain node is deployed");
   });
 
-  test.skip("Codegen starter kit", async () => {
-    await $`bun packages/cli/src/cli.ts codegen`;
+  test("Create HD private key on the platform", async () => {
+    const { output: privateKeyOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "private-key",
+        "hd-ecdsa-p256",
+        "--accept-defaults",
+        "--default",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--wait",
+        PRIVATE_KEY_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(privateKeyOutput).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
+    expect(privateKeyOutput).toInclude("Private key is deployed");
   });
 
-  test.skip(
-    "Build starter kit",
-    async () => {
-      await $`bun install`.cwd(projectDir);
-      await $`bun lint`.cwd(projectDir);
-      await $`bun run build`.cwd(projectDir);
-    },
-    { timeout: 60_000 },
-  );
+  test("Create smart contract set and deploy on the platform", async () => {
+    const { output: smartContractSetOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "smart-contract-set",
+        "--use-case",
+        "solidity-starterkit",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        SMART_CONTRACT_SET_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(smartContractSetOutput).toInclude(`Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`);
+    expect(smartContractSetOutput).toInclude("Smart contract set is deployed");
+  });
+
+  test("Create IPFS storage on the platform", async () => {
+    const { output: ipfsOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "storage",
+        "ipfs",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        IPFS_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(ipfsOutput).toInclude(`Storage ${IPFS_NAME} created successfully`);
+    expect(ipfsOutput).toInclude("Storage is deployed");
+  });
+
+  test("Create graph middleware on the platform", async () => {
+    const { output: graphOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "middleware",
+        "graph",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        GRAPH_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
+    expect(graphOutput).toInclude("Middleware is deployed");
+  });
+
+  test.skip("Create smart contract portal middleware on the platform", () => {});
+
+  test.skip("Create hasura integration on the platform", () => {});
+
+  test.skip("Create Minio storage on the platform", () => {});
+
+  test.skip("Create blockscout insights on the platform", () => {
+    // Optional, can be done later
+  });
+
+  test.skip("Create custom deployment on the platform", () => {
+    // Optional, can be done later
+  });
+
+  test("Connect starter kit", async () => {
+    const { output } = await runCommand(["connect", "--accept-defaults"], { cwd: projectDir });
+    expect(output).toInclude("Connected to SettleMint");
+  });
+
+  test("Codegen starter kit", async () => {
+    const { output } = await runCommand(["codegen"], { cwd: projectDir });
+    expect(output).toInclude("Schema was generated successfully");
+    expect(output).toInclude("Introspection output was generated successfully");
+    expect(output).toInclude("Codegen complete");
+  });
+
+  test.skip("Build starter kit", async () => {
+    await $`bun install`.cwd(projectDir);
+    await $`bun lint`.cwd(projectDir);
+    await $`bun run build`.cwd(projectDir);
+  });
+
+  test.skip("Validate that .env file has the correct values", async () => {});
 
   test("Delete created resources on the platform", async () => {
     const { output: deleteApplicationOutput } = await runCommand(
@@ -134,5 +246,6 @@ describe("Setup a project using the SDK", () => {
       { cwd: projectDir },
     );
     expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
+    workspaceDeleted = true;
   });
 });

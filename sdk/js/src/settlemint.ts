@@ -17,18 +17,57 @@ import {
   blockchainNetworkList,
   blockchainNetworkRead,
 } from "./graphql/blockchain-network.js";
-import { type BlockchainNode, blockchainNodeList, blockchainNodeRead } from "./graphql/blockchain-node.js";
 import {
+  type BlockchainNode,
+  type CreateBlockchainNodeArgs,
+  blockchainNodeCreate,
+  blockchainNodeList,
+  blockchainNodeRead,
+} from "./graphql/blockchain-node.js";
+import {
+  type CreateCustomDeploymentArgs,
   type CustomDeployment,
+  customdeploymentCreate,
   customdeploymentList,
   customdeploymentRead,
   customdeploymentUpdate,
 } from "./graphql/custom-deployment.js";
-import { type Insights, insightsList, insightsRead } from "./graphql/insights.js";
-import { type IntegrationTool, integrationToolList, integrationToolRead } from "./graphql/integration-tool.js";
-import { type Middleware, middlewareList, middlewareRead } from "./graphql/middleware.js";
-import { type PrivateKey, privateKeyList, privatekeyRead } from "./graphql/private-key.js";
-import { type Storage, storageList, storageRead } from "./graphql/storage.js";
+import {
+  type CreateInsightsArgs,
+  type Insights,
+  insightsCreate,
+  insightsList,
+  insightsRead,
+} from "./graphql/insights.js";
+import {
+  type CreateIntegrationToolArgs,
+  type IntegrationTool,
+  integrationToolCreate,
+  integrationToolList,
+  integrationToolRead,
+} from "./graphql/integration-tool.js";
+import {
+  type CreateMiddlewareArgs,
+  type Middleware,
+  middlewareCreate,
+  middlewareList,
+  middlewareRead,
+} from "./graphql/middleware.js";
+import {
+  type CreatePrivateKeyArgs,
+  type PrivateKey,
+  privateKeyCreate,
+  privateKeyList,
+  privatekeyRead,
+} from "./graphql/private-key.js";
+import {
+  type CreateSmartContractSetArgs,
+  type SmartContractSet,
+  smartContractSetCreate,
+  smartContractSetList,
+  smartContractSetRead,
+} from "./graphql/smart-contract-set.js";
+import { type CreateStorageArgs, type Storage, storageCreate, storageList, storageRead } from "./graphql/storage.js";
 import {
   type CreateWorkspaceArgs,
   type Workspace,
@@ -61,31 +100,43 @@ export interface SettlemintClient {
   blockchainNode: {
     list: (applicationId: Id) => Promise<BlockchainNode[]>;
     read: (blockchainNodeId: Id) => Promise<BlockchainNode>;
+    create: (args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>;
   };
   middleware: {
     list: (applicationId: Id) => Promise<Middleware[]>;
     read: (middlewareId: Id) => Promise<Middleware>;
+    create: (args: CreateMiddlewareArgs) => Promise<Middleware>;
   };
   integrationTool: {
     list: (applicationId: Id) => Promise<IntegrationTool[]>;
     read: (integrationToolId: Id) => Promise<IntegrationTool>;
+    create: (args: CreateIntegrationToolArgs) => Promise<IntegrationTool>;
   };
   storage: {
     list: (applicationId: Id) => Promise<Storage[]>;
     read: (storageId: Id) => Promise<Storage>;
+    create: (args: CreateStorageArgs) => Promise<Storage>;
   };
   privateKey: {
     list: (applicationId: Id) => Promise<PrivateKey[]>;
     read: (privateKeyId: Id) => Promise<PrivateKey>;
+    create: (args: CreatePrivateKeyArgs) => Promise<PrivateKey>;
   };
   insights: {
     list: (applicationId: Id) => Promise<Insights[]>;
     read: (insightsId: Id) => Promise<Insights>;
+    create: (args: CreateInsightsArgs) => Promise<Insights>;
   };
   customDeployment: {
     list: (applicationId: Id) => Promise<CustomDeployment[]>;
     read: (customDeploymentId: Id) => Promise<CustomDeployment>;
+    create: (args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>;
     update: (customDeploymentId: Id, imageTag: string) => Promise<CustomDeployment>;
+  };
+  smartContractSet: {
+    list: (applicationId: Id) => Promise<SmartContractSet[]>;
+    read: (smartContractSetId: Id) => Promise<SmartContractSet>;
+    create: (args: CreateSmartContractSetArgs) => Promise<SmartContractSet>;
   };
 }
 
@@ -136,31 +187,43 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     blockchainNode: {
       list: blockchainNodeList(gqlClient, options),
       read: blockchainNodeRead(gqlClient, options),
+      create: blockchainNodeCreate(gqlClient, options),
     },
     middleware: {
       list: middlewareList(gqlClient, options),
       read: middlewareRead(gqlClient, options),
+      create: middlewareCreate(gqlClient, options),
     },
     integrationTool: {
       list: integrationToolList(gqlClient, options),
       read: integrationToolRead(gqlClient, options),
+      create: integrationToolCreate(gqlClient, options),
     },
     storage: {
       list: storageList(gqlClient, options),
       read: storageRead(gqlClient, options),
+      create: storageCreate(gqlClient, options),
     },
     privateKey: {
       list: privateKeyList(gqlClient, options),
       read: privatekeyRead(gqlClient, options),
+      create: privateKeyCreate(gqlClient, options),
     },
     insights: {
       list: insightsList(gqlClient, options),
       read: insightsRead(gqlClient, options),
+      create: insightsCreate(gqlClient, options),
     },
     customDeployment: {
       list: customdeploymentList(gqlClient, options),
       read: customdeploymentRead(gqlClient, options),
+      create: customdeploymentCreate(gqlClient, options),
       update: customdeploymentUpdate(gqlClient, options),
+    },
+    smartContractSet: {
+      list: smartContractSetList(gqlClient, options),
+      read: smartContractSetRead(gqlClient, options),
+      create: smartContractSetCreate(gqlClient, options),
     },
   };
 }

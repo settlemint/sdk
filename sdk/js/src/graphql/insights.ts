@@ -1,5 +1,5 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
-import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
@@ -60,6 +60,39 @@ query getInsights($id: ID!) {
 );
 
 /**
+ * GraphQL mutation to create insights.
+ */
+const createInsights = graphql(
+  `
+  mutation createInsights(
+    $applicationId: ID!
+    $name: String!
+    $provider: String!
+    $region: String!
+    $size: ClusterServiceSize
+    $insightsCategory: InsightsCategory!
+  ) {
+    createInsights(
+      applicationId: $applicationId
+      name: $name
+      provider: $provider
+      region: $region
+      size: $size
+      insightsCategory: $insightsCategory
+    ) {
+      ...Insights
+    }
+  }
+`,
+  [InsightsFragment],
+);
+
+/**
+ * Arguments for creating insights.
+ */
+export type CreateInsightsArgs = VariablesOf<typeof createInsights>;
+
+/**
  * Creates a function to list insights for a given application.
  *
  * @param gqlClient - The GraphQL client to use for the request.
@@ -103,6 +136,35 @@ export const insightsRead = (
   return async (insightsId: Id) => {
     const id = validate(IdSchema, insightsId);
     const { insights } = await gqlClient.request(getInsight, { id });
+    return insights;
+  };
+};
+
+/**
+ * Creates a function to create new insights.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes insights creation arguments and returns the created insights.
+ * @throws Will throw an error if the arguments are invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const insights = await client.insights.create({
+ *   applicationId: 'appId',
+ *   name: 'My Insights',
+ *   provider: 'aws',
+ *   region: 'us-east-1',
+ *   insightsCategory: 'GRAFANA'
+ * });
+ */
+export const insightsCreate = (
+  gqlClient: GraphQLClient,
+  options: ClientOptions,
+): ((args: CreateInsightsArgs) => Promise<Insights>) => {
+  return async (args: CreateInsightsArgs) => {
+    validate(IdSchema, args.applicationId);
+    const { createInsights: insights } = await gqlClient.request(createInsights, args);
     return insights;
   };
 };

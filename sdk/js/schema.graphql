@@ -13636,7 +13636,7 @@ type Mutation {
     useCase: String!
 
     """Unique identifier of the user"""
-    userId: ID!
+    userId: ID
   ): SmartContractSetType!
 
   """Creates a new Storage service"""
@@ -21359,12 +21359,12 @@ type Subgraph {
 }
 
 type SubgraphStatus {
-  chainHeadBlock: BlockInfo!
+  chainHeadBlock: BlockInfo
   earliestBlockNumber: String!
   health: String!
   isPaused: Boolean!
   isSynced: Boolean!
-  latestBlock: BlockInfo!
+  latestBlock: BlockInfo
 }
 
 type Subscription {

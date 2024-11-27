@@ -1,5 +1,5 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
-import { type ResultOf, graphql } from "@/helpers/graphql.js";
+import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
@@ -20,6 +20,12 @@ const BlockchainNodeFragment = graphql(`
       id
       label
       displayValue
+    }
+    blockchainNetwork {
+      ... on AbstractClusterService {
+        id
+        name
+      }
     }
   }
 `);
@@ -57,6 +63,42 @@ query getBlockchainNode($id: ID!) {
 `,
   [BlockchainNodeFragment],
 );
+
+/**
+ * GraphQL mutation to create a blockchain node.
+ */
+const createBlockchainNode = graphql(
+  `
+  mutation createBlockchainNode(
+    $applicationId: ID!
+    $blockchainNetworkId: ID!
+    $name: String!
+    $provider: String!
+    $region: String!
+    $size: ClusterServiceSize
+    $type: ClusterServiceType
+    $nodeType: NodeType
+    $keyMaterial: ID
+  ) {
+    createBlockchainNode(
+      applicationId: $applicationId
+      blockchainNetworkId: $blockchainNetworkId
+      name: $name
+      provider: $provider
+      region: $region
+      size: $size
+      type: $type
+      nodeType: $nodeType
+      keyMaterial: $keyMaterial
+    ) {
+      ...BlockchainNode
+    }
+  }
+`,
+  [BlockchainNodeFragment],
+);
+
+export type CreateBlockchainNodeArgs = VariablesOf<typeof createBlockchainNode>;
 
 /**
  * Creates a function to list blockchain nodes for a given application.
@@ -102,6 +144,25 @@ export const blockchainNodeRead = (
   return async (blockchainNodeId: Id) => {
     const id = validate(IdSchema, blockchainNodeId);
     const { blockchainNode } = await gqlClient.request(getBlockchainNode, { id });
+    return blockchainNode;
+  };
+};
+
+/**
+ * Creates a function to create a new blockchain node.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes blockchain node creation arguments and returns a promise resolving to the created blockchain node.
+ */
+export const blockchainNodeCreate = (
+  gqlClient: GraphQLClient,
+  options: ClientOptions,
+): ((args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>) => {
+  return async (args: CreateBlockchainNodeArgs) => {
+    validate(IdSchema, args.applicationId);
+    validate(IdSchema, args.blockchainNetworkId);
+    const { createBlockchainNode: blockchainNode } = await gqlClient.request(createBlockchainNode, args);
     return blockchainNode;
   };
 };

@@ -90,11 +90,31 @@ export function getCreateCommand({
 
     if (isDefault) {
       const defaultEnv = mapDefaultEnv();
-      const newEnv: Partial<DotEnv> = {
-        SETTLEMINT_ACCESS_TOKEN: accessToken,
-        SETTLEMINT_INSTANCE: instance,
-        ...(defaultEnv instanceof Promise ? await defaultEnv : defaultEnv),
-      };
+      const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
+      const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;
+      const newEnv: Partial<DotEnv> = isApplicationChanged
+        ? {
+            SETTLEMINT_ACCESS_TOKEN: accessToken,
+            SETTLEMINT_INSTANCE: instance,
+            SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY,
+            SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY,
+            SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY,
+            ...updatedEnv,
+          }
+        : {
+            ...env,
+            ...updatedEnv,
+          };
+      if (isApplicationChanged) {
+        newEnv.SETTLEMINT_WORKSPACE = updatedEnv.SETTLEMINT_APPLICATION
+          ? (await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)).workspace.id
+          : env.SETTLEMINT_WORKSPACE!;
+      }
+      if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
+        newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (
+          await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE)
+        ).blockchainNetwork.id;
+      }
       await writeEnvSpinner(!!prod, newEnv);
       note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
     }
@@ -106,10 +126,10 @@ export function getCreateCommand({
         id: waitFor?.id ?? result.id,
         action: "deploy",
       });
-    }
 
-    if (waitFor) {
-      outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
+      if (waitFor) {
+        outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
+      }
     }
 
     outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);

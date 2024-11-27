@@ -75,11 +75,6 @@ const createBlockchainNetwork = graphql(
     $region: String!
     $size: ClusterServiceSize
     $type: ClusterServiceType
-    $requestsCpu: Int
-    $requestsMemory: Int
-    $limitCpu: Int
-    $limitMemory: Int
-    $diskSpace: Int
     $batchTimeout: Float
     $maxMessageCount: Int
     $absoluteMaxBytes: Int
@@ -108,11 +103,6 @@ const createBlockchainNetwork = graphql(
       region: $region
       size: $size
       type: $type
-      requestsCpu: $requestsCpu
-      requestsMemory: $requestsMemory
-      limitCpu: $limitCpu
-      limitMemory: $limitMemory
-      diskSpace: $diskSpace
       batchTimeout: $batchTimeout
       maxMessageCount: $maxMessageCount
       absoluteMaxBytes: $absoluteMaxBytes
@@ -213,6 +203,7 @@ export const blockchainNetworkCreate = (
 ): ((args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>) => {
   return async (args: CreateBlockchainNetworkArgs) => {
     const blockchainNetworkArgs = setNetworkDefaults(args);
+    validate(IdSchema, blockchainNetworkArgs.applicationId);
     const { createBlockchainNetwork: blockchainNetwork } = await gqlClient.request(
       createBlockchainNetwork,
       blockchainNetworkArgs,
@@ -233,8 +224,9 @@ export const blockchainNetworkDelete = (
   options: ClientOptions,
 ): ((blockchainNetworkId: Id) => Promise<BlockchainNetwork>) => {
   return async (networkId: Id) => {
+    const id = validate(IdSchema, networkId);
     const { deleteBlockchainNetwork: blockchainNetwork } = await gqlClient.request(deleteBlockchainNetwork, {
-      blockchainNetworkId: networkId,
+      blockchainNetworkId: id,
     });
     return blockchainNetwork;
   };
