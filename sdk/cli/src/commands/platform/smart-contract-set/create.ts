@@ -1,5 +1,6 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { Option } from "@commander-js/extra-typings";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../common/create-command";
 
 /**
@@ -62,7 +63,7 @@ export function smartContractSetCreateCommand() {
               });
               return {
                 result,
-                mapDefaultEnv: () => {
+                mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
                     SETTLEMINT_APPLICATION: application,
                     SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode,

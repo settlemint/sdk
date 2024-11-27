@@ -1,4 +1,6 @@
+import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -36,12 +38,13 @@ export function graphMiddlewareCreateCommand() {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
               const smartContractSet = smartContractSetId ?? env.SETTLEMINT_SMART_CONTRACT_SET!;
               const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
+              const storage = storageId ?? env.SETTLEMINT_IPFS ?? env.SETTLEMINT_MINIO!;
               const result = await settlemint.middleware.create({
                 name,
                 applicationId: application,
                 interface: "GRAPH",
                 smartContractSetId: smartContractSet,
-                storageId,
+                storageId: storage,
                 blockchainNodeId: blockchainNode,
                 provider,
                 region,
@@ -50,12 +53,20 @@ export function graphMiddlewareCreateCommand() {
               });
               return {
                 result,
-                mapDefaultEnv: () => {
+                mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
+                  const theGraph = await testGqlEndpoint(
+                    env.SETTLEMINT_ACCESS_TOKEN!,
+                    undefined,
+                    result?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
+                  );
                   return {
                     SETTLEMINT_APPLICATION: application,
                     SETTLEMINT_SMART_CONTRACT_SET: smartContractSet,
                     SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode,
-                    SETTLEMINT_GRAPH_MIDDLEWARE: result.id,
+                    SETTLEMINT_THEGRAPH: result.id,
+                    SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: result?.endpoints.find((endpoint) =>
+                      endpoint.id.includes(theGraph ? "graphql" : "default-subgraph-graphql"),
+                    )?.displayValue,
                   };
                 },
               };

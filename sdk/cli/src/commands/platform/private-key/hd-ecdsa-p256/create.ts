@@ -1,4 +1,5 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -28,7 +29,7 @@ export function privateKeyHdCreateCommand() {
             });
             return {
               result,
-              mapDefaultEnv: () => {
+              mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
                   SETTLEMINT_APPLICATION: application,
                   SETTLEMINT_HD_PRIVATE_KEY: result.id,

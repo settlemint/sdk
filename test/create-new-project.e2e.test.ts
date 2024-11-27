@@ -12,6 +12,7 @@ const APPLICATION_NAME = "Starter Kit App";
 const NETWORK_NAME = "Starter Kit Network";
 const PRIVATE_KEY_NAME = "Starter Kit Private Key";
 const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
+const IPFS_NAME = "Starter Kit IPFS";
 
 const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
@@ -155,16 +156,36 @@ describe("Setup a project using the SDK", () => {
     expect(smartContractSetOutput).toInclude("Smart contract set is deployed");
   });
 
+  test("Create IPFS storage on the platform", async () => {
+    const { output: ipfsOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "storage",
+        "ipfs",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        IPFS_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(ipfsOutput).toInclude(`Storage ${IPFS_NAME} created successfully`);
+    expect(ipfsOutput).toInclude("Storage is deployed");
+  });
+
+  test.skip("Create Minio storage on the platform", () => {});
+
   test.skip("Create graph middleware on the platform", () => {});
 
   test.skip("Create smart contract portal middleware on the platform", () => {});
 
   test.skip("Create hasura integration on the platform", () => {
     // Run hasura migrations?
-  });
-
-  test.skip("Create minio/ipfs storage on the platform", () => {
-    // Minio or IPFS by default?
   });
 
   test.skip("Create blockscout insights on the platform", () => {

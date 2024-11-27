@@ -1,3 +1,4 @@
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getDeleteCommand } from "../common/delete-command";
 
 /**
@@ -11,7 +12,7 @@ export function applicationDeleteCommand() {
     type: "application",
     alias: "a",
     envKey: "SETTLEMINT_APPLICATION",
-    mapDefaultEnv: (env) => {
+    mapDefaultEnv: (env): Partial<DotEnv> => {
       return {
         SETTLEMINT_WORKSPACE: env.SETTLEMINT_WORKSPACE,
       };

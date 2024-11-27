@@ -1,4 +1,5 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -28,17 +29,18 @@ export function ipfsStorageCreateCommand() {
             });
             return {
               result,
-              mapDefaultEnv: () => {
+              mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
                   SETTLEMINT_APPLICATION: application,
-                  SETTLEMINT_IPFS_STORAGE: result.id,
-                  SETTLEMINT_IPFS_API_ENDPOINT: result?.endpoints.find((endpoint) => endpoint.id === "api")
+                  SETTLEMINT_IPFS: result.id,
+                  SETTLEMINT_IPFS_API_ENDPOINT: result?.endpoints.find((endpoint) => endpoint.id.includes("api"))
                     ?.displayValue,
-                  SETTLEMINT_IPFS_PINNING_ENDPOINT: result?.endpoints.find(
-                    (endpoint) => endpoint.id === "cluster-pinning-api",
+                  SETTLEMINT_IPFS_PINNING_ENDPOINT: result?.endpoints.find((endpoint) =>
+                    endpoint.id.includes("cluster-pinning-api"),
                   )?.displayValue,
-                  SETTLEMINT_IPFS_GATEWAY_ENDPOINT: result?.endpoints.find((endpoint) => endpoint.id === "gateway")
-                    ?.displayValue,
+                  SETTLEMINT_IPFS_GATEWAY_ENDPOINT: result?.endpoints.find((endpoint) =>
+                    endpoint.id.includes("gateway"),
+                  )?.displayValue,
                 };
               },
             };
