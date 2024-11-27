@@ -1,5 +1,5 @@
+import { addClusterServiceArgs } from "@/commands/platform/common/cluser-service.args";
 import { parseNumber } from "@/utils/parse-number";
-import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
@@ -15,7 +15,7 @@ export function blockchainNetworkBesuCreateCommand() {
     type: "blockchain network",
     alias: "b",
     execute: (cmd, baseAction) => {
-      cmd
+      addClusterServiceArgs(cmd)
         .option(
           "-a, --application-id <applicationId>",
           "The application ID to create the network in (defaults to application from env)",
@@ -27,18 +27,6 @@ export function blockchainNetworkBesuCreateCommand() {
         .option("--gas-limit <limit>", "Block gas limit")
         .option("--gas-price <price>", "Gas price in wei", parseNumber)
         .option("--seconds-per-block <seconds>", "Block time in seconds", parseNumber)
-        .requiredOption("--provider <provider>", "Network provider")
-        .requiredOption("--region <region>", "Deployment region")
-        .addOption(
-          new Option("--size <size>", "Network size")
-            .choices(["CUSTOM", "LARGE", "MEDIUM", "SMALL"])
-            .argParser((value) => value as "CUSTOM" | "LARGE" | "MEDIUM" | "SMALL" | null | undefined),
-        )
-        .addOption(
-          new Option("--type <type>", "Network type")
-            .choices(["DEDICATED", "SHARED"])
-            .argParser((value) => value as "DEDICATED" | "SHARED" | null | undefined),
-        )
         .action(
           async (
             name,

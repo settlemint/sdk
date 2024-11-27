@@ -66,7 +66,7 @@ const createSmartContractSet = graphql(
     $name: String!
     $blockchainNodeId: ID!
     $useCase: String!
-    $userId: ID!
+    $userId: ID
     $provider: String!
     $region: String!
     $size: ClusterServiceSize
