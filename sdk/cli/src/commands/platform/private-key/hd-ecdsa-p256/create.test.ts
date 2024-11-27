@@ -33,10 +33,12 @@ describe("privateKeyHdCreateCommand", () => {
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
+      size: "SMALL",
+      type: "SHARED",
     });
   });
 
-  test("executes command with application id", () => {
+  test("executes command with args", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
@@ -68,6 +70,8 @@ describe("privateKeyHdCreateCommand", () => {
       provider: "gke",
       region: "europe",
       applicationId: "123456789",
+      size: "SMALL",
+      type: "SHARED",
     });
   });
 });

@@ -42,7 +42,7 @@ export function graphMiddlewareCreateCommand() {
               const result = await settlemint.middleware.create({
                 name,
                 applicationId: application,
-                interface: "GRAPH",
+                interface: "HA_GRAPH",
                 smartContractSetId: smartContractSet,
                 storageId: storage,
                 blockchainNodeId: blockchainNode,

@@ -13,6 +13,7 @@ const NETWORK_NAME = "Starter Kit Network";
 const PRIVATE_KEY_NAME = "Starter Kit Private Key";
 const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
 const IPFS_NAME = "Starter Kit IPFS";
+const GRAPH_NAME = "Starter Kit Graph";
 
 const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
@@ -178,15 +179,33 @@ describe("Setup a project using the SDK", () => {
     expect(ipfsOutput).toInclude("Storage is deployed");
   });
 
-  test.skip("Create Minio storage on the platform", () => {});
-
-  test.skip("Create graph middleware on the platform", () => {});
+  test("Create graph middleware on the platform", async () => {
+    const { output: graphOutput } = await runCommand(
+      [
+        "platform",
+        "create",
+        "middleware",
+        "graph",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        GRAPH_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
+    expect(graphOutput).toInclude("Middleware is deployed");
+  });
 
   test.skip("Create smart contract portal middleware on the platform", () => {});
 
-  test.skip("Create hasura integration on the platform", () => {
-    // Run hasura migrations?
-  });
+  test.skip("Create hasura integration on the platform", () => {});
+
+  test.skip("Create Minio storage on the platform", () => {});
 
   test.skip("Create blockscout insights on the platform", () => {
     // Optional, can be done later
@@ -196,8 +215,9 @@ describe("Setup a project using the SDK", () => {
     // Optional, can be done later
   });
 
-  test.skip("Connect starter kit", async () => {
-    await $`bun packages/cli/src/cli.ts connect`;
+  test("Connect starter kit", async () => {
+    const { output } = await runCommand(["connect", "--accept-defaults"], { cwd: projectDir });
+    expect(output).toInclude("Connected to SettleMint");
   });
 
   test.skip("Codegen starter kit", async () => {

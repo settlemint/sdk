@@ -32,7 +32,7 @@ export function privateKeyHdCreateCommand() {
               mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
                   SETTLEMINT_APPLICATION: application,
-                  SETTLEMINT_HD_PRIVATE_KEY: result.id,
+                  SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
                 };
               },
             };
