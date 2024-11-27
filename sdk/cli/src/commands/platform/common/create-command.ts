@@ -90,11 +90,34 @@ export function getCreateCommand({
 
     if (isDefault) {
       const defaultEnv = mapDefaultEnv();
+      const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
       const newEnv: Partial<DotEnv> = {
         SETTLEMINT_ACCESS_TOKEN: accessToken,
         SETTLEMINT_INSTANCE: instance,
-        ...(defaultEnv instanceof Promise ? await defaultEnv : defaultEnv),
+        SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY,
+        SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY,
+        SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY,
+        ...updatedEnv,
       };
+      if (updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION) {
+        newEnv.SETTLEMINT_WORKSPACE = env.SETTLEMINT_WORKSPACE;
+        newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK =
+          updatedEnv.SETTLEMINT_BLOCKCHAIN_NETWORK ?? env.SETTLEMINT_BLOCKCHAIN_NETWORK;
+        newEnv.SETTLEMINT_HASURA = updatedEnv.SETTLEMINT_HASURA ?? env.SETTLEMINT_HASURA;
+        newEnv.SETTLEMINT_HASURA_ENDPOINT = updatedEnv.SETTLEMINT_HASURA_ENDPOINT ?? env.SETTLEMINT_HASURA_ENDPOINT;
+        newEnv.SETTLEMINT_HASURA_ADMIN_SECRET =
+          updatedEnv.SETTLEMINT_HASURA_ADMIN_SECRET ?? env.SETTLEMINT_HASURA_ADMIN_SECRET;
+        newEnv.SETTLEMINT_THEGRAPH = updatedEnv.SETTLEMINT_THEGRAPH ?? env.SETTLEMINT_THEGRAPH;
+        newEnv.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT =
+          updatedEnv.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT ?? env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
+        newEnv.SETTLEMINT_PORTAL = updatedEnv.SETTLEMINT_PORTAL ?? env.SETTLEMINT_PORTAL;
+        newEnv.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT =
+          updatedEnv.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT ?? env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
+      } else {
+        newEnv.SETTLEMINT_WORKSPACE = updatedEnv.SETTLEMINT_APPLICATION
+          ? (await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)).workspace.id
+          : env.SETTLEMINT_WORKSPACE!;
+      }
       await writeEnvSpinner(!!prod, newEnv);
       note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
     }
@@ -106,10 +129,10 @@ export function getCreateCommand({
         id: waitFor?.id ?? result.id,
         action: "deploy",
       });
-    }
 
-    if (waitFor) {
-      outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
+      if (waitFor) {
+        outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
+      }
     }
 
     outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);

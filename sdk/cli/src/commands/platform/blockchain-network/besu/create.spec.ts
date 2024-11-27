@@ -36,6 +36,8 @@ describe("besuCreateCommand", () => {
       provider: "gke",
       region: "europe",
       nodeName: "validator-1",
+      size: "SMALL",
+      type: "SHARED",
     });
   });
 
@@ -80,6 +82,8 @@ describe("besuCreateCommand", () => {
       chainId: 12345,
       gasLimit: "10000000",
       secondsPerBlock: 5,
+      size: "SMALL",
+      type: "SHARED",
     });
   });
 
@@ -109,6 +113,10 @@ describe("besuCreateCommand", () => {
       "validator-1",
       "--application-id",
       "123456789",
+      "--size",
+      "LARGE",
+      "--type",
+      "DEDICATED",
     ]);
 
     expect(commandArgs).toBe("test-network");
@@ -118,6 +126,8 @@ describe("besuCreateCommand", () => {
       region: "europe",
       nodeName: "validator-1",
       applicationId: "123456789",
+      size: "LARGE",
+      type: "DEDICATED",
     });
   });
 });

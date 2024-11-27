@@ -21,6 +21,12 @@ const BlockchainNodeFragment = graphql(`
       label
       displayValue
     }
+    blockchainNetwork {
+      ... on AbstractClusterService {
+        id
+        name
+      }
+    }
   }
 `);
 

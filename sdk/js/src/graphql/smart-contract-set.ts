@@ -143,7 +143,9 @@ export const smartContractSetCreate = (
   return async (args: CreateSmartContractSetArgs) => {
     validate(IdSchema, args.applicationId);
     validate(IdSchema, args.blockchainNodeId);
-    validate(IdSchema, args.userId);
+    if (typeof args.userId === "string") {
+      validate(IdSchema, args.userId);
+    }
     const { createSmartContractSet: smartContractSet } = await gqlClient.request(createSmartContractSet, args);
     return smartContractSet;
   };

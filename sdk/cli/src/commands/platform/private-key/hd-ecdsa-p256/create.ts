@@ -1,4 +1,3 @@
-import type { DotEnv } from "@settlemint/sdk-utils";
 import { addClusterServiceProviderAndRegionsArgs } from "../../common/cluster-service.args";
 import { getCreateCommand } from "../../common/create-command";
 
@@ -17,17 +16,19 @@ export function privateKeyHdCreateCommand() {
         .option("--application-id <applicationId>", "Application ID")
         .action(async (name, { applicationId, provider, region, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
+            const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
             const result = await settlemint.privateKey.create({
               name,
-              applicationId: applicationId ?? env.SETTLEMINT_APPLICATION!,
+              applicationId: application,
               privateKeyType: "HD_ECDSA_P256",
               provider,
               region,
             });
             return {
               result,
-              mapDefaultEnv: (): Partial<DotEnv> => {
+              mapDefaultEnv: () => {
                 return {
+                  SETTLEMINT_APPLICATION: application,
                   SETTLEMINT_HD_PRIVATE_KEY: result.id,
                 };
               },

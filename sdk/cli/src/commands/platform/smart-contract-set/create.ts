@@ -1,6 +1,5 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { Option } from "@commander-js/extra-typings";
-import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../common/create-command";
 
 /**
@@ -49,10 +48,12 @@ export function smartContractSetCreateCommand() {
             { applicationId, blockchainNodeId, provider, region, size, type, useCase, userId, ...defaultArgs },
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
+              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
+              const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
               const result = await settlemint.smartContractSet.create({
                 name,
-                applicationId: applicationId ?? env.SETTLEMINT_APPLICATION!,
-                blockchainNodeId: blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!,
+                applicationId: application,
+                blockchainNodeId: blockchainNode,
                 provider,
                 region,
                 size,
@@ -61,8 +62,14 @@ export function smartContractSetCreateCommand() {
               });
               return {
                 result,
-                mapDefaultEnv: (): Partial<DotEnv> => {
+                mapDefaultEnv: async () => {
+                  const blockchainNetwork = blockchainNodeId
+                    ? (await settlemint.blockchainNode.read(blockchainNodeId)).blockchainNetwork.id
+                    : env.SETTLEMINT_BLOCKCHAIN_NETWORK!;
                   return {
+                    SETTLEMINT_APPLICATION: application,
+                    SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNetwork,
+                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode,
                     SETTLEMINT_SMART_CONTRACT_SET: result.id,
                   };
                 },

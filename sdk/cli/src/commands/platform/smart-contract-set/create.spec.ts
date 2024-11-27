@@ -34,6 +34,8 @@ describe("smartContractSetCreateCommand", () => {
       provider: "gke",
       region: "europe",
       useCase: "solidity-empty",
+      size: "SMALL",
+      type: "SHARED",
     });
   });
 
@@ -63,7 +65,7 @@ describe("smartContractSetCreateCommand", () => {
       "--use-case",
       "solidity-empty",
       "--size",
-      "medium",
+      "MEDIUM",
     ]);
 
     expect(commandArgs).toBe("test-set");
@@ -72,7 +74,8 @@ describe("smartContractSetCreateCommand", () => {
       region: "europe",
       blockchainNodeId: "node-123",
       useCase: "solidity-empty",
-      size: "medium",
+      size: "MEDIUM",
+      type: "SHARED",
     });
   });
 
@@ -112,6 +115,8 @@ describe("smartContractSetCreateCommand", () => {
       blockchainNodeId: "node-123",
       useCase: "solidity-starterkit",
       applicationId: "123456789",
+      size: "SMALL",
+      type: "SHARED",
     });
   });
 });

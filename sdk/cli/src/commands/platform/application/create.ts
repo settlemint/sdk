@@ -29,7 +29,6 @@ export function applicationCreateCommand() {
               mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
                   SETTLEMINT_APPLICATION: result.id,
-                  SETTLEMINT_WORKSPACE: workspace,
                 };
               },
             };

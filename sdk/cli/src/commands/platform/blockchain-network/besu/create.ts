@@ -76,14 +76,9 @@ export function blockchainNetworkBesuCreateCommand() {
                       ...blockchainNode,
                     }
                   : undefined,
-                mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                  const workspaceId = applicationId
-                    ? (await settlemint.application.read(applicationId)).workspace.id
-                    : env.SETTLEMINT_WORKSPACE!;
-
+                mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
                     SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_WORKSPACE: workspaceId,
                     SETTLEMINT_BLOCKCHAIN_NETWORK: result.id,
                     SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.id,
                   };
