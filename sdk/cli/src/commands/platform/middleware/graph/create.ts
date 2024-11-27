@@ -65,13 +65,13 @@ export function graphMiddlewareCreateCommand() {
     },
     examples: [
       {
-        description: "Create a graph middleware using default options",
-        command: "platform create middleware graph my-graph --accept-defaults --default",
+        description: "Create a graph middleware and save as default",
+        command: "platform create middleware graph my-graph --accept-defaults -d",
       },
       {
-        description: "Create a graph middleware and save as default",
+        description: "Create a graph middleware in a different application",
         command:
-          "platform create middleware graph my-graph --application-id 123456789 --smart-contract-set-id scs-123 -d",
+          "platform create middleware graph my-graph --application-id 123456789 --smart-contract-set-id scs-123 --blockchain-node-id node-123 --storage-id storage-123",
       },
     ],
   });

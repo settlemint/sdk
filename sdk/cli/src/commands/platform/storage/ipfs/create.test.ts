@@ -1,52 +1,39 @@
 import { describe, expect, test } from "bun:test";
 import { Command } from "@commander-js/extra-typings";
-import { smartContractSetCreateCommand } from "./create.js";
+import { ipfsStorageCreateCommand } from "./create.js";
 
-describe("smartContractSetCreateCommand", () => {
+describe("ipfsStorageCreateCommand", () => {
   test("executes command with required arguments", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      smartContractSetCreateCommand()
+      ipfsStorageCreateCommand()
         .exitOverride()
-        .action((args, options) => {
+        .action((args: string, options: Record<string, unknown>) => {
           commandArgs = args;
           commandOptions = options;
         }),
     );
-    program.parse([
-      "node",
-      "test",
-      "smart-contract-set",
-      "test-set",
-      "--provider",
-      "gke",
-      "--region",
-      "europe",
-      "--use-case",
-      "solidity-empty",
-    ]);
+    program.parse(["node", "test", "ipfs", "test-storage", "--provider", "gke", "--region", "europe"]);
 
-    // Validate command was executed with correct argumentsa
-    expect(commandArgs).toBe("test-set");
+    expect(commandArgs).toBe("test-storage");
     expect(commandOptions).toEqual({
       provider: "gke",
       region: "europe",
-      useCase: "solidity-empty",
       size: "SMALL",
       type: "SHARED",
     });
   });
 
-  test("executes command with parameters", () => {
+  test("executes command with optional parameters", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      smartContractSetCreateCommand()
+      ipfsStorageCreateCommand()
         .exitOverride()
-        .action((args, options) => {
+        .action((args: string, options: Record<string, unknown>) => {
           commandArgs = args;
           commandOptions = options;
         }),
@@ -54,29 +41,27 @@ describe("smartContractSetCreateCommand", () => {
     program.parse([
       "node",
       "test",
-      "smart-contract-set",
-      "test-set",
+      "ipfs",
+      "test-storage",
       "--provider",
       "gke",
       "--region",
       "europe",
-      "--blockchain-node-id",
-      "node-123",
-      "--use-case",
-      "solidity-starterkit",
       "--application-id",
       "123456789",
+      "--size",
+      "MEDIUM",
+      "--type",
+      "DEDICATED",
     ]);
 
-    expect(commandArgs).toBe("test-set");
+    expect(commandArgs).toBe("test-storage");
     expect(commandOptions).toEqual({
       provider: "gke",
       region: "europe",
-      blockchainNodeId: "node-123",
-      useCase: "solidity-starterkit",
       applicationId: "123456789",
-      size: "SMALL",
-      type: "SHARED",
+      size: "MEDIUM",
+      type: "DEDICATED",
     });
   });
 });

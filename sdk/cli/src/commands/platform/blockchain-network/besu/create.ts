@@ -90,24 +90,13 @@ export function blockchainNetworkBesuCreateCommand() {
     },
     examples: [
       {
-        description: "Create a Besu blockchain network with required options",
-        command:
-          "platform create blockchain-network besu my-network --provider gke --region europe --node-name validator-1 --accept-defaults",
-      },
-      {
         description: "Create a Besu blockchain network and save as default",
-        command:
-          "platform create blockchain-network besu my-network --provider gke --region europe --node-name validator-1 -d",
+        command: "platform create blockchain-network besu my-network --node-name validator-1 --accept-defaults -d",
       },
       {
-        description: "Create a Besu blockchain network in a specific application",
+        description: "Create a Besu blockchain network in a different application",
         command:
-          "platform create blockchain-network besu my-network --provider gke --region europe --node-name validator-1 --application-id 123456789",
-      },
-      {
-        description: "Create a Besu blockchain network with custom parameters",
-        command:
-          "platform create blockchain-network besu my-network --provider gke --region europe --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
+          "platform create blockchain-network besu my-network --application-id 123456789 --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
       },
     ],
   });

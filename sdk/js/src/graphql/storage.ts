@@ -69,14 +69,18 @@ mutation CreateStorage(
   $name: String!,
   $storageProtocol: StorageProtocol!,
   $provider: String!,
-  $region: String!
+  $region: String!,
+  $size: ClusterServiceSize
+  $type: ClusterServiceType
 ) {
   createStorage(
     applicationId: $applicationId,
     name: $name,
     storageProtocol: $storageProtocol,
     provider: $provider,
-    region: $region
+    region: $region,
+    size: $size,
+    type: $type
   ) {
     ...Storage
   }

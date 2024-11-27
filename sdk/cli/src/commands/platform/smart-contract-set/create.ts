@@ -76,13 +76,13 @@ export function smartContractSetCreateCommand() {
     },
     examples: [
       {
-        description: "Create a smart contract set using default options",
-        command: "platform create smart-contract-set my-contracts --use-case nft --accept-defaults --default",
+        description: "Create a smart contract set and save as default",
+        command: "platform create smart-contract-set my-contracts --use-case nft --accept-defaults -d",
       },
       {
-        description: "Create a smart contract set and save as default",
+        description: "Create a smart contract set in a different application",
         command:
-          "platform create smart-contract-set my-contracts --application-id 123456789 --blockchain-node-id node-123 --use-case nft --user-id user-123 -d",
+          "platform create smart-contract-set my-contracts --application-id 123456789 --blockchain-node-id node-123 --use-case nft --user-id user-123",
       },
     ],
   });
