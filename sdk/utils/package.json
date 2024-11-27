@@ -61,7 +61,7 @@
     "@types/npmcli__package-json": "^4"
   },
   "dependencies": {
-    "@antfu/install-pkg": "^0.4",
+    "@antfu/install-pkg": "^0.5.0",
     "@dotenvx/dotenvx": "^1",
     "@npmcli/package-json": "^6",
     "deepmerge-ts": "^7",
