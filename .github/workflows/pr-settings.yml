@@ -23,24 +23,35 @@ permissions:
 
 jobs:
   labels:
-    runs-on: namespace-profile-sony-bank-app
+    runs-on: namespace-profile-btp-lite
     steps:
+      - name: Configure 1Password
+        uses: 1password/load-secrets-action/configure@v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load secrets
+        uses: 1password/load-secrets-action@v2
+        env:
+          PR_SLACK_WEBHOOK_URL: op://platform/slack-webhooks/pr-webhook
+
       - name: Send GitHub Action trigger data to Slack workflow with reviewers
         if: ${{ tojson(github.event.pull_request.requested_reviewers) != '[]' && !github.event.pull_request.draft }}
         uses: slackapi/slack-github-action@v2.0.0
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.PR_SLACK_WEBHOOK_URL }}
         with:
+          webhook: ${{ env.PR_SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
           payload: |
             {
               "message": "${{ github.event.pull_request.title }} (by ${{ github.event.pull_request.user.login }} and to be checked by ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}) -> ${{ github.event.pull_request.html_url }}"
             }
+
       - name: Send GitHub Action trigger data to Slack workflow without reviewers
         if: ${{ !github.event.pull_request.draft }}
         uses: slackapi/slack-github-action@v2.0.0
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.PR_SLACK_WEBHOOK_URL }}
         with:
+          webhook: ${{ env.PR_SLACK_WEBHOOK_URL }}
+          webhook-type: webhook-trigger
           payload: |
             {
               "message": "${{ github.event.pull_request.title }} (by ${{ github.event.pull_request.user.login }}) -> ${{ github.event.pull_request.html_url }}"
