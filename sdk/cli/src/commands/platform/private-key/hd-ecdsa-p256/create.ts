@@ -38,11 +38,11 @@ export function privateKeyHdCreateCommand() {
     examples: [
       {
         description: "Create a private key using default options",
-        command: "platform private-key create my-key --accept-defaults --default",
+        command: "platform create private-key hd-ecdsa-p256 my-key --accept-defaults --default",
       },
       {
         description: "Create a private key and save as default",
-        command: "platform private-key create my-key --application-id 123456789 -d",
+        command: "platform create private-key hd-ecdsa-p256 my-key --application-id 123456789 -d",
       },
     ],
   });

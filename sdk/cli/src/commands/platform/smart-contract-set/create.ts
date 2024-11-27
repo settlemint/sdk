@@ -20,6 +20,7 @@ export function smartContractSetCreateCommand() {
         .addOption(
           new Option("--use-case <useCase>", "Use case for the smart contract set")
             .choices([
+              // TODO: use enum from graphql api schema
               "solidity-empty",
               "solidity-token-erc20",
               "solidity-token-erc1155",
@@ -73,12 +74,12 @@ export function smartContractSetCreateCommand() {
     examples: [
       {
         description: "Create a smart contract set using default options",
-        command: "platform smart-contract-set create my-contracts --use-case nft --accept-defaults --default",
+        command: "platform create smart-contract-set my-contracts --use-case nft --accept-defaults --default",
       },
       {
         description: "Create a smart contract set and save as default",
         command:
-          "platform smart-contract-set create my-contracts --application-id 123456789 --blockchain-node-id node-123 --use-case nft --user-id user-123 -d",
+          "platform create smart-contract-set my-contracts --application-id 123456789 --blockchain-node-id node-123 --use-case nft --user-id user-123 -d",
       },
     ],
   });

@@ -105,6 +105,41 @@ describe("Setup a project using the SDK", () => {
     { timeout: 600_000 },
   );
 
+  test("Create HD private key on the platform", async () => {
+    const { output: privateKeyOutput } = await runCommand(
+      ["platform", "create", "private-key", "hd-ecdsa-p256", "--accept-defaults", "--default"],
+      { cwd: projectDir },
+    );
+    expect(privateKeyOutput).toInclude("Private key created successfully");
+  });
+
+  test("Create smart contract set and deploy on the platform", () => {
+    // Deploy to node
+    // Deploy subgraph to graph instance
+    // Extract abi for the portal (or can we use predeployed abis as wel?)
+    // Extract contract address information
+  });
+
+  test.skip("Create graph middleware on the platform", () => {});
+
+  test.skip("Create smart contract portal middleware on the platform", () => {});
+
+  test.skip("Create hasura integration on the platform", () => {
+    // Run hasura migrations?
+  });
+
+  test.skip("Create minio/ipfs storage on the platform", () => {
+    // Minio or IPFS by default?
+  });
+
+  test.skip("Create blockscout insights on the platform", () => {
+    // Optional, can be done later
+  });
+
+  test.skip("Create custom deployment on the platform", () => {
+    // Optional, can be done later
+  });
+
   test.skip("Connect starter kit", async () => {
     await $`bun packages/cli/src/cli.ts connect`;
   });
