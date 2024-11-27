@@ -75,11 +75,6 @@ const createBlockchainNetwork = graphql(
     $region: String!
     $size: ClusterServiceSize
     $type: ClusterServiceType
-    $requestsCpu: Int
-    $requestsMemory: Int
-    $limitCpu: Int
-    $limitMemory: Int
-    $diskSpace: Int
     $batchTimeout: Float
     $maxMessageCount: Int
     $absoluteMaxBytes: Int
@@ -108,11 +103,6 @@ const createBlockchainNetwork = graphql(
       region: $region
       size: $size
       type: $type
-      requestsCpu: $requestsCpu
-      requestsMemory: $requestsMemory
-      limitCpu: $limitCpu
-      limitMemory: $limitMemory
-      diskSpace: $diskSpace
       batchTimeout: $batchTimeout
       maxMessageCount: $maxMessageCount
       absoluteMaxBytes: $absoluteMaxBytes

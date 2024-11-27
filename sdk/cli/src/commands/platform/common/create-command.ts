@@ -118,6 +118,11 @@ export function getCreateCommand({
           ? (await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)).workspace.id
           : env.SETTLEMINT_WORKSPACE!;
       }
+      if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
+        newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (
+          await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE)
+        ).blockchainNetwork.id;
+      }
       await writeEnvSpinner(!!prod, newEnv);
       note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
     }

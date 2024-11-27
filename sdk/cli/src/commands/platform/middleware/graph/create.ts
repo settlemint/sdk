@@ -10,36 +10,58 @@ export function graphMiddlewareCreateCommand() {
   return getCreateCommand({
     name: "graph",
     type: "middleware",
-    alias: "graph",
+    alias: "gr",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option("--application-id <applicationId>", "Application ID")
         .option("--smart-contract-set-id <smartContractSetId>", "Smart Contract Set ID")
-        .action(async (name, { applicationId, smartContractSetId, provider, region, size, type, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env) => {
-            const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-            const smartContractSet = smartContractSetId ?? env.SETTLEMINT_SMART_CONTRACT_SET!;
-            const result = await settlemint.middleware.create({
-              name,
-              applicationId: application,
+        .option("--storage-id <storageId>", "Storage ID")
+        .option("--blockchain-node-id <blockchainNodeId>", "Blockchain Node ID")
+        .action(
+          async (
+            name,
+            {
+              applicationId,
+              smartContractSetId,
+              storageId,
+              blockchainNodeId,
               provider,
               region,
-              interface: "GRAPH",
               size,
               type,
+              ...defaultArgs
+            },
+          ) => {
+            return baseAction(defaultArgs, async (settlemint, env) => {
+              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
+              const smartContractSet = smartContractSetId ?? env.SETTLEMINT_SMART_CONTRACT_SET!;
+              const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
+              const result = await settlemint.middleware.create({
+                name,
+                applicationId: application,
+                interface: "GRAPH",
+                smartContractSetId: smartContractSet,
+                storageId,
+                blockchainNodeId: blockchainNode,
+                provider,
+                region,
+                size,
+                type,
+              });
+              return {
+                result,
+                mapDefaultEnv: () => {
+                  return {
+                    SETTLEMINT_APPLICATION: application,
+                    SETTLEMINT_SMART_CONTRACT_SET: smartContractSet,
+                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode,
+                    SETTLEMINT_GRAPH_MIDDLEWARE: result.id,
+                  };
+                },
+              };
             });
-            return {
-              result,
-              mapDefaultEnv: () => {
-                return {
-                  SETTLEMINT_APPLICATION: application,
-                  SETTLEMINT_SMART_CONTRACT_SET: smartContractSet,
-                  SETTLEMINT_GRAPH_MIDDLEWARE: result.id,
-                };
-              },
-            };
-          });
-        });
+          },
+        );
     },
     examples: [
       {

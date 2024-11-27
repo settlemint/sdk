@@ -77,11 +77,6 @@ const createBlockchainNode = graphql(
     $region: String!
     $size: ClusterServiceSize
     $type: ClusterServiceType
-    $requestsCpu: Int
-    $requestsMemory: Int
-    $limitCpu: Int
-    $limitMemory: Int
-    $diskSpace: Int
     $nodeType: NodeType
     $keyMaterial: ID
   ) {
@@ -93,11 +88,6 @@ const createBlockchainNode = graphql(
       region: $region
       size: $size
       type: $type
-      requestsCpu: $requestsCpu
-      requestsMemory: $requestsMemory
-      limitCpu: $limitCpu
-      limitMemory: $limitMemory
-      diskSpace: $diskSpace
       nodeType: $nodeType
       keyMaterial: $keyMaterial
     ) {

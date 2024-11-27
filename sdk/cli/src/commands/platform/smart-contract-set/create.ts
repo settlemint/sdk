@@ -62,13 +62,9 @@ export function smartContractSetCreateCommand() {
               });
               return {
                 result,
-                mapDefaultEnv: async () => {
-                  const blockchainNetwork = blockchainNodeId
-                    ? (await settlemint.blockchainNode.read(blockchainNodeId)).blockchainNetwork.id
-                    : env.SETTLEMINT_BLOCKCHAIN_NETWORK!;
+                mapDefaultEnv: () => {
                   return {
                     SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNetwork,
                     SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode,
                     SETTLEMINT_SMART_CONTRACT_SET: result.id,
                   };

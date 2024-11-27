@@ -71,12 +71,13 @@ const createMiddleware = graphql(
     $region: String!
     $size: ClusterServiceSize
     $type: ClusterServiceType
-    $requestsCpu: Int
-    $requestsMemory: Int
-    $limitCpu: Int
-    $limitMemory: Int
-    $diskSpace: Int
     $interface: MiddlewareType!
+    $storageId: ID
+    $smartContractSetId: ID
+    $blockchainNodeId: ID
+    $loadBalancerId: ID
+    $abis: [SmartContractPortalMiddlewareAbiInputDto!]
+    $includePredeployedAbis: [String!]
   ) {
     createMiddleware(
       applicationId: $applicationId
@@ -85,12 +86,13 @@ const createMiddleware = graphql(
       region: $region
       size: $size
       type: $type
-      requestsCpu: $requestsCpu
-      requestsMemory: $requestsMemory
-      limitCpu: $limitCpu
-      limitMemory: $limitMemory
-      diskSpace: $diskSpace
       interface: $interface
+      storageId: $storageId
+      smartContractSetId: $smartContractSetId
+      blockchainNodeId: $blockchainNodeId
+      loadBalancerId: $loadBalancerId
+      abis: $abis
+      includePredeployedAbis: $includePredeployedAbis
     ) {
       ...Middleware
     }
