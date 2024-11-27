@@ -28,7 +28,7 @@ describe("smartContractSetCreateCommand", () => {
       "solidity-empty",
     ]);
 
-    // Validate command was executed with correct arguments
+    // Validate command was executed with correct argumentsa
     expect(commandArgs).toBe("test-set");
     expect(commandOptions).toEqual({
       provider: "gke",
