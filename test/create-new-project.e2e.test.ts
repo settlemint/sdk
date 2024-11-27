@@ -220,8 +220,11 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Connected to SettleMint");
   });
 
-  test.skip("Codegen starter kit", async () => {
-    await $`bun packages/cli/src/cli.ts codegen`;
+  test("Codegen starter kit", async () => {
+    const { output } = await runCommand(["codegen"], { cwd: projectDir });
+    expect(output).toInclude("Schema was generated successfully");
+    expect(output).toInclude("Introspection output was generated successfully");
+    expect(output).toInclude("Codegen complete");
   });
 
   test.skip("Build starter kit", async () => {
