@@ -9,7 +9,7 @@
       "internalConsoleOptions": "openOnSessionStart",
       "request": "launch",
       "name": "SDK: Create",
-      "program": "../../packages/cli/src/cli.ts",
+      "program": "../../sdk/cli/src/cli.ts",
       "args": ["create"],
       "cwd": "${workspaceFolder}/apps/registry",
       "watchMode": true,
@@ -21,7 +21,7 @@
       "internalConsoleOptions": "openOnSessionStart",
       "request": "launch",
       "name": "SDK: Connect",
-      "program": "../../packages/cli/src/cli.ts",
+      "program": "../../sdk/cli/src/cli.ts",
       "args": ["connect", "--accept-defaults"],
       "cwd": "${workspaceFolder}/apps/registry",
       "watchMode": true,
@@ -33,7 +33,7 @@
       "internalConsoleOptions": "openOnSessionStart",
       "request": "launch",
       "name": "SDK: Update Custom Deployment",
-      "program": "../../packages/sdk/src/cli/cli.ts",
+      "program": "../../sdk/src/cli/cli.ts",
       "args": [
         "custom-deployment",
         "update",
@@ -42,7 +42,7 @@
         "--port",
         "3000"
       ],
-      "cwd": "${workspaceFolder}/apps/asset-tokenization",
+      "cwd": "${workspaceFolder}/apps/registry",
       "watchMode": true,
       "strictEnv": false,
       "stopOnEntry": false

@@ -2,6 +2,8 @@ import { blockchainNetworkCreateCommand } from "@/commands/platform/blockchain-n
 import { workspaceCreateCommand } from "@/commands/platform/workspace/create";
 import { Command } from "@commander-js/extra-typings";
 import { applicationCreateCommand } from "./application/create";
+import { privateKeyCreateCommand } from "./private-key/create";
+import { smartContractSetCreateCommand } from "./smart-contract-set/create";
 
 /**
  * Creates and returns the 'create' command for the SettleMint SDK.
@@ -15,5 +17,7 @@ export function createCommand(): Command {
     .description("Create a resource in the SettleMint platform")
     .addCommand(workspaceCreateCommand())
     .addCommand(applicationCreateCommand())
-    .addCommand(blockchainNetworkCreateCommand());
+    .addCommand(blockchainNetworkCreateCommand())
+    .addCommand(privateKeyCreateCommand())
+    .addCommand(smartContractSetCreateCommand());
 }

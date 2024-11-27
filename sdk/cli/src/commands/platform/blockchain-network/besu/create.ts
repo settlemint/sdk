@@ -1,4 +1,4 @@
-import { addClusterServiceArgs } from "@/commands/platform/common/cluser-service.args";
+import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { parseNumber } from "@/utils/parse-number";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
