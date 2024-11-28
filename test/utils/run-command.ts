@@ -4,7 +4,7 @@ import type { Subprocess } from "bun";
 import { isLocalEnv } from "./is-local-env";
 
 const authSecret = randomBytes(32).toString("hex");
-const commandsRunning: Subprocess[] = [];
+const commandsRunning: Record<string, Subprocess[]> = {};
 
 const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN,
@@ -18,7 +18,11 @@ if (isLocalEnv()) {
   DEFAULT_ENV.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }
 
-export async function runCommand(command: string[], options: { env?: Record<string, string>; cwd?: string } = {}) {
+export async function runCommand(
+  testScope: string,
+  command: string[],
+  options: { env?: Record<string, string>; cwd?: string } = {},
+) {
   const cwd = options.cwd ?? resolve(__dirname, "../");
   const proc = Bun.spawn(["bun", resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...command], {
     stdout: "pipe",
@@ -28,11 +32,14 @@ export async function runCommand(command: string[], options: { env?: Record<stri
       ...(options.env ?? {}),
     },
   });
-  commandsRunning.push(proc);
+  if (!commandsRunning[testScope]) {
+    commandsRunning[testScope] = [];
+  }
+  commandsRunning[testScope].push(proc);
   await proc.exited;
-  const index = commandsRunning.indexOf(proc);
+  const index = commandsRunning[testScope].indexOf(proc);
   if (index > -1) {
-    commandsRunning.splice(index, 1);
+    commandsRunning[testScope].splice(index, 1);
   }
   const output = await new Response(proc.stdout).text();
   console.log(output);
@@ -46,8 +53,8 @@ export async function runCommand(command: string[], options: { env?: Record<stri
   return { output, cwd };
 }
 
-export function forceExitAllCommands() {
+export function forceExitAllCommands(testScope: string) {
   // biome-ignore lint/complexity/noForEach: <explanation>
-  commandsRunning.forEach((command) => command.kill());
-  commandsRunning.splice(0);
+  commandsRunning[testScope].forEach((command) => command.kill());
+  commandsRunning[testScope] = [];
 }

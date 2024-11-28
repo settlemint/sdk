@@ -21,6 +21,8 @@ const GRAPH_NAME = "Starter Kit Graph";
 const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 
+const COMMAND_TEST_SCOPE = "create-new-project-e2e";
+
 let projectDir: string;
 let workspaceDeleted = false;
 const createdResources = {
@@ -41,9 +43,13 @@ afterAll(async () => {
   if (!workspaceDeleted) {
     try {
       // Deleting a workspace automatically deletes all underlying resources
-      await runCommand(["platform", "delete", "workspace", "--accept-defaults", "--force", "default"], {
-        cwd: projectDir,
-      });
+      await runCommand(
+        COMMAND_TEST_SCOPE,
+        ["platform", "delete", "workspace", "--accept-defaults", "--force", "default"],
+        {
+          cwd: projectDir,
+        },
+      );
     } catch (err) {
       console.error("Failed to delete workspace", err);
     }
@@ -57,12 +63,18 @@ afterAll(async () => {
 });
 
 afterEach(() => {
-  forceExitAllCommands();
+  forceExitAllCommands(COMMAND_TEST_SCOPE);
 });
 
 describe("Setup a project using the SDK", () => {
   test("Create a starter kit project", async () => {
-    const { cwd, output } = await runCommand(["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME]);
+    const { cwd, output } = await runCommand(COMMAND_TEST_SCOPE, [
+      "create",
+      "--project-name",
+      PROJECT_NAME,
+      "--template",
+      TEMPLATE_NAME,
+    ]);
     projectDir = join(cwd, PROJECT_NAME);
     expect((await stat(join(cwd, PROJECT_NAME))).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
@@ -71,6 +83,7 @@ describe("Setup a project using the SDK", () => {
   test("Create workspace and application on the platform", async () => {
     expect(projectDir).toBeString();
     const { output: workspaceOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       [
         "platform",
         "create",
@@ -112,6 +125,7 @@ describe("Setup a project using the SDK", () => {
     }
 
     const { output: applicationOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       ["platform", "create", "application", `${APPLICATION_NAME}`, "--accept-defaults", "--default"],
       { cwd: projectDir },
     );
@@ -122,6 +136,7 @@ describe("Setup a project using the SDK", () => {
   test("Create blockchain network and node on the platform", async () => {
     expect(createdResources.application).toBeTrue();
     const { output: networkOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       [
         "platform",
         "create",
@@ -148,6 +163,7 @@ describe("Setup a project using the SDK", () => {
   test("Create HD private key on the platform", async () => {
     expect(createdResources.blockchainNode).toBeTrue();
     const { output: privateKeyOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       [
         "platform",
         "create",
@@ -172,6 +188,7 @@ describe("Setup a project using the SDK", () => {
   test("Create smart contract set and deploy on the platform", async () => {
     expect(createdResources.blockchainNode).toBeTrue();
     const { output: smartContractSetOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       [
         "platform",
         "create",
@@ -197,6 +214,7 @@ describe("Setup a project using the SDK", () => {
   test("Create IPFS storage on the platform", async () => {
     expect(createdResources.application).toBeTrue();
     const { output: ipfsOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       [
         "platform",
         "create",
@@ -221,6 +239,7 @@ describe("Setup a project using the SDK", () => {
     expect(createdResources.smartContractSet).toBeTrue();
     expect(createdResources.ipfsStorage).toBeTrue();
     const { output: graphOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       [
         "platform",
         "create",
@@ -258,13 +277,13 @@ describe("Setup a project using the SDK", () => {
 
   test("Connect starter kit", async () => {
     expect(Object.values(createdResources).includes(false)).toBeFalse();
-    const { output } = await runCommand(["connect", "--accept-defaults"], { cwd: projectDir });
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir });
     expect(output).toInclude("Connected to SettleMint");
   });
 
   test("Codegen starter kit", async () => {
     expect(Object.values(createdResources).includes(false)).toBeFalse();
-    const { output } = await runCommand(["codegen"], { cwd: projectDir });
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: projectDir });
     expect(output).toInclude("Schema was generated successfully");
     expect(output).toInclude("Introspection output was generated successfully");
     expect(output).toInclude("Codegen complete");
@@ -281,11 +300,13 @@ describe("Setup a project using the SDK", () => {
   test("Delete created resources on the platform", async () => {
     expect(createdResources.application).toBeTrue();
     const { output: deleteApplicationOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       ["platform", "delete", "application", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
     );
     expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
     const { output: deleteWorkspaceOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
       ["platform", "delete", "workspace", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
     );
