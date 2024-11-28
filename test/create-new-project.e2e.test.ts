@@ -12,6 +12,7 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 const WORKSPACE_NAME = "Starter Kit Demo Workspace";
 const APPLICATION_NAME = "Starter Kit App";
 const NETWORK_NAME = "Starter Kit Network";
+const NODE_NAME = "Starter Kit Node";
 const PRIVATE_KEY_NAME = "Starter Kit Private Key";
 const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
 const IPFS_NAME = "Starter Kit IPFS";
@@ -117,7 +118,7 @@ describe("Setup a project using the SDK", () => {
         "--region",
         CLUSTER_REGION,
         "--node-name",
-        "validator-1",
+        NODE_NAME,
         "--accept-defaults",
         "--default",
         "--wait",
