@@ -105,10 +105,10 @@ export function getCreateCommand({
             ...env,
             ...updatedEnv,
           };
-      if (isApplicationChanged) {
-        newEnv.SETTLEMINT_WORKSPACE = updatedEnv.SETTLEMINT_APPLICATION
-          ? (await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)).workspace.id
-          : env.SETTLEMINT_WORKSPACE!;
+      if (isApplicationChanged && updatedEnv.SETTLEMINT_APPLICATION) {
+        newEnv.SETTLEMINT_WORKSPACE = (
+          await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)
+        ).workspace.id;
       }
       if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
         newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (

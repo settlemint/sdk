@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
@@ -96,7 +96,7 @@ export async function codegenTsconfig(env: DotEnv) {
   }
   tsconfig.config.compilerOptions.paths["@schemas/*"] = ["./*.d.ts"];
 
-  writeFileSync(tsconfig.path, JSON.stringify(tsconfig.config, null, 2), "utf8");
+  await writeFile(tsconfig.path, JSON.stringify(tsconfig.config, null, 2), "utf8");
 
   return {
     hasura,

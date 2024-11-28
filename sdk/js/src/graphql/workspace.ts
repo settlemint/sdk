@@ -116,6 +116,14 @@ const deleteWorkspace = graphql(
   [WorkspaceFragment, ApplicationFragment],
 );
 
+const addCredits = graphql(
+  `
+  mutation addCredits($workspaceId: String!, $amount: Float!) {
+    addCredits(workspaceId: $workspaceId, amount: $amount)
+  }
+`,
+);
+
 /**
  * Creates a function to list all workspaces and their applications.
  *
@@ -202,5 +210,28 @@ export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions
     const id = validate(IdSchema, workspaceId);
     const { deleteWorkspace: workspace } = await gqlClient.request(deleteWorkspace, { id });
     return workspace;
+  };
+};
+
+/**
+ * Creates a function to add credits to a workspace.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes a workspace ID and credit amount and adds credits to the workspace.
+ * @throws Will throw an error if the workspace ID is invalid or if the amount is not a positive number.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * await client.workspace.addCredits('workspaceId', 100);
+ */
+export const workspaceAddCredits = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (workspaceId: Id, amount: number) => {
+    const id = validate(IdSchema, workspaceId);
+    if (amount <= 0) {
+      throw new Error("Credit amount must be a positive number");
+    }
+    const { addCredits: result } = await gqlClient.request(addCredits, { workspaceId: id, amount });
+    return result;
   };
 };

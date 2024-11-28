@@ -1,6 +1,8 @@
 import { afterAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import { isLocalEnv } from "./utils/is-local-env";
 import { runCommand } from "./utils/run-command";
@@ -80,6 +82,20 @@ describe("Setup a project using the SDK", () => {
       { cwd: projectDir },
     );
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
+
+    const currentCwd = process.cwd();
+    process.chdir(projectDir);
+    // Add some credits so the workspace will not be auto paused
+    const env: Partial<DotEnv> = await loadEnv(false, false);
+    expect(env.SETTLEMINT_WORKSPACE).toBeString();
+    const settlemint = createSettleMintClient({
+      accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    process.chdir(currentCwd);
+    if (!isLocalEnv()) {
+      await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 100);
+    }
 
     const { output: applicationOutput } = await runCommand(
       ["platform", "create", "application", `${APPLICATION_NAME}`, "--accept-defaults", "--default"],

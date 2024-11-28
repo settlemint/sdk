@@ -71,6 +71,7 @@ import { type CreateStorageArgs, type Storage, storageCreate, storageList, stora
 import {
   type CreateWorkspaceArgs,
   type Workspace,
+  workspaceAddCredits,
   workspaceCreate,
   workspaceDelete,
   workspaceList,
@@ -84,6 +85,7 @@ export interface SettlemintClient {
     read: (workspaceId: Id) => Promise<Workspace>;
     create: (args: CreateWorkspaceArgs) => Promise<Workspace>;
     delete: (workspaceId: Id) => Promise<Workspace>;
+    addCredits: (workspaceId: Id, amount: number) => Promise<boolean>;
   };
   application: {
     list: (workspaceId: Id) => Promise<Application[]>;
@@ -171,6 +173,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       read: workspaceRead(gqlClient, options),
       create: workspaceCreate(gqlClient, options),
       delete: workspaceDelete(gqlClient, options),
+      addCredits: workspaceAddCredits(gqlClient, options),
     },
     application: {
       list: applicationList(gqlClient, options),

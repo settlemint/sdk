@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, rmSync } from "node:fs";
+import { exists, readdir, rm } from "node:fs/promises";
 import { resolve } from "node:path";
 
 /**
@@ -70,12 +70,12 @@ export function formatTargetDir(targetDir: string): string {
  *
  * @example
  * ```typescript
- * const dirIsEmpty = isEmpty("/path/to/directory");
+ * const dirIsEmpty = await isEmpty("/path/to/directory");
  * console.log(dirIsEmpty);
  * ```
  */
-export function isEmpty(path: string): boolean {
-  const files = readdirSync(path);
+export async function isEmpty(path: string): Promise<boolean> {
+  const files = await readdir(path);
   return files.length === 0 || (files.length === 1 && files[0] === ".git");
 }
 
@@ -86,13 +86,13 @@ export function isEmpty(path: string): boolean {
  *
  * @example
  * ```typescript
- * emptyDir("/path/to/directory");
+ * await emptyDir("/path/to/directory");
  * ```
  */
-export function emptyDir(dir: string): void {
-  if (!existsSync(dir)) return;
-  for (const file of readdirSync(dir)) {
+export async function emptyDir(dir: string): Promise<void> {
+  if (!(await exists(dir))) return;
+  for (const file of await readdir(dir)) {
     if (file === ".git") continue;
-    rmSync(resolve(dir, file), { recursive: true, force: true });
+    await rm(resolve(dir, file), { recursive: true, force: true });
   }
 }

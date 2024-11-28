@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { projectRoot } from "@/filesystem.js";
 import type { DotEnv } from "@/validation.js";
@@ -26,7 +26,7 @@ export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boo
 
   const mergedEnv = deepmerge(currentEnv, env);
 
-  writeFileSync(envFile, stringify(mergedEnv));
+  await writeFile(envFile, stringify(mergedEnv));
 }
 
 const quote = /[\s"'#]/;

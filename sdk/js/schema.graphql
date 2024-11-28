@@ -134,6 +134,9 @@ interface AbstractClusterService implements AbstractEntity {
   """Indicates if the pod is running"""
   isPodRunning: Boolean!
 
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
+
   """CPU limit in millicores"""
   limitCpu: Int
 
@@ -293,6 +296,9 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
 
   """CPU limit in millicores"""
   limitCpu: Int
@@ -922,6 +928,9 @@ type ArbitrumBlockchainNetwork implements AbstractClusterService & AbstractEntit
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -1071,6 +1080,9 @@ type ArbitrumBlockchainNode implements AbstractClusterService & AbstractEntity &
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -1225,6 +1237,9 @@ type ArbitrumGoerliBlockchainNetwork implements AbstractClusterService & Abstrac
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -1374,6 +1389,9 @@ type ArbitrumGoerliBlockchainNode implements AbstractClusterService & AbstractEn
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -1528,6 +1546,9 @@ type ArbitrumSepoliaBlockchainNetwork implements AbstractClusterService & Abstra
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -1677,6 +1698,9 @@ type ArbitrumSepoliaBlockchainNode implements AbstractClusterService & AbstractE
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -1827,6 +1851,9 @@ type AttestationIndexerMiddleware implements AbstractClusterService & AbstractEn
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -2050,6 +2077,9 @@ type AvalancheBlockchainNetwork implements AbstractClusterService & AbstractEnti
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -2202,6 +2232,9 @@ type AvalancheBlockchainNode implements AbstractClusterService & AbstractEntity 
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -2365,6 +2398,9 @@ type AvalancheFujiBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -2517,6 +2553,9 @@ type AvalancheFujiBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -2689,7 +2728,7 @@ input BesuBftGenesisConfigDataInput {
   requesttimeoutseconds: Float!
 
   """The empty block period in seconds for the BFT consensus"""
-  xemptyblockperiodseconds: Float!
+  xemptyblockperiodseconds: Float
 }
 
 type BesuBftGenesisConfigDataType {
@@ -2703,7 +2742,7 @@ type BesuBftGenesisConfigDataType {
   requesttimeoutseconds: Float!
 
   """The empty block period in seconds for the BFT consensus"""
-  xemptyblockperiodseconds: Float!
+  xemptyblockperiodseconds: Float
 }
 
 input BesuCliqueGenesisConfigDataInput {
@@ -2995,6 +3034,9 @@ type BesuIbftv2BlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -3146,6 +3188,9 @@ type BesuIbftv2BlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Key material for the blockchain node"""
   keyMaterial: AccessibleEcdsaP256PrivateKey
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -3286,6 +3331,9 @@ type BesuMiddleware implements AbstractClusterService & AbstractEntity & Middlew
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -3457,6 +3505,9 @@ type BesuQBFTBlockchainNetwork implements AbstractClusterService & AbstractEntit
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -3608,6 +3659,9 @@ type BesuQBFTBlockchainNode implements AbstractClusterService & AbstractEntity &
 
   """Key material for the blockchain node"""
   keyMaterial: AccessibleEcdsaP256PrivateKey
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -4013,6 +4067,9 @@ type BlockchainExplorer implements AbstractClusterService & AbstractEntity & Ins
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -4157,6 +4214,9 @@ interface BlockchainNetwork implements AbstractClusterService & AbstractEntity {
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -4394,6 +4454,9 @@ interface BlockchainNode implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -4595,6 +4658,9 @@ type BscBlockchainNode implements AbstractClusterService & AbstractEntity & Bloc
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -4749,6 +4815,9 @@ type BscPoWBlockchainNetwork implements AbstractClusterService & AbstractEntity 
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -4908,6 +4977,9 @@ type BscPoWTestnetBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -5057,6 +5129,9 @@ type BscTestnetBlockchainNode implements AbstractClusterService & AbstractEntity
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -5200,6 +5275,9 @@ type Chainlink implements AbstractClusterService & AbstractEntity & Integration 
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -5534,6 +5612,9 @@ type CordaBlockchainNetwork implements AbstractClusterService & AbstractEntity &
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -5683,6 +5764,9 @@ type CordaBlockchainNode implements AbstractClusterService & AbstractEntity & Bl
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -5826,6 +5910,9 @@ type CordappSmartContractSet implements AbstractClusterService & AbstractEntity 
 
   """The language of the smart contract set"""
   language: SmartContractLanguage!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -6504,6 +6591,9 @@ type CustomDeployment implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -6858,6 +6948,9 @@ type EVMLoadBalancer implements AbstractClusterService & AbstractEntity & LoadBa
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7017,6 +7110,9 @@ type FabricBlockchainNode implements AbstractClusterService & AbstractEntity & B
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7162,6 +7258,9 @@ type FabricLoadBalancer implements AbstractClusterService & AbstractEntity & Loa
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7327,6 +7426,9 @@ type FabricRaftBlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7487,6 +7589,9 @@ type FabricSmartContractSet implements AbstractClusterService & AbstractEntity &
 
   """The language of the smart contract set"""
   language: SmartContractLanguage!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7655,6 +7760,9 @@ type FantomMainnetBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7804,6 +7912,9 @@ type FantomMainnetBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -7958,6 +8069,9 @@ type FantomTestnetBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -8107,6 +8221,9 @@ type FantomTestnetBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -8273,6 +8390,9 @@ type FireflyFabconnectMiddleware implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -8415,6 +8535,9 @@ type GethBlockchainNode implements AbstractClusterService & AbstractEntity & Blo
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -8581,6 +8704,9 @@ type GethCliqueBlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -8730,6 +8856,9 @@ type GethCliqueBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Key material for the blockchain node"""
   keyMaterial: AccessibleEcdsaP256PrivateKey
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9028,6 +9157,9 @@ type GethGoerliBlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9177,6 +9309,9 @@ type GethGoerliBlockchainNode implements AbstractClusterService & AbstractEntity
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9331,6 +9466,9 @@ type GethPoSRinkebyBlockchainNetwork implements AbstractClusterService & Abstrac
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9490,6 +9628,9 @@ type GethPoWBlockchainNetwork implements AbstractClusterService & AbstractEntity
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9639,6 +9780,9 @@ type GethRinkebyBlockchainNode implements AbstractClusterService & AbstractEntit
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9793,6 +9937,9 @@ type GethVenidiumBlockchainNetwork implements AbstractClusterService & AbstractE
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -9942,6 +10089,9 @@ type GethVenidiumBlockchainNode implements AbstractClusterService & AbstractEnti
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -10085,6 +10235,9 @@ type GraphMiddleware implements AbstractClusterService & AbstractEntity & Middle
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -10227,6 +10380,9 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -10367,6 +10523,9 @@ type Hasura implements AbstractClusterService & AbstractEntity & Integration {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -10504,6 +10663,9 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
 
   """CPU limit in millicores"""
   limitCpu: Int
@@ -10661,6 +10823,9 @@ type HederaMainnetBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -10810,6 +10975,9 @@ type HederaMainnetBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -10964,6 +11132,9 @@ type HederaTestnetBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -11113,6 +11284,9 @@ type HederaTestnetBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -11267,6 +11441,9 @@ type HoleskyBlockchainNetwork implements AbstractClusterService & AbstractEntity
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -11416,6 +11593,9 @@ type HoleskyBlockchainNode implements AbstractClusterService & AbstractEntity & 
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -11558,6 +11738,9 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
 
   """CPU limit in millicores"""
   limitCpu: Int
@@ -11705,6 +11888,9 @@ type HyperledgerExplorer implements AbstractClusterService & AbstractEntity & In
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -11839,6 +12025,9 @@ type IPFSStorage implements AbstractClusterService & AbstractEntity & Storage {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -11984,6 +12173,9 @@ interface Insights implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -12208,6 +12400,9 @@ interface Integration implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -12359,6 +12554,9 @@ type IntegrationStudio implements AbstractClusterService & AbstractEntity & Inte
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -12529,6 +12727,9 @@ interface LoadBalancer implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -12704,6 +12905,9 @@ interface Middleware implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -12867,6 +13071,9 @@ type MinioStorage implements AbstractClusterService & AbstractEntity & Storage {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -14968,6 +15175,9 @@ type OptimismBlockchainNetwork implements AbstractClusterService & AbstractEntit
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -15117,6 +15327,9 @@ type OptimismBlockchainNode implements AbstractClusterService & AbstractEntity &
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -15271,6 +15484,9 @@ type OptimismGoerliBlockchainNetwork implements AbstractClusterService & Abstrac
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -15420,6 +15636,9 @@ type OptimismGoerliBlockchainNode implements AbstractClusterService & AbstractEn
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -15574,6 +15793,9 @@ type OptimismSepoliaBlockchainNetwork implements AbstractClusterService & Abstra
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -15723,6 +15945,9 @@ type OptimismSepoliaBlockchainNode implements AbstractClusterService & AbstractE
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -15866,6 +16091,9 @@ type OtterscanBlockchainExplorer implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -16201,6 +16429,9 @@ type PolygonAmoyBlockchainNetwork implements AbstractClusterService & AbstractEn
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -16350,6 +16581,9 @@ type PolygonAmoyBlockchainNode implements AbstractClusterService & AbstractEntit
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -16504,6 +16738,9 @@ type PolygonBlockchainNetwork implements AbstractClusterService & AbstractEntity
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -16653,6 +16890,9 @@ type PolygonBlockchainNode implements AbstractClusterService & AbstractEntity & 
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -16800,6 +17040,9 @@ type PolygonEdgeBlockchainNode implements AbstractClusterService & AbstractEntit
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """Libp2p key of the blockchain node"""
@@ -17133,6 +17376,9 @@ type PolygonEdgePoABlockchainNetwork implements AbstractClusterService & Abstrac
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -17289,6 +17535,9 @@ type PolygonMumbaiBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -17438,6 +17687,9 @@ type PolygonMumbaiBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -17598,6 +17850,9 @@ type PolygonSupernetBlockchainNetwork implements AbstractClusterService & Abstra
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -17756,6 +18011,9 @@ type PolygonSupernetBlockchainNode implements AbstractClusterService & AbstractE
 
   """Key material for the blockchain node"""
   keyMaterial: AccessibleEcdsaP256PrivateKey
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """Libp2p key for the blockchain node"""
@@ -17925,6 +18183,9 @@ type PolygonZkEvmBlockchainNetwork implements AbstractClusterService & AbstractE
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -18074,6 +18335,9 @@ type PolygonZkEvmBlockchainNode implements AbstractClusterService & AbstractEnti
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -18228,6 +18492,9 @@ type PolygonZkEvmTestnetBlockchainNetwork implements AbstractClusterService & Ab
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -18377,6 +18644,9 @@ type PolygonZkEvmTestnetBlockchainNode implements AbstractClusterService & Abstr
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -18515,6 +18785,9 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
 
   """CPU limit in millicores"""
   limitCpu: Int
@@ -19481,6 +19754,9 @@ type QuorumQBFTBlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -19636,6 +19912,9 @@ type QuorumQBFTBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Key material for the blockchain node"""
   keyMaterial: AccessibleEcdsaP256PrivateKey
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -20028,6 +20307,9 @@ type SepoliaBlockchainNetwork implements AbstractClusterService & AbstractEntity
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -20177,6 +20459,9 @@ type SepoliaBlockchainNode implements AbstractClusterService & AbstractEntity & 
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -20348,6 +20633,9 @@ type SmartContractPortalMiddleware implements AbstractClusterService & AbstractE
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -20569,6 +20857,9 @@ interface SmartContractSet implements AbstractClusterService & AbstractEntity {
 
   """The language of the smart contract set"""
   language: SmartContractLanguage!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -20739,6 +21030,9 @@ type SoliditySmartContractSet implements AbstractClusterService & AbstractEntity
 
   """The language of the smart contract set"""
   language: SmartContractLanguage!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -20890,6 +21184,9 @@ type SoneiumMinatoBlockchainNetwork implements AbstractClusterService & Abstract
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -21039,6 +21336,9 @@ type SoneiumMinatoBlockchainNode implements AbstractClusterService & AbstractEnt
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -21172,6 +21472,9 @@ interface Storage implements AbstractClusterService & AbstractEntity {
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -21348,6 +21651,7 @@ type StripeSubscription {
 
 type Subgraph {
   chain: String!
+  graphqlQueryEndpoint: ClusterServiceEndpoints!
   hash: String!
   isActive: Boolean!
   name: String!
@@ -21474,6 +21778,9 @@ type TezosBlockchainNetwork implements AbstractClusterService & AbstractEntity &
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -21617,6 +21924,9 @@ type TezosBlockchainNode implements AbstractClusterService & AbstractEntity & Bl
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -21775,6 +22085,9 @@ type TezosSmartContractSet implements AbstractClusterService & AbstractEntity & 
 
   """The language of the smart contract set"""
   language: SmartContractLanguage!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -21923,6 +22236,9 @@ type TezosTestnetBlockchainNetwork implements AbstractClusterService & AbstractE
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""
@@ -22066,6 +22382,9 @@ type TezosTestnetBlockchainNode implements AbstractClusterService & AbstractEnti
   isPodRunning: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
   latestVersion: String!
 
   """CPU limit in millicores"""

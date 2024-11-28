@@ -1,10 +1,10 @@
-import { existsSync, mkdirSync } from "node:fs";
+import { exists, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
-export function ensureFolder(path: string): void {
+export async function ensureFolder(path: string): Promise<void> {
   // Create the output directory if it doesn't exist
   const outputDir = dirname(path);
-  if (!existsSync(outputDir)) {
-    mkdirSync(outputDir, { recursive: true });
+  if (!(await exists(outputDir))) {
+    await mkdir(outputDir, { recursive: true });
   }
 }
