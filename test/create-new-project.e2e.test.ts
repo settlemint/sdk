@@ -64,7 +64,7 @@ describe("Setup a project using the SDK", () => {
   test("Create a starter kit project", async () => {
     const { cwd, output } = await runCommand(["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME]);
     projectDir = join(cwd, PROJECT_NAME);
-    expect((await stat(join(cwd, PROJECT_NAME))).isDirectory()).toBeTruthy();
+    expect((await stat(join(cwd, PROJECT_NAME))).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
   });
 
@@ -120,7 +120,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create blockchain network and node on the platform", async () => {
-    expect(createdResources.application).toBeTruthy();
+    expect(createdResources.application).toBeTrue();
     const { output: networkOutput } = await runCommand(
       [
         "platform",
@@ -146,7 +146,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create HD private key on the platform", async () => {
-    expect(createdResources.blockchainNode).toBeTruthy();
+    expect(createdResources.blockchainNode).toBeTrue();
     const { output: privateKeyOutput } = await runCommand(
       [
         "platform",
@@ -170,7 +170,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create smart contract set and deploy on the platform", async () => {
-    expect(createdResources.blockchainNode).toBeTruthy();
+    expect(createdResources.blockchainNode).toBeTrue();
     const { output: smartContractSetOutput } = await runCommand(
       [
         "platform",
@@ -195,7 +195,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create IPFS storage on the platform", async () => {
-    expect(createdResources.application).toBeTruthy();
+    expect(createdResources.application).toBeTrue();
     const { output: ipfsOutput } = await runCommand(
       [
         "platform",
@@ -218,8 +218,8 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create graph middleware on the platform", async () => {
-    expect(createdResources.smartContractSet).toBeTruthy();
-    expect(createdResources.ipfsStorage).toBeTruthy();
+    expect(createdResources.smartContractSet).toBeTrue();
+    expect(createdResources.ipfsStorage).toBeTrue();
     const { output: graphOutput } = await runCommand(
       [
         "platform",
@@ -257,13 +257,13 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Connect starter kit", async () => {
-    expect(Object.values(createdResources).includes(false)).toBeTruthy();
+    expect(Object.values(createdResources).includes(false)).toBeFalse();
     const { output } = await runCommand(["connect", "--accept-defaults"], { cwd: projectDir });
     expect(output).toInclude("Connected to SettleMint");
   });
 
   test("Codegen starter kit", async () => {
-    expect(Object.values(createdResources).includes(false)).toBeTruthy();
+    expect(Object.values(createdResources).includes(false)).toBeFalse();
     const { output } = await runCommand(["codegen"], { cwd: projectDir });
     expect(output).toInclude("Schema was generated successfully");
     expect(output).toInclude("Introspection output was generated successfully");
@@ -279,7 +279,7 @@ describe("Setup a project using the SDK", () => {
   test.skip("Validate that .env file has the correct values", async () => {});
 
   test("Delete created resources on the platform", async () => {
-    expect(createdResources.application).toBeTruthy();
+    expect(createdResources.application).toBeTrue();
     const { output: deleteApplicationOutput } = await runCommand(
       ["platform", "delete", "application", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
