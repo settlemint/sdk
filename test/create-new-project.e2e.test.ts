@@ -1,11 +1,11 @@
-import { afterAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import { isLocalEnv } from "./utils/is-local-env";
-import { runCommand } from "./utils/run-command";
+import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
 const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
@@ -23,6 +23,14 @@ const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 
 let projectDir: string;
 let workspaceDeleted = false;
+const createdResources = {
+  application: false,
+  blockchainNode: false,
+  hdPrivateKey: false,
+  ipfsStorage: false,
+  smartContractSet: false,
+  graphMiddleware: false,
+};
 
 setDefaultTimeout(10 * 60_000);
 
@@ -48,6 +56,10 @@ afterAll(async () => {
   }
 });
 
+afterEach(() => {
+  forceExitAllCommands();
+});
+
 describe("Setup a project using the SDK", () => {
   test("Create a starter kit project", async () => {
     const { cwd, output } = await runCommand(["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME]);
@@ -57,6 +69,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create workspace and application on the platform", async () => {
+    expect(projectDir).toBeString();
     const { output: workspaceOutput } = await runCommand(
       [
         "platform",
@@ -103,9 +116,11 @@ describe("Setup a project using the SDK", () => {
       { cwd: projectDir },
     );
     expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
+    createdResources.application = true;
   });
 
   test("Create blockchain network and node on the platform", async () => {
+    expect(createdResources.application).toBeTruthy();
     const { output: networkOutput } = await runCommand(
       [
         "platform",
@@ -127,9 +142,11 @@ describe("Setup a project using the SDK", () => {
     );
     expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkOutput).toInclude("Blockchain node is deployed");
+    createdResources.blockchainNode = true;
   });
 
   test("Create HD private key on the platform", async () => {
+    expect(createdResources.blockchainNode).toBeTruthy();
     const { output: privateKeyOutput } = await runCommand(
       [
         "platform",
@@ -149,9 +166,11 @@ describe("Setup a project using the SDK", () => {
     );
     expect(privateKeyOutput).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
     expect(privateKeyOutput).toInclude("Private key is deployed");
+    createdResources.hdPrivateKey = true;
   });
 
   test("Create smart contract set and deploy on the platform", async () => {
+    expect(createdResources.blockchainNode).toBeTruthy();
     const { output: smartContractSetOutput } = await runCommand(
       [
         "platform",
@@ -172,9 +191,11 @@ describe("Setup a project using the SDK", () => {
     );
     expect(smartContractSetOutput).toInclude(`Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`);
     expect(smartContractSetOutput).toInclude("Smart contract set is deployed");
+    createdResources.smartContractSet = true;
   });
 
   test("Create IPFS storage on the platform", async () => {
+    expect(createdResources.application).toBeTruthy();
     const { output: ipfsOutput } = await runCommand(
       [
         "platform",
@@ -197,6 +218,8 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Create graph middleware on the platform", async () => {
+    expect(createdResources.smartContractSet).toBeTruthy();
+    expect(createdResources.ipfsStorage).toBeTruthy();
     const { output: graphOutput } = await runCommand(
       [
         "platform",
@@ -216,6 +239,7 @@ describe("Setup a project using the SDK", () => {
     );
     expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
     expect(graphOutput).toInclude("Middleware is deployed");
+    createdResources.graphMiddleware = true;
   });
 
   test.skip("Create smart contract portal middleware on the platform", () => {});
@@ -233,11 +257,13 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Connect starter kit", async () => {
+    expect(Object.values(createdResources).includes(false)).toBeTruthy();
     const { output } = await runCommand(["connect", "--accept-defaults"], { cwd: projectDir });
     expect(output).toInclude("Connected to SettleMint");
   });
 
   test("Codegen starter kit", async () => {
+    expect(Object.values(createdResources).includes(false)).toBeTruthy();
     const { output } = await runCommand(["codegen"], { cwd: projectDir });
     expect(output).toInclude("Schema was generated successfully");
     expect(output).toInclude("Introspection output was generated successfully");
@@ -253,6 +279,7 @@ describe("Setup a project using the SDK", () => {
   test.skip("Validate that .env file has the correct values", async () => {});
 
   test("Delete created resources on the platform", async () => {
+    expect(createdResources.application).toBeTruthy();
     const { output: deleteApplicationOutput } = await runCommand(
       ["platform", "delete", "application", "--accept-defaults", "--force", "default"],
       { cwd: projectDir },
