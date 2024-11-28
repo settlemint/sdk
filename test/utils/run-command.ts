@@ -1,10 +1,15 @@
+import { randomBytes } from "node:crypto";
 import { resolve } from "node:path";
 import { $ } from "bun";
 import { isLocalEnv } from "./is-local-env";
 
+const authSecret = randomBytes(32).toString("hex");
+
 const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN,
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE,
+  SETTLEMINT_AUTH_SECRET: authSecret,
+  NEXTAUTH_URL: "http://localhost:3000",
 };
 
 if (isLocalEnv()) {

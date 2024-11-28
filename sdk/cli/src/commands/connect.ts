@@ -2,6 +2,7 @@ import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -85,6 +86,7 @@ export function connectCommand(): Command {
         )?.displayValue;
 
         await writeEnvSpinner(!!prod, {
+          ...PRE_DEPLOYED_CONTRACTS,
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,
@@ -120,9 +122,6 @@ export function connectCommand(): Command {
           )?.displayValue,
           SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id.includes("gateway"))
             ?.displayValue,
-          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: "0x5e771e1417100000000000000000000000000001",
-          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: "0x5e771e1417100000000000000000000000000002",
-          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: "0x5e771e1417100000000000000000000000000003",
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
           SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) =>
             endpoint.id.includes("internal"),

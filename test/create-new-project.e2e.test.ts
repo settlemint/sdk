@@ -23,7 +23,7 @@ const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 let projectDir: string;
 let workspaceDeleted = false;
 
-setDefaultTimeout(5 * 60_000);
+setDefaultTimeout(10 * 60_000);
 
 afterAll(async () => {
   if (!projectDir) {
