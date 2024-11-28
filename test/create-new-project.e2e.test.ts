@@ -233,6 +233,7 @@ describe("Setup a project using the SDK", () => {
     );
     expect(ipfsOutput).toInclude(`Storage ${IPFS_NAME} created successfully`);
     expect(ipfsOutput).toInclude("Storage is deployed");
+    createdResources.ipfsStorage = true;
   });
 
   test("Create graph middleware on the platform", async () => {
