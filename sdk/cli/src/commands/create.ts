@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync } from "node:fs";
+import { exists, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { namePrompt } from "@/commands/create/name.prompt";
 import { templatePrompt } from "@/commands/create/template.prompt";
@@ -36,11 +36,11 @@ export function createCommand(): Command {
 
         const targetDir = formatTargetDir(name);
         const projectDir = join(process.cwd(), targetDir);
-        if (!existsSync(projectDir)) {
-          mkdirSync(projectDir, { recursive: true });
+        if (!(await exists(projectDir))) {
+          await mkdir(projectDir, { recursive: true });
         }
 
-        if (!isEmpty(projectDir)) {
+        if (!(await isEmpty(projectDir))) {
           const confirmEmpty = await confirm({
             message: `The folder ${projectDir} already exists. Do you want to empty it?`,
             default: false,
@@ -48,7 +48,7 @@ export function createCommand(): Command {
           if (!confirmEmpty) {
             cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
           }
-          emptyDir(projectDir);
+          await emptyDir(projectDir);
         }
 
         const selectedTemplate = await templatePrompt(templates, template);

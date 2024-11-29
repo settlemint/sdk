@@ -14,7 +14,7 @@
   "biome.requireConfigFile": true,
   "editor.codeActionsOnSave": {
     "quickfix.biome": "explicit",
-    "source.organizeImports": "explicit",
+    "source.organizeImports": "never",
     "source.organizeImports.biome": "explicit"
   },
   "editor.defaultFormatter": "biomejs.biome",

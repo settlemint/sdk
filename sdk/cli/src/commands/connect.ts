@@ -1,7 +1,8 @@
-import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
+import { getHAGraphEndpoint, getIpfsEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -74,17 +75,12 @@ export function connectCommand(): Command {
         const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
         const authSecret = await authSecretPrompt(env, autoAccept);
 
-        const theGraph = await testGqlEndpoint(
-          accessToken,
-          undefined,
-          thegraph?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
-        );
-
         const blockscoutEndpoint = blockscout?.endpoints.find((endpoint) =>
           endpoint.id.includes("interface"),
         )?.displayValue;
 
         await writeEnvSpinner(!!prod, {
+          ...PRE_DEPLOYED_CONTRACTS,
           SETTLEMINT_ACCESS_TOKEN: accessToken,
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,
@@ -96,9 +92,7 @@ export function connectCommand(): Command {
             credential.id.includes("admin-secret"),
           )?.displayValue,
           SETTLEMINT_THEGRAPH: thegraph?.id,
-          SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: thegraph?.endpoints.find((endpoint) =>
-            endpoint.id.includes(theGraph ? "graphql" : "default-subgraph-graphql"),
-          )?.displayValue,
+          ...(await getHAGraphEndpoint(thegraph, env)),
           SETTLEMINT_PORTAL: portal?.id,
           SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
             ?.displayValue,
@@ -114,15 +108,7 @@ export function connectCommand(): Command {
           SETTLEMINT_MINIO_SECRET_KEY: minio?.credentials.find((credential) => credential.id.includes("secret-key"))
             ?.displayValue,
           SETTLEMINT_IPFS: ipfs?.id,
-          SETTLEMINT_IPFS_API_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id.includes("api"))?.displayValue,
-          SETTLEMINT_IPFS_PINNING_ENDPOINT: ipfs?.endpoints.find((endpoint) =>
-            endpoint.id.includes("cluster-pinning-api"),
-          )?.displayValue,
-          SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ipfs?.endpoints.find((endpoint) => endpoint.id.includes("gateway"))
-            ?.displayValue,
-          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: "0x5e771e1417100000000000000000000000000001",
-          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: "0x5e771e1417100000000000000000000000000002",
-          SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: "0x5e771e1417100000000000000000000000000003",
+          ...getIpfsEndpoints(ipfs),
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
           SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) =>
             endpoint.id.includes("internal"),

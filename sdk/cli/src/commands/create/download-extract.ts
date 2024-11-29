@@ -1,4 +1,4 @@
-import { mkdirSync } from "node:fs";
+import { mkdir } from "node:fs/promises";
 import type { Template } from "@settlemint/sdk-utils/package-manager";
 import { downloadTemplate } from "giget";
 
@@ -17,7 +17,7 @@ import { downloadTemplate } from "giget";
  */
 export async function downloadAndExtractNpmPackage(template: Template["value"], targetDir: string): Promise<void> {
   // Create target directory if it doesn't exist
-  mkdirSync(targetDir, { recursive: true });
+  await mkdir(targetDir, { recursive: true });
 
   // Fetch the latest version from npm registry
   const response = await fetch(`https://registry.npmjs.org/${template}`);

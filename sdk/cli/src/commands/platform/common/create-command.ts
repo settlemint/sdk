@@ -96,19 +96,18 @@ export function getCreateCommand({
         ? {
             SETTLEMINT_ACCESS_TOKEN: accessToken,
             SETTLEMINT_INSTANCE: instance,
-            SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY,
-            SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY,
-            SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY: env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY,
+            SETTLEMINT_AUTH_SECRET: env.SETTLEMINT_AUTH_SECRET,
+            NEXTAUTH_URL: env.NEXTAUTH_URL,
             ...updatedEnv,
           }
         : {
             ...env,
             ...updatedEnv,
           };
-      if (isApplicationChanged) {
-        newEnv.SETTLEMINT_WORKSPACE = updatedEnv.SETTLEMINT_APPLICATION
-          ? (await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)).workspace.id
-          : env.SETTLEMINT_WORKSPACE!;
+      if (isApplicationChanged && updatedEnv.SETTLEMINT_APPLICATION) {
+        newEnv.SETTLEMINT_WORKSPACE = (
+          await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)
+        ).workspace.id;
       }
       if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
         newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (

@@ -1,3 +1,4 @@
+import isInCi from "is-in-ci";
 import yoctoSpinner from "yocto-spinner";
 import { redBright } from "yoctocolors";
 import { note } from "./note.js";
@@ -9,6 +10,9 @@ interface SpinnerOptions<R> {
 }
 
 export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
+  if (isInCi) {
+    return options.task();
+  }
   const spinner = yoctoSpinner().start(options.startMessage);
   try {
     const result = await options.task();

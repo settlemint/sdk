@@ -22,6 +22,15 @@ const MiddlewareFragment = graphql(`
       label
       displayValue
     }
+    ... on HAGraphMiddleware {
+      subgraphs {
+        name
+        graphqlQueryEndpoint {
+          displayValue
+          id
+        }
+      }
+    }
   }
 `);
 
