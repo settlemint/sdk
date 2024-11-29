@@ -1,7 +1,8 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { getCreateCommand } from "@/commands/platform/common/create-command";
+import { getHAGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { getCreateCommand } from "../../common/create-command";
 
 /**
  * Creates and returns the 'graph' middleware command for the SettleMint SDK.
@@ -17,7 +18,7 @@ export function graphMiddlewareCreateCommand() {
       addClusterServiceArgs(cmd)
         .option("--application-id <applicationId>", "Application ID")
         .option("--smart-contract-set-id <smartContractSetId>", "Smart Contract Set ID")
-        .option("--storage-id <storageId>", "Storage ID")
+        .option("--storage-id <storageId>", "Storage ID (IFPS)")
         .option("--blockchain-node-id <blockchainNodeId>", "Blockchain Node ID")
         .action(
           async (
@@ -38,7 +39,7 @@ export function graphMiddlewareCreateCommand() {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
               const smartContractSet = smartContractSetId ?? env.SETTLEMINT_SMART_CONTRACT_SET!;
               const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
-              const storage = storageId ?? env.SETTLEMINT_IPFS ?? env.SETTLEMINT_MINIO!;
+              const storage = storageId ?? env.SETTLEMINT_IPFS;
               const result = await settlemint.middleware.create({
                 name,
                 applicationId: application,
@@ -54,19 +55,10 @@ export function graphMiddlewareCreateCommand() {
               return {
                 result,
                 mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                  const theGraph = await testGqlEndpoint(
-                    env.SETTLEMINT_ACCESS_TOKEN!,
-                    undefined,
-                    result?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
-                  );
                   return {
                     SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_SMART_CONTRACT_SET: smartContractSet,
-                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode,
                     SETTLEMINT_THEGRAPH: result.id,
-                    SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: result?.endpoints.find((endpoint) =>
-                      endpoint.id.includes(theGraph ? "graphql" : "default-subgraph-graphql"),
-                    )?.displayValue,
+                    ...(await getHAGraphEndpoint(result, env)),
                   };
                 },
               };
