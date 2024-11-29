@@ -1,4 +1,3 @@
-import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { getHAGraphEndpoint } from "@/utils/get-cluster-service-endpoint";

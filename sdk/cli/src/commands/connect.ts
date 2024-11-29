@@ -1,4 +1,3 @@
-import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
