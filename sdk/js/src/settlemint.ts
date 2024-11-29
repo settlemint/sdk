@@ -179,6 +179,9 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
           if (response.status < 500 && response.status !== 429 && response.status !== 408 && response.status !== 0) {
             return response;
           }
+          if (attempt === maxRetries) {
+            return response;
+          }
         } catch (error) {
           if (attempt === maxRetries) {
             throw error;

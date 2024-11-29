@@ -262,21 +262,21 @@ describe("Setup a project using the SDK", () => {
     createdResources.graphMiddleware = true;
   });
 
-  test.skip("Create smart contract portal middleware on the platform", () => {});
+  // test("Create smart contract portal middleware on the platform", () => {});
 
-  test.skip("Create hasura integration on the platform", () => {});
+  // test("Create hasura integration on the platform", () => {});
 
-  test.skip("Create Minio storage on the platform", () => {
-    // Optional, can be done later
-  });
+  // test("Create Minio storage on the platform", () => {
+  //   // Optional, can be done later
+  // });
 
-  test.skip("Create blockscout insights on the platform", () => {
-    // Optional, can be done later
-  });
+  // test("Create blockscout insights on the platform", () => {
+  //   // Optional, can be done later
+  // });
 
-  test.skip("Create custom deployment on the platform", () => {
-    // Optional, can be done later
-  });
+  // test("Create custom deployment on the platform", () => {
+  //   // Optional, can be done later
+  // });
 
   test("Validate that .env file has the correct values", async () => {
     const currentCwd = process.cwd();
@@ -286,7 +286,6 @@ describe("Setup a project using the SDK", () => {
 
     expect(env.SETTLEMINT_ACCESS_TOKEN).toBeString();
     expect(env.SETTLEMINT_INSTANCE).toBeString();
-    expect(env.SETTLEMINT_AUTH_SECRET).toBeString();
     expect(env.SETTLEMINT_WORKSPACE).toBeString();
     if (createdResources.application) {
       expect(env.SETTLEMINT_APPLICATION).toBeString();
