@@ -266,7 +266,9 @@ describe("Setup a project using the SDK", () => {
 
   test.skip("Create hasura integration on the platform", () => {});
 
-  test.skip("Create Minio storage on the platform", () => {});
+  test.skip("Create Minio storage on the platform", () => {
+    // Optional, can be done later
+  });
 
   test.skip("Create blockscout insights on the platform", () => {
     // Optional, can be done later
@@ -274,6 +276,44 @@ describe("Setup a project using the SDK", () => {
 
   test.skip("Create custom deployment on the platform", () => {
     // Optional, can be done later
+  });
+
+  test("Validate that .env file has the correct values", async () => {
+    const currentCwd = process.cwd();
+    process.chdir(projectDir);
+    const env: Partial<DotEnv> = await loadEnv(false, false);
+    process.chdir(currentCwd);
+
+    expect(env.SETTLEMINT_ACCESS_TOKEN).toBeString();
+    expect(env.SETTLEMINT_INSTANCE).toBeString();
+    expect(env.SETTLEMINT_AUTH_SECRET).toBeString();
+    expect(env.SETTLEMINT_WORKSPACE).toBeString();
+    if (createdResources.application) {
+      expect(env.SETTLEMINT_APPLICATION).toBeString();
+    }
+    if (createdResources.blockchainNode) {
+      expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK).toBeString();
+      expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeString();
+      expect(env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY).toBeString();
+      expect(env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY).toBeString();
+      expect(env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY).toBeString();
+    }
+    if (createdResources.hdPrivateKey) {
+      expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
+    }
+    if (createdResources.smartContractSet) {
+      expect(env.SETTLEMINT_SMART_CONTRACT_SET).toBeString();
+    }
+    if (createdResources.ipfsStorage) {
+      expect(env.SETTLEMINT_IPFS).toBeString();
+      expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
+      expect(env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT).toBeString();
+      expect(env.SETTLEMINT_IPFS_PINNING_ENDPOINT).toBeString();
+    }
+    if (createdResources.graphMiddleware) {
+      expect(env.SETTLEMINT_THEGRAPH).toBeString();
+      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toBeString();
+    }
   });
 
   test("Connect starter kit", async () => {
@@ -295,8 +335,6 @@ describe("Setup a project using the SDK", () => {
     await $`bun lint`.cwd(projectDir);
     await $`bun run build`.cwd(projectDir);
   });
-
-  test.skip("Validate that .env file has the correct values", async () => {});
 
   test("Delete created resources on the platform", async () => {
     expect(createdResources.application).toBeTrue();
