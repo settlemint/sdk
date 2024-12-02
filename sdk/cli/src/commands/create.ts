@@ -1,4 +1,4 @@
-import { exists, mkdir } from "node:fs/promises";
+import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { namePrompt } from "@/commands/create/name.prompt";
 import { templatePrompt } from "@/commands/create/template.prompt";
@@ -6,6 +6,7 @@ import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { exists } from "@settlemint/sdk-utils/filesystem";
 import { emptyDir, formatTargetDir, isEmpty, setName, templates } from "@settlemint/sdk-utils/package-manager";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import { downloadAndExtractNpmPackage } from "./create/download-extract";
