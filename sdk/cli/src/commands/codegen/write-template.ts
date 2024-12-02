@@ -1,6 +1,7 @@
-import { exists, mkdir, writeFile } from "node:fs/promises";
+import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { exists } from "@settlemint/sdk-utils/filesystem";
 
 export async function writeTemplate(template: string, directory: string, filename: string) {
   const projectDir = await projectRoot();

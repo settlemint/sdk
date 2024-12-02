@@ -1,5 +1,6 @@
-import { exists, readdir, rm } from "node:fs/promises";
+import { readdir, rm } from "node:fs/promises";
 import { resolve } from "node:path";
+import { exists } from "../filesystem.js";
 
 /**
  * Array of available templates for project creation.
