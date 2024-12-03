@@ -11,12 +11,8 @@ export async function getHAGraphEndpoint(
   }
 
   const testEndpoint = service.subgraphs.find(
-    ({ graphqlQueryEndpoint }) => !graphqlQueryEndpoint?.id.includes("-starterkits"),
+    ({ graphqlQueryEndpoint }) => !graphqlQueryEndpoint?.id.endsWith("-starterkits"),
   )?.graphqlQueryEndpoint?.displayValue;
-
-  if (!testEndpoint) {
-    return {};
-  }
 
   const hasEndpoint =
     testEndpoint && env.SETTLEMINT_ACCESS_TOKEN

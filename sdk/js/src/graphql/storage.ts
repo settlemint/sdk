@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const StorageFragment = graphql(`
   fragment Storage on Storage {
+    __typename
     id
     name
     status
