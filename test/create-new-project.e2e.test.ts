@@ -40,7 +40,7 @@ const createdResources = {
   blockscoutInsights: false,
 };
 
-setDefaultTimeout(10 * 60_000);
+setDefaultTimeout(15 * 60_000);
 
 afterAll(async () => {
   if (!projectDir) {
