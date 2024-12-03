@@ -42,7 +42,7 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   }
 
   try {
-    return validate(validateEnv ? DotEnvSchema : DotEnvSchemaPartial, process.env) as T extends true
+    return validate(validateEnv ? DotEnvSchema : DotEnvSchemaPartial, parsed) as T extends true
       ? DotEnv
       : DotEnvPartial;
   } catch (error) {

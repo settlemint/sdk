@@ -337,6 +337,7 @@ describe("Setup a project using the SDK", () => {
   test("Validate that .env file has the correct values", async () => {
     const currentCwd = process.cwd();
     process.chdir(projectDir);
+    process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
     process.chdir(currentCwd);
 
@@ -368,6 +369,16 @@ describe("Setup a project using the SDK", () => {
     if (createdResources.graphMiddleware) {
       expect(env.SETTLEMINT_THEGRAPH).toBeString();
       expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toBeString();
+    }
+    if (createdResources.portalMiddleware) {
+      expect(env.SETTLEMINT_PORTAL).toBeString();
+      expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
+      expect(env.SETTLEMINT_PORTAL_REST_ENDPOINT).toBeString();
+    }
+    if (createdResources.hasuraIntegration) {
+      expect(env.SETTLEMINT_HASURA).toBeString();
+      expect(env.SETTLEMINT_HASURA_ENDPOINT).toBeString();
+      expect(env.SETTLEMINT_HASURA_ADMIN_SECRET).toBeString();
     }
   });
 
