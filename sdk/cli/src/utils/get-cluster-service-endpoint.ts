@@ -46,3 +46,15 @@ export function getIpfsEndpoints(service: Storage | undefined): Partial<DotEnv> 
       ?.displayValue,
   };
 }
+
+export function getPortalEndpoints(service: Middleware | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "SmartContractPortalMiddleware") {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
+      ?.displayValue,
+    SETTLEMINT_PORTAL_REST_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("rest"))?.displayValue,
+  };
+}

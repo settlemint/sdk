@@ -2,7 +2,7 @@ import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
-import { getHAGraphEndpoint, getIpfsEndpoints } from "@/utils/get-cluster-service-endpoint";
+import { getHAGraphEndpoint, getIpfsEndpoints, getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -93,11 +93,7 @@ export function connectCommand(): Command {
           )?.displayValue,
           SETTLEMINT_THEGRAPH: thegraph?.id,
           ...(await getHAGraphEndpoint(thegraph, env)),
-          SETTLEMINT_PORTAL: portal?.id,
-          SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
-            ?.displayValue,
-          SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("rest"))
-            ?.displayValue,
+          ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           NEXTAUTH_URL: authUrl,
           SETTLEMINT_AUTH_SECRET: authSecret,
