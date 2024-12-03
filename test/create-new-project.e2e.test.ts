@@ -139,107 +139,214 @@ describe("Setup a project using the SDK", () => {
     createdResources.application = true;
   });
 
-  test("Create blockchain network and node on the platform", async () => {
+  test("Create blockchain network, node, hasura integration and IPFS storage on the platform", async () => {
     expect(createdResources.application).toBeTrue();
-    const { output: networkOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "blockchain-network",
-        "besu",
-        NETWORK_NAME,
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--node-name",
-        NODE_NAME,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-      ],
-      { cwd: projectDir },
-    );
-    expect(networkOutput).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
-    expect(networkOutput).toInclude("Blockchain node is deployed");
-    createdResources.blockchainNode = true;
+
+    const results = await Promise.allSettled([
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "blockchain-network",
+          "besu",
+          NETWORK_NAME,
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--node-name",
+          NODE_NAME,
+          "--accept-defaults",
+          "--default",
+          "--wait",
+        ],
+        { cwd: projectDir },
+      ),
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "integration-tool",
+          "hasura",
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--accept-defaults",
+          "--default",
+          "--wait",
+          HASURA_NAME,
+        ],
+        { cwd: projectDir },
+      ),
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "storage",
+          "ipfs",
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--accept-defaults",
+          "--default",
+          "--wait",
+          IPFS_NAME,
+        ],
+        { cwd: projectDir },
+      ),
+    ]);
+
+    const [networkResult, hasuraResult, ipfsResult] = results;
+
+    expect([networkResult.status, hasuraResult.status, ipfsResult.status]).toEqual([
+      "fulfilled",
+      "fulfilled",
+      "fulfilled",
+    ]);
+
+    if (networkResult.status === "fulfilled") {
+      expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
+      expect(networkResult.value.output).toInclude("Blockchain node is deployed");
+      createdResources.blockchainNode = true;
+    }
+
+    if (hasuraResult.status === "fulfilled") {
+      expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
+      expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
+      createdResources.hasuraIntegration = true;
+    }
+
+    if (ipfsResult.status === "fulfilled") {
+      expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
+      expect(ipfsResult.value.output).toInclude("Storage is deployed");
+      createdResources.ipfsStorage = true;
+    }
   });
 
-  test("Create HD private key on the platform", async () => {
+  test("Create HD private key, smart contract set, portal middleware and blockscout insights on the platform", async () => {
     expect(createdResources.blockchainNode).toBeTrue();
-    const { output: privateKeyOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "private-key",
-        "hd-ecdsa-p256",
-        "--accept-defaults",
-        "--default",
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--wait",
-        PRIVATE_KEY_NAME,
-      ],
-      { cwd: projectDir },
-    );
-    expect(privateKeyOutput).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
-    expect(privateKeyOutput).toInclude("Private key is deployed");
-    createdResources.hdPrivateKey = true;
-  });
 
-  test("Create smart contract set and deploy on the platform", async () => {
-    expect(createdResources.blockchainNode).toBeTrue();
-    const { output: smartContractSetOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "smart-contract-set",
-        "--use-case",
-        "solidity-starterkit",
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-        SMART_CONTRACT_SET_NAME,
-      ],
-      { cwd: projectDir },
-    );
-    expect(smartContractSetOutput).toInclude(`Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`);
-    expect(smartContractSetOutput).toInclude("Smart contract set is deployed");
-    createdResources.smartContractSet = true;
-  });
+    const results = await Promise.allSettled([
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "private-key",
+          "hd-ecdsa-p256",
+          "--accept-defaults",
+          "--default",
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--wait",
+          PRIVATE_KEY_NAME,
+        ],
+        { cwd: projectDir },
+      ),
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "smart-contract-set",
+          "--use-case",
+          "solidity-starterkit",
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--accept-defaults",
+          "--default",
+          "--wait",
+          SMART_CONTRACT_SET_NAME,
+        ],
+        { cwd: projectDir },
+      ),
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "middleware",
+          "smart-contract-portal",
+          PORTAL_NAME,
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--accept-defaults",
+          "--default",
+          "--wait",
+          "--include-predeployed-abis",
+          "StarterKitERC20Registry",
+          "StarterKitERC20Factory",
+          "StarterKitERC20",
+          "StarterKitERC20DexFactory",
+          "StarterKitERC20Dex",
+        ],
+        { cwd: projectDir },
+      ),
+      runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "platform",
+          "create",
+          "insights",
+          "blockscout",
+          "--provider",
+          CLUSTER_PROVIDER,
+          "--region",
+          CLUSTER_REGION,
+          "--accept-defaults",
+          "--default",
+          "--wait",
+          BLOCKSCOUT_NAME,
+        ],
+        { cwd: projectDir },
+      ),
+    ]);
 
-  test("Create IPFS storage on the platform", async () => {
-    expect(createdResources.application).toBeTrue();
-    const { output: ipfsOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "storage",
-        "ipfs",
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-        IPFS_NAME,
-      ],
-      { cwd: projectDir },
-    );
-    expect(ipfsOutput).toInclude(`Storage ${IPFS_NAME} created successfully`);
-    expect(ipfsOutput).toInclude("Storage is deployed");
-    createdResources.ipfsStorage = true;
+    const [privateKeyResult, smartContractSetResult, portalResult, blockscoutResult] = results;
+
+    expect([
+      privateKeyResult.status,
+      smartContractSetResult.status,
+      portalResult.status,
+      blockscoutResult.status,
+    ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
+
+    if (privateKeyResult.status === "fulfilled") {
+      expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
+      expect(privateKeyResult.value.output).toInclude("Private key is deployed");
+      createdResources.hdPrivateKey = true;
+    }
+
+    if (smartContractSetResult.status === "fulfilled") {
+      expect(smartContractSetResult.value.output).toInclude(
+        `Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`,
+      );
+      expect(smartContractSetResult.value.output).toInclude("Smart contract set is deployed");
+      createdResources.smartContractSet = true;
+    }
+
+    if (portalResult.status === "fulfilled") {
+      expect(portalResult.value.output).toInclude(`Middleware ${PORTAL_NAME} created successfully`);
+      expect(portalResult.value.output).toInclude("Middleware is deployed");
+      createdResources.portalMiddleware = true;
+    }
+
+    if (blockscoutResult.status === "fulfilled") {
+      expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
+      expect(blockscoutResult.value.output).toInclude("Insights is deployed");
+      createdResources.blockscoutInsights = true;
+    }
   });
 
   test("Create graph middleware on the platform", async () => {
@@ -266,87 +373,6 @@ describe("Setup a project using the SDK", () => {
     expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
     expect(graphOutput).toInclude("Middleware is deployed");
     createdResources.graphMiddleware = true;
-  });
-
-  test("Create smart contract portal middleware on the platform", async () => {
-    expect(createdResources.blockchainNode).toBeTrue();
-    const { output: portalOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "middleware",
-        "smart-contract-portal",
-        PORTAL_NAME,
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-        "--include-predeployed-abis",
-        "StarterKitERC20Registry",
-        "StarterKitERC20Factory",
-        "StarterKitERC20",
-        "StarterKitERC20DexFactory",
-        "StarterKitERC20Dex",
-      ],
-      { cwd: projectDir },
-    );
-    expect(portalOutput).toInclude(`Middleware ${PORTAL_NAME} created successfully`);
-    expect(portalOutput).toInclude("Middleware is deployed");
-    createdResources.portalMiddleware = true;
-  });
-
-  test("Create hasura integration on the platform", async () => {
-    expect(createdResources.application).toBeTrue();
-    const { output: hasuraOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "integration-tool",
-        "hasura",
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-        HASURA_NAME,
-      ],
-      { cwd: projectDir },
-    );
-    expect(hasuraOutput).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
-    expect(hasuraOutput).toInclude("Integration tool is deployed");
-    createdResources.hasuraIntegration = true;
-  });
-
-  test("Create blockscout insights on the platform", async () => {
-    expect(createdResources.application).toBeTrue();
-    const { output: blockscoutOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      [
-        "platform",
-        "create",
-        "insights",
-        "blockscout",
-        "--provider",
-        CLUSTER_PROVIDER,
-        "--region",
-        CLUSTER_REGION,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-        BLOCKSCOUT_NAME,
-      ],
-      { cwd: projectDir },
-    );
-    expect(blockscoutOutput).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
-    expect(blockscoutOutput).toInclude("Insights is deployed");
-    createdResources.blockscoutInsights = true;
   });
 
   // test("Create Minio storage on the platform", () => {
