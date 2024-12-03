@@ -17,6 +17,8 @@ const PRIVATE_KEY_NAME = "Starter Kit Private Key";
 const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
 const IPFS_NAME = "Starter Kit IPFS";
 const GRAPH_NAME = "Starter Kit Graph";
+const PORTAL_NAME = "Starter Kit Portal";
+const HASURA_NAME = "Starter Kit Hasura";
 
 const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
@@ -32,6 +34,8 @@ const createdResources = {
   ipfsStorage: false,
   smartContractSet: false,
   graphMiddleware: false,
+  portalMiddleware: false,
+  hasuraIntegration: false,
 };
 
 setDefaultTimeout(10 * 60_000);
@@ -262,9 +266,61 @@ describe("Setup a project using the SDK", () => {
     createdResources.graphMiddleware = true;
   });
 
-  // test("Create smart contract portal middleware on the platform", () => {});
+  test("Create smart contract portal middleware on the platform", async () => {
+    expect(createdResources.blockchainNode).toBeTrue();
+    const { output: portalOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      [
+        "platform",
+        "create",
+        "middleware",
+        "smart-contract-portal",
+        PORTAL_NAME,
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        "--include-predeployed-abis",
+        "StarterKitERC20Registry",
+        "StarterKitERC20Factory",
+        "StarterKitERC20",
+        "StarterKitERC20DexFactory",
+        "StarterKitERC20Dex",
+      ],
+      { cwd: projectDir },
+    );
+    expect(portalOutput).toInclude(`Middleware ${PORTAL_NAME} created successfully`);
+    expect(portalOutput).toInclude("Middleware is deployed");
+    createdResources.portalMiddleware = true;
+  });
 
-  // test("Create hasura integration on the platform", () => {});
+  test("Create hasura integration on the platform", async () => {
+    expect(createdResources.application).toBeTrue();
+    const { output: hasuraOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      [
+        "platform",
+        "create",
+        "integration",
+        "hasura",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        HASURA_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(hasuraOutput).toInclude(`Integration ${HASURA_NAME} created successfully`);
+    expect(hasuraOutput).toInclude("Integration is deployed");
+    createdResources.hasuraIntegration = true;
+  });
 
   // test("Create Minio storage on the platform", () => {
   //   // Optional, can be done later
