@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const InsightsFragment = graphql(`
   fragment Insights on Insights {
+    __typename
     id
     name
     status
@@ -67,18 +68,24 @@ const createInsights = graphql(
   mutation createInsights(
     $applicationId: ID!
     $name: String!
+    $insightsCategory: InsightsCategory!
     $provider: String!
     $region: String!
     $size: ClusterServiceSize
-    $insightsCategory: InsightsCategory!
+    $type: ClusterServiceType
+    $blockchainNode: ID
+    $loadBalancer: ID
   ) {
     createInsights(
       applicationId: $applicationId
       name: $name
+      insightsCategory: $insightsCategory
       provider: $provider
       region: $region
       size: $size
-      insightsCategory: $insightsCategory
+      type: $type
+      blockchainNode: $blockchainNode
+      loadBalancer: $loadBalancer
     ) {
       ...Insights
     }

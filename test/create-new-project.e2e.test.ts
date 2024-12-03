@@ -19,6 +19,7 @@ const IPFS_NAME = "Starter Kit IPFS";
 const GRAPH_NAME = "Starter Kit Graph";
 const PORTAL_NAME = "Starter Kit Portal";
 const HASURA_NAME = "Starter Kit Hasura";
+const BLOCKSCOUT_NAME = "Starter Kit Blockscout";
 
 const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
@@ -36,6 +37,7 @@ const createdResources = {
   graphMiddleware: false,
   portalMiddleware: false,
   hasuraIntegration: false,
+  blockscoutInsights: false,
 };
 
 setDefaultTimeout(10 * 60_000);
@@ -322,11 +324,32 @@ describe("Setup a project using the SDK", () => {
     createdResources.hasuraIntegration = true;
   });
 
-  // test("Create Minio storage on the platform", () => {
-  //   // Optional, can be done later
-  // });
+  test("Create blockscout insights on the platform", async () => {
+    expect(createdResources.application).toBeTrue();
+    const { output: blockscoutOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      [
+        "platform",
+        "create",
+        "insights",
+        "blockscout",
+        "--provider",
+        CLUSTER_PROVIDER,
+        "--region",
+        CLUSTER_REGION,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        BLOCKSCOUT_NAME,
+      ],
+      { cwd: projectDir },
+    );
+    expect(blockscoutOutput).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
+    expect(blockscoutOutput).toInclude("Insights is deployed");
+    createdResources.blockscoutInsights = true;
+  });
 
-  // test("Create blockscout insights on the platform", () => {
+  // test("Create Minio storage on the platform", () => {
   //   // Optional, can be done later
   // });
 
@@ -380,6 +403,11 @@ describe("Setup a project using the SDK", () => {
       expect(env.SETTLEMINT_HASURA_ENDPOINT).toBeString();
       expect(env.SETTLEMINT_HASURA_ADMIN_SECRET).toBeString();
     }
+    if (createdResources.blockscoutInsights) {
+      expect(env.SETTLEMINT_BLOCKSCOUT).toBeString();
+      expect(env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT).toBeString();
+      expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
+    }
   });
 
   test("Connect starter kit", async () => {
@@ -405,6 +433,10 @@ describe("Setup a project using the SDK", () => {
     }
     if (createdResources.ipfsStorage) {
       expect(output).toInclude("Generating IPFS resources");
+      expect(output).toInclude("Schema was generated successfully");
+    }
+    if (createdResources.blockscoutInsights) {
+      expect(output).toInclude("Generating Blockscout resources");
       expect(output).toInclude("Schema was generated successfully");
     }
     expect(output).toInclude("Codegen complete");

@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const PrivateKeyFragment = graphql(`
   fragment PrivateKey on PrivateKey {
+    __typename
     id
     name
     uniqueName

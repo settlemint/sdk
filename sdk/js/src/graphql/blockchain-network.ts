@@ -9,6 +9,7 @@ import { setNetworkDefaults } from "../defaults/blockchain-network-defaults.js";
  */
 const BlockchainNetworkFragment = graphql(`
   fragment BlockchainNetwork on BlockchainNetwork {
+    __typename
     id
     name
     status

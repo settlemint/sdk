@@ -3,6 +3,7 @@ import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
 import {
+  getBlockscoutEndpoints,
   getHAGraphEndpoint,
   getHasuraEndpoints,
   getIpfsEndpoints,
@@ -111,10 +112,7 @@ export function connectCommand(): Command {
             endpoint.id.includes("internal"),
           )?.displayValue,
           SETTLEMINT_BLOCKSCOUT: blockscout?.id,
-          SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: blockscoutEndpoint
-            ? `${blockscoutEndpoint}/api/v1/graphql`
-            : undefined,
-          SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: blockscoutEndpoint,
+          ...getBlockscoutEndpoints(blockscout),
         });
 
         outro("Connected to SettleMint");

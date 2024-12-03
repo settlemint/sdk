@@ -1,5 +1,5 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
-import type { IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
+import type { Insights, IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
 export async function getHAGraphEndpoint(
@@ -68,5 +68,20 @@ export function getHasuraEndpoints(service: IntegrationTool | undefined): Partia
     SETTLEMINT_HASURA_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
     SETTLEMINT_HASURA_ADMIN_SECRET: service.credentials.find((credential) => credential.id.includes("admin-secret"))
       ?.displayValue,
+  };
+}
+
+export function getBlockscoutEndpoints(service: Insights | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "BlockchainExplorer") {
+    return {};
+  }
+
+  const uiEndpoint = service.endpoints.find((endpoint) => endpoint.id.includes("interface"))?.displayValue;
+
+  return {
+    SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: uiEndpoint
+      ? `${new URL("/api/v1/graphql", uiEndpoint).toString()}`
+      : undefined,
+    SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: uiEndpoint,
   };
 }
