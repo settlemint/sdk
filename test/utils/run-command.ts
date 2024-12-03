@@ -22,11 +22,13 @@ if (isLocalEnv()) {
 
 export async function runCommand(
   testScope: string,
-  command: string[],
-  options: { env?: Record<string, string>; cwd?: string } = {},
+  args: string[],
+  options: { isCli?: boolean; env?: Record<string, string>; cwd?: string } = {},
 ) {
   const cwd = options.cwd ?? resolve(__dirname, "../");
-  const proc = Bun.spawn(["bun", resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...command], {
+  const cmds =
+    options.isCli === false ? ["bun", ...args] : ["bun", resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...args];
+  const proc = Bun.spawn(cmds, {
     stdout: "pipe",
     cwd,
     env: {

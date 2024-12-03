@@ -472,7 +472,7 @@ describe("Setup a project using the SDK", () => {
     const env = { NODE_ENV: "production" };
     await $`bun install`.cwd(projectDir).env(env);
     await $`bun lint`.cwd(projectDir).env(env);
-    await $`bun run build`.cwd(projectDir).env(env);
+    await runCommand(COMMAND_TEST_SCOPE, ["run", "build"], { cwd: projectDir, isCli: false, env });
   });
 
   test("Delete created resources on the platform", async () => {
