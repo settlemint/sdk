@@ -396,7 +396,7 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test.skip("Build starter kit", async () => {
+  test("Build starter kit", async () => {
     await $`bun install`.cwd(projectDir);
     await $`bun lint`.cwd(projectDir);
     await $`bun run build`.cwd(projectDir);
