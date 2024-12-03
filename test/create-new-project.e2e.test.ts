@@ -304,7 +304,7 @@ describe("Setup a project using the SDK", () => {
       [
         "platform",
         "create",
-        "integration",
+        "integration-tool",
         "hasura",
         "--provider",
         CLUSTER_PROVIDER,
@@ -317,8 +317,8 @@ describe("Setup a project using the SDK", () => {
       ],
       { cwd: projectDir },
     );
-    expect(hasuraOutput).toInclude(`Integration ${HASURA_NAME} created successfully`);
-    expect(hasuraOutput).toInclude("Integration is deployed");
+    expect(hasuraOutput).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
+    expect(hasuraOutput).toInclude("Integration tool is deployed");
     createdResources.hasuraIntegration = true;
   });
 
