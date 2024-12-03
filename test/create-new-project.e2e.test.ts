@@ -443,9 +443,10 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Build starter kit", async () => {
-    await $`bun install`.cwd(projectDir);
-    await $`bun lint`.cwd(projectDir);
-    await $`bun run build`.cwd(projectDir);
+    const env = { NODE_ENV: "production" };
+    await $`bun install`.cwd(projectDir).env(env);
+    await $`bun lint`.cwd(projectDir).env(env);
+    await $`bun run build`.cwd(projectDir).env(env);
   });
 
   test("Delete created resources on the platform", async () => {
