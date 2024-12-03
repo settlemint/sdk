@@ -391,8 +391,22 @@ describe("Setup a project using the SDK", () => {
   test("Codegen starter kit", async () => {
     expect(Object.values(createdResources).includes(false)).toBeFalse();
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: projectDir });
-    expect(output).toInclude("Schema was generated successfully");
-    expect(output).toInclude("Introspection output was generated successfully");
+    if (createdResources.hasuraIntegration) {
+      expect(output).toInclude("Generating Hasura resources");
+      expect(output).toInclude("Schema was generated successfully");
+    }
+    if (createdResources.portalMiddleware) {
+      expect(output).toInclude("Generating Portal resources");
+      expect(output).toInclude("Schema was generated successfully");
+    }
+    if (createdResources.graphMiddleware) {
+      expect(output).toInclude("Generating TheGraph resources");
+      expect(output).toInclude("Introspection output was generated successfully");
+    }
+    if (createdResources.ipfsStorage) {
+      expect(output).toInclude("Generating IPFS resources");
+      expect(output).toInclude("Schema was generated successfully");
+    }
     expect(output).toInclude("Codegen complete");
   });
 

@@ -5,7 +5,7 @@ import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
@@ -41,21 +41,27 @@ export function codegenCommand(): Command {
 
         const promises: Promise<void>[] = [];
         if (hasura) {
+          note("Generating Hasura resources");
           promises.push(codegenHasura(env));
         }
         if (portal) {
+          note("Generating Portal resources");
           promises.push(codegenPortal(env));
         }
         if (thegraph) {
+          note("Generating TheGraph resources");
           promises.push(codegenTheGraph(env));
         }
         if (blockscout) {
+          note("Generating Blockscout resources");
           promises.push(codegenBlockscout(env));
         }
         if (shouldCodegenMinio(env)) {
+          note("Generating Minio resources");
           promises.push(codegenMinio(env));
         }
         if (shouldCodegenIpfs(env)) {
+          note("Generating IPFS resources");
           promises.push(codegenIpfs(env));
         }
 
