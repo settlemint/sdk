@@ -2,6 +2,7 @@ import { blockchainNetworkCreateCommand } from "@/commands/platform/blockchain-n
 import { workspaceCreateCommand } from "@/commands/platform/workspace/create";
 import { Command } from "@commander-js/extra-typings";
 import { applicationCreateCommand } from "./application/create";
+import { integrationToolCreateCommand } from "./integration-tools/create";
 import { middlewareCreateCommand } from "./middleware/create";
 import { privateKeyCreateCommand } from "./private-key/create";
 import { smartContractSetCreateCommand } from "./smart-contract-set/create";
@@ -23,5 +24,6 @@ export function createCommand(): Command {
     .addCommand(privateKeyCreateCommand())
     .addCommand(smartContractSetCreateCommand())
     .addCommand(middlewareCreateCommand())
-    .addCommand(storageCreateCommand());
+    .addCommand(storageCreateCommand())
+    .addCommand(integrationToolCreateCommand());
 }

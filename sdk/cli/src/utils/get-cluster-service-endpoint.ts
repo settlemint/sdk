@@ -1,5 +1,5 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
-import type { Middleware, Storage } from "@settlemint/sdk-js";
+import type { IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
 export async function getHAGraphEndpoint(
@@ -56,5 +56,17 @@ export function getPortalEndpoints(service: Middleware | undefined): Partial<Dot
     SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
       ?.displayValue,
     SETTLEMINT_PORTAL_REST_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("rest"))?.displayValue,
+  };
+}
+
+export function getHasuraEndpoints(service: IntegrationTool | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "Hasura") {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_HASURA_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
+    SETTLEMINT_HASURA_ADMIN_SECRET: service.credentials.find((credential) => credential.id.includes("admin-secret"))
+      ?.displayValue,
   };
 }

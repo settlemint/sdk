@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const IntegrationFragment = graphql(`
   fragment Integration on Integration {
+    __typename
     id
     name
     status
@@ -71,6 +72,7 @@ const createIntegration = graphql(
     $provider: String!
     $region: String!
     $size: ClusterServiceSize
+    $type: ClusterServiceType
   ) {
     createIntegration(
       applicationId: $applicationId
@@ -79,6 +81,7 @@ const createIntegration = graphql(
       provider: $provider
       region: $region
       size: $size
+      type: $type
     ) {
       ...Integration
     }

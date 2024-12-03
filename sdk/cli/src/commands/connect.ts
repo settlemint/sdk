@@ -2,7 +2,12 @@ import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
-import { getHAGraphEndpoint, getIpfsEndpoints, getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
+import {
+  getHAGraphEndpoint,
+  getHasuraEndpoints,
+  getIpfsEndpoints,
+  getPortalEndpoints,
+} from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -86,11 +91,7 @@ export function connectCommand(): Command {
           SETTLEMINT_WORKSPACE: workspace.id,
           SETTLEMINT_APPLICATION: application.id,
           SETTLEMINT_HASURA: hasura?.id,
-          SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
-            ?.displayValue,
-          SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) =>
-            credential.id.includes("admin-secret"),
-          )?.displayValue,
+          ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.id,
           ...(await getHAGraphEndpoint(thegraph, env)),
           ...getPortalEndpoints(portal),
