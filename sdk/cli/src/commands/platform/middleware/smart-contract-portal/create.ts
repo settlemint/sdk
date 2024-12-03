@@ -51,10 +51,8 @@ export function smartContractPortalMiddlewareCreateCommand() {
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = !loadBalancerId
-                ? (blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!)
-                : undefined;
-              const loadBalancer = loadBalancerId ?? env.SETTLEMINT_LOAD_BALANCER!;
+              const blockchainNode = loadBalancerId ? undefined : (blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+              const loadBalancer = loadBalancerId ?? (blockchainNode ? undefined : env.SETTLEMINT_LOAD_BALANCER!);
               // Read and parse ABI files if provided
               const parsedAbis: { name: string; abi: string }[] = [];
               if (abis && abis.length > 0) {

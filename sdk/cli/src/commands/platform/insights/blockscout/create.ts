@@ -28,10 +28,8 @@ export function blockscoutInsightsCreateCommand() {
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = !loadBalancerId
-                ? (blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!)
-                : undefined;
-              const loadBalancer = loadBalancerId ?? env.SETTLEMINT_LOAD_BALANCER!;
+              const blockchainNode = loadBalancerId ? undefined : (blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+              const loadBalancer = loadBalancerId ?? (blockchainNode ? undefined : env.SETTLEMINT_LOAD_BALANCER!);
               const result = await settlemint.insights.create({
                 name,
                 applicationId: application,
