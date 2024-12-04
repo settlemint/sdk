@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const MiddlewareFragment = graphql(`
   fragment Middleware on Middleware {
+    __typename
     id
     name
     status

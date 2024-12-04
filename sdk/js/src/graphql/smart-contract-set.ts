@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const SmartContractSetFragment = graphql(`
   fragment SmartContractSet on SmartContractSet {
+    __typename
     id
     name
     application {

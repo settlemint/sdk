@@ -2,7 +2,13 @@ import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
-import { getHAGraphEndpoint, getIpfsEndpoints } from "@/utils/get-cluster-service-endpoint";
+import {
+  getBlockscoutEndpoints,
+  getHAGraphEndpoint,
+  getHasuraEndpoints,
+  getIpfsEndpoints,
+  getPortalEndpoints,
+} from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -86,18 +92,10 @@ export function connectCommand(): Command {
           SETTLEMINT_WORKSPACE: workspace.id,
           SETTLEMINT_APPLICATION: application.id,
           SETTLEMINT_HASURA: hasura?.id,
-          SETTLEMINT_HASURA_ENDPOINT: hasura?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
-            ?.displayValue,
-          SETTLEMINT_HASURA_ADMIN_SECRET: hasura?.credentials.find((credential) =>
-            credential.id.includes("admin-secret"),
-          )?.displayValue,
+          ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.id,
           ...(await getHAGraphEndpoint(thegraph, env)),
-          SETTLEMINT_PORTAL: portal?.id,
-          SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
-            ?.displayValue,
-          SETTLEMINT_PORTAL_REST_ENDPOINT: portal?.endpoints.find((endpoint) => endpoint.id.includes("rest"))
-            ?.displayValue,
+          ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           NEXTAUTH_URL: authUrl,
           SETTLEMINT_AUTH_SECRET: authSecret,
@@ -114,10 +112,7 @@ export function connectCommand(): Command {
             endpoint.id.includes("internal"),
           )?.displayValue,
           SETTLEMINT_BLOCKSCOUT: blockscout?.id,
-          SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: blockscoutEndpoint
-            ? `${blockscoutEndpoint}/api/v1/graphql`
-            : undefined,
-          SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: blockscoutEndpoint,
+          ...getBlockscoutEndpoints(blockscout),
         });
 
         outro("Connected to SettleMint");

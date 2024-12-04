@@ -1,6 +1,7 @@
 import { randomBytes } from "node:crypto";
 import { resolve } from "node:path";
 import type { Subprocess } from "bun";
+import isInCi from "is-in-ci";
 import { isLocalEnv } from "./is-local-env";
 
 const authSecret = randomBytes(32).toString("hex");
@@ -11,6 +12,7 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE,
   SETTLEMINT_AUTH_SECRET: authSecret,
   NEXTAUTH_URL: "http://localhost:3000",
+  CI: isInCi ? "true" : "false",
 };
 
 if (isLocalEnv()) {
@@ -20,11 +22,13 @@ if (isLocalEnv()) {
 
 export async function runCommand(
   testScope: string,
-  command: string[],
-  options: { env?: Record<string, string>; cwd?: string } = {},
+  args: string[],
+  options: { isCli?: boolean; env?: Record<string, string>; cwd?: string } = {},
 ) {
   const cwd = options.cwd ?? resolve(__dirname, "../");
-  const proc = Bun.spawn(["bun", resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...command], {
+  const cmds =
+    options.isCli === false ? ["bun", ...args] : ["bun", resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...args];
+  const proc = Bun.spawn(cmds, {
     stdout: "pipe",
     cwd,
     env: {

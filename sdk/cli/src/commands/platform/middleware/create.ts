@@ -1,5 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
 import { graphMiddlewareCreateCommand } from "./graph/create";
+import { smartContractPortalMiddlewareCreateCommand } from "./smart-contract-portal/create";
 
 /**
  * Creates and returns the 'middleware' command for the SettleMint SDK.
@@ -11,5 +12,6 @@ export function middlewareCreateCommand(): Command {
   return new Command("middleware")
     .alias("mw")
     .description("Create a middleware service in the SettleMint platform")
-    .addCommand(graphMiddlewareCreateCommand());
+    .addCommand(graphMiddlewareCreateCommand())
+    .addCommand(smartContractPortalMiddlewareCreateCommand());
 }

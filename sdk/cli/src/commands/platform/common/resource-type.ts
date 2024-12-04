@@ -10,7 +10,7 @@ export type ResourceType =
   | "middleware"
   | "integration tool"
   | "storage"
-  | "insight";
+  | "insights";
 
 export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient> = {
   application: "application",
@@ -23,5 +23,5 @@ export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient>
   middleware: "middleware",
   "integration tool": "integrationTool",
   storage: "storage",
-  insight: "insights",
+  insights: "insights",
 };

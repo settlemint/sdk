@@ -1,5 +1,5 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
-import type { Middleware, Storage } from "@settlemint/sdk-js";
+import type { Insights, IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
 export async function getHAGraphEndpoint(
@@ -11,12 +11,8 @@ export async function getHAGraphEndpoint(
   }
 
   const testEndpoint = service.subgraphs.find(
-    ({ graphqlQueryEndpoint }) => !graphqlQueryEndpoint?.id.includes("-starterkits"),
+    ({ graphqlQueryEndpoint }) => !graphqlQueryEndpoint?.id.endsWith("-starterkits"),
   )?.graphqlQueryEndpoint?.displayValue;
-
-  if (!testEndpoint) {
-    return {};
-  }
 
   const hasEndpoint =
     testEndpoint && env.SETTLEMINT_ACCESS_TOKEN
@@ -48,5 +44,44 @@ export function getIpfsEndpoints(service: Storage | undefined): Partial<DotEnv> 
       ?.displayValue,
     SETTLEMINT_IPFS_GATEWAY_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.includes("gateway"))
       ?.displayValue,
+  };
+}
+
+export function getPortalEndpoints(service: Middleware | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "SmartContractPortalMiddleware") {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
+      ?.displayValue,
+    SETTLEMINT_PORTAL_REST_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("rest"))?.displayValue,
+  };
+}
+
+export function getHasuraEndpoints(service: IntegrationTool | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "Hasura") {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_HASURA_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
+    SETTLEMINT_HASURA_ADMIN_SECRET: service.credentials.find((credential) => credential.id.includes("admin-secret"))
+      ?.displayValue,
+  };
+}
+
+export function getBlockscoutEndpoints(service: Insights | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "BlockchainExplorer") {
+    return {};
+  }
+
+  const uiEndpoint = service.endpoints.find((endpoint) => endpoint.id.includes("interface"))?.displayValue;
+
+  return {
+    SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: uiEndpoint
+      ? `${new URL("/api/v1/graphql", uiEndpoint).toString()}`
+      : undefined,
+    SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: uiEndpoint,
   };
 }

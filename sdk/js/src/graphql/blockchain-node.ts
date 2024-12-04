@@ -8,6 +8,7 @@ import type { GraphQLClient } from "graphql-request";
  */
 const BlockchainNodeFragment = graphql(`
   fragment BlockchainNode on BlockchainNode {
+    __typename
     id
     name
     status
