@@ -42,23 +42,28 @@ export async function waitForCompletion({
       const startTime = Date.now();
 
       while (true) {
-        const resource = await settlemint[serviceType].read(id);
+        try {
+          const resource = await settlemint[serviceType].read(id);
 
-        if (resource.status === "COMPLETED") {
-          note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
-          return true;
-        }
+          if (resource.status === "COMPLETED") {
+            note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
+            return true;
+          }
 
-        if (resource.status === "FAILED") {
-          note(`${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
-          return true;
+          if (resource.status === "FAILED") {
+            note(`${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
+            return true;
+          }
+
+          note(`${capitalizeFirstLetter(type)} is not ready yet (status: ${resource.status})`);
+        } catch (error) {
+          note(`${capitalizeFirstLetter(type)} is not ready yet (status: UNKNOWN)`);
         }
 
         if (Date.now() - startTime > maxTimeout) {
           throw new Error(`Operation timed out after 10 minutes for ${type} with id ${id}`);
         }
-        note(`${capitalizeFirstLetter(type)} is not ready yet (status: ${resource.status})`);
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 5_000));
       }
     },
   });
