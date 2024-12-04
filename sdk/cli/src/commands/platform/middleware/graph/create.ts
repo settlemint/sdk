@@ -1,6 +1,6 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
-import { getHAGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
+import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
 /**
@@ -54,10 +54,11 @@ export function graphMiddlewareCreateCommand() {
               return {
                 result,
                 mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
+                  const resource = await settlemint.middleware.read(result.id);
                   return {
                     SETTLEMINT_APPLICATION: application,
                     SETTLEMINT_THEGRAPH: result.id,
-                    ...(await getHAGraphEndpoint(result, env)),
+                    ...(await getGraphEndpoint(resource, env)),
                   };
                 },
               };

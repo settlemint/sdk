@@ -1,21 +1,14 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { Insights, IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { note } from "@settlemint/sdk-utils/terminal";
 
-export async function getHAGraphEndpoint(
+export async function getGraphEndpoint(
   service: Middleware | undefined,
   env: Partial<DotEnv>,
 ): Promise<Partial<DotEnv>> {
   if (!service || service.__typename !== "HAGraphMiddleware") {
     return {};
   }
-
-  const subgraphEndpoints = service.subgraphs
-    .map((subgraph) => subgraph.graphqlQueryEndpoint?.displayValue)
-    .filter(Boolean)
-    .join(", ");
-  note(`Subgraphs endpoints: ${subgraphEndpoints}`);
 
   const testEndpoint = service.subgraphs.find(
     ({ graphqlQueryEndpoint }) => !graphqlQueryEndpoint?.id.endsWith("-starterkits"),
