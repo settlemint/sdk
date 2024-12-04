@@ -13,7 +13,7 @@ COPY --chmod=0777 . .
 RUN bun run build
 
 # RUN
-FROM node:22.11.0-alpine3.20 AS prod
+FROM node:22.12.0-alpine3.20 AS prod
 
 LABEL org.opencontainers.image.source="https://github.com/settlemint/btp"
 
