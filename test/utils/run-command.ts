@@ -14,6 +14,7 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_AUTH_SECRET: authSecret,
   NEXTAUTH_URL: "http://localhost:3000",
   CI: isInCi ? "true" : "false",
+  NODE_ENV: "development",
 };
 
 if (isLocalEnv()) {

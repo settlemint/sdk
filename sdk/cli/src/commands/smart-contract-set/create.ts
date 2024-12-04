@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { SMART_CONTRACT_SETS, SMART_CONTRACT_SET_DETAILS } from "@/constants/smart-contract-sets";
 import { Command, Option } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
-import { type DotEnv, exists } from "@settlemint/sdk-utils";
+import { type DotEnv, executeCommand, exists } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
@@ -61,7 +61,14 @@ export function createCommand(): Command {
             if (!smartContractSet) {
               throw new Error(`No smart contract set found for use case ${selectedUseCase}`);
             }
-            await $`forge init ${name} --template ${smartContractSet.image.repository} --branch v${smartContractSet.image.tag}`;
+            await executeCommand("forge", [
+              "init",
+              name,
+              "--template",
+              smartContractSet.image.repository,
+              "--branch",
+              `v${smartContractSet.image.tag}`,
+            ]);
             await setName(name, projectDir);
           },
           stopMessage: "Smart contract set fully scaffolded",
