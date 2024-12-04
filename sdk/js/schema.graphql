@@ -14089,7 +14089,7 @@ type Mutation {
   ): MiddlewareUnionType!
   deletePersonalAccessToken(id: String!): Boolean!
 
-  """Delete a PrivateKey service"""
+  """Delete a private key service"""
   deletePrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
@@ -14421,7 +14421,7 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
-  """Pause a PrivateKey service"""
+  """Pause a private key service"""
   pausePrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
@@ -14481,7 +14481,7 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
-  """Restart PrivateKey service"""
+  """Restart a private key service"""
   restartPrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
@@ -14541,7 +14541,7 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
-  """Resume a PrivateKey service"""
+  """Resume a private key service"""
   resumePrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
@@ -14601,7 +14601,7 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
-  """Retry deployment of PrivateKey service"""
+  """Retry a private key service"""
   retryPrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
@@ -21656,9 +21656,9 @@ type Subgraph {
   isActive: Boolean!
   name: String!
   namespace: String!
-  nodeId: String!
+  nodeId: String
   shard: String!
-  status: SubgraphStatus!
+  status: SubgraphStatus
   versionStatus: String!
 }
 
@@ -21666,7 +21666,7 @@ type SubgraphStatus {
   chainHeadBlock: BlockInfo
   earliestBlockNumber: String!
   health: String!
-  isPaused: Boolean!
+  isPaused: Boolean
   isSynced: Boolean!
   latestBlock: BlockInfo
 }
