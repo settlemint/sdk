@@ -34,7 +34,8 @@
         "noForEach": "warn"
       },
       "correctness": {
-        "useExhaustiveDependencies": "warn"
+        "useExhaustiveDependencies": "warn",
+        "noUnusedImports": "error"
       },
       "style": {
         "noNonNullAssertion": "off"
