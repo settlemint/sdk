@@ -19,6 +19,7 @@ import { ascii, cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../package.json";
 import { createCommand } from "./commands/create";
 import { platformCommand } from "./commands/platform";
+import { smartContractSetCommand } from "./commands/smart-contract.set";
 
 ascii();
 
@@ -42,6 +43,7 @@ sdkcli
 sdkcli.addCommand(connectCommand());
 sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(platformCommand());
+sdkcli.addCommand(smartContractSetCommand());
 sdkcli.addCommand(createCommand());
 
 /**
