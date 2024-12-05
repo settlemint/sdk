@@ -12,16 +12,19 @@ export function hardhatDeployLocalCommand() {
     .option("--verify", "Verify the deployment");
 
   build.action(async ({ module, reset, verify }) => {
-    await executeCommand("npx", [
-      "hardhat",
-      "ignition",
-      "deploy",
-      ...(reset ? ["--reset"] : []),
-      ...(verify ? ["--verify"] : []),
-      "--network",
-      "localhost",
-      module,
-    ]);
+    await executeCommand(
+      "npx",
+      [
+        "hardhat",
+        "ignition",
+        "deploy",
+        ...(reset ? ["--reset"] : []),
+        ...(verify ? ["--verify"] : []),
+        "--network",
+        "localhost",
+        module,
+      ].filter(Boolean),
+    );
   });
 
   return build;

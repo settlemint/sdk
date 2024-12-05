@@ -26,6 +26,21 @@ beforeAll(async () => {
   await createBlockchainNodeAndIpfs();
   await createPrivateKeySmartcontractSetPortalAndBlockscout();
   await createGraphMiddleware();
+  if (
+    !resourceAlreadyCreated([
+      "SETTLEMINT_APPLICATION",
+      "SETTLEMINT_BLOCKCHAIN_NETWORK",
+      "SETTLEMINT_BLOCKCHAIN_NODE",
+      "SETTLEMINT_IPFS",
+      "SETTLEMINT_SMART_CONTRACT_SET",
+      "SETTLEMINT_HD_PRIVATE_KEY",
+      "SETTLEMINT_PORTAL",
+      "SETTLEMINT_BLOCKSCOUT",
+      "SETTLEMINT_THEGRAPH",
+    ])
+  ) {
+    throw new Error("Creating resources failed");
+  }
 });
 
 afterAll(async () => {
@@ -40,7 +55,7 @@ afterAll(async () => {
     "--accept-defaults",
     "--force",
     "default",
-  ]);
+  ]).result;
   expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
   const { output: deleteWorkspaceOutput } = await runCommand(COMMAND_TEST_SCOPE, [
     "platform",
@@ -49,7 +64,7 @@ afterAll(async () => {
     "--accept-defaults",
     "--force",
     "default",
-  ]);
+  ]).result;
   expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
 });
 
@@ -95,7 +110,7 @@ async function createWorkspaceAndApplication() {
       "BE",
       "--accept-defaults",
       "--default",
-    ]);
+    ]).result;
     expect(workspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} created successfully`);
     await addWorkspaceCredits();
   }
@@ -109,7 +124,7 @@ async function createWorkspaceAndApplication() {
       `${APPLICATION_NAME}`,
       "--accept-defaults",
       "--default",
-    ]);
+    ]).result;
     expect(applicationOutput).toInclude(`Application ${APPLICATION_NAME} created successfully`);
   }
 }
@@ -137,7 +152,7 @@ async function createBlockchainNodeAndIpfs() {
           "--accept-defaults",
           "--default",
           "--wait",
-        ]),
+        ]).result,
     hasHasuraIntegration
       ? Promise.resolve()
       : runCommand(COMMAND_TEST_SCOPE, [
@@ -153,7 +168,7 @@ async function createBlockchainNodeAndIpfs() {
           "--default",
           "--wait",
           HASURA_NAME,
-        ]),
+        ]).result,
     hasIpfsStorage
       ? Promise.resolve()
       : runCommand(COMMAND_TEST_SCOPE, [
@@ -169,7 +184,7 @@ async function createBlockchainNodeAndIpfs() {
           "--default",
           "--wait",
           IPFS_NAME,
-        ]),
+        ]).result,
   ]);
 
   const [networkResult, hasuraResult, ipfsResult] = results;
@@ -218,7 +233,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           CLUSTER_REGION,
           "--wait",
           PRIVATE_KEY_NAME,
-        ]),
+        ]).result,
     hasSmartContractSet
       ? Promise.resolve()
       : runCommand(COMMAND_TEST_SCOPE, [
@@ -235,7 +250,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           "--default",
           "--wait",
           SMART_CONTRACT_SET_NAME,
-        ]),
+        ]).result,
     hasPortalMiddleware
       ? Promise.resolve()
       : runCommand(COMMAND_TEST_SCOPE, [
@@ -257,7 +272,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           "StarterKitERC20",
           "StarterKitERC20DexFactory",
           "StarterKitERC20Dex",
-        ]),
+        ]).result,
     hasBlockscoutInsights
       ? Promise.resolve()
       : runCommand(COMMAND_TEST_SCOPE, [
@@ -273,7 +288,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           "--default",
           "--wait",
           BLOCKSCOUT_NAME,
-        ]),
+        ]).result,
   ]);
 
   const [privateKeyResult, smartContractSetResult, portalResult, blockscoutResult] = results;
@@ -327,7 +342,7 @@ async function createGraphMiddleware() {
     "--default",
     "--wait",
     GRAPH_NAME,
-  ]);
+  ]).result;
   expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
   expect(graphOutput).toInclude("Middleware is deployed");
 }

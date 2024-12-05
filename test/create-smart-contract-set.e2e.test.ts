@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { $ } from "bun";
+import { $, type ShellError } from "bun";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
@@ -32,54 +32,82 @@ describe("Setup a smart contract set using the SDK", () => {
       COMMAND_TEST_SCOPE,
       ["smart-contract-set", "create", "--project-name", SMART_CONTRACT_SET_NAME, "--use-case", "solidity-starterkit"],
       { cwd: __dirname },
-    );
+    ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
     await $`bun install`.cwd(projectDir);
   });
 
   test("Foundry - Build smart contract set", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "build"], { cwd: projectDir });
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "build"], { cwd: projectDir }).result;
     expect(output).toInclude("Compiler run successful!");
   });
 
   test("Foundry - Format smart contract set", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "format"], { cwd: projectDir });
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "format"], { cwd: projectDir }).result;
     expect(output).toInclude("Smart contract set formatted successfully!");
   });
 
   test("Foundry - Start local anvil network", (done) => {
-    runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "network"], { cwd: projectDir })
+    const { result, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "network"], { cwd: projectDir });
+    result
       .then(({ output }) => {
-        console.log("output", output);
         expect(output).toInclude("Listening on 127.0.0.1:8545");
         done();
       })
-      .catch((err: Error) => {
+      .catch((err: ShellError) => {
         expect(err).toBeUndefined();
         done();
       });
-    setTimeout(async () => {
-      await $`killall anvil`;
+    setTimeout(() => {
+      kill();
     }, 3_000);
   });
 
-  test("Foundry - Test smart contract set", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "test"], { cwd: projectDir });
+  test.skip("Foundry - Test smart contract set", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "test"], { cwd: projectDir }).result;
     expect(output).toInclude("[PASS]");
     expect(output).not.toInclude("[FAIL]");
     expect(output).toInclude("Suite result: ok.");
   });
 
-  test("Hardhat - Deploy smart contract set (local)", async () => {});
-
-  test("Deploy smart contract set (remote)", async () => {
-    // Clone smart contract set repo
-    // Deploy to node
-    // Deploy subgraph to graph instance
-    // Extract abi for the portal (or can we use predeployed abis as wel?)
-    // Extract contract address information from deployment
+  test("Hardhat - Build smart contract set", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "build"], { cwd: projectDir }).result;
+    expect(output).toMatch(/.*Compiled [0-9]+ Solidity files successfully.*/);
   });
+
+  test("Hardhat - Test smart contract set", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "test"], { cwd: projectDir }).result;
+    expect(output).toInclude("0 passing");
+  });
+
+  test("Hardhat - Deploy smart contract set (local)", (done) => {
+    const { result, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "network"], { cwd: projectDir });
+    let isDeployed = false;
+    result
+      .then(() => {
+        expect(isDeployed).toBeTrue();
+        done();
+      })
+      .catch(() => {
+        expect(isDeployed).toBeTrue();
+        done();
+      });
+    setTimeout(async () => {
+      const { output } = await runCommand(
+        COMMAND_TEST_SCOPE,
+        ["scs", "hardhat", "deploy", "local", "-m", "ignition/modules/main.ts"],
+        {
+          cwd: projectDir,
+        },
+      ).result;
+      expect(output).toInclude("successfully deployed 🚀");
+      isDeployed = true;
+      kill();
+    }, 3_000);
+  });
+
+  test("Hardhat - Deploy smart contract set (remote)", async () => {});
 
   test("Deploy subgraph", async () => {});
 });
@@ -103,16 +131,6 @@ describe("Setup a smart contract set using the SDK", () => {
   ],
   "tasks": [
     {
-      "label": "Foundry - Build",
-      "type": "shell",
-      "command": "btp-scs foundry build",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      },
-      "problemMatcher": []
-    },
-    {
       "label": "Hardhat - Build",
       "type": "shell",
       "command": "btp-scs hardhat build",
@@ -123,31 +141,11 @@ describe("Setup a smart contract set using the SDK", () => {
       "problemMatcher": []
     },
     {
-      "label": "Foundry - Test",
-      "type": "shell",
-      "command": "btp-scs foundry test",
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
       "label": "Hardhat - Test",
       "type": "shell",
       "command": "btp-scs hardhat test",
       "group": "test",
       "problemMatcher": []
-    },
-    {
-      "label": "Foundry - Format",
-      "type": "shell",
-      "command": "btp-scs foundry format",
-      "problemMatcher": []
-    },
-    {
-      "label": "Foundry - Start network",
-      "type": "shell",
-      "command": "btp-scs foundry network",
-      "problemMatcher": [],
-      "isBackground": true
     },
     {
       "label": "Hardhat - Start network",

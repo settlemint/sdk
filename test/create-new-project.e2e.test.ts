@@ -34,8 +34,10 @@ describe("Setup a project using the SDK", () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME],
-      { cwd: __dirname },
-    );
+      {
+        cwd: __dirname,
+      },
+    ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
     await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
@@ -95,12 +97,13 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Connect starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir });
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
+      .result;
     expect(output).toInclude("Connected to SettleMint");
   });
 
   test("Codegen starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: projectDir });
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: projectDir }).result;
 
     expect(output).toInclude("Generating Hasura resources");
     expect(output).toInclude("Generating IPFS resources");

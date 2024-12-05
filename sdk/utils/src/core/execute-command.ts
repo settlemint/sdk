@@ -5,11 +5,12 @@ import { spawn } from "node:child_process";
  *
  * @param command - The command to execute
  * @param args - Array of arguments to pass to the command
+ * @param env - Environment variables to pass to the command
  * @returns Promise that resolves when the process completes successfully
  * @throws Error if the process fails or exits with non-zero code
  */
-export async function executeCommand(command: string, args: string[]): Promise<void> {
-  const child = spawn(command, args);
+export async function executeCommand(command: string, args: string[], env?: Record<string, string>): Promise<void> {
+  const child = spawn(command, args, { env: { ...process.env, ...env } });
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data) => {
       console.log(data.toString());
