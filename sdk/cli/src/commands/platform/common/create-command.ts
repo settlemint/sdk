@@ -88,6 +88,19 @@ export function getCreateCommand({
       stopMessage: `${capitalizeFirstLetter(type)} created`,
     });
 
+    if (wait) {
+      await waitForCompletion({
+        settlemint,
+        type: waitFor?.resourceType ?? type,
+        id: waitFor?.id ?? result.id,
+        action: "deploy",
+      });
+
+      if (waitFor) {
+        outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
+      }
+    }
+
     if (isDefault) {
       const defaultEnv = mapDefaultEnv();
       const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
@@ -116,19 +129,6 @@ export function getCreateCommand({
       }
       await writeEnvSpinner(!!prod, newEnv);
       note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
-    }
-
-    if (wait) {
-      await waitForCompletion({
-        settlemint,
-        type: waitFor?.resourceType ?? type,
-        id: waitFor?.id ?? result.id,
-        action: "deploy",
-      });
-
-      if (waitFor) {
-        outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
-      }
     }
 
     outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);

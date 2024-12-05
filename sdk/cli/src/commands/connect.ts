@@ -4,7 +4,7 @@ import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
 import {
   getBlockscoutEndpoints,
-  getHAGraphEndpoint,
+  getGraphEndpoint,
   getHasuraEndpoints,
   getIpfsEndpoints,
   getPortalEndpoints,
@@ -94,7 +94,7 @@ export function connectCommand(): Command {
           SETTLEMINT_HASURA: hasura?.id,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.id,
-          ...(await getHAGraphEndpoint(thegraph, env)),
+          ...(await getGraphEndpoint(thegraph, env)),
           ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           NEXTAUTH_URL: authUrl,
