@@ -1,6 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { $ } from "bun";
-import { isEmpty } from "lodash";
+import { executeCommand } from "@settlemint/sdk-utils";
 
 export function hardhatDeployRemoteCommand() {
   const build = new Command("remote")
@@ -24,22 +23,32 @@ export function hardhatDeployRemoteCommand() {
     const envVars = envText.split("\n").map((line) => line.trim());
     for (const envVar of envVars) {
       const [key, value] = envVar.split("=");
-      process.env[key] = value;
+      process.env[key as string] = value;
     }
 
-    if (isEmpty(process.env.BTP_FROM)) {
+    if (!process.env.BTP_FROM) {
       throw new Error(
         "No private key is activated on the node to sign the transaction. Activate a private key on the node this smart contract set is connected to in the Private Keys section.",
       );
     }
 
-    if (verify && isEmpty(process.env.ETHERSCAN_API_KEY)) {
+    if (verify && !process.env.ETHERSCAN_API_KEY) {
       throw new Error(
         "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardht.config.ts file",
       );
     }
 
-    await $`npx hardhat ignition deploy ${reset ? "--reset" : ""} ${verify ? "--verify" : ""} ${deploymentId ? `--deployment-id ${deploymentId}` : ""} --network btp ${module}`;
+    await executeCommand("npx", [
+      "hardhat",
+      "ignition",
+      "deploy",
+      ...(reset ? ["--reset"] : []),
+      ...(verify ? ["--verify"] : []),
+      ...(deploymentId ? ["--deployment-id", deploymentId] : []),
+      "--network",
+      "btp",
+      module,
+    ]);
   });
 
   return build;

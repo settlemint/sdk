@@ -9,8 +9,8 @@ import { spawn } from "node:child_process";
  * @throws Error if the process fails or exits with non-zero code
  */
 export async function executeCommand(command: string, args: string[]): Promise<void> {
+  const child = spawn(command, args);
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args);
     child.stdout.on("data", (data) => {
       console.log(data.toString());
     });

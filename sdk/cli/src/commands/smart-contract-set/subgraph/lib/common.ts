@@ -31,7 +31,7 @@ export async function commonSetup(isGenerated: boolean) {
   const envVars = envText.split("\n").map((line) => line.trim());
   for (const envVar of envVars) {
     const [key, value] = envVar.split("=");
-    process.env[key] = value;
+    process.env[key as string] = value;
   }
 
   const network =

@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { $ } from "bun";
+import { executeCommand } from "@settlemint/sdk-utils";
 
 export function hardhatScriptLocalCommand() {
   const build = new Command("local")
@@ -7,7 +7,7 @@ export function hardhatScriptLocalCommand() {
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"');
 
   build.action(async ({ script }) => {
-    await $`npx hardhat run ${script} --network localhost`;
+    await executeCommand("npx", ["hardhat", "run", script, "--network", "localhost"]);
   });
 
   return build;

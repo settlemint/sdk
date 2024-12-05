@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { $ } from "bun";
+import { executeCommand } from "@settlemint/sdk-utils";
 
 export function hardhatScriptRemoteCommand() {
   const build = new Command("remote")
@@ -17,10 +17,10 @@ export function hardhatScriptRemoteCommand() {
     const envVars = envText.split("\n").map((line) => line.trim());
     for (const envVar of envVars) {
       const [key, value] = envVar.split("=");
-      process.env[key] = value;
+      process.env[key as string] = value;
     }
 
-    await $`npx hardhat run ${script} --network btp`;
+    await executeCommand("npx", ["hardhat", "run", script, "--network", "btp"]);
   });
 
   return build;

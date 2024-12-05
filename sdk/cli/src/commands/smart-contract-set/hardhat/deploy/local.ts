@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { $ } from "bun";
+import { executeCommand } from "@settlemint/sdk-utils";
 
 export function hardhatDeployLocalCommand() {
   const build = new Command("local")
@@ -12,7 +12,16 @@ export function hardhatDeployLocalCommand() {
     .option("--verify", "Verify the deployment");
 
   build.action(async ({ module, reset, verify }) => {
-    await $`npx hardhat ignition deploy ${reset ? "--reset" : ""} ${verify ? "--verify" : ""} --network localhost ${module}`;
+    await executeCommand("npx", [
+      "hardhat",
+      "ignition",
+      "deploy",
+      ...(reset ? ["--reset"] : []),
+      ...(verify ? ["--verify"] : []),
+      "--network",
+      "localhost",
+      module,
+    ]);
   });
 
   return build;
