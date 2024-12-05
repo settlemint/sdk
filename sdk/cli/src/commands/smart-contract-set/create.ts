@@ -7,15 +7,14 @@ import { type DotEnv, executeCommand, exists } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import { $ } from "bun";
 import { namePrompt } from "../create/name.prompt";
 import { useCasePrompt } from "./prompts/use-case.prompt";
 
 /**
- * Creates and returns the 'codegen' command for the SettleMint SDK CLI.
- * This command generates the code for using the SettleMint services in the user's project.
+ * Creates and returns the 'create' command for the SettleMint SDK CLI.
+ * This command bootstraps a new smart contract set project with the selected use case template.
  *
- * @returns {Command} The configured 'codegen' command
+ * @returns {Command} The configured 'create' command
  */
 export function createCommand(): Command {
   return (
