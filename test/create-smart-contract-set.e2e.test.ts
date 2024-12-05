@@ -27,16 +27,39 @@ afterEach(() => {
 
 describe("Setup a smart contract set using the SDK", () => {
   test("Create a smart contract set", async () => {
-    const { cwd, output } = await runCommand(COMMAND_TEST_SCOPE, [
-      "smart-contract-set",
-      "create",
-      "--project-name",
-      SMART_CONTRACT_SET_NAME,
-      "--use-case",
-      "solidity-starterkit",
-    ]);
+    const { cwd, output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "create", "--project-name", SMART_CONTRACT_SET_NAME, "--use-case", "solidity-starterkit"],
+      { cwd: __dirname },
+    );
     projectDir = join(cwd, SMART_CONTRACT_SET_NAME);
-    expect((await stat(join(cwd, SMART_CONTRACT_SET_NAME))).isDirectory()).toBeTrue();
+    expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
   });
+
+  test("Compile smart contract set", async () => {
+    // Clone smart contract set repo
+    // Deploy to node
+    // Deploy subgraph to graph instance
+    // Extract abi for the portal (or can we use predeployed abis as wel?)
+    // Extract contract address information from deployment
+  });
+
+  test("Deploy smart contract set (local)", async () => {
+    // Clone smart contract set repo
+    // Deploy to node
+    // Deploy subgraph to graph instance
+    // Extract abi for the portal (or can we use predeployed abis as wel?)
+    // Extract contract address information from deployment
+  });
+
+  test("Deploy smart contract set (remote)", async () => {
+    // Clone smart contract set repo
+    // Deploy to node
+    // Deploy subgraph to graph instance
+    // Extract abi for the portal (or can we use predeployed abis as wel?)
+    // Extract contract address information from deployment
+  });
+
+  test("Deploy subgraph", async () => {});
 });

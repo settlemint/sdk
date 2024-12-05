@@ -27,7 +27,7 @@ export async function runCommand(
   args: string[],
   options: { env?: Record<string, string>; cwd?: string } = {},
 ) {
-  const cwd = options.cwd ?? resolve(__dirname, "../");
+  const cwd = options.cwd ?? resolve(__dirname, "../../");
   const cmds = [resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...args];
   const proc = spawn("bun", cmds, {
     cwd,
