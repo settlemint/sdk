@@ -44,6 +44,9 @@ jobs:
         with:
           bun-version-file: package.json
 
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
       - name: Install Bun dependencies
         run: bun install
 

@@ -1,4 +1,4 @@
-import { afterAll, afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { $ } from "bun";
@@ -7,20 +7,20 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 const SMART_CONTRACT_SET_NAME = "contracts";
 const COMMAND_TEST_SCOPE = "create-smart-contract-set-e2e";
 
-let projectDir: string;
+const projectDir = join(process.cwd(), "test", SMART_CONTRACT_SET_NAME);
 
 setDefaultTimeout(15 * 60_000);
 
-afterAll(async () => {
-  if (!projectDir) {
-    return;
-  }
+async function cleanup() {
   try {
     await rmdir(projectDir, { recursive: true });
   } catch (err) {
     console.log("Failed to delete project dir", err);
   }
-});
+}
+
+beforeAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -28,12 +28,11 @@ afterEach(() => {
 
 describe("Setup a smart contract set using the SDK", () => {
   test("Create a smart contract set and install packages", async () => {
-    const { cwd, output } = await runCommand(
+    const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["smart-contract-set", "create", "--project-name", SMART_CONTRACT_SET_NAME, "--use-case", "solidity-starterkit"],
       { cwd: __dirname },
     );
-    projectDir = join(cwd, SMART_CONTRACT_SET_NAME);
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
     await $`bun install`.cwd(projectDir);
@@ -56,7 +55,8 @@ describe("Setup a smart contract set using the SDK", () => {
         expect(output).toInclude("Listening on 127.0.0.1:8545");
         done();
       })
-      .catch(() => {
+      .catch((err: Error) => {
+        expect(err).toBeUndefined();
         done();
       });
     setTimeout(async () => {

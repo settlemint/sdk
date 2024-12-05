@@ -1,4 +1,4 @@
-import { afterAll, afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
@@ -10,20 +10,20 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 
 const COMMAND_TEST_SCOPE = "create-new-project-e2e";
 
-let projectDir: string;
+const projectDir = join(process.cwd(), "test", PROJECT_NAME);
 
 setDefaultTimeout(15 * 60_000);
 
-afterAll(async () => {
-  if (!projectDir) {
-    return;
-  }
+async function cleanup() {
   try {
     await rmdir(projectDir, { recursive: true });
   } catch (err) {
     console.log("Failed to delete project dir", err);
   }
-});
+}
+
+beforeAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -31,12 +31,11 @@ afterEach(() => {
 
 describe("Setup a project using the SDK", () => {
   test("Create a starter kit project", async () => {
-    const { cwd, output } = await runCommand(
+    const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME],
       { cwd: __dirname },
     );
-    projectDir = join(cwd, PROJECT_NAME);
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
     await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
