@@ -2,7 +2,7 @@ import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { Insights, IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
-export async function getHAGraphEndpoint(
+export async function getGraphEndpoint(
   service: Middleware | undefined,
   env: Partial<DotEnv>,
 ): Promise<Partial<DotEnv>> {
