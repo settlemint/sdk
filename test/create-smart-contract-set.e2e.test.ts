@@ -64,6 +64,13 @@ describe("Setup a smart contract set using the SDK", () => {
     }, 3_000);
   });
 
+  test("Foundry - Test smart contract set", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "test"], { cwd: projectDir });
+    expect(output).toInclude("[PASS]");
+    expect(output).not.toInclude("[FAIL]");
+    expect(output).toInclude("Suite result: ok.");
+  });
+
   test("Hardhat - Deploy smart contract set (local)", async () => {});
 
   test("Deploy smart contract set (remote)", async () => {
