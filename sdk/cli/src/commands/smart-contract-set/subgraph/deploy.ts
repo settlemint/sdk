@@ -2,9 +2,9 @@ import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
 import { $ } from "bun";
 import { stringify } from "yaml";
-import { type SubgraphTemplate, commonSetup } from "./lib/common.ts";
-import { isGenerated } from "./lib/is-generated.ts";
-import { getSubgraphYamlConfig, subgraphYamlFile } from "./lib/utils.ts";
+import { type SubgraphTemplate, commonSetup } from "./lib/common.js";
+import { isGenerated } from "./lib/is-generated.js";
+import { getSubgraphYamlConfig, subgraphYamlFile } from "./lib/utils.js";
 
 export function subgraphDeployCommand() {
   return new Command("deploy").description("Deploy the subgraph").action(async () => {

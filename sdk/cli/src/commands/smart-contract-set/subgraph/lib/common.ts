@@ -2,7 +2,7 @@ import { existsSync, rmSync } from "node:fs";
 import { $, semver } from "bun";
 import slugify from "slugify";
 import { stringify } from "yaml";
-import { getSubgraphYamlConfig, subgraphYamlFile } from "./utils.ts";
+import { getSubgraphYamlConfig, subgraphYamlFile } from "./utils.js";
 
 export async function commonSetup(isGenerated: boolean) {
   await $`forge build`;
