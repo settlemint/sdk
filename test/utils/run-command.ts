@@ -63,15 +63,11 @@ export async function runCommand(
         reject(new Error(`Command failed with code ${code}`));
       }
     });
-    proc.on("error", (error) => {
-      console.error("Error in command", error);
-      reject(error);
-    });
   });
 }
 
 export function forceExitAllCommands(testScope: string) {
   // biome-ignore lint/complexity/noForEach: <explanation>
-  commandsRunning[testScope].forEach((command) => command.kill("SIGTERM"));
+  commandsRunning[testScope].forEach((command) => command.kill());
   commandsRunning[testScope] = [];
 }
