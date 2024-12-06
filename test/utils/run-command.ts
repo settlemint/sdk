@@ -83,5 +83,5 @@ function killProcess(pid: number) {
   process.kill(pid, "SIGINT");
   $`pkill -P ${pid}`
     .then(() => console.log(`Killed process ${pid}`))
-    .catch(() => console.log(`Failed to kill process ${pid}`));
+    .catch((err) => console.error(`Failed to kill process ${pid}`, err));
 }

@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils";
+import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 
 export function hardhatScriptRemoteCommand() {
   const build = new Command("remote")
@@ -19,8 +19,8 @@ export function hardhatScriptRemoteCommand() {
       const [key, value] = envVar.split("=");
       process.env[key as string] = value;
     }
-
-    await executeCommand("npx", ["hardhat", "run", script, "--network", "btp"]);
+    const { command, args } = await getPackageManagerExecutable();
+    await executeCommand(command, [...args, "hardhat", "run", script, "--network", "btp"]);
   });
 
   return build;

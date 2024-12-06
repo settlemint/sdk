@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils";
+import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 
 export function hardhatDeployLocalCommand() {
   const build = new Command("local")
@@ -12,9 +12,11 @@ export function hardhatDeployLocalCommand() {
     .option("--verify", "Verify the deployment");
 
   build.action(async ({ module, reset, verify }) => {
+    const { command, args } = await getPackageManagerExecutable();
     await executeCommand(
-      "npx",
+      command,
       [
+        ...args,
         "hardhat",
         "ignition",
         "deploy",
