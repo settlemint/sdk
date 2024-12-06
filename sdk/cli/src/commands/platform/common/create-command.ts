@@ -50,10 +50,11 @@ export function getCreateCommand({
       createFunction: (
         settlemintClient: SettlemintClient,
         env: Partial<DotEnv>,
+        autoAccept: boolean,
       ) => Promise<{
         result: { id: string; name: string };
         waitFor?: { resourceType: ResourceType; id: string; name: string };
-        mapDefaultEnv: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
+        mapDefaultEnv?: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
       }>,
     ) => void | Promise<void>,
   ) => void;
@@ -83,7 +84,7 @@ export function getCreateCommand({
     const { result, waitFor, mapDefaultEnv } = await spinner({
       startMessage: `Creating ${type}`,
       task: async () => {
-        return createFunction(settlemint, env);
+        return createFunction(settlemint, env, autoAccept);
       },
       stopMessage: `${capitalizeFirstLetter(type)} created`,
     });
@@ -101,7 +102,7 @@ export function getCreateCommand({
       }
     }
 
-    if (isDefault) {
+    if (isDefault && typeof mapDefaultEnv === "function") {
       const defaultEnv = mapDefaultEnv();
       const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
       const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;

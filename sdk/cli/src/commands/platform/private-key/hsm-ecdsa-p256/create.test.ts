@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import { Command } from "@commander-js/extra-typings";
-import { privateKeyHdCreateCommand } from "./create";
+import { privateKeyHsmCreateCommand } from "./create";
 
 describe("privateKeyHdCreateCommand", () => {
   test("executes command with required arguments", () => {
@@ -8,7 +8,7 @@ describe("privateKeyHdCreateCommand", () => {
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      privateKeyHdCreateCommand()
+      privateKeyHsmCreateCommand()
         .exitOverride()
         .action((args: string, options: Record<string, unknown>) => {
           commandArgs = args;
@@ -18,7 +18,7 @@ describe("privateKeyHdCreateCommand", () => {
     program.parse([
       "node",
       "test",
-      "hd-ecdsa-p256",
+      "hsm-ecdsa-p256",
       "test-key",
       "--accept-defaults",
       "--provider",
@@ -43,7 +43,7 @@ describe("privateKeyHdCreateCommand", () => {
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      privateKeyHdCreateCommand()
+      privateKeyHsmCreateCommand()
         .exitOverride()
         .action((args: string, options: Record<string, unknown>) => {
           commandArgs = args;
@@ -53,7 +53,7 @@ describe("privateKeyHdCreateCommand", () => {
     program.parse([
       "node",
       "test",
-      "hd-ecdsa-p256",
+      "hsm-ecdsa-p256",
       "test-key",
       "--accept-defaults",
       "--provider",

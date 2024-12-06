@@ -9,6 +9,7 @@ const APPLICATION_NAME = "Starter Kit App";
 const NETWORK_NAME = "Starter Kit Network";
 const NODE_NAME = "Starter Kit Node";
 const PRIVATE_KEY_NAME = "Starter Kit Private Key";
+const PRIVATE_KEY_SMART_CONTRACTS_NAME = "Starter Kit Private Key Smart Contracts";
 const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
 const IPFS_NAME = "Starter Kit IPFS";
 const GRAPH_NAME = "Starter Kit Graph";
@@ -58,6 +59,7 @@ beforeAll(async () => {
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddleware();
   } catch (err) {
+    console.error("Failed to create resources", err);
     await cleanup();
     process.exit(1);
   }
@@ -186,16 +188,34 @@ async function createBlockchainNodeAndIpfs() {
 
   const [networkResult, hasuraResult, ipfsResult] = results;
 
+  if (networkResult.status === "fulfilled" && networkResult.value) {
+    expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
+    expect(networkResult.value.output).toInclude("Blockchain node is deployed");
+    const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "private-key",
+      "hsm-ecdsa-p256",
+      "--accept-defaults",
+      "--default",
+      "--provider",
+      CLUSTER_PROVIDER,
+      "--region",
+      CLUSTER_REGION,
+      "--wait",
+      PRIVATE_KEY_SMART_CONTRACTS_NAME,
+    ]).result;
+    expect(privateKeyHsmCreateCommandOutput).toInclude(
+      `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAME} created successfully`,
+    );
+    expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
+  }
+
   expect([networkResult.status, hasuraResult.status, ipfsResult.status]).toEqual([
     "fulfilled",
     "fulfilled",
     "fulfilled",
   ]);
-
-  if (networkResult.status === "fulfilled" && networkResult.value) {
-    expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
-    expect(networkResult.value.output).toInclude("Blockchain node is deployed");
-  }
 
   if (hasuraResult.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
@@ -300,7 +320,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   if (privateKeyResult.status === "fulfilled" && privateKeyResult.value) {
     expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
     expect(privateKeyResult.value.output).toInclude("Private key is deployed");
-    true;
   }
 
   if (smartContractSetResult.status === "fulfilled" && smartContractSetResult.value) {
