@@ -15,30 +15,24 @@ export function privateKeyHsmCreateCommand() {
       addClusterServiceArgs(cmd)
         .option("--application-id <applicationId>", "Application ID")
         .option("--blockchain-node-id <blockchainNodeId>", "Blockchain Node ID")
-        .action(
-          async (
-            name,
-            { applicationId, blockchainNodeId, provider, region, size, type, ...defaultArgs },
-            autoAccept,
-          ) => {
-            return baseAction(defaultArgs, async (settlemint, env) => {
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const result = await settlemint.privateKey.create({
-                name,
-                applicationId: application,
-                privateKeyType: "HSM_ECDSA_P256",
-                blockchainNodes: blockchainNodeId ? [blockchainNodeId] : [],
-                provider,
-                region,
-                size,
-                type,
-              });
-              return {
-                result,
-              };
+        .action(async (name, { applicationId, blockchainNodeId, provider, region, size, type, ...defaultArgs }) => {
+          return baseAction(defaultArgs, async (settlemint, env) => {
+            const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
+            const result = await settlemint.privateKey.create({
+              name,
+              applicationId: application,
+              privateKeyType: "HSM_ECDSA_P256",
+              blockchainNodes: blockchainNodeId ? [blockchainNodeId] : [],
+              provider,
+              region,
+              size,
+              type,
             });
-          },
-        );
+            return {
+              result,
+            };
+          });
+        });
     },
     examples: [
       {
