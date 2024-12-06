@@ -78,6 +78,7 @@ import {
   workspaceRead,
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
+import { getEnv } from "./rest/foundry.js";
 
 export interface SettlemintClient {
   workspace: {
@@ -139,6 +140,9 @@ export interface SettlemintClient {
     list: (applicationId: Id) => Promise<SmartContractSet[]>;
     read: (smartContractSetId: Id) => Promise<SmartContractSet>;
     create: (args: CreateSmartContractSetArgs) => Promise<SmartContractSet>;
+  };
+  foundry: {
+    env: (blockchainNodeId: Id, graphMiddlewareId?: Id) => Promise<Record<string, string>>;
   };
 }
 
@@ -254,6 +258,9 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       list: smartContractSetList(gqlClient, options),
       read: smartContractSetRead(gqlClient, options),
       create: smartContractSetCreate(gqlClient, options),
+    },
+    foundry: {
+      env: getEnv(options),
     },
   };
 }

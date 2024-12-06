@@ -1,5 +1,9 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 
 export function hardhatScriptRemoteCommand() {
   const build = new Command("remote")
@@ -7,20 +11,19 @@ export function hardhatScriptRemoteCommand() {
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"');
 
   build.action(async ({ script }) => {
-    const env = await fetch(`${process.env.BTP_CLUSTER_MANAGER_URL}/ide/foundry/${process.env.BTP_SCS_ID}/env`, {
-      headers: {
-        "x-auth-token": process.env.BTP_SERVICE_TOKEN!,
-      },
-    });
-    const envText = await env.text();
-
-    const envVars = envText.split("\n").map((line) => line.trim());
-    for (const envVar of envVars) {
-      const [key, value] = envVar.split("=");
-      process.env[key as string] = value;
+    const env = await loadEnv(false, false);
+    const accessToken = await accessTokenPrompt(env, true);
+    const instance = await instancePrompt(env, true);
+    if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
+      throw new ServiceNotConfiguredError("Blockchain node");
     }
+    const settlemint = createSettleMintClient({
+      accessToken,
+      instance,
+    });
+    const envConfig = await settlemint.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE, env.SETTLEMINT_THEGRAPH);
     const { command, args } = await getPackageManagerExecutable();
-    await executeCommand(command, [...args, "hardhat", "run", script, "--network", "btp"]);
+    await executeCommand(command, [...args, "hardhat", "run", script, "--network", "btp"], envConfig);
   });
 
   return build;

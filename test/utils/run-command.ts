@@ -16,6 +16,8 @@ const DEFAULT_ENV: Record<string, string> = {
   NEXTAUTH_URL: "http://localhost:3000",
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
+  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
+  HARDHAT_IGNITION_CONFIRM_RESET: "false",
 };
 
 if (isLocalEnv()) {

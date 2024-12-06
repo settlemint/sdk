@@ -21,52 +21,49 @@ const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
 
 const COMMAND_TEST_SCOPE = "setup-platform-resources";
 
-beforeAll(async () => {
-  await createWorkspaceAndApplication();
-  await createBlockchainNodeAndIpfs();
-  await createPrivateKeySmartcontractSetPortalAndBlockscout();
-  await createGraphMiddleware();
-  if (
-    !resourceAlreadyCreated([
-      "SETTLEMINT_APPLICATION",
-      "SETTLEMINT_BLOCKCHAIN_NETWORK",
-      "SETTLEMINT_BLOCKCHAIN_NODE",
-      "SETTLEMINT_IPFS",
-      "SETTLEMINT_SMART_CONTRACT_SET",
-      "SETTLEMINT_HD_PRIVATE_KEY",
-      "SETTLEMINT_PORTAL",
-      "SETTLEMINT_BLOCKSCOUT",
-      "SETTLEMINT_THEGRAPH",
-    ])
-  ) {
-    throw new Error("Creating resources failed");
-  }
-});
-
-afterAll(async () => {
+async function cleanup() {
   if (process.env.DISABLE_WORKSPACE_DELETE) {
     console.log("Skipping delete of workspace and application");
     return;
   }
-  const { output: deleteApplicationOutput } = await runCommand(COMMAND_TEST_SCOPE, [
-    "platform",
-    "delete",
-    "application",
-    "--accept-defaults",
-    "--force",
-    "default",
-  ]).result;
-  expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
-  const { output: deleteWorkspaceOutput } = await runCommand(COMMAND_TEST_SCOPE, [
-    "platform",
-    "delete",
-    "workspace",
-    "--accept-defaults",
-    "--force",
-    "default",
-  ]).result;
-  expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
+  try {
+    const { output: deleteApplicationOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "delete",
+      "application",
+      "--accept-defaults",
+      "--force",
+      "default",
+    ]).result;
+    expect(deleteApplicationOutput).toInclude(`Application ${APPLICATION_NAME} deleted successfully`);
+    const { output: deleteWorkspaceOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "delete",
+      "workspace",
+      "--accept-defaults",
+      "--force",
+      "default",
+    ]).result;
+    expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
+  } catch (err) {
+    const error = err as Error;
+    console.error(`Cleaning up resources failed: ${error.message}`, error);
+  }
+}
+
+beforeAll(async () => {
+  try {
+    await createWorkspaceAndApplication();
+    await createBlockchainNodeAndIpfs();
+    await createPrivateKeySmartcontractSetPortalAndBlockscout();
+    await createGraphMiddleware();
+  } catch (err) {
+    await cleanup();
+    process.exit(1);
+  }
 });
+
+afterAll(cleanup);
 
 async function resourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
   const env: Partial<DotEnv> = await loadEnv(false, false);

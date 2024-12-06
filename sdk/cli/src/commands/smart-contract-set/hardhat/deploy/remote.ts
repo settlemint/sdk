@@ -1,5 +1,9 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 
 export function hardhatDeployRemoteCommand() {
   const build = new Command("remote")
@@ -13,42 +17,48 @@ export function hardhatDeployRemoteCommand() {
     .option("--verify", "Verify the deployment");
 
   build.action(async ({ module, reset, verify, deploymentId }) => {
-    const env = await fetch(`${process.env.BTP_CLUSTER_MANAGER_URL}/ide/foundry/${process.env.BTP_SCS_ID}/env`, {
-      headers: {
-        "x-auth-token": process.env.BTP_SERVICE_TOKEN!,
-      },
+    const env = await loadEnv(false, false);
+
+    const accessToken = await accessTokenPrompt(env, true);
+    const instance = await instancePrompt(env, true);
+
+    if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
+      throw new ServiceNotConfiguredError("Blockchain node");
+    }
+
+    const settlemint = createSettleMintClient({
+      accessToken,
+      instance,
     });
-    const envText = await env.text();
 
-    const envVars = envText.split("\n").map((line) => line.trim());
-    for (const envVar of envVars) {
-      const [key, value] = envVar.split("=");
-      process.env[key as string] = value;
+    const envConfig = await settlemint.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE, env.SETTLEMINT_THEGRAPH);
+    const address = envConfig.BTP_FROM;
+    if (!address) {
+      throw new Error("No private key is activated on the node to sign the transaction.");
     }
 
-    if (!process.env.BTP_FROM) {
+    if (verify && !envConfig.ETHERSCAN_API_KEY) {
       throw new Error(
-        "No private key is activated on the node to sign the transaction. Activate a private key on the node this smart contract set is connected to in the Private Keys section.",
+        "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardhat.config.ts file",
       );
     }
-
-    if (verify && !process.env.ETHERSCAN_API_KEY) {
-      throw new Error(
-        "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardht.config.ts file",
-      );
-    }
-
-    await executeCommand("npx", [
-      "hardhat",
-      "ignition",
-      "deploy",
-      ...(reset ? ["--reset"] : []),
-      ...(verify ? ["--verify"] : []),
-      ...(deploymentId ? ["--deployment-id", deploymentId] : []),
-      "--network",
-      "btp",
-      module,
-    ]);
+    const { command, args } = await getPackageManagerExecutable();
+    await executeCommand(
+      command,
+      [
+        ...args,
+        "hardhat",
+        "ignition",
+        "deploy",
+        ...(reset ? ["--reset"] : []),
+        ...(verify ? ["--verify"] : []),
+        ...(deploymentId ? ["--deployment-id", deploymentId] : []),
+        "--network",
+        "btp",
+        module,
+      ].filter(Boolean),
+      envConfig,
+    );
   });
 
   return build;

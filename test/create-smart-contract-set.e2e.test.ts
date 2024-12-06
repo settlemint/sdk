@@ -1,11 +1,12 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { rmdir, stat } from "node:fs/promises";
+import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { $, type ShellError } from "bun";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
 const COMMAND_TEST_SCOPE = "create-smart-contract-set-e2e";
+const USE_CASE = "solidity-token-erc20";
 
 const projectDir = join(process.cwd(), "test", SMART_CONTRACT_SET_NAME);
 
@@ -30,17 +31,19 @@ describe("Setup a smart contract set using the SDK", () => {
   test("Create a smart contract set and install packages", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "create", "--project-name", SMART_CONTRACT_SET_NAME, "--use-case", "solidity-starterkit"],
+      ["smart-contract-set", "create", "--project-name", SMART_CONTRACT_SET_NAME, "--use-case", USE_CASE],
       { cwd: __dirname },
     ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
     await $`bun install`.cwd(projectDir);
+    await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
+    await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
 
   test("Foundry - Build smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "build"], { cwd: projectDir }).result;
-    expect(output).toInclude("Compiler run successful!");
+    expect(output).toInclude("Compiler run successful");
   });
 
   test("Foundry - Format smart contract set", async () => {
@@ -94,111 +97,44 @@ describe("Setup a smart contract set using the SDK", () => {
         done();
       });
     setTimeout(async () => {
-      const { output } = await runCommand(
+      const { output: deployOutput } = await runCommand(
         COMMAND_TEST_SCOPE,
         ["scs", "hardhat", "deploy", "local", "-m", "ignition/modules/main.ts"],
         {
           cwd: projectDir,
         },
       ).result;
-      expect(output).toInclude("successfully deployed 🚀");
+      expect(deployOutput).toInclude("successfully deployed 🚀");
+
+      const { output: outputReset } = await runCommand(
+        COMMAND_TEST_SCOPE,
+        ["scs", "hardhat", "deploy", "local", "--reset", "-m", "ignition/modules/main.ts"],
+        {
+          cwd: projectDir,
+        },
+      ).result;
+      expect(outputReset).toInclude("successfully deployed 🚀");
       isDeployed = true;
       kill();
     }, 3_000);
   });
 
-  test("Hardhat - Deploy smart contract set (remote)", async () => {});
-
-  test("Deploy subgraph", async () => {});
+  test("Hardhat - Deploy smart contract set (remote)", async () => {
+    const { output: deployOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "-m", "ignition/modules/main.ts"],
+      {
+        cwd: projectDir,
+      },
+    ).result;
+    expect(deployOutput).toInclude("successfully deployed 🚀");
+    const { output: outputReset } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts"],
+      {
+        cwd: projectDir,
+      },
+    ).result;
+    expect(outputReset).toInclude("successfully deployed 🚀");
+  });
 });
-
-/*
-{
-  "version": "2.0.0",
-  "inputs": [
-    {
-      "id": "deployment-module",
-      "description": "Hardhat Ignition Module",
-      "type": "promptString",
-      "default": "ignition/modules/main.ts"
-    },
-    {
-      "id": "extra-deployment",
-      "description": "Extra commandline arguments, e.g. --verify",
-      "type": "promptString",
-      "default": ""
-    },
-  ],
-  "tasks": [
-    {
-      "label": "Hardhat - Build",
-      "type": "shell",
-      "command": "btp-scs hardhat build",
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-      "problemMatcher": []
-    },
-    {
-      "label": "Hardhat - Test",
-      "type": "shell",
-      "command": "btp-scs hardhat test",
-      "group": "test",
-      "problemMatcher": []
-    },
-    {
-      "label": "Hardhat - Start network",
-      "type": "shell",
-      "command": "btp-scs hardhat network",
-      "problemMatcher": [],
-      "isBackground": true,
-    },
-    {
-      "label": "Hardhat - Deploy to local network",
-      "type": "shell",
-      "command": "btp-scs hardhat deploy local ${input:extra-deployment} -m ${input:deployment-module}",
-      "problemMatcher": []
-    },
-    {
-      "label": "Hardhat - Reset & Deploy to local network",
-      "type": "shell",
-      "command": "btp-scs hardhat deploy local --reset ${input:extra-deployment} -m ${input:deployment-module}",
-      "problemMatcher": []
-    },
-    {
-      "label": "Hardhat - Deploy to platform network",
-      "type": "shell",
-      "command": "btp-scs hardhat deploy remote ${input:extra-deployment} -m ${input:deployment-module}",
-      "problemMatcher": []
-    },
-    {
-      "label": "Hardhat - Reset & Deploy to platform network",
-      "type": "shell",
-      "command": "btp-scs hardhat deploy remote --reset ${input:extra-deployment} -m ${input:deployment-module}",
-      "problemMatcher": []
-    },
-    {
-      "label": "The Graph - Codegen the subgraph types",
-      "type": "shell",
-      "command": "btp-scs subgraph codegen",
-      "problemMatcher": []
-    },
-    {
-      "label": "The Graph - Build the subgraph",
-      "type": "shell",
-      "command": "btp-scs subgraph build",
-      "problemMatcher": [],
-      "group": {
-        "kind": "build",
-        "isDefault": false
-      },
-    },
-    {
-      "label": "The Graph - Deploy or update the subgraph",
-      "type": "shell",
-      "command": "btp-scs subgraph deploy",
-      "problemMatcher": []
-    }
-  ],
-}*/
