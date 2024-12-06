@@ -762,6 +762,10 @@ type ApplicationAccessToken {
   """The name of the application access token"""
   name: String!
 
+  """The private key scope of the token"""
+  privateKeyScope: PrivateKeyScope!
+  privateKeys: [PrivateKey!]!
+
   """The smart contract set scope of the token"""
   smartContractSetScope: SmartContractSetScope!
   smartcontractSets: [SmartContractSet!]!
@@ -13268,6 +13272,9 @@ type Mutation {
     """Name of the application access token"""
     name: String!
 
+    """Scope for private key access"""
+    privateKeyScope: PrivateKeyScopeInputType!
+
     """Scope for smart contract set access"""
     smartContractSetScope: SmartContractSetScopeInputType!
 
@@ -14922,6 +14929,9 @@ type Mutation {
 
     """Name of the application access token"""
     name: String
+
+    """Scope for private key access"""
+    privateKeyScope: PrivateKeyScopeInputType
 
     """Scope for smart contract set access"""
     smartContractSetScope: SmartContractSetScopeInputType
@@ -18885,6 +18895,23 @@ input PrivateKeyInputType {
   privateKeyId: ID!
 }
 
+"""Scope for private key access"""
+type PrivateKeyScope {
+  """Type of the access token scope"""
+  type: ApplicationAccessTokenScopeType!
+
+  """Array of service IDs within the scope"""
+  values: [ID!]!
+}
+
+input PrivateKeyScopeInputType {
+  """Type of the access token scope"""
+  type: ApplicationAccessTokenScopeType!
+
+  """Array of service IDs within the scope"""
+  values: [ID!]!
+}
+
 enum PrivateKeyType {
   ACCESSIBLE_ECDSA_P256
   HD_ECDSA_P256
@@ -19115,6 +19142,7 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedCustomDeployment!
+  foundryEnvConfig(blockchainNodeId: String!, middlewareId: String): JSON!
   getUseCases: [UseCaseDto!]!
   getUser(userId: ID): User!
 

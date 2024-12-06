@@ -32,6 +32,7 @@ import {
   customdeploymentRead,
   customdeploymentUpdate,
 } from "./graphql/custom-deployment.js";
+import { getEnv } from "./graphql/foundry.js";
 import {
   type CreateInsightsArgs,
   type Insights,
@@ -78,7 +79,6 @@ import {
   workspaceRead,
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
-import { getEnv } from "./rest/foundry.js";
 
 export interface SettlemintClient {
   workspace: {
@@ -260,7 +260,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       create: smartContractSetCreate(gqlClient, options),
     },
     foundry: {
-      env: getEnv(options),
+      env: getEnv(gqlClient, options),
     },
   };
 }
