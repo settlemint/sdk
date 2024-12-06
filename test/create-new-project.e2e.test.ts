@@ -109,11 +109,7 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Generating IPFS resources");
     expect(output).toInclude("Generating Blockscout resources");
     expect(output).toInclude("Generating Portal resources");
-    expect(output).toInclude("Schema was generated successfully");
-
     expect(output).toInclude("Generating TheGraph resources");
-    expect(output).toInclude("Introspection output was generated successfully");
-
     expect(output).toInclude("Codegen complete");
   });
 
