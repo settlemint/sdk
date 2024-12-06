@@ -23,7 +23,7 @@ export function privateKeyHsmCreateCommand() {
           ) => {
             return baseAction(defaultArgs, async (settlemint, env, autoAccept) => {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = (blockchainNodeId ?? autoAccept) ? env.SETTLEMINT_BLOCKCHAIN_NODE! : undefined;
+              const blockchainNode = blockchainNodeId ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE! : undefined);
               const result = await settlemint.privateKey.create({
                 name,
                 applicationId: application,
