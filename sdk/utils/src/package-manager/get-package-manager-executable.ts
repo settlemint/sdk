@@ -8,6 +8,8 @@ export async function getPackageManagerExecutable(targetDir?: string): Promise<{
       return { command: "pnpm", args: ["dlx"] };
     case "bun":
       return { command: "bunx", args: [] };
+    case "yarn":
+      return { command: "yarn", args: ["create"] };
   }
 
   // Default to npm
