@@ -38,9 +38,9 @@ export function hardhatDeployRemoteCommand() {
       throw new Error("No private key is activated on the node to sign the transaction.");
     }
 
-    if (verify && !envConfig.ETHERSCAN_API_KEY) {
+    if (verify && !(envConfig.ETHERSCAN_API_KEY || env.ETHERSCAN_API_KEY)) {
       throw new Error(
-        "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardhat.config.ts file",
+        "It is not possible to verify the deployment on this network unless you supply an Etherscan API key using the ETHERSCAN_API_KEY environment variable",
       );
     }
     const { command, args } = await getPackageManagerExecutable();
