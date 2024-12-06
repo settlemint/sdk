@@ -188,14 +188,17 @@ async function createBlockchainNodeAndIpfs() {
 
   const [networkResult, hasuraResult, ipfsResult] = results;
 
-  if (networkResult.status === "fulfilled" && networkResult.value) {
+  if (!hasBlockchainNode && networkResult.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkResult.value.output).toInclude("Blockchain node is deployed");
+    const env: Partial<DotEnv> = await loadEnv(false, false);
     const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
       "create",
       "private-key",
       "hsm-ecdsa-p256",
+      "--blockchain-node-id",
+      env.SETTLEMINT_BLOCKCHAIN_NODE!,
       "--accept-defaults",
       "--default",
       "--provider",
@@ -233,6 +236,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const hasSmartContractSet = await resourceAlreadyCreated(["SETTLEMINT_SMART_CONTRACT_SET"]);
   const hasPortalMiddleware = await resourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
   const hasBlockscoutInsights = await resourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
+  const env: Partial<DotEnv> = await loadEnv(false, false);
 
   const results = await Promise.allSettled([
     hasPrivateKey
@@ -242,6 +246,8 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           "create",
           "private-key",
           "hd-ecdsa-p256",
+          "--blockchain-node-id",
+          env.SETTLEMINT_BLOCKCHAIN_NODE!,
           "--accept-defaults",
           "--default",
           "--provider",

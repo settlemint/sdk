@@ -22,14 +22,13 @@ export function privateKeyHdCreateCommand() {
             { applicationId, blockchainNodeId, provider, region, size, type, ...defaultArgs },
             autoAccept,
           ) => {
-            return baseAction(defaultArgs, async (settlemint, env, autoAccept) => {
+            return baseAction(defaultArgs, async (settlemint, env) => {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = blockchainNodeId ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE! : undefined);
               const result = await settlemint.privateKey.create({
                 name,
                 applicationId: application,
                 privateKeyType: "HD_ECDSA_P256",
-                blockchainNodes: blockchainNode ? [blockchainNode] : [],
+                blockchainNodes: blockchainNodeId ? [blockchainNodeId] : [],
                 provider,
                 region,
                 size,
