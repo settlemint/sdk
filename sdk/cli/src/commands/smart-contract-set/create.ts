@@ -45,7 +45,7 @@ export function createCommand(): Command {
           if (!confirmEmpty) {
             cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
           }
-          await rmdir(projectDir);
+          await rmdir(projectDir, { recursive: true });
         }
 
         const selectedUseCase = await useCasePrompt(useCase);
