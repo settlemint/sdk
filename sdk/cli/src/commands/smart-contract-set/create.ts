@@ -27,10 +27,11 @@ export function createCommand(): Command {
           .choices(SMART_CONTRACT_SETS)
           .makeOptionMandatory(),
       )
-      .action(async ({ projectName, useCase }) => {
+      .option("--prod", "Connect to your production environment")
+      .action(async ({ projectName, useCase, prod }) => {
         intro("Creating a new smart contract set");
 
-        const env: Partial<DotEnv> = await loadEnv(false, false);
+        const env: Partial<DotEnv> = await loadEnv(false, !!prod);
         const name = await namePrompt(env, projectName);
 
         const targetDir = formatTargetDir(name);

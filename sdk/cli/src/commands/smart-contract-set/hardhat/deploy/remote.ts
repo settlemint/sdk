@@ -14,10 +14,11 @@ export function hardhatDeployRemoteCommand() {
     )
     .option("--deployment-id <deploymentId>", "Set a custom deployment id")
     .option("-r, --reset", "Reset the deployment")
-    .option("--verify", "Verify the deployment");
+    .option("--verify", "Verify the deployment")
+    .option("--prod", "Connect to your production environment");
 
-  build.action(async ({ module, reset, verify, deploymentId }) => {
-    const env = await loadEnv(false, false);
+  build.action(async ({ module, reset, verify, deploymentId, prod }) => {
+    const env = await loadEnv(false, !!prod);
 
     const accessToken = await accessTokenPrompt(env, true);
     const instance = await instancePrompt(env, true);
