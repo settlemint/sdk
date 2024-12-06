@@ -20,7 +20,7 @@ export async function executeCommand(command: string, args: string[], env?: Reco
     });
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {
-      if (code === 0) {
+      if (code === 0 || code === null || code === 143) {
         resolve();
         return;
       }
