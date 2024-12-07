@@ -49,7 +49,7 @@
   "dependencies": {
     "@commander-js/extra-typings": "12.1.0",
     "@inquirer/confirm": "5.1.0",
-    "@inquirer/input": "4.0.2",
+    "@inquirer/input": "4.1.0",
     "@inquirer/password": "4.0.3",
     "@inquirer/select": "4.0.2",
     "@settlemint/sdk-js": "workspace:*",
