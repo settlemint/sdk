@@ -53,7 +53,7 @@
     "react-dropzone": "14.3.5",
     "react-hook-form": "7.54.0",
     "react-is": "19.0.0-rc-28668d39-20241023",
-    "sonner": "1.7.0",
+    "sonner": "1.7.1",
     "tailwind-merge": "2.5.5",
     "tailwindcss-animate": "1.0.7",
     "ts-morph": "24.0.0",
