@@ -38,18 +38,19 @@ export function getRestartCommand({
   envKey: keyof DotEnv;
   restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
 }) {
-  return new Command(sanitizeCommandName(name))
+  const commandName = sanitizeCommandName(name);
+  return new Command(commandName)
     .alias(alias)
     .description(
       `Restart a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to restart the default ${type} from your .env file.
 ${createExamples([
   {
     description: `Restarts the specified ${type} by id`,
-    command: `platform restart ${type}${subType ? ` ${subType}` : ""} <${type}-id>`,
+    command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
   },
   {
     description: `Restarts the default ${type} in the production environment`,
-    command: `platform restart ${type}${subType ? ` ${subType}` : ""} default --prod`,
+    command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
   },
 ])}`,
     )

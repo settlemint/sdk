@@ -4,8 +4,8 @@ import { customDeploymentRestartCommand } from "./custom-deployments/restart";
 import { insightsRestartCommand } from "./insights/restart";
 import { integrationToolRestartCommand } from "./integration-tools/restart";
 import { middlewareRestartCommand } from "./middleware/restart";
-import { smartContractPortalRestartCommand } from "./middleware/smart-contract-portal/restart";
 import { privateKeyRestartCommand } from "./private-key/restart";
+import { smartContractSetRestartCommand } from "./smart-contract-set/restart";
 import { storageRestartCommand } from "./storage/restart";
 
 /**
@@ -21,7 +21,7 @@ export function restartCommand() {
     .addCommand(integrationToolRestartCommand())
     .addCommand(middlewareRestartCommand())
     .addCommand(privateKeyRestartCommand())
-    .addCommand(smartContractPortalRestartCommand())
+    .addCommand(smartContractSetRestartCommand())
     .addCommand(storageRestartCommand());
 
   return cmd;
