@@ -26,12 +26,14 @@ import type { ResourceType } from "./resource-type";
 export function getRestartCommand({
   name,
   type,
+  subType,
   alias,
   envKey,
   restartFunction,
 }: {
   name: string;
   type: ResourceType;
+  subType?: string;
   alias: string;
   envKey: keyof DotEnv;
   restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
@@ -43,11 +45,11 @@ export function getRestartCommand({
 ${createExamples([
   {
     description: `Restarts the specified ${type} by id`,
-    command: `platform restart ${type} <${type}-id>`,
+    command: `platform restart ${type}${subType ? ` ${subType}` : ""} <${type}-id>`,
   },
   {
     description: `Restarts the default ${type} in the production environment`,
-    command: `platform restart ${type} default --prod`,
+    command: `platform restart ${type}${subType ? ` ${subType}` : ""}  default --prod`,
   },
 ])}`,
     )

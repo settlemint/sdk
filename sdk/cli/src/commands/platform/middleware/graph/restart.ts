@@ -8,6 +8,7 @@ export function graphRestartCommand() {
   return getRestartCommand({
     name: "graph",
     type: "middleware",
+    subType: "graph",
     alias: "gr",
     envKey: "SETTLEMINT_THEGRAPH",
     restartFunction: async (settlemint, id) => {

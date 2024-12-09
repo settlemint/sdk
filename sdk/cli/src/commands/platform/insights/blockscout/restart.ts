@@ -8,6 +8,7 @@ export function blockscoutRestartCommand() {
   return getRestartCommand({
     name: "blockscout",
     type: "insights",
+    subType: "blockscout",
     alias: "bs",
     envKey: "SETTLEMINT_BLOCKSCOUT",
     restartFunction: async (settlemint, id) => {
