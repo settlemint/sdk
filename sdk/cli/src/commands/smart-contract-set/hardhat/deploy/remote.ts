@@ -8,9 +8,9 @@ import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemin
 export function hardhatDeployRemoteCommand() {
   const build = new Command("remote")
     .description("Deploy the smart contracts using Hardhat/ignition to the remote network on the platform")
-    .requiredOption(
+    .option(
       "-m, --module <ignitionmodule>",
-      'The module to deploy with Ignition, e.g. "ignition/modules/Counter.ts"',
+      'The module to deploy with Ignition, defaults to "ignition/modules/main.ts"',
     )
     .option("--deployment-id <deploymentId>", "Set a custom deployment id")
     .option("-r, --reset", "Reset the deployment")
@@ -56,7 +56,7 @@ export function hardhatDeployRemoteCommand() {
         ...(deploymentId ? ["--deployment-id", deploymentId] : []),
         "--network",
         "btp",
-        module,
+        module ?? "ignition/modules/main.ts",
       ].filter(Boolean),
       envConfig,
     );

@@ -4,9 +4,9 @@ import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-uti
 export function hardhatDeployLocalCommand() {
   const build = new Command("local")
     .description("Deploy the smart contracts using Hardhat/ignition to the local development network")
-    .requiredOption(
+    .option(
       "-m, --module <ignitionmodule>",
-      'The module to deploy with Ignition, e.g. "ignition/modules/Counter.ts"',
+      'The module to deploy with Ignition, defaults to "ignition/modules/main.ts"',
     )
     .option("-r, --reset", "Reset the deployment")
     .option("--verify", "Verify the deployment");
@@ -24,7 +24,7 @@ export function hardhatDeployLocalCommand() {
         ...(verify ? ["--verify"] : []),
         "--network",
         "localhost",
-        module,
+        module ?? "ignition/modules/main.ts",
       ].filter(Boolean),
     );
   });
