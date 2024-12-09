@@ -1,5 +1,6 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
 import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
@@ -33,11 +34,9 @@ export function hardhatDeployRemoteCommand() {
       instance,
     });
 
+    const node = await settlemint.blockchainNode.read(env.SETTLEMINT_BLOCKCHAIN_NODE);
     const envConfig = await settlemint.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE, env.SETTLEMINT_THEGRAPH);
-    const address = envConfig.BTP_FROM;
-    if (!address) {
-      throw new Error("No private key is activated on the node to sign the transaction.");
-    }
+    await addressPrompt(env, true, node);
 
     if (verify) {
       const config = await getHardhatConfigData();

@@ -28,6 +28,14 @@ const BlockchainNodeFragment = graphql(`
         name
       }
     }
+    privateKeys {
+      ... on PrivateKey {
+        id
+        name
+        privateKeyType
+        address
+      }
+    }
   }
 `);
 
