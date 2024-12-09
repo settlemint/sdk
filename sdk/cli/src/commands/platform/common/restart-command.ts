@@ -49,7 +49,7 @@ ${createExamples([
   },
   {
     description: `Restarts the default ${type} in the production environment`,
-    command: `platform restart ${type}${subType ? ` ${subType}` : ""}  default --prod`,
+    command: `platform restart ${type}${subType ? ` ${subType}` : ""} default --prod`,
   },
 ])}`,
     )
