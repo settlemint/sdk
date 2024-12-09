@@ -1,8 +1,8 @@
 import { createCommand } from "@/commands/platform/create";
 import { deleteCommand } from "@/commands/platform/delete";
+import { restartCommand } from "@/commands/platform/restart";
 import { updateCommand } from "@/commands/platform/update";
 import { Command } from "@commander-js/extra-typings";
-import { restartCommand } from "./platform/restart";
 
 /**
  * Creates and returns the 'platform' command for the SettleMint SDK.
