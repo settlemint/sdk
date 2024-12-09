@@ -8,7 +8,7 @@ export function ipfsRestartCommand() {
   return getRestartCommand({
     name: "ipfs",
     type: "storage",
-    alias: "ipfs",
+    alias: "ip",
     envKey: "SETTLEMINT_IPFS",
     restartFunction: async (settlemint, id) => {
       return settlemint.storage.restart(id);
