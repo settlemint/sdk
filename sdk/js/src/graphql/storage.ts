@@ -92,6 +92,17 @@ mutation CreateStorage(
 
 export type CreateStorageArgs = VariablesOf<typeof createStorage>;
 
+const restartStorage = graphql(
+  `
+  mutation RestartStorage($id: ID!) {
+    restartStorage(entityId: $id) {
+      ...Storage
+    }
+  }
+`,
+  [StorageFragment],
+);
+
 /**
  * Creates a function to list storage items for a given application.
  *
@@ -158,3 +169,11 @@ export const storageCreate = (
     return storage;
   };
 };
+
+export const storageRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (storageId: Id): Promise<Storage> => {
+    const id = validate(IdSchema, storageId);
+    const { restartStorage: storage } = await gqlClient.request(restartStorage, { id });
+    return storage;
+  };

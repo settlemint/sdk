@@ -93,6 +93,21 @@ const createSmartContractSet = graphql(
 export type CreateSmartContractSetArgs = VariablesOf<typeof createSmartContractSet>;
 
 /**
+ * GraphQL mutation to restart a smart contract set.
+ */
+const restartSmartContractSet = graphql(
+  `
+  mutation RestartSmartContractSet($entityId: ID!) {
+    restartSmartContractSet(entityId: $entityId) {
+      ...SmartContractSet
+    }
+  }`,
+  [SmartContractSetFragment],
+);
+
+export type RestartSmartContractSetArgs = VariablesOf<typeof restartSmartContractSet>;
+
+/**
  * Creates a function to list smart contract sets for a given application.
  *
  * @param gqlClient - The GraphQL client to use for the request.
@@ -153,3 +168,13 @@ export const smartContractSetCreate = (
     return smartContractSet;
   };
 };
+
+export const smartContractSetRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (smartContractSetId: Id): Promise<SmartContractSet> => {
+    const id = validate(IdSchema, smartContractSetId);
+    const { restartSmartContractSet: smartContractSet } = await gqlClient.request(restartSmartContractSet, {
+      entityId: id,
+    });
+    return smartContractSet;
+  };

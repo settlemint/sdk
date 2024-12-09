@@ -143,6 +143,17 @@ const deleteBlockchainNetwork = graphql(
   [BlockchainNetworkFragment],
 );
 
+const restartBlockchainNetwork = graphql(
+  `
+  mutation RestartBlockchainNetwork($id: ID!) {
+    restartBlockchainNetwork(entityId: $id) {
+      ...BlockchainNetwork
+    }
+  }
+`,
+  [BlockchainNetworkFragment],
+);
+
 /**
  * Creates a function to list blockchain networks for a given application.
  *
@@ -232,3 +243,11 @@ export const blockchainNetworkDelete = (
     return blockchainNetwork;
   };
 };
+
+export const blockchainNetworkRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (networkId: Id): Promise<BlockchainNetwork> => {
+    const id = validate(IdSchema, networkId);
+    const { restartBlockchainNetwork: blockchainNetwork } = await gqlClient.request(restartBlockchainNetwork, { id });
+    return blockchainNetwork;
+  };
