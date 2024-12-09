@@ -1,6 +1,7 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
+import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
@@ -38,10 +39,13 @@ export function hardhatDeployRemoteCommand() {
       throw new Error("No private key is activated on the node to sign the transaction.");
     }
 
-    if (verify && !(envConfig.ETHERSCAN_API_KEY || env.ETHERSCAN_API_KEY)) {
-      throw new Error(
-        "It is not possible to verify the deployment on this network unless you supply an Etherscan API key using the ETHERSCAN_API_KEY environment variable",
-      );
+    if (verify) {
+      const config = await getHardhatConfigData();
+      if (!config?.etherscan?.apiKey) {
+        throw new Error(
+          "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardhat.config.ts file",
+        );
+      }
     }
     const { command, args } = await getPackageManagerExecutable();
     await executeCommand(
