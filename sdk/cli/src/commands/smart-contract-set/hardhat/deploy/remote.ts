@@ -1,6 +1,7 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
+import { deploymentIdPrompt } from "@/commands/smart-contract-set/prompts/deployment-id.prompt";
 import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
@@ -40,7 +41,7 @@ export function hardhatDeployRemoteCommand() {
     const node = await settlemint.blockchainNode.read(env.SETTLEMINT_BLOCKCHAIN_NODE);
     const envConfig = await settlemint.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE, env.SETTLEMINT_THEGRAPH);
     await addressPrompt(autoAccept, node);
-
+    const customDeploymentId = deploymentId ?? (await deploymentIdPrompt(env, autoAccept, prod));
     if (verify) {
       const config = await getHardhatConfigData();
       if (!config?.etherscan?.apiKey) {
@@ -59,7 +60,7 @@ export function hardhatDeployRemoteCommand() {
         "deploy",
         ...(reset ? ["--reset"] : []),
         ...(verify ? ["--verify"] : []),
-        ...(deploymentId ? ["--deployment-id", deploymentId] : []),
+        ...(customDeploymentId ? ["--deployment-id", customDeploymentId] : []),
         "--network",
         "btp",
         module ?? "ignition/modules/main.ts",
