@@ -1,0 +1,95 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { sanitizeCommandName } from "@/utils/sanitize-command-name";
+import { Command } from "@commander-js/extra-typings";
+import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
+import { createExamples } from "../utils/create-examples";
+import type { ResourceType } from "./resource-type";
+
+/**
+ * Creates a command for restarting resources in the SettleMint platform.
+ *
+ * @param options - Configuration options for the restart command
+ * @param options.name - The name of the command
+ * @param options.type - The type of resource to restart
+ * @param options.alias - Command alias (shorthand)
+ * @param options.envKey - Environment variable key for the resource ID
+ * @param options.restartFunction - Function that performs the actual restart operation on the platform
+ * @returns A configured Commander command for restarting the specified resource type
+ */
+export function getRestartCommand({
+  name,
+  type,
+  alias,
+  envKey,
+  restartFunction,
+}: {
+  name: string;
+  type: ResourceType;
+  alias: string;
+  envKey: keyof DotEnv;
+  restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+}) {
+  return new Command(sanitizeCommandName(name))
+    .alias(alias)
+    .description(
+      `Restart a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to restart the default ${type} from your .env file.
+${createExamples([
+  {
+    description: `Restarts the specified ${type} by id`,
+    command: `platform restart ${type} <${type}-id>`,
+  },
+  {
+    description: `Restarts the default ${type} in the production environment`,
+    command: `platform restart ${type} default --prod`,
+  },
+])}`,
+    )
+    .argument("<id>", `The id of the ${type}, use 'default' to restart the default one from your .env file`)
+    .option("-a, --accept-defaults", "Accept the default and previously set values")
+    .option("--prod", "Connect to your production environment")
+    .option("-w, --wait", "Wait until restarted")
+    .action(async (id, { acceptDefaults, prod, wait }) => {
+      intro(`Restarting ${type} in the SettleMint platform`);
+
+      const autoAccept = !!acceptDefaults || isInCi;
+      const env: Partial<DotEnv> = await loadEnv(false, !!prod);
+
+      const accessToken = await accessTokenPrompt(env, autoAccept);
+      const instance = await instancePrompt(env, autoAccept);
+
+      const settlemint = createSettleMintClient({
+        accessToken,
+        instance,
+      });
+
+      const isDefaultId = id === "default";
+      const serviceId = isDefaultId ? env[envKey]! : id;
+
+      if (!serviceId) {
+        throw new Error(
+          `No default ${type} found in your .env file. Please provide a valid ${type} ID or set a default ${type} first.`,
+        );
+      }
+
+      const result = await spinner({
+        startMessage: `Restarting ${type}`,
+        task: async () => {
+          return restartFunction(settlemint, serviceId);
+        },
+        stopMessage: `${capitalizeFirstLetter(type)} restart initiated`,
+      });
+
+      if (wait) {
+        await waitForCompletion({ settlemint, type, id: serviceId, action: "restart" });
+      }
+
+      outro(`${capitalizeFirstLetter(type)} ${result.name} restart initiated successfully`);
+    });
+}
