@@ -116,13 +116,17 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote)", async () => {
-    const { output: deployOutput } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
-      cwd: projectDir,
-    }).result;
+    const { output: deployOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "--accept-defaults"],
+      {
+        cwd: projectDir,
+      },
+    ).result;
     expect(deployOutput).toInclude("successfully deployed 🚀");
     const { output: outputReset } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts"],
+      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
       {
         cwd: projectDir,
       },

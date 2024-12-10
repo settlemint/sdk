@@ -1,21 +1,36 @@
-import { getHardhatConfigData, updateHardhatConfigData } from "@/utils/hardhat-config";
+import { getHardhatConfigData } from "@/utils/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
+import type { DotEnv } from "@settlemint/sdk-utils";
+import { writeEnvSpinner } from "../../connect/write-env.spinner";
 
 /**
  * Prompts the user to select a blockchain address to deploy the smart contract set to.
  *
- * @param accept - Whether to accept the default address from env
- * @param node - The blockchain node containing available addresses
+ * @param options - The options for the address prompt
+ * @param options.env - The environment variables
+ * @param options.accept - Whether to accept the default address from env
+ * @param options.prod - Whether this is a production deployment
+ * @param options.node - The blockchain node containing available addresses
  * @returns The selected address or null if none available
  * @throws {Error} If no addresses are available to select from
  */
-export async function addressPrompt(accept: boolean, node: BlockchainNode): Promise<string | null> {
+export async function addressPrompt({
+  env,
+  accept,
+  prod,
+  node,
+}: {
+  env: Partial<DotEnv>;
+  accept: boolean;
+  prod: boolean | undefined;
+  node: BlockchainNode;
+}): Promise<string | null> {
   const config = await getHardhatConfigData();
-
   const possiblePrivateKeys =
     node.privateKeys?.filter((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256") ?? [];
-  const defaultAddress = config.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
+  const defaultAddress =
+    env.SETTLEMINT_SMART_CONTRACT_SET_ADDRESS ?? config.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
   if (defaultPossible) {
@@ -35,13 +50,10 @@ export async function addressPrompt(accept: boolean, node: BlockchainNode): Prom
     default: defaultAddress ?? possiblePrivateKeys[0]?.address,
   });
 
-  if (address) {
-    await updateHardhatConfigData({
-      ...config,
-      networks: {
-        ...config.networks,
-        btp: { ...config.networks?.btp, from: address },
-      },
+  if (address && address !== env.SETTLEMINT_SMART_CONTRACT_SET_ADDRESS) {
+    await writeEnvSpinner(!!prod, {
+      ...env,
+      SETTLEMINT_SMART_CONTRACT_SET_ADDRESS: address,
     });
   }
 

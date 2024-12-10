@@ -21,11 +21,10 @@ export async function deploymentIdPrompt(
   env: Partial<DotEnv>,
   accept: boolean,
   prod: boolean | undefined,
-): Promise<string> {
+): Promise<string | undefined> {
   const defaultDeploymentId = env.SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID;
-  const defaultPossible = accept && defaultDeploymentId;
 
-  if (defaultPossible) {
+  if (accept) {
     return defaultDeploymentId;
   }
 
@@ -40,8 +39,8 @@ export async function deploymentIdPrompt(
   }
 
   const deploymentId = await input({
-    message: "What is the deployment ID of your smart contract set?",
-    required: true,
+    message: "What is the deployment ID of your smart contract set (optional)?",
+    required: false,
   });
 
   await writeEnvSpinner(!!prod, {
