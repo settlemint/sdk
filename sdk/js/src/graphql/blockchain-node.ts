@@ -109,6 +109,17 @@ const createBlockchainNode = graphql(
 
 export type CreateBlockchainNodeArgs = VariablesOf<typeof createBlockchainNode>;
 
+const restartBlockchainNode = graphql(
+  `
+  mutation RestartBlockchainNode($id: ID!) {
+    restartBlockchainNode(entityId: $id) {
+      ...BlockchainNode
+    }
+  }
+`,
+  [BlockchainNodeFragment],
+);
+
 /**
  * Creates a function to list blockchain nodes for a given application.
  *
@@ -175,3 +186,11 @@ export const blockchainNodeCreate = (
     return blockchainNode;
   };
 };
+
+export const blockchainNodeRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (nodeId: Id): Promise<BlockchainNode> => {
+    const id = validate(IdSchema, nodeId);
+    const { restartBlockchainNode: blockchainNode } = await gqlClient.request(restartBlockchainNode, { id });
+    return blockchainNode;
+  };

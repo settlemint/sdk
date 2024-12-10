@@ -5,7 +5,7 @@ import { note, spinner } from "@settlemint/sdk-utils/terminal";
 import type { Id } from "@settlemint/sdk-utils/validation";
 import type { ResourceType } from "../common/resource-type";
 
-type Action = "deploy" | "destroy";
+type Action = "deploy" | "destroy" | "restart";
 
 /**
  * Waits for a resource to complete deployment/destruction or fails after a specified timeout.

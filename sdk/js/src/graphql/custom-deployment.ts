@@ -102,6 +102,17 @@ mutation CreateCustomDeployment(
 
 export type CreateCustomDeploymentArgs = VariablesOf<typeof createCustomDeployment>;
 
+const restartCustomDeployment = graphql(
+  `
+  mutation RestartCustomDeployment($id: ID!) {
+    restartCustomDeployment(entityId: $id) {
+      ...CustomDeployment
+    }
+  }
+`,
+  [CustomDeploymentFragment],
+);
+
 /**
  * Creates a function to list custom deployments for a given application.
  *
@@ -178,3 +189,11 @@ export const customdeploymentCreate = (
     return customDeployment;
   };
 };
+
+export const customDeploymentRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (deploymentId: Id): Promise<CustomDeployment> => {
+    const id = validate(IdSchema, deploymentId);
+    const { restartCustomDeployment: customDeployment } = await gqlClient.request(restartCustomDeployment, { id });
+    return customDeployment;
+  };
