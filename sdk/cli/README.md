@@ -66,4 +66,5 @@ Create a ".env" file in the root folder of this project.
 ```env
 SETTLEMINT_ACCESS_TOKEN="sm_pat_xxx"
 SETTLEMINT_INSTANCE="https://me.settlemint.be"
+DISABLE_WORKSPACE_DELETE=true
 ```

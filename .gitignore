@@ -49,3 +49,4 @@ apps/registry/public/*.json
 # Testing
 test/starter-kit-demo
 test/unknown
+test/contracts

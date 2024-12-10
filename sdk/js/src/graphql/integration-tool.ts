@@ -95,6 +95,17 @@ const createIntegration = graphql(
  */
 export type CreateIntegrationToolArgs = VariablesOf<typeof createIntegration>;
 
+const restartIntegrationTool = graphql(
+  `
+  mutation RestartIntegrationTool($id: ID!) {
+    restartIntegration(entityId: $id) {
+      ...Integration
+    }
+  }
+`,
+  [IntegrationFragment],
+);
+
 /**
  * Creates a function to list integration tools for a given application.
  *
@@ -169,3 +180,23 @@ export const integrationToolCreate = (
     return integration;
   };
 };
+
+/**
+ * Creates a function to restart a specific integration tool.
+ *
+ * @param gqlClient - The GraphQL client to use for the request.
+ * @param options - The SettleMint client options.
+ * @returns A function that takes an integration tool ID and returns the restarted tool.
+ * @throws Will throw an error if the integration tool ID is invalid.
+ *
+ * @example
+ * const client = createSettleMintClient({ ... });
+ * const restartedIntegrationTool = await client.integrationTool.restart('integrationToolId');
+ */
+export const integrationToolRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (toolId: Id): Promise<IntegrationTool> => {
+    const id = validate(IdSchema, toolId);
+    const { restartIntegration: integration } = await gqlClient.request(restartIntegrationTool, { id });
+    return integration;
+  };

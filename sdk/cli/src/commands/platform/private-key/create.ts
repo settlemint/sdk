@@ -1,5 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
 import { privateKeyHdCreateCommand } from "./hd-ecdsa-p256/create";
+import { privateKeyHsmCreateCommand } from "./hsm-ecdsa-p256/create";
 
 /**
  * Creates and returns the 'private-key' command for the SettleMint SDK.
@@ -11,5 +12,6 @@ export function privateKeyCreateCommand(): Command {
   return new Command("private-key")
     .alias("pk")
     .description("Create a private key in the SettleMint platform")
-    .addCommand(privateKeyHdCreateCommand());
+    .addCommand(privateKeyHdCreateCommand())
+    .addCommand(privateKeyHsmCreateCommand());
 }

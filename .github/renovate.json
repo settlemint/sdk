@@ -14,30 +14,23 @@
     ":prHourlyLimitNone",
     ":widenPeerDependencies",
     "security:openssf-scorecard",
-    "schedule:nonOfficeHours"
+    "schedule:nonOfficeHours",
+    "helpers:pinGitHubActionDigests"
   ],
-  "labels": [
-    "dependencies"
-  ],
+  "labels": ["dependencies"],
   "rebaseWhen": "conflicted",
   "customManagers": [
     {
       "customType": "regex",
       "datasourceTemplate": "npm",
       "depNameTemplate": "@biomejs/biome",
-      "fileMatch": [
-        "(^|/)biome.jsonc?$"
-      ],
-      "matchStrings": [
-        "\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""
-      ]
+      "fileMatch": ["(^|/)biome.jsonc?$"],
+      "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
     }
   ],
   "packageRules": [
     {
-      "matchFileNames": [
-        "apps/**"
-      ],
+      "matchFileNames": ["apps/**"],
       "rangeStrategy": "pin"
     }
   ],

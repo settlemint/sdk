@@ -99,6 +99,17 @@ const createInsights = graphql(
  */
 export type CreateInsightsArgs = VariablesOf<typeof createInsights>;
 
+const restartInsights = graphql(
+  `
+  mutation RestartInsights($id: ID!) {
+    restartInsights(entityId: $id) {
+      ...Insights
+    }
+  }
+`,
+  [InsightsFragment],
+);
+
 /**
  * Creates a function to list insights for a given application.
  *
@@ -175,3 +186,11 @@ export const insightsCreate = (
     return insights;
   };
 };
+
+export const insightsRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (insightsId: Id): Promise<Insights> => {
+    const id = validate(IdSchema, insightsId);
+    const { restartInsights: insights } = await gqlClient.request(restartInsights, { id });
+    return insights;
+  };

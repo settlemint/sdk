@@ -37,17 +37,17 @@
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
-    "test:e2e": "bun test test/*.ts",
+    "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setupPlatformResources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "lefthook": "1.8.5",
+    "lefthook": "1.9.0",
     "turbo": "2.3.3",
     "typescript": "5.7.2",
     "knip": "5.39.2",
     "@types/bun": "1.1.14",
-    "@arethetypeswrong/cli": "0.17.0",
+    "@arethetypeswrong/cli": "0.17.1",
     "publint": "0.2.12",
     "tsup": "8.3.5"
   },
@@ -63,5 +63,10 @@
     "lefthook",
     "secp256k1",
     "utf-8-validate"
-  ]
+  ],
+  "overrides": {
+    "elliptic": "6.6.1",
+    "ws": "8.18.0",
+    "react-is": "19.0.0"
+  }
 }

@@ -1,4 +1,5 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { SMART_CONTRACT_SETS } from "@/constants/smart-contract-sets";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../common/create-command";
@@ -19,26 +20,7 @@ export function smartContractSetCreateCommand() {
         .option("--blockchain-node-id <blockchainNodeId>", "Blockchain Node ID")
         .addOption(
           new Option("--use-case <useCase>", "Use case for the smart contract set")
-            .choices([
-              "solidity-empty",
-              "solidity-token-erc20",
-              "solidity-token-erc1155",
-              "solidity-token-erc20-metatx",
-              "solidity-supplychain",
-              "chaincode-ts-empty",
-              "chaincode-ts-empty-pdc",
-              "chaincode-go-empty",
-              "solidity-statemachine",
-              "solidity-token-erc20-crowdsale",
-              "solidity-token-erc721",
-              "solidity-token-erc721a",
-              "solidity-token-erc721-generative-art",
-              "solidity-token-soulbound",
-              "solidity-diamond-bond",
-              "solidity-attestation-service",
-              "solidity-zeto",
-              "solidity-starterkit",
-            ])
+            .choices(SMART_CONTRACT_SETS)
             .makeOptionMandatory(),
         )
         .option("--user-id <userId>", "User ID")

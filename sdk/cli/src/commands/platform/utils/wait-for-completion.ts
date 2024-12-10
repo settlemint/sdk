@@ -5,7 +5,7 @@ import { note, spinner } from "@settlemint/sdk-utils/terminal";
 import type { Id } from "@settlemint/sdk-utils/validation";
 import type { ResourceType } from "../common/resource-type";
 
-type Action = "deploy" | "destroy";
+type Action = "deploy" | "destroy" | "restart";
 
 /**
  * Waits for a resource to complete deployment/destruction or fails after a specified timeout.
@@ -22,7 +22,7 @@ export async function waitForCompletion({
   type,
   id,
   action,
-  maxTimeout = 10 * 60 * 1000, // 10 minutes in milliseconds
+  maxTimeout = 15 * 60 * 1000, // 15 minutes in milliseconds
 }: {
   settlemint: SettlemintClient;
   type: ResourceType;
@@ -61,7 +61,7 @@ export async function waitForCompletion({
         }
 
         if (Date.now() - startTime > maxTimeout) {
-          throw new Error(`Operation timed out after 10 minutes for ${type} with id ${id}`);
+          throw new Error(`Operation timed out after ${maxTimeout / 60_000} minutes for ${type} with id ${id}`);
         }
         await new Promise((resolve) => setTimeout(resolve, 5_000));
       }

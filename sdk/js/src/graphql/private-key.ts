@@ -64,6 +64,7 @@ const createPrivateKey = graphql(
     $region: String!
     $size: ClusterServiceSize
     $type: ClusterServiceType
+    $blockchainNodes: [ID!]
   ) {
     createPrivateKey(
       applicationId: $applicationId,
@@ -73,6 +74,7 @@ const createPrivateKey = graphql(
       region: $region
       size: $size
       type: $type
+      blockchainNodes: $blockchainNodes
     ) {
       ...PrivateKey
     }
@@ -82,6 +84,17 @@ const createPrivateKey = graphql(
 );
 
 export type CreatePrivateKeyArgs = VariablesOf<typeof createPrivateKey>;
+
+const restartPrivateKey = graphql(
+  `
+  mutation RestartPrivateKey($id: ID!) {
+    restartPrivateKey(entityId: $id) {
+      ...PrivateKey
+    }
+  }
+`,
+  [PrivateKeyFragment],
+);
 
 /**
  * Creates a function to list private keys for a given application.
@@ -150,3 +163,11 @@ export const privateKeyCreate = (
     return privateKey;
   };
 };
+
+export const privateKeyRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (keyId: Id): Promise<PrivateKey> => {
+    const id = validate(IdSchema, keyId);
+    const { restartPrivateKey: privateKey } = await gqlClient.request(restartPrivateKey, { id });
+    return privateKey;
+  };

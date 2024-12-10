@@ -762,6 +762,10 @@ type ApplicationAccessToken {
   """The name of the application access token"""
   name: String!
 
+  """The private key scope of the token"""
+  privateKeyScope: PrivateKeyScope!
+  privateKeys: [PrivateKey!]!
+
   """The smart contract set scope of the token"""
   smartContractSetScope: SmartContractSetScope!
   smartcontractSets: [SmartContractSet!]!
@@ -4568,6 +4572,7 @@ enum BlockchainNodeActionMessageKey {
   NETWORK_WILL_NOT_PRODUCE_BLOCKS
   NETWORK_WILL_NOT_PRODUCE_BLOCKS_IF_NO_EXTERNAL_VALIDATORS
   NOT_PERMITTED_TO_CREATE_VALIDATORS
+  RESUME_VALIDATOR_PAUSED_LAST_FIRST
   VALIDATOR_CANNOT_BE_ADDED
   VALIDATOR_CANNOT_BE_ADDED_IF_NO_EXTERNAL_VALIDATORS
   VALIDATOR_WILL_BECOME_NON_VALIDATOR
@@ -13268,6 +13273,9 @@ type Mutation {
     """Name of the application access token"""
     name: String!
 
+    """Scope for private key access"""
+    privateKeyScope: PrivateKeyScopeInputType!
+
     """Scope for smart contract set access"""
     smartContractSetScope: SmartContractSetScopeInputType!
 
@@ -14922,6 +14930,9 @@ type Mutation {
 
     """Name of the application access token"""
     name: String
+
+    """Scope for private key access"""
+    privateKeyScope: PrivateKeyScopeInputType
 
     """Scope for smart contract set access"""
     smartContractSetScope: SmartContractSetScopeInputType
@@ -18885,6 +18896,23 @@ input PrivateKeyInputType {
   privateKeyId: ID!
 }
 
+"""Scope for private key access"""
+type PrivateKeyScope {
+  """Type of the access token scope"""
+  type: ApplicationAccessTokenScopeType!
+
+  """Array of service IDs within the scope"""
+  values: [ID!]!
+}
+
+input PrivateKeyScopeInputType {
+  """Type of the access token scope"""
+  type: ApplicationAccessTokenScopeType!
+
+  """Array of service IDs within the scope"""
+  values: [ID!]!
+}
+
 enum PrivateKeyType {
   ACCESSIBLE_ECDSA_P256
   HD_ECDSA_P256
@@ -19115,6 +19143,7 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedCustomDeployment!
+  foundryEnvConfig(blockchainNodeId: String!, middlewareId: String): JSON!
   getUseCases: [UseCaseDto!]!
   getUser(userId: ID): User!
 

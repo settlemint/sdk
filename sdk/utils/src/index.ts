@@ -1,4 +1,4 @@
-export * from "./core/string.js";
+export * from "./core.js";
 export * from "./environment.js";
 export * from "./filesystem.js";
 export * from "./package-manager.js";

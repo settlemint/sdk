@@ -62,6 +62,8 @@ describe("privateKeyHdCreateCommand", () => {
       "europe",
       "--application-id",
       "123456789",
+      "--blockchain-node-id",
+      "node-1",
     ]);
 
     expect(commandArgs).toBe("test-key");
@@ -70,6 +72,7 @@ describe("privateKeyHdCreateCommand", () => {
       provider: "gke",
       region: "europe",
       applicationId: "123456789",
+      blockchainNodeId: "node-1",
       size: "SMALL",
       type: "SHARED",
     });

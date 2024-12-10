@@ -12,12 +12,12 @@ import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
 
 /**
- * Creates and returns the 'connect' command for the SettleMint SDK.
- * This command initializes the setup of the SettleMint SDK in the user's project.
- * It guides the user through a series of prompts to configure their environment,
- * select services, and set up necessary files.
+ * Creates and returns the 'codegen' command for the SettleMint SDK.
+ * This command generates TypeScript types and queries for GraphQL schemas and REST APIs.
+ * It reads the environment configuration and generates code for configured services
+ * like Hasura, Portal, TheGraph, Blockscout, Minio and IPFS.
  *
- * @returns {Command} The configured 'connect' command
+ * @returns {Command} The configured 'codegen' command
  */
 export function codegenCommand(): Command {
   return (
