@@ -53,7 +53,7 @@ export function getCreateCommand({
       ) => Promise<{
         result: { id: string; name: string };
         waitFor?: { resourceType: ResourceType; id: string; name: string };
-        mapDefaultEnv: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
+        mapDefaultEnv?: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
       }>,
     ) => void | Promise<void>,
   ) => void;
@@ -101,7 +101,7 @@ export function getCreateCommand({
       }
     }
 
-    if (isDefault) {
+    if (isDefault && typeof mapDefaultEnv === "function") {
       const defaultEnv = mapDefaultEnv();
       const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
       const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;

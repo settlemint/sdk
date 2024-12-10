@@ -12,10 +12,10 @@ import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import { downloadAndExtractNpmPackage } from "./create/download-extract";
 
 /**
- * Creates and returns the 'codegen' command for the SettleMint SDK CLI.
- * This command generates the code for using the SettleMint services in the user's project.
+ * Creates and returns the 'create' command for the SettleMint SDK CLI.
+ * This command bootstraps a new SettleMint project from a template.
  *
- * @returns {Command} The configured 'codegen' command
+ * @returns {Command} The configured 'create' command
  */
 export function createCommand(): Command {
   return (

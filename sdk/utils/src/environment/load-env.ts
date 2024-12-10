@@ -35,7 +35,7 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   if (prod) {
     process.env.NODE_ENV = "production";
   }
-  let { parsed } = config({ convention: "nextjs", logLevel: "error" });
+  let { parsed } = config({ convention: "nextjs", logLevel: "error", overload: true });
 
   if (!parsed) {
     parsed = {};

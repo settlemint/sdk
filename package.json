@@ -37,7 +37,7 @@
     "translate": "turbo translate",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
-    "test:e2e": "bun test test/*.ts",
+    "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setupPlatformResources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done"
   },
   "devDependencies": {

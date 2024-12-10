@@ -22,7 +22,7 @@ export async function waitForCompletion({
   type,
   id,
   action,
-  maxTimeout = 10 * 60 * 1000, // 10 minutes in milliseconds
+  maxTimeout = 15 * 60 * 1000, // 15 minutes in milliseconds
 }: {
   settlemint: SettlemintClient;
   type: ResourceType;
@@ -61,7 +61,7 @@ export async function waitForCompletion({
         }
 
         if (Date.now() - startTime > maxTimeout) {
-          throw new Error(`Operation timed out after 10 minutes for ${type} with id ${id}`);
+          throw new Error(`Operation timed out after ${maxTimeout / 60_000} minutes for ${type} with id ${id}`);
         }
         await new Promise((resolve) => setTimeout(resolve, 5_000));
       }

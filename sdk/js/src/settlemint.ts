@@ -35,6 +35,7 @@ import {
   customdeploymentRead,
   customdeploymentUpdate,
 } from "./graphql/custom-deployment.js";
+import { getEnv } from "./graphql/foundry.js";
 import {
   type CreateInsightsArgs,
   type Insights,
@@ -164,6 +165,9 @@ export interface SettlemintClient {
     create: (args: CreateSmartContractSetArgs) => Promise<SmartContractSet>;
     restart: (smartContractSetId: Id) => Promise<SmartContractSet>;
   };
+  foundry: {
+    env: (blockchainNodeId: Id, graphMiddlewareId?: Id) => Promise<Record<string, string>>;
+  };
 }
 
 /**
@@ -287,6 +291,9 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       read: smartContractSetRead(gqlClient, options),
       create: smartContractSetCreate(gqlClient, options),
       restart: smartContractSetRestart(gqlClient, options),
+    },
+    foundry: {
+      env: getEnv(gqlClient, options),
     },
   };
 }
