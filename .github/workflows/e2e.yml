@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '0 0 * * *' # runs every night Sun-Fri at 2AM (time difference with GHA! + 2hr)
+    - cron: '0 6 * * 1-5' # runs every morning Mon-Fri at 6AM UTC
   workflow_dispatch:
 
 name: E2E
