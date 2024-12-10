@@ -16,6 +16,7 @@ import {
   blockchainNetworkDelete,
   blockchainNetworkList,
   blockchainNetworkRead,
+  blockchainNetworkRestart,
 } from "./graphql/blockchain-network.js";
 import {
   type BlockchainNode,
@@ -23,10 +24,12 @@ import {
   blockchainNodeCreate,
   blockchainNodeList,
   blockchainNodeRead,
+  blockchainNodeRestart,
 } from "./graphql/blockchain-node.js";
 import {
   type CreateCustomDeploymentArgs,
   type CustomDeployment,
+  customDeploymentRestart,
   customdeploymentCreate,
   customdeploymentList,
   customdeploymentRead,
@@ -38,6 +41,7 @@ import {
   insightsCreate,
   insightsList,
   insightsRead,
+  insightsRestart,
 } from "./graphql/insights.js";
 import {
   type CreateIntegrationToolArgs,
@@ -45,6 +49,7 @@ import {
   integrationToolCreate,
   integrationToolList,
   integrationToolRead,
+  integrationToolRestart,
 } from "./graphql/integration-tool.js";
 import {
   type CreateMiddlewareArgs,
@@ -52,12 +57,14 @@ import {
   middlewareCreate,
   middlewareList,
   middlewareRead,
+  middlewareRestart,
 } from "./graphql/middleware.js";
 import {
   type CreatePrivateKeyArgs,
   type PrivateKey,
   privateKeyCreate,
   privateKeyList,
+  privateKeyRestart,
   privatekeyRead,
 } from "./graphql/private-key.js";
 import {
@@ -66,8 +73,16 @@ import {
   smartContractSetCreate,
   smartContractSetList,
   smartContractSetRead,
+  smartContractSetRestart,
 } from "./graphql/smart-contract-set.js";
-import { type CreateStorageArgs, type Storage, storageCreate, storageList, storageRead } from "./graphql/storage.js";
+import {
+  type CreateStorageArgs,
+  type Storage,
+  storageCreate,
+  storageList,
+  storageRead,
+  storageRestart,
+} from "./graphql/storage.js";
 import {
   type CreateWorkspaceArgs,
   type Workspace,
@@ -98,47 +113,56 @@ export interface SettlemintClient {
     read: (blockchainNetworkId: Id) => Promise<BlockchainNetwork>;
     create: (args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>;
     delete: (networkId: Id) => Promise<BlockchainNetwork>;
+    restart: (networkId: Id) => Promise<BlockchainNetwork>;
   };
   blockchainNode: {
     list: (applicationId: Id) => Promise<BlockchainNode[]>;
     read: (blockchainNodeId: Id) => Promise<BlockchainNode>;
     create: (args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>;
+    restart: (nodeId: Id) => Promise<BlockchainNode>;
   };
   middleware: {
     list: (applicationId: Id) => Promise<Middleware[]>;
     read: (middlewareId: Id) => Promise<Middleware>;
     create: (args: CreateMiddlewareArgs) => Promise<Middleware>;
+    restart: (middlewareId: Id) => Promise<Middleware>;
   };
   integrationTool: {
     list: (applicationId: Id) => Promise<IntegrationTool[]>;
     read: (integrationToolId: Id) => Promise<IntegrationTool>;
     create: (args: CreateIntegrationToolArgs) => Promise<IntegrationTool>;
+    restart: (integrationToolId: Id) => Promise<IntegrationTool>;
   };
   storage: {
     list: (applicationId: Id) => Promise<Storage[]>;
     read: (storageId: Id) => Promise<Storage>;
     create: (args: CreateStorageArgs) => Promise<Storage>;
+    restart: (storageId: Id) => Promise<Storage>;
   };
   privateKey: {
     list: (applicationId: Id) => Promise<PrivateKey[]>;
     read: (privateKeyId: Id) => Promise<PrivateKey>;
     create: (args: CreatePrivateKeyArgs) => Promise<PrivateKey>;
+    restart: (privateKeyId: Id) => Promise<PrivateKey>;
   };
   insights: {
     list: (applicationId: Id) => Promise<Insights[]>;
     read: (insightsId: Id) => Promise<Insights>;
     create: (args: CreateInsightsArgs) => Promise<Insights>;
+    restart: (insightsId: Id) => Promise<Insights>;
   };
   customDeployment: {
     list: (applicationId: Id) => Promise<CustomDeployment[]>;
     read: (customDeploymentId: Id) => Promise<CustomDeployment>;
     create: (args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>;
     update: (customDeploymentId: Id, imageTag: string) => Promise<CustomDeployment>;
+    restart: (customDeploymentId: Id) => Promise<CustomDeployment>;
   };
   smartContractSet: {
     list: (applicationId: Id) => Promise<SmartContractSet[]>;
     read: (smartContractSetId: Id) => Promise<SmartContractSet>;
     create: (args: CreateSmartContractSetArgs) => Promise<SmartContractSet>;
+    restart: (smartContractSetId: Id) => Promise<SmartContractSet>;
   };
 }
 
@@ -213,47 +237,56 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       read: blockchainNetworkRead(gqlClient, options),
       create: blockchainNetworkCreate(gqlClient, options),
       delete: blockchainNetworkDelete(gqlClient, options),
+      restart: blockchainNetworkRestart(gqlClient, options),
     },
     blockchainNode: {
       list: blockchainNodeList(gqlClient, options),
       read: blockchainNodeRead(gqlClient, options),
       create: blockchainNodeCreate(gqlClient, options),
+      restart: blockchainNodeRestart(gqlClient, options),
     },
     middleware: {
       list: middlewareList(gqlClient, options),
       read: middlewareRead(gqlClient, options),
       create: middlewareCreate(gqlClient, options),
+      restart: middlewareRestart(gqlClient, options),
     },
     integrationTool: {
       list: integrationToolList(gqlClient, options),
       read: integrationToolRead(gqlClient, options),
       create: integrationToolCreate(gqlClient, options),
+      restart: integrationToolRestart(gqlClient, options),
     },
     storage: {
       list: storageList(gqlClient, options),
       read: storageRead(gqlClient, options),
       create: storageCreate(gqlClient, options),
+      restart: storageRestart(gqlClient, options),
     },
     privateKey: {
       list: privateKeyList(gqlClient, options),
       read: privatekeyRead(gqlClient, options),
       create: privateKeyCreate(gqlClient, options),
+      restart: privateKeyRestart(gqlClient, options),
     },
     insights: {
       list: insightsList(gqlClient, options),
       read: insightsRead(gqlClient, options),
       create: insightsCreate(gqlClient, options),
+      restart: insightsRestart(gqlClient, options),
     },
     customDeployment: {
       list: customdeploymentList(gqlClient, options),
       read: customdeploymentRead(gqlClient, options),
       create: customdeploymentCreate(gqlClient, options),
       update: customdeploymentUpdate(gqlClient, options),
+      restart: customDeploymentRestart(gqlClient, options),
     },
     smartContractSet: {
       list: smartContractSetList(gqlClient, options),
       read: smartContractSetRead(gqlClient, options),
       create: smartContractSetCreate(gqlClient, options),
+      restart: smartContractSetRestart(gqlClient, options),
     },
   };
 }

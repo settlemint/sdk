@@ -113,6 +113,17 @@ const createMiddleware = graphql(
 
 export type CreateMiddlewareArgs = VariablesOf<typeof createMiddleware>;
 
+const restartMiddleware = graphql(
+  `
+  mutation RestartMiddleware($id: ID!) {
+    restartMiddleware(entityId: $id) {
+      ...Middleware
+    }
+  }
+`,
+  [MiddlewareFragment],
+);
+
 /**
  * Creates a function to list middlewares for a given application.
  *
@@ -178,3 +189,11 @@ export const middlewareCreate = (
     return middleware;
   };
 };
+
+export const middlewareRestart =
+  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  async (middlewareId: Id): Promise<Middleware> => {
+    const id = validate(IdSchema, middlewareId);
+    const { restartMiddleware: middleware } = await gqlClient.request(restartMiddleware, { id });
+    return middleware;
+  };

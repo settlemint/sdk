@@ -375,6 +375,14 @@ describe("Setup a project using the SDK", () => {
     createdResources.graphMiddleware = true;
   });
 
+  test("Restart smart contract set on the platform", async () => {
+    expect(createdResources.smartContractSet).toBeTrue();
+    const { output: graphOutput } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "restart", "scs", "default"], {
+      cwd: projectDir,
+    });
+    expect(graphOutput).toInclude(`Smart contract set ${SMART_CONTRACT_SET_NAME} restart initiated successfully`);
+  });
+
   // test("Create Minio storage on the platform", () => {
   //   // Optional, can be done later
   // });
