@@ -63,5 +63,9 @@
     "lefthook",
     "secp256k1",
     "utf-8-validate"
-  ]
+  ],
+  "overrides": {
+    "elliptic": "6.6.1",
+    "ws": "8.18.0"
+  }
 }
