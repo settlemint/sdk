@@ -40,7 +40,7 @@ export function hardhatDeployRemoteCommand() {
 
     const node = await settlemint.blockchainNode.read(env.SETTLEMINT_BLOCKCHAIN_NODE);
     const envConfig = await settlemint.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE, env.SETTLEMINT_THEGRAPH);
-    await addressPrompt(autoAccept, node);
+    await addressPrompt({ env, accept: autoAccept, prod, node });
     const customDeploymentId = deploymentId ?? (await deploymentIdPrompt(env, autoAccept, prod));
     if (verify) {
       const config = await getHardhatConfigData();
