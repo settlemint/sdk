@@ -1,3 +1,5 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -18,28 +20,35 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
     .alias("custom-deployments")
     .alias("cd")
     .argument("<tag>", "The tag to update the custom deployment to")
+    .option(
+      "--id <id>",
+      "The ID of the custom deployment to update. If not provided, will use SETTLEMINT_CUSTOM_DEPLOYMENT from env",
+    )
     .option("--prod", "Connect to your production environment")
     .option("--wait", "Wait for the custom deployment to be redeployed")
     .description("Update a custom deployment in the SettleMint platform")
-    .action(async (tag, { prod, wait }) => {
+    .action(async (tag, { id, prod, wait }) => {
       intro("Updating custom deployment in the SettleMint platform");
 
-      const env: DotEnv = await loadEnv(true, !!prod);
+      const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const id = env.SETTLEMINT_CUSTOM_DEPLOYMENT;
-      if (!id) {
-        throw new Error("No custom deployment configured");
+      const customDeploymentId = id ?? env.SETTLEMINT_CUSTOM_DEPLOYMENT;
+      if (!customDeploymentId) {
+        throw new Error("No custom deployment ID specified. Please provide it either via the --id flag or by setting the SETTLEMINT_CUSTOM_DEPLOYMENT environment variable");
       }
 
+      const accessToken = await accessTokenPrompt(env, true);
+      const instance = await instancePrompt(env, true);
+
       const settlemint = createSettleMintClient({
-        accessToken: env.SETTLEMINT_ACCESS_TOKEN,
-        instance: env.SETTLEMINT_INSTANCE,
+        accessToken,
+        instance,
       });
 
       const customDeployment = await spinner({
         startMessage: "Updating custom deployment",
         task: async () => {
-          return settlemint.customDeployment.update(id, tag);
+          return settlemint.customDeployment.update(customDeploymentId, tag);
         },
         stopMessage: "Custom deployment updated",
       });
