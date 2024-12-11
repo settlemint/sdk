@@ -35,35 +35,35 @@ jobs:
     runs-on: namespace-profile-sdk
     steps:
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@v2
+        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load secrets
-        uses: 1password/load-secrets-action@v2
+        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
         env:
           NPM_TOKEN: op://platform/npmjs/credential
           PAT_TOKEN: op://platform/github-commit-pat/credential
 
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@v5
+        uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
         with:
           token: ${{ env.PAT_TOKEN }}
 
       - name: Setup caches
-        uses: namespacelabs/nscloud-cache-action@v1
+        uses: namespacelabs/nscloud-cache-action@f23fbf3b586540a96f4f5849a5e04c7e56e1e804 # v1
         with:
           path: |
             ./.turbo
             ~/.bun/install/cache
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
         with:
           bun-version-file: package.json
 
       - name: Install Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
         with:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -74,7 +74,7 @@ jobs:
 
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@v5
+        uses: rlespinasse/github-slug-action@aba9f8db6ef36e0733227a62673d6592b1f430ea # v5
 
       - name: Update package versions
         id: package-version
@@ -155,13 +155,13 @@ jobs:
 
       - name: Upload static files as artifact
         id: deployment
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
         with:
           path: apps/registry/public
 
       - name: Login to GitHub Container Registry
         if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -169,7 +169,7 @@ jobs:
 
       - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' }}
-        uses: taoliujun/action-unique-comment@v1
+        uses: taoliujun/action-unique-comment@95aa81645432e8f3f10cca47ae832a25f31a9d92 # v1
         with:
             uniqueIdentifier: ${{ github.workflow }}
             body: |
@@ -189,7 +189,7 @@ jobs:
                 | Registry |  | `ghcr.io/settlemint/btp-sdk-registry:${{ env.VERSION }}` |
 
       - name: Auto-commit updated package versions
-        uses: stefanzweifel/git-auto-commit-action@v5
+        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
         if: ${{ env.TAG == 'latest' }}
         with:
           commit_message: "chore: update package versions [skip ci]"
@@ -249,7 +249,7 @@ jobs:
 
       - name: Build docker containers
         if: ${{ github.event_name != 'pull_request' }}
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3
         with:
           timeout_minutes: 15
           max_attempts: 3
@@ -271,4 +271,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4
