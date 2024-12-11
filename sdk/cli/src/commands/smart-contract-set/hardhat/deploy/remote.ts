@@ -1,4 +1,3 @@
-import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
 import { deploymentIdPrompt } from "@/commands/smart-contract-set/prompts/deployment-id.prompt";
@@ -31,7 +30,10 @@ export function hardhatDeployRemoteCommand() {
       throw new ServiceNotConfiguredError("Blockchain node");
     }
 
-    const accessToken = await applicationAccessTokenPrompt(env, true);
+    const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+    if (!accessToken) {
+      cancel("No access token found, please run `settlemint connect` to connect to your instance");
+    }
     const instance = await instancePrompt(env, true);
     const settlemint = createSettleMintClient({
       accessToken,

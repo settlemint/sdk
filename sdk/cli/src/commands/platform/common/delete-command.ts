@@ -1,4 +1,3 @@
-import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
@@ -7,7 +6,7 @@ import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
@@ -75,7 +74,10 @@ ${createExamples([
       const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
+      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+      if (!accessToken) {
+        cancel("No access token found, please run `settlemint connect` to connect to your instance");
+      }
       const instance = await instancePrompt(env, autoAccept);
 
       const settlemint = createSettleMintClient({

@@ -15,6 +15,7 @@ import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
+import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
 import { applicationPrompt } from "./connect/application.prompt";
 import { authSecretPrompt } from "./connect/auth-secret.prompt";
 import { authUrlPrompt } from "./connect/auth-url.prompt";
@@ -60,19 +61,23 @@ export function connectCommand(): Command {
           );
         }
 
-        const accessToken = personalAccessToken.personalAccessToken;
+        let accessToken = personalAccessToken.personalAccessToken;
 
-        const settlemint = createSettleMintClient({
+        let settlemint = createSettleMintClient({
           accessToken,
           instance,
         });
-
-        //const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
 
         const workspaces = await workspaceSpinner(settlemint);
 
         const workspace = await workspacePrompt(env, workspaces, autoAccept);
         const application = await applicationPrompt(env, workspace?.applications ?? [], autoAccept);
+
+        accessToken = await applicationAccessTokenPrompt(env, application, settlemint, autoAccept);
+        settlemint = createSettleMintClient({
+          accessToken,
+          instance,
+        });
 
         const { middleware, integrationTool, storage, privateKey, insights, customDeployment } = await servicesSpinner(
           settlemint,
@@ -90,10 +95,6 @@ export function connectCommand(): Command {
 
         const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
         const authSecret = await authSecretPrompt(env, autoAccept);
-
-        const blockscoutEndpoint = blockscout?.endpoints.find((endpoint) =>
-          endpoint.id.includes("interface"),
-        )?.displayValue;
 
         await writeEnvSpinner(!!prod, {
           ...PRE_DEPLOYED_CONTRACTS,

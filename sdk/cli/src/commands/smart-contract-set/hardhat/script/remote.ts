@@ -1,9 +1,9 @@
-import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatScriptRemoteCommand() {
   const build = new Command("remote")
@@ -18,7 +18,10 @@ export function hardhatScriptRemoteCommand() {
       throw new ServiceNotConfiguredError("Blockchain node");
     }
 
-    const accessToken = await applicationAccessTokenPrompt(env, true);
+    const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+    if (!accessToken) {
+      cancel("No access token found, please run `settlemint connect` to connect to your instance");
+    }
     const instance = await instancePrompt(env, true);
     const settlemint = createSettleMintClient({
       accessToken,
