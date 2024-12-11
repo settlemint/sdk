@@ -35,7 +35,7 @@
     "docker": "turbo docker",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
-    "typecheck": "turbo typecheck && bun test:type-check",
+    "typecheck": "turbo typecheck",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
     "test:typecheck": "cd test && bunx tsc",
