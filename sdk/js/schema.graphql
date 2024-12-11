@@ -10444,9 +10444,6 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """The associated smart contract set"""
   smartContractSet: SmartContractSetType
 
-  """Spec version for the HA Graph middleware"""
-  specVersion: String!
-
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
   storage: StorageType
@@ -19148,7 +19145,7 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedCustomDeployment!
-  foundryEnvConfig(blockchainNodeId: String!): JSON!
+  foundryEnvConfig(blockchainNodeId: String!, middlewareId: String): JSON!
   getUseCases: [UseCaseDto!]!
   getUser(userId: ID): User!
 
