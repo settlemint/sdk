@@ -1,7 +1,7 @@
-import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
+import { getInstanceCredentials } from "@/utils/config";
 import {
   getBlockscoutEndpoints,
   getGraphEndpoint,
@@ -13,7 +13,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { applicationPrompt } from "./connect/application.prompt";
 import { authSecretPrompt } from "./connect/auth-secret.prompt";
@@ -51,13 +51,23 @@ export function connectCommand(): Command {
         const autoAccept = !!acceptDefaults || isInCi;
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-        const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
         const instance = await instancePrompt(env, autoAccept);
+        const personalAccessToken = await getInstanceCredentials(instance);
+
+        if (!personalAccessToken) {
+          cancel(
+            "No personal access token found for instance, please run `settlemint login` to login to your instance",
+          );
+        }
+
+        const accessToken = personalAccessToken.personalAccessToken;
 
         const settlemint = createSettleMintClient({
           accessToken,
           instance,
         });
+
+        //const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
 
         const workspaces = await workspaceSpinner(settlemint);
 
