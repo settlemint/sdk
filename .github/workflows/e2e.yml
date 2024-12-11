@@ -30,17 +30,17 @@ jobs:
     runs-on: namespace-profile-sdk
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@v5
+        uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
 
       - name: Setup caches
-        uses: namespacelabs/nscloud-cache-action@v1
+        uses: namespacelabs/nscloud-cache-action@f23fbf3b586540a96f4f5849a5e04c7e56e1e804 # v1
         with:
           path: |
             ./.turbo
             ~/.bun/install/cache
 
       - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
         with:
           bun-version-file: package.json
 
@@ -50,7 +50,7 @@ jobs:
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
 
       - name: Setup Foundry
-        uses: foundry-rs/foundry-toolchain@v1
+        uses: foundry-rs/foundry-toolchain@362aa1be8f31305295acb1032271acd5e9b99312 # v1
 
       - name: Install Bun dependencies
         run: bun install
