@@ -10,8 +10,8 @@ const commandsRunning: Record<string, ChildProcessWithoutNullStreams[]> = {};
 
 const DEFAULT_ENV: Record<string, string> = {
   ...process.env,
-  SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN,
-  SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE,
+  SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   SETTLEMINT_AUTH_SECRET: authSecret,
   NEXTAUTH_URL: "http://localhost:3000",
   CI: isInCi ? "true" : "false",
@@ -58,9 +58,9 @@ export function runCommand(
   const p = new Promise<CommandResult>((resolve, reject) => {
     proc.on("close", (code: number) => {
       console.log(`child process exited with code ${code}`);
-      const index = commandsRunning[testScope].indexOf(proc);
+      const index = commandsRunning[testScope]?.indexOf(proc) ?? -1;
       if (index > -1) {
-        commandsRunning[testScope].splice(index, 1);
+        commandsRunning[testScope]?.splice(index, 1);
       }
       if (code === 0 || code === null || code === 143) {
         resolve({ output: output.join("\n"), cwd });
@@ -71,13 +71,13 @@ export function runCommand(
   });
   return {
     result: p,
-    kill: () => killProcess(proc.pid),
+    kill: () => proc.pid && killProcess(proc.pid),
   };
 }
 
 export function forceExitAllCommands(testScope: string) {
   // biome-ignore lint/complexity/noForEach: <explanation>
-  commandsRunning[testScope].forEach((command) => killProcess(command.pid));
+  commandsRunning[testScope]?.forEach((command) => command.pid && killProcess(command.pid));
   commandsRunning[testScope] = [];
 }
 

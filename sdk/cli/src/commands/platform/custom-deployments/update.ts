@@ -34,7 +34,9 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
 
       const customDeploymentId = id ?? env.SETTLEMINT_CUSTOM_DEPLOYMENT;
       if (!customDeploymentId) {
-        throw new Error("No custom deployment ID specified. Please provide it either via the --id flag or by setting the SETTLEMINT_CUSTOM_DEPLOYMENT environment variable");
+        throw new Error(
+          "No custom deployment ID specified. Please provide it either via the --id flag or by setting the SETTLEMINT_CUSTOM_DEPLOYMENT environment variable",
+        );
       }
 
       const accessToken = await accessTokenPrompt(env, true);
