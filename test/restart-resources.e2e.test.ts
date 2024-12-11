@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { SMART_CONTRACT_SET_NAME } from "./constants/testResources";
+import { SMART_CONTRACT_SET_NAME } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const COMMAND_TEST_SCOPE = __filename;

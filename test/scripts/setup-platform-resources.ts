@@ -11,11 +11,12 @@ import {
   IPFS_NAME,
   NETWORK_NAME,
   NODE_NAME,
+  PORTAL_NAME,
   PRIVATE_KEY_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAME,
   SMART_CONTRACT_SET_NAME,
   WORKSPACE_NAME,
-} from "../constants/testResources";
+} from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
 import { runCommand } from "../utils/run-command";
 
