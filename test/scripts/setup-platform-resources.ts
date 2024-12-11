@@ -135,56 +135,59 @@ async function createBlockchainNodeAndIpfs() {
   const hasHasuraIntegration = await resourceAlreadyCreated(["SETTLEMINT_HASURA"]);
   const hasIpfsStorage = await resourceAlreadyCreated(["SETTLEMINT_IPFS"]);
   const results = await deployResources([
-    hasBlockchainNetwork && hasBlockchainNode
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "blockchain-network",
-          "besu",
-          NETWORK_NAME,
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--node-name",
-          NODE_NAME,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-        ]).result,
-    hasHasuraIntegration
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "integration-tool",
-          "hasura",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          HASURA_NAME,
-        ]).result,
-    hasIpfsStorage
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "storage",
-          "ipfs",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          IPFS_NAME,
-        ]).result,
+    () =>
+      hasBlockchainNetwork && hasBlockchainNode
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "blockchain-network",
+            "besu",
+            NETWORK_NAME,
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--node-name",
+            NODE_NAME,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+          ]).result,
+    () =>
+      hasHasuraIntegration
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "integration-tool",
+            "hasura",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            HASURA_NAME,
+          ]).result,
+    () =>
+      hasIpfsStorage
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "storage",
+            "ipfs",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            IPFS_NAME,
+          ]).result,
   ]);
 
   const [networkResult, hasuraResult, ipfsResult] = results;
@@ -240,79 +243,83 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
   const results = await deployResources([
-    hasPrivateKey
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "private-key",
-          "hd-ecdsa-p256",
-          "--blockchain-node-id",
-          env.SETTLEMINT_BLOCKCHAIN_NODE!,
-          "--accept-defaults",
-          "--default",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--wait",
-          PRIVATE_KEY_NAME,
-        ]).result,
-    hasSmartContractSet
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "smart-contract-set",
-          "--use-case",
-          "solidity-starterkit",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          SMART_CONTRACT_SET_NAME,
-        ]).result,
-    hasPortalMiddleware
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "middleware",
-          "smart-contract-portal",
-          PORTAL_NAME,
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          "--include-predeployed-abis",
-          "StarterKitERC20Registry",
-          "StarterKitERC20Factory",
-          "StarterKitERC20",
-          "StarterKitERC20DexFactory",
-          "StarterKitERC20Dex",
-        ]).result,
-    hasBlockscoutInsights
-      ? Promise.resolve(undefined)
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "insights",
-          "blockscout",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          BLOCKSCOUT_NAME,
-        ]).result,
+    () =>
+      hasPrivateKey
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "private-key",
+            "hd-ecdsa-p256",
+            "--blockchain-node-id",
+            env.SETTLEMINT_BLOCKCHAIN_NODE!,
+            "--accept-defaults",
+            "--default",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--wait",
+            PRIVATE_KEY_NAME,
+          ]).result,
+    () =>
+      hasSmartContractSet
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "smart-contract-set",
+            "--use-case",
+            "solidity-starterkit",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            SMART_CONTRACT_SET_NAME,
+          ]).result,
+    () =>
+      hasPortalMiddleware
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "middleware",
+            "smart-contract-portal",
+            PORTAL_NAME,
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            "--include-predeployed-abis",
+            "StarterKitERC20Registry",
+            "StarterKitERC20Factory",
+            "StarterKitERC20",
+            "StarterKitERC20DexFactory",
+            "StarterKitERC20Dex",
+          ]).result,
+    () =>
+      hasBlockscoutInsights
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "insights",
+            "blockscout",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            BLOCKSCOUT_NAME,
+          ]).result,
   ]);
 
   const [privateKeyResult, smartContractSetResult, portalResult, blockscoutResult] = results;
@@ -370,12 +377,12 @@ async function createGraphMiddleware() {
   expect(graphOutput).toInclude("Middleware is deployed");
 }
 
-async function deployResources(commands: Promise<CommandResult | undefined>[]) {
+async function deployResources(commands: (() => Promise<CommandResult | undefined>)[]) {
   if (DISABLE_CONCURRENT_DEPLOYMENT) {
     const results: PromiseSettledResult<undefined | CommandResult>[] = [];
     for (const command of commands) {
       try {
-        const result = await command;
+        const result = await command();
         results.push({
           status: "fulfilled",
           value: result,
@@ -389,5 +396,5 @@ async function deployResources(commands: Promise<CommandResult | undefined>[]) {
     }
     return results;
   }
-  return await Promise.allSettled(commands);
+  return await Promise.allSettled(commands.map((command) => command()));
 }
