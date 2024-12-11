@@ -1,4 +1,4 @@
-import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -17,7 +17,7 @@ export function subgraphCodegenCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const accessToken = await accessTokenPrompt(env, true);
+      const accessToken = await applicationAccessTokenPrompt(env, true);
       const instance = await instancePrompt(env, true);
       const settlemintClient = createSettleMintClient({
         accessToken,

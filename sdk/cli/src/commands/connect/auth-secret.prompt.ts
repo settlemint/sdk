@@ -1,7 +1,8 @@
 import { randomBytes } from "node:crypto";
 import confirm from "@inquirer/confirm";
 import password from "@inquirer/password";
-import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, validate } from "@settlemint/sdk-utils/validation";
+import { z } from "zod";
 /**
  * Prompts the user for the access token of their SettleMint application.
  * If the access token is already present in the environment variables and valid,
@@ -47,7 +48,7 @@ export async function authSecretPrompt(env: Partial<DotEnv>, accept: boolean): P
     message: "What is the auth secret to encrypt your user sessions?",
     validate(value) {
       try {
-        validate(AccessTokenSchema, value);
+        validate(z.string(), value);
         return true;
       } catch (error) {
         return "Invalid access token";

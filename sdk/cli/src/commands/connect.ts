@@ -1,4 +1,4 @@
-import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
@@ -51,7 +51,7 @@ export function connectCommand(): Command {
         const autoAccept = !!acceptDefaults || isInCi;
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-        const accessToken = await accessTokenPrompt(env, autoAccept);
+        const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
         const instance = await instancePrompt(env, autoAccept);
 
         const settlemint = createSettleMintClient({

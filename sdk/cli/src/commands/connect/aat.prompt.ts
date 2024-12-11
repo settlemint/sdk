@@ -1,6 +1,6 @@
 import confirm from "@inquirer/confirm";
 import password from "@inquirer/password";
-import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
+import { ApplicationAccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
 /**
  * Prompts the user for the access token of their SettleMint application.
  * If the access token is already present in the environment variables and valid,
@@ -15,7 +15,7 @@ import { AccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/
  * const accessToken = await accessTokenPrompt(env);
  * console.log(accessToken); // Output: your-access-token or user input
  */
-export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean): Promise<string> {
+export async function applicationAccessTokenPrompt(env: Partial<DotEnv>, accept: boolean): Promise<string> {
   const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const defaultPossible = accept && defaultAccessToken;
 
@@ -25,7 +25,7 @@ export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean): 
 
   if (defaultAccessToken) {
     const keep = await confirm({
-      message: "Do you want to use the existing access token?",
+      message: "Do you want to use the existing application access token?",
       default: true,
     });
     if (keep) {
@@ -34,13 +34,13 @@ export async function accessTokenPrompt(env: Partial<DotEnv>, accept: boolean): 
   }
 
   return password({
-    message: "What is the access token for your application in SettleMint?",
+    message: "What is the application access token for your application in SettleMint?",
     validate(value) {
       try {
-        validate(AccessTokenSchema, value);
+        validate(ApplicationAccessTokenSchema, value);
         return true;
       } catch (error) {
-        return "Invalid access token";
+        return "Invalid application access token";
       }
     },
   });

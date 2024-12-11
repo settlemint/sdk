@@ -1,4 +1,4 @@
-import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import {
   getSubgraphConfig,
@@ -24,7 +24,7 @@ export function subgraphDeployCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const accessToken = await accessTokenPrompt(env, true);
+      const accessToken = await applicationAccessTokenPrompt(env, true);
       const instance = await instancePrompt(env, true);
       const settlemintClient = createSettleMintClient({
         accessToken,
@@ -42,7 +42,7 @@ export function subgraphDeployCommand() {
       const cwd = generated ? process.cwd() : "./subgraph";
 
       const subgraphYamlFile = await getSubgraphYamlFile();
-      await updateSpecVersion(theGraphMiddleware.specVersion);
+      await updateSpecVersion(theGraphMiddleware.specVersion as string);
 
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], { cwd });

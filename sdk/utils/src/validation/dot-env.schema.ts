@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AccessTokenSchema } from "./access-token.schema.js";
+import { ApplicationAccessTokenSchema } from "./access-token.schema.js";
 import { IdSchema } from "./id.schema.js";
 import { UrlSchema } from "./url.schema.js";
 /**
@@ -7,7 +7,7 @@ import { UrlSchema } from "./url.schema.js";
  */
 export const DotEnvSchema = z.object({
   SETTLEMINT_INSTANCE: UrlSchema,
-  SETTLEMINT_ACCESS_TOKEN: AccessTokenSchema,
+  SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema,
   SETTLEMINT_WORKSPACE: IdSchema,
   SETTLEMINT_APPLICATION: IdSchema,
   SETTLEMINT_BLOCKCHAIN_NETWORK: IdSchema.optional(),

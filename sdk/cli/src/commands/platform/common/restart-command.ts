@@ -1,4 +1,4 @@
-import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
@@ -64,7 +64,7 @@ ${createExamples([
       const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const accessToken = await accessTokenPrompt(env, autoAccept);
+      const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
       const instance = await instancePrompt(env, autoAccept);
 
       const settlemint = createSettleMintClient({

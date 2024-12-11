@@ -1,4 +1,4 @@
-import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { type CommandExample, createExamples } from "@/commands/platform/utils/create-examples";
@@ -73,7 +73,7 @@ export function getCreateCommand({
     const autoAccept = !!acceptDefaults || isInCi;
     const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-    const accessToken = await accessTokenPrompt(env, autoAccept);
+    const accessToken = await applicationAccessTokenPrompt(env, autoAccept);
     const instance = await instancePrompt(env, autoAccept);
     const settlemint = createSettleMintClient({
       accessToken,

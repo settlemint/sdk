@@ -18,6 +18,8 @@ import { Command } from "@commander-js/extra-typings";
 import { ascii, cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../package.json";
 import { createCommand } from "./commands/create";
+import { loginCommand } from "./commands/login";
+import { logoutCommand } from "./commands/logout";
 import { platformCommand } from "./commands/platform";
 import { smartContractSetCommand } from "./commands/smart-contract.set";
 
@@ -45,6 +47,8 @@ sdkcli.addCommand(codegenCommand());
 sdkcli.addCommand(platformCommand());
 sdkcli.addCommand(smartContractSetCommand());
 sdkcli.addCommand(createCommand());
+sdkcli.addCommand(loginCommand());
+sdkcli.addCommand(logoutCommand());
 
 /**
  * Parses command line arguments and executes the appropriate command.
