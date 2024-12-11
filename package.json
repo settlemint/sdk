@@ -38,7 +38,7 @@
     "typecheck": "turbo typecheck && bun test:type-check",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
-    "test:type-check": "cd test && bunx tsc",
+    "test:typecheck": "cd test && bunx tsc",
     "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setup-platform-resources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done"
   },
