@@ -1,4 +1,4 @@
-import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { Command } from "@commander-js/extra-typings";
@@ -18,7 +18,7 @@ export function hardhatScriptRemoteCommand() {
       throw new ServiceNotConfiguredError("Blockchain node");
     }
 
-    const accessToken = await accessTokenPrompt(env, true);
+    const accessToken = await applicationAccessTokenPrompt(env, true);
     const instance = await instancePrompt(env, true);
     const settlemint = createSettleMintClient({
       accessToken,

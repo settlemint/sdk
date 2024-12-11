@@ -1,4 +1,4 @@
-import type { AccessToken } from "@settlemint/sdk-utils/validation";
+import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 
 /**
  * Tests a GraphQL endpoint with exponential retry.
@@ -10,7 +10,7 @@ import type { AccessToken } from "@settlemint/sdk-utils/validation";
  * @returns A boolean indicating whether the endpoint is accessible.
  */
 export async function testGqlEndpoint(
-  accessToken: AccessToken,
+  accessToken: ApplicationAccessToken,
   hasuraAdminSecret?: string,
   gqlEndpoint?: string,
   isHasura = false,

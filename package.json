@@ -62,8 +62,10 @@
     "bufferutil",
     "esbuild",
     "keccak",
+    "keytar",
     "lefthook",
     "secp256k1",
+    "sharp",
     "utf-8-validate"
   ],
   "overrides": {

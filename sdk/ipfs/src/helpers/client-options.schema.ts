@@ -1,4 +1,4 @@
-import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
+import { ApplicationAccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
@@ -18,7 +18,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({
-  accessToken: AccessTokenSchema,
+  accessToken: ApplicationAccessTokenSchema,
 });
 
 /**
