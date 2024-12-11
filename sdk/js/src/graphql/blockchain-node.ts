@@ -11,6 +11,7 @@ const BlockchainNodeFragment = graphql(`
     __typename
     id
     name
+    uniqueName
     status
     endpoints {
       id

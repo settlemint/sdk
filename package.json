@@ -35,9 +35,11 @@
     "docker": "turbo docker",
     "deploy": "turbo deploy",
     "translate": "turbo translate",
+    "typecheck": "turbo typecheck",
     "ci:local": "bunx turbo format lint build attw publint test:coverage --concurrency=12 --summarize",
     "postinstall": "lefthook install",
-    "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setupPlatformResources.ts",
+    "test:typecheck": "cd test && bunx tsc",
+    "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setup-platform-resources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done"
   },
   "devDependencies": {

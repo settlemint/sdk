@@ -166,7 +166,7 @@ export interface SettlemintClient {
     restart: (smartContractSetId: Id) => Promise<SmartContractSet>;
   };
   foundry: {
-    env: (blockchainNodeId: Id, graphMiddlewareId?: Id) => Promise<Record<string, string>>;
+    env: (blockchainNodeId: Id) => Promise<Record<string, string>>;
   };
 }
 

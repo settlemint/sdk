@@ -1,4 +1,4 @@
-import { getHardhatConfigData } from "@/utils/hardhat-config";
+import type { HardhatConfig } from "@/utils/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -20,17 +20,18 @@ export async function addressPrompt({
   accept,
   prod,
   node,
+  hardhatConfig,
 }: {
   env: Partial<DotEnv>;
   accept: boolean;
   prod: boolean | undefined;
   node: BlockchainNode;
+  hardhatConfig: HardhatConfig;
 }): Promise<string | null> {
-  const config = await getHardhatConfigData();
   const possiblePrivateKeys =
     node.privateKeys?.filter((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256") ?? [];
   const defaultAddress =
-    env.SETTLEMINT_SMART_CONTRACT_SET_ADDRESS ?? config.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
+    env.SETTLEMINT_SMART_CONTRACT_SET_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
   if (defaultPossible) {

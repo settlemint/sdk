@@ -31,7 +31,7 @@ export async function waitForCompletion({
   maxTimeout?: number;
 }): Promise<boolean> {
   const serviceType = SETTLEMINT_CLIENT_MAP[type];
-  if (serviceType === "workspace" || serviceType === "application") {
+  if (serviceType === "workspace" || serviceType === "application" || serviceType === "foundry") {
     return true;
   }
 
@@ -70,5 +70,11 @@ export async function waitForCompletion({
 }
 
 function getActionLabel(action: Action): string {
-  return action === "deploy" ? "deployed" : "destroyed";
+  if (action === "restart") {
+    return "restarted";
+  }
+  if (action === "destroy") {
+    return "destroyed";
+  }
+  return "deployed";
 }

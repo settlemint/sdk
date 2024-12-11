@@ -13,6 +13,8 @@ const MiddlewareFragment = graphql(`
     name
     status
     interface
+    entityVersion
+    serviceUrl
     endpoints {
       id
       label
@@ -24,6 +26,7 @@ const MiddlewareFragment = graphql(`
       displayValue
     }
     ... on HAGraphMiddleware {
+      specVersion
       subgraphs {
         name
         graphqlQueryEndpoint {

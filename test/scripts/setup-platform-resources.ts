@@ -1,26 +1,27 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import {
+  APPLICATION_NAME,
+  BLOCKSCOUT_NAME,
+  CLUSTER_PROVIDER,
+  CLUSTER_REGION,
+  GRAPH_NAME,
+  HASURA_NAME,
+  IPFS_NAME,
+  NETWORK_NAME,
+  NODE_NAME,
+  PORTAL_NAME,
+  PRIVATE_KEY_NAME,
+  PRIVATE_KEY_SMART_CONTRACTS_NAME,
+  SMART_CONTRACT_SET_NAME,
+  WORKSPACE_NAME,
+} from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
-import { runCommand } from "../utils/run-command";
+import { type CommandResult, runCommand } from "../utils/run-command";
 
-const WORKSPACE_NAME = "Starter Kit Demo Workspace";
-const APPLICATION_NAME = "Starter Kit App";
-const NETWORK_NAME = "Starter Kit Network";
-const NODE_NAME = "Starter Kit Node";
-const PRIVATE_KEY_NAME = "Starter Kit Private Key";
-const PRIVATE_KEY_SMART_CONTRACTS_NAME = "Starter Kit Private Key Smart Contracts";
-const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
-const IPFS_NAME = "Starter Kit IPFS";
-const GRAPH_NAME = "Starter Kit Graph";
-const PORTAL_NAME = "Starter Kit Portal";
-const HASURA_NAME = "Starter Kit Hasura";
-const BLOCKSCOUT_NAME = "Starter Kit Blockscout";
-
-const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
-const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
-
-const COMMAND_TEST_SCOPE = "setup-platform-resources";
+const COMMAND_TEST_SCOPE = __filename;
+const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
 async function cleanup() {
   if (process.env.DISABLE_WORKSPACE_DELETE) {
@@ -133,62 +134,65 @@ async function createBlockchainNodeAndIpfs() {
   const hasBlockchainNode = await resourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
   const hasHasuraIntegration = await resourceAlreadyCreated(["SETTLEMINT_HASURA"]);
   const hasIpfsStorage = await resourceAlreadyCreated(["SETTLEMINT_IPFS"]);
-  const results = await Promise.allSettled([
-    hasBlockchainNetwork && hasBlockchainNode
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "blockchain-network",
-          "besu",
-          NETWORK_NAME,
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--node-name",
-          NODE_NAME,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-        ]).result,
-    hasHasuraIntegration
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "integration-tool",
-          "hasura",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          HASURA_NAME,
-        ]).result,
-    hasIpfsStorage
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "storage",
-          "ipfs",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          IPFS_NAME,
-        ]).result,
+  const results = await deployResources([
+    () =>
+      hasBlockchainNetwork && hasBlockchainNode
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "blockchain-network",
+            "besu",
+            NETWORK_NAME,
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--node-name",
+            NODE_NAME,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+          ]).result,
+    () =>
+      hasHasuraIntegration
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "integration-tool",
+            "hasura",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            HASURA_NAME,
+          ]).result,
+    () =>
+      hasIpfsStorage
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "storage",
+            "ipfs",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            IPFS_NAME,
+          ]).result,
   ]);
 
   const [networkResult, hasuraResult, ipfsResult] = results;
 
-  if (!hasBlockchainNode && networkResult.status === "fulfilled" && networkResult.value) {
+  if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkResult.value.output).toInclude("Blockchain node is deployed");
     const env: Partial<DotEnv> = await loadEnv(false, false);
@@ -214,18 +218,18 @@ async function createBlockchainNodeAndIpfs() {
     expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
   }
 
-  expect([networkResult.status, hasuraResult.status, ipfsResult.status]).toEqual([
+  expect([networkResult?.status, hasuraResult?.status, ipfsResult?.status]).toEqual([
     "fulfilled",
     "fulfilled",
     "fulfilled",
   ]);
 
-  if (hasuraResult.status === "fulfilled" && hasuraResult.value) {
+  if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
     expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
   }
 
-  if (ipfsResult.status === "fulfilled" && ipfsResult.value) {
+  if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
@@ -238,109 +242,113 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const hasBlockscoutInsights = await resourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
-  const results = await Promise.allSettled([
-    hasPrivateKey
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "private-key",
-          "hd-ecdsa-p256",
-          "--blockchain-node-id",
-          env.SETTLEMINT_BLOCKCHAIN_NODE!,
-          "--accept-defaults",
-          "--default",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--wait",
-          PRIVATE_KEY_NAME,
-        ]).result,
-    hasSmartContractSet
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "smart-contract-set",
-          "--use-case",
-          "solidity-starterkit",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          SMART_CONTRACT_SET_NAME,
-        ]).result,
-    hasPortalMiddleware
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "middleware",
-          "smart-contract-portal",
-          PORTAL_NAME,
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          "--include-predeployed-abis",
-          "StarterKitERC20Registry",
-          "StarterKitERC20Factory",
-          "StarterKitERC20",
-          "StarterKitERC20DexFactory",
-          "StarterKitERC20Dex",
-        ]).result,
-    hasBlockscoutInsights
-      ? Promise.resolve()
-      : runCommand(COMMAND_TEST_SCOPE, [
-          "platform",
-          "create",
-          "insights",
-          "blockscout",
-          "--provider",
-          CLUSTER_PROVIDER,
-          "--region",
-          CLUSTER_REGION,
-          "--accept-defaults",
-          "--default",
-          "--wait",
-          BLOCKSCOUT_NAME,
-        ]).result,
+  const results = await deployResources([
+    () =>
+      hasPrivateKey
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "private-key",
+            "hd-ecdsa-p256",
+            "--blockchain-node-id",
+            env.SETTLEMINT_BLOCKCHAIN_NODE!,
+            "--accept-defaults",
+            "--default",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--wait",
+            PRIVATE_KEY_NAME,
+          ]).result,
+    () =>
+      hasSmartContractSet
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "smart-contract-set",
+            "--use-case",
+            "solidity-starterkit",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            SMART_CONTRACT_SET_NAME,
+          ]).result,
+    () =>
+      hasPortalMiddleware
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "middleware",
+            "smart-contract-portal",
+            PORTAL_NAME,
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            "--include-predeployed-abis",
+            "StarterKitERC20Registry",
+            "StarterKitERC20Factory",
+            "StarterKitERC20",
+            "StarterKitERC20DexFactory",
+            "StarterKitERC20Dex",
+          ]).result,
+    () =>
+      hasBlockscoutInsights
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "insights",
+            "blockscout",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            BLOCKSCOUT_NAME,
+          ]).result,
   ]);
 
   const [privateKeyResult, smartContractSetResult, portalResult, blockscoutResult] = results;
 
   expect([
-    privateKeyResult.status,
-    smartContractSetResult.status,
-    portalResult.status,
-    blockscoutResult.status,
+    privateKeyResult?.status,
+    smartContractSetResult?.status,
+    portalResult?.status,
+    blockscoutResult?.status,
   ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
 
-  if (privateKeyResult.status === "fulfilled" && privateKeyResult.value) {
+  if (privateKeyResult?.status === "fulfilled" && privateKeyResult.value) {
     expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
     expect(privateKeyResult.value.output).toInclude("Private key is deployed");
   }
 
-  if (smartContractSetResult.status === "fulfilled" && smartContractSetResult.value) {
+  if (smartContractSetResult?.status === "fulfilled" && smartContractSetResult.value) {
     expect(smartContractSetResult.value.output).toInclude(
       `Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`,
     );
     expect(smartContractSetResult.value.output).toInclude("Smart contract set is deployed");
   }
 
-  if (portalResult.status === "fulfilled" && portalResult.value) {
+  if (portalResult?.status === "fulfilled" && portalResult.value) {
     expect(portalResult.value.output).toInclude(`Middleware ${PORTAL_NAME} created successfully`);
     expect(portalResult.value.output).toInclude("Middleware is deployed");
   }
 
-  if (blockscoutResult.status === "fulfilled" && blockscoutResult.value) {
+  if (blockscoutResult?.status === "fulfilled" && blockscoutResult.value) {
     expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
     expect(blockscoutResult.value.output).toInclude("Insights is deployed");
   }
@@ -367,4 +375,27 @@ async function createGraphMiddleware() {
   ]).result;
   expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
   expect(graphOutput).toInclude("Middleware is deployed");
+}
+
+async function deployResources(commands: (() => Promise<CommandResult | undefined>)[]) {
+  if (DISABLE_CONCURRENT_DEPLOYMENT) {
+    console.log("Disabling concurrent deployment, running commands sequentially");
+    const results: PromiseSettledResult<undefined | CommandResult>[] = [];
+    for (const command of commands) {
+      try {
+        const result = await command();
+        results.push({
+          status: "fulfilled",
+          value: result,
+        });
+      } catch (err) {
+        results.push({
+          status: "rejected",
+          reason: err,
+        });
+      }
+    }
+    return results;
+  }
+  return await Promise.allSettled(commands.map((command) => command()));
 }

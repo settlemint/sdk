@@ -2,12 +2,8 @@ import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
-export async function theGraphPrompt(
-  env: Partial<DotEnv>,
-  middlewares: Middleware[],
-  accept: boolean,
-): Promise<Middleware | undefined> {
-  const possible = middlewares.filter((middleware) => ["HA_GRAPH", "GRAPH"].includes(middleware.interface));
+export async function theGraphPrompt(env: Partial<DotEnv>, middlewares: Middleware[], accept: boolean) {
+  const possible = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
 
   if (possible.length === 0) {
     return undefined;

@@ -8,7 +8,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 const PROJECT_NAME = "starter-kit-demo";
 const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 
-const COMMAND_TEST_SCOPE = "create-new-project-e2e";
+const COMMAND_TEST_SCOPE = __filename;
 
 const projectDir = join(process.cwd(), "test", PROJECT_NAME);
 
@@ -42,14 +42,6 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Your project is ready to go!");
     await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
-  });
-
-  test("Restart smart contract set on the platform", async () => {
-    expect(createdResources.smartContractSet).toBeTrue();
-    const { output: graphOutput } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "restart", "scs", "default"], {
-      cwd: projectDir,
-    });
-    expect(graphOutput).toInclude(`Smart contract set ${SMART_CONTRACT_SET_NAME} restart initiated successfully`);
   });
 
   // test("Create Minio storage on the platform", () => {

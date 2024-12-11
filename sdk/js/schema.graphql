@@ -10444,6 +10444,9 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """The associated smart contract set"""
   smartContractSet: SmartContractSetType
 
+  """Spec version for the HA Graph middleware"""
+  specVersion: String!
+
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
   storage: StorageType
@@ -12333,6 +12336,7 @@ type InstantMetric {
 
   """Namespace of the instant metric"""
   namespace: String!
+  nonSuccessfulRequests: String
   polygonEdgeNetworkAverageConsensusRounds: String
   polygonEdgeNetworkLastAverageBlockTime: String
   polygonEdgeNetworkMaxConsensusRounds: String
@@ -12348,6 +12352,7 @@ type InstantMetric {
   storage: String
   storagePercentage: String
   storageQuota: String
+  successfulRequests: String
   totalBackends: String
 }
 
@@ -19143,7 +19148,7 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedCustomDeployment!
-  foundryEnvConfig(blockchainNodeId: String!, middlewareId: String): JSON!
+  foundryEnvConfig(blockchainNodeId: String!): JSON!
   getUseCases: [UseCaseDto!]!
   getUser(userId: ID): User!
 
@@ -20066,6 +20071,10 @@ type RangeMetric {
 
   """Namespace of the range metric"""
   namespace: String!
+  nonSuccessfulRequestsDay: [RangeDatePoint!]!
+  nonSuccessfulRequestsHour: [RangeDatePoint!]!
+  nonSuccessfulRequestsMonth: [RangeDatePoint!]!
+  nonSuccessfulRequestsWeek: [RangeDatePoint!]!
   pendingTransactions: [RangeDatePoint!]!
   polygonEdgeTransactionsHour: [RangeDatePoint!]!
   queuedTransactions: [RangeDatePoint!]!
@@ -20081,6 +20090,10 @@ type RangeMetric {
   storageMonth: [RangeDatePoint!]!
   storageWeek: [RangeDatePoint!]!
   successRpcRequests: [RangeDatePoint!]!
+  successfulRequestsDay: [RangeDatePoint!]!
+  successfulRequestsHour: [RangeDatePoint!]!
+  successfulRequestsMonth: [RangeDatePoint!]!
+  successfulRequestsWeek: [RangeDatePoint!]!
   transactionsPerBlock: [RangeDatePoint!]!
 }
 
