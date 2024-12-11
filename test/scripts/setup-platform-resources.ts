@@ -379,6 +379,7 @@ async function createGraphMiddleware() {
 
 async function deployResources(commands: (() => Promise<CommandResult | undefined>)[]) {
   if (DISABLE_CONCURRENT_DEPLOYMENT) {
+    console.log("Disabling concurrent deployment, running commands sequentially");
     const results: PromiseSettledResult<undefined | CommandResult>[] = [];
     for (const command of commands) {
       try {
