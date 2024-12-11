@@ -1,4 +1,5 @@
 import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
+import { note } from "@settlemint/sdk-utils/terminal";
 
 /**
  * Executes a command with the given arguments in a child process
@@ -17,10 +18,10 @@ export async function executeCommand(
   const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data) => {
-      console.log(data.toString());
+      note(data.toString());
     });
     child.stderr.on("data", (data) => {
-      console.error(data.toString());
+      note(data.toString());
     });
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {

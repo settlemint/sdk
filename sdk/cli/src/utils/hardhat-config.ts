@@ -1,3 +1,4 @@
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { HardhatUserConfig } from "hardhat/config";
 
 export type HardhatConfig = HardhatUserConfig & { etherscan?: { apiKey?: string } };
@@ -11,8 +12,9 @@ export async function getHardhatConfigData(envConfig: Record<string, string>): P
     };
     const hardhatConfigData = await import("hardhat");
     return hardhatConfigData.userConfig;
-  } catch (error) {
-    console.error("Error reading hardhat.config.ts", error);
+  } catch (err) {
+    const error = err as Error;
+    note(`Error reading hardhat.config.ts: ${error.message}`);
     return {};
   }
 }

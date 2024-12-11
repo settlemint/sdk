@@ -1,4 +1,3 @@
-import confirm from "@inquirer/confirm";
 import input from "@inquirer/input";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { writeEnvSpinner } from "../../connect/write-env.spinner";
@@ -28,25 +27,18 @@ export async function deploymentIdPrompt(
     return defaultDeploymentId;
   }
 
-  if (defaultDeploymentId) {
-    const keep = await confirm({
-      message: "Do you want to use the existing deployment ID?",
-      default: true,
-    });
-    if (keep) {
-      return defaultDeploymentId;
-    }
-  }
-
   const deploymentId = await input({
     message: "What is the deployment ID of your smart contract set (optional)?",
     required: false,
+    default: defaultDeploymentId,
   });
 
-  await writeEnvSpinner(!!prod, {
-    ...env,
-    SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID: deploymentId,
-  });
+  if (deploymentId !== defaultDeploymentId) {
+    await writeEnvSpinner(!!prod, {
+      ...env,
+      SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID: deploymentId,
+    });
+  }
 
   return deploymentId;
 }

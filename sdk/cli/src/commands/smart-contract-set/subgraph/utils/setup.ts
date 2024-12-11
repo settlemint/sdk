@@ -1,10 +1,10 @@
 import { rm, writeFile } from "node:fs/promises";
+import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
 import type { SettlemintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 import semver from "semver";
-import slugify from "slugify";
 import { stringify } from "yaml";
-import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./utils";
+import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./subgraph-config";
 
 export interface SubgraphSetupParams {
   env: Partial<DotEnv>;
@@ -28,12 +28,15 @@ export async function subgraphSetup({ env, settlemintClient, isGenerated }: Subg
     await rm("./subgraph/build", { recursive: true, force: true });
   }
 
-  const envConfig = await settlemintClient.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE!, env.SETTLEMINT_THEGRAPH);
+  const envConfig = {
+    BTP_SUBGRAPH_FIXED_NETWORK: "", // TODO
+    BTP_NODE_UNIQUE_NAME: "", // TODO
+  };
 
   const network =
     process.env.BTP_SUBGRAPH_FIXED_NETWORK === "true"
       ? "settlemint"
-      : sanitize(process.env.BTP_NODE_UNIQUE_NAME || "localhost", 30);
+      : sanitizeName(process.env.BTP_NODE_UNIQUE_NAME || "localhost", 30);
 
   if (isGenerated) {
     const { command, args } = await getPackageManagerExecutable();
@@ -79,83 +82,3 @@ export async function subgraphSetup({ env, settlemintClient, isGenerated }: Subg
   const subgraphYamlFile = await getSubgraphYamlFile();
   await writeFile(subgraphYamlFile, stringify(yamlConfig));
 }
-
-function sanitize(value: string, length = 35) {
-  return slugify(value, {
-    strict: true,
-    remove: /[!"'()*+.:@~]/g,
-    replacement: "-",
-    lower: true,
-  })
-    .slice(0, length)
-    .replaceAll(/(^\d*)/g, "")
-    .replaceAll(/(-$)/g, "")
-    .replaceAll(/(^-)/g, "");
-}
-
-export type SubgraphTemplate = {
-  output: string;
-  chain: string;
-  datasources: {
-    name: string;
-    address: string;
-    startBlock: number;
-    module: string[];
-  }[];
-};
-
-export type SubgraphConfig = {
-  specVersion: string;
-  schema: {
-    file: string;
-  };
-  features: string[];
-  dataSources: {
-    kind: string;
-    name: string;
-    network: string;
-    source: {
-      address: string;
-      abi: string;
-      startBlock: number;
-    };
-    mapping: {
-      kind: string;
-      apiVersion: string;
-      language: string;
-      entities: string[];
-      abis: {
-        name: string;
-        file: string;
-      }[];
-      eventHandlers: {
-        event: string;
-        handler: string;
-      }[];
-      file: string;
-    };
-  }[];
-  templates?: {
-    kind: string;
-    name: string;
-    network: string;
-    source: {
-      abi: string;
-    };
-    mapping: {
-      kind: string;
-      apiVersion: string;
-      language: string;
-      entities: string[];
-      abis: {
-        name: string;
-        file: string;
-      }[];
-      eventHandlers: {
-        event: string;
-        handler: string;
-      }[];
-      file: string;
-    };
-  }[];
-};

@@ -13,6 +13,7 @@ const MiddlewareFragment = graphql(`
     name
     status
     interface
+    serviceUrl
     endpoints {
       id
       label

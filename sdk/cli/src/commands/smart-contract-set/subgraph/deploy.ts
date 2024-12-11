@@ -1,109 +1,99 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
-import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
+import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
+import {
+  getSubgraphConfig,
+  getSubgraphYamlConfig,
+  updateSubgraphYamlConfig,
+} from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { Command } from "@commander-js/extra-typings";
-import select from "@inquirer/select";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { loadEnv } from "@settlemint/sdk-utils";
-import { $ } from "bun";
-import { stringify } from "yaml";
-import { type SubgraphTemplate, subgraphSetup } from "./lib/common";
-import { isGenerated } from "./lib/is-generated";
-import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./lib/utils";
+import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
+import isInCi from "is-in-ci";
+import { subgraphNamePrompt } from "../prompts/subgraph-name.prompt";
+import { isGenerated } from "./utils/is-generated";
+import { subgraphSetup } from "./utils/setup";
+import { getSubgraphYamlFile } from "./utils/subgraph-config";
 
 export function subgraphDeployCommand() {
-  return new Command("deploy").description("Deploy the subgraph").action(async () => {
-    const env = await loadEnv(false, true);
+  return new Command("deploy")
+    .description("Deploy the subgraph")
+    .option("-a, --accept-defaults", "Accept the default and previously set values")
+    .option("--prod", "Connect to your production environment")
+    .action(async ({ prod, acceptDefaults }) => {
+      const autoAccept = !!acceptDefaults || isInCi;
+      const env = await loadEnv(false, !!prod);
 
-    if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
-      throw new ServiceNotConfiguredError("Blockchain node");
-    }
-
-    const accessToken = await accessTokenPrompt(env, true);
-    const instance = await instancePrompt(env, true);
-
-    const generated = await isGenerated();
-    await subgraphSetup({
-      isGenerated: generated,
-      env,
-      settlemintClient: createSettleMintClient({
+      const accessToken = await accessTokenPrompt(env, true);
+      const instance = await instancePrompt(env, true);
+      const settlemintClient = createSettleMintClient({
         accessToken,
         instance,
-      }),
-    });
-    const { adminUrl, specVersion } = await selectMiddleware();
+      });
 
-    const cwd = generated ? process.cwd() : "./subgraph";
+      const generated = await isGenerated();
 
-    const subgraphYamlFile = await getSubgraphYamlFile();
-    await updateSpecVersion(specVersion);
-    await $`npx graph codegen ${subgraphYamlFile}`;
-
-    if (generated) {
-      const currentConfig: SubgraphTemplate = await Bun.file("./subgraph/subgraph.config.json").json();
-      if (currentConfig.datasources.some((ds) => ds.address === "0x0000000000000000000000000000000000000000")) {
-        throw new Error(
-          'The "subgraph/subgraph.config.json" config has not been set, ensure all the contracts listed have an address added',
-        );
+      await subgraphSetup({
+        isGenerated: generated,
+        env,
+        settlemintClient,
+      });
+      const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
+      const theGraphMiddleware = await theGraphPrompt(env, middlewares, autoAccept);
+      if (!theGraphMiddleware) {
+        cancel("No Graph Middleware selected. Please select one to continue.");
       }
-    }
 
-    const scsName = process.env.BTP_SCS_NAME;
-    await $`npx graph create --node ${adminUrl} ${scsName}`;
-    await $`npx graph deploy --version-label v1.0.${Date.now()} --node ${adminUrl} --ipfs https://ipfs.network.thegraph.com ${scsName} ${subgraphYamlFile}`;
-  });
-}
+      const cwd = generated ? process.cwd() : "./subgraph";
 
-async function selectMiddleware() {
-  const defaultMiddleware = process.env.BTP_MIDDLEWARE as string;
-  const defaultSpecVersion = process.env.BTP_MIDDLEWARE_SPEC_VERSION as string;
+      const subgraphYamlFile = await getSubgraphYamlFile();
+      await updateSpecVersion(theGraphMiddleware.specVersion);
 
-  if (defaultMiddleware && defaultSpecVersion) {
-    return {
-      adminUrl: defaultMiddleware,
-      specVersion: defaultSpecVersion,
-    };
-  }
+      const { command, args } = await getPackageManagerExecutable();
+      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], { cwd });
 
-  const middlewaresResponse = await fetch(
-    `${process.env.BTP_CLUSTER_MANAGER_URL}/graph-middleware/subgraph-deploy-targets/${process.env.BTP_SCS_ID}`,
-    {
-      headers: {
-        "x-auth-token": process.env.BTP_SERVICE_TOKEN!,
-      },
-    },
-  );
+      if (generated) {
+        const currentConfig = await getSubgraphConfig();
+        if (
+          !currentConfig ||
+          currentConfig?.datasources.some((ds) => ds.address === "0x0000000000000000000000000000000000000000")
+        ) {
+          throw new Error(
+            'The "subgraph/subgraph.config.json" config has not been set, ensure all the contracts listed have an address added',
+          );
+        }
+      }
 
-  const middlewares = (await middlewaresResponse.json()) as {
-    uniqueName: string;
-    adminUrl: string;
-    specVersion: string;
-  }[];
+      const graphName = await subgraphNamePrompt(env, autoAccept, !!prod);
+      if (!graphName) {
+        cancel("No graph name provided. Please provide a graph name to continue.");
+      }
 
-  if (middlewares.length === 0) {
-    throw new Error(
-      "You do not have any middlewares in the application to deploy the subgraph to. Please create one and try again.",
-    );
-  }
+      const middlewareAdminUrl = new URL(
+        `/${encodeURIComponent(accessToken)}/admin`,
+        theGraphMiddleware.serviceUrl,
+      ).toString();
 
-  const middleware = await select({
-    message: "Which middleware do you want to deploy the subgraph to?",
-    choices: middlewares.map((middleware) => ({
-      name: middleware.uniqueName,
-      value: middleware,
-    })),
-  });
-
-  if (!middleware) {
-    throw new Error("No middleware selected");
-  }
-
-  return middleware;
+      await executeCommand(command, [...args, "graph", "create", "--node", middlewareAdminUrl, graphName]);
+      await executeCommand(command, [
+        ...args,
+        "graph",
+        "deploy",
+        "--version-label",
+        `v1.0.${Date.now()}`,
+        "--node",
+        middlewareAdminUrl,
+        "--ipfs",
+        "https://ipfs.network.thegraph.com",
+        graphName,
+        subgraphYamlFile,
+      ]);
+    });
 }
 
 async function updateSpecVersion(specVersion: string) {
   const yamlConfig = await getSubgraphYamlConfig();
   yamlConfig.specVersion = specVersion;
-  const subgraphYamlFile = await getSubgraphYamlFile();
-  await Bun.write(subgraphYamlFile, stringify(yamlConfig));
+  await updateSubgraphYamlConfig(yamlConfig);
 }
