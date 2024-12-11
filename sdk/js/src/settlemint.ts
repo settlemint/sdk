@@ -2,6 +2,10 @@ import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
 import {
+  type CreateApplicationAccessTokenArgs,
+  applicationAccessTokenCreate,
+} from "./graphql/application-access-tokens.js";
+import {
   type Application,
   type CreateApplicationArgs,
   applicationCreate,
@@ -168,6 +172,9 @@ export interface SettlemintClient {
   foundry: {
     env: (blockchainNodeId: Id) => Promise<Record<string, string>>;
   };
+  applicationAccessToken: {
+    create: (args: CreateApplicationAccessTokenArgs) => Promise<string>;
+  };
 }
 
 /**
@@ -294,6 +301,9 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     },
     foundry: {
       env: getEnv(gqlClient, options),
+    },
+    applicationAccessToken: {
+      create: applicationAccessTokenCreate(gqlClient, options),
     },
   };
 }

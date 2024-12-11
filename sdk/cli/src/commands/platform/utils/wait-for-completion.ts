@@ -35,6 +35,11 @@ export async function waitForCompletion({
     return true;
   }
 
+  const service = settlemint[serviceType];
+  if (!service || !("read" in service)) {
+    throw new Error(`Service ${serviceType} does not support status checking`);
+  }
+
   return spinner({
     startMessage: `Waiting for ${type} to be ${getActionLabel(action)}`,
     stopMessage: `Waiting for ${type} to be ${getActionLabel(action)}`,
@@ -43,7 +48,7 @@ export async function waitForCompletion({
 
       while (true) {
         try {
-          const resource = await settlemint[serviceType].read(id);
+          const resource = await service.read(id);
 
           if (resource.status === "COMPLETED") {
             note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);

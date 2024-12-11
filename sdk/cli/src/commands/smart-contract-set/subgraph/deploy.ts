@@ -1,4 +1,3 @@
-import { applicationAccessTokenPrompt } from "@/commands/connect/aat.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import {
   getSubgraphConfig,
@@ -24,7 +23,10 @@ export function subgraphDeployCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const accessToken = await applicationAccessTokenPrompt(env, true);
+      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+      if (!accessToken) {
+        cancel("No access token found, please run `settlemint connect` to connect to your instance");
+      }
       const instance = await instancePrompt(env, true);
       const settlemintClient = createSettleMintClient({
         accessToken,
