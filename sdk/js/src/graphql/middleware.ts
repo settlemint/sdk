@@ -24,6 +24,7 @@ const MiddlewareFragment = graphql(`
       displayValue
     }
     ... on HAGraphMiddleware {
+      specVersion
       subgraphs {
         name
         graphqlQueryEndpoint {

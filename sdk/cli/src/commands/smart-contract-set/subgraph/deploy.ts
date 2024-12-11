@@ -1,21 +1,41 @@
+import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { ServiceNotConfiguredError } from "@/error/serviceNotConfiguredError";
 import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import { stringify } from "yaml";
-import { type SubgraphTemplate, commonSetup } from "./lib/common";
+import { type SubgraphTemplate, subgraphSetup } from "./lib/common";
 import { isGenerated } from "./lib/is-generated";
-import { getSubgraphYamlConfig, subgraphYamlFile } from "./lib/utils";
+import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./lib/utils";
 
 export function subgraphDeployCommand() {
   return new Command("deploy").description("Deploy the subgraph").action(async () => {
-    const generated = await isGenerated;
-    await commonSetup(generated);
-    const { adminUrl, specVersion } = await selectMiddleware();
+    const env = await loadEnv(false, true);
 
-    if (!generated) {
-      $.cwd("./subgraph");
+    if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
+      throw new ServiceNotConfiguredError("Blockchain node");
     }
 
+    const accessToken = await accessTokenPrompt(env, true);
+    const instance = await instancePrompt(env, true);
+
+    const generated = await isGenerated();
+    await subgraphSetup({
+      isGenerated: generated,
+      env,
+      settlemintClient: createSettleMintClient({
+        accessToken,
+        instance,
+      }),
+    });
+    const { adminUrl, specVersion } = await selectMiddleware();
+
+    const cwd = generated ? process.cwd() : "./subgraph";
+
+    const subgraphYamlFile = await getSubgraphYamlFile();
     await updateSpecVersion(specVersion);
     await $`npx graph codegen ${subgraphYamlFile}`;
 
@@ -84,5 +104,6 @@ async function selectMiddleware() {
 async function updateSpecVersion(specVersion: string) {
   const yamlConfig = await getSubgraphYamlConfig();
   yamlConfig.specVersion = specVersion;
+  const subgraphYamlFile = await getSubgraphYamlFile();
   await Bun.write(subgraphYamlFile, stringify(yamlConfig));
 }

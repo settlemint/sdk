@@ -8,8 +8,8 @@ import type { ClientOptions } from "../helpers/client-options.schema.js";
  * GraphQL query to fetch Foundry environment configuration.
  */
 const getFoundryEnvConfig = graphql(`
-  query getFoundryEnvConfig($blockchainNodeId: String!, $middlewareId: String) {
-    foundryEnvConfig(blockchainNodeId: $blockchainNodeId, middlewareId: $middlewareId)
+  query getFoundryEnvConfig($blockchainNodeId: String!) {
+    foundryEnvConfig(blockchainNodeId: $blockchainNodeId)
   }
 `);
 
@@ -24,11 +24,8 @@ export type GetFoundryEnvConfigVariables = VariablesOf<typeof getFoundryEnvConfi
 export type GetFoundryEnvConfigResult = ResultOf<typeof getFoundryEnvConfig>;
 
 export function getEnv(gqlClient: GraphQLClient, options: ClientOptions) {
-  return async (blockchainNodeId: Id, graphMiddlewareId?: Id) => {
+  return async (blockchainNodeId: Id) => {
     validate(IdSchema, blockchainNodeId);
-    if (graphMiddlewareId) {
-      validate(IdSchema, graphMiddlewareId);
-    }
     const { foundryEnvConfig } = await gqlClient.request(getFoundryEnvConfig, { blockchainNodeId });
     return foundryEnvConfig as Record<string, string>;
   };

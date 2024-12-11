@@ -1,10 +1,18 @@
-import { rm } from "node:fs/promises";
-import { executeCommand, exists } from "@settlemint/sdk-utils";
+import { rm, writeFile } from "node:fs/promises";
+import type { SettlemintClient } from "@settlemint/sdk-js";
+import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import semver from "semver";
 import slugify from "slugify";
 import { stringify } from "yaml";
-import { getSubgraphYamlConfig, subgraphYamlFile } from "./utils";
+import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./utils";
 
-export async function commonSetup(isGenerated: boolean) {
+export interface SubgraphSetupParams {
+  env: Partial<DotEnv>;
+  settlemintClient: SettlemintClient;
+  isGenerated: boolean;
+}
+
+export async function subgraphSetup({ env, settlemintClient, isGenerated }: SubgraphSetupParams) {
   await executeCommand("forge", ["build"]);
 
   if (await exists("./generated")) {
@@ -20,19 +28,7 @@ export async function commonSetup(isGenerated: boolean) {
     await rm("./subgraph/build", { recursive: true, force: true });
   }
 
-  const env = await fetch(`${process.env.BTP_CLUSTER_MANAGER_URL}/ide/foundry/${process.env.BTP_SCS_ID}/env`, {
-    headers: {
-      "x-auth-token": process.env.BTP_SERVICE_TOKEN!,
-    },
-  });
-
-  const envText = await env.text();
-
-  const envVars = envText.split("\n").map((line) => line.trim());
-  for (const envVar of envVars) {
-    const [key, value] = envVar.split("=");
-    process.env[key] = value;
-  }
+  const envConfig = await settlemintClient.foundry.env(env.SETTLEMINT_BLOCKCHAIN_NODE!, env.SETTLEMINT_THEGRAPH);
 
   const network =
     process.env.BTP_SUBGRAPH_FIXED_NETWORK === "true"
@@ -40,7 +36,22 @@ export async function commonSetup(isGenerated: boolean) {
       : sanitize(process.env.BTP_NODE_UNIQUE_NAME || "localhost", 30);
 
   if (isGenerated) {
-    await $`npx graph-compiler --config subgraph/subgraph.config.json --include node_modules/@openzeppelin/subgraphs/src/datasources subgraph/datasources --export-schema --export-subgraph`;
+    const { command, args } = await getPackageManagerExecutable();
+    await executeCommand(
+      command,
+      [
+        ...args,
+        "graph-compiler",
+        "--config",
+        "subgraph/subgraph.config.json",
+        "--include",
+        "node_modules/@openzeppelin/subgraphs/src/datasources",
+        "subgraph/datasources",
+        "--export-schema",
+        "--export-subgraph",
+      ],
+      { env: envConfig },
+    );
   }
 
   const yamlConfig = await getSubgraphYamlConfig();
@@ -51,21 +62,22 @@ export async function commonSetup(isGenerated: boolean) {
 
   for (const dataSource of yamlConfig.dataSources) {
     // Returns 0 if the versions are equal, 1 if `v1` is greater, or -1 if `v2` is greater.
-    if (semver.order(dataSource.mapping.apiVersion, "0.0.9") === -1) {
+    if (semver.lt(dataSource.mapping.apiVersion, "0.0.9")) {
       dataSource.mapping.apiVersion = "0.0.9";
     }
     dataSource.network = network;
   }
   if (yamlConfig.templates) {
     for (const template of yamlConfig.templates) {
-      if (semver.order(template.mapping.apiVersion, "0.0.9") === -1) {
+      if (semver.lt(template.mapping.apiVersion, "0.0.9")) {
         template.mapping.apiVersion = "0.0.9";
       }
       template.network = network;
     }
   }
 
-  await Bun.write(subgraphYamlFile, stringify(yamlConfig));
+  const subgraphYamlFile = await getSubgraphYamlFile();
+  await writeFile(subgraphYamlFile, stringify(yamlConfig));
 }
 
 function sanitize(value: string, length = 35) {
