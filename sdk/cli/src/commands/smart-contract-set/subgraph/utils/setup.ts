@@ -1,7 +1,9 @@
 import { rm, writeFile } from "node:fs/promises";
+import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
 import type { SettlemintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 import semver from "semver";
 import { stringify } from "yaml";
 import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./subgraph-config";
@@ -9,10 +11,17 @@ import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./subgraph-config";
 export interface SubgraphSetupParams {
   env: Partial<DotEnv>;
   settlemintClient: SettlemintClient;
+  autoAccept: boolean;
   isGenerated: boolean;
 }
 
-export async function subgraphSetup({ env, settlemintClient, isGenerated }: SubgraphSetupParams) {
+export async function subgraphSetup({ env, settlemintClient, isGenerated, autoAccept }: SubgraphSetupParams) {
+  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
+  const theGraphMiddleware = await theGraphPrompt(env, middlewares, autoAccept);
+  if (!theGraphMiddleware) {
+    cancel("No Graph Middleware selected. Please select one to continue.");
+  }
+
   await executeCommand("forge", ["build"]);
 
   if (await exists("./generated")) {
@@ -28,33 +37,22 @@ export async function subgraphSetup({ env, settlemintClient, isGenerated }: Subg
     await rm("./subgraph/build", { recursive: true, force: true });
   }
 
-  const envConfig = {
-    BTP_SUBGRAPH_FIXED_NETWORK: "", // TODO
-    BTP_NODE_UNIQUE_NAME: "", // TODO
-  };
-
-  const network =
-    process.env.BTP_SUBGRAPH_FIXED_NETWORK === "true"
-      ? "settlemint"
-      : sanitizeName(process.env.BTP_NODE_UNIQUE_NAME || "localhost", 30);
+  const isFixedNetwork = (theGraphMiddleware.entityVersion ?? 4) >= 4;
+  const network = isFixedNetwork ? "settlemint" : sanitizeName(await getNodeName({ env, settlemintClient }), 30);
 
   if (isGenerated) {
     const { command, args } = await getPackageManagerExecutable();
-    await executeCommand(
-      command,
-      [
-        ...args,
-        "graph-compiler",
-        "--config",
-        "subgraph/subgraph.config.json",
-        "--include",
-        "node_modules/@openzeppelin/subgraphs/src/datasources",
-        "subgraph/datasources",
-        "--export-schema",
-        "--export-subgraph",
-      ],
-      { env: envConfig },
-    );
+    await executeCommand(command, [
+      ...args,
+      "graph-compiler",
+      "--config",
+      "subgraph/subgraph.config.json",
+      "--include",
+      "node_modules/@openzeppelin/subgraphs/src/datasources",
+      "subgraph/datasources",
+      "--export-schema",
+      "--export-subgraph",
+    ]);
   }
 
   const yamlConfig = await getSubgraphYamlConfig();
@@ -81,4 +79,14 @@ export async function subgraphSetup({ env, settlemintClient, isGenerated }: Subg
 
   const subgraphYamlFile = await getSubgraphYamlFile();
   await writeFile(subgraphYamlFile, stringify(yamlConfig));
+
+  return theGraphMiddleware;
+}
+
+async function getNodeName({ env, settlemintClient }: Pick<SubgraphSetupParams, "env" | "settlemintClient">) {
+  if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
+    return "localhost";
+  }
+  const node = await settlemintClient.blockchainNode.read(env.SETTLEMINT_BLOCKCHAIN_NODE);
+  return node.uniqueName;
 }

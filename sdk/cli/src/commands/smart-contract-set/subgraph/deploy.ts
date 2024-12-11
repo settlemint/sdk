@@ -1,6 +1,5 @@
 import { accessTokenPrompt } from "@/commands/connect/accesstoken.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
-import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import {
   getSubgraphConfig,
   getSubgraphYamlConfig,
@@ -33,17 +32,12 @@ export function subgraphDeployCommand() {
       });
 
       const generated = await isGenerated();
-
-      await subgraphSetup({
+      const theGraphMiddleware = await subgraphSetup({
         isGenerated: generated,
         env,
         settlemintClient,
+        autoAccept,
       });
-      const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
-      const theGraphMiddleware = await theGraphPrompt(env, middlewares, autoAccept);
-      if (!theGraphMiddleware) {
-        cancel("No Graph Middleware selected. Please select one to continue.");
-      }
 
       const cwd = generated ? process.cwd() : "./subgraph";
 
