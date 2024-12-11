@@ -5,7 +5,7 @@ import { $, type ShellError } from "bun";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
-const COMMAND_TEST_SCOPE = "create-smart-contract-set-e2e";
+const COMMAND_TEST_SCOPE = __filename;
 const USE_CASE = "solidity-token-erc20";
 
 const projectDir = join(process.cwd(), "test", SMART_CONTRACT_SET_NAME);

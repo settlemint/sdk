@@ -70,5 +70,11 @@ export async function waitForCompletion({
 }
 
 function getActionLabel(action: Action): string {
-  return action === "deploy" ? "deployed" : "destroyed";
+  if (action === "restart") {
+    return "restarted";
+  }
+  if (action === "destroy") {
+    return "destroyed";
+  }
+  return "deployed";
 }

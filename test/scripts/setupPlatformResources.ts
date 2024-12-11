@@ -1,26 +1,25 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import {
+  APPLICATION_NAME,
+  BLOCKSCOUT_NAME,
+  CLUSTER_PROVIDER,
+  CLUSTER_REGION,
+  GRAPH_NAME,
+  HASURA_NAME,
+  IPFS_NAME,
+  NETWORK_NAME,
+  NODE_NAME,
+  PRIVATE_KEY_NAME,
+  PRIVATE_KEY_SMART_CONTRACTS_NAME,
+  SMART_CONTRACT_SET_NAME,
+  WORKSPACE_NAME,
+} from "../constants/testResources";
 import { isLocalEnv } from "../utils/is-local-env";
 import { runCommand } from "../utils/run-command";
 
-const WORKSPACE_NAME = "Starter Kit Demo Workspace";
-const APPLICATION_NAME = "Starter Kit App";
-const NETWORK_NAME = "Starter Kit Network";
-const NODE_NAME = "Starter Kit Node";
-const PRIVATE_KEY_NAME = "Starter Kit Private Key";
-const PRIVATE_KEY_SMART_CONTRACTS_NAME = "Starter Kit Private Key Smart Contracts";
-const SMART_CONTRACT_SET_NAME = "Starter Kit Smart Contract Set";
-const IPFS_NAME = "Starter Kit IPFS";
-const GRAPH_NAME = "Starter Kit Graph";
-const PORTAL_NAME = "Starter Kit Portal";
-const HASURA_NAME = "Starter Kit Hasura";
-const BLOCKSCOUT_NAME = "Starter Kit Blockscout";
-
-const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
-const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";
-
-const COMMAND_TEST_SCOPE = "setup-platform-resources";
+const COMMAND_TEST_SCOPE = __filename;
 
 async function cleanup() {
   if (process.env.DISABLE_WORKSPACE_DELETE) {
