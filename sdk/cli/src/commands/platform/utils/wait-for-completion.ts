@@ -31,7 +31,7 @@ export async function waitForCompletion({
   maxTimeout?: number;
 }): Promise<boolean> {
   const serviceType = SETTLEMINT_CLIENT_MAP[type];
-  if (serviceType === "workspace" || serviceType === "application") {
+  if (serviceType === "workspace" || serviceType === "application" || serviceType === "foundry") {
     return true;
   }
 

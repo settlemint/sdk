@@ -50,3 +50,4 @@ apps/registry/public/*.json
 test/starter-kit-demo
 test/unknown
 test/contracts
+test/contracts-subgraphs

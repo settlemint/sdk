@@ -12336,6 +12336,7 @@ type InstantMetric {
 
   """Namespace of the instant metric"""
   namespace: String!
+  nonSuccessfulRequests: String
   polygonEdgeNetworkAverageConsensusRounds: String
   polygonEdgeNetworkLastAverageBlockTime: String
   polygonEdgeNetworkMaxConsensusRounds: String
@@ -12351,6 +12352,7 @@ type InstantMetric {
   storage: String
   storagePercentage: String
   storageQuota: String
+  successfulRequests: String
   totalBackends: String
 }
 
@@ -20069,6 +20071,10 @@ type RangeMetric {
 
   """Namespace of the range metric"""
   namespace: String!
+  nonSuccessfulRequestsDay: [RangeDatePoint!]!
+  nonSuccessfulRequestsHour: [RangeDatePoint!]!
+  nonSuccessfulRequestsMonth: [RangeDatePoint!]!
+  nonSuccessfulRequestsWeek: [RangeDatePoint!]!
   pendingTransactions: [RangeDatePoint!]!
   polygonEdgeTransactionsHour: [RangeDatePoint!]!
   queuedTransactions: [RangeDatePoint!]!
@@ -20084,6 +20090,10 @@ type RangeMetric {
   storageMonth: [RangeDatePoint!]!
   storageWeek: [RangeDatePoint!]!
   successRpcRequests: [RangeDatePoint!]!
+  successfulRequestsDay: [RangeDatePoint!]!
+  successfulRequestsHour: [RangeDatePoint!]!
+  successfulRequestsMonth: [RangeDatePoint!]!
+  successfulRequestsWeek: [RangeDatePoint!]!
   transactionsPerBlock: [RangeDatePoint!]!
 }
 

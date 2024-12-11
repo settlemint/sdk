@@ -1,5 +1,5 @@
 import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
-import { note } from "@settlemint/sdk-utils/terminal";
+import { note } from "../terminal/note.js";
 
 /**
  * Executes a command with the given arguments in a child process
