@@ -18,9 +18,10 @@ import {
   WORKSPACE_NAME,
 } from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
-import { runCommand } from "../utils/run-command";
+import { type CommandResult, runCommand } from "../utils/run-command";
 
 const COMMAND_TEST_SCOPE = __filename;
+const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
 async function cleanup() {
   if (process.env.DISABLE_WORKSPACE_DELETE) {
@@ -133,9 +134,9 @@ async function createBlockchainNodeAndIpfs() {
   const hasBlockchainNode = await resourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
   const hasHasuraIntegration = await resourceAlreadyCreated(["SETTLEMINT_HASURA"]);
   const hasIpfsStorage = await resourceAlreadyCreated(["SETTLEMINT_IPFS"]);
-  const results = await Promise.allSettled([
+  const results = await deployResources([
     hasBlockchainNetwork && hasBlockchainNode
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -153,7 +154,7 @@ async function createBlockchainNodeAndIpfs() {
           "--wait",
         ]).result,
     hasHasuraIntegration
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -169,7 +170,7 @@ async function createBlockchainNodeAndIpfs() {
           HASURA_NAME,
         ]).result,
     hasIpfsStorage
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -188,7 +189,7 @@ async function createBlockchainNodeAndIpfs() {
 
   const [networkResult, hasuraResult, ipfsResult] = results;
 
-  if (!hasBlockchainNode && networkResult.status === "fulfilled" && networkResult.value) {
+  if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkResult.value.output).toInclude("Blockchain node is deployed");
     const env: Partial<DotEnv> = await loadEnv(false, false);
@@ -214,18 +215,18 @@ async function createBlockchainNodeAndIpfs() {
     expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
   }
 
-  expect([networkResult.status, hasuraResult.status, ipfsResult.status]).toEqual([
+  expect([networkResult?.status, hasuraResult?.status, ipfsResult?.status]).toEqual([
     "fulfilled",
     "fulfilled",
     "fulfilled",
   ]);
 
-  if (hasuraResult.status === "fulfilled" && hasuraResult.value) {
+  if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
     expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
   }
 
-  if (ipfsResult.status === "fulfilled" && ipfsResult.value) {
+  if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
@@ -238,9 +239,9 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const hasBlockscoutInsights = await resourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
-  const results = await Promise.allSettled([
+  const results = await deployResources([
     hasPrivateKey
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -258,7 +259,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           PRIVATE_KEY_NAME,
         ]).result,
     hasSmartContractSet
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -275,7 +276,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           SMART_CONTRACT_SET_NAME,
         ]).result,
     hasPortalMiddleware
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -297,7 +298,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           "StarterKitERC20Dex",
         ]).result,
     hasBlockscoutInsights
-      ? Promise.resolve()
+      ? Promise.resolve(undefined)
       : runCommand(COMMAND_TEST_SCOPE, [
           "platform",
           "create",
@@ -317,30 +318,30 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const [privateKeyResult, smartContractSetResult, portalResult, blockscoutResult] = results;
 
   expect([
-    privateKeyResult.status,
-    smartContractSetResult.status,
-    portalResult.status,
-    blockscoutResult.status,
+    privateKeyResult?.status,
+    smartContractSetResult?.status,
+    portalResult?.status,
+    blockscoutResult?.status,
   ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
 
-  if (privateKeyResult.status === "fulfilled" && privateKeyResult.value) {
+  if (privateKeyResult?.status === "fulfilled" && privateKeyResult.value) {
     expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
     expect(privateKeyResult.value.output).toInclude("Private key is deployed");
   }
 
-  if (smartContractSetResult.status === "fulfilled" && smartContractSetResult.value) {
+  if (smartContractSetResult?.status === "fulfilled" && smartContractSetResult.value) {
     expect(smartContractSetResult.value.output).toInclude(
       `Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`,
     );
     expect(smartContractSetResult.value.output).toInclude("Smart contract set is deployed");
   }
 
-  if (portalResult.status === "fulfilled" && portalResult.value) {
+  if (portalResult?.status === "fulfilled" && portalResult.value) {
     expect(portalResult.value.output).toInclude(`Middleware ${PORTAL_NAME} created successfully`);
     expect(portalResult.value.output).toInclude("Middleware is deployed");
   }
 
-  if (blockscoutResult.status === "fulfilled" && blockscoutResult.value) {
+  if (blockscoutResult?.status === "fulfilled" && blockscoutResult.value) {
     expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
     expect(blockscoutResult.value.output).toInclude("Insights is deployed");
   }
@@ -367,4 +368,26 @@ async function createGraphMiddleware() {
   ]).result;
   expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
   expect(graphOutput).toInclude("Middleware is deployed");
+}
+
+async function deployResources(commands: Promise<CommandResult | undefined>[]) {
+  if (DISABLE_CONCURRENT_DEPLOYMENT) {
+    const results: PromiseSettledResult<undefined | CommandResult>[] = [];
+    for (const command of commands) {
+      try {
+        const result = await command;
+        results.push({
+          status: "fulfilled",
+          value: result,
+        });
+      } catch (err) {
+        results.push({
+          status: "rejected",
+          reason: err,
+        });
+      }
+    }
+    return results;
+  }
+  return await Promise.allSettled(commands);
 }

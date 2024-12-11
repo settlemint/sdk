@@ -1,5 +1,4 @@
 import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
-import { note } from "../terminal/note.js";
 
 /**
  * Executes a command with the given arguments in a child process
@@ -18,10 +17,10 @@ export async function executeCommand(
   const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data) => {
-      note(data.toString());
+      console.log(data.toString());
     });
     child.stderr.on("data", (data) => {
-      note(data.toString());
+      console.error(data.toString());
     });
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {

@@ -25,7 +25,7 @@ if (isLocalEnv()) {
   DEFAULT_ENV.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 }
 
-type CommandResult = { output: string; cwd: string };
+export type CommandResult = { output: string; cwd: string };
 
 export function runCommand(
   testScope: string,
