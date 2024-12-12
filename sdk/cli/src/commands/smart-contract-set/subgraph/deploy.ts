@@ -4,6 +4,7 @@ import {
   getSubgraphYamlConfig,
   updateSubgraphYamlConfig,
 } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
+import { missingAccessTokenError } from "@/error/missing-config-error";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
@@ -25,7 +26,7 @@ export function subgraphDeployCommand() {
 
       const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
       if (!accessToken) {
-        cancel("No access token found, please run `settlemint connect` to connect to your instance");
+        return missingAccessTokenError();
       }
       const instance = await instancePrompt(env, true);
       const settlemintClient = createSettleMintClient({

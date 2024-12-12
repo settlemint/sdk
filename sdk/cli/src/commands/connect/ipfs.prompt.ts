@@ -14,7 +14,7 @@ export async function ipfsPrompt(
   }
 
   const defaultStorage =
-    (possible.find((storage) => storage.id === env.SETTLEMINT_IPFS) ?? possible.length === 1) ? possible[0] : undefined;
+    possible.find((storage) => storage.id === env.SETTLEMINT_IPFS) ?? (possible.length === 1 ? possible[0] : undefined);
   const defaultPossible = accept && defaultStorage;
 
   if (defaultPossible) {

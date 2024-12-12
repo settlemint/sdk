@@ -1,18 +1,18 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { missingAccessTokenError } from "@/error/missing-config-error";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
 import { createExamples } from "../utils/create-examples";
 import type { ResourceType } from "./resource-type";
-
 /**
  * Creates a command for deleting resources in the SettleMint platform.
  *
@@ -76,7 +76,7 @@ ${createExamples([
 
       const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
       if (!accessToken) {
-        cancel("No access token found, please run `settlemint connect` to connect to your instance");
+        return missingAccessTokenError();
       }
       const instance = await instancePrompt(env, autoAccept);
 

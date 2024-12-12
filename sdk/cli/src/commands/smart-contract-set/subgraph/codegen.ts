@@ -1,8 +1,8 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { missingAccessTokenError } from "@/error/missing-config-error";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
-import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { isGenerated } from "./utils/is-generated";
 import { subgraphSetup } from "./utils/setup";
@@ -19,7 +19,7 @@ export function subgraphCodegenCommand() {
 
       const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
       if (!accessToken) {
-        cancel("No access token found, please run `settlemint connect` to connect to your instance");
+        return missingAccessTokenError();
       }
       const instance = await instancePrompt(env, true);
       const settlemintClient = createSettleMintClient({
