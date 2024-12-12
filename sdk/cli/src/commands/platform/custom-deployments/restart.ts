@@ -13,5 +13,6 @@ export function customDeploymentRestartCommand() {
     restartFunction: async (settlemint, id) => {
       return settlemint.customDeployment.restart(id);
     },
+    usePersonalAccessToken: false,
   });
 }
