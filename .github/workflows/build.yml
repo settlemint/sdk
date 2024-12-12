@@ -197,68 +197,69 @@ jobs:
           branch: main
           file_pattern: 'package.json **/schema.graphql'
 
-      - name: Check if packages are published
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          echo "Checking if packages are published..."
-          MAX_ATTEMPTS=120
-          DELAY=10
-          ATTEMPT=1
+      # This is super unstable and we publish the registry to github pages which is fine for now
+      # - name: Check if packages are published
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   run: |
+      #     echo "Checking if packages are published..."
+      #     MAX_ATTEMPTS=120
+      #     DELAY=10
+      #     ATTEMPT=1
 
-          check_package() {
-            local package=$1
-            local version=$2
-            echo "Checking $package@$version..."
-            if bun pm view "$package@$version" version &>/dev/null; then
-              echo "$package@$version is published."
-              return 0
-            else
-              echo "$package@$version is not yet published."
-              return 1
-            fi
-          }
+      #     check_package() {
+      #       local package=$1
+      #       local version=$2
+      #       echo "Checking $package@$version..."
+      #       if bun pm view "$package@$version" version &>/dev/null; then
+      #         echo "$package@$version is published."
+      #         return 0
+      #       else
+      #         echo "$package@$version is not yet published."
+      #         return 1
+      #       fi
+      #     }
 
-          while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
-            ALL_PUBLISHED=true
+      #     while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
+      #       ALL_PUBLISHED=true
 
-            for dir in ./packages/*; do
-              if [ -f "$dir/package.json" ]; then
-                PACKAGE_NAME=$(jq -r .name "$dir/package.json")
-                PACKAGE_VERSION=$(jq -r .version "$dir/package.json")
+      #       for dir in ./packages/*; do
+      #         if [ -f "$dir/package.json" ]; then
+      #           PACKAGE_NAME=$(jq -r .name "$dir/package.json")
+      #           PACKAGE_VERSION=$(jq -r .version "$dir/package.json")
 
-                if ! check_package "$PACKAGE_NAME" "$PACKAGE_VERSION"; then
-                  ALL_PUBLISHED=false
-                  break
-                fi
-              fi
-            done
+      #           if ! check_package "$PACKAGE_NAME" "$PACKAGE_VERSION"; then
+      #             ALL_PUBLISHED=false
+      #             break
+      #           fi
+      #         fi
+      #       done
 
-            if $ALL_PUBLISHED; then
-              echo "All packages are published."
-              break
-            fi
+      #       if $ALL_PUBLISHED; then
+      #         echo "All packages are published."
+      #         break
+      #       fi
 
-            if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
-              echo "Timeout: Not all packages were published within the expected time."
-              exit 1
-            fi
+      #       if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
+      #         echo "Timeout: Not all packages were published within the expected time."
+      #         exit 1
+      #       fi
 
-            echo "Waiting for 10 seconds before next check (Attempt $ATTEMPT/$MAX_ATTEMPTS)..."
-            sleep $DELAY
-            ATTEMPT=$((ATTEMPT + 1))
-          done
+      #       echo "Waiting for 10 seconds before next check (Attempt $ATTEMPT/$MAX_ATTEMPTS)..."
+      #       sleep $DELAY
+      #       ATTEMPT=$((ATTEMPT + 1))
+      #     done
 
-      - name: Build docker containers
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3
-        with:
-          timeout_minutes: 15
-          max_attempts: 3
-          retry_wait_seconds: 30
-          command: bunx turbo docker --env-mode=loose
-        env:
-          TAG: ${{ env.TAG }}
-          VERSION: ${{ env.VERSION }}
+      # - name: Build docker containers
+      #   if: ${{ github.event_name != 'pull_request' }}
+      #   uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3
+      #   with:
+      #     timeout_minutes: 15
+      #     max_attempts: 3
+      #     retry_wait_seconds: 30
+      #     command: bunx turbo docker --env-mode=loose
+      #   env:
+      #     TAG: ${{ env.TAG }}
+      #     VERSION: ${{ env.VERSION }}
 
   deploy:
     name: Deploy to Registry to GitHub Pages
