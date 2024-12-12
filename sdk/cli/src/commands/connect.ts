@@ -1,6 +1,7 @@
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
+import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getInstanceCredentials } from "@/utils/config";
 import {
   getBlockscoutEndpoints,
@@ -13,7 +14,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
 import { applicationPrompt } from "./connect/application.prompt";
@@ -57,9 +58,7 @@ export function connectCommand(): Command {
         const personalAccessToken = await getInstanceCredentials(instance);
 
         if (!personalAccessToken) {
-          cancel(
-            "No personal access token found for instance, please run `settlemint login` to login to your instance",
-          );
+          return missingPersonalAccessTokenError();
         }
 
         const accessToken = personalAccessToken.personalAccessToken;

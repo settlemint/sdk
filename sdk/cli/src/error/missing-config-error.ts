@@ -9,3 +9,7 @@ export function missingConfigError(type: ServiceType) {
 export function missingAccessTokenError() {
   return cancel("No access token found, please run `settlemint connect` to connect to your instance");
 }
+
+export function missingPersonalAccessTokenError() {
+  return cancel("No personal access token found for instance, please run `settlemint login` to login to your instance");
+}

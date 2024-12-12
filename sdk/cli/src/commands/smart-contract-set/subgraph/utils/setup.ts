@@ -16,6 +16,7 @@ export interface SubgraphSetupParams {
 }
 
 export async function subgraphSetup({ env, settlemintClient, isGenerated, autoAccept }: SubgraphSetupParams) {
+  // TODO: use PAT token (only if there is no default middleware)
   const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
   const theGraphMiddleware = await theGraphPrompt(env, middlewares, autoAccept);
   if (!theGraphMiddleware) {
