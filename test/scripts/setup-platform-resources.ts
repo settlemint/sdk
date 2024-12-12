@@ -86,7 +86,7 @@ async function addWorkspaceCredits() {
   const env: Partial<DotEnv> = await loadEnv(false, false);
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
   const settlemint = createSettleMintClient({
-    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
     instance: env.SETTLEMINT_INSTANCE!,
   });
   if (!isLocalEnv()) {
