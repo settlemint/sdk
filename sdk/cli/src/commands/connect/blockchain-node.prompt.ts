@@ -4,13 +4,11 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Prompts the user to select a blockchain node to connect to.
- * If there's only one blockchain node available and auto-accept is enabled,
- * it will automatically select that node.
  *
- * @param env - The current environment variables
- * @param nodes - Array of available blockchain nodes
- * @param accept - Whether to automatically accept default values
- * @returns The selected blockchain node or undefined if none selected
+ * @param env - The environment variables containing the current configuration
+ * @param nodes - The available blockchain nodes to choose from
+ * @param accept - Whether to automatically accept default values without prompting
+ * @returns The selected blockchain node, or undefined if no nodes are available or none is selected
  */
 export async function blockchainNodePrompt(
   env: Partial<DotEnv>,

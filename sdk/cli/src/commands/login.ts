@@ -4,6 +4,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
 import { setDefaultInstance, storeCredentials } from "../utils/config";
 import { instancePrompt } from "./connect/instance.prompt";
 import { personalAccessTokenPrompt } from "./connect/pat.prompt";
@@ -44,6 +45,11 @@ export function loginCommand(): Command {
           chunks.push(Buffer.from(chunk));
         }
         personalAccessToken = Buffer.concat(chunks).toString().trim();
+        try {
+          validate(PersonalAccessTokenSchema, personalAccessToken);
+        } catch {
+          cancel("Invalid personal access token");
+        }
       } else {
         personalAccessToken = await personalAccessTokenPrompt(instance);
       }
