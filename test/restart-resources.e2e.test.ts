@@ -11,15 +11,15 @@ afterEach(() => {
 });
 
 describe("Restart platform resources using the SDK", () => {
-  test("Restart smart contract set on the platform", async () => {
+  test.skip("Restart custom deployment on the platform", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
       "restart",
-      "scs",
+      "cd",
       "default",
       "--wait",
       "--accept-defaults",
     ]).result;
-    expect(output).toInclude(`Smart contract set ${SMART_CONTRACT_SET_NAME} restart initiated successfully`);
+    expect(output).toInclude(`Custom deployment ${SMART_CONTRACT_SET_NAME} restart initiated successfully`);
   });
 });

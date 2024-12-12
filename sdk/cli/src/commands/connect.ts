@@ -62,9 +62,9 @@ export function connectCommand(): Command {
           );
         }
 
-        let accessToken = personalAccessToken.personalAccessToken;
+        const accessToken = personalAccessToken.personalAccessToken;
 
-        let settlemint = createSettleMintClient({
+        const settlemint = createSettleMintClient({
           accessToken,
           instance,
         });
@@ -74,11 +74,7 @@ export function connectCommand(): Command {
         const workspace = await workspacePrompt(env, workspaces, autoAccept);
         const application = await applicationPrompt(env, workspace?.applications ?? [], autoAccept);
 
-        accessToken = await applicationAccessTokenPrompt(env, application, settlemint, autoAccept);
-        settlemint = createSettleMintClient({
-          accessToken,
-          instance,
-        });
+        const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, autoAccept);
 
         const { middleware, integrationTool, storage, privateKey, insights, customDeployment, blockchainNodes } =
           await servicesSpinner(settlemint, application);
@@ -98,7 +94,7 @@ export function connectCommand(): Command {
 
         await writeEnvSpinner(!!prod, {
           ...PRE_DEPLOYED_CONTRACTS,
-          SETTLEMINT_ACCESS_TOKEN: accessToken,
+          SETTLEMINT_ACCESS_TOKEN: aatToken,
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,
           SETTLEMINT_APPLICATION: application.id,
