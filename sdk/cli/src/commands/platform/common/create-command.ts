@@ -25,8 +25,8 @@ type DefaultArgs = {
  *
  * @param options - Configuration options for the create command
  * @param options.name - The name of the command
- * @param options.type - The type of resource to create (e.g. "middleware", "storage", etc)
- * @param options.alias - Command alias for shorthand usage (e.g. "aat" for "application-access-token")
+ * @param options.type - The type of resource to create
+ * @param options.alias - Command alias for shorthand usage
  * @param options.examples - Array of example usage strings showing different ways to use the command
  * @param options.execute - Function to configure and execute the create command
  * @param options.execute.cmd - The Commander command instance to configure with options and action

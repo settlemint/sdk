@@ -21,6 +21,10 @@ import {
 import { isLocalEnv } from "../utils/is-local-env";
 import { type CommandResult, runCommand } from "../utils/run-command";
 
+// Needed so it loads the correct environment variables
+// @ts-ignore
+process.env.NODE_ENV = "development";
+
 const COMMAND_TEST_SCOPE = __filename;
 const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
@@ -48,6 +52,7 @@ async function cleanup() {
       "default",
     ]).result;
     expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
+    await logout();
   } catch (err) {
     const error = err as Error;
     console.error(`Cleaning up resources failed: ${error.message}`, error);
@@ -62,7 +67,6 @@ beforeAll(async () => {
     await createBlockchainNodeAndIpfs();
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddleware();
-    await logout();
   } catch (err) {
     console.error("Failed to create resources", err);
     await cleanup();
@@ -407,7 +411,7 @@ async function createApplicationAccessToken() {
     "create",
     "aat",
     "--validity-period",
-    "DAYS_7",
+    "NONE",
     "--accept-defaults",
     "--default",
     AAT_NAME,
