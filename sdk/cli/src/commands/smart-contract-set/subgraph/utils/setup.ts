@@ -1,7 +1,9 @@
 import { rm, writeFile } from "node:fs/promises";
 import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
-import type { SettlemintClient } from "@settlemint/sdk-js";
+import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
+import { getInstanceCredentials } from "@/utils/config";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import semver from "semver";
@@ -10,15 +12,14 @@ import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./subgraph-config";
 
 export interface SubgraphSetupParams {
   env: Partial<DotEnv>;
-  settlemintClient: SettlemintClient;
+  instance: string;
+  accessToken: string;
   autoAccept: boolean;
   isGenerated: boolean;
 }
 
-export async function subgraphSetup({ env, settlemintClient, isGenerated, autoAccept }: SubgraphSetupParams) {
-  // TODO: use PAT token (only if there is no default middleware)
-  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
-  const theGraphMiddleware = await theGraphPrompt(env, middlewares, autoAccept);
+export async function subgraphSetup({ env, instance, accessToken, isGenerated, autoAccept }: SubgraphSetupParams) {
+  const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
   if (!theGraphMiddleware) {
     cancel("No Graph Middleware selected. Please select one to continue.");
   }
@@ -39,7 +40,7 @@ export async function subgraphSetup({ env, settlemintClient, isGenerated, autoAc
   }
 
   const isFixedNetwork = (theGraphMiddleware.entityVersion ?? 4) >= 4;
-  const network = isFixedNetwork ? "settlemint" : sanitizeName(await getNodeName({ env, settlemintClient }), 30);
+  const network = isFixedNetwork ? "settlemint" : sanitizeName(await getNodeName({ env, instance, accessToken }), 30);
 
   if (isGenerated) {
     const { command, args } = await getPackageManagerExecutable();
@@ -84,10 +85,46 @@ export async function subgraphSetup({ env, settlemintClient, isGenerated, autoAc
   return theGraphMiddleware;
 }
 
-async function getNodeName({ env, settlemintClient }: Pick<SubgraphSetupParams, "env" | "settlemintClient">) {
+async function getTheGraphMiddleware({
+  env,
+  instance,
+  accessToken,
+  autoAccept,
+}: Pick<SubgraphSetupParams, "env" | "instance" | "accessToken" | "autoAccept">) {
+  if (autoAccept && env.SETTLEMINT_THEGRAPH) {
+    const settlemintClient = createSettleMintClient({
+      accessToken,
+      instance,
+    });
+    const defaultTheGraphMiddleware = await settlemintClient.middleware.read(env.SETTLEMINT_THEGRAPH);
+    if (defaultTheGraphMiddleware && defaultTheGraphMiddleware.__typename === "HAGraphMiddleware") {
+      return defaultTheGraphMiddleware;
+    }
+  }
+  const personalAccessToken = await getInstanceCredentials(instance);
+  if (!personalAccessToken) {
+    return missingPersonalAccessTokenError();
+  }
+  const settlemintClient = createSettleMintClient({
+    accessToken: personalAccessToken.personalAccessToken,
+    instance,
+  });
+  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
+  return theGraphPrompt(env, middlewares, autoAccept);
+}
+
+async function getNodeName({
+  env,
+  instance,
+  accessToken,
+}: Pick<SubgraphSetupParams, "env" | "instance" | "accessToken">) {
   if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
     return "localhost";
   }
+  const settlemintClient = createSettleMintClient({
+    accessToken,
+    instance,
+  });
   const node = await settlemintClient.blockchainNode.read(env.SETTLEMINT_BLOCKCHAIN_NODE);
   return node.uniqueName;
 }

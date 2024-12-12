@@ -6,7 +6,6 @@ import {
 } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { missingAccessTokenError } from "@/error/missing-config-error";
 import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
@@ -28,17 +27,21 @@ export function subgraphDeployCommand() {
       if (!accessToken) {
         return missingAccessTokenError();
       }
-      const instance = await instancePrompt(env, true);
-      const settlemintClient = createSettleMintClient({
-        accessToken,
-        instance,
-      });
 
+      const instance = await instancePrompt(env, true);
       const generated = await isGenerated();
+      await subgraphSetup({
+        isGenerated: generated,
+        env,
+        instance,
+        accessToken,
+        autoAccept,
+      });
       const theGraphMiddleware = await subgraphSetup({
         isGenerated: generated,
         env,
-        settlemintClient,
+        instance,
+        accessToken,
         autoAccept,
       });
 
