@@ -2,6 +2,7 @@ import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import {
+  AAT_NAME,
   APPLICATION_NAME,
   BLOCKSCOUT_NAME,
   CLUSTER_PROVIDER,
@@ -55,10 +56,13 @@ async function cleanup() {
 
 beforeAll(async () => {
   try {
+    await login();
+    await createApplicationAccessToken();
     await createWorkspaceAndApplication();
     await createBlockchainNodeAndIpfs();
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddleware();
+    await logout();
   } catch (err) {
     console.error("Failed to create resources", err);
     await cleanup();
@@ -375,6 +379,40 @@ async function createGraphMiddleware() {
   ]).result;
   expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
   expect(graphOutput).toInclude("Middleware is deployed");
+}
+
+async function login() {
+  const { output: loginOutput } = await runCommand(
+    COMMAND_TEST_SCOPE,
+    ["login", "--token-stdin", "--accept-defaults", "--default"],
+    {
+      stdin: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS,
+    },
+  ).result;
+  expect(loginOutput).toInclude("Successfully logged in to SettleMint!");
+}
+
+async function logout() {
+  const { output: logoutOutput } = await runCommand(COMMAND_TEST_SCOPE, ["logout", "--all"]).result;
+  expect(logoutOutput).toInclude("Successfully logged out from all instances");
+}
+
+async function createApplicationAccessToken() {
+  const hasAat = await resourceAlreadyCreated(["SETTLEMINT_ACCESS_TOKEN"]);
+  if (hasAat) {
+    return;
+  }
+  const { output: graphOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+    "platform",
+    "create",
+    "aat",
+    "--validity-period",
+    "DAYS_7",
+    "--accept-defaults",
+    "--default",
+    AAT_NAME,
+  ]).result;
+  expect(graphOutput).toInclude(`Application access token ${AAT_NAME} created successfully`);
 }
 
 async function deployResources(commands: (() => Promise<CommandResult | undefined>)[]) {

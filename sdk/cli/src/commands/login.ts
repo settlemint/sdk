@@ -1,9 +1,10 @@
 import { loginSpinner } from "@/commands/connect/login.spinner";
+import { createExamples } from "@/commands/platform/utils/create-examples";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
-import { storeCredentials } from "../utils/config";
+import { setDefaultInstance, storeCredentials } from "../utils/config";
 import { instancePrompt } from "./connect/instance.prompt";
 import { personalAccessTokenPrompt } from "./connect/pat.prompt";
 
@@ -15,14 +16,37 @@ import { personalAccessTokenPrompt } from "./connect/pat.prompt";
  */
 export function loginCommand(): Command {
   return new Command("login")
-    .description("Login to your SettleMint account")
+    .description(
+      `Login to your SettleMint account.\n${createExamples([
+        {
+          description: "Login to your SettleMint account",
+          command: "settlemint login",
+        },
+        {
+          description: "Login to your SettleMint account using a token from STDIN",
+          command: "cat ~/my_token.txt | settlemint login --token-stdin --accept-defaults",
+        },
+      ])}`,
+    )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
-    .action(async ({ acceptDefaults }) => {
-      intro("Logging in to your SettleMint account");
+    .option("-d, --default", "Set this instance as the default")
+    .option("--token-stdin", "Provide a token using STDIN")
+    .action(async ({ acceptDefaults, default: isDefault, tokenStdin }) => {
+      intro("Login to your SettleMint account");
 
       const env = await loadEnv(false, false);
       const instance = await instancePrompt(env, !!acceptDefaults);
-      const personalAccessToken = await personalAccessTokenPrompt(instance);
+
+      let personalAccessToken: string;
+      if (tokenStdin) {
+        const chunks: Buffer[] = [];
+        for await (const chunk of process.stdin) {
+          chunks.push(Buffer.from(chunk));
+        }
+        personalAccessToken = Buffer.concat(chunks).toString().trim();
+      } else {
+        personalAccessToken = await personalAccessTokenPrompt(instance);
+      }
 
       // Test the connection by trying to list workspaces
       const client = createSettleMintClient({
@@ -38,6 +62,10 @@ export function loginCommand(): Command {
 
       // If we get here, the connection was successful
       await storeCredentials(personalAccessToken, instance);
+
+      if (isDefault) {
+        await setDefaultInstance(instance);
+      }
 
       outro("Successfully logged in to SettleMint!");
     });

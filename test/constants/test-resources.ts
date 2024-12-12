@@ -12,6 +12,7 @@ export const GRAPH_NAME = "Starter Kit Graph";
 export const PORTAL_NAME = "Starter Kit Portal";
 export const HASURA_NAME = "Starter Kit Hasura";
 export const BLOCKSCOUT_NAME = "Starter Kit Blockscout";
+export const AAT_NAME = "Starter Kit Application Access Token";
 
 export const CLUSTER_PROVIDER = isLocalEnv() ? "local" : "gke";
 export const CLUSTER_REGION = isLocalEnv() ? "orbstack" : "europe";

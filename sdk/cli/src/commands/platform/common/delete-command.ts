@@ -2,6 +2,7 @@ import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getInstanceCredentials } from "@/utils/config";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
@@ -23,6 +24,7 @@ import type { ResourceType } from "./resource-type";
  * @param options.envKey - Environment variable key for the resource ID
  * @param options.mapDefaultEnv - Optional function to map environment variables when deleting default resource
  * @param options.deleteFunction - Function that performs the actual delete operation on the platform
+ * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
  * @returns A configured Commander command for deleting the specified resource type
  */
 export function getDeleteCommand({
@@ -32,6 +34,7 @@ export function getDeleteCommand({
   envKey,
   mapDefaultEnv = () => ({}),
   deleteFunction,
+  usePersonalAccessToken = true,
 }: {
   name: string;
   type: ResourceType;
@@ -39,6 +42,7 @@ export function getDeleteCommand({
   envKey: keyof DotEnv;
   mapDefaultEnv?: (env: Partial<DotEnv>) => Partial<DotEnv>;
   deleteFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  usePersonalAccessToken?: boolean;
 }) {
   return new Command(sanitizeCommandName(name))
     .alias(alias)
@@ -74,11 +78,13 @@ ${createExamples([
       const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+      const instance = await instancePrompt(env, autoAccept);
+      const accessToken = usePersonalAccessToken
+        ? (await getInstanceCredentials(instance))?.personalAccessToken
+        : env.SETTLEMINT_ACCESS_TOKEN;
       if (!accessToken) {
         return missingAccessTokenError();
       }
-      const instance = await instancePrompt(env, autoAccept);
 
       const settlemint = createSettleMintClient({
         accessToken,
@@ -104,7 +110,7 @@ ${createExamples([
 
       if (isDefaultId) {
         const newEnv: Partial<DotEnv> = {
-          SETTLEMINT_ACCESS_TOKEN: accessToken,
+          SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
           SETTLEMINT_INSTANCE: instance,
           ...mapDefaultEnv(env),
         };

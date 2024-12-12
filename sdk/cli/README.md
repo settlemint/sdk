@@ -64,7 +64,7 @@ bun --inspect-wait=localhost:6499/ sdk/cli/src/cli.ts connect
 Create a ".env" file in the root folder of this project.
 
 ```env
-SETTLEMINT_ACCESS_TOKEN="sm_pat_xxx"
+SETTLEMINT_ACCESS_TOKEN_E2E_TESTS="sm_pat_xxx"
 SETTLEMINT_INSTANCE="https://me.settlemint.be"
 DISABLE_WORKSPACE_DELETE=true
 ```
