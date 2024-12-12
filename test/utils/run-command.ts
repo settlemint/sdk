@@ -30,7 +30,7 @@ export type CommandResult = { output: string; cwd: string };
 export function runCommand(
   testScope: string,
   args: string[],
-  options: { env?: Record<string, string>; cwd?: string } = {},
+  options: { env?: Record<string, string>; cwd?: string; stdin?: string } = {},
 ) {
   const cwd = options.cwd ?? resolve(__dirname, "../../");
   const cmds = [resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...args];
@@ -41,6 +41,10 @@ export function runCommand(
       ...(options.env ?? {}),
     },
   });
+  if (options.stdin) {
+    proc.stdin.write(options.stdin);
+    proc.stdin.end();
+  }
   const output: string[] = [];
   const errors: string[] = [];
   proc.stdout.on("data", (data) => {

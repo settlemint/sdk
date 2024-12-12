@@ -19,6 +19,7 @@ import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
 import { applicationPrompt } from "./connect/application.prompt";
 import { authSecretPrompt } from "./connect/auth-secret.prompt";
 import { authUrlPrompt } from "./connect/auth-url.prompt";
+import { blockchainNodePrompt } from "./connect/blockchain-node.prompt";
 import { blockscoutPrompt } from "./connect/blockscout.prompt";
 import { customDeploymentPrompt } from "./connect/custom-deployment.prompt";
 import { hasuraPrompt } from "./connect/hasura.prompt";
@@ -79,11 +80,10 @@ export function connectCommand(): Command {
           instance,
         });
 
-        const { middleware, integrationTool, storage, privateKey, insights, customDeployment } = await servicesSpinner(
-          settlemint,
-          application,
-        );
+        const { middleware, integrationTool, storage, privateKey, insights, customDeployment, blockchainNodes } =
+          await servicesSpinner(settlemint, application);
 
+        const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
         const hasura = await hasuraPrompt(env, integrationTool, autoAccept);
         const thegraph = await theGraphPrompt(env, middleware, autoAccept);
         const portal = await portalPrompt(env, middleware, autoAccept);
@@ -102,6 +102,8 @@ export function connectCommand(): Command {
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,
           SETTLEMINT_APPLICATION: application.id,
+          SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNode?.blockchainNetwork?.id,
+          SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.id,
           SETTLEMINT_HASURA: hasura?.id,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.id,

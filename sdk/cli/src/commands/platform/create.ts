@@ -1,6 +1,7 @@
 import { blockchainNetworkCreateCommand } from "@/commands/platform/blockchain-network/create";
 import { workspaceCreateCommand } from "@/commands/platform/workspace/create";
 import { Command } from "@commander-js/extra-typings";
+import { applicationAccessTokenCreateCommand } from "./apllication-access-tokens/create";
 import { applicationCreateCommand } from "./application/create";
 import { insightsCreateCommand } from "./insights/create";
 import { integrationToolCreateCommand } from "./integration-tools/create";
@@ -27,5 +28,6 @@ export function createCommand(): Command {
     .addCommand(middlewareCreateCommand())
     .addCommand(storageCreateCommand())
     .addCommand(integrationToolCreateCommand())
-    .addCommand(insightsCreateCommand());
+    .addCommand(insightsCreateCommand())
+    .addCommand(applicationAccessTokenCreateCommand());
 }

@@ -2,6 +2,7 @@ import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import {
+  AAT_NAME,
   APPLICATION_NAME,
   BLOCKSCOUT_NAME,
   CLUSTER_PROVIDER,
@@ -19,6 +20,10 @@ import {
 } from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
 import { type CommandResult, runCommand } from "../utils/run-command";
+
+// Needed so it loads the correct environment variables
+// @ts-ignore
+process.env.NODE_ENV = "development";
 
 const COMMAND_TEST_SCOPE = __filename;
 const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
@@ -47,6 +52,7 @@ async function cleanup() {
       "default",
     ]).result;
     expect(deleteWorkspaceOutput).toInclude(`Workspace ${WORKSPACE_NAME} deleted successfully`);
+    await logout();
   } catch (err) {
     const error = err as Error;
     console.error(`Cleaning up resources failed: ${error.message}`, error);
@@ -55,7 +61,9 @@ async function cleanup() {
 
 beforeAll(async () => {
   try {
+    await login();
     await createWorkspaceAndApplication();
+    await createApplicationAccessToken();
     await createBlockchainNodeAndIpfs();
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddleware();
@@ -78,7 +86,7 @@ async function addWorkspaceCredits() {
   const env: Partial<DotEnv> = await loadEnv(false, false);
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
   const settlemint = createSettleMintClient({
-    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
     instance: env.SETTLEMINT_INSTANCE!,
   });
   if (!isLocalEnv()) {
@@ -375,6 +383,40 @@ async function createGraphMiddleware() {
   ]).result;
   expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
   expect(graphOutput).toInclude("Middleware is deployed");
+}
+
+async function login() {
+  const { output: loginOutput } = await runCommand(
+    COMMAND_TEST_SCOPE,
+    ["login", "--token-stdin", "--accept-defaults", "--default"],
+    {
+      stdin: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS,
+    },
+  ).result;
+  expect(loginOutput).toInclude("Successfully logged in to SettleMint!");
+}
+
+async function logout() {
+  const { output: logoutOutput } = await runCommand(COMMAND_TEST_SCOPE, ["logout", "--all"]).result;
+  expect(logoutOutput).toInclude("Successfully logged out from all instances");
+}
+
+async function createApplicationAccessToken() {
+  const hasAat = await resourceAlreadyCreated(["SETTLEMINT_ACCESS_TOKEN"]);
+  if (hasAat) {
+    return;
+  }
+  const { output: graphOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+    "platform",
+    "create",
+    "aat",
+    "--validity-period",
+    "NONE",
+    "--accept-defaults",
+    "--default",
+    AAT_NAME,
+  ]).result;
+  expect(graphOutput).toInclude(`Application access token ${AAT_NAME} created successfully`);
 }
 
 async function deployResources(commands: (() => Promise<CommandResult | undefined>)[]) {

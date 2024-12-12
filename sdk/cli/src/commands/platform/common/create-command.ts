@@ -2,12 +2,14 @@ import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { type CommandExample, createExamples } from "@/commands/platform/utils/create-examples";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getInstanceCredentials } from "@/utils/config";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import type { ResourceType } from "./resource-type";
 
@@ -24,11 +26,12 @@ type DefaultArgs = {
  * @param options - Configuration options for the create command
  * @param options.name - The name of the command
  * @param options.type - The type of resource to create
- * @param options.alias - Command alias (shorthand)
+ * @param options.alias - Command alias for shorthand usage
  * @param options.examples - Array of example usage strings showing different ways to use the command
- * @param options.execute - Function to configure and execute the create command, takes a Commander command instance and base action function
- * @param options.execute.cmd - The Commander command instance to configure
- * @param options.execute.baseAction - Base action function that handles common create functionality
+ * @param options.execute - Function to configure and execute the create command
+ * @param options.execute.cmd - The Commander command instance to configure with options and action
+ * @param options.execute.baseAction - Base action function that handles common create functionality like env loading and client setup
+ * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
  * @returns A configured Commander command for creating the specified resource type
  */
 export function getCreateCommand({
@@ -37,6 +40,7 @@ export function getCreateCommand({
   alias,
   examples,
   execute,
+  usePersonalAccessToken = true,
 }: {
   name: string;
   type: ResourceType;
@@ -56,6 +60,7 @@ export function getCreateCommand({
       }>,
     ) => void | Promise<void>,
   ) => void;
+  usePersonalAccessToken?: boolean;
 }) {
   const cmd = new Command(sanitizeCommandName(name))
     .alias(alias)
@@ -72,11 +77,14 @@ export function getCreateCommand({
     const autoAccept = !!acceptDefaults || isInCi;
     const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-    const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
-    if (!accessToken) {
-      cancel("No access token found, please run `settlemint connect` to connect to your instance");
-    }
     const instance = await instancePrompt(env, autoAccept);
+    const accessToken = usePersonalAccessToken
+      ? (await getInstanceCredentials(instance))?.personalAccessToken
+      : env.SETTLEMINT_ACCESS_TOKEN;
+    if (!accessToken) {
+      return missingAccessTokenError();
+    }
+
     const settlemint = createSettleMintClient({
       accessToken,
       instance,
@@ -109,7 +117,7 @@ export function getCreateCommand({
       const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;
       const newEnv: Partial<DotEnv> = isApplicationChanged
         ? {
-            SETTLEMINT_ACCESS_TOKEN: accessToken,
+            SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
             SETTLEMINT_INSTANCE: instance,
             SETTLEMINT_AUTH_SECRET: env.SETTLEMINT_AUTH_SECRET,
             NEXTAUTH_URL: env.NEXTAUTH_URL,

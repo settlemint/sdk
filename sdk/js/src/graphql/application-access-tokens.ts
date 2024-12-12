@@ -1,5 +1,6 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type VariablesOf, graphql } from "@/helpers/graphql.js";
+import { IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 const createApplicationAccessToken = graphql(
@@ -24,6 +25,7 @@ export type CreateApplicationAccessTokenArgs = VariablesOf<typeof createApplicat
  */
 export const applicationAccessTokenCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (args: CreateApplicationAccessTokenArgs): Promise<string> => {
+    validate(IdSchema, args.applicationId);
     const { createApplicationAccessToken: applicationAccessToken } = await gqlClient.request(
       createApplicationAccessToken,
       args,

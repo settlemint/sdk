@@ -55,7 +55,6 @@ describe("Setup a project using the SDK", () => {
   test("Validate that .env file has the correct values", async () => {
     const currentCwd = process.cwd();
     process.chdir(projectDir);
-    process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
     process.chdir(currentCwd);
 

@@ -14,9 +14,8 @@ export async function portalPrompt(
   }
 
   const defaultMiddleware =
-    (possible.find((middleware) => middleware.id === env.SETTLEMINT_PORTAL) ?? possible.length === 1)
-      ? possible[0]
-      : undefined;
+    possible.find((middleware) => middleware.id === env.SETTLEMINT_PORTAL) ??
+    (possible.length === 1 ? possible[0] : undefined);
   const defaultPossible = accept && defaultMiddleware;
 
   if (defaultPossible) {

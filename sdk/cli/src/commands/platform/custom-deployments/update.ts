@@ -1,9 +1,10 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { missingAccessTokenError } from "@/error/missing-config-error";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -40,7 +41,7 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
 
       const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
       if (!accessToken) {
-        cancel("No access token found, please run `settlemint connect` to connect to your instance");
+        return missingAccessTokenError();
       }
       const instance = await instancePrompt(env, true);
 
