@@ -62,8 +62,8 @@ async function cleanup() {
 beforeAll(async () => {
   try {
     await login();
-    await createApplicationAccessToken();
     await createWorkspaceAndApplication();
+    await createApplicationAccessToken();
     await createBlockchainNodeAndIpfs();
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddleware();
