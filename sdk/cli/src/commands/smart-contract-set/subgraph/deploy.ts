@@ -30,13 +30,6 @@ export function subgraphDeployCommand() {
 
       const instance = await instancePrompt(env, true);
       const generated = await isGenerated();
-      await subgraphSetup({
-        isGenerated: generated,
-        env,
-        instance,
-        accessToken,
-        autoAccept,
-      });
       const theGraphMiddleware = await subgraphSetup({
         isGenerated: generated,
         env,
