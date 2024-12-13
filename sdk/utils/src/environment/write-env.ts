@@ -18,6 +18,7 @@ export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boo
   let { parsed: currentEnv } = config({
     path: envFile,
     logLevel: "error",
+    quiet: true,
   });
 
   if (!currentEnv) {
