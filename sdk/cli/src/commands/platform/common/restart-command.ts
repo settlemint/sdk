@@ -1,6 +1,7 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getInstanceCredentials } from "@/utils/config";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
@@ -21,6 +22,7 @@ import type { ResourceType } from "./resource-type";
  * @param options.alias - Command alias (shorthand)
  * @param options.envKey - Environment variable key for the resource ID
  * @param options.restartFunction - Function that performs the actual restart operation on the platform
+ * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
  * @returns A configured Commander command for restarting the specified resource type
  */
 export function getRestartCommand({
@@ -30,6 +32,7 @@ export function getRestartCommand({
   alias,
   envKey,
   restartFunction,
+  usePersonalAccessToken = true,
 }: {
   name: string;
   type: ResourceType;
@@ -37,6 +40,7 @@ export function getRestartCommand({
   alias: string;
   envKey: keyof DotEnv;
   restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  usePersonalAccessToken?: boolean;
 }) {
   const commandName = sanitizeCommandName(name);
   return new Command(commandName)
@@ -64,11 +68,13 @@ ${createExamples([
       const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+      const instance = await instancePrompt(env, autoAccept);
+      const accessToken = usePersonalAccessToken
+        ? (await getInstanceCredentials(instance))?.personalAccessToken
+        : env.SETTLEMINT_ACCESS_TOKEN;
       if (!accessToken) {
         return missingAccessTokenError();
       }
-      const instance = await instancePrompt(env, autoAccept);
 
       const settlemint = createSettleMintClient({
         accessToken,
