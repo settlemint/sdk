@@ -6368,6 +6368,12 @@ input CreateMultiServiceMiddlewareArgs {
   """Name of the cluster service"""
   name: String!
 
+  """ID of the orderer node"""
+  ordererNodeId: ID
+
+  """ID of the peer node"""
+  peerNodeId: ID
+
   """Provider of the cluster service"""
   provider: String!
   ref: String!
@@ -10444,6 +10450,9 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """The associated smart contract set"""
   smartContractSet: SmartContractSetType
 
+  """Spec version for the HA Graph middleware"""
+  specVersion: String!
+
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
   storage: StorageType
@@ -13709,6 +13718,12 @@ type Mutation {
     """Name of the cluster service"""
     name: String!
 
+    """ID of the orderer node"""
+    ordererNodeId: ID
+
+    """ID of the peer node"""
+    peerNodeId: ID
+
     """Provider of the cluster service"""
     provider: String!
 
@@ -13900,14 +13915,77 @@ type Mutation {
 
   """Creates an application based on a use-case template."""
   createUseCaseApplication(
-    """Application Name"""
+    """The absolute maximum bytes for Fabric Raft consensus"""
+    absoluteMaxBytes: Int = 10
+
+    """The batch timeout for Fabric Raft consensus"""
+    batchTimeout: Float = 2
+
+    """The genesis configuration for Besu IBFTv2 networks"""
+    besuIbft2Genesis: BesuIbft2GenesisInput
+
+    """The genesis configuration for Besu QBFT networks"""
+    besuQbftGenesis: BesuQbftGenesisInput
+
+    """The chain ID for permissioned EVM networks"""
+    chainId: Int
+
+    """The consensus algorithm for the blockchain network"""
+    consensusAlgorithm: ConsensusAlgorithm
+
+    """The contract size limit for Besu networks"""
+    contractSizeLimit: Int
+
+    """The endorsement policy for Fabric Raft consensus"""
+    endorsementPolicy: FabricEndorsementPolicy
+
+    """The EVM stack size for Besu networks"""
+    evmStackSize: Int
+
+    """List of external nodes for permissioned EVM networks"""
+    externalNodes: [BlockchainNetworkExternalNodeInput!]
+
+    """The gas limit for permissioned EVM networks"""
+    gasLimit: String
+
+    """The gas price for permissioned EVM networks"""
+    gasPrice: Int
+
+    """The genesis configuration for Geth networks"""
+    gethGenesis: GethGenesisInput
+
+    """The key material for permissioned EVM networks"""
+    keyMaterial: ID
+
+    """The maximum code size for Quorum networks"""
+    maxCodeSize: Int
+
+    """The maximum message count for Fabric Raft consensus"""
+    maxMessageCount: Int = 500
+
+    """Name of the application"""
     name: String!
+
+    """The genesis configuration for Polygon Edge networks"""
+    polygonEdgeGenesis: PolygonEdgeGenesisInput
+
+    """The preferred maximum bytes for Fabric Raft consensus"""
+    preferredMaxBytes: Int = 2
 
     """Provider of the cluster service"""
     provider: String
 
+    """The genesis configuration for Quorum networks"""
+    quorumGenesis: QuorumGenesisInput
+
     """Region of the cluster service"""
     region: String
+
+    """The number of seconds per block for permissioned EVM networks"""
+    secondsPerBlock: Int
+
+    """The transaction size limit for Quorum networks"""
+    txnSizeLimit: Int
 
     """Use Case ID"""
     useCaseId: String
@@ -14288,6 +14366,12 @@ type Mutation {
 
     """New name for the cluster service"""
     name: String
+
+    """ID of the orderer node"""
+    ordererNodeId: ID
+
+    """ID of the peer node"""
+    peerNodeId: ID
   ): MiddlewareUnionType!
 
   """Edit a PrivateKey service"""
@@ -16279,12 +16363,6 @@ type PaginatedSmartContractSets {
 type PaginatedStorages {
   count: Int!
   items: [StorageType!]!
-  licenseLimitReached: Boolean
-}
-
-type PaginatedUsers {
-  count: Int!
-  items: [User!]!
   licenseLimitReached: Boolean
 }
 
@@ -19145,7 +19223,7 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedCustomDeployment!
-  foundryEnvConfig(blockchainNodeId: String!, middlewareId: String): JSON!
+  foundryEnvConfig(blockchainNodeId: String!): JSON!
   getUseCases: [UseCaseDto!]!
   getUser(userId: ID): User!
 
@@ -19389,22 +19467,6 @@ type Query {
     orderByDesc: String
   ): PaginatedStorages!
   userWallet(id: String!): UserWallet!
-  users(
-    """Flag to hide internal users"""
-    hideInternalUsers: Boolean = false
-
-    """Maximum number of items to return"""
-    limit: Int
-
-    """Number of items to skip before starting to collect the result set"""
-    offset: Int! = 0
-
-    """Field to order by in ascending order"""
-    orderByAsc: String
-
-    """Field to order by in descending order"""
-    orderByDesc: String
-  ): PaginatedUsers!
   webhookConsumers(middlewareId: ID!): [SmartContractPortalWebhookConsumer!]!
   workspace(includeChildren: Boolean, workspaceId: ID!): Workspace!
   workspaces(includeChildren: Boolean, includeParent: Boolean, onlyActiveWorkspaces: Boolean, reporting: Boolean): [Workspace!]!
