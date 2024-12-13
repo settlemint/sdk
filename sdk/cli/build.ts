@@ -10,26 +10,31 @@ function formatSize(bytes: number): string {
 
 async function build() {
   console.log("🏗️  Building bundle...");
-  const build = await Bun.build({
-    entrypoints: ["./src/cli.ts"],
-    outdir: "./dist",
-    target: "node",
-    format: "esm",
-    splitting: false,
-    sourcemap: "external",
-    minify: process.env.NODE_ENV === "production",
-    external: ["hardhat", "hardhat/*"],
-  });
-  console.log(`📦 Bundle: ${formatSize(build.outputs[0].size)}`);
+  try {
+    const build = await Bun.build({
+      entrypoints: ["./src/cli.ts"],
+      outdir: "./dist",
+      target: "node",
+      format: "esm",
+      splitting: false,
+      sourcemap: "external",
+      minify: process.env.NODE_ENV === "production",
+      external: ["hardhat", "hardhat/*"],
+    });
 
-  console.log("📝 Generating types...");
-  const proc = Bun.spawn(["tsc", "--emitDeclarationOnly", "--declaration", "--outDir", "dist"], {
-    stdout: "inherit",
-    stderr: "inherit",
-  });
+    if (!build.success) {
+      throw new Error(build.logs.join("\n"));
+    }
 
-  await proc.exited;
+    console.log(`📦 Bundle: ${formatSize(build.outputs[0].size)}`);
+  } catch (error) {
+    throw new Error(`Bundle build failed: ${error.message}`);
+  }
+
   console.log("✨ Build complete!");
 }
 
-build();
+build().catch((err) => {
+  console.error("❌ Build failed:", err.message);
+  process.exit(1);
+});
