@@ -14,7 +14,7 @@ export async function customDeploymentPrompt(
   const defaultCustomDeployment =
     customDeployments.find((customDeployment) => customDeployment.id === env.SETTLEMINT_CUSTOM_DEPLOYMENT) ??
     (customDeployments.length === 1 ? customDeployments[0] : undefined);
-  const defaultPossible = accept && defaultCustomDeployment;
+  const defaultPossible = accept; // is optional
 
   if (defaultPossible) {
     return defaultCustomDeployment;

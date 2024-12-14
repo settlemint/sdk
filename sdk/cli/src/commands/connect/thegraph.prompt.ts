@@ -13,7 +13,7 @@ export async function theGraphPrompt(env: Partial<DotEnv>, middlewares: Middlewa
     possible.find((middleware) => middleware.id === env.SETTLEMINT_THEGRAPH) ??
     (possible.length === 1 ? possible[0] : undefined);
 
-  const defaultPossible = accept && defaultMiddleware;
+  const defaultPossible = accept; // is optional
 
   if (defaultPossible) {
     return defaultMiddleware;
