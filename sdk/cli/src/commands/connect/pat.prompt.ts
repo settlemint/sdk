@@ -1,6 +1,6 @@
 import confirm from "@inquirer/confirm";
 import password from "@inquirer/password";
-import { PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
 import { getInstanceCredentials } from "../../utils/config";
 
 /**
@@ -12,17 +12,27 @@ import { getInstanceCredentials } from "../../utils/config";
  * @returns A promise that resolves to the validated access token.
  * @throws Will throw an error if the input validation fails.
  */
-export async function personalAccessTokenPrompt(instance: string): Promise<string> {
+export async function personalAccessTokenPrompt(
+  env: Partial<DotEnv>,
+  instance: string,
+  accept: boolean,
+): Promise<string> {
   const existingConfig = await getInstanceCredentials(instance);
+  const defaultPersonalAccessToken = env.SETTLEMINT_PERSONAL_ACCESS_TOKEN || existingConfig?.personalAccessToken;
+  const defaultPossible = accept && defaultPersonalAccessToken;
 
-  if (existingConfig) {
+  if (defaultPossible) {
+    return defaultPersonalAccessToken;
+  }
+
+  if (existingConfig && defaultPersonalAccessToken) {
     const useExisting = await confirm({
       message: `Do you want to use your existing personal access token for ${instance}?`,
       default: true,
     });
 
     if (useExisting) {
-      return existingConfig.personalAccessToken;
+      return defaultPersonalAccessToken;
     }
   }
 

@@ -36,6 +36,7 @@ export function loginCommand(): Command {
       intro("Login to your SettleMint account");
 
       const env = await loadEnv(false, false);
+
       const instance = await instancePrompt(env, !!acceptDefaults);
 
       let personalAccessToken: string;
@@ -51,7 +52,7 @@ export function loginCommand(): Command {
           cancel("Invalid personal access token");
         }
       } else {
-        personalAccessToken = await personalAccessTokenPrompt(instance);
+        personalAccessToken = await personalAccessTokenPrompt(env, instance, !!acceptDefaults);
       }
 
       // Test the connection by trying to list workspaces
