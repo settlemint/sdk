@@ -1,11 +1,9 @@
 import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
-import { randomBytes } from "node:crypto";
 import { resolve } from "node:path";
 import { $ } from "bun";
 import isInCi from "is-in-ci";
 import { isLocalEnv } from "./is-local-env";
 
-const authSecret = randomBytes(32).toString("hex");
 const commandsRunning: Record<string, ChildProcessWithoutNullStreams[]> = {};
 
 const DEFAULT_ENV: Record<string, string> = {
