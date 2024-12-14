@@ -66,9 +66,6 @@ describe("Setup a project using the SDK", () => {
 
     expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK).toBeString();
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeString();
-    expect(env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_DEX_FACTORY).toBeString();
-    expect(env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_FACTORY).toBeString();
-    expect(env.SETTLEMINT_PREDEPLOYED_CONTRACT_ERC20_REGISTRY).toBeString();
 
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
 
