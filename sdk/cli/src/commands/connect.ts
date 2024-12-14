@@ -1,6 +1,5 @@
 import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
-import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
 import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getInstanceCredentials } from "@/utils/config";
 import {
@@ -18,8 +17,6 @@ import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
 import { applicationPrompt } from "./connect/application.prompt";
-import { authSecretPrompt } from "./connect/auth-secret.prompt";
-import { authUrlPrompt } from "./connect/auth-url.prompt";
 import { blockchainNodePrompt } from "./connect/blockchain-node.prompt";
 import { blockscoutPrompt } from "./connect/blockscout.prompt";
 import { customDeploymentPrompt } from "./connect/custom-deployment.prompt";
@@ -88,11 +85,7 @@ export function connectCommand(): Command {
         const cDeployment = await customDeploymentPrompt(env, customDeployment, autoAccept);
         const blockscout = await blockscoutPrompt(env, insights, autoAccept);
 
-        const authUrl = await authUrlPrompt(env, autoAccept, !!prod);
-        const authSecret = await authSecretPrompt(env, autoAccept);
-
         await writeEnvSpinner(!!prod, {
-          ...PRE_DEPLOYED_CONTRACTS,
           SETTLEMINT_ACCESS_TOKEN: aatToken,
           SETTLEMINT_INSTANCE: instance,
           SETTLEMINT_WORKSPACE: workspace.id,
@@ -105,8 +98,6 @@ export function connectCommand(): Command {
           ...(await getGraphEndpoint(thegraph, env)),
           ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
-          NEXTAUTH_URL: authUrl,
-          SETTLEMINT_AUTH_SECRET: authSecret,
           SETTLEMINT_MINIO: minio?.id,
           SETTLEMINT_MINIO_ENDPOINT: minio?.endpoints.find((endpoint) => endpoint.id.includes("s3-api"))?.displayValue,
           SETTLEMINT_MINIO_ACCESS_KEY: minio?.credentials.find((credential) => credential.id.includes("access-key"))
