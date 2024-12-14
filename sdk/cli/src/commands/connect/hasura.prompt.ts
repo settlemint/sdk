@@ -16,7 +16,7 @@ export async function hasuraPrompt(
   const defaultIntegration =
     possible.find((integration) => integration.id === env.SETTLEMINT_HASURA) ??
     (possible.length === 1 ? possible[0] : undefined);
-  const defaultPossible = accept && defaultIntegration;
+  const defaultPossible = accept; // is optional
 
   if (defaultPossible) {
     return defaultIntegration;

@@ -38,10 +38,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 function getFullUrl(options: ClientOptions): string {
   return options.runtime === "server"
     ? new URL(options.instance).toString()
-    : new URL(
-        "/proxy/thegraph/graphql",
-        process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
-      ).toString();
+    : new URL("/proxy/thegraph/graphql", window?.location?.origin ?? "http://localhost:3000").toString();
 }
 
 /**

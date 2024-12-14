@@ -1,5 +1,4 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
-import { PRE_DEPLOYED_CONTRACTS } from "@/constants/predeployed-contracts";
 import { parseNumber } from "@/utils/parse-number";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
@@ -79,7 +78,6 @@ export function blockchainNetworkBesuCreateCommand() {
                   : undefined,
                 mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
-                    ...PRE_DEPLOYED_CONTRACTS,
                     SETTLEMINT_APPLICATION: application,
                     SETTLEMINT_BLOCKCHAIN_NETWORK: result.id,
                     SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.id,

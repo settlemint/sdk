@@ -16,7 +16,7 @@ export async function hdPrivateKeyPrompt(
   const defaultPrivateKey =
     possible.find((privateKey) => privateKey.uniqueName === env.SETTLEMINT_HD_PRIVATE_KEY) ??
     (possible.length === 1 ? possible[0] : undefined);
-  const defaultPossible = accept && defaultPrivateKey;
+  const defaultPossible = accept; // is optional
 
   if (defaultPossible) {
     return defaultPrivateKey;

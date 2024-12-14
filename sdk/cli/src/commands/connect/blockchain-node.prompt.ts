@@ -21,7 +21,7 @@ export async function blockchainNodePrompt(
 
   const defaultNode =
     nodes.find((node) => node.id === env.SETTLEMINT_BLOCKCHAIN_NODE) ?? (nodes.length === 1 ? nodes[0] : undefined);
-  const defaultPossible = accept && defaultNode;
+  const defaultPossible = accept; // is optional
 
   if (defaultPossible) {
     return defaultNode;

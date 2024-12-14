@@ -16,7 +16,7 @@ export async function minioPrompt(
   const defaultStorage =
     possible.find((storage) => storage.id === env.SETTLEMINT_MINIO) ??
     (possible.length === 1 ? possible[0] : undefined);
-  const defaultPossible = accept && defaultStorage;
+  const defaultPossible = accept; // is optional
 
   if (defaultPossible) {
     return defaultStorage;

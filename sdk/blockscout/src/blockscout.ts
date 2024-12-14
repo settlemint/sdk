@@ -34,7 +34,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 /**
  * Constructs the full URL for the Blockscout GraphQL API based on the provided options.
  * For server-side runtime, uses the provided instance URL.
- * For browser-side runtime, constructs a proxy URL using NEXTAUTH_URL or window location.
+ * For browser-side runtime, constructs a proxy URL using window location.
  *
  * @param options - The client options for configuring the Blockscout client
  * @returns The complete GraphQL API URL as a string
@@ -42,10 +42,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 function getFullUrl(options: ClientOptions): string {
   return options.runtime === "server"
     ? new URL(options.instance).toString()
-    : new URL(
-        "/proxy/blockscout/graphql",
-        process.env.NEXTAUTH_URL ?? window?.location?.origin ?? "http://localhost:3000",
-      ).toString();
+    : new URL("/proxy/blockscout/graphql", window?.location?.origin ?? "http://localhost:3000").toString();
 }
 
 /**

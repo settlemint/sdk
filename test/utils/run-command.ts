@@ -12,8 +12,6 @@ const DEFAULT_ENV: Record<string, string> = {
   ...process.env,
   SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN!,
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
-  SETTLEMINT_AUTH_SECRET: authSecret,
-  NEXTAUTH_URL: "http://localhost:3000",
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
   HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
