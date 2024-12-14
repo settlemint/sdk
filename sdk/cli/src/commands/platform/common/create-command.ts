@@ -119,8 +119,6 @@ export function getCreateCommand({
         ? {
             SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
             SETTLEMINT_INSTANCE: instance,
-            SETTLEMINT_AUTH_SECRET: env.SETTLEMINT_AUTH_SECRET,
-            NEXTAUTH_URL: env.NEXTAUTH_URL,
             ...updatedEnv,
           }
         : {
