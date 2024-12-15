@@ -64,27 +64,27 @@ function generateRewrites(env: DotEnv): Rewrite[] {
   const rewriteConfigs: Rewrite[] = [
     {
       source: "/proxy/thegraph/graphql",
-      destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT ?? "",
+      destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT ?? "http://unconfigured.settlemint.com",
     },
     {
       source: "/proxy/hasura/graphql",
-      destination: env.SETTLEMINT_HASURA_ENDPOINT ?? "",
+      destination: env.SETTLEMINT_HASURA_ENDPOINT ?? "http://unconfigured.settlemint.com",
     },
     {
       source: "/proxy/portal/graphql",
-      destination: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT ?? "",
+      destination: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT ?? "http://unconfigured.settlemint.com",
     },
     {
       source: "/proxy/ipfs/api/v0",
-      destination: env.SETTLEMINT_IPFS_API_ENDPOINT ?? "",
+      destination: env.SETTLEMINT_IPFS_API_ENDPOINT ?? "http://unconfigured.settlemint.com",
     },
     {
       source: "/proxy/ipfs/gateway",
-      destination: env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT ?? "",
+      destination: env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT ?? "http://unconfigured.settlemint.com",
     },
     {
       source: "/proxy/blockscout/graphql",
-      destination: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT ?? "",
+      destination: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT ?? "http://unconfigured.settlemint.com",
     },
   ];
 
