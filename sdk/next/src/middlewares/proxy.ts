@@ -24,7 +24,9 @@ export function proxyMiddleware(request: NextRequest): NextResponse | undefined 
   if (isProxyRoute(request.nextUrl.pathname)) {
     const response = NextResponse.next();
     response.headers.delete("Authorization");
-    response.headers.set("x-auth-token", env.SETTLEMINT_ACCESS_TOKEN);
+    if (env.SETTLEMINT_ACCESS_TOKEN) {
+      response.headers.set("x-auth-token", env.SETTLEMINT_ACCESS_TOKEN);
+    }
     if (isHasuraProxyRoute(request.nextUrl.pathname) && env.SETTLEMINT_HASURA_ADMIN_SECRET) {
       response.headers.set("x-hasura-admin-secret", env.SETTLEMINT_HASURA_ADMIN_SECRET);
     }

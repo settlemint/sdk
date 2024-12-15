@@ -62,42 +62,34 @@ function getExistingRewrites(nextConfig: NextConfig) {
  * @returns An array of new rewrites
  */
 function generateRewrites(env: DotEnv): Rewrite[] {
-  const rewriteConfigs = [
+  const rewriteConfigs: Rewrite[] = [
     {
-      condition: !!env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT,
       source: "/proxy/thegraph/graphql",
-      destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT,
+      destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT ?? "",
     },
     {
-      condition: !!env.SETTLEMINT_HASURA_ENDPOINT,
       source: "/proxy/hasura/graphql",
-      destination: env.SETTLEMINT_HASURA_ENDPOINT,
+      destination: env.SETTLEMINT_HASURA_ENDPOINT ?? "",
     },
     {
-      condition: !!env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
       source: "/proxy/portal/graphql",
-      destination: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+      destination: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT ?? "",
     },
     {
-      condition: !!env.SETTLEMINT_IPFS_API_ENDPOINT,
       source: "/proxy/ipfs/api/v0",
-      destination: env.SETTLEMINT_IPFS_API_ENDPOINT,
+      destination: env.SETTLEMINT_IPFS_API_ENDPOINT ?? "",
     },
     {
-      condition: !!env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT,
       source: "/proxy/ipfs/gateway",
-      destination: env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT,
+      destination: env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT ?? "",
     },
     {
-      condition: !!env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
       source: "/proxy/blockscout/graphql",
-      destination: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
+      destination: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT ?? "",
     },
   ];
 
-  return rewriteConfigs
-    .filter(({ condition, destination }) => condition && destination)
-    .map(({ source, destination }) => ({ source, destination })) as Rewrite[];
+  return rewriteConfigs;
 }
 
 /**
