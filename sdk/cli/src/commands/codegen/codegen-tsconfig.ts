@@ -14,16 +14,21 @@ export async function codegenTsconfig(env: DotEnv) {
     };
   }
 
+  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  if (!accessToken) {
+    return {
+      hasura: false,
+      portal: false,
+      thegraph: false,
+      blockscout: false,
+    };
+  }
+
   const [hasura, portal, thegraph, blockscout] = await Promise.all([
-    testGqlEndpoint(
-      env.SETTLEMINT_ACCESS_TOKEN,
-      env.SETTLEMINT_HASURA_ADMIN_SECRET,
-      env.SETTLEMINT_HASURA_ENDPOINT,
-      true,
-    ),
-    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
-    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
-    testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
+    testGqlEndpoint(accessToken, env.SETTLEMINT_HASURA_ADMIN_SECRET, env.SETTLEMINT_HASURA_ENDPOINT, true),
+    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
+    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
+    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
   ]);
 
   if (!tsconfig.config.compilerOptions) {
