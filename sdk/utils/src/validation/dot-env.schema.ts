@@ -6,11 +6,11 @@ import { UrlSchema } from "./url.schema.js";
  * Schema for validating access tokens.
  */
 export const DotEnvSchema = z.object({
-  SETTLEMINT_INSTANCE: UrlSchema,
-  SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema,
+  SETTLEMINT_INSTANCE: UrlSchema.default("https://console.settlemint.com"),
+  SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema.optional(),
   SETTLEMINT_PERSONAL_ACCESS_TOKEN: PersonalAccessTokenSchema.optional(),
-  SETTLEMINT_WORKSPACE: IdSchema,
-  SETTLEMINT_APPLICATION: IdSchema,
+  SETTLEMINT_WORKSPACE: IdSchema.optional(),
+  SETTLEMINT_APPLICATION: IdSchema.optional(),
   SETTLEMINT_BLOCKCHAIN_NETWORK: IdSchema.optional(),
   SETTLEMINT_BLOCKCHAIN_NODE: IdSchema.optional(),
   SETTLEMINT_LOAD_BALANCER: IdSchema.optional(),

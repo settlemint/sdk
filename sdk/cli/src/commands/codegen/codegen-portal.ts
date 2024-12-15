@@ -15,7 +15,7 @@ export async function codegenPortal(env: DotEnv) {
     output: "portal-schema.graphql",
     tsconfig: undefined,
     headers: {
-      "x-auth-token": accessToken,
+      "x-auth-token": accessToken ?? "",
     },
   });
 
