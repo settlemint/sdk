@@ -1,5 +1,4 @@
-import { type DotEnv, DotEnvSchema } from "@settlemint/sdk-utils";
-import { validate } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import type { NextConfig } from "next";
 import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
 
@@ -26,7 +25,7 @@ export async function withSettleMint<C extends NextConfig>(
     ...nextConfig,
   };
 
-  const env = validate(DotEnvSchema, process.env);
+  const env = await loadEnv(true, false);
 
   return {
     ...baseConfig,
