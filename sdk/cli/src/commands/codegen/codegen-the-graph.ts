@@ -9,6 +9,9 @@ export async function codegenTheGraph(env: DotEnv) {
   }
 
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  if (!accessToken) {
+    return;
+  }
 
   await generateSchema({
     input: gqlEndpoint,

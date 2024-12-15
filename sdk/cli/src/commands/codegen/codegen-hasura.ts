@@ -9,7 +9,11 @@ export async function codegenHasura(env: DotEnv) {
   }
 
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
-  const adminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET!;
+  const adminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET;
+
+  if (!accessToken || !adminSecret) {
+    return;
+  }
 
   await generateSchema({
     input: gqlEndpoint,

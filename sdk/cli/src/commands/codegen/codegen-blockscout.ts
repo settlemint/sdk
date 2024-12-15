@@ -11,6 +11,9 @@ export async function codegenBlockscout(env: DotEnv) {
   }
 
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  if (!accessToken) {
+    return;
+  }
 
   // gql.tada has an introspection query which exceeds the max complexity configured in blockscout
   // This query is the same one that blockscout uses on its playground for introspection
