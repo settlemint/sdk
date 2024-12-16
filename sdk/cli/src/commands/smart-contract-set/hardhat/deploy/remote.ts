@@ -43,7 +43,7 @@ export function hardhatDeployRemoteCommand() {
       instance,
     });
 
-    let nodeId = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE;
+    let nodeId = blockchainNodeId;
     if (!nodeId) {
       const personalAccessToken = await getInstanceCredentials(instance);
       if (!personalAccessToken) {
