@@ -122,7 +122,6 @@ describe("Setup a smart contract set using the SDK", () => {
     // Confirm deployment
     deployCommand.stdin.write("y");
     deployCommand.stdin.end();
-
     const { output: deployOutput } = await deployCommand.result;
     expect(deployOutput).toInclude("successfully deployed 🚀");
 
@@ -133,12 +132,9 @@ describe("Setup a smart contract set using the SDK", () => {
         cwd: projectDir,
       },
     );
-    // Confirm deployment
+    // Confirm deployment and reset
     resetCommand.stdin.write("y");
     resetCommand.stdin.end();
-    // Confirm reset
-    deployCommand.stdin.write("y");
-    deployCommand.stdin.end();
     const { output: outputReset } = await resetCommand.result;
     expect(outputReset).toInclude("successfully deployed 🚀");
   });

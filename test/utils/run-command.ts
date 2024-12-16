@@ -12,6 +12,7 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
+  HARDHAT_IGNITION_CONFIRM_RESET: "false",
 };
 
 if (isLocalEnv()) {

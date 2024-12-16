@@ -26,6 +26,7 @@ export async function executeCommand(
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {
       if (code === 0 || code === null || code === 143) {
+        process.stdin.unpipe(child.stdin);
         resolve();
         return;
       }
