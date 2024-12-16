@@ -1,5 +1,9 @@
 import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
 
+interface ExecuteCommandOptions extends SpawnOptionsWithoutStdio {
+  silent?: boolean;
+}
+
 /**
  * Executes a command with the given arguments in a child process
  *
@@ -12,13 +16,17 @@ import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
 export async function executeCommand(
   command: string,
   args: string[],
-  options?: SpawnOptionsWithoutStdio,
-): Promise<void> {
+  options?: ExecuteCommandOptions,
+): Promise<string[]> {
   const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
   process.stdin.pipe(child.stdin);
+  const output: string[] = [];
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data) => {
-      console.log(data.toString());
+      if (!options?.silent) {
+        console.log(data.toString());
+      }
+      output.push(data.toString());
     });
     child.stderr.on("data", (data) => {
       console.error(data.toString());
@@ -27,7 +35,7 @@ export async function executeCommand(
     child.on("close", (code) => {
       if (code === 0 || code === null || code === 143) {
         process.stdin.unpipe(child.stdin);
-        resolve();
+        resolve(output);
         return;
       }
       reject(new Error(`Command "${command}" exited with code ${code}`));
