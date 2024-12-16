@@ -32,6 +32,7 @@
   },
   "scripts": {
     "build": "bun run build.ts",
+    "dev": "tsup-node --watch",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
