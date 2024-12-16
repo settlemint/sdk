@@ -1,4 +1,3 @@
-import {} from "node:fs/promises";
 import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { HardhatUserConfig } from "hardhat/config";
