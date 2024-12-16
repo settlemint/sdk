@@ -8419,14 +8419,12 @@ type FireflyFabconnectMiddleware implements AbstractClusterService & AbstractEnt
   """Name of the service"""
   name: String!
   namespace: String!
-  ordererNode: BlockchainNode
 
   """Password for the service"""
   password: String!
 
   """Date when the service was paused"""
   pausedAt: DateTime
-  peerNode: BlockchainNode
 
   """Product name of the service"""
   productName: String!
