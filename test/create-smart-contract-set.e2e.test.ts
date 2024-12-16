@@ -117,15 +117,20 @@ describe("Setup a smart contract set using the SDK", () => {
 
   test("Hardhat - Deploy smart contract set (remote)", async () => {
     const blockchainNodeId = process.env.SETTLEMINT_BLOCKCHAIN_NODE!;
-    const { output: deployOutput } = await runCommand(
+    const deployCommand = runCommand(
       COMMAND_TEST_SCOPE,
       ["scs", "hardhat", "deploy", "remote", "--blockchain-node-id", blockchainNodeId, "--accept-defaults"],
       {
         cwd: projectDir,
       },
-    ).result;
+    );
+    // Confirm deployment
+    deployCommand.stdin.write("y");
+    deployCommand.stdin.end();
+    const { output: deployOutput } = await deployCommand.result;
     expect(deployOutput).toInclude("successfully deployed 🚀");
-    const { output: outputReset } = await runCommand(
+
+    const resetCommand = runCommand(
       COMMAND_TEST_SCOPE,
       [
         "scs",
@@ -142,7 +147,11 @@ describe("Setup a smart contract set using the SDK", () => {
       {
         cwd: projectDir,
       },
-    ).result;
+    );
+    // Confirm deployment and reset
+    resetCommand.stdin.write("y");
+    resetCommand.stdin.end();
+    const { output: outputReset } = await resetCommand.result;
     expect(outputReset).toInclude("successfully deployed 🚀");
   });
 });

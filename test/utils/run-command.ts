@@ -12,7 +12,6 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
-  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
   HARDHAT_IGNITION_CONFIRM_RESET: "false",
 };
 
@@ -71,6 +70,7 @@ export function runCommand(
   });
   return {
     result: p,
+    stdin: proc.stdin,
     kill: () => proc.pid && killProcess(proc.pid),
   };
 }
