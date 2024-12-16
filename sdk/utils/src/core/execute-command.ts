@@ -24,12 +24,12 @@ export async function executeCommand(
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data) => {
       if (!options?.silent) {
-        console.log(data.toString());
+        process.stdout.write(data);
       }
       output.push(data.toString());
     });
     child.stderr.on("data", (data) => {
-      console.error(data.toString());
+      process.stderr.write(data);
     });
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {
