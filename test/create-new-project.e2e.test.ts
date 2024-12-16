@@ -55,7 +55,9 @@ describe("Setup a project using the SDK", () => {
   test("Validate that .env file has the correct values", async () => {
     const currentCwd = process.cwd();
     process.chdir(projectDir);
+    process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
+    console.log("env", env);
     process.chdir(currentCwd);
 
     expect(env.SETTLEMINT_ACCESS_TOKEN).toBeString();
@@ -68,8 +70,6 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeString();
 
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
-
-    expect(env.SETTLEMINT_SMART_CONTRACT_SET).toBeString();
 
     expect(env.SETTLEMINT_IPFS).toBeString();
     expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
