@@ -2,8 +2,7 @@ import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt"
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
 import { deploymentIdPrompt } from "@/commands/smart-contract-set/prompts/deployment-id.prompt";
-import { missingAccessTokenError, missingPersonalAccessTokenError } from "@/error/missing-config-error";
-import { getInstanceCredentials } from "@/utils/config";
+import { missingAccessTokenError } from "@/error/missing-config-error";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -43,17 +42,9 @@ export function hardhatDeployRemoteCommand() {
       instance,
     });
 
-    let nodeId = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE;
+    let nodeId = blockchainNodeId;
     if (!nodeId) {
-      const personalAccessToken = await getInstanceCredentials(instance);
-      if (!personalAccessToken) {
-        return missingPersonalAccessTokenError();
-      }
-      const settlemintPat = createSettleMintClient({
-        accessToken: personalAccessToken.personalAccessToken,
-        instance,
-      });
-      const blockchainNodes = await settlemintPat.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+      const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
       const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
       if (!blockchainNode) {
         cancel("No Blockchain Node selected. Please select one to continue.");
