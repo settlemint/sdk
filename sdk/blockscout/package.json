@@ -49,6 +49,7 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "gql.tada": "^1",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
     "zod": "^3"
