@@ -11,7 +11,10 @@ export async function getHardhatConfigData(envConfig: Record<string, string>): P
       command,
       [...args, "ts-node", "-e", `import hardhat from "hardhat";\nconsole.log(JSON.stringify(hardhat.userConfig));`],
       {
-        env: envConfig,
+        env: {
+          ...process.env,
+          ...envConfig,
+        },
         silent: true,
       },
     );
