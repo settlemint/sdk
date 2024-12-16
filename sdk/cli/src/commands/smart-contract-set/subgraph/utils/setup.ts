@@ -1,8 +1,6 @@
 import { rm, writeFile } from "node:fs/promises";
 import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
-import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
-import { getInstanceCredentials } from "@/utils/config";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
@@ -91,24 +89,17 @@ async function getTheGraphMiddleware({
   accessToken,
   autoAccept,
 }: Pick<SubgraphSetupParams, "env" | "instance" | "accessToken" | "autoAccept">) {
+  const settlemintClient = createSettleMintClient({
+    accessToken,
+    instance,
+  });
   if (autoAccept && env.SETTLEMINT_THEGRAPH) {
-    const settlemintClient = createSettleMintClient({
-      accessToken,
-      instance,
-    });
     const defaultTheGraphMiddleware = await settlemintClient.middleware.read(env.SETTLEMINT_THEGRAPH);
     if (defaultTheGraphMiddleware && defaultTheGraphMiddleware.__typename === "HAGraphMiddleware") {
       return defaultTheGraphMiddleware;
     }
   }
-  const personalAccessToken = await getInstanceCredentials(instance);
-  if (!personalAccessToken) {
-    return missingPersonalAccessTokenError();
-  }
-  const settlemintClient = createSettleMintClient({
-    accessToken: personalAccessToken.personalAccessToken,
-    instance,
-  });
+
   const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
   return theGraphPrompt(env, middlewares, autoAccept);
 }

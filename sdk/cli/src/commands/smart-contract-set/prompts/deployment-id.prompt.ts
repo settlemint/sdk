@@ -13,7 +13,7 @@ import { writeEnvSpinner } from "../../connect/write-env.spinner";
  * @returns A promise that resolves to the deployment ID.
  *
  * @example
- * const env: Partial<DotEnv> = { SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID: "deployment-123" };
+ * const env: Partial<DotEnv> = { SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: "deployment-123" };
  * const deploymentId = await deploymentIdPrompt(env, false, false);
  */
 export async function deploymentIdPrompt(
@@ -21,7 +21,7 @@ export async function deploymentIdPrompt(
   accept: boolean,
   prod: boolean | undefined,
 ): Promise<string | undefined> {
-  const defaultDeploymentId = env.SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID;
+  const defaultDeploymentId = env.SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID;
 
   if (accept) {
     return defaultDeploymentId;
@@ -36,7 +36,7 @@ export async function deploymentIdPrompt(
   if (deploymentId !== defaultDeploymentId) {
     await writeEnvSpinner(!!prod, {
       ...env,
-      SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID: deploymentId,
+      SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: deploymentId,
     });
   }
 
