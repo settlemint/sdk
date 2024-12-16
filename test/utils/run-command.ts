@@ -12,7 +12,6 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
-  HARDHAT_IGNITION_CONFIRM_RESET: "false",
 };
 
 if (isLocalEnv()) {
@@ -28,8 +27,8 @@ export function runCommand(
   options: { env?: Record<string, string>; cwd?: string; stdin?: string } = {},
 ) {
   const cwd = options.cwd ?? resolve(__dirname, "../../");
-  const cmds = [resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...args];
-  const proc = spawn("bun", cmds, {
+  const cmds = [resolve(__dirname, "../../sdk/cli/dist/cli.mjs"), ...args];
+  const proc = spawn("node", cmds, {
     cwd,
     env: {
       ...DEFAULT_ENV,
@@ -71,6 +70,7 @@ export function runCommand(
   return {
     result: p,
     stdin: proc.stdin,
+    stdout: proc.stdout,
     kill: () => proc.pid && killProcess(proc.pid),
   };
 }

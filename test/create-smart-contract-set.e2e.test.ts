@@ -134,7 +134,12 @@ describe("Setup a smart contract set using the SDK", () => {
     );
     // Confirm deployment and reset
     resetCommand.stdin.write("y");
-    resetCommand.stdin.end();
+    resetCommand.stdin.uncork();
+    const onConfirmDeploy = () => {
+      resetCommand.stdin.write("y");
+      resetCommand.stdin.uncork();
+    };
+    resetCommand.stdout.on("data", onConfirmDeploy);
     const { output: outputReset } = await resetCommand.result;
     expect(outputReset).toInclude("successfully deployed 🚀");
   });
