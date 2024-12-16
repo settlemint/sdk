@@ -61,7 +61,7 @@ export function graphMiddlewareCreateCommand() {
       {
         description: "Create a graph middleware in a different application",
         command:
-          "platform create middleware graph my-graph --application-id 123456789 --smart-contract-set-id scs-123 --blockchain-node-id node-123 --storage-id storage-123",
+          "platform create middleware graph my-graph --application-id 123456789 --blockchain-node-id node-123 --storage-id storage-123",
       },
     ],
   });
