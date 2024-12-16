@@ -1,6 +1,8 @@
 on:
   schedule:
     - cron: '0 6 * * 1-5' # runs every morning Mon-Fri at 6AM UTC
+  pull_request:
+    types: [labeled]
   workflow_dispatch:
 
 name: E2E
@@ -27,6 +29,8 @@ permissions:
 jobs:
   e2e:
     name: E2E
+    timeout-minutes: 60  # Ensures the job never runs longer than 1 hour
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'e2e') }}
     runs-on: namespace-profile-sdk
     steps:
       - name: Checkout repository

@@ -49,8 +49,6 @@ describe("graphCreateCommand", () => {
       "europe",
       "--blockchain-node-id",
       "node-123",
-      "--smart-contract-set-id",
-      "contract-123",
       "--application-id",
       "123456789",
     ]);
@@ -60,7 +58,6 @@ describe("graphCreateCommand", () => {
       provider: "gke",
       region: "europe",
       blockchainNodeId: "node-123",
-      smartContractSetId: "contract-123",
       applicationId: "123456789",
       size: "SMALL",
       type: "SHARED",

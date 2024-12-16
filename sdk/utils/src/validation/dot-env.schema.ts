@@ -38,9 +38,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: UrlSchema.optional(),
   SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: UrlSchema.optional(),
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
-  SETTLEMINT_SMART_CONTRACT_SET: IdSchema.optional(),
-  SETTLEMINT_SMART_CONTRACT_SET_ADDRESS: z.string().optional(),
-  SETTLEMINT_SMART_CONTRACT_SET_DEPLOYMENT_ID: z.string().optional(),
+  SETTLEMINT_SMART_CONTRACT_ADDRESS: z.string().optional(),
+  SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: z.string().optional(),
 });
 
 export type DotEnv = z.infer<typeof DotEnvSchema>;

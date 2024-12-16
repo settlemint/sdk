@@ -31,7 +31,7 @@ export async function addressPrompt({
   const possiblePrivateKeys =
     node.privateKeys?.filter((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256") ?? [];
   const defaultAddress =
-    env.SETTLEMINT_SMART_CONTRACT_SET_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
+    env.SETTLEMINT_SMART_CONTRACT_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
   if (defaultPossible) {
@@ -51,10 +51,10 @@ export async function addressPrompt({
     default: defaultAddress ?? possiblePrivateKeys[0]?.address,
   });
 
-  if (address && address !== env.SETTLEMINT_SMART_CONTRACT_SET_ADDRESS) {
+  if (address && address !== env.SETTLEMINT_SMART_CONTRACT_ADDRESS) {
     await writeEnvSpinner(!!prod, {
       ...env,
-      SETTLEMINT_SMART_CONTRACT_SET_ADDRESS: address,
+      SETTLEMINT_SMART_CONTRACT_ADDRESS: address,
     });
   }
 
