@@ -116,21 +116,42 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote)", async () => {
-    const { output: deployOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--accept-defaults"],
-      {
-        cwd: projectDir,
-      },
-    ).result;
+    const deployCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--accept-defaults"], {
+      cwd: projectDir,
+    });
+    // Confirm deployment
+    const onDeployOuput = (message: string) => {
+      if (message.includes("Confirm deploy")) {
+        deployCommand.stdin.cork();
+        deployCommand.stdin.write("y");
+        deployCommand.stdin.uncork();
+      }
+    };
+    deployCommand.stdout.on("data", onDeployOuput);
+    const { output: deployOutput } = await deployCommand.result;
+    deployCommand.stdout.off("data", onDeployOuput);
     expect(deployOutput).toInclude("successfully deployed 🚀");
-    const { output: outputReset } = await runCommand(
+    expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
+
+    const resetCommand = runCommand(
       COMMAND_TEST_SCOPE,
       ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
       {
         cwd: projectDir,
       },
-    ).result;
+    );
+    // Confirm deployment and reset
+    const onResetOutput = (message: string) => {
+      if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
+        resetCommand.stdin.cork();
+        resetCommand.stdin.write("y");
+        resetCommand.stdin.uncork();
+      }
+    };
+    resetCommand.stdout.on("data", onResetOutput);
+    const { output: outputReset } = await resetCommand.result;
+    resetCommand.stdout.off("data", onResetOutput);
     expect(outputReset).toInclude("successfully deployed 🚀");
+    expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
   });
 });

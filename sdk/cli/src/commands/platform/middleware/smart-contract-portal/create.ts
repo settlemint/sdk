@@ -105,7 +105,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
       {
         description: "Create a smart contract portal middleware in a different application",
         command:
-          "platform create middleware smart-contract-portal my-portal --application-id 123456789 --smart-contract-set-id scs-123 --blockchain-node-id node-123",
+          "platform create middleware smart-contract-portal my-portal --application-id 123456789 --blockchain-node-id node-123",
       },
     ],
   });

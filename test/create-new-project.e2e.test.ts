@@ -11,6 +11,7 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 const COMMAND_TEST_SCOPE = __filename;
 
 const projectDir = join(process.cwd(), "test", PROJECT_NAME);
+const dappDir = join(projectDir, "kit", "dapp");
 
 setDefaultTimeout(15 * 60_000);
 
@@ -55,6 +56,7 @@ describe("Setup a project using the SDK", () => {
   test("Validate that .env file has the correct values", async () => {
     const currentCwd = process.cwd();
     process.chdir(projectDir);
+    process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
     process.chdir(currentCwd);
 
@@ -68,8 +70,6 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeString();
 
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
-
-    expect(env.SETTLEMINT_SMART_CONTRACT_SET).toBeString();
 
     expect(env.SETTLEMINT_IPFS).toBeString();
     expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
@@ -99,7 +99,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Codegen starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: projectDir }).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: dappDir }).result;
 
     expect(output).toInclude("Generating Hasura resources");
     expect(output).toInclude("Generating IPFS resources");
@@ -113,6 +113,6 @@ describe("Setup a project using the SDK", () => {
     const env = { NODE_ENV: "production" };
     await $`bun install`.cwd(projectDir).env(env);
     await $`bun lint`.cwd(projectDir).env(env);
-    await $`bunx tsc`.cwd(projectDir).env(env);
+    await $`bun check-types`.cwd(projectDir).env(env);
   });
 });

@@ -7,7 +7,6 @@ import { insightsCreateCommand } from "./insights/create";
 import { integrationToolCreateCommand } from "./integration-tools/create";
 import { middlewareCreateCommand } from "./middleware/create";
 import { privateKeyCreateCommand } from "./private-key/create";
-import { smartContractSetCreateCommand } from "./smart-contract-set/create";
 import { storageCreateCommand } from "./storage/create";
 
 /**
@@ -24,7 +23,6 @@ export function createCommand(): Command {
     .addCommand(applicationCreateCommand())
     .addCommand(blockchainNetworkCreateCommand())
     .addCommand(privateKeyCreateCommand())
-    .addCommand(smartContractSetCreateCommand())
     .addCommand(middlewareCreateCommand())
     .addCommand(storageCreateCommand())
     .addCommand(integrationToolCreateCommand())

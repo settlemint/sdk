@@ -1,4 +1,5 @@
 import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { $ } from "bun";
 import isInCi from "is-in-ci";
@@ -12,9 +13,10 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
-  HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
-  HARDHAT_IGNITION_CONFIRM_RESET: "false",
 };
+
+const CLI_DEV_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.mjs");
+const CLI_PROD_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.js");
 
 if (isLocalEnv()) {
   // Disable warnings for self signed certificates
@@ -29,8 +31,9 @@ export function runCommand(
   options: { env?: Record<string, string>; cwd?: string; stdin?: string } = {},
 ) {
   const cwd = options.cwd ?? resolve(__dirname, "../../");
-  const cmds = [resolve(__dirname, "../../sdk/cli/src/cli.ts"), ...args];
-  const proc = spawn("bun", cmds, {
+  const cliEntry = existsSync(CLI_DEV_ENTRY_POINT) ? CLI_DEV_ENTRY_POINT : CLI_PROD_ENTRY_POINT;
+  const cmds = [cliEntry, ...args];
+  const proc = spawn("node", cmds, {
     cwd,
     env: {
       ...DEFAULT_ENV,
@@ -71,6 +74,8 @@ export function runCommand(
   });
   return {
     result: p,
+    stdin: proc.stdin,
+    stdout: proc.stdout,
     kill: () => proc.pid && killProcess(proc.pid),
   };
 }
