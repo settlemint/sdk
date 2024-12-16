@@ -1,7 +1,6 @@
-import { existsSync } from "node:fs";
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { projectRoot } from "@/filesystem.js";
+import { exists, projectRoot } from "@/filesystem.js";
 import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";
@@ -13,7 +12,7 @@ async function findMonoRepoRoot(startDir: string): Promise<string | null> {
   while (currentDir !== "/") {
     const packageJsonPath = join(currentDir, "package.json");
 
-    if (existsSync(packageJsonPath)) {
+    if (await exists(packageJsonPath)) {
       try {
         const packageJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
         if (packageJson.workspaces && Array.isArray(packageJson.workspaces) && packageJson.workspaces.length > 0) {
@@ -77,11 +76,13 @@ export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boo
         secrets ? `.env${prod ? ".production" : ""}.local` : `.env${prod ? ".production" : ""}`,
       );
 
-      let { parsed: currentEnv } = config({
-        path: envFile,
-        logLevel: "error",
-        quiet: true,
-      });
+      let { parsed: currentEnv } = (await exists(envFile))
+        ? config({
+            path: envFile,
+            logLevel: "error",
+            quiet: true,
+          })
+        : { parsed: {} };
 
       if (!currentEnv) {
         currentEnv = {};
