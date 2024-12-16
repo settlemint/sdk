@@ -15,7 +15,6 @@ import {
   PORTAL_NAME,
   PRIVATE_KEY_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAME,
-  SMART_CONTRACT_SET_NAME,
   WORKSPACE_NAME,
 } from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
@@ -245,7 +244,6 @@ async function createBlockchainNodeAndIpfs() {
 
 async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const hasPrivateKey = await resourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
-  const hasSmartContractSet = await resourceAlreadyCreated(["SETTLEMINT_SMART_CONTRACT_SET"]);
   const hasPortalMiddleware = await resourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
   const hasBlockscoutInsights = await resourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
   const env: Partial<DotEnv> = await loadEnv(false, false);
@@ -269,24 +267,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             CLUSTER_REGION,
             "--wait",
             PRIVATE_KEY_NAME,
-          ]).result,
-    () =>
-      hasSmartContractSet
-        ? Promise.resolve(undefined)
-        : runCommand(COMMAND_TEST_SCOPE, [
-            "platform",
-            "create",
-            "smart-contract-set",
-            "--use-case",
-            "solidity-starterkit",
-            "--provider",
-            CLUSTER_PROVIDER,
-            "--region",
-            CLUSTER_REGION,
-            "--accept-defaults",
-            "--default",
-            "--wait",
-            SMART_CONTRACT_SET_NAME,
           ]).result,
     () =>
       hasPortalMiddleware
@@ -330,25 +310,17 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
           ]).result,
   ]);
 
-  const [privateKeyResult, smartContractSetResult, portalResult, blockscoutResult] = results;
+  const [privateKeyResult, portalResult, blockscoutResult] = results;
 
-  expect([
-    privateKeyResult?.status,
-    smartContractSetResult?.status,
-    portalResult?.status,
-    blockscoutResult?.status,
-  ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
+  expect([privateKeyResult?.status, portalResult?.status, blockscoutResult?.status]).toEqual([
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+  ]);
 
   if (privateKeyResult?.status === "fulfilled" && privateKeyResult.value) {
     expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
     expect(privateKeyResult.value.output).toInclude("Private key is deployed");
-  }
-
-  if (smartContractSetResult?.status === "fulfilled" && smartContractSetResult.value) {
-    expect(smartContractSetResult.value.output).toInclude(
-      `Smart contract set ${SMART_CONTRACT_SET_NAME} created successfully`,
-    );
-    expect(smartContractSetResult.value.output).toInclude("Smart contract set is deployed");
   }
 
   if (portalResult?.status === "fulfilled" && portalResult.value) {
