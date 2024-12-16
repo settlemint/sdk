@@ -1,4 +1,5 @@
 import { type ChildProcessWithoutNullStreams, spawn } from "node:child_process";
+import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { $ } from "bun";
 import isInCi from "is-in-ci";
@@ -14,6 +15,9 @@ const DEFAULT_ENV: Record<string, string> = {
   NODE_ENV: "development",
 };
 
+const CLI_DEV_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.mjs");
+const CLI_PROD_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.js");
+
 if (isLocalEnv()) {
   // Disable warnings for self signed certificates
   DEFAULT_ENV.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -27,7 +31,8 @@ export function runCommand(
   options: { env?: Record<string, string>; cwd?: string; stdin?: string } = {},
 ) {
   const cwd = options.cwd ?? resolve(__dirname, "../../");
-  const cmds = [resolve(__dirname, "../../sdk/cli/dist/cli.mjs"), ...args];
+  const cliEntry = existsSync(CLI_DEV_ENTRY_POINT) ? CLI_DEV_ENTRY_POINT : CLI_PROD_ENTRY_POINT;
+  const cmds = [cliEntry, ...args];
   const proc = spawn("node", cmds, {
     cwd,
     env: {
