@@ -15,6 +15,7 @@ export async function executeCommand(
   options?: SpawnOptionsWithoutStdio,
 ): Promise<void> {
   const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
+  process.stdin.pipe(child.stdin);
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data) => {
       console.log(data.toString());
