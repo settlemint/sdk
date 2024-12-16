@@ -1,33 +1,96 @@
-import { writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { existsSync } from "node:fs";
+import { readFile, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
 import { projectRoot } from "@/filesystem.js";
 import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";
+import { glob } from "glob";
+
+async function findMonoRepoRoot(startDir: string): Promise<string | null> {
+  let currentDir = startDir;
+
+  while (currentDir !== "/") {
+    const packageJsonPath = join(currentDir, "package.json");
+
+    if (existsSync(packageJsonPath)) {
+      try {
+        const packageJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
+        if (packageJson.workspaces && Array.isArray(packageJson.workspaces) && packageJson.workspaces.length > 0) {
+          return currentDir;
+        }
+      } catch {
+        // Ignore parse errors and continue climbing
+      }
+    }
+
+    const parentDir = dirname(currentDir);
+    if (parentDir === currentDir) {
+      break; // We've reached the root
+    }
+    currentDir = parentDir;
+  }
+
+  return null;
+}
+
+async function findMonoRepoPackages(projectDir: string): Promise<string[]> {
+  try {
+    const monoRepoRoot = await findMonoRepoRoot(projectDir);
+    if (!monoRepoRoot) {
+      return [projectDir];
+    }
+
+    const packageJsonPath = join(monoRepoRoot, "package.json");
+    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
+    const workspaces = packageJson.workspaces;
+
+    const packagePaths = await Promise.all(
+      workspaces.map(async (workspace: string) => {
+        const matches = await glob(join(monoRepoRoot, workspace, "package.json"));
+        return matches.map((match) => join(match, ".."));
+      }),
+    );
+
+    const allPaths = packagePaths.flat();
+    // If no packages found in workspaces, treat as non-monorepo
+    return allPaths.length === 0 ? [projectDir] : [monoRepoRoot, ...allPaths];
+  } catch (error) {
+    // If any error occurs, treat as non-monorepo
+    return [projectDir];
+  }
+}
 
 export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boolean): Promise<void> {
   const projectDir = await projectRoot();
-  const envFile = join(
-    projectDir,
-    secrets ? `.env${prod ? ".production" : ""}.local` : `.env${prod ? ".production" : ""}`,
-  );
 
   if (prod) {
     process.env.NODE_ENV = "production";
   }
-  let { parsed: currentEnv } = config({
-    path: envFile,
-    logLevel: "error",
-    quiet: true,
-  });
 
-  if (!currentEnv) {
-    currentEnv = {};
-  }
+  const targetDirs = await findMonoRepoPackages(projectDir);
 
-  const mergedEnv = deepmerge(currentEnv, env);
+  await Promise.all(
+    targetDirs.map(async (dir) => {
+      const envFile = join(
+        dir,
+        secrets ? `.env${prod ? ".production" : ""}.local` : `.env${prod ? ".production" : ""}`,
+      );
 
-  await writeFile(envFile, stringify(mergedEnv));
+      let { parsed: currentEnv } = config({
+        path: envFile,
+        logLevel: "error",
+        quiet: true,
+      });
+
+      if (!currentEnv) {
+        currentEnv = {};
+      }
+
+      const mergedEnv = deepmerge(currentEnv, env);
+      await writeFile(envFile, stringify(mergedEnv));
+    }),
+  );
 }
 
 const quote = /[\s"'#]/;
