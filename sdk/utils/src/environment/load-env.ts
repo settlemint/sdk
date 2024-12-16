@@ -1,7 +1,6 @@
 import { cancel } from "@/terminal.js";
 import { type DotEnv, type DotEnvPartial, DotEnvSchema, DotEnvSchemaPartial, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
-import { findRootSync } from "@manypkg/find-root";
 
 /**
  * Loads environment variables from .env files.
@@ -23,7 +22,6 @@ export async function loadEnv<T extends boolean = true>(
 
 /**
  * Loads environment variables for a specific environment.
- * In a monorepo setup, it first loads the root .env files, then overrides with package-specific ones.
  *
  * @param environment - The environment to load variables for.
  * @param validateEnv - Whether to validate the environment variables.
@@ -37,39 +35,11 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   if (prod) {
     process.env.NODE_ENV = "production";
   }
+  let { parsed } = config({ convention: "nextjs", logLevel: "error", overload: true, quiet: true });
 
-  // Find monorepo root
-  const cwd = process.cwd();
-  let rootDir: string;
-  try {
-    rootDir = findRootSync(cwd).rootDir;
-  } catch {
-    rootDir = cwd;
+  if (!parsed) {
+    parsed = {};
   }
-
-  // Load root .env files first
-  const rootConfig = config({
-    path: rootDir,
-    convention: "nextjs",
-    logLevel: "error",
-    overload: true,
-    quiet: true,
-  });
-
-  // Then load package-specific .env files (they will override root values)
-  const packageConfig = config({
-    path: cwd,
-    convention: "nextjs",
-    logLevel: "error",
-    overload: true,
-    quiet: true,
-  });
-
-  // Merge configurations, package values take precedence
-  const parsed = {
-    ...(rootConfig.parsed || {}),
-    ...(packageConfig.parsed || {}),
-  };
 
   try {
     return validate(validateEnv ? DotEnvSchema : DotEnvSchemaPartial, {
