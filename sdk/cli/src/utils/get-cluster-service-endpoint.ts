@@ -14,6 +14,9 @@ export async function getGraphEndpoint(
 
   const testEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) => !isStarterKit(graphqlQueryEndpoint?.id))
     ?.graphqlQueryEndpoint?.displayValue;
+  const starterKitEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) =>
+    isStarterKit(graphqlQueryEndpoint?.id),
+  )?.graphqlQueryEndpoint?.displayValue;
 
   const hasEndpoint =
     testEndpoint && env.SETTLEMINT_ACCESS_TOKEN
@@ -21,11 +24,9 @@ export async function getGraphEndpoint(
       : false;
 
   const endpoints = hasEndpoint
-    ? service.subgraphs
-        .filter(({ graphqlQueryEndpoint }) => !isStarterKit(graphqlQueryEndpoint?.id))
-        .map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue)
-    : testEndpoint
-      ? [testEndpoint]
+    ? service.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue)
+    : starterKitEndpoint
+      ? [starterKitEndpoint]
       : [];
 
   if (endpoints.length === 0) {
