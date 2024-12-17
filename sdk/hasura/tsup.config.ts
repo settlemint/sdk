@@ -17,5 +17,9 @@ export default defineConfig(({ watch }) => {
       entry: ["src/hasura.ts"],
       ...sharedConfig,
     },
+    {
+      entry: ["src/drizzle.ts"],
+      ...sharedConfig,
+    },
   ];
 });
