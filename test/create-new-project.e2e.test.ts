@@ -1,8 +1,12 @@
 import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, rmdir, stat } from "node:fs/promises";
+import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
+import {
+  getSubgraphConfig,
+  updateSubgraphConfig,
+} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
@@ -12,6 +16,7 @@ const COMMAND_TEST_SCOPE = __filename;
 
 const projectDir = join(process.cwd(), "test", PROJECT_NAME);
 const dappDir = join(projectDir, "kit", "dapp");
+const contractsDir = join(projectDir, "kit", "contracts");
 
 setDefaultTimeout(15 * 60_000);
 
@@ -31,6 +36,8 @@ afterEach(() => {
 });
 
 describe("Setup a project using the SDK", () => {
+  let contractsDeploymentInfo: Record<string, string>;
+
   test("Create a starter kit project", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
@@ -94,10 +101,84 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 
+  test("Install dependencies and link SDK to use local one", async () => {
+    const env = { NODE_ENV: "production" };
+    await $`bun link`.cwd("./sdk/cli");
+    await $`bun install`.cwd(projectDir).env(env);
+    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
+  });
+
   test("Connect starter kit", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
       .result;
     expect(output).toInclude("Connected to SettleMint");
+  });
+
+  test("Deploy smart contract and get address info", async () => {
+    const env = { NODE_ENV: "production" };
+    await $`bun install @openzeppelin/contracts`.cwd(contractsDir).env(env);
+    const deploymentId = "starter-kit-asset-tokenization";
+    const { output: deployOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
+      {
+        cwd: contractsDir,
+        env: {
+          HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
+        },
+      },
+    ).result;
+    const deploymentInfoData = await readFile(
+      join(projectDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
+    );
+    contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).toInclude("successfully deployed 🚀");
+  });
+
+  test("Deploy subgraphs", async () => {
+    const cwd = process.cwd();
+    process.chdir(contractsDir);
+    const config = await getSubgraphConfig();
+    expect(config).toBeDefined();
+    expect(config).not.toBeNull();
+    const getAddress = (name: string) => {
+      if (name === "BondFacet") {
+        return contractsDeploymentInfo["DiamondModule#BondFacet"];
+      }
+      if (name === "GenericToken") {
+        return contractsDeploymentInfo["DiamondModule#GenericToken"];
+      }
+      return undefined;
+    };
+    await updateSubgraphConfig({
+      ...config!,
+      datasources: config!.datasources.map((source) => {
+        return {
+          ...source,
+          address: getAddress(source.name) ?? source.address,
+        };
+      }),
+    });
+    const contracts = ["BondFacet", "GenericToken"];
+    for (const contract of contracts) {
+      const { output } = await runCommand(
+        COMMAND_TEST_SCOPE,
+        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", contract],
+        {
+          cwd: projectDir,
+        },
+      ).result;
+      expect(output).toInclude("Build completed");
+    }
+    // Needed so it loads the correct environment variables
+    // @ts-ignore
+    process.env.NODE_ENV = "development";
+    const env: Partial<DotEnv> = await loadEnv(false, false);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length);
+    for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
+      expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract.toLowerCase()}`))).toBeTrue();
+    }
+    process.chdir(cwd);
   });
 
   test("Codegen starter kit", async () => {
@@ -115,9 +196,6 @@ describe("Setup a project using the SDK", () => {
 
   test("Build starter kit", async () => {
     const env = { NODE_ENV: "production" };
-    await $`bun link`.cwd("./sdk/cli");
-    await $`bun install`.cwd(projectDir).env(env);
-    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
     await $`bun lint`.cwd(projectDir).env(env);
     await $`bun check-types`.cwd(projectDir).env(env);
   });
