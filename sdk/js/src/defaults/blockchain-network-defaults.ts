@@ -11,7 +11,7 @@ export function setNetworkDefaults(args: CreateBlockchainNetworkArgs): CreateBlo
       evmStackSize: args.evmStackSize ?? 2048,
       gasLimit: args.gasLimit ?? "9007199254740991",
       gasPrice: args.gasPrice ?? 0,
-      secondsPerBlock: args.secondsPerBlock ?? 2,
+      secondsPerBlock: args.secondsPerBlock ?? 15,
     };
   }
   return clusterServiceArgs;
