@@ -13,11 +13,6 @@ const DrizzleConfigSchema = z.discriminatedUnion("runtime", [
   z.object({
     runtime: z.literal("server"),
     databaseUrl: z.string().url().min(1),
-    maxPoolSize: z.coerce.number().int().positive().default(20),
-    idleTimeoutMillis: z.coerce.number().int().positive().default(30000),
-    connectionTimeoutMillis: z.coerce.number().int().positive().default(5000),
-    maxRetries: z.coerce.number().int().nonnegative().default(3),
-    retryDelayMs: z.coerce.number().int().positive().default(5000),
   }),
   z.object({
     runtime: z.literal("browser"),
@@ -48,9 +43,9 @@ function setupErrorHandling(pool: pg.Pool, config: ServerConfig) {
   pool.on("error", async (err: Error) => {
     console.error("[Drizzle] Pool error occurred:", err);
 
-    if (retryCount < config.maxRetries) {
+    if (retryCount < 3) {
       retryCount++;
-      console.log(`[Drizzle] Attempting to recover - retry ${retryCount}/${config.maxRetries}`);
+      console.log(`[Drizzle] Attempting to recover - retry ${retryCount}/3`);
 
       try {
         const client = await pool.connect();
@@ -59,7 +54,7 @@ function setupErrorHandling(pool: pg.Pool, config: ServerConfig) {
         retryCount = 0;
       } catch (retryError) {
         console.error(`[Drizzle] Recovery attempt ${retryCount} failed:`, retryError);
-        await sleep(config.retryDelayMs * 2 ** (retryCount - 1));
+        await sleep(5000 * 2 ** (retryCount - 1));
       }
     } else {
       console.error("[Drizzle] Max retries exceeded - pool is in an error state");
@@ -97,9 +92,9 @@ export function createDrizzleClient(options: Omit<DrizzleConfig, "runtime"> & Re
 
   const pool = new pg.Pool({
     connectionString: validatedOptions.databaseUrl,
-    max: validatedOptions.maxPoolSize,
-    idleTimeoutMillis: validatedOptions.idleTimeoutMillis,
-    connectionTimeoutMillis: validatedOptions.connectionTimeoutMillis,
+    max: 20,
+    idleTimeoutMillis: 30000,
+    connectionTimeoutMillis: 5000,
   });
 
   setupErrorHandling(pool, validatedOptions);
