@@ -1,5 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
-import { basename } from "node:path";
+import { basename, join } from "node:path";
 import { exists } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { parse, stringify } from "yaml";
@@ -89,9 +89,9 @@ export const updateSubgraphYamlConfig = async (config: SubgraphYamlConfig): Prom
   await writeFile(subgraphYamlFile, stringify(config));
 };
 
-export const getSubgraphConfig = async (): Promise<SubgraphConfig | null> => {
+export const getSubgraphConfig = async (path: string = process.cwd()): Promise<SubgraphConfig | null> => {
   try {
-    const configContents = await readFile(CONFIG_FILE_PATH);
+    const configContents = await readFile(join(path, CONFIG_FILE_PATH));
     const currentConfig: SubgraphConfig = JSON.parse(configContents.toString());
     return currentConfig;
   } catch (err) {
@@ -101,9 +101,9 @@ export const getSubgraphConfig = async (): Promise<SubgraphConfig | null> => {
   }
 };
 
-export const updateSubgraphConfig = async (config: SubgraphConfig): Promise<void> => {
+export const updateSubgraphConfig = async (config: SubgraphConfig, path: string = process.cwd()): Promise<void> => {
   try {
-    await writeFile(CONFIG_FILE_PATH, JSON.stringify(config, undefined, 2));
+    await writeFile(join(path, CONFIG_FILE_PATH), JSON.stringify(config, undefined, 2));
   } catch (err) {
     const error = err as Error;
     note(`Failed to update ${basename(CONFIG_FILE_PATH)} file: ${error.message}`);

@@ -14,7 +14,7 @@ const PROJECT_NAME = "contracts-subgraphs";
 const COMMAND_TEST_SCOPE = __filename;
 const USE_CASE = "solidity-diamond-bond";
 
-const projectDir = join(process.cwd(), "test", PROJECT_NAME);
+const projectDir = join(__dirname, PROJECT_NAME);
 
 setDefaultTimeout(15 * 60_000);
 
@@ -227,9 +227,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
   });
 
   test("Deploy subgraphs (fix subgraph.config.json and deploy)", async () => {
-    const cwd = process.cwd();
-    process.chdir(projectDir);
-    const config = await getSubgraphConfig();
+    const config = await getSubgraphConfig(projectDir);
     expect(config).toBeDefined();
     expect(config).not.toBeNull();
     const getAddress = (name: string) => {
@@ -241,15 +239,18 @@ describe("Build and deploy a subgraph using the SDK", () => {
       }
       return undefined;
     };
-    await updateSubgraphConfig({
-      ...config!,
-      datasources: config!.datasources.map((source) => {
-        return {
-          ...source,
-          address: getAddress(source.name) ?? source.address,
-        };
-      }),
-    });
+    await updateSubgraphConfig(
+      {
+        ...config!,
+        datasources: config!.datasources.map((source) => {
+          return {
+            ...source,
+            address: getAddress(source.name) ?? source.address,
+          };
+        }),
+      },
+      projectDir,
+    );
     const contracts = ["BondFacet", "GenericToken"];
     for (const contract of contracts) {
       const { output } = await runCommand(
@@ -261,14 +262,10 @@ describe("Build and deploy a subgraph using the SDK", () => {
       ).result;
       expect(output).toInclude("Build completed");
     }
-    // Needed so it loads the correct environment variables
-    // @ts-ignore
-    process.env.NODE_ENV = "development";
-    const env: Partial<DotEnv> = await loadEnv(false, false);
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length);
+    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length + 1); // +1 for the default starterkit subgraph
     for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
       expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract.toLowerCase()}`))).toBeTrue();
     }
-    process.chdir(cwd);
   });
 });

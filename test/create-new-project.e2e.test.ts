@@ -10,7 +10,7 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 
 const COMMAND_TEST_SCOPE = __filename;
 
-const projectDir = join(process.cwd(), "test", PROJECT_NAME);
+const projectDir = join(__dirname, PROJECT_NAME);
 const dappDir = join(projectDir, "kit", "dapp");
 
 setDefaultTimeout(15 * 60_000);
@@ -54,13 +54,7 @@ describe("Setup a project using the SDK", () => {
   // });
 
   test("Validate that .env file has the correct values", async () => {
-    const currentCwd = process.cwd();
-    process.chdir(projectDir);
-    // Needed so it loads the correct environment variables
-    // @ts-ignore
-    process.env.NODE_ENV = "development";
-    const env: Partial<DotEnv> = await loadEnv(false, false);
-    process.chdir(currentCwd);
+    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
 
     expect(env.SETTLEMINT_ACCESS_TOKEN).toBeString();
     expect(env.SETTLEMINT_INSTANCE).toBeString();
