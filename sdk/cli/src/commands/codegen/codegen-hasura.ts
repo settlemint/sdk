@@ -6,6 +6,9 @@ export async function codegenHasura(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const adminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET;
+  const databaseUrl = env.SETTLEMINT_HASURA_DATABASE_URL;
+  const databaseUsername = env.SETTLEMINT_HASURA_DATABASE_USERNAME;
+  const databasePassword = env.SETTLEMINT_HASURA_DATABASE_PASSWORD;
 
   // Early return if required Hasura environment variables are missing during runtime
   if (process.env.NODE_ENV !== "production" && (!gqlEndpoint || !accessToken || !adminSecret)) {
@@ -52,17 +55,25 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
 
   // Generate Drizzle client template with build time safety
   const drizzleTemplate = `import { createDrizzleClient } from "@settlemint/sdk-hasura";
+import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 
-export const drizzleClient = createDrizzleClient({
+export const drizzleClient: NodePgDatabase = createDrizzleClient({
   databaseUrl: process.env.SETTLEMINT_HASURA_DATABASE_URL ?? "",
   database: process.env.SETTLEMINT_HASURA_DATABASE_DB_NAME ?? "",
   user: process.env.SETTLEMINT_HASURA_DATABASE_USER ?? "",
   password: process.env.SETTLEMINT_HASURA_DATABASE_PASSWORD ?? "",
-  maxPoolSize: process.env.SETTLEMINT_HASURA_DATABASE_MAX_POOL_SIZE,
-  idleTimeoutMillis: process.env.SETTLEMINT_HASURA_DATABASE_IDLE_TIMEOUT,
-  connectionTimeoutMillis: process.env.SETTLEMINT_HASURA_DATABASE_CONNECTION_TIMEOUT,
+  maxPoolSize: Number(process.env.SETTLEMINT_HASURA_DATABASE_MAX_POOL_SIZE),
+  idleTimeoutMillis: Number(process.env.SETTLEMINT_HASURA_DATABASE_IDLE_TIMEOUT),
+  connectionTimeoutMillis: Number(process.env.SETTLEMINT_HASURA_DATABASE_CONNECTION_TIMEOUT),
+  maxRetries: Number(process.env.SETTLEMINT_HASURA_DATABASE_MAX_RETRIES),
+  retryDelayMs: Number(process.env.SETTLEMINT_HASURA_DATABASE_RETRY_DELAY),
 });`;
 
   // Always generate the Drizzle template, but with proper build time handling
   await writeTemplate(drizzleTemplate, "/lib/settlemint", "drizzle.ts");
+
+  // Warn about missing database variables only during runtime
+  if (process.env.NODE_ENV !== "production" && (!databaseUrl || !databaseUsername || !databasePassword)) {
+    console.warn("[Codegen] Missing database environment variables");
+  }
 }
