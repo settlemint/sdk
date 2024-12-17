@@ -80,3 +80,5 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
 
 export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+
+export * from "./drizzle.js";
