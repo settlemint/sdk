@@ -281,8 +281,7 @@ Remember: Prioritize clarity and maintainability while delivering robust, access
 3. During build time, environment variables should be filled with empty strings to pass Zod validation, while maintaining actual validation at runtime
 
 ## Latest Changes
-- Enhanced writeEnv function to support writing environment files to all monorepo packages
-- Added functionality to detect and process workspaces from package.json
-- Environment files are now written to each package directory when allMonoRepoPackages is true
-- Added graceful fallback for non-monorepo scenarios (missing package.json, no workspaces, etc.)
-- Added directory tree climbing to detect monorepo root from any subdirectory
+- Updating codegen-hasura.ts to generate both Hasura and Drizzle client templates
+- Adding proper environment variable validation for Drizzle configuration
+- Ensuring consistent template generation patterns
+- Adding proper error handling and validation for both client generations
