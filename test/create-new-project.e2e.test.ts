@@ -1,9 +1,8 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
-import {} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
@@ -13,7 +12,6 @@ const COMMAND_TEST_SCOPE = __filename;
 
 const projectDir = join(process.cwd(), "test", PROJECT_NAME);
 const dappDir = join(projectDir, "kit", "dapp");
-const contractsDir = join(projectDir, "kit", "contracts");
 
 setDefaultTimeout(15 * 60_000);
 
@@ -26,7 +24,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);

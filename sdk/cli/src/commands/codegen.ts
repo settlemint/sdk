@@ -2,6 +2,7 @@ import { codegenHasura } from "@/commands/codegen/codegen-hasura";
 import { codegenPortal } from "@/commands/codegen/codegen-portal";
 import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
 import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
+import { subgraphNamePrompt } from "@/commands/codegen/subgraph-name.prompt";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -34,6 +35,10 @@ export function codegenCommand(): Command {
         intro("Generating GraphQL types and queries for your dApp");
 
         const env: DotEnv = await loadEnv(true, !!prod);
+
+        if (!Array.isArray(thegraphSubgraphNames)) {
+          thegraphSubgraphNames = await subgraphNamePrompt(env);
+        }
 
         const { hasura, portal, thegraph, blockscout } = await spinner({
           startMessage: "Testing configured GraphQL schema",
