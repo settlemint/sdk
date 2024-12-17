@@ -41,17 +41,17 @@ describe("Setup a smart contract set using the SDK", () => {
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
 
-  test.skip("Foundry - Build smart contract set", async () => {
+  test("Foundry - Build smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "build"], { cwd: projectDir }).result;
     expect(output).toInclude("Compiler run successful");
   });
 
-  test.skip("Foundry - Format smart contract set", async () => {
+  test("Foundry - Format smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "format"], { cwd: projectDir }).result;
     expect(output).toInclude("Smart contract set formatted successfully!");
   });
 
-  test.skip("Foundry - Start local anvil network", (done) => {
+  test("Foundry - Start local anvil network", (done) => {
     const { result, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "network"], { cwd: projectDir });
     result
       .then(({ output }) => {
@@ -67,24 +67,24 @@ describe("Setup a smart contract set using the SDK", () => {
     }, 3_000);
   });
 
-  test.skip("Foundry - Test smart contract set", async () => {
+  test("Foundry - Test smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "test"], { cwd: projectDir }).result;
     expect(output).toInclude("[PASS]");
     expect(output).not.toInclude("[FAIL]");
     expect(output).toInclude("Suite result: ok.");
   });
 
-  test.skip("Hardhat - Build smart contract set", async () => {
+  test("Hardhat - Build smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "build"], { cwd: projectDir }).result;
     expect(output).toMatch(/.*Compiled [0-9]+ Solidity files successfully.*/);
   });
 
-  test.skip("Hardhat - Test smart contract set", async () => {
+  test("Hardhat - Test smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "test"], { cwd: projectDir }).result;
     expect(output).toInclude("0 passing");
   });
 
-  test.skip("Hardhat - Deploy smart contract set (local)", (done) => {
+  test("Hardhat - Deploy smart contract set (local)", (done) => {
     const { result, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "network"], { cwd: projectDir });
     let isDeployed = false;
     result
@@ -116,14 +116,9 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote)", async () => {
-    const blockchainNodeId = process.env.SETTLEMINT_BLOCKCHAIN_NODE!;
-    const deployCommand = runCommand(
-      COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--blockchain-node-id", blockchainNodeId, "--accept-defaults"],
-      {
-        cwd: projectDir,
-      },
-    );
+    const deployCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--accept-defaults"], {
+      cwd: projectDir,
+    });
     // Confirm deployment
     const onDeployOuput = (message: string) => {
       if (message.includes("Confirm deploy")) {
@@ -140,18 +135,7 @@ describe("Setup a smart contract set using the SDK", () => {
 
     const resetCommand = runCommand(
       COMMAND_TEST_SCOPE,
-      [
-        "scs",
-        "hardhat",
-        "deploy",
-        "remote",
-        "--blockchain-node-id",
-        blockchainNodeId,
-        "--reset",
-        "-m",
-        "ignition/modules/main.ts",
-        "--accept-defaults",
-      ],
+      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
       {
         cwd: projectDir,
       },
