@@ -7,8 +7,6 @@ export async function codegenHasura(env: DotEnv) {
   const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const adminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET;
   const databaseUrl = env.SETTLEMINT_HASURA_DATABASE_URL;
-  const databaseUsername = env.SETTLEMINT_HASURA_DATABASE_USERNAME;
-  const databasePassword = env.SETTLEMINT_HASURA_DATABASE_PASSWORD;
 
   // Early return if required Hasura environment variables are missing during runtime
   if (process.env.NODE_ENV !== "production" && (!gqlEndpoint || !accessToken || !adminSecret)) {
@@ -59,9 +57,6 @@ import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 export const drizzleClient: NodePgDatabase = createDrizzleClient({
   databaseUrl: process.env.SETTLEMINT_HASURA_DATABASE_URL ?? "",
-  database: process.env.SETTLEMINT_HASURA_DATABASE_DB_NAME ?? "",
-  user: process.env.SETTLEMINT_HASURA_DATABASE_USER ?? "",
-  password: process.env.SETTLEMINT_HASURA_DATABASE_PASSWORD ?? "",
   maxPoolSize: Number(process.env.SETTLEMINT_HASURA_DATABASE_MAX_POOL_SIZE),
   idleTimeoutMillis: Number(process.env.SETTLEMINT_HASURA_DATABASE_IDLE_TIMEOUT),
   connectionTimeoutMillis: Number(process.env.SETTLEMINT_HASURA_DATABASE_CONNECTION_TIMEOUT),
@@ -73,7 +68,7 @@ export const drizzleClient: NodePgDatabase = createDrizzleClient({
   await writeTemplate(drizzleTemplate, "/lib/settlemint", "drizzle.ts");
 
   // Warn about missing database variables only during runtime
-  if (process.env.NODE_ENV !== "production" && (!databaseUrl || !databaseUsername || !databasePassword)) {
+  if (process.env.NODE_ENV !== "production" && !databaseUrl) {
     console.warn("[Codegen] Missing database environment variables");
   }
 }

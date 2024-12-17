@@ -13,9 +13,6 @@ const DrizzleConfigSchema = z.discriminatedUnion("runtime", [
   z.object({
     runtime: z.literal("server"),
     databaseUrl: z.string().url().min(1),
-    database: z.string().min(1),
-    password: z.string().min(1),
-    user: z.string().min(1),
     maxPoolSize: z.coerce.number().int().positive().default(20),
     idleTimeoutMillis: z.coerce.number().int().positive().default(30000),
     connectionTimeoutMillis: z.coerce.number().int().positive().default(5000),
@@ -100,9 +97,6 @@ export function createDrizzleClient(options: Omit<DrizzleConfig, "runtime"> & Re
 
   const pool = new Pool({
     connectionString: validatedOptions.databaseUrl,
-    database: validatedOptions.database,
-    password: validatedOptions.password,
-    user: validatedOptions.user,
     max: validatedOptions.maxPoolSize,
     idleTimeoutMillis: validatedOptions.idleTimeoutMillis,
     connectionTimeoutMillis: validatedOptions.connectionTimeoutMillis,
