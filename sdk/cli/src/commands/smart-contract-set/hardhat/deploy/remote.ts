@@ -5,7 +5,7 @@ import { deploymentIdPrompt } from "@/commands/smart-contract-set/prompts/deploy
 import { missingAccessTokenError } from "@/error/missing-config-error";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
@@ -42,17 +42,35 @@ export function hardhatDeployRemoteCommand() {
       instance,
     });
 
-    let nodeId = blockchainNodeId;
-    if (!nodeId) {
+    let node: BlockchainNode | undefined = undefined;
+    if (!blockchainNodeId) {
       const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
-      const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
+      if (blockchainNodes.length === 0) {
+        throw new Error("No blockchain nodes found. Please create a blockchain node and try again.");
+      }
+
+      const nodesWithPrivateKey = await Promise.all(
+        blockchainNodes.map((node) => settlemint.blockchainNode.read(node.id)),
+      );
+      const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
+        (node) => node.privateKeys && node.privateKeys.length > 0,
+      );
+      if (nodesWithActivePrivateKey.length === 0) {
+        throw new Error(
+          "No blockchain nodes with private keys found. Please activate a private key on your blockchain node and try again.",
+        );
+      }
+
+      const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, autoAccept);
       if (!blockchainNode) {
         cancel("No Blockchain Node selected. Please select one to continue.");
       }
-      nodeId = blockchainNode.id;
+      node = blockchainNode;
+    } else {
+      node = await settlemint.blockchainNode.read(blockchainNodeId);
     }
 
-    const envConfig = await settlemint.foundry.env(nodeId);
+    const envConfig = await settlemint.foundry.env(node.id);
     const hardhatConfig = await getHardhatConfigData(envConfig);
     if (verify && !hardhatConfig?.etherscan?.apiKey) {
       throw new Error(
@@ -60,7 +78,6 @@ export function hardhatDeployRemoteCommand() {
       );
     }
 
-    const node = await settlemint.blockchainNode.read(nodeId);
     const address = await addressPrompt({ env, accept: autoAccept, prod, node, hardhatConfig });
     if (!address) {
       cancel("No private key selected. Please select one to continue.");
