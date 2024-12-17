@@ -77,7 +77,7 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_IPFS_PINNING_ENDPOINT).toBeString();
 
     expect(env.SETTLEMINT_THEGRAPH).toBeString();
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toBeString();
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeString();
 
     expect(env.SETTLEMINT_PORTAL).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();

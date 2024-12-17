@@ -12,7 +12,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";
 const COMMAND_TEST_SCOPE = __filename;
-const USE_CASE = "solidity-token-erc20";
+const USE_CASE = "solidity-diamond-bond";
 
 const projectDir = join(process.cwd(), "test", PROJECT_NAME);
 
@@ -50,9 +50,10 @@ describe("Build and deploy a subgraph using the SDK", () => {
   });
 
   test("Deploy smart contract and get address info", async () => {
+    const deploymentId = "diamond-bond";
     const { output: deployOutput } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--deployment-id", "erc20", "--accept-defaults"],
+      ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
       {
         cwd: projectDir,
         env: {
@@ -61,7 +62,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
       },
     ).result;
     const deploymentInfoData = await readFile(
-      join(projectDir, "ignition", "deployments", "erc20", "deployed_addresses.json"),
+      join(projectDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );
     contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
     expect(deployOutput).toInclude("successfully deployed 🚀");
@@ -80,39 +81,77 @@ describe("Build and deploy a subgraph using the SDK", () => {
     const parsed = parse(subgraphYaml.toString());
     expect(parsed).toEqual({
       specVersion: "0.0.4",
-      schema: {
-        file: "scs.schema.graphql",
-      },
+      schema: { file: "scs.schema.graphql" },
       dataSources: [
+        {
+          kind: "ethereum/contract",
+          name: "diamond",
+          network: "settlemint",
+          source: { address: "0x0000000000000000000000000000000000000000", abi: "BondFacet", startBlock: 0 },
+          mapping: {
+            kind: "ethereum/events",
+            apiVersion: "0.0.9",
+            language: "wasm/assemblyscript",
+            entities: ["BondFacet"],
+            abis: [{ name: "BondFacet", file: "diamond/BondFacet.json" }],
+            eventHandlers: [
+              {
+                event: "BondInitializedPart1(uint256,uint256,uint256,uint256,uint256,uint256,address)",
+                handler: "handleBondInitializedPart1",
+              },
+              {
+                event: "BondInitializedPart2(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+                handler: "handleBondInitializedPart2",
+              },
+              {
+                event: "BondParametersEditedPart1(uint256,uint256,uint256,uint256,uint256,uint256,address)",
+                handler: "handleBondParametersEditedPart1",
+              },
+              {
+                event: "BondParametersEditedPart2(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+                handler: "handleBondParametersEditedPart2",
+              },
+              {
+                event: "CouponsComputed(uint256,uint256[],uint256[],uint256[],uint256[],uint256[])",
+                handler: "handleCouponsComputed",
+              },
+              { event: "BondIssued(uint256,uint256,uint256)", handler: "handleBondIssued" },
+              { event: "BondsWithdrawn(string,uint256,address,uint256)", handler: "handleBondsWithdrawn" },
+              { event: "BalloonRateSet(uint256,uint256,uint256)", handler: "handleBalloonRateSet" },
+              { event: "GracePeriodSet(uint256,uint256)", handler: "handleGracePeriodSet" },
+              {
+                event: "CapitalAmortizationFreePeriodSet(uint256,uint256)",
+                handler: "handleCapitalAmortizationFreePeriodSet",
+              },
+              { event: "InvestorsCountChanged(uint256,uint256)", handler: "handleInvestorsCountChanged" },
+              {
+                event: "CampaignStartAndEndDateSet(uint256,uint256,uint256)",
+                handler: "handleCampaignStartAndEndDateSet",
+              },
+              { event: "CampaignPaused(uint256)", handler: "handleCampaignPaused" },
+              { event: "CampaignUnpaused(uint256)", handler: "handleCampaignUnpaused" },
+              { event: "MinAndMaxAmountSet(uint256,uint256,uint256,uint256)", handler: "handleMinAndMaxAmountSet" },
+              { event: "IssueDateSet(uint256,uint256)", handler: "handleIssueDateSet" },
+              { event: "BondTransferred(string,uint256,address,address,uint256)", handler: "handleBondTransferred" },
+              { event: "ReservedAmountChanged(uint256,uint256)", handler: "handleReservedAmountChanged" },
+            ],
+            file: "diamond/diamond.wasm",
+          },
+        },
         {
           kind: "ethereum/contract",
           name: "erc20",
           network: "settlemint",
-          source: {
-            address: "0x0000000000000000000000000000000000000000",
-            abi: "IERC20",
-            startBlock: 0,
-          },
+          source: { address: "0x0000000000000000000000000000000000000000", abi: "IERC20", startBlock: 0 },
           mapping: {
             kind: "ethereum/events",
             apiVersion: "0.0.9",
             language: "wasm/assemblyscript",
             entities: ["ERC20Contract"],
-            abis: [
-              {
-                name: "IERC20",
-                file: "erc20/IERC20Metadata.json",
-              },
-            ],
+            abis: [{ name: "IERC20", file: "erc20/IERC20Metadata.json" }],
             eventHandlers: [
-              {
-                event: "Approval(indexed address,indexed address,uint256)",
-                handler: "handleApproval",
-              },
-              {
-                event: "Transfer(indexed address,indexed address,uint256)",
-                handler: "handleTransfer",
-              },
+              { event: "Approval(indexed address,indexed address,uint256)", handler: "handleApproval" },
+              { event: "Transfer(indexed address,indexed address,uint256)", handler: "handleTransfer" },
             ],
             file: "erc20/erc20.wasm",
           },
@@ -121,31 +160,16 @@ describe("Build and deploy a subgraph using the SDK", () => {
           kind: "ethereum/contract",
           name: "pausable",
           network: "settlemint",
-          source: {
-            address: "0x0000000000000000000000000000000000000000",
-            abi: "Pausable",
-            startBlock: 0,
-          },
+          source: { address: "0x0000000000000000000000000000000000000000", abi: "Pausable", startBlock: 0 },
           mapping: {
             kind: "ethereum/events",
             apiVersion: "0.0.9",
             language: "wasm/assemblyscript",
             entities: ["Pausable"],
-            abis: [
-              {
-                name: "Pausable",
-                file: "pausable/Pausable.json",
-              },
-            ],
+            abis: [{ name: "Pausable", file: "pausable/Pausable.json" }],
             eventHandlers: [
-              {
-                event: "Paused(address)",
-                handler: "handlePaused",
-              },
-              {
-                event: "Unpaused(address)",
-                handler: "handleUnpaused",
-              },
+              { event: "Paused(address)", handler: "handlePaused" },
+              { event: "Unpaused(address)", handler: "handleUnpaused" },
             ],
             file: "pausable/pausable.wasm",
           },
@@ -154,35 +178,20 @@ describe("Build and deploy a subgraph using the SDK", () => {
           kind: "ethereum/contract",
           name: "accesscontrol",
           network: "settlemint",
-          source: {
-            address: "0x0000000000000000000000000000000000000000",
-            abi: "AccessControl",
-            startBlock: 0,
-          },
+          source: { address: "0x0000000000000000000000000000000000000000", abi: "AccessControl", startBlock: 0 },
           mapping: {
             kind: "ethereum/events",
             apiVersion: "0.0.9",
             language: "wasm/assemblyscript",
             entities: ["AccessControl"],
-            abis: [
-              {
-                name: "AccessControl",
-                file: "accesscontrol/IAccessControl.json",
-              },
-            ],
+            abis: [{ name: "AccessControl", file: "accesscontrol/IAccessControl.json" }],
             eventHandlers: [
               {
                 event: "RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)",
                 handler: "handleRoleAdminChanged",
               },
-              {
-                event: "RoleGranted(indexed bytes32,indexed address,indexed address)",
-                handler: "handleRoleGranted",
-              },
-              {
-                event: "RoleRevoked(indexed bytes32,indexed address,indexed address)",
-                handler: "handleRoleRevoked",
-              },
+              { event: "RoleGranted(indexed bytes32,indexed address,indexed address)", handler: "handleRoleGranted" },
+              { event: "RoleRevoked(indexed bytes32,indexed address,indexed address)", handler: "handleRoleRevoked" },
             ],
             file: "accesscontrol/accesscontrol.wasm",
           },
@@ -203,7 +212,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
     expect(output).toInclude("Types generated successfully");
   });
 
-  test("Deploy subgraph (invalid subgraph.config.json)", async () => {
+  test("Deploy subgraphs (invalid subgraph.config.json)", async () => {
     const command = runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "deploy", "--accept-defaults"], {
       cwd: projectDir,
     });
@@ -213,40 +222,49 @@ describe("Build and deploy a subgraph using the SDK", () => {
     });
     expect(() => command.result).toThrow();
     expect(outputs.join("\n")).toMatch(
-      /The \"subgraph\/subgraph\.config\.json\" config has not been set, ensure all the contracts listed have an address added/i,
+      /The "subgraph\/subgraph\.config\.json" config has not been set, ensure all the contracts listed have an address added/i,
     );
   });
 
-  test("Deploy subgraph (fix subgraph.config.json and deploy)", async () => {
+  test("Deploy subgraphs (fix subgraph.config.json and deploy)", async () => {
     const cwd = process.cwd();
     process.chdir(projectDir);
     const config = await getSubgraphConfig();
     expect(config).toBeDefined();
     expect(config).not.toBeNull();
+    const getAddress = (name: string) => {
+      if (name === "BondFacet") {
+        return contractsDeploymentInfo["DiamondModule#BondFacet"];
+      }
+      if (name === "GenericToken") {
+        return contractsDeploymentInfo["DiamondModule#GenericToken"];
+      }
+      return undefined;
+    };
     await updateSubgraphConfig({
       ...config!,
       datasources: config!.datasources.map((source) => {
         return {
           ...source,
-          address:
-            source.name === "GenericToken"
-              ? contractsDeploymentInfo["GenericERC20Module#GenericERC20"]!
-              : source.address,
+          address: getAddress(source.name) ?? source.address,
         };
       }),
     });
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", "erc20"],
-      {
-        cwd: projectDir,
-      },
-    ).result;
-    expect(output).toInclude("Build completed");
+    const contracts = ["BondFacet", "GenericToken"];
+    for (const contract of contracts) {
+      const { output } = await runCommand(
+        COMMAND_TEST_SCOPE,
+        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", contract],
+        {
+          cwd: projectDir,
+        },
+      ).result;
+      expect(output).toInclude("Build completed");
+    }
     process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toEndWith("/subgraphs/name/erc20");
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME).toBe("erc20");
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toEndWith(`/subgraphs/name/${contracts[1]}`);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME).toBe(contracts[1]!);
     process.chdir(cwd);
   });
 });
