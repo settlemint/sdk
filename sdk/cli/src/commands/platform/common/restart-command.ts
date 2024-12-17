@@ -82,7 +82,7 @@ ${createExamples([
       });
 
       const isDefaultId = id === "default";
-      const serviceId = isDefaultId ? env[envKey]! : id;
+      const serviceId = isDefaultId ? (env[envKey]! as string) : id;
 
       if (!serviceId) {
         throw new Error(

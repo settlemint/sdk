@@ -265,7 +265,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
     const env: Partial<DotEnv> = await loadEnv(false, false);
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length);
     for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
-      expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract}`))).toBeTrue();
+      expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract.toLowerCase()}`))).toBeTrue();
     }
     process.chdir(cwd);
   });
