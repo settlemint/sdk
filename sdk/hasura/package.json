@@ -56,7 +56,8 @@
     "graphql-request": "^7",
     "zod": "^3",
     "drizzle-orm": "^0.38",
-    "pg": "^8"
+    "pg": "^8",
+    "drizzle-kit": "^0.30"
   },
   "peerDependencies": {},
   "engines": {

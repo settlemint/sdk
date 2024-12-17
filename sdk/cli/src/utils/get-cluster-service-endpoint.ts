@@ -70,12 +70,6 @@ export function getHasuraEndpoints(service: IntegrationTool | undefined): Partia
       ?.displayValue,
     SETTLEMINT_HASURA_DATABASE_URL: service.endpoints.find((endpoint) => endpoint.id.includes("postgresql"))
       ?.displayValue,
-    SETTLEMINT_HASURA_DATABASE_USERNAME: service.credentials.find((credential) => credential.id.includes("pg-user"))
-      ?.displayValue,
-    SETTLEMINT_HASURA_DATABASE_PASSWORD: service.credentials.find((credential) => credential.id.includes("pg-password"))
-      ?.displayValue,
-    SETTLEMINT_HASURA_DATABASE_DB_NAME: service.credentials.find((credential) => credential.id.includes("pg-database"))
-      ?.displayValue,
   };
 }
 
