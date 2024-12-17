@@ -1,8 +1,13 @@
-import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
+import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import { parse } from "yaml";
+import {
+  getSubgraphConfig,
+  updateSubgraphConfig,
+} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";
@@ -22,13 +27,15 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-afterAll(cleanup);
+//afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
 });
 
 describe("Build and deploy a subgraph using the SDK", () => {
+  let contractsDeploymentInfo: Record<string, string>;
+
   test("Create a smart contract set and install packages", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
@@ -40,6 +47,24 @@ describe("Build and deploy a subgraph using the SDK", () => {
     await $`bun install`.cwd(projectDir);
     await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+  });
+
+  test("Deploy smart contract and get address info", async () => {
+    const { output: deployOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "--deployment-id", "erc20", "--accept-defaults"],
+      {
+        cwd: projectDir,
+        env: {
+          HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
+        },
+      },
+    ).result;
+    const deploymentInfoData = await readFile(
+      join(projectDir, "ignition", "deployments", "erc20", "deployed_addresses.json"),
+    );
+    contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).toInclude("successfully deployed 🚀");
   });
 
   test("Build subgraph", async () => {
@@ -165,5 +190,63 @@ describe("Build and deploy a subgraph using the SDK", () => {
       ],
       features: ["nonFatalErrors", "fullTextSearch", "ipfsOnEthereumContracts"],
     });
+  });
+
+  test("Codegen subgraph", async () => {
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "codegen", "--accept-defaults"],
+      {
+        cwd: projectDir,
+      },
+    ).result;
+    expect(output).toInclude("Types generated successfully");
+  });
+
+  test("Deploy subgraph (invalid subgraph.config.json)", async () => {
+    const command = runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "deploy", "--accept-defaults"], {
+      cwd: projectDir,
+    });
+    const outputs: string[] = [];
+    command.stdout.on("data", (data) => {
+      outputs.push(data.toString());
+    });
+    expect(() => command.result).toThrow();
+    expect(outputs.join("\n")).toMatch(
+      /The \"subgraph\/subgraph\.config\.json\" config has not been set, ensure all the contracts listed have an address added/i,
+    );
+  });
+
+  test("Deploy subgraph (fix subgraph.config.json and deploy)", async () => {
+    const cwd = process.cwd();
+    process.chdir(projectDir);
+    const config = await getSubgraphConfig();
+    expect(config).toBeDefined();
+    expect(config).not.toBeNull();
+    await updateSubgraphConfig({
+      ...config!,
+      datasources: config!.datasources.map((source) => {
+        return {
+          ...source,
+          address:
+            source.name === "GenericToken"
+              ? contractsDeploymentInfo["GenericERC20Module#GenericERC20"]!
+              : source.address,
+        };
+      }),
+    });
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", "erc20"],
+      {
+        cwd: projectDir,
+      },
+    ).result;
+    expect(output).toInclude("Build completed");
+    process.env.NODE_ENV = "development";
+    const env: Partial<DotEnv> = await loadEnv(false, false);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toEndWith("/subgraphs/name/erc20");
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME).toBe("erc20");
+    process.chdir(cwd);
   });
 });

@@ -1,25 +1,28 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import {
   getSubgraphConfig,
   getSubgraphYamlConfig,
   updateSubgraphYamlConfig,
 } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { subgraphNamePrompt } from "../prompts/subgraph-name.prompt";
-import { isGenerated } from "./utils/is-generated";
 import { subgraphSetup } from "./utils/setup";
-import { getSubgraphYamlFile } from "./utils/subgraph-config";
+import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
 
 export function subgraphDeployCommand() {
   return new Command("deploy")
     .description("Deploy the subgraph")
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
-    .action(async ({ prod, acceptDefaults }) => {
+    .argument("[subgraphName]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
+    .action(async (subgraphName, { prod, acceptDefaults }) => {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
@@ -58,7 +61,7 @@ export function subgraphDeployCommand() {
         }
       }
 
-      const graphName = await subgraphNamePrompt(env, autoAccept, !!prod);
+      const graphName = await subgraphNamePrompt(subgraphName, env, autoAccept, !!prod);
       if (!graphName) {
         cancel("No graph name provided. Please provide a graph name to continue.");
       }
@@ -82,6 +85,17 @@ export function subgraphDeployCommand() {
         graphName,
         subgraphYamlFile,
       ]);
+
+      const settlemintClient = createSettleMintClient({
+        accessToken,
+        instance,
+      });
+      const middleware = await settlemintClient.middleware.read(env.SETTLEMINT_THEGRAPH!);
+      const graphEndpoints = await getGraphEndpoint(middleware, env);
+      await writeEnvSpinner(!!prod, {
+        ...env,
+        ...graphEndpoints,
+      });
     });
 }
 
