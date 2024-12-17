@@ -2,7 +2,7 @@ import { runsOnServer } from "@settlemint/sdk-utils/runtime";
 import { validate } from "@settlemint/sdk-utils/validation";
 import { drizzle } from "drizzle-orm/node-postgres";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { Pool, type PoolClient } from "pg";
+import pg from "pg";
 import { z } from "zod";
 
 /**
@@ -42,7 +42,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 /**
  * Handles database connection errors and retry logic
  */
-function setupErrorHandling(pool: Pool, config: ServerConfig) {
+function setupErrorHandling(pool: pg.Pool, config: ServerConfig) {
   let retryCount = 0;
 
   pool.on("error", async (err: Error) => {
@@ -67,7 +67,7 @@ function setupErrorHandling(pool: Pool, config: ServerConfig) {
     }
   });
 
-  pool.on("connect", (client: PoolClient) => {
+  pool.on("connect", (client: pg.PoolClient) => {
     client.on("error", (err: Error) => {
       console.error("[Drizzle] Database client error:", err);
     });
@@ -95,7 +95,7 @@ export function createDrizzleClient(options: Omit<DrizzleConfig, "runtime"> & Re
     runtime: "server",
   }) as ServerConfig;
 
-  const pool = new Pool({
+  const pool = new pg.Pool({
     connectionString: validatedOptions.databaseUrl,
     max: validatedOptions.maxPoolSize,
     idleTimeoutMillis: validatedOptions.idleTimeoutMillis,
