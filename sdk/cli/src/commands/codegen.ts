@@ -23,10 +23,14 @@ export function codegenCommand(): Command {
   return (
     new Command("codegen")
       .option("--prod", "Connect to your production environment")
+      .option(
+        "--thegraph-subgraph-names <subgraph-names...>",
+        "The name(s) of the TheGraph subgraph(s) to generate (skip if you want to generate all)",
+      )
       // Set the command description
       .description("Generate GraphQL and REST types and queries")
       // Define the action to be executed when the command is run
-      .action(async ({ prod }) => {
+      .action(async ({ prod, thegraphSubgraphNames }) => {
         intro("Generating GraphQL types and queries for your dApp");
 
         const env: DotEnv = await loadEnv(true, !!prod);
@@ -34,7 +38,7 @@ export function codegenCommand(): Command {
         const { hasura, portal, thegraph, blockscout } = await spinner({
           startMessage: "Testing configured GraphQL schema",
           task: async () => {
-            return codegenTsconfig(env);
+            return codegenTsconfig(env, thegraphSubgraphNames);
           },
           stopMessage: "Tested GraphQL schemas",
         });
@@ -50,7 +54,7 @@ export function codegenCommand(): Command {
         }
         if (thegraph) {
           note("Generating TheGraph resources");
-          promises.push(codegenTheGraph(env));
+          promises.push(codegenTheGraph(env, thegraphSubgraphNames));
         }
         if (blockscout) {
           note("Generating Blockscout resources");

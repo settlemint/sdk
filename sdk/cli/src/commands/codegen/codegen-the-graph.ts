@@ -1,9 +1,10 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
-export async function codegenTheGraph(env: DotEnv) {
+export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
   const gqlEndpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS;
   if (!Array.isArray(gqlEndpoints) || gqlEndpoints.length === 0) {
     return;
@@ -19,8 +20,21 @@ export async function codegenTheGraph(env: DotEnv) {
     `import type { introspection } from "@schemas/the-graph-env"`,
   ];
 
-  for (const gqlEndpoint of gqlEndpoints) {
-    const name = gqlEndpoint.split("/").pop() ?? "default";
+  const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
+    const name = gqlEndpoint.split("/").pop();
+    if (!name) {
+      return false;
+    }
+    if (subgraphNames && !subgraphNames.includes(name)) {
+      note(`[SKIPPED] Generating TheGraph subgraph ${name}`);
+      return false;
+    }
+    return true;
+  });
+
+  for (const gqlEndpoint of toGenerate) {
+    const name = gqlEndpoint.split("/").pop()!;
+    note(`Generating TheGraph subgraph ${name}`);
     await generateSchema({
       input: gqlEndpoint,
       output: `the-graph-schema-${name}.graphql`,
@@ -29,29 +43,29 @@ export async function codegenTheGraph(env: DotEnv) {
         "x-auth-token": accessToken,
       },
     });
+    const nameSuffix = toGenerate.length === 1 ? "" : capitalizeFirstLetter(name);
     template.push(
       ...[
-        `  export const { client: theGraphClient${capitalizeFirstLetter(name)}, graphql: theGraphGraphql${capitalizeFirstLetter(name)} } = createTheGraphClient<{
-      introspection: introspection;
-      disableMasking: true;
-      scalars: {
-        DateTime: Date;
-        JSON: Record<string, unknown>;
-        Bytes: string;
-        Int8: string;
-        BigInt: string;
-        BigDecimal: string;
-        Timestamp: string;
-      };
-    }>({
-      instances: process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!,
-      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
-      subgraphName: "${name}",
-    });`,
+        `
+export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${nameSuffix} } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+  }>({
+  instances: process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  subgraphName: "${name}",
+});`,
       ],
-      "",
     );
-
-    await writeTemplate(template.join("\n"), "/lib/settlemint", `the-graph-${name}.ts`);
   }
+  await writeTemplate(template.join("\n"), "/lib/settlemint", "the-graph.ts");
 }

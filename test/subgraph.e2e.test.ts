@@ -217,7 +217,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
       cwd: projectDir,
     });
     const outputs: string[] = [];
-    command.stdout.on("data", (data) => {
+    command.stdout.on("data", (data: Buffer) => {
       outputs.push(data.toString());
     });
     expect(() => command.result).toThrow();
@@ -261,6 +261,8 @@ describe("Build and deploy a subgraph using the SDK", () => {
       ).result;
       expect(output).toInclude("Build completed");
     }
+    // Needed so it loads the correct environment variables
+    // @ts-ignore
     process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length);

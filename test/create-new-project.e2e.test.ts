@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
@@ -24,7 +24,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-afterAll(cleanup);
+//afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -56,6 +56,8 @@ describe("Setup a project using the SDK", () => {
   test("Validate that .env file has the correct values", async () => {
     const currentCwd = process.cwd();
     process.chdir(projectDir);
+    // Needed so it loads the correct environment variables
+    // @ts-ignore
     process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
     process.chdir(currentCwd);
@@ -99,7 +101,9 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Codegen starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: dappDir }).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen", "--thegraph-subgraph-names", "generictoken"], {
+      cwd: dappDir,
+    }).result;
 
     expect(output).toInclude("Generating Hasura resources");
     expect(output).toInclude("Generating IPFS resources");
@@ -111,7 +115,9 @@ describe("Setup a project using the SDK", () => {
 
   test("Build starter kit", async () => {
     const env = { NODE_ENV: "production" };
+    await $`bun link`.cwd("./sdk/cli");
     await $`bun install`.cwd(projectDir).env(env);
+    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
     await $`bun lint`.cwd(projectDir).env(env);
     await $`bun check-types`.cwd(projectDir).env(env);
   });

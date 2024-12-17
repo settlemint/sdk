@@ -64,9 +64,9 @@ function generateRewrites(env: DotEnv): Rewrite[] {
   const theGraphEndpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? [];
   const rewriteConfigs: Rewrite[] = [
     ...theGraphEndpoints.map((endpoint) => {
-      const name = endpoint.split("/").pop() ?? "default";
+      const name = endpoint.split("/").pop();
       return {
-        source: `/proxy/thegraph/graphql/${encodeURIComponent(name)}`,
+        source: `/proxy/thegraph/graphql/${name ? encodeURIComponent(name) : ""}`,
         destination: endpoint ?? "http://unconfigured.settlemint.com",
       };
     }),
