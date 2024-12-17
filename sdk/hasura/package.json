@@ -47,12 +47,16 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/pg": "^8"
+  },
   "dependencies": {
     "gql.tada": "^1",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
-    "zod": "^3"
+    "zod": "^3",
+    "drizzle-orm": "^0.38",
+    "pg": "^8"
   },
   "peerDependencies": {},
   "engines": {
