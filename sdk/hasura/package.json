@@ -35,6 +35,12 @@
         "types": "./dist/hasura.d.cts",
         "default": "./dist/hasura.cjs"
       }
+    },
+    "./drizzle": {
+      "import": {
+        "types": "./dist/drizzle.d.ts",
+        "default": "./dist/drizzle.mjs"
+      }
     }
   },
   "scripts": {
