@@ -156,7 +156,7 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
-    const { kill, stdout, stdin, result } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
+    const { stdout, stdin, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
       cwd: projectDir,
     });
 
@@ -166,7 +166,7 @@ describe("Setup a smart contract set using the SDK", () => {
         nodeListCapture.push(message);
         const nodeListString = nodeListCapture.join("\n");
         expect(nodeListString).not.toContain("Starter Kit Node (without activated PK)");
-        stdout.off("data", onDeployOutput);
+        kill();
         done();
       }
 

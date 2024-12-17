@@ -88,7 +88,7 @@ export function forceExitAllCommands(testScope: string) {
 
 function killProcess(pid: number) {
   process.kill(pid, "SIGINT");
-  $`pkill -P ${pid}`
+  $`kill -9 ${pid}`
     .then(() => console.log(`Killed process ${pid}`))
     .catch((err) => console.error(`Failed to kill process ${pid}`, err));
 }
