@@ -46,7 +46,7 @@ export function hardhatDeployRemoteCommand() {
     if (!blockchainNodeId) {
       const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
       if (blockchainNodes.length === 0) {
-        throw new Error("No blockchain nodes found. Please create a blockchain node and try again.");
+        cancel("No blockchain nodes found. Please create a blockchain node and try again.");
       }
 
       const nodesWithPrivateKey = await Promise.all(
@@ -56,7 +56,7 @@ export function hardhatDeployRemoteCommand() {
         (node) => node.privateKeys && node.privateKeys.length > 0,
       );
       if (nodesWithActivePrivateKey.length === 0) {
-        throw new Error(
+        cancel(
           "No blockchain nodes with private keys found. Please activate a private key on your blockchain node and try again.",
         );
       }
@@ -73,7 +73,7 @@ export function hardhatDeployRemoteCommand() {
     const envConfig = await settlemint.foundry.env(node.id);
     const hardhatConfig = await getHardhatConfigData(envConfig);
     if (verify && !hardhatConfig?.etherscan?.apiKey) {
-      throw new Error(
+      cancel(
         "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardhat.config.ts file",
       );
     }
