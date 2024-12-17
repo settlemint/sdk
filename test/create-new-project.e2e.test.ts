@@ -31,8 +31,6 @@ afterEach(() => {
 });
 
 describe("Setup a project using the SDK", () => {
-  let contractsDeploymentInfo: Record<string, string>;
-
   test("Create a starter kit project", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
