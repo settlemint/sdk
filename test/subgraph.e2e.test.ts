@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
@@ -27,7 +27,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -263,8 +263,10 @@ describe("Build and deploy a subgraph using the SDK", () => {
     }
     process.env.NODE_ENV = "development";
     const env: Partial<DotEnv> = await loadEnv(false, false);
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toEndWith(`/subgraphs/name/${contracts[1]}`);
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME).toBe(contracts[1]!);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length);
+    for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
+      expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract}`))).toBeTrue();
+    }
     process.chdir(cwd);
   });
 });
