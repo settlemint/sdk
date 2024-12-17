@@ -27,7 +27,7 @@ export async function codegenTsconfig(env: DotEnv) {
   const [hasura, portal, thegraph, blockscout] = await Promise.all([
     testGqlEndpoint(accessToken, env.SETTLEMINT_HASURA_ADMIN_SECRET, env.SETTLEMINT_HASURA_ENDPOINT, true),
     testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
-    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
+    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.[0]),
     testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
   ]);
 
@@ -52,16 +52,17 @@ export async function codegenTsconfig(env: DotEnv) {
             },
           ]
         : []),
-      ...(thegraph
-        ? [
-            {
-              name: "thegraph",
-              schema: "the-graph-schema.graphql",
-              tadaOutputLocation: "the-graph-env.d.ts",
-              tadaTurboLocation: "the-graph-cache.d.ts",
+      ...(thegraph && Array.isArray(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS)
+        ? env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS.map((endpoint) => {
+            const name = endpoint.split("/").pop() ?? "default";
+            return {
+              name: `thegraph-${name}`,
+              schema: `the-graph-schema-${name}.graphql`,
+              tadaOutputLocation: `the-graph-env-${name}.d.ts`,
+              tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
               trackFieldUsage: false,
-            },
-          ]
+            };
+          })
         : []),
       ...(portal
         ? [

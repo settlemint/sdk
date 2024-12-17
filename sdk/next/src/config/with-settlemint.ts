@@ -61,11 +61,15 @@ function getExistingRewrites(nextConfig: NextConfig) {
  * @returns An array of new rewrites
  */
 function generateRewrites(env: DotEnv): Rewrite[] {
+  const theGraphEndpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? [];
   const rewriteConfigs: Rewrite[] = [
-    {
-      source: "/proxy/thegraph/graphql",
-      destination: env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT ?? "http://unconfigured.settlemint.com",
-    },
+    ...theGraphEndpoints.map((endpoint) => {
+      const name = endpoint.split("/").pop() ?? "default";
+      return {
+        source: `/proxy/thegraph/graphql/${encodeURIComponent(name)}`,
+        destination: endpoint ?? "http://unconfigured.settlemint.com",
+      };
+    }),
     {
       source: "/proxy/hasura/graphql",
       destination: env.SETTLEMINT_HASURA_ENDPOINT ?? "http://unconfigured.settlemint.com",

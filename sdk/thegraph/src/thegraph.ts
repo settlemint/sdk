@@ -14,12 +14,14 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
  */
 export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
   z.object({
-    instance: UrlOrPathSchema,
+    instances: z.array(UrlOrPathSchema),
     runtime: z.literal("server"),
     accessToken: ApplicationAccessTokenSchema,
+    subgraphName: z.string(),
   }),
   z.object({
     runtime: z.literal("browser"),
+    subgraphName: z.string(),
   }),
 ]);
 
@@ -36,9 +38,17 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @throws Will throw an error if called on the client side when runtime is set to "server".
  */
 function getFullUrl(options: ClientOptions): string {
-  return options.runtime === "server"
-    ? new URL(options.instance).toString()
-    : new URL("/proxy/thegraph/graphql", window?.location?.origin ?? "http://localhost:3000").toString();
+  if (options.runtime === "server") {
+    const instance = options.instances.find((instance) => instance.endsWith(`/${options.subgraphName}`));
+    if (!instance) {
+      throw new Error(`Instance for subgraph ${options.subgraphName} not found`);
+    }
+    return new URL(instance).toString();
+  }
+  return new URL(
+    `/proxy/thegraph/graphql/${encodeURIComponent(options.subgraphName)}`,
+    window?.location?.origin ?? "http://localhost:3000",
+  ).toString();
 }
 
 /**
