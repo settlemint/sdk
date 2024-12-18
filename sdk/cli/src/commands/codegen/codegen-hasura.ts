@@ -52,18 +52,18 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   await writeTemplate(hasuraTemplate, "/lib/settlemint", "hasura.ts");
 
   // Generate Drizzle client template with build time safety
-  const drizzleTemplate = `import { createDrizzleClient } from "@settlemint/sdk-hasura/drizzle";
+  const drizzleTemplate = `import { createDrizzleClient } from '@settlemint/sdk-hasura/drizzle';
 
-let drizzleClient: ReturnType<typeof createDrizzleClient> | undefined;
+let cachedDrizzleClient: ReturnType<typeof createDrizzleClient> | undefined;
 
 export const drizzleClient = (schemas: Record<string, unknown>) => {
-  if (!drizzleClient) {
-    drizzleClient = createDrizzleClient({
-      databaseUrl: process.env.SETTLEMINT_HASURA_DATABASE_URL ?? "",
-      schemas
+  if (!cachedDrizzleClient) {
+    cachedDrizzleClient = createDrizzleClient({
+      databaseUrl: process.env.SETTLEMINT_HASURA_DATABASE_URL ?? '',
+      schemas,
     });
   }
-  return drizzleClient;
+  return cachedDrizzleClient;
 };
 `;
 
