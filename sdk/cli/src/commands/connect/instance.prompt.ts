@@ -33,5 +33,6 @@ export async function instancePrompt(env: Partial<DotEnv>, accept: boolean): Pro
         return "Invalid URL";
       }
     },
+    transformer: (value) => value.trim(),
   });
 }

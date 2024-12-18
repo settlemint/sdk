@@ -88,7 +88,14 @@ export function forceExitAllCommands(testScope: string) {
 
 function killProcess(pid: number) {
   process.kill(pid, "SIGINT");
+
   $`pkill -P ${pid}`
-    .then(() => console.log(`Killed process ${pid}`))
-    .catch((err) => console.error(`Failed to kill process ${pid}`, err));
+    .then(() => console.log(`[pkill] Killed process ${pid}`))
+    .catch((pkillError) => {
+      $`kill -9 ${pid}`
+        .then(() => console.log(`[kill] Killed process ${pid}`))
+        .catch((killError) => {
+          console.error(`Failed to kill process ${pid}`, { pkillError, killError });
+        });
+    });
 }
