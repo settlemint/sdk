@@ -188,9 +188,11 @@ describe("Setup a project using the SDK", () => {
       expect(output).toInclude("Build completed");
     }
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
-    for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
+    for (const datasource of config.dataSources) {
       expect(
-        config.dataSources.some(({ name }) => endpoint.endsWith(`/subgraphs/name/${name.toLowerCase()}`)),
+        env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
+          endpoint.endsWith(`/subgraphs/name/${datasource.name.toLowerCase()}`),
+        ),
       ).toBeTrue();
     }
   });

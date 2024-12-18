@@ -76,7 +76,7 @@ const CONFIG_FILE_PATH = "./subgraph/subgraph.config.json";
 export const isGenerated = (path: string = process.cwd()) => exists(join(path, CONFIG_FILE_PATH));
 
 export const getSubgraphYamlFile = async (path: string = process.cwd()) => {
-  const generated = await isGenerated();
+  const generated = await isGenerated(path);
   if (generated && (await exists(join(path, "generated/scs.subgraph.yaml")))) {
     return join(path, "generated/scs.subgraph.yaml");
   }
