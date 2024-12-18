@@ -1,3 +1,4 @@
+import { dirname } from "node:path";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import {
@@ -32,23 +33,22 @@ export function subgraphDeployCommand() {
       }
 
       const instance = await instancePrompt(env, true);
-      const generated = await isGenerated();
       const theGraphMiddleware = await subgraphSetup({
-        isGenerated: generated,
         env,
         instance,
         accessToken,
         autoAccept,
       });
 
-      const cwd = generated ? process.cwd() : "./subgraph";
-
       const subgraphYamlFile = await getSubgraphYamlFile();
       await updateSpecVersion(theGraphMiddleware.specVersion as string);
 
       const { command, args } = await getPackageManagerExecutable();
-      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], { cwd });
+      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], {
+        cwd: dirname(subgraphYamlFile),
+      });
 
+      const generated = await isGenerated();
       if (generated) {
         const currentConfig = await getSubgraphConfig();
         if (

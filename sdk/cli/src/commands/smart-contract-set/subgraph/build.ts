@@ -1,10 +1,11 @@
+import { dirname } from "node:path";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { missingAccessTokenError } from "@/error/missing-config-error";
 import { Command } from "@commander-js/extra-typings";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import isInCi from "is-in-ci";
 import { subgraphSetup } from "./utils/setup";
-import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
+import { getSubgraphYamlFile } from "./utils/subgraph-config";
 
 export function subgraphBuildCommand() {
   return new Command("build")
@@ -21,18 +22,16 @@ export function subgraphBuildCommand() {
       }
 
       const instance = await instancePrompt(env, true);
-      const generated = await isGenerated();
       await subgraphSetup({
-        isGenerated: generated,
         env,
         instance,
         accessToken,
         autoAccept,
       });
 
-      const cwd = generated ? process.cwd() : "./subgraph";
       const { command, args } = await getPackageManagerExecutable();
       const subgraphYamlFile = await getSubgraphYamlFile();
+      const cwd = dirname(subgraphYamlFile);
       await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], { cwd });
       await executeCommand(command, [...args, "graph", "build", subgraphYamlFile], { cwd });
     });

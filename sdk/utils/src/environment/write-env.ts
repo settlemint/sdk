@@ -1,5 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { tryParseJson } from "@/core/json.js";
 import { exists, projectRoot } from "@/filesystem.js";
 import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
@@ -13,13 +14,9 @@ async function findMonoRepoRoot(startDir: string): Promise<string | null> {
     const packageJsonPath = join(currentDir, "package.json");
 
     if (await exists(packageJsonPath)) {
-      try {
-        const packageJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
-        if (packageJson.workspaces && Array.isArray(packageJson.workspaces) && packageJson.workspaces.length > 0) {
-          return currentDir;
-        }
-      } catch {
-        // Ignore parse errors and continue climbing
+      const packageJson = tryParseJson<{ workspaces: string[] }>(await readFile(packageJsonPath, "utf-8"));
+      if (packageJson?.workspaces && Array.isArray(packageJson?.workspaces) && packageJson?.workspaces.length > 0) {
+        return currentDir;
       }
     }
 
@@ -41,8 +38,8 @@ async function findMonoRepoPackages(projectDir: string): Promise<string[]> {
     }
 
     const packageJsonPath = join(monoRepoRoot, "package.json");
-    const packageJson = JSON.parse(await readFile(packageJsonPath, "utf-8"));
-    const workspaces = packageJson.workspaces;
+    const packageJson = tryParseJson<{ workspaces: string[] }>(await readFile(packageJsonPath, "utf-8"));
+    const workspaces = packageJson?.workspaces ?? [];
 
     const packagePaths = await Promise.all(
       workspaces.map(async (workspace: string) => {

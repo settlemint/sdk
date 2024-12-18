@@ -1,28 +1,30 @@
-import { rm, writeFile } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
+import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import semver from "semver";
-import { stringify } from "yaml";
-import { getSubgraphYamlConfig, getSubgraphYamlFile } from "./subgraph-config";
+import { getSubgraphYamlConfig } from "./subgraph-config";
 
 export interface SubgraphSetupParams {
   env: Partial<DotEnv>;
   instance: string;
   accessToken: string;
   autoAccept: boolean;
-  isGenerated: boolean;
 }
 
-export async function subgraphSetup({ env, instance, accessToken, isGenerated, autoAccept }: SubgraphSetupParams) {
+export async function subgraphSetup({ env, instance, accessToken, autoAccept }: SubgraphSetupParams) {
   const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
   if (!theGraphMiddleware) {
     cancel("No Graph Middleware selected. Please select one to continue.");
   }
 
-  await executeCommand("forge", ["build"]);
+  const generated = await isGenerated();
+  if (generated) {
+    await executeCommand("forge", ["build"]);
+  }
 
   if (await exists("./generated")) {
     await rm("./generated", { recursive: true, force: true });
@@ -40,7 +42,7 @@ export async function subgraphSetup({ env, instance, accessToken, isGenerated, a
   const isFixedNetwork = (theGraphMiddleware.entityVersion ?? 4) >= 4;
   const network = isFixedNetwork ? "settlemint" : sanitizeName(await getNodeName({ env, instance, accessToken }), 30);
 
-  if (isGenerated) {
+  if (generated) {
     const { command, args } = await getPackageManagerExecutable();
     await executeCommand(command, [
       ...args,
@@ -57,7 +59,7 @@ export async function subgraphSetup({ env, instance, accessToken, isGenerated, a
 
   const yamlConfig = await getSubgraphYamlConfig();
 
-  if (isGenerated) {
+  if (generated) {
     yamlConfig.features = ["nonFatalErrors", "fullTextSearch", "ipfsOnEthereumContracts"];
   }
 
@@ -77,8 +79,7 @@ export async function subgraphSetup({ env, instance, accessToken, isGenerated, a
     }
   }
 
-  const subgraphYamlFile = await getSubgraphYamlFile();
-  await writeFile(subgraphYamlFile, stringify(yamlConfig));
+  await updateSubgraphYamlConfig(yamlConfig);
 
   return theGraphMiddleware;
 }

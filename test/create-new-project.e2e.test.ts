@@ -1,8 +1,12 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, rmdir, stat } from "node:fs/promises";
+import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
+import {
+  getSubgraphYamlConfig,
+  updateSubgraphYamlConfig,
+} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
@@ -11,7 +15,9 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 const COMMAND_TEST_SCOPE = __filename;
 
 const projectDir = join(__dirname, PROJECT_NAME);
-const dappDir = join(projectDir, "kit", "dapp");
+const dAppDir = join(projectDir, "kit", "dapp");
+const contractsDir = join(projectDir, "kit", "contracts");
+const subgraphDir = join(projectDir, "kit", "subgraph");
 
 setDefaultTimeout(15 * 60_000);
 
@@ -31,6 +37,8 @@ afterEach(() => {
 });
 
 describe("Setup a project using the SDK", () => {
+  let contractsDeploymentInfo: Record<string, string>;
+
   test("Create a starter kit project", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
@@ -101,9 +109,97 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Connected to SettleMint");
   });
 
-  test("Codegen starter kit", async () => {
+  test("contracts - Install dependencies", async () => {
+    const result = await $`bun run dependencies`.cwd(contractsDir);
+    expect(result.exitCode).toBe(0);
+  });
+
+  test("contracts - Build and Deploy smart contracts", async () => {
+    const deploymentId = "starterkit-asset-tokenization";
+    const { output: deployOutput } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
+      {
+        cwd: contractsDir,
+        env: {
+          HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
+        },
+      },
+    ).result;
+    const deploymentInfoData = await readFile(
+      join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
+    );
+    contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).toInclude("successfully deployed 🚀");
+    expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
+  });
+
+  test("subgraph - Update contract addresses", async () => {
+    const config = await getSubgraphYamlConfig(subgraphDir);
+    const updatedConfig: typeof config = {
+      ...config,
+      dataSources: config.dataSources.map((dataSource) => {
+        const addressKey = Object.keys(contractsDeploymentInfo).find((key) => key.endsWith(`#${dataSource.name}`));
+        const address = addressKey ? contractsDeploymentInfo[addressKey]! : dataSource.source.address;
+        return {
+          ...dataSource,
+          source: {
+            ...dataSource.source,
+            address,
+          },
+        };
+      }),
+    };
+    await updateSubgraphYamlConfig(updatedConfig, subgraphDir);
+  });
+
+  test("subgraph - Build subgraph", async () => {
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "build", "--accept-defaults"],
+      {
+        cwd: subgraphDir,
+      },
+    ).result;
+    expect(output).toInclude("Build completed");
+  });
+
+  test("subgraph - Codegen subgraph", async () => {
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "codegen", "--accept-defaults"],
+      {
+        cwd: subgraphDir,
+      },
+    ).result;
+    expect(output).toInclude("Types generated successfully");
+  });
+
+  test("subgraph - Deploy subgraphs", async () => {
+    const config = await getSubgraphYamlConfig(subgraphDir);
+    for (const datasource of config.dataSources) {
+      const { output } = await runCommand(
+        COMMAND_TEST_SCOPE,
+        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", datasource.name],
+        {
+          cwd: subgraphDir,
+        },
+      ).result;
+      expect(output).toInclude("Build completed");
+    }
+    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    for (const datasource of config.dataSources) {
+      expect(
+        env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
+          endpoint.endsWith(`/subgraphs/name/${datasource.name.toLowerCase()}`),
+        ),
+      ).toBeTrue();
+    }
+  });
+
+  test("dApp - Codegen starter kit", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen", "--thegraph-subgraph-names", "starterkits"], {
-      cwd: dappDir,
+      cwd: dAppDir,
     }).result;
 
     expect(output).toInclude("Generating Hasura resources");

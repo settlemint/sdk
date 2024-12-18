@@ -1,4 +1,4 @@
-import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { executeCommand, getPackageManagerExecutable, tryParseJson } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { HardhatUserConfig } from "hardhat/config";
 
@@ -18,7 +18,7 @@ export async function getHardhatConfigData(envConfig: Record<string, string>): P
         silent: true,
       },
     );
-    const config = JSON.parse(output.join(" "));
+    const config = tryParseJson<unknown>(output.join(" "));
     if (isHardhatConfig(config)) {
       return config;
     }

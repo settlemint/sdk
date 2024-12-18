@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
+import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
@@ -31,12 +32,8 @@ async function ensureConfigDir(): Promise<void> {
 export async function readConfig(): Promise<Config> {
   await ensureConfigDir();
 
-  try {
-    const content = await readFile(CONFIG_FILE, "utf-8");
-    return JSON.parse(content) as Config;
-  } catch {
-    return { instances: {} };
-  }
+  const content = await readFile(CONFIG_FILE, "utf-8");
+  return tryParseJson<Config>(content, { instances: {} })!;
 }
 
 /**
