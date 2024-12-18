@@ -1,5 +1,5 @@
+import { tryParseJson } from "@/core/json.js";
 import { z } from "zod";
-import { tryParseJson } from "../core.js";
 import { ApplicationAccessTokenSchema, PersonalAccessTokenSchema } from "./access-token.schema.js";
 import { IdSchema } from "./id.schema.js";
 import { UrlSchema } from "./url.schema.js";
