@@ -166,7 +166,7 @@ describe("Setup a smart contract set using the SDK", () => {
         nodeListCapture.push(message);
         const nodeListString = nodeListCapture.join("\n");
         expect(nodeListString).not.toContain("Starter Kit Node (without activated PK)");
-        kill();
+        stdout.off("data", onDeployOutput);
         done();
       }
 
