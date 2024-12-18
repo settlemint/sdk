@@ -1,26 +1,7 @@
 import { runsOnServer } from "@settlemint/sdk-utils/runtime";
-import { validate } from "@settlemint/sdk-utils/validation";
 import { drizzle } from "drizzle-orm/node-postgres";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import pg from "pg";
-import { z } from "zod";
-
-/**
- * Schema for validating Drizzle client configuration options.
- * Discriminates between server and browser runtime environments.
- */
-const DrizzleConfigSchema = z.discriminatedUnion("runtime", [
-  z.object({
-    runtime: z.literal("server"),
-    databaseUrl: z.string().url().min(1),
-  }),
-  z.object({
-    runtime: z.literal("browser"),
-  }),
-]);
-
-type DrizzleConfig = z.infer<typeof DrizzleConfigSchema>;
-type ServerConfig = Extract<DrizzleConfig, { runtime: "server" }>;
 
 /**
  * Type for the extended Pool events including our custom permanent-failure event
@@ -37,7 +18,7 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 /**
  * Handles database connection errors and retry logic
  */
-function setupErrorHandling(pool: pg.Pool, config: ServerConfig) {
+function setupErrorHandling(pool: pg.Pool) {
   let retryCount = 0;
 
   pool.on("error", async (err: Error) => {
@@ -74,30 +55,29 @@ function setupErrorHandling(pool: pg.Pool, config: ServerConfig) {
 }
 
 /**
- * Creates a Drizzle client for database operations
+ * Creates a Drizzle client for database operations with schema typings
  *
- * @param options - The configuration options for the Drizzle client
- * @returns The initialized Drizzle client
+ * @param databaseUrl - The PostgreSQL connection URL
+ * @param schemas - Object containing the schema definitions
+ * @returns The initialized Drizzle client with proper schema typings
  * @throws {Error} If called from browser runtime or if validation fails
  */
-export function createDrizzleClient(options: Omit<DrizzleConfig, "runtime"> & Record<string, unknown>): NodePgDatabase {
+export function createDrizzleClient<TSchema extends Record<string, unknown>>(
+  databaseUrl: string,
+  schemas: TSchema,
+): NodePgDatabase<TSchema> {
   if (!runsOnServer) {
     throw new Error("Drizzle client can only be created on the server side");
   }
 
-  const validatedOptions = validate(DrizzleConfigSchema, {
-    ...options,
-    runtime: "server",
-  }) as ServerConfig;
-
   const pool = new pg.Pool({
-    connectionString: validatedOptions.databaseUrl,
+    connectionString: databaseUrl,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 5000,
   });
 
-  setupErrorHandling(pool, validatedOptions);
+  setupErrorHandling(pool);
 
-  return drizzle(pool);
+  return drizzle(pool, { schema: schemas });
 }

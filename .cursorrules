@@ -279,9 +279,9 @@ Remember: Prioritize clarity and maintainability while delivering robust, access
 1. Implement Next.js configuration wrapper for SettleMint SDK
 2. Add ability to differentiate between build time and runtime environment variables and configuration
 3. During build time, environment variables should be filled with empty strings to pass Zod validation, while maintaining actual validation at runtime
+4. Add proper typing support for multiple schemas in Drizzle DB client
 
 ## Latest Changes
-- Updating codegen-hasura.ts to generate both Hasura and Drizzle client templates
-- Adding proper environment variable validation for Drizzle configuration
-- Ensuring consistent template generation patterns
-- Adding proper error handling and validation for both client generations
+- Adding schema typing support to Drizzle client
+- Ensuring type safety for database operations across multiple schemas
+- Maintaining proper error handling and validation
