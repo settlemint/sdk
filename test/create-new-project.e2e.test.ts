@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, readFile, rmdir, stat, unlink } from "node:fs/promises";
+import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
@@ -49,8 +49,6 @@ describe("Setup a project using the SDK", () => {
     ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
-    await unlink(join(projectDir, "kit/dapp/the-graph-schema.graphql"));
-    await unlink(join(projectDir, "kit/dapp/the-graph-env.d.ts"));
     await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
