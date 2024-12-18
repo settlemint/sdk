@@ -36,10 +36,14 @@
         "default": "./dist/hasura.cjs"
       }
     },
-    "./drizzle": {
+    "./postgres": {
       "import": {
-        "types": "./dist/drizzle.d.ts",
-        "default": "./dist/drizzle.mjs"
+        "types": "./dist/postgres.d.ts",
+        "default": "./dist/postgres.mjs"
+      },
+      "require": {
+        "types": "./dist/postgres.d.cts",
+        "default": "./dist/postgres.cjs"
       }
     }
   },

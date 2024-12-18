@@ -58,7 +58,7 @@ export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${na
     Timestamp: string;
   };
   }>({
-  instances: process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!,
+  instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!),
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
   subgraphName: "${name}",
 });`,

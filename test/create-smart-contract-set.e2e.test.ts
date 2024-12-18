@@ -120,16 +120,16 @@ describe("Setup a smart contract set using the SDK", () => {
       cwd: projectDir,
     });
     // Confirm deployment
-    const onDeployOuput = (message: string) => {
+    const onDeployOutput = (message: string) => {
       if (message.includes("Confirm deploy")) {
         deployCommand.stdin.cork();
         deployCommand.stdin.write("y");
         deployCommand.stdin.uncork();
       }
     };
-    deployCommand.stdout.on("data", onDeployOuput);
+    deployCommand.stdout.on("data", onDeployOutput);
     const { output: deployOutput } = await deployCommand.result;
-    deployCommand.stdout.off("data", onDeployOuput);
+    deployCommand.stdout.off("data", onDeployOutput);
     expect(deployOutput).toInclude("successfully deployed 🚀");
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
 
@@ -153,5 +153,30 @@ describe("Setup a smart contract set using the SDK", () => {
     resetCommand.stdout.off("data", onResetOutput);
     expect(outputReset).toInclude("successfully deployed 🚀");
     expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
+  });
+
+  test("Hardhat - Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
+    const { stdout, stdin, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
+      cwd: projectDir,
+    });
+
+    const nodeListCapture: string[] = [];
+    const onDeployOutput = (message: string) => {
+      if (message.includes("Which blockchain node do you want to connect to?")) {
+        nodeListCapture.push(message);
+        const nodeListString = nodeListCapture.join("\n");
+        expect(nodeListString).not.toContain("Starter Kit Node (without activated PK)");
+        stdout.off("data", onDeployOutput);
+        done();
+      }
+
+      if (message.includes("Confirm deploy")) {
+        stdin.cork();
+        stdin.write("y");
+        stdin.uncork();
+      }
+    };
+
+    stdout.on("data", onDeployOutput);
   });
 });

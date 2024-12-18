@@ -18,7 +18,7 @@ export default defineConfig(({ watch }) => {
       ...sharedConfig,
     },
     {
-      entry: ["src/drizzle.ts"],
+      entry: ["src/postgres.ts"],
       ...sharedConfig,
     },
   ];

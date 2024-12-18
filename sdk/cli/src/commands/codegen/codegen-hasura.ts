@@ -52,23 +52,13 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   await writeTemplate(hasuraTemplate, "/lib/settlemint", "hasura.ts");
 
   // Generate Drizzle client template with build time safety
-  const drizzleTemplate = `import { createDrizzleClient } from "@settlemint/sdk-hasura/drizzle";
+  const drizzleTemplate = `import { createPostgresPool } from '@settlemint/sdk-hasura/postgres';
 
-let drizzleClient: ReturnType<typeof createDrizzleClient> | undefined;
-
-export const drizzleClient = (schemas: Record<string, unknown>) => {
-  if (!drizzleClient) {
-    drizzleClient = createDrizzleClient({
-      databaseUrl: process.env.SETTLEMINT_HASURA_DATABASE_URL ?? "",
-      schemas
-    });
-  }
-  return drizzleClient;
-};
+export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL ?? '');
 `;
 
   // Always generate the Drizzle template, but with proper build time handling
-  await writeTemplate(drizzleTemplate, "/lib/settlemint", "drizzle.ts");
+  await writeTemplate(drizzleTemplate, "/lib/settlemint", "postgres.ts");
 
   // Warn about missing database variables only during runtime
   if (process.env.NODE_ENV !== "production" && !databaseUrl) {
