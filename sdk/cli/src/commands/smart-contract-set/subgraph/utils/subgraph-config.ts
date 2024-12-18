@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
-import { exists } from "@settlemint/sdk-utils";
+import { exists, tryParseJson } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { parse, stringify } from "yaml";
 
@@ -106,7 +106,7 @@ export const updateSubgraphYamlConfig = async (
 export const getSubgraphConfig = async (path: string = process.cwd()): Promise<SubgraphConfig | null> => {
   try {
     const configContents = await readFile(join(path, CONFIG_FILE_PATH));
-    const currentConfig: SubgraphConfig = JSON.parse(configContents.toString());
+    const currentConfig = tryParseJson<SubgraphConfig>(configContents.toString());
     return currentConfig;
   } catch (err) {
     const error = err as Error;
