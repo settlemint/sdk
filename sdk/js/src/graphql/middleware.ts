@@ -27,7 +27,7 @@ const MiddlewareFragment = graphql(`
     }
     ... on HAGraphMiddleware {
       specVersion
-      subgraphs {
+      subgraphs(noCache: $noCache) {
         name
         graphqlQueryEndpoint {
           displayValue
@@ -48,7 +48,7 @@ export type Middleware = ResultOf<typeof MiddlewareFragment>;
  */
 const getMiddlewares = graphql(
   `
-query getMiddlewares($id: ID!) {
+query getMiddlewares($id: ID!, $noCache: Boolean = false) {
   middlewares(applicationId: $id) {
     items {
       ...Middleware
@@ -63,7 +63,7 @@ query getMiddlewares($id: ID!) {
  */
 const getMiddleware = graphql(
   `
-query getMiddleware($id: ID!) {
+query getMiddleware($id: ID!, $noCache: Boolean = true) {
   middleware(entityId: $id) {
     ...Middleware
   }
@@ -91,6 +91,7 @@ const createMiddleware = graphql(
     $loadBalancerId: ID
     $abis: [SmartContractPortalMiddlewareAbiInputDto!]
     $includePredeployedAbis: [String!]
+    $noCache: Boolean = false
   ) {
     createMiddleware(
       applicationId: $applicationId
@@ -118,7 +119,7 @@ export type CreateMiddlewareArgs = VariablesOf<typeof createMiddleware>;
 
 const restartMiddleware = graphql(
   `
-  mutation RestartMiddleware($id: ID!) {
+  mutation RestartMiddleware($id: ID!, $noCache: Boolean = false) {
     restartMiddleware(entityId: $id) {
       ...Middleware
     }
