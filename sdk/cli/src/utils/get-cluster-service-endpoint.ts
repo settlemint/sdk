@@ -10,8 +10,12 @@ export async function getGraphEndpoint(
     return {};
   }
 
-  const testEndpoint = service.subgraphs.find(
-    ({ graphqlQueryEndpoint }) => !graphqlQueryEndpoint?.id.endsWith("-starterkits"),
+  const isStarterKit = (id: string) => id.endsWith("-starterkits");
+
+  const testEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) => !isStarterKit(graphqlQueryEndpoint?.id))
+    ?.graphqlQueryEndpoint?.displayValue;
+  const starterKitEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) =>
+    isStarterKit(graphqlQueryEndpoint?.id),
   )?.graphqlQueryEndpoint?.displayValue;
 
   const hasEndpoint =
@@ -19,17 +23,18 @@ export async function getGraphEndpoint(
       ? await testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, testEndpoint)
       : false;
 
-  const endpoint = hasEndpoint
-    ? testEndpoint
-    : service.subgraphs.find(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.id.includes("-starterkits"))
-        ?.graphqlQueryEndpoint?.displayValue;
+  const endpoints = hasEndpoint
+    ? service.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue)
+    : starterKitEndpoint
+      ? [starterKitEndpoint]
+      : [];
 
-  if (!endpoint) {
+  if (endpoints.length === 0) {
     return {};
   }
 
   return {
-    SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: endpoint,
+    SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: endpoints,
   };
 }
 

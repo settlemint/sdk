@@ -10,7 +10,7 @@ const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
 
 const COMMAND_TEST_SCOPE = __filename;
 
-const projectDir = join(process.cwd(), "test", PROJECT_NAME);
+const projectDir = join(__dirname, PROJECT_NAME);
 const dappDir = join(projectDir, "kit", "dapp");
 
 setDefaultTimeout(15 * 60_000);
@@ -54,11 +54,7 @@ describe("Setup a project using the SDK", () => {
   // });
 
   test("Validate that .env file has the correct values", async () => {
-    const currentCwd = process.cwd();
-    process.chdir(projectDir);
-    process.env.NODE_ENV = "development";
-    const env: Partial<DotEnv> = await loadEnv(false, false);
-    process.chdir(currentCwd);
+    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
 
     expect(env.SETTLEMINT_ACCESS_TOKEN).toBeString();
     expect(env.SETTLEMINT_INSTANCE).toBeString();
@@ -77,7 +73,7 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_IPFS_PINNING_ENDPOINT).toBeString();
 
     expect(env.SETTLEMINT_THEGRAPH).toBeString();
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT).toBeString();
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
 
     expect(env.SETTLEMINT_PORTAL).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
@@ -92,6 +88,13 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 
+  test("Install dependencies and link SDK to use local one", async () => {
+    const env = { NODE_ENV: "production" };
+    await $`bun link`.cwd("./sdk/cli");
+    await $`bun install`.cwd(projectDir).env(env);
+    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
+  });
+
   test("Connect starter kit", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
       .result;
@@ -99,7 +102,9 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Codegen starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen"], { cwd: dappDir }).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen", "--thegraph-subgraph-names", "starterkits"], {
+      cwd: dappDir,
+    }).result;
 
     expect(output).toInclude("Generating Hasura resources");
     expect(output).toInclude("Generating IPFS resources");
@@ -111,7 +116,6 @@ describe("Setup a project using the SDK", () => {
 
   test("Build starter kit", async () => {
     const env = { NODE_ENV: "production" };
-    await $`bun install`.cwd(projectDir).env(env);
     await $`bun lint`.cwd(projectDir).env(env);
     await $`bun check-types`.cwd(projectDir).env(env);
   });

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { tryParseJson } from "../core.js";
 import { ApplicationAccessTokenSchema, PersonalAccessTokenSchema } from "./access-token.schema.js";
 import { IdSchema } from "./id.schema.js";
 import { UrlSchema } from "./url.schema.js";
@@ -19,7 +20,10 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_HASURA_ADMIN_SECRET: z.string().optional(),
   SETTLEMINT_HASURA_DATABASE_URL: z.string().optional(),
   SETTLEMINT_THEGRAPH: IdSchema.optional(),
-  SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT: UrlSchema.optional(),
+  SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: z.preprocess(
+    (value) => tryParseJson(value as string, []),
+    z.array(UrlSchema).optional(),
+  ),
   SETTLEMINT_THEGRAPH_SUBGRAPH_NAME: z.string().optional(),
   SETTLEMINT_PORTAL: IdSchema.optional(),
   SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: UrlSchema.optional(),

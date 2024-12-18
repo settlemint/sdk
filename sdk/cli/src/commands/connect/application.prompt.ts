@@ -1,5 +1,6 @@
 import select from "@inquirer/select";
 import type { Application } from "@settlemint/sdk-js";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function applicationPrompt(
@@ -15,7 +16,7 @@ export async function applicationPrompt(
   }
 
   if (applications.length === 0) {
-    throw new Error("No applications found");
+    cancel("No applications found");
   }
 
   const application = await select({
@@ -28,7 +29,7 @@ export async function applicationPrompt(
   });
 
   if (!application) {
-    throw new Error("No application selected");
+    cancel("No application selected");
   }
 
   return application;

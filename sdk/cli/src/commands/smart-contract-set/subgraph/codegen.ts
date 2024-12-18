@@ -3,9 +3,8 @@ import { missingAccessTokenError } from "@/error/missing-config-error";
 import { Command } from "@commander-js/extra-typings";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import isInCi from "is-in-ci";
-import { isGenerated } from "./utils/is-generated";
 import { subgraphSetup } from "./utils/setup";
-import { getSubgraphYamlFile } from "./utils/subgraph-config";
+import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
 
 export function subgraphCodegenCommand() {
   return new Command("codegen")

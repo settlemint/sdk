@@ -3,7 +3,7 @@ import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
 
-export async function codegenTsconfig(env: DotEnv) {
+export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: string[]) {
   const tsconfig = getTsconfig();
   if (!tsconfig?.config) {
     return {
@@ -24,10 +24,15 @@ export async function codegenTsconfig(env: DotEnv) {
     };
   }
 
+  const theGraphEndpoints = (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? []).filter((gqlEndpoint) => {
+    const name = gqlEndpoint.split("/").pop();
+    return name && (!thegraphSubgraphNames || thegraphSubgraphNames.includes(name));
+  });
+
   const [hasura, portal, thegraph, blockscout] = await Promise.all([
     testGqlEndpoint(accessToken, env.SETTLEMINT_HASURA_ADMIN_SECRET, env.SETTLEMINT_HASURA_ENDPOINT, true),
     testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
-    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT),
+    testGqlEndpoint(accessToken, undefined, theGraphEndpoints[0]),
     testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
   ]);
 
@@ -53,15 +58,16 @@ export async function codegenTsconfig(env: DotEnv) {
           ]
         : []),
       ...(thegraph
-        ? [
-            {
-              name: "thegraph",
-              schema: "the-graph-schema.graphql",
-              tadaOutputLocation: "the-graph-env.d.ts",
-              tadaTurboLocation: "the-graph-cache.d.ts",
+        ? theGraphEndpoints.map((endpoint) => {
+            const name = endpoint.split("/").pop()!;
+            return {
+              name: `thegraph-${name}`,
+              schema: `the-graph-schema-${name}.graphql`,
+              tadaOutputLocation: `the-graph-env-${name}.d.ts`,
+              tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
               trackFieldUsage: false,
-            },
-          ]
+            };
+          })
         : []),
       ...(portal
         ? [

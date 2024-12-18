@@ -16,8 +16,9 @@ import { config } from "@dotenvx/dotenvx";
 export async function loadEnv<T extends boolean = true>(
   validateEnv: T,
   prod: boolean,
+  path: string = process.cwd(),
 ): Promise<T extends true ? DotEnv : DotEnvPartial> {
-  return loadEnvironmentEnv(validateEnv, !!prod);
+  return loadEnvironmentEnv(validateEnv, !!prod, path);
 }
 
 /**
@@ -25,17 +26,19 @@ export async function loadEnv<T extends boolean = true>(
  *
  * @param environment - The environment to load variables for.
  * @param validateEnv - Whether to validate the environment variables.
+ * @param path - The path to load the environment variables from.
  * @returns A promise that resolves to the environment variables, either validated or raw.
  * @throws Will throw an error if validation fails when validateEnv is true.
  */
 export async function loadEnvironmentEnv<T extends boolean = true>(
   validateEnv: T,
   prod: boolean,
+  path: string = process.cwd(),
 ): Promise<T extends true ? DotEnv : DotEnvPartial> {
   if (prod) {
     process.env.NODE_ENV = "production";
   }
-  let { parsed } = config({ convention: "nextjs", logLevel: "error", overload: true, quiet: true });
+  let { parsed } = config({ convention: "nextjs", logLevel: "error", overload: true, quiet: true, path });
 
   if (!parsed) {
     parsed = {};

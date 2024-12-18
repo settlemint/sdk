@@ -1,10 +1,12 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { generateSchema } from "@gql.tada/cli-utils";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
-export async function codegenTheGraph(env: DotEnv) {
-  const gqlEndpoint = env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT;
-  if (!gqlEndpoint) {
+export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
+  const gqlEndpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS;
+  if (!Array.isArray(gqlEndpoints) || gqlEndpoints.length === 0) {
     return;
   }
 
@@ -13,19 +15,39 @@ export async function codegenTheGraph(env: DotEnv) {
     return;
   }
 
-  await generateSchema({
-    input: gqlEndpoint,
-    output: "the-graph-schema.graphql",
-    tsconfig: undefined,
-    headers: {
-      "x-auth-token": accessToken,
-    },
+  const template = [
+    `import { createTheGraphClient } from "@settlemint/sdk-thegraph";`,
+    `import type { introspection } from "@schemas/the-graph-env"`,
+  ];
+
+  const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
+    const name = gqlEndpoint.split("/").pop();
+    if (!name) {
+      return false;
+    }
+    if (subgraphNames && !subgraphNames.includes(name)) {
+      note(`[SKIPPED] Generating TheGraph subgraph ${name}`);
+      return false;
+    }
+    return true;
   });
 
-  const template = `import { createTheGraphClient } from "@settlemint/sdk-thegraph";
-import type { introspection } from "@schemas/the-graph-env";
-
-export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGraphClient<{
+  for (const gqlEndpoint of toGenerate) {
+    const name = gqlEndpoint.split("/").pop()!;
+    note(`Generating TheGraph subgraph ${name}`);
+    await generateSchema({
+      input: gqlEndpoint,
+      output: `the-graph-schema-${name}.graphql`,
+      tsconfig: undefined,
+      headers: {
+        "x-auth-token": accessToken,
+      },
+    });
+    const nameSuffix = toGenerate.length === 1 ? "" : capitalizeFirstLetter(name);
+    template.push(
+      ...[
+        `
+export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${nameSuffix} } = createTheGraphClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
@@ -37,10 +59,13 @@ export const { client: theGraphClient, graphql: theGraphGraphql } = createTheGra
     BigDecimal: string;
     Timestamp: string;
   };
-}>({
-  instance: process.env.SETTLEMINT_THEGRAPH_SUBGRAPH_ENDPOINT!,
+  }>({
+  instances: process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
-});`;
-
-  await writeTemplate(template, "/lib/settlemint", "the-graph.ts");
+  subgraphName: "${name}",
+});`,
+      ],
+    );
+  }
+  await writeTemplate(template.join("\n"), "/lib/settlemint", "the-graph.ts");
 }
