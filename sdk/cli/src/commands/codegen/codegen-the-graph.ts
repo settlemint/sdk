@@ -15,10 +15,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     return;
   }
 
-  const template = [
-    `import { createTheGraphClient } from "@settlemint/sdk-thegraph";`,
-    `import type { introspection } from "@schemas/the-graph-env"`,
-  ];
+  const template = [`import { createTheGraphClient } from "@settlemint/sdk-thegraph";`];
 
   const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
     const name = gqlEndpoint.split("/").pop();
@@ -29,6 +26,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
       note(`[SKIPPED] Generating TheGraph subgraph ${name}`);
       return false;
     }
+    template.push(`import type { introspection as ${name}Introspection } from "@schemas/the-graph-env-${name}"`);
     return true;
   });
 
@@ -48,7 +46,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
       ...[
         `
 export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${nameSuffix} } = createTheGraphClient<{
-  introspection: introspection;
+  introspection: ${name}Introspection;
   disableMasking: true;
   scalars: {
     DateTime: Date;
