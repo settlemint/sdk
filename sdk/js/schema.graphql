@@ -10458,7 +10458,7 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
   storage: StorageType
-  subgraphs: [Subgraph!]!
+  subgraphs(noCache: Boolean! = false): [Subgraph!]!
 
   """Type of the service"""
   type: ClusterServiceType!
