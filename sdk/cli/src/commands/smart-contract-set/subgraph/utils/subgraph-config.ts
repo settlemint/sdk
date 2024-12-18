@@ -73,19 +73,33 @@ export type SubgraphConfig = {
 
 const CONFIG_FILE_PATH = "./subgraph/subgraph.config.json";
 
-export const isGenerated = () => exists(CONFIG_FILE_PATH);
+export const isGenerated = (path: string = process.cwd()) => exists(join(path, CONFIG_FILE_PATH));
 
-export const getSubgraphYamlFile = async () =>
-  (await isGenerated()) ? "generated/scs.subgraph.yaml" : "subgraph/subgraph.yaml";
+export const getSubgraphYamlFile = async (path: string = process.cwd()) => {
+  const generated = await isGenerated();
+  if (generated && (await exists(join(path, "generated/scs.subgraph.yaml")))) {
+    return join(path, "generated/scs.subgraph.yaml");
+  }
+  if (await exists(join(path, "subgraph/subgraph.yaml"))) {
+    return join(path, "subgraph/subgraph.yaml");
+  }
+  if (await exists(join(path, "subgraph.yaml"))) {
+    return join(path, "subgraph.yaml");
+  }
+  throw new Error("Subgraph configuration file not found");
+};
 
-export const getSubgraphYamlConfig = async (): Promise<SubgraphYamlConfig> => {
-  const subgraphYamlFile = await getSubgraphYamlFile();
+export const getSubgraphYamlConfig = async (path: string = process.cwd()): Promise<SubgraphYamlConfig> => {
+  const subgraphYamlFile = await getSubgraphYamlFile(path);
   const rawYamlConfig = await readFile(subgraphYamlFile);
   return parse(rawYamlConfig.toString());
 };
 
-export const updateSubgraphYamlConfig = async (config: SubgraphYamlConfig): Promise<void> => {
-  const subgraphYamlFile = await getSubgraphYamlFile();
+export const updateSubgraphYamlConfig = async (
+  config: SubgraphYamlConfig,
+  cwd: string = process.cwd(),
+): Promise<void> => {
+  const subgraphYamlFile = await getSubgraphYamlFile(cwd);
   await writeFile(subgraphYamlFile, stringify(config));
 };
 

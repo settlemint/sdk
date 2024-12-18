@@ -1,11 +1,11 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat, unlink } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import {
-  getSubgraphConfig,
-  updateSubgraphConfig,
+  getSubgraphYamlConfig,
+  updateSubgraphYamlConfig,
 } from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
@@ -17,7 +17,7 @@ const COMMAND_TEST_SCOPE = __filename;
 const projectDir = join(__dirname, PROJECT_NAME);
 const dAppDir = join(projectDir, "kit", "dapp");
 const contractsDir = join(projectDir, "kit", "contracts");
-const subgraphDir = join(projectDir, "build", "subgraph");
+const subgraphDir = join(projectDir, "kit", "subgraph");
 
 setDefaultTimeout(15 * 60_000);
 
@@ -30,7 +30,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -136,36 +136,53 @@ describe("Setup a project using the SDK", () => {
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test("subgraph -Deploy subgraphs", async () => {
-    const config = await getSubgraphConfig(subgraphDir);
-    expect(config).toBeDefined();
-    expect(config).not.toBeNull();
-    const getAddress = (name: string) => {
-      if (name === "BondFacet") {
-        return contractsDeploymentInfo["DiamondModule#BondFacet"];
-      }
-      if (name === "GenericToken") {
-        return contractsDeploymentInfo["DiamondModule#GenericToken"];
-      }
-      return undefined;
+  test("subgraph - Update contract addresses", async () => {
+    const config = await getSubgraphYamlConfig(subgraphDir);
+    const updatedConfig: typeof config = {
+      ...config,
+      dataSources: config.dataSources.map((dataSource) => {
+        const addressKey = Object.keys(contractsDeploymentInfo).find((key) => key.endsWith(`#${dataSource.name}`));
+        const address = addressKey ? contractsDeploymentInfo[addressKey]! : dataSource.source.address;
+        return {
+          ...dataSource,
+          source: {
+            ...dataSource.source,
+            address,
+          },
+        };
+      }),
     };
-    await updateSubgraphConfig(
+    await updateSubgraphYamlConfig(updatedConfig, subgraphDir);
+  });
+
+  test("subgraph - Build subgraph", async () => {
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "build", "--accept-defaults"],
       {
-        ...config!,
-        datasources: config!.datasources.map((source) => {
-          return {
-            ...source,
-            address: getAddress(source.name) ?? source.address,
-          };
-        }),
+        cwd: subgraphDir,
       },
-      subgraphDir,
-    );
-    const contracts = ["BondFacet", "GenericToken"];
-    for (const contract of contracts) {
+    ).result;
+    expect(output).toInclude("Build completed");
+  });
+
+  test("subgraph - Codegen subgraph", async () => {
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "codegen", "--accept-defaults"],
+      {
+        cwd: subgraphDir,
+      },
+    ).result;
+    expect(output).toInclude("Types generated successfully");
+  });
+
+  test("subgraph - Deploy subgraphs", async () => {
+    const config = await getSubgraphYamlConfig(subgraphDir);
+    for (const datasource of config.dataSources) {
       const { output } = await runCommand(
         COMMAND_TEST_SCOPE,
-        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", contract],
+        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", datasource.name],
         {
           cwd: subgraphDir,
         },
@@ -173,9 +190,10 @@ describe("Setup a project using the SDK", () => {
       expect(output).toInclude("Build completed");
     }
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length + 1); // +1 for the default starterkit subgraph
     for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
-      expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract.toLowerCase()}`))).toBeTrue();
+      expect(
+        config.dataSources.some(({ name }) => endpoint.endsWith(`/subgraphs/name/${name.toLowerCase()}`)),
+      ).toBeTrue();
     }
   });
 

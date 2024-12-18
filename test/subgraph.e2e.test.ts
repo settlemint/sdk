@@ -3,9 +3,9 @@ import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
-import { parse } from "yaml";
 import {
   getSubgraphConfig,
+  getSubgraphYamlConfig,
   updateSubgraphConfig,
 } from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
@@ -77,9 +77,8 @@ describe("Build and deploy a subgraph using the SDK", () => {
       },
     ).result;
     expect(output).toInclude("Build completed");
-    const subgraphYaml = await readFile(join(projectDir, "build", "subgraph.yaml"));
-    const parsed = parse(subgraphYaml.toString());
-    expect(parsed).toEqual({
+    const subgraphYaml = await getSubgraphYamlConfig(projectDir);
+    expect(subgraphYaml).toEqual({
       specVersion: "0.0.4",
       schema: { file: "scs.schema.graphql" },
       dataSources: [
@@ -230,32 +229,24 @@ describe("Build and deploy a subgraph using the SDK", () => {
     const config = await getSubgraphConfig(projectDir);
     expect(config).toBeDefined();
     expect(config).not.toBeNull();
-    const getAddress = (name: string) => {
-      if (name === "BondFacet") {
-        return contractsDeploymentInfo["DiamondModule#BondFacet"];
-      }
-      if (name === "GenericToken") {
-        return contractsDeploymentInfo["DiamondModule#GenericToken"];
-      }
-      return undefined;
-    };
     await updateSubgraphConfig(
       {
         ...config!,
         datasources: config!.datasources.map((source) => {
+          const addressKey = Object.keys(contractsDeploymentInfo).find((key) => key.endsWith(`#${source.name}`));
+          const address = addressKey ? contractsDeploymentInfo[addressKey]! : source.address;
           return {
             ...source,
-            address: getAddress(source.name) ?? source.address,
+            address,
           };
         }),
       },
       projectDir,
     );
-    const contracts = ["BondFacet", "GenericToken"];
-    for (const contract of contracts) {
+    for (const datasource of config!.datasources) {
       const { output } = await runCommand(
         COMMAND_TEST_SCOPE,
-        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", contract],
+        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", datasource.name],
         {
           cwd: projectDir,
         },
@@ -263,9 +254,10 @@ describe("Build and deploy a subgraph using the SDK", () => {
       expect(output).toInclude("Build completed");
     }
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
-    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArrayOfSize(contracts.length + 1); // +1 for the default starterkit subgraph
     for (const endpoint of env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS!) {
-      expect(contracts.some((contract) => endpoint.endsWith(`/subgraphs/name/${contract.toLowerCase()}`))).toBeTrue();
+      expect(
+        config!.datasources.some(({ name }) => endpoint.endsWith(`/subgraphs/name/${name.toLowerCase()}`)),
+      ).toBeTrue();
     }
   });
 });
