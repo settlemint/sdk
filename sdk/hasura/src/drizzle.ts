@@ -62,16 +62,16 @@ function setupErrorHandling(pool: pg.Pool) {
  * @returns The initialized Drizzle client with proper schema typings
  * @throws {Error} If called from browser runtime or if validation fails
  */
-export function createDrizzleClient<TSchema extends Record<string, unknown>>(
-  databaseUrl: string,
-  schemas: TSchema,
-): NodePgDatabase<TSchema> {
+export function createDrizzleClient<TSchema extends Record<string, unknown>>(params: {
+  databaseUrl: string;
+  schemas?: TSchema;
+}): NodePgDatabase<TSchema> {
   if (!runsOnServer) {
     throw new Error("Drizzle client can only be created on the server side");
   }
 
   const pool = new pg.Pool({
-    connectionString: databaseUrl,
+    connectionString: params.databaseUrl,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 5000,
@@ -79,5 +79,5 @@ export function createDrizzleClient<TSchema extends Record<string, unknown>>(
 
   setupErrorHandling(pool);
 
-  return drizzle(pool, { schema: schemas });
+  return drizzle(pool, { schema: params.schemas });
 }
