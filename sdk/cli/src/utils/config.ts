@@ -32,8 +32,12 @@ async function ensureConfigDir(): Promise<void> {
 export async function readConfig(): Promise<Config> {
   await ensureConfigDir();
 
-  const content = await readFile(CONFIG_FILE, "utf-8");
-  return tryParseJson<Config>(content, { instances: {} })!;
+  try {
+    const content = await readFile(CONFIG_FILE, "utf-8");
+    return tryParseJson<Config>(content, { instances: {} })!;
+  } catch (error) {
+    return { instances: {} };
+  }
 }
 
 /**

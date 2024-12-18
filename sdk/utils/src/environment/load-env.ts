@@ -1,8 +1,6 @@
-import { mkdirSync } from "node:fs";
 import { cancel } from "@/terminal.js";
 import { type DotEnv, type DotEnvPartial, DotEnvSchema, DotEnvSchemaPartial, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
-import { pathExistsSync } from "find-up";
 /**
  * Loads environment variables from .env files.
  * To enable encryption with dotenvx (https://www.dotenvx.com/docs) run `bunx dotenvx encrypt`
@@ -38,9 +36,6 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
 ): Promise<T extends true ? DotEnv : DotEnvPartial> {
   if (prod) {
     process.env.NODE_ENV = "production";
-  }
-  if (!pathExistsSync(path)) {
-    mkdirSync(path, { recursive: true });
   }
   let { parsed } = config({ convention: "nextjs", logLevel: "error", overload: true, quiet: true, path });
 
