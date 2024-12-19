@@ -1,5 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
 import { ipfsRestartCommand } from "./ipfs/restart";
+import { minioRestartCommand } from "./minio/restart";
 
 /**
  * Creates and returns the 'storage' command for the SettleMint SDK.
@@ -11,5 +12,6 @@ export function storageRestartCommand(): Command {
   return new Command("storage")
     .alias("st")
     .description("Restart a storage service in the SettleMint platform")
-    .addCommand(ipfsRestartCommand());
+    .addCommand(ipfsRestartCommand())
+    .addCommand(minioRestartCommand());
 }
