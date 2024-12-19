@@ -8,7 +8,7 @@ import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function hardhatScriptRemoteCommand() {
-  const build = new Command("remote")
+  const cmd = new Command("remote")
     .description("Run a Hardhat script to deploy a contract on the platform or interact with a deployed contract.")
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"')
     .option(
@@ -16,9 +16,10 @@ export function hardhatScriptRemoteCommand() {
       "Blockchain Node ID (optional, defaults to the blockchain node in the environment)",
     )
     .option("--prod", "Connect to your production environment")
-    .option("-a, --accept-defaults", "Accept the default and previously set values");
+    .option("-a, --accept-defaults", "Accept the default and previously set values")
+    .option("--no-compile", "Don't compile before running this task");
 
-  build.action(async ({ script, prod, blockchainNodeId, acceptDefaults }) => {
+  cmd.action(async ({ script, prod, blockchainNodeId, acceptDefaults, compile }) => {
     const autoAccept = !!acceptDefaults || isInCi;
     const env = await loadEnv(false, !!prod);
 
@@ -44,8 +45,12 @@ export function hardhatScriptRemoteCommand() {
 
     const envConfig = await settlemint.foundry.env(nodeId);
     const { command, args } = await getPackageManagerExecutable();
-    await executeCommand(command, [...args, "hardhat", "run", script, "--network", "btp"], { env: envConfig });
+    await executeCommand(
+      command,
+      [...args, "hardhat", "run", script, "--network", "btp", ...(compile ? ["--no-compile"] : [])],
+      { env: envConfig },
+    );
   });
 
-  return build;
+  return cmd;
 }
