@@ -92,3 +92,17 @@ export function getBlockscoutEndpoints(service: Insights | undefined): Partial<D
     SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: uiEndpoint,
   };
 }
+
+export function getMinioEndpoints(service: Storage | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "MinioStorage") {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_MINIO_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.includes("s3-api"))?.displayValue,
+    SETTLEMINT_MINIO_ACCESS_KEY: service?.credentials.find((credential) => credential.id.includes("access-key"))
+      ?.displayValue,
+    SETTLEMINT_MINIO_SECRET_KEY: service?.credentials.find((credential) => credential.id.includes("secret-key"))
+      ?.displayValue,
+  };
+}

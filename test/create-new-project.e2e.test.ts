@@ -99,7 +99,10 @@ describe("Setup a project using the SDK", () => {
   test("Install dependencies and link SDK to use local one", async () => {
     const env = { NODE_ENV: "production" };
     await $`bun link`.cwd("./sdk/cli");
-    await $`bun install`.cwd(projectDir).env(env);
+    await $`bun install`.cwd(projectDir).env({
+      ...process.env,
+      ...env,
+    });
     await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
   });
 
@@ -203,6 +206,7 @@ describe("Setup a project using the SDK", () => {
     }).result;
 
     expect(output).toInclude("Generating Hasura resources");
+    expect(output).toInclude("Generating Minio resources");
     expect(output).toInclude("Generating IPFS resources");
     expect(output).toInclude("Generating Blockscout resources");
     expect(output).toInclude("Generating Portal resources");
