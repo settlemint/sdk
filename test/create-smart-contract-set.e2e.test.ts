@@ -156,7 +156,7 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
-    const { stdout, stdin, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
+    const { stdout, stdin } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
       cwd: projectDir,
     });
 
