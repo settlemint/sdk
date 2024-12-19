@@ -10,6 +10,7 @@ const InsightsFragment = graphql(`
   fragment Insights on Insights {
     __typename
     id
+    uniqueName
     name
     status
     insightsCategory

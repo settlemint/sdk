@@ -10,6 +10,7 @@ const SmartContractSetFragment = graphql(`
   fragment SmartContractSet on SmartContractSet {
     __typename
     id
+    uniqueName
     name
     application {
       id

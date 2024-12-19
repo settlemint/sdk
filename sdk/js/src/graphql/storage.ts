@@ -10,6 +10,7 @@ const StorageFragment = graphql(`
   fragment Storage on Storage {
     __typename
     id
+    uniqueName
     name
     status
     storageProtocol

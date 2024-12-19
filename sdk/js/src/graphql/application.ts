@@ -10,6 +10,7 @@ import type { GraphQLClient } from "graphql-request";
 export const ApplicationFragment = graphql(`
   fragment Application on Application {
     id
+    uniqueName
     name
     workspace { id }
   }

@@ -11,6 +11,7 @@ const WorkspaceFragment = graphql(
   `
   fragment Workspace on Workspace {
     id
+    uniqueName
     name
     applications {
       ...Application

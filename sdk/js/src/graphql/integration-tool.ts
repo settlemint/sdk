@@ -10,6 +10,7 @@ const IntegrationFragment = graphql(`
   fragment Integration on Integration {
     __typename
     id
+    uniqueName
     name
     status
     integrationType

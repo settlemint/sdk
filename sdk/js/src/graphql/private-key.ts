@@ -10,8 +10,8 @@ const PrivateKeyFragment = graphql(`
   fragment PrivateKey on PrivateKey {
     __typename
     id
-    name
     uniqueName
+    name
     privateKeyType
     status
   }

@@ -11,6 +11,7 @@ const BlockchainNetworkFragment = graphql(`
   fragment BlockchainNetwork on BlockchainNetwork {
     __typename
     id
+    uniqueName
     name
     status
     blockchainNodes {

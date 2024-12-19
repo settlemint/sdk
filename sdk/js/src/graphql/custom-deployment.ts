@@ -9,6 +9,7 @@ import type { GraphQLClient } from "graphql-request";
 const CustomDeploymentFragment = graphql(`
   fragment CustomDeployment on CustomDeployment {
     id
+    uniqueName
     name
     status
     endpoints {

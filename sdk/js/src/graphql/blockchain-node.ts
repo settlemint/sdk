@@ -10,8 +10,8 @@ const BlockchainNodeFragment = graphql(`
   fragment BlockchainNode on BlockchainNode {
     __typename
     id
-    name
     uniqueName
+    name
     status
     endpoints {
       id
