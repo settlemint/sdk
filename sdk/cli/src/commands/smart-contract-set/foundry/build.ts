@@ -1,12 +1,16 @@
+import { mapPassthroughOptions } from "@/utils/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
 import { executeCommand } from "@settlemint/sdk-utils";
 
 export function foundryBuildCommand() {
-  const build = new Command("build");
-  build.description("Build the smart contracts using Foundry/forge");
-  build.action(async () => {
-    await executeCommand("forge", ["build"]);
-  });
-
-  return build;
+  return new Command("build")
+    .description("Build the smart contracts using Foundry/forge")
+    .helpOption(false)
+    .option("-h, --help", "Get list of possible forge options")
+    .passThroughOptions()
+    .allowUnknownOption(true)
+    .action(async (passThroughOptions, cmd) => {
+      const forgeOptions = mapPassthroughOptions(passThroughOptions, cmd);
+      await executeCommand("forge", ["build", ...forgeOptions]);
+    });
 }
