@@ -43,7 +43,8 @@ export function hardhatDeployRemoteCommand() {
     });
 
     let node: BlockchainNode | undefined = undefined;
-    if (!blockchainNodeId) {
+    const nodeId = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE;
+    if (!nodeId) {
       const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
       if (blockchainNodes.length === 0) {
         cancel("No blockchain nodes found. Please create a blockchain node and try again.");
@@ -67,7 +68,7 @@ export function hardhatDeployRemoteCommand() {
       }
       node = blockchainNode;
     } else {
-      node = await settlemint.blockchainNode.read(blockchainNodeId);
+      node = await settlemint.blockchainNode.read(nodeId);
     }
 
     const envConfig = await settlemint.foundry.env(node.id);
