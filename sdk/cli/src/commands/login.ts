@@ -21,11 +21,12 @@ export function loginCommand(): Command {
       `Login to your SettleMint account.\n${createExamples([
         {
           description: "Login to your SettleMint account",
-          command: "settlemint login",
+          command: "login",
         },
         {
           description: "Login to your SettleMint account using a token from STDIN",
-          command: "cat ~/my_token.txt | settlemint login --token-stdin --accept-defaults",
+          command: "login --token-stdin --accept-defaults",
+          commandPrefix: "cat ~/my_token.txt | ",
         },
       ])}`,
     )
