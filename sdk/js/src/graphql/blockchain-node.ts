@@ -13,6 +13,7 @@ const BlockchainNodeFragment = graphql(`
     name
     uniqueName
     status
+    blockchainClient
     endpoints {
       id
       label
