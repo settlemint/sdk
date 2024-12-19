@@ -21,7 +21,6 @@ export function blockchainNodeBesuCreateCommand() {
           "The application ID to create the node in (defaults to application from env)",
         )
         .requiredOption("--blockchain-network-id <blockchainNetworkId>", "Blockchain network to add this node to")
-        .requiredOption("--name <name>", "Name of the node")
         .option("--node-identity <nodeIdentity>", "EC DSA P256 private key to use as the node identity")
         .addOption(
           new Option("--node-type <nodeType>", "Type of the node")
