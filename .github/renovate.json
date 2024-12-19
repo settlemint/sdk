@@ -18,7 +18,7 @@
     "helpers:pinGitHubActionDigests"
   ],
   "labels": ["dependencies"],
-  "rebaseWhen": "conflicted",
+  "rebaseWhen": "auto",
   "customManagers": [
     {
       "customType": "regex",
