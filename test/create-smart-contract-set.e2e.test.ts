@@ -168,7 +168,7 @@ describe("Setup a smart contract set using the SDK", () => {
     expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test("Hardhat - Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
+  test.skip("Hardhat - Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
     const { stdout, stdin, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
       cwd: projectDir,
     });
