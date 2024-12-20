@@ -5,15 +5,6 @@ import type { DotEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import { getCreateCommand } from "../../common/create-command";
 
-const prettyNodeTypeNames = {
-  validator: "VALIDATOR",
-  "non-validator": "NON_VALIDATOR",
-  notary: "NOTARY",
-  orderer: "ORDERER",
-  peer: "PEER",
-  unspecified: "UNSPECIFIED",
-} as const;
-
 /**
  * Creates and returns the 'blockchain-node besu' command for the SettleMint SDK.
  * This command creates a new Besu blockchain node in a specified application.
@@ -35,7 +26,7 @@ export function blockchainNodeBesuCreateCommand() {
         .option("--node-identity <nodeIdentity>", "EC DSA P256 private key to use as the node identity")
         .addOption(
           new Option("--node-type <nodeType>", "Type of the node")
-            .choices(Object.keys(prettyNodeTypeNames) as (keyof typeof prettyNodeTypeNames)[])
+            .choices(["VALIDATOR", "NON_VALIDATOR", "NOTARY", "ORDERER", "PEER", "UNSPECIFIED"] as const)
             .makeOptionMandatory(),
         )
         .action(
@@ -60,7 +51,7 @@ export function blockchainNodeBesuCreateCommand() {
                 cancel("No application found");
               }
 
-              let networkId = blockchainNetworkId ?? env.SETTLEMINT_BLOCKCHAIN_NETWORK!;
+              let networkId = blockchainNetworkId ?? (acceptDefaults ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
               if (!networkId) {
                 const networks = await settlemint.blockchainNetwork.list(application);
                 const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
@@ -74,7 +65,7 @@ export function blockchainNodeBesuCreateCommand() {
                 applicationId: application,
                 name,
                 blockchainNetworkId: networkId,
-                nodeType: prettyNodeTypeNames[nodeType],
+                nodeType,
                 keyMaterial: nodeIdentity,
                 provider,
                 region,
