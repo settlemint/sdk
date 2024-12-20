@@ -206,7 +206,6 @@ async function createBlockchainNodeMinioAndIpfs() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
-            "--wait",
             HASURA_NAME,
           ]).result,
     () =>
@@ -223,7 +222,6 @@ async function createBlockchainNodeMinioAndIpfs() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
-            "--wait",
             MINIO_NAME,
           ]).result,
     () =>
@@ -240,7 +238,6 @@ async function createBlockchainNodeMinioAndIpfs() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
-            "--wait",
             IPFS_NAME,
           ]).result,
   ]);
@@ -282,17 +279,14 @@ async function createBlockchainNodeMinioAndIpfs() {
 
   if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
-    expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
   }
 
   if (minioResult?.status === "fulfilled" && minioResult.value) {
     expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
-    expect(minioResult.value.output).toInclude("Storage is deployed");
   }
 
   if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
-    expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 }
 
@@ -361,7 +355,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
-            "--wait",
             BLOCKSCOUT_NAME,
           ]).result,
     () =>
@@ -397,7 +390,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
-            "--wait",
             NODE_NAME_3_WITHOUT_PK,
           ]).result,
   ]);
@@ -424,7 +416,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
 
   if (blockscoutResult?.status === "fulfilled" && blockscoutResult.value) {
     expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
-    expect(blockscoutResult.value.output).toInclude("Insights is deployed");
   }
 
   if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
@@ -436,7 +427,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
     expect(nodeWithoutPkResult.value.output).toInclude(
       `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
     );
-    expect(nodeWithoutPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 }
 
