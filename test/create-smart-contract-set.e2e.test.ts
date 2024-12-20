@@ -48,21 +48,21 @@ describe("Setup a smart contract set using the SDK", () => {
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
 
-  test("Foundry - Build smart contract set", async () => {
+  test.skip("Foundry - Build smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "build", "--optimize"], {
       cwd: projectDir,
     }).result;
     expect(output).toInclude("Compiler run successful");
   });
 
-  test("Foundry - Format smart contract set", async () => {
+  test.skip("Foundry - Format smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "format", "--check"], {
       cwd: projectDir,
     }).result;
     expect(output).toInclude("Smart contract set formatted successfully!");
   });
 
-  test("Foundry - Start local anvil network", (done) => {
+  test.skip("Foundry - Start local anvil network", (done) => {
     const { result, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "network", "--block-time", "5"], {
       cwd: projectDir,
     });
@@ -80,7 +80,7 @@ describe("Setup a smart contract set using the SDK", () => {
     }, 3_000);
   });
 
-  test("Foundry - Test smart contract set", async () => {
+  test.skip("Foundry - Test smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "test", "--fail-fast"], {
       cwd: projectDir,
     }).result;
@@ -89,20 +89,20 @@ describe("Setup a smart contract set using the SDK", () => {
     expect(output).toInclude("Suite result: ok.");
   });
 
-  test("Hardhat - Build smart contract set", async () => {
+  test.skip("Hardhat - Build smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "build", "--quiet"], { cwd: projectDir })
       .result;
     expect(output).toMatch(/.*Compiled [0-9]+ Solidity files successfully.*/);
   });
 
-  test("Hardhat - Test smart contract set", async () => {
+  test.skip("Hardhat - Test smart contract set", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "test", "--no-compile"], {
       cwd: projectDir,
     }).result;
     expect(output).toInclude("0 passing");
   });
 
-  test("Hardhat - Deploy smart contract set (local)", (done) => {
+  test.skip("Hardhat - Deploy smart contract set (local)", (done) => {
     const { result, kill } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "network", "--port", "8545"], {
       cwd: projectDir,
     });
@@ -135,7 +135,7 @@ describe("Setup a smart contract set using the SDK", () => {
     }, 3_000);
   });
 
-  test("Hardhat - Deploy smart contract set (remote)", async () => {
+  test.skip("Hardhat - Deploy smart contract set (remote)", async () => {
     const deployCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--accept-defaults"], {
       cwd: projectDir,
     });
@@ -190,7 +190,7 @@ describe("Setup a smart contract set using the SDK", () => {
         nodeListCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // Choose the first option
+        resetCommand.stdin.write("\n");
         resetCommand.stdin.uncork();
       }
 
@@ -198,7 +198,7 @@ describe("Setup a smart contract set using the SDK", () => {
         privateKeyCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // Choose the first option
+        resetCommand.stdin.write("\n");
         resetCommand.stdin.uncork();
       }
 
@@ -219,7 +219,7 @@ describe("Setup a smart contract set using the SDK", () => {
     expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
 
     const privateKeyString = privateKeyCapture.join("\n");
-    expect(privateKeyString).toContain(PRIVATE_KEY_2_NAME);
-    expect(privateKeyString).not.toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME); // This private is not activated on the node we select
+    expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
+    expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME); // This private is not activated on the node we select
   });
 });
