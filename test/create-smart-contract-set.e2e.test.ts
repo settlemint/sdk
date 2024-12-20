@@ -219,7 +219,7 @@ describe("Setup a smart contract set using the SDK", () => {
     expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
 
     const privateKeyString = privateKeyCapture.join("\n");
-    expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
-    expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME); // This private is not activated on the node we select
+    expect(privateKeyString).toContain(PRIVATE_KEY_2_NAME);
+    expect(privateKeyString).not.toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME); // This private is not activated on the node we select
   });
 });
