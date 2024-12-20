@@ -28,7 +28,7 @@ export async function blockchainNetworkPrompt(
     return defaultNetwork;
   }
 
-  const network = await select({
+  return select({
     message: "Which blockchain network do you want to connect to?",
     choices: [
       ...networks.map((network) => ({
@@ -42,6 +42,4 @@ export async function blockchainNetworkPrompt(
     ],
     default: defaultNetwork,
   });
-
-  return network;
 }
