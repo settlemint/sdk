@@ -91,7 +91,9 @@ mutation CreateStorage(
   [StorageFragment],
 );
 
-export type CreateStorageArgs = VariablesOf<typeof createStorage>;
+export type CreateStorageArgs = Omit<VariablesOf<typeof createStorage>, "applicationId"> & {
+  applicationUniqueName: string;
+};
 
 const restartStorage = graphql(
   `

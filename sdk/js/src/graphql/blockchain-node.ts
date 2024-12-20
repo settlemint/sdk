@@ -108,7 +108,13 @@ const createBlockchainNode = graphql(
   [BlockchainNodeFragment],
 );
 
-export type CreateBlockchainNodeArgs = VariablesOf<typeof createBlockchainNode>;
+export type CreateBlockchainNodeArgs = Omit<
+  VariablesOf<typeof createBlockchainNode>,
+  "applicationId" | "blockchainNetworkId"
+> & {
+  applicationUniqueName: string;
+  blockchainNetworkUniqueName: string;
+};
 
 const restartBlockchainNode = graphql(
   `

@@ -101,7 +101,9 @@ mutation CreateCustomDeployment(
   [CustomDeploymentFragment],
 );
 
-export type CreateCustomDeploymentArgs = VariablesOf<typeof createCustomDeployment>;
+export type CreateCustomDeploymentArgs = Omit<VariablesOf<typeof createCustomDeployment>, "applicationId"> & {
+  applicationUniqueName: string;
+};
 
 const restartCustomDeployment = graphql(
   `

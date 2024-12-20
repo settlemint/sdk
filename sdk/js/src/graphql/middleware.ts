@@ -116,7 +116,16 @@ const createMiddleware = graphql(
   [MiddlewareFragment],
 );
 
-export type CreateMiddlewareArgs = VariablesOf<typeof createMiddleware>;
+export type CreateMiddlewareArgs = Omit<
+  VariablesOf<typeof createMiddleware>,
+  "applicationId" | "blockchainNode" | "loadBalancer" | "smartContractSet" | "storage"
+> & {
+  applicationUniqueName: string;
+  blockchainNodeUniqueName?: string;
+  loadBalancerUniqueName?: string;
+  smartContractSetUniqueName?: string;
+  storageUniqueName?: string;
+};
 
 const restartMiddleware = graphql(
   `

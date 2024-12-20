@@ -74,7 +74,9 @@ const deleteApplication = graphql(
   [ApplicationFragment],
 );
 
-export type CreateApplicationArgs = VariablesOf<typeof createApplication>;
+export type CreateApplicationArgs = Omit<VariablesOf<typeof createApplication>, "workspaceId"> & {
+  workspaceUniqueName: string;
+};
 
 /**
  * Lists all applications in a workspace.

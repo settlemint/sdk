@@ -98,7 +98,14 @@ const createInsights = graphql(
 /**
  * Arguments for creating insights.
  */
-export type CreateInsightsArgs = VariablesOf<typeof createInsights>;
+export type CreateInsightsArgs = Omit<
+  VariablesOf<typeof createInsights>,
+  "applicationId" | "blockchainNode" | "loadBalancer"
+> & {
+  applicationUniqueName: string;
+  blockchainNodeUniqueName?: string;
+  loadBalancerUniqueName?: string;
+};
 
 const restartInsights = graphql(
   `

@@ -102,75 +102,75 @@ import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-option
 export interface SettlemintClient {
   workspace: {
     list: () => Promise<Workspace[]>;
-    read: (workspaceId: Id) => Promise<Workspace>;
+    read: (workspaceUniqueName: string) => Promise<Workspace>;
     create: (args: CreateWorkspaceArgs) => Promise<Workspace>;
-    delete: (workspaceId: Id) => Promise<Workspace>;
+    delete: (workspaceUniqueName: string) => Promise<Workspace>;
     addCredits: (workspaceId: Id, amount: number) => Promise<boolean>;
   };
   application: {
-    list: (workspaceId: Id) => Promise<Application[]>;
-    read: (applicationId: Id) => Promise<Application>;
+    list: (workspaceUniqueName: string) => Promise<Application[]>;
+    read: (applicationUniqueName: string) => Promise<Application>;
     create: (args: CreateApplicationArgs) => Promise<Application>;
     delete: (applicationId: Id) => Promise<Application>;
   };
   blockchainNetwork: {
-    list: (applicationId: Id) => Promise<BlockchainNetwork[]>;
-    read: (blockchainNetworkId: Id) => Promise<BlockchainNetwork>;
+    list: (applicationUniqueName: string) => Promise<BlockchainNetwork[]>;
+    read: (blockchainNetworkUniqueName: string) => Promise<BlockchainNetwork>;
     create: (args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>;
-    delete: (networkId: Id) => Promise<BlockchainNetwork>;
-    restart: (networkId: Id) => Promise<BlockchainNetwork>;
+    delete: (networkUniqueName: string) => Promise<BlockchainNetwork>;
+    restart: (networkUniqueName: string) => Promise<BlockchainNetwork>;
   };
   blockchainNode: {
-    list: (applicationId: Id) => Promise<BlockchainNode[]>;
-    read: (blockchainNodeId: Id) => Promise<BlockchainNode>;
+    list: (applicationUniqueName: string) => Promise<BlockchainNode[]>;
+    read: (blockchainNodeUniqueName: string) => Promise<BlockchainNode>;
     create: (args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>;
-    restart: (nodeId: Id) => Promise<BlockchainNode>;
+    restart: (nodeUniqueName: string) => Promise<BlockchainNode>;
   };
   middleware: {
-    list: (applicationId: Id) => Promise<Middleware[]>;
-    read: (middlewareId: Id) => Promise<Middleware>;
+    list: (applicationUniqueName: string) => Promise<Middleware[]>;
+    read: (middlewareUniqueName: string) => Promise<Middleware>;
     create: (args: CreateMiddlewareArgs) => Promise<Middleware>;
-    restart: (middlewareId: Id) => Promise<Middleware>;
+    restart: (middlewareUniqueName: string) => Promise<Middleware>;
   };
   integrationTool: {
-    list: (applicationId: Id) => Promise<IntegrationTool[]>;
-    read: (integrationToolId: Id) => Promise<IntegrationTool>;
+    list: (applicationUniqueName: string) => Promise<IntegrationTool[]>;
+    read: (integrationToolUniqueName: string) => Promise<IntegrationTool>;
     create: (args: CreateIntegrationToolArgs) => Promise<IntegrationTool>;
-    restart: (integrationToolId: Id) => Promise<IntegrationTool>;
+    restart: (integrationToolUniqueName: string) => Promise<IntegrationTool>;
   };
   storage: {
-    list: (applicationId: Id) => Promise<Storage[]>;
-    read: (storageId: Id) => Promise<Storage>;
+    list: (applicationUniqueName: string) => Promise<Storage[]>;
+    read: (storageUniqueName: string) => Promise<Storage>;
     create: (args: CreateStorageArgs) => Promise<Storage>;
-    restart: (storageId: Id) => Promise<Storage>;
+    restart: (storageUniqueName: string) => Promise<Storage>;
   };
   privateKey: {
-    list: (applicationId: Id) => Promise<PrivateKey[]>;
-    read: (privateKeyId: Id) => Promise<PrivateKey>;
+    list: (applicationUniqueName: string) => Promise<PrivateKey[]>;
+    read: (privateKeyUniqueName: string) => Promise<PrivateKey>;
     create: (args: CreatePrivateKeyArgs) => Promise<PrivateKey>;
-    restart: (privateKeyId: Id) => Promise<PrivateKey>;
+    restart: (privateKeyUniqueName: string) => Promise<PrivateKey>;
   };
   insights: {
-    list: (applicationId: Id) => Promise<Insights[]>;
-    read: (insightsId: Id) => Promise<Insights>;
+    list: (applicationUniqueName: string) => Promise<Insights[]>;
+    read: (insightsUniqueName: string) => Promise<Insights>;
     create: (args: CreateInsightsArgs) => Promise<Insights>;
-    restart: (insightsId: Id) => Promise<Insights>;
+    restart: (insightsUniqueName: string) => Promise<Insights>;
   };
   customDeployment: {
-    list: (applicationId: Id) => Promise<CustomDeployment[]>;
-    read: (customDeploymentId: Id) => Promise<CustomDeployment>;
+    list: (applicationUniqueName: string) => Promise<CustomDeployment[]>;
+    read: (customDeploymentUniqueName: string) => Promise<CustomDeployment>;
     create: (args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>;
-    update: (customDeploymentId: Id, imageTag: string) => Promise<CustomDeployment>;
-    restart: (customDeploymentId: Id) => Promise<CustomDeployment>;
+    update: (customDeploymentUniqueName: string, imageTag: string) => Promise<CustomDeployment>;
+    restart: (customDeploymentUniqueName: string) => Promise<CustomDeployment>;
   };
   smartContractSet: {
-    list: (applicationId: Id) => Promise<SmartContractSet[]>;
-    read: (smartContractSetId: Id) => Promise<SmartContractSet>;
+    list: (applicationUniqueName: string) => Promise<SmartContractSet[]>;
+    read: (smartContractSetUniqueName: string) => Promise<SmartContractSet>;
     create: (args: CreateSmartContractSetArgs) => Promise<SmartContractSet>;
-    restart: (smartContractSetId: Id) => Promise<SmartContractSet>;
+    restart: (smartContractSetUniqueName: string) => Promise<SmartContractSet>;
   };
   foundry: {
-    env: (blockchainNodeId: Id) => Promise<Record<string, string>>;
+    env: (blockchainNodeUniqueName: string) => Promise<Record<string, string>>;
   };
   applicationAccessToken: {
     create: (args: CreateApplicationAccessTokenArgs) => Promise<string>;

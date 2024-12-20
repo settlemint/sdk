@@ -83,7 +83,10 @@ const createPrivateKey = graphql(
   [PrivateKeyFragment],
 );
 
-export type CreatePrivateKeyArgs = VariablesOf<typeof createPrivateKey>;
+export type CreatePrivateKeyArgs = Omit<VariablesOf<typeof createPrivateKey>, "applicationId" | "blockchainNodes"> & {
+  applicationUniqueName: string;
+  blockchainNodeUniqueNames?: string[];
+};
 
 const restartPrivateKey = graphql(
   `

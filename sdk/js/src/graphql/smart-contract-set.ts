@@ -91,7 +91,13 @@ const createSmartContractSet = graphql(
   [SmartContractSetFragment],
 );
 
-export type CreateSmartContractSetArgs = VariablesOf<typeof createSmartContractSet>;
+export type CreateSmartContractSetArgs = Omit<
+  VariablesOf<typeof createSmartContractSet>,
+  "applicationId" | "blockchainNodeId"
+> & {
+  applicationUniqueName: string;
+  blockchainNodeUniqueName: string;
+};
 
 /**
  * GraphQL mutation to restart a smart contract set.

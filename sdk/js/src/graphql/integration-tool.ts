@@ -94,7 +94,14 @@ const createIntegration = graphql(
 /**
  * Arguments for creating an integration tool.
  */
-export type CreateIntegrationToolArgs = VariablesOf<typeof createIntegration>;
+export type CreateIntegrationToolArgs = Omit<
+  VariablesOf<typeof createIntegration>,
+  "applicationId" | "blockchainNode" | "loadBalancer"
+> & {
+  applicationUniqueName: string;
+  blockchainNodeUniqueName?: string;
+  loadBalancerUniqueName?: string;
+};
 
 const restartIntegrationTool = graphql(
   `

@@ -128,7 +128,9 @@ const createBlockchainNetwork = graphql(
 /**
  * Arguments required to create a blockchain network.
  */
-export type CreateBlockchainNetworkArgs = VariablesOf<typeof createBlockchainNetwork>;
+export type CreateBlockchainNetworkArgs = Omit<VariablesOf<typeof createBlockchainNetwork>, "applicationId"> & {
+  applicationUniqueName: string;
+};
 
 /**
  * GraphQL mutation to delete a blockchain network.
