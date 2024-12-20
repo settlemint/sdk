@@ -1,7 +1,9 @@
+import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
+import { blockchainNodeRead } from "./blockchain-node.js";
 
 /**
  * Fragment for the SmartContractSet type.
@@ -166,12 +168,19 @@ export const smartContractSetCreate = (
   options: ClientOptions,
 ): ((args: CreateSmartContractSetArgs) => Promise<SmartContractSet>) => {
   return async (args: CreateSmartContractSetArgs) => {
-    validate(IdSchema, args.applicationId);
-    validate(IdSchema, args.blockchainNodeId);
     if (typeof args.userId === "string") {
       validate(IdSchema, args.userId);
     }
-    const { createSmartContractSet: smartContractSet } = await gqlClient.request(createSmartContractSet, args);
+    const { applicationUniqueName, blockchainNodeUniqueName, ...otherArgs } = args;
+    const [application, blockchainNode] = await Promise.all([
+      applicationRead(gqlClient, options)(applicationUniqueName),
+      blockchainNodeRead(gqlClient, options)(blockchainNodeUniqueName),
+    ]);
+    const { createSmartContractSet: smartContractSet } = await gqlClient.request(createSmartContractSet, {
+      ...otherArgs,
+      applicationId: application.id,
+      blockchainNodeId: blockchainNode.id,
+    });
     return smartContractSet;
   };
 };

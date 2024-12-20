@@ -1,3 +1,4 @@
+import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
@@ -189,8 +190,12 @@ export const insightsCreate = (
   options: ClientOptions,
 ): ((args: CreateInsightsArgs) => Promise<Insights>) => {
   return async (args: CreateInsightsArgs) => {
-    validate(IdSchema, args.applicationId);
-    const { createInsights: insights } = await gqlClient.request(createInsights, args);
+    const { applicationUniqueName, ...otherArgs } = args;
+    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const { createInsights: insights } = await gqlClient.request(createInsights, {
+      ...otherArgs,
+      applicationId: application.id,
+    });
     return insights;
   };
 };

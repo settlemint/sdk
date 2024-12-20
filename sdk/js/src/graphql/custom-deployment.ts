@@ -1,3 +1,4 @@
+import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
@@ -187,8 +188,12 @@ export const customdeploymentCreate = (
   options: ClientOptions,
 ): ((args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>) => {
   return async (args: CreateCustomDeploymentArgs) => {
-    validate(IdSchema, args.applicationId);
-    const { createCustomDeployment: customDeployment } = await gqlClient.request(createCustomDeployment, args);
+    const { applicationUniqueName, ...otherArgs } = args;
+    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const { createCustomDeployment: customDeployment } = await gqlClient.request(createCustomDeployment, {
+      ...otherArgs,
+      applicationId: application.id,
+    });
     return customDeployment;
   };
 };

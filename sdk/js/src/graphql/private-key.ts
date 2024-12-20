@@ -1,3 +1,4 @@
+import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
@@ -161,8 +162,12 @@ export const privateKeyCreate = (
   options: ClientOptions,
 ): ((args: CreatePrivateKeyArgs) => Promise<PrivateKey>) => {
   return async (args: CreatePrivateKeyArgs) => {
-    validate(IdSchema, args.applicationId);
-    const { createPrivateKey: privateKey } = await gqlClient.request(createPrivateKey, args);
+    const { applicationUniqueName, ...otherArgs } = args;
+    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const { createPrivateKey: privateKey } = await gqlClient.request(createPrivateKey, {
+      ...otherArgs,
+      applicationId: application.id,
+    });
     return privateKey;
   };
 };

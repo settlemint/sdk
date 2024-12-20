@@ -14128,6 +14128,9 @@ type Mutation {
     """The unique identifier of the entity"""
     entityId: ID!
   ): BlockchainNetworkType!
+
+  """Delete a BlockchainNetwork service by unique name"""
+  deleteBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
   deleteBlockchainNetworkInvite(
     """The ID of the blockchain network invite to delete"""
     inviteId: ID!
@@ -14148,11 +14151,17 @@ type Mutation {
     entityId: ID!
   ): BlockchainNodeType!
 
+  """Delete a BlockchainNode service by unique name"""
+  deleteBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
+
   """Delete a CustomDeployment service"""
   deleteCustomDeployment(
     """The unique identifier of the entity"""
     entityId: ID!
   ): CustomDeployment!
+
+  """Delete a CustomDeployment service by unique name"""
+  deleteCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
 
   """Delete a Insights service"""
   deleteInsights(
@@ -14160,11 +14169,17 @@ type Mutation {
     entityId: ID!
   ): InsightsTypeUnion!
 
+  """Delete a Insights service by unique name"""
+  deleteInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
+
   """Delete a Integration service"""
   deleteIntegration(
     """The unique identifier of the entity"""
     entityId: ID!
   ): IntegrationTypeUnion!
+
+  """Delete a Integration service by unique name"""
+  deleteIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
 
   """Delete a LoadBalancer service"""
   deleteLoadBalancer(
@@ -14172,11 +14187,17 @@ type Mutation {
     entityId: ID!
   ): LoadBalancerType!
 
+  """Delete a LoadBalancer service by unique name"""
+  deleteLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
+
   """Delete a Middleware service"""
   deleteMiddleware(
     """The unique identifier of the entity"""
     entityId: ID!
   ): MiddlewareUnionType!
+
+  """Delete a Middleware service by unique name"""
+  deleteMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
   deletePersonalAccessToken(id: String!): Boolean!
 
   """Delete a private key service"""
@@ -14184,6 +14205,9 @@ type Mutation {
     """The unique identifier of the entity"""
     entityId: ID!
   ): PrivateKeyUnionType!
+
+  """Delete a PrivateKey service by unique name"""
+  deletePrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
   deletePrivateKeyVerification(id: String!): Boolean!
 
   """Delete a smart contract portal middleware ABI"""
@@ -14198,11 +14222,17 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
+  """Delete a SmartContractSet service by unique name"""
+  deleteSmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
+
   """Delete a Storage service"""
   deleteStorage(
     """The unique identifier of the entity"""
     entityId: ID!
   ): StorageType!
+
+  """Delete a Storage service by unique name"""
+  deleteStorageByUniqueName(uniqueName: String!): StorageType!
   deleteUserWallet(id: String!): UserWallet!
   deleteUserWalletVerification(id: String!): Boolean!
   deleteWorkspace(workspaceId: ID!): Workspace!
@@ -14311,6 +14341,50 @@ type Mutation {
     The primary domain for the custom deployment. If none is set, the first custom domain or internal domain is used.
     """
     primaryDomain: String
+  ): CustomDeployment!
+
+  """Edit a Custom Deployment service by unique name"""
+  editCustomDeploymentByUniqueName(
+    """Advanced deployment configuration for the cluster service"""
+    advancedDeploymentConfig: AdvancedDeploymentConfigInput
+
+    """Custom domains for the deployment"""
+    customDomains: [String!]
+
+    """Disable authentication for the custom deployment"""
+    disableAuth: Boolean = true
+
+    """Environment variables for the custom deployment"""
+    environmentVariables: JSON
+
+    """Access token for image credentials"""
+    imageCredentialsAccessToken: String
+
+    """Username for image credentials"""
+    imageCredentialsUsername: String
+
+    """The name of the Docker image"""
+    imageName: String
+
+    """The repository of the Docker image"""
+    imageRepository: String
+
+    """The tag of the Docker image"""
+    imageTag: String
+
+    """New name for the cluster service"""
+    name: String
+
+    """The port number for the custom deployment"""
+    port: Int
+
+    """
+    The primary domain for the custom deployment. If none is set, the first custom domain or internal domain is used.
+    """
+    primaryDomain: String
+
+    """The unique name of the custom deployment"""
+    uniqueName: String!
   ): CustomDeployment!
 
   """Edit a Insights service"""
@@ -14481,11 +14555,17 @@ type Mutation {
     entityId: ID!
   ): BlockchainNetworkType!
 
+  """Pause BlockchainNetwork service by unique name"""
+  pauseBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
+
   """Pause a BlockchainNode service"""
   pauseBlockchainNode(
     """The unique identifier of the entity"""
     entityId: ID!
   ): BlockchainNodeType!
+
+  """Pause BlockchainNode service by unique name"""
+  pauseBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
 
   """Pause a CustomDeployment service"""
   pauseCustomDeployment(
@@ -14493,11 +14573,17 @@ type Mutation {
     entityId: ID!
   ): CustomDeployment!
 
+  """Pause CustomDeployment service by unique name"""
+  pauseCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
+
   """Pause a Insights service"""
   pauseInsights(
     """The unique identifier of the entity"""
     entityId: ID!
   ): InsightsTypeUnion!
+
+  """Pause Insights service by unique name"""
+  pauseInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
 
   """Pause a Integration service"""
   pauseIntegration(
@@ -14505,11 +14591,17 @@ type Mutation {
     entityId: ID!
   ): IntegrationTypeUnion!
 
+  """Pause Integration service by unique name"""
+  pauseIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
+
   """Pause a LoadBalancer service"""
   pauseLoadBalancer(
     """The unique identifier of the entity"""
     entityId: ID!
   ): LoadBalancerType!
+
+  """Pause LoadBalancer service by unique name"""
+  pauseLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
 
   """Pause a Middleware service"""
   pauseMiddleware(
@@ -14517,11 +14609,17 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
+  """Pause Middleware service by unique name"""
+  pauseMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
+
   """Pause a private key service"""
   pausePrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
   ): PrivateKeyUnionType!
+
+  """Pause PrivateKey service by unique name"""
+  pausePrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
 
   """Pause a SmartContractSet service"""
   pauseSmartContractSet(
@@ -14529,11 +14627,17 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
+  """Pause SmartContractSet service by unique name"""
+  pauseSmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
+
   """Pause a Storage service"""
   pauseStorage(
     """The unique identifier of the entity"""
     entityId: ID!
   ): StorageType!
+
+  """Pause Storage service by unique name"""
+  pauseStorageByUniqueName(uniqueName: String!): StorageType!
 
   """Restart BlockchainNetwork service"""
   restartBlockchainNetwork(
@@ -14541,11 +14645,17 @@ type Mutation {
     entityId: ID!
   ): BlockchainNetworkType!
 
+  """Restart BlockchainNetwork service by unique name"""
+  restartBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
+
   """Restart BlockchainNode service"""
   restartBlockchainNode(
     """The unique identifier of the entity"""
     entityId: ID!
   ): BlockchainNodeType!
+
+  """Restart BlockchainNode service by unique name"""
+  restartBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
 
   """Restart CustomDeployment service"""
   restartCustomDeployment(
@@ -14553,11 +14663,17 @@ type Mutation {
     entityId: ID!
   ): CustomDeployment!
 
+  """Restart CustomDeployment service by unique name"""
+  restartCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
+
   """Restart Insights service"""
   restartInsights(
     """The unique identifier of the entity"""
     entityId: ID!
   ): InsightsTypeUnion!
+
+  """Restart Insights service by unique name"""
+  restartInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
 
   """Restart Integration service"""
   restartIntegration(
@@ -14565,11 +14681,17 @@ type Mutation {
     entityId: ID!
   ): IntegrationTypeUnion!
 
+  """Restart Integration service by unique name"""
+  restartIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
+
   """Restart LoadBalancer service"""
   restartLoadBalancer(
     """The unique identifier of the entity"""
     entityId: ID!
   ): LoadBalancerType!
+
+  """Restart LoadBalancer service by unique name"""
+  restartLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
 
   """Restart Middleware service"""
   restartMiddleware(
@@ -14577,11 +14699,17 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
+  """Restart Middleware service by unique name"""
+  restartMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
+
   """Restart a private key service"""
   restartPrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
   ): PrivateKeyUnionType!
+
+  """Restart PrivateKey service by unique name"""
+  restartPrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
 
   """Restart SmartContractSet service"""
   restartSmartContractSet(
@@ -14589,11 +14717,17 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
+  """Restart SmartContractSet service by unique name"""
+  restartSmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
+
   """Restart Storage service"""
   restartStorage(
     """The unique identifier of the entity"""
     entityId: ID!
   ): StorageType!
+
+  """Restart Storage service by unique name"""
+  restartStorageByUniqueName(uniqueName: String!): StorageType!
 
   """Resume a BlockchainNetwork service"""
   resumeBlockchainNetwork(
@@ -14601,11 +14735,17 @@ type Mutation {
     entityId: ID!
   ): BlockchainNetworkType!
 
+  """Resume BlockchainNetwork service by unique name"""
+  resumeBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
+
   """Resume a BlockchainNode service"""
   resumeBlockchainNode(
     """The unique identifier of the entity"""
     entityId: ID!
   ): BlockchainNodeType!
+
+  """Resume BlockchainNode service by unique name"""
+  resumeBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
 
   """Resume a CustomDeployment service"""
   resumeCustomDeployment(
@@ -14613,11 +14753,17 @@ type Mutation {
     entityId: ID!
   ): CustomDeployment!
 
+  """Resume CustomDeployment service by unique name"""
+  resumeCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
+
   """Resume a Insights service"""
   resumeInsights(
     """The unique identifier of the entity"""
     entityId: ID!
   ): InsightsTypeUnion!
+
+  """Resume Insights service by unique name"""
+  resumeInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
 
   """Resume a Integration service"""
   resumeIntegration(
@@ -14625,11 +14771,17 @@ type Mutation {
     entityId: ID!
   ): IntegrationTypeUnion!
 
+  """Resume Integration service by unique name"""
+  resumeIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
+
   """Resume a LoadBalancer service"""
   resumeLoadBalancer(
     """The unique identifier of the entity"""
     entityId: ID!
   ): LoadBalancerType!
+
+  """Resume LoadBalancer service by unique name"""
+  resumeLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
 
   """Resume a Middleware service"""
   resumeMiddleware(
@@ -14637,11 +14789,17 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
+  """Resume Middleware service by unique name"""
+  resumeMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
+
   """Resume a private key service"""
   resumePrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
   ): PrivateKeyUnionType!
+
+  """Resume PrivateKey service by unique name"""
+  resumePrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
 
   """Resume a SmartContractSet service"""
   resumeSmartContractSet(
@@ -14649,11 +14807,17 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
+  """Resume SmartContractSet service by unique name"""
+  resumeSmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
+
   """Resume a Storage service"""
   resumeStorage(
     """The unique identifier of the entity"""
     entityId: ID!
   ): StorageType!
+
+  """Resume Storage service by unique name"""
+  resumeStorageByUniqueName(uniqueName: String!): StorageType!
 
   """Retry deployment of BlockchainNetwork service"""
   retryBlockchainNetwork(
@@ -14661,11 +14825,17 @@ type Mutation {
     entityId: ID!
   ): BlockchainNetworkType!
 
+  """Retry deployment of BlockchainNetwork service by unique name"""
+  retryBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
+
   """Retry deployment of BlockchainNode service"""
   retryBlockchainNode(
     """The unique identifier of the entity"""
     entityId: ID!
   ): BlockchainNodeType!
+
+  """Retry deployment of BlockchainNode service by unique name"""
+  retryBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
 
   """Retry deployment of CustomDeployment service"""
   retryCustomDeployment(
@@ -14673,11 +14843,17 @@ type Mutation {
     entityId: ID!
   ): CustomDeployment!
 
+  """Retry deployment of CustomDeployment service by unique name"""
+  retryCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
+
   """Retry deployment of Insights service"""
   retryInsights(
     """The unique identifier of the entity"""
     entityId: ID!
   ): InsightsTypeUnion!
+
+  """Retry deployment of Insights service by unique name"""
+  retryInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
 
   """Retry deployment of Integration service"""
   retryIntegration(
@@ -14685,11 +14861,17 @@ type Mutation {
     entityId: ID!
   ): IntegrationTypeUnion!
 
+  """Retry deployment of Integration service by unique name"""
+  retryIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
+
   """Retry deployment of LoadBalancer service"""
   retryLoadBalancer(
     """The unique identifier of the entity"""
     entityId: ID!
   ): LoadBalancerType!
+
+  """Retry deployment of LoadBalancer service by unique name"""
+  retryLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
 
   """Retry deployment of Middleware service"""
   retryMiddleware(
@@ -14697,11 +14879,17 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
+  """Retry deployment of Middleware service by unique name"""
+  retryMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
+
   """Retry a private key service"""
   retryPrivateKey(
     """The unique identifier of the entity"""
     entityId: ID!
   ): PrivateKeyUnionType!
+
+  """Retry deployment of PrivateKey service by unique name"""
+  retryPrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
 
   """Retry deployment of SmartContractSet service"""
   retrySmartContractSet(
@@ -14709,11 +14897,17 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
+  """Retry deployment of SmartContractSet service by unique name"""
+  retrySmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
+
   """Retry deployment of Storage service"""
   retryStorage(
     """The unique identifier of the entity"""
     entityId: ID!
   ): StorageType!
+
+  """Retry deployment of Storage service by unique name"""
+  retryStorageByUniqueName(uniqueName: String!): StorageType!
 
   """Scale a BlockchainNetwork service"""
   scaleBlockchainNetwork(
@@ -19102,6 +19296,7 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedApplicationAccessTokens!
+  applicationByUniqueName(uniqueName: String!): Application!
 
   """Get cost breakdown for application"""
   applicationCosts(applicationId: ID!, subtractMonth: Int! = 0): ApplicationCostsInfo!
@@ -19144,10 +19339,34 @@ type Query {
     entityId: ID!
   ): BlockchainNetworkType!
 
+  """Get a BlockchainNetwork service by unique name"""
+  blockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
+
   """List the BlockchainNetwork services for an application"""
   blockchainNetworks(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedBlockchainNetworks!
+
+  """List the BlockchainNetwork services for an application by unique name"""
+  blockchainNetworksByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19171,10 +19390,34 @@ type Query {
     entityId: ID!
   ): BlockchainNodeType!
 
+  """Get a BlockchainNode service by unique name"""
+  blockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
+
   """List the BlockchainNode services for an application"""
   blockchainNodes(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedBlockchainNodes!
+
+  """List the BlockchainNode services for an application by unique name"""
+  blockchainNodesByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19205,6 +19448,9 @@ type Query {
     entityId: ID!
   ): CustomDeployment!
 
+  """Get a CustomDeployment service by unique name"""
+  customDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
+
   """List the CustomDeployment services for an application"""
   customDeployments(
     """Unique identifier of the application"""
@@ -19225,7 +19471,29 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedCustomDeployment!
+
+  """List the CustomDeployment services for an application by unique name"""
+  customDeploymentsByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedCustomDeployment!
   foundryEnvConfig(blockchainNodeId: String!): JSON!
+  foundryEnvConfigByUniqueName(blockchainNodeUniqueName: String!): JSON!
   getUseCases: [UseCaseDto!]!
   getUser(userId: ID): User!
 
@@ -19235,10 +19503,34 @@ type Query {
     entityId: ID!
   ): InsightsTypeUnion!
 
+  """Get a Insights service by unique name"""
+  insightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
+
   """List the Insights services for an application"""
   insightsList(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedInsightss!
+
+  """List the Insights services for an application by unique name"""
+  insightsListByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19262,10 +19554,34 @@ type Query {
     entityId: ID!
   ): IntegrationTypeUnion!
 
+  """Get a Integration service by unique name"""
+  integrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
+
   """List the Integration services for an application"""
   integrations(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedIntegrations!
+
+  """List the Integration services for an application by unique name"""
+  integrationsByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19293,10 +19609,34 @@ type Query {
     entityId: ID!
   ): LoadBalancerType!
 
+  """Get a LoadBalancer service by unique name"""
+  loadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
+
   """List the LoadBalancer services for an application"""
   loadBalancers(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedLoadBalancers!
+
+  """List the LoadBalancer services for an application by unique name"""
+  loadBalancersByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19330,10 +19670,34 @@ type Query {
     entityId: ID!
   ): MiddlewareUnionType!
 
+  """Get a Middleware service by unique name"""
+  middlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
+
   """List the Middleware services for an application"""
   middlewares(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedMiddlewares!
+
+  """List the Middleware services for an application by unique name"""
+  middlewaresByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19370,10 +19734,34 @@ type Query {
     entityId: ID!
   ): PrivateKeyUnionType!
 
+  """Get a PrivateKey service by unique name"""
+  privateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
+
   """List the PrivateKey services for an application"""
   privateKeys(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedPrivateKeys!
+
+  """List the PrivateKey services for an application by unique name"""
+  privateKeysByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19421,10 +19809,34 @@ type Query {
     entityId: ID!
   ): SmartContractSetType!
 
+  """Get a SmartContractSet service by unique name"""
+  smartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
+
   """List the SmartContractSet services for an application"""
   smartContractSets(
     """Unique identifier of the application"""
     applicationId: ID!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedSmartContractSets!
+
+  """List the SmartContractSet services for an application by unique name"""
+  smartContractSetsByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
 
     """Maximum number of items to return"""
     limit: Int
@@ -19448,6 +19860,9 @@ type Query {
     entityId: ID!
   ): StorageType!
 
+  """Get a Storage service by unique name"""
+  storageByUniqueName(uniqueName: String!): StorageType!
+
   """List the Storage services for an application"""
   storages(
     """Unique identifier of the application"""
@@ -19468,9 +19883,31 @@ type Query {
     """Field to order by in descending order"""
     orderByDesc: String
   ): PaginatedStorages!
+
+  """List the Storage services for an application by unique name"""
+  storagesByUniqueName(
+    """Unique name of the application"""
+    applicationUniqueName: String!
+
+    """Maximum number of items to return"""
+    limit: Int
+
+    """Number of items to skip before starting to collect the result set"""
+    offset: Int! = 0
+
+    """Additional options for listing cluster services"""
+    options: ListClusterServiceOptions
+
+    """Field to order by in ascending order"""
+    orderByAsc: String
+
+    """Field to order by in descending order"""
+    orderByDesc: String
+  ): PaginatedStorages!
   userWallet(id: String!): UserWallet!
   webhookConsumers(middlewareId: ID!): [SmartContractPortalWebhookConsumer!]!
   workspace(includeChildren: Boolean, workspaceId: ID!): Workspace!
+  workspaceByUniqueName(includeChildren: Boolean, uniqueName: String!): Workspace!
   workspaces(includeChildren: Boolean, includeParent: Boolean, onlyActiveWorkspaces: Boolean, reporting: Boolean): [Workspace!]!
 }
 
