@@ -34,11 +34,11 @@ export function graphMiddlewareCreateCommand() {
             return {
               result,
               mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                const resource = await settlemint.middleware.read(result.id);
+                const graphMiddleware = await settlemint.middleware.read(result.uniqueName);
                 return {
                   SETTLEMINT_APPLICATION: application,
                   SETTLEMINT_THEGRAPH: result.uniqueName,
-                  ...(await getGraphEndpoint(resource, env)),
+                  ...(await getGraphEndpoint(graphMiddleware, env)),
                 };
               },
             };
