@@ -48,7 +48,7 @@ export function blockchainNodeBesuCreateCommand() {
             return baseAction(defaultArgs, async (settlemint, env) => {
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
               if (!application) {
-                cancel("No application found");
+                cancel("No application found. Please specify an application or run `settlemint connect` to continue.");
               }
 
               let networkId = blockchainNetworkId ?? (acceptDefaults ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
@@ -56,7 +56,7 @@ export function blockchainNodeBesuCreateCommand() {
                 const networks = await settlemint.blockchainNetwork.list(application);
                 const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
                 if (!network) {
-                  cancel("No network found");
+                  cancel("No network found. Please specify a network to continue.");
                 }
                 networkId = network?.id;
               }
