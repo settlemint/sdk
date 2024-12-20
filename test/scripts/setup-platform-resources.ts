@@ -12,7 +12,10 @@ import {
   IPFS_NAME,
   NETWORK_NAME,
   NODE_NAME,
+  NODE_NAME_2_WITH_PK,
+  NODE_NAME_3_WITHOUT_PK,
   PORTAL_NAME,
+  PRIVATE_KEY_2_NAME,
   PRIVATE_KEY_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAME,
   WORKSPACE_NAME,
@@ -75,26 +78,38 @@ beforeAll(async () => {
 
 afterAll(cleanup);
 
-async function resourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
+async function setupSettleMintClient() {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  return createSettleMintClient({
+    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+    instance: env.SETTLEMINT_INSTANCE!,
+  });
+}
+
+async function defaultResourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
   const env: Partial<DotEnv> = await loadEnv(false, false);
   return envNames.every((envName) => env[envName] !== undefined);
+}
+
+async function findBlockchainNodeByName(blockchainNodeName: string) {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  const settlemint = await setupSettleMintClient();
+  const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+  return nodes.find((node) => node.name === blockchainNodeName);
 }
 
 async function addWorkspaceCredits() {
   // Add some credits so the workspace will not be auto paused
   const env: Partial<DotEnv> = await loadEnv(false, false);
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
-  const settlemint = createSettleMintClient({
-    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
-    instance: env.SETTLEMINT_INSTANCE!,
-  });
+  const settlemint = await setupSettleMintClient();
   if (!isLocalEnv()) {
     await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 100);
   }
 }
 
 async function createWorkspaceAndApplication() {
-  const hasWorkspace = await resourceAlreadyCreated(["SETTLEMINT_WORKSPACE"]);
+  const hasWorkspace = await defaultResourceAlreadyCreated(["SETTLEMINT_WORKSPACE"]);
   if (!hasWorkspace) {
     const { output: workspaceOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -122,7 +137,7 @@ async function createWorkspaceAndApplication() {
     await addWorkspaceCredits();
   }
 
-  const hasApplication = await resourceAlreadyCreated(["SETTLEMINT_APPLICATION"]);
+  const hasApplication = await defaultResourceAlreadyCreated(["SETTLEMINT_APPLICATION"]);
   if (!hasApplication) {
     const { output: applicationOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -137,10 +152,11 @@ async function createWorkspaceAndApplication() {
 }
 
 async function createBlockchainNodeAndIpfs() {
-  const hasBlockchainNetwork = await resourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NETWORK"]);
-  const hasBlockchainNode = await resourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
-  const hasHasuraIntegration = await resourceAlreadyCreated(["SETTLEMINT_HASURA"]);
-  const hasIpfsStorage = await resourceAlreadyCreated(["SETTLEMINT_IPFS"]);
+  const hasBlockchainNetwork = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NETWORK"]);
+  const hasBlockchainNode = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
+
+  const hasHasuraIntegration = await defaultResourceAlreadyCreated(["SETTLEMINT_HASURA"]);
+  const hasIpfsStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_IPFS"]);
   const results = await deployResources([
     () =>
       hasBlockchainNetwork && hasBlockchainNode
@@ -225,6 +241,60 @@ async function createBlockchainNodeAndIpfs() {
     expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
   }
 
+  let blockchainNodeWithPk = await findBlockchainNodeByName(NODE_NAME_2_WITH_PK);
+  if (!blockchainNodeWithPk) {
+    const { output: nodeWithPkCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "blockchain-node",
+      "besu",
+      NODE_NAME_2_WITH_PK,
+      "--accept-defaults",
+      "--provider",
+      CLUSTER_PROVIDER,
+      "--region",
+      CLUSTER_REGION,
+    ]).result;
+
+    expect(nodeWithPkCreateCommandOutput).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
+
+    blockchainNodeWithPk = await findBlockchainNodeByName(NODE_NAME_2_WITH_PK);
+    const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "private-key",
+      "hsm-ecdsa-p256",
+      "--blockchain-node-id",
+      blockchainNodeWithPk!.id,
+      "--accept-defaults",
+      "--provider",
+      CLUSTER_PROVIDER,
+      "--region",
+      CLUSTER_REGION,
+      PRIVATE_KEY_2_NAME,
+    ]).result;
+    expect(privateKeyHsmCreateCommandOutput).toInclude(`Private key ${PRIVATE_KEY_2_NAME} created successfully`);
+  }
+
+  const blockchainNodeWithoutPk = await findBlockchainNodeByName(NODE_NAME_3_WITHOUT_PK);
+  if (!blockchainNodeWithoutPk) {
+    const { output: nodeWithoutPkCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "blockchain-node",
+      "besu",
+      NODE_NAME_3_WITHOUT_PK,
+      "--accept-defaults",
+      "--provider",
+      CLUSTER_PROVIDER,
+      "--region",
+      CLUSTER_REGION,
+    ]).result;
+    expect(nodeWithoutPkCreateCommandOutput).toInclude(
+      `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
+    );
+  }
+
   expect([networkResult?.status, hasuraResult?.status, ipfsResult?.status]).toEqual([
     "fulfilled",
     "fulfilled",
@@ -243,9 +313,9 @@ async function createBlockchainNodeAndIpfs() {
 }
 
 async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
-  const hasPrivateKey = await resourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
-  const hasPortalMiddleware = await resourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
-  const hasBlockscoutInsights = await resourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
+  const hasPrivateKey = await defaultResourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
+  const hasPortalMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
+  const hasBlockscoutInsights = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
   const results = await deployResources([
@@ -335,7 +405,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
 }
 
 async function createGraphMiddleware() {
-  const hasGraphMiddleware = await resourceAlreadyCreated(["SETTLEMINT_THEGRAPH"]);
+  const hasGraphMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_THEGRAPH"]);
   if (hasGraphMiddleware) {
     return;
   }
@@ -374,7 +444,7 @@ async function logout() {
 }
 
 async function createApplicationAccessToken() {
-  const hasAat = await resourceAlreadyCreated(["SETTLEMINT_ACCESS_TOKEN"]);
+  const hasAat = await defaultResourceAlreadyCreated(["SETTLEMINT_ACCESS_TOKEN"]);
   if (hasAat) {
     return;
   }
