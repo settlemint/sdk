@@ -101,7 +101,7 @@ export function connectCommand(): Command {
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           SETTLEMINT_MINIO: minio?.uniqueName,
           ...getMinioEndpoints(minio),
-          SETTLEMINT_IPFS: ipfs?.id,
+          SETTLEMINT_IPFS: ipfs?.uniqueName,
           ...getIpfsEndpoints(ipfs),
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.uniqueName,
           SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) =>
