@@ -64,7 +64,7 @@ export function hardhatDeployRemoteCommand() {
         }
 
         const nodesWithPrivateKey = await Promise.all(
-          blockchainNodes.map((node) => settlemint.blockchainNode.read(node.id)),
+          blockchainNodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)),
         );
         const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
           (node) => node.privateKeys && node.privateKeys.length > 0,
@@ -84,7 +84,7 @@ export function hardhatDeployRemoteCommand() {
         node = await settlemint.blockchainNode.read(blockchainNodeUniqueName);
       }
 
-      const envConfig = await settlemint.foundry.env(node.id);
+      const envConfig = await settlemint.foundry.env(node.uniqueName);
       const hardhatConfig = await getHardhatConfigData(envConfig);
       if (verify && !hardhatConfig?.etherscan?.apiKey) {
         cancel(
