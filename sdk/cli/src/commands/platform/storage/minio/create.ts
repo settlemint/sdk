@@ -33,7 +33,7 @@ export function minioStorageCreateCommand() {
               mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
                   SETTLEMINT_APPLICATION: application,
-                  SETTLEMINT_MINIO: result.id,
+                  SETTLEMINT_MINIO: result.uniqueName,
                   ...getMinioEndpoints(result),
                 };
               },
@@ -48,7 +48,7 @@ export function minioStorageCreateCommand() {
       },
       {
         description: "Create a MinIO storage in a different application",
-        command: "platform create storage minio my-storage --application-id app-123",
+        command: "platform create storage minio my-storage --application app-123",
       },
     ],
   });

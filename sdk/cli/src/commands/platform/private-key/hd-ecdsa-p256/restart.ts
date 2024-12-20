@@ -11,8 +11,8 @@ export function hdEcdsaP256RestartCommand() {
     subType: "hd-ecdsa-p256",
     alias: "hd",
     envKey: "SETTLEMINT_HD_PRIVATE_KEY",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.privateKey.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.privateKey.restart(uniqueName);
     },
   });
 }
