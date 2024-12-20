@@ -422,6 +422,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
 
   if (blockscoutResult?.status === "fulfilled" && blockscoutResult.value) {
     expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
+    expect(blockscoutResult.value.output).toInclude("Insights is deployed");
   }
 
   if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
