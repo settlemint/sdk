@@ -190,7 +190,7 @@ describe("Setup a smart contract set using the SDK", () => {
         nodeListCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // This selects the second option
+        resetCommand.stdin.write("\n"); // Selects the default option - env.SETTLEMINT_BLOCKCHAIN_NODE
         resetCommand.stdin.uncork();
       }
 
@@ -198,7 +198,7 @@ describe("Setup a smart contract set using the SDK", () => {
         privateKeyCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // This selects the first option again
+        resetCommand.stdin.write("\n"); // Selects the one and only private key activated on env.SETTLEMINT_BLOCKCHAIN_NODE - PRIVATE_KEY_SMART_CONTRACTS_NAME
         resetCommand.stdin.uncork();
       }
 
