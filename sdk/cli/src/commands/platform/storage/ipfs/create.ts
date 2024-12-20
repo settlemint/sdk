@@ -47,7 +47,7 @@ export function ipfsStorageCreateCommand() {
       },
       {
         description: "Create an IPFS storage in a different application",
-        command: "platform create storage ipfs my-storage --application-id app-123",
+        command: "platform create storage ipfs my-storage --application app-123",
       },
     ],
   });

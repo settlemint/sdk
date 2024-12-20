@@ -45,7 +45,7 @@ export function applicationCreateCommand() {
       },
       {
         description: "Create an application in a specific workspace",
-        command: "platform create application my-app --workspace-id 123456789",
+        command: "platform create application my-app --workspace my-workspace",
       },
     ],
   });

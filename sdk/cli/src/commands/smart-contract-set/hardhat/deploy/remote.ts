@@ -23,8 +23,8 @@ export function hardhatDeployRemoteCommand() {
     .option("--parameters <parameters>", "A relative path to a JSON file to use for the module parameters")
     .option("--strategy <strategy>", `Set the deployment strategy to use (default: "basic")`)
     .option(
-      "--blockchain-node-id <blockchainNodeId>",
-      "Blockchain Node ID (optional, defaults to the blockchain node in the environment)",
+      "--blockchain-node <blockchainNode>",
+      "Blockchain Node unique name (optional, defaults to the blockchain node in the environment)",
     )
     .option("--prod", "Connect to your production environment")
     .option("-a, --accept-defaults", "Accept the default and previously set values");
@@ -40,7 +40,7 @@ export function hardhatDeployRemoteCommand() {
       strategy,
       prod,
       acceptDefaults,
-      blockchainNodeId,
+      blockchainNode: blockchainNodeUniqueName,
     }) => {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
@@ -57,7 +57,7 @@ export function hardhatDeployRemoteCommand() {
       });
 
       let node: BlockchainNode | undefined = undefined;
-      if (!blockchainNodeId) {
+      if (!blockchainNodeUniqueName) {
         const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
         if (blockchainNodes.length === 0) {
           cancel("No blockchain nodes found. Please create a blockchain node and try again.");
@@ -81,7 +81,7 @@ export function hardhatDeployRemoteCommand() {
         }
         node = blockchainNode;
       } else {
-        node = await settlemint.blockchainNode.read(blockchainNodeId);
+        node = await settlemint.blockchainNode.read(blockchainNodeUniqueName);
       }
 
       const envConfig = await settlemint.foundry.env(node.id);

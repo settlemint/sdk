@@ -12,14 +12,14 @@ export function hardhatScriptRemoteCommand() {
     .description("Run a Hardhat script to deploy a contract on the platform or interact with a deployed contract.")
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"')
     .option(
-      "--blockchain-node-id <blockchainNodeId>",
-      "Blockchain Node ID (optional, defaults to the blockchain node in the environment)",
+      "--blockchain-node <blockchainNode>",
+      "Blockchain Node unique name (optional, defaults to the blockchain node in the environment)",
     )
     .option("--prod", "Connect to your production environment")
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--no-compile", "Don't compile before running this task");
 
-  cmd.action(async ({ script, prod, blockchainNodeId, acceptDefaults, compile }) => {
+  cmd.action(async ({ script, prod, blockchainNode: blockchainNodeUniqueName, acceptDefaults, compile }) => {
     const autoAccept = !!acceptDefaults || isInCi;
     const env = await loadEnv(false, !!prod);
 
@@ -33,17 +33,17 @@ export function hardhatScriptRemoteCommand() {
       instance,
     });
 
-    let nodeId = blockchainNodeId;
-    if (!nodeId) {
+    let nodeUniqueName = blockchainNodeUniqueName;
+    if (!nodeUniqueName) {
       const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
       const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
       if (!blockchainNode) {
         cancel("No Blockchain Node selected. Please select one to continue.");
       }
-      nodeId = blockchainNode.id;
+      nodeUniqueName = blockchainNode.uniqueName;
     }
 
-    const envConfig = await settlemint.foundry.env(nodeId);
+    const envConfig = await settlemint.foundry.env(nodeUniqueName);
     const { command, args } = await getPackageManagerExecutable();
     await executeCommand(
       command,
