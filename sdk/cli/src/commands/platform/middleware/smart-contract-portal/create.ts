@@ -17,11 +17,11 @@ export function smartContractPortalMiddlewareCreateCommand() {
     alias: "scp",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
-        .option("--application-id <applicationId>", "Application ID")
-        .option("--load-balancer-id <loadBalancerId>", "Load Balancer ID (mutually exclusive with blockchain-node-id)")
+        .option("--application <application>", "Application unique name")
+        .option("--load-balancer <loadBalancer>", "Load Balancer unique name (mutually exclusive with blockchain-node)")
         .option(
-          "--blockchain-node-id <blockchainNodeId>",
-          "Blockchain Node ID (mutually exclusive with load-balancer-id)",
+          "--blockchain-node <blockchainNode>",
+          "Blockchain Node unique name (mutually exclusive with load-balancer)",
         )
         .option("--abis <abis...>", "Path to abi file(s)")
         .addOption(
@@ -37,9 +37,9 @@ export function smartContractPortalMiddlewareCreateCommand() {
           async (
             name,
             {
-              applicationId,
-              blockchainNodeId,
-              loadBalancerId,
+              application,
+              blockchainNode,
+              loadBalancer,
               provider,
               region,
               size,
@@ -50,9 +50,13 @@ export function smartContractPortalMiddlewareCreateCommand() {
             },
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = loadBalancerId ? undefined : (blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
-              const loadBalancer = loadBalancerId ?? (blockchainNode ? undefined : env.SETTLEMINT_LOAD_BALANCER!);
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+              const blockchainNodeUniqueName = loadBalancer
+                ? undefined
+                : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+              const loadBalancerUniqueName = blockchainNodeUniqueName
+                ? undefined
+                : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
               // Read and parse ABI files if provided
               const parsedAbis: { name: string; abi: string }[] = [];
               if (abis && abis.length > 0) {
@@ -72,10 +76,10 @@ export function smartContractPortalMiddlewareCreateCommand() {
               }
               const result = await settlemint.middleware.create({
                 name,
-                applicationId: application,
+                applicationUniqueName,
                 interface: "SMART_CONTRACT_PORTAL",
-                blockchainNodeId: blockchainNode,
-                loadBalancerId: loadBalancer,
+                blockchainNodeUniqueName,
+                loadBalancerUniqueName,
                 abis: parsedAbis,
                 includePredeployedAbis,
                 provider,
@@ -88,7 +92,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
                   return {
                     SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_PORTAL: result.id,
+                    SETTLEMINT_PORTAL: result.uniqueName,
                     ...getPortalEndpoints(result),
                   };
                 },
@@ -105,7 +109,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
       {
         description: "Create a smart contract portal middleware in a different application",
         command:
-          "platform create middleware smart-contract-portal my-portal --application-id 123456789 --blockchain-node-id node-123",
+          "platform create middleware smart-contract-portal my-portal --application my-app --blockchain-node node-123",
       },
     ],
   });

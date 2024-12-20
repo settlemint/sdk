@@ -25,8 +25,9 @@ export function applicationAccessTokenCreateCommand() {
         )
         .action(async (name, { application, validityPeriod, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
+            const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
             const aatToken = await settlemint.applicationAccessToken.create({
-              applicationUniqueName: application ?? env.SETTLEMINT_APPLICATION!,
+              applicationUniqueName,
               name,
               blockchainNetworkScope: {
                 type: "ALL",
@@ -74,6 +75,7 @@ export function applicationAccessTokenCreateCommand() {
               result: {
                 id: "",
                 name,
+                uniqueName: "",
               },
               mapDefaultEnv: (): Partial<DotEnv> => ({
                 SETTLEMINT_ACCESS_TOKEN: aatToken,

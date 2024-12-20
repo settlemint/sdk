@@ -47,9 +47,10 @@ export function blockchainNetworkBesuCreateCommand() {
             },
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
               const result = await settlemint.blockchainNetwork.create({
                 name,
-                applicationUniqueName: application ?? env.SETTLEMINT_APPLICATION!,
+                applicationUniqueName,
                 nodeName: nodeName,
                 consensusAlgorithm: "BESU_QBFT",
                 chainId,

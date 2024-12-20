@@ -15,13 +15,13 @@ export function minioStorageCreateCommand() {
     alias: "m",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
-        .option("--application-id <applicationId>", "Application ID")
-        .action(async (name, { applicationId, provider, region, size, type, ...defaultArgs }) => {
+        .option("--application <application>", "Application unique name")
+        .action(async (name, { application, provider, region, size, type, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
-            const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
+            const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
             const result = await settlemint.storage.create({
               name,
-              applicationId: application,
+              applicationUniqueName,
               storageProtocol: "MINIO",
               provider,
               region,
