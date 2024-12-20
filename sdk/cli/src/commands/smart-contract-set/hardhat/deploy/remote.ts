@@ -82,6 +82,11 @@ export function hardhatDeployRemoteCommand() {
         node = blockchainNode;
       } else {
         node = await settlemint.blockchainNode.read(nodeId);
+        if (!node.isEvm) {
+          cancel(
+            "The specified blockchain node is not an EVM blockchain node. Please specify an EVM blockchain node to continue.",
+          );
+        }
       }
 
       const envConfig = await settlemint.foundry.env(node.id);
