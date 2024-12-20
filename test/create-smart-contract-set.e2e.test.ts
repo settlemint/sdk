@@ -157,6 +157,9 @@ describe("Setup a smart contract set using the SDK", () => {
   test("Hardhat - Reset & Deploy smart contract set (remote) - With nodes and private key selection", async () => {
     const resetCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--reset"], {
       cwd: projectDir,
+      env: {
+        CI: "false", // To disable auto accept in CI
+      },
     });
 
     const nodeListCapture: string[] = [];
