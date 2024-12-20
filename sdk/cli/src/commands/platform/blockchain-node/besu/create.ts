@@ -3,6 +3,7 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
+import isInCi from "is-in-ci";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -46,12 +47,13 @@ export function blockchainNodeBesuCreateCommand() {
             },
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
+              const autoAccept = !!acceptDefaults || isInCi;
               const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
               if (!application) {
                 cancel("No application found. Please specify an application or run `settlemint connect` to continue.");
               }
 
-              let networkId = blockchainNetworkId ?? (acceptDefaults ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
+              let networkId = blockchainNetworkId ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
               if (!networkId) {
                 const networks = await settlemint.blockchainNetwork.list(application);
                 const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
