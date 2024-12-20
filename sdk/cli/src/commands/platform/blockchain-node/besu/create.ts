@@ -26,7 +26,7 @@ export function blockchainNodeBesuCreateCommand() {
         .option("--node-identity <nodeIdentity>", "EC DSA P256 private key to use as the node identity")
         .addOption(
           new Option("--node-type <nodeType>", "Type of the node")
-            .choices(["VALIDATOR", "NON_VALIDATOR", "NOTARY", "ORDERER", "PEER", "UNSPECIFIED"] as const)
+            .choices(["VALIDATOR", "NON_VALIDATOR"] as const)
             .makeOptionMandatory(),
         )
         .action(
@@ -89,17 +89,17 @@ export function blockchainNodeBesuCreateCommand() {
     examples: [
       {
         description: "Create a Besu blockchain node and save as default",
-        command: "platform create blockchain-node besu my-node --node-type validator --accept-defaults -d",
+        command: "platform create blockchain-node besu my-node --node-type VALIDATOR --accept-defaults -d",
       },
       {
         description: "Create a Besu blockchain node in a different network",
         command:
-          "platform create blockchain-node besu my-node --blockchain-network-id 12345 --node-type non-validator --accept-defaults",
+          "platform create blockchain-node besu my-node --blockchain-network-id 12345 --node-type NON_VALIDATOR --accept-defaults",
       },
       {
         description: "Create a Besu blockchain node in a different application",
         command:
-          "platform create blockchain-node besu my-node --application-id 123456789 --node-type non-validator --accept-defaults",
+          "platform create blockchain-node besu my-node --application-id 123456789 --node-type NON_VALIDATOR --accept-defaults",
       },
     ],
   });
