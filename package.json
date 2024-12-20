@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "0.6.59",
+  "version": "0.7.0",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -44,12 +44,12 @@
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "lefthook": "1.9.3",
+    "lefthook": "1.10.0",
     "turbo": "2.3.3",
     "typescript": "5.7.2",
-    "knip": "5.41.0",
+    "knip": "5.41.1",
     "@types/bun": "1.1.14",
-    "@arethetypeswrong/cli": "0.17.1",
+    "@arethetypeswrong/cli": "0.17.2",
     "publint": "0.2.12",
     "tsup": "8.3.5"
   },

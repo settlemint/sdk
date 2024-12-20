@@ -1,5 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
 import { ipfsStorageCreateCommand } from "./ipfs/create";
+import { minioStorageCreateCommand } from "./minio/create";
 
 /**
  * Creates and returns the 'storage' command for the SettleMint SDK.
@@ -11,5 +12,6 @@ export function storageCreateCommand(): Command {
   return new Command("storage")
     .alias("st")
     .description("Create a storage service in the SettleMint platform")
-    .addCommand(ipfsStorageCreateCommand());
+    .addCommand(ipfsStorageCreateCommand())
+    .addCommand(minioStorageCreateCommand());
 }

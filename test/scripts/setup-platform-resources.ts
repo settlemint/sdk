@@ -10,6 +10,7 @@ import {
   GRAPH_NAME,
   HASURA_NAME,
   IPFS_NAME,
+  MINIO_NAME,
   NETWORK_NAME,
   NODE_NAME,
   NODE_NAME_2_WITH_PK,
@@ -66,7 +67,7 @@ beforeAll(async () => {
     await login();
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
-    await createBlockchainNodeAndIpfs();
+    await createBlockchainNodeMinioAndIpfs();
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddleware();
   } catch (err) {
@@ -151,11 +152,11 @@ async function createWorkspaceAndApplication() {
   }
 }
 
-async function createBlockchainNodeAndIpfs() {
+async function createBlockchainNodeMinioAndIpfs() {
   const hasBlockchainNetwork = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NETWORK"]);
   const hasBlockchainNode = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
-
   const hasHasuraIntegration = await defaultResourceAlreadyCreated(["SETTLEMINT_HASURA"]);
+  const hasMinioStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_MINIO"]);
   const hasIpfsStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_IPFS"]);
   const results = await deployResources([
     () =>
@@ -195,6 +196,23 @@ async function createBlockchainNodeAndIpfs() {
             HASURA_NAME,
           ]).result,
     () =>
+      hasMinioStorage
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "storage",
+            "minio",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            MINIO_NAME,
+          ]).result,
+    () =>
       hasIpfsStorage
         ? Promise.resolve(undefined)
         : runCommand(COMMAND_TEST_SCOPE, [
@@ -213,7 +231,14 @@ async function createBlockchainNodeAndIpfs() {
           ]).result,
   ]);
 
-  const [networkResult, hasuraResult, ipfsResult] = results;
+  const [networkResult, hasuraResult, minioResult, ipfsResult] = results;
+
+  expect([networkResult?.status, hasuraResult?.status, minioResult?.status, ipfsResult?.status]).toEqual([
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+  ]);
 
   if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
@@ -304,6 +329,11 @@ async function createBlockchainNodeAndIpfs() {
   if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
     expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
+  }
+
+  if (minioResult?.status === "fulfilled" && minioResult.value) {
+    expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
+    expect(minioResult.value.output).toInclude("Storage is deployed");
   }
 
   if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {

@@ -7,6 +7,7 @@ import {
   getGraphEndpoint,
   getHasuraEndpoints,
   getIpfsEndpoints,
+  getMinioEndpoints,
   getPortalEndpoints,
 } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
@@ -99,11 +100,7 @@ export function connectCommand(): Command {
           ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           SETTLEMINT_MINIO: minio?.id,
-          SETTLEMINT_MINIO_ENDPOINT: minio?.endpoints.find((endpoint) => endpoint.id.includes("s3-api"))?.displayValue,
-          SETTLEMINT_MINIO_ACCESS_KEY: minio?.credentials.find((credential) => credential.id.includes("access-key"))
-            ?.displayValue,
-          SETTLEMINT_MINIO_SECRET_KEY: minio?.credentials.find((credential) => credential.id.includes("secret-key"))
-            ?.displayValue,
+          ...getMinioEndpoints(minio),
           SETTLEMINT_IPFS: ipfs?.id,
           ...getIpfsEndpoints(ipfs),
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.id,
