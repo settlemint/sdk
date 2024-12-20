@@ -48,7 +48,7 @@
     "slugify": "1.6.6",
     "yoctocolors": "2.1.1",
     "@commander-js/extra-typings": "12.1.0",
-    "@inquirer/confirm": "5.1.0",
+    "@inquirer/confirm": "5.1.1",
     "@inquirer/input": "4.1.0",
     "@inquirer/password": "4.0.3",
     "@inquirer/select": "4.0.3",
