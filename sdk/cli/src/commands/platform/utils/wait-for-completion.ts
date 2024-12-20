@@ -2,7 +2,6 @@ import { SETTLEMINT_CLIENT_MAP } from "@/commands/platform/common/resource-type"
 import type { SettlemintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { note, spinner } from "@settlemint/sdk-utils/terminal";
-import type { Id } from "@settlemint/sdk-utils/validation";
 import type { ResourceType } from "../common/resource-type";
 
 type Action = "deploy" | "destroy" | "restart";
@@ -11,7 +10,7 @@ type Action = "deploy" | "destroy" | "restart";
  * Waits for a resource to complete deployment/destruction or fails after a specified timeout.
  * @param settlemint - The SettlemintClient instance
  * @param type - The type of resource to check
- * @param id - The ID of the resource to monitor
+ * @param uniqueName - The unique name of the resource to monitor
  * @param action - The action being performed ('deploy' or 'destroy')
  * @param maxTimeout - Maximum time to wait in milliseconds before timing out (defaults to 10 minutes)
  * @returns A promise that resolves to true if the resource completes successfully
@@ -20,13 +19,13 @@ type Action = "deploy" | "destroy" | "restart";
 export async function waitForCompletion({
   settlemint,
   type,
-  id,
+  uniqueName,
   action,
   maxTimeout = 15 * 60 * 1000, // 15 minutes in milliseconds
 }: {
   settlemint: SettlemintClient;
   type: ResourceType;
-  id: Id;
+  uniqueName: string;
   action: Action;
   maxTimeout?: number;
 }): Promise<boolean> {
@@ -53,7 +52,7 @@ export async function waitForCompletion({
 
       while (true) {
         try {
-          const resource = await service.read(id);
+          const resource = await service.read(uniqueName);
 
           if (resource.status === "COMPLETED") {
             note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
@@ -71,7 +70,9 @@ export async function waitForCompletion({
         }
 
         if (Date.now() - startTime > maxTimeout) {
-          throw new Error(`Operation timed out after ${maxTimeout / 60_000} minutes for ${type} with id ${id}`);
+          throw new Error(
+            `Operation timed out after ${maxTimeout / 60_000} minutes for ${type} with unique name ${uniqueName}`,
+          );
         }
         await new Promise((resolve) => setTimeout(resolve, 5_000));
       }

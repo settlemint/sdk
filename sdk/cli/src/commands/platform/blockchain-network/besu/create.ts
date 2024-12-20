@@ -17,8 +17,8 @@ export function blockchainNetworkBesuCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option(
-          "-a, --application-id <applicationId>",
-          "The application ID to create the network in (defaults to application from env)",
+          "-a, --application <uniqueName>",
+          "The unique name of the application to create the network in (defaults to application from env)",
         )
         .requiredOption("--node-name <name>", "Name of the node")
         .option("--chain-id <chainId>", "The chain ID for the network", parseNumber)
@@ -31,7 +31,7 @@ export function blockchainNetworkBesuCreateCommand() {
           async (
             name,
             {
-              applicationId,
+              application,
               chainId,
               contractSizeLimit,
               evmStackSize,
@@ -47,10 +47,9 @@ export function blockchainNetworkBesuCreateCommand() {
             },
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
               const result = await settlemint.blockchainNetwork.create({
                 name,
-                applicationId: application,
+                applicationUniqueName: application ?? env.SETTLEMINT_APPLICATION!,
                 nodeName: nodeName,
                 consensusAlgorithm: "BESU_QBFT",
                 chainId,

@@ -14,21 +14,20 @@ export function applicationCreateCommand() {
     execute: (cmd, baseAction) => {
       cmd
         .option(
-          "-w, --workspace-id <workspaceId>",
-          "The workspace ID to create the application in (defaults to workspace from env)",
+          "-w, --workspace <workspace>",
+          "The workspace unique name to create the application in (defaults to workspace from env)",
         )
-        .action(async (name, { workspaceId, ...defaultArgs }) => {
+        .action(async (name, { workspace, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
-            const workspace = workspaceId ?? env.SETTLEMINT_WORKSPACE!;
             const result = await settlemint.application.create({
               name,
-              workspaceId: workspace!,
+              workspaceUniqueName: workspace ?? env.SETTLEMINT_WORKSPACE!,
             });
             return {
               result,
               mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
-                  SETTLEMINT_APPLICATION: result.id,
+                  SETTLEMINT_APPLICATION: result.uniqueName,
                 };
               },
             };

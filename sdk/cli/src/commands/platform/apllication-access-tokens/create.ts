@@ -15,18 +15,18 @@ export function applicationAccessTokenCreateCommand() {
     execute: (cmd, baseAction) => {
       cmd
         .option(
-          "-a, --application-id <applicationId>",
-          "The application ID to create the application access token for (defaults to application from env)",
+          "-a, --application <application>",
+          "The application unique name to create the application access token for (defaults to application from env)",
         )
         .addOption(
           new Option("-v, --validity-period <period>", "The validity period for the token")
             .choices(["DAYS_7", "DAYS_30", "DAYS_60", "DAYS_90", "NONE"])
             .default("DAYS_7"),
         )
-        .action(async (name, { applicationId, validityPeriod, ...defaultArgs }) => {
+        .action(async (name, { application, validityPeriod, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
             const aatToken = await settlemint.applicationAccessToken.create({
-              applicationId: applicationId ?? env.SETTLEMINT_APPLICATION!,
+              applicationUniqueName: application ?? env.SETTLEMINT_APPLICATION!,
               name,
               blockchainNetworkScope: {
                 type: "ALL",
