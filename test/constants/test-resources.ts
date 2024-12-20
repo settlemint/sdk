@@ -5,7 +5,7 @@ export const APPLICATION_NAME = "Starter Kit App";
 export const NETWORK_NAME = "Starter Kit Network";
 export const NODE_NAME = "Starter Kit Node";
 export const NODE_NAME_2_WITH_PK = "Starter Kit Node 2 (with activated PK)";
-export const NODE_NAME_3_WITHOUT_PK = "Starter Kit Node 3(without activated PK)";
+export const NODE_NAME_3_WITHOUT_PK = "Starter Kit Node 3 (without activated PK)";
 
 export const PRIVATE_KEY_NAME = "Starter Kit Private Key";
 export const PRIVATE_KEY_2_NAME = "Starter Kit Private Key 2";

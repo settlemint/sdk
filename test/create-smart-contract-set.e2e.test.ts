@@ -2,7 +2,8 @@ import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, te
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { $, type ShellError } from "bun";
-import { NODE_NAME_2_WITH_PK, NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
+import { NODE_NAME_2_WITH_PK } from "./constants/test-resources";
+import { NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
@@ -146,31 +147,10 @@ describe("Setup a smart contract set using the SDK", () => {
     deployCommand.stdout.off("data", onDeployOutput);
     expect(deployOutput).toInclude("successfully deployed 🚀");
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
-
-    const resetCommand = runCommand(
-      COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
-      {
-        cwd: projectDir,
-      },
-    );
-    // Confirm deployment and reset
-    const onResetOutput = (message: string) => {
-      if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
-        resetCommand.stdin.cork();
-        resetCommand.stdin.write("y");
-        resetCommand.stdin.uncork();
-      }
-    };
-    resetCommand.stdout.on("data", onResetOutput);
-    const { output: outputReset } = await resetCommand.result;
-    resetCommand.stdout.off("data", onResetOutput);
-    expect(outputReset).toInclude("successfully deployed 🚀");
-    expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test("Hardhat - Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
-    const { stdout, stdin } = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote"], {
+  test("Hardhat - Reset & Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
+    const resetCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--reset"], {
       cwd: projectDir,
     });
 
@@ -178,20 +158,34 @@ describe("Setup a smart contract set using the SDK", () => {
     const onDeployOutput = (message: string) => {
       if (message.includes("Which blockchain node do you want to connect to?")) {
         nodeListCapture.push(message);
-        const nodeListString = nodeListCapture.join("\n");
-        expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
-        expect(nodeListString).toContain(NODE_NAME_2_WITH_PK);
-        stdout.off("data", onDeployOutput);
-        done();
+
+        resetCommand.stdin.cork();
+        resetCommand.stdin.write("\n"); // Press enter
+        resetCommand.stdin.uncork();
       }
 
-      if (message.includes("Confirm deploy")) {
-        stdin.cork();
-        stdin.write("y");
-        stdin.uncork();
+      if (message.includes("Which private key do you want to deploy from?")) {
+        resetCommand.stdin.cork();
+        resetCommand.stdin.write("\n"); // Press enter
+        resetCommand.stdin.uncork();
+      }
+
+      if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
+        resetCommand.stdin.cork();
+        resetCommand.stdin.write("y");
+        resetCommand.stdin.uncork();
       }
     };
 
-    stdout.on("data", onDeployOutput);
+    resetCommand.stdout.on("data", onDeployOutput);
+    const { output: outputReset } = await resetCommand.result;
+    resetCommand.stdout.off("data", onDeployOutput);
+
+    expect(outputReset).toInclude("successfully deployed 🚀");
+    expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
+
+    const nodeListString = nodeListCapture.join("\n");
+    expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
+    expect(nodeListString).toContain(NODE_NAME_2_WITH_PK);
   });
 });
