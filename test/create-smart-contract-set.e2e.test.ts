@@ -2,6 +2,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, te
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { $, type ShellError } from "bun";
+import { NODE_NAME_2_WITH_PK, NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
@@ -165,7 +166,8 @@ describe("Setup a smart contract set using the SDK", () => {
       if (message.includes("Which blockchain node do you want to connect to?")) {
         nodeListCapture.push(message);
         const nodeListString = nodeListCapture.join("\n");
-        expect(nodeListString).not.toContain("Starter Kit Node (without activated PK)");
+        expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
+        expect(nodeListString).toContain(NODE_NAME_2_WITH_PK);
         stdout.off("data", onDeployOutput);
         done();
       }
