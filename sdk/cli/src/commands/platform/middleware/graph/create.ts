@@ -16,42 +16,35 @@ export function graphMiddlewareCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option("--application-id <applicationId>", "Application ID")
-        .option("--storage-id <storageId>", "Storage ID (IFPS)")
         .option("--blockchain-node-id <blockchainNodeId>", "Blockchain Node ID")
-        .action(
-          async (
-            name,
-            { applicationId, storageId, blockchainNodeId, provider, region, size, type, ...defaultArgs },
-          ) => {
-            return baseAction(defaultArgs, async (settlemint, env) => {
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
-              const storage = storageId ?? env.SETTLEMINT_IPFS;
-              const result = await settlemint.middleware.create({
-                name,
-                applicationId: application,
-                interface: "HA_GRAPH",
-                storageId: storage,
-                blockchainNodeId: blockchainNode,
-                provider,
-                region,
-                size,
-                type,
-              });
-              return {
-                result,
-                mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                  const resource = await settlemint.middleware.read(result.id);
-                  return {
-                    SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_THEGRAPH: result.id,
-                    ...(await getGraphEndpoint(resource, env)),
-                  };
-                },
-              };
+        .action(async (name, { applicationId, blockchainNodeId, provider, region, size, type, ...defaultArgs }) => {
+          return baseAction(defaultArgs, async (settlemint, env) => {
+            const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
+            const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
+
+            const result = await settlemint.middleware.create({
+              name,
+              applicationId: application,
+              interface: "HA_GRAPH",
+              blockchainNodeId: blockchainNode,
+              provider,
+              region,
+              size,
+              type,
             });
-          },
-        );
+            return {
+              result,
+              mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
+                const resource = await settlemint.middleware.read(result.id);
+                return {
+                  SETTLEMINT_APPLICATION: application,
+                  SETTLEMINT_THEGRAPH: result.id,
+                  ...(await getGraphEndpoint(resource, env)),
+                };
+              },
+            };
+          });
+        });
     },
     examples: [
       {
