@@ -206,6 +206,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
+            "--wait",
             HASURA_NAME,
           ]).result,
     () =>
@@ -222,6 +223,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
+            "--wait",
             MINIO_NAME,
           ]).result,
     () =>
@@ -238,6 +240,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
+            "--wait",
             IPFS_NAME,
           ]).result,
   ]);
@@ -279,14 +282,17 @@ async function createBlockchainNodeMinioAndIpfs() {
 
   if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
+    expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
   }
 
   if (minioResult?.status === "fulfilled" && minioResult.value) {
     expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
+    expect(minioResult.value.output).toInclude("Storage is deployed");
   }
 
   if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
+    expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 }
 
@@ -355,6 +361,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--default",
+            "--wait",
             BLOCKSCOUT_NAME,
           ]).result,
     () =>

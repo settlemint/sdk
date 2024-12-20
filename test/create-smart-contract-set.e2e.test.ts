@@ -210,7 +210,7 @@ describe("Setup a smart contract set using the SDK", () => {
     };
 
     resetCommand.stdout.on("data", onResetOutput);
-    const { output: outputReset } = await resetCommand.result;
+    await resetCommand.result;
     resetCommand.stdout.off("data", onResetOutput);
 
     const nodeListString = nodeListCapture.join("\n");
