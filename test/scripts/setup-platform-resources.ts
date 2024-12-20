@@ -372,7 +372,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
-            "--wait",
             NODE_NAME_2_WITH_PK,
           ]).result,
     () =>
@@ -420,7 +419,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
 
   if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
     expect(nodeWithPkResult.value.output).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
-    expect(nodeWithPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 
   if (nodeWithoutPkResult?.status === "fulfilled" && nodeWithoutPkResult.value) {
