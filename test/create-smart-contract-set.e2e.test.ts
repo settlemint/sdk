@@ -190,7 +190,7 @@ describe("Setup a smart contract set using the SDK", () => {
         nodeListCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n");
+        resetCommand.stdin.write("\n"); // This selects the second option
         resetCommand.stdin.uncork();
       }
 
@@ -198,7 +198,7 @@ describe("Setup a smart contract set using the SDK", () => {
         privateKeyCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n");
+        resetCommand.stdin.write("\n"); // This selects the first option again
         resetCommand.stdin.uncork();
       }
 
@@ -220,6 +220,6 @@ describe("Setup a smart contract set using the SDK", () => {
 
     const privateKeyString = privateKeyCapture.join("\n");
     expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
-    expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME); // This private is not activated on the node we select
+    expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME);
   });
 });
