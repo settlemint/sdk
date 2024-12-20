@@ -62,7 +62,7 @@ export async function applicationAccessTokenPrompt(
     });
 
     const aat = await settlemint.applicationAccessToken.create({
-      applicationId: application.id,
+      applicationUniqueName: application.uniqueName,
       name,
       blockchainNetworkScope: {
         type: "ALL",

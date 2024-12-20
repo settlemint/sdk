@@ -90,7 +90,8 @@ async function addWorkspaceCredits() {
     instance: env.SETTLEMINT_INSTANCE!,
   });
   if (!isLocalEnv()) {
-    await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 100);
+    const workspace = await settlemint.workspace.read(env.SETTLEMINT_WORKSPACE!);
+    await settlemint.workspace.addCredits(workspace.id, 100);
   }
 }
 
@@ -234,7 +235,7 @@ async function createBlockchainNodeMinioAndIpfs() {
       "create",
       "private-key",
       "hsm-ecdsa-p256",
-      "--blockchain-node-id",
+      "--blockchain-node",
       env.SETTLEMINT_BLOCKCHAIN_NODE!,
       "--accept-defaults",
       "--default",
@@ -282,7 +283,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "create",
             "private-key",
             "hd-ecdsa-p256",
-            "--blockchain-node-id",
+            "--blockchain-node",
             env.SETTLEMINT_BLOCKCHAIN_NODE!,
             "--accept-defaults",
             "--default",

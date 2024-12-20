@@ -2,7 +2,21 @@ import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
-import { ApplicationFragment } from "./application.js";
+
+/**
+ * GraphQL fragment containing core application fields.
+ */
+export const ApplicationFragment = graphql(`
+  fragment Application on Application {
+    id
+    uniqueName
+    name
+    workspace {
+      id
+      uniqueName
+    }
+  }
+`);
 
 /**
  * GraphQL fragment containing core workspace fields.
