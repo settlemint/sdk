@@ -56,32 +56,32 @@ export function hardhatDeployRemoteCommand() {
         instance,
       });
 
+      const nodeId = autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : blockchainNodeId;
       let node: BlockchainNode | undefined = undefined;
-      if (!blockchainNodeId) {
-        const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
-        if (blockchainNodes.length === 0) {
-          cancel("No blockchain nodes found. Please create a blockchain node and try again.");
+      if (!nodeId) {
+        const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+        const evmNodes = nodes.filter((node) => node.isEvm);
+        if (evmNodes.length === 0) {
+          cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");
         }
 
-        const nodesWithPrivateKey = await Promise.all(
-          blockchainNodes.map((node) => settlemint.blockchainNode.read(node.id)),
-        );
+        const nodesWithPrivateKey = await Promise.all(evmNodes.map((node) => settlemint.blockchainNode.read(node.id)));
         const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
           (node) => node.privateKeys && node.privateKeys.length > 0,
         );
         if (nodesWithActivePrivateKey.length === 0) {
           cancel(
-            "No blockchain nodes with private keys found. Please activate a private key on your blockchain node and try again.",
+            "No EVM blockchain nodes with private keys found. Please activate a private key on your EVM blockchain node and try again.",
           );
         }
 
         const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, autoAccept);
         if (!blockchainNode) {
-          cancel("No Blockchain Node selected. Please select one to continue.");
+          cancel("No EVM blockchain node selected. Please select one to continue.");
         }
         node = blockchainNode;
       } else {
-        node = await settlemint.blockchainNode.read(blockchainNodeId);
+        node = await settlemint.blockchainNode.read(nodeId);
       }
 
       const envConfig = await settlemint.foundry.env(node.id);
