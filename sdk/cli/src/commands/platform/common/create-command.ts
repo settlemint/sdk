@@ -2,8 +2,7 @@ import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { type CommandExample, createExamples } from "@/commands/platform/utils/create-examples";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
-import { missingAccessTokenError } from "@/error/missing-config-error";
-import { getInstanceCredentials } from "@/utils/config";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
@@ -12,7 +11,6 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import type { ResourceType } from "./resource-type";
-
 type DefaultArgs = {
   acceptDefaults?: true | undefined;
   default?: true | undefined;
@@ -78,12 +76,13 @@ export function getCreateCommand({
     const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
     const instance = env.SETTLEMINT_INSTANCE ?? (await instancePrompt(env, autoAccept));
-    const accessToken = usePersonalAccessToken
-      ? (await getInstanceCredentials(instance))?.personalAccessToken
-      : env.SETTLEMINT_ACCESS_TOKEN;
-    if (!accessToken) {
-      return missingAccessTokenError();
-    }
+    const accessToken = await getApplicationOrPersonalAccessToken({
+      validateEnv: false,
+      prod: !!prod,
+      instance,
+      prefer: usePersonalAccessToken ? "personal" : "application",
+      strict: true,
+    });
 
     const settlemint = createSettleMintClient({
       accessToken,
