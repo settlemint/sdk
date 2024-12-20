@@ -1,11 +1,10 @@
 import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
- * GraphQL fragment for the PrivateKey type.
+ * GraphQL fragment containing core private key fields.
  */
 const PrivateKeyFragment = graphql(`
   fragment PrivateKey on PrivateKey {
@@ -19,131 +18,130 @@ const PrivateKeyFragment = graphql(`
 `);
 
 /**
- * Represents a private key with its details.
+ * Type representing a private key entity.
  */
 export type PrivateKey = ResultOf<typeof PrivateKeyFragment>;
 
 /**
- * GraphQL query to fetch private keys for a given application.
+ * Query to fetch private keys for an application.
  */
 const getPrivateKeys = graphql(
   `
-query getPrivateKeys($id: ID!) {
-  privateKeys(applicationId: $id) {
-    items {
-      ...PrivateKey
+    query GetPrivateKeys($applicationUniqueName: String!) {
+      privateKeysByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...PrivateKey
+        }
+      }
     }
-  }
-}`,
+  `,
   [PrivateKeyFragment],
 );
 
 /**
- * GraphQL query to fetch a specific private key by its ID.
+ * Query to fetch a specific private key.
  */
 const getPrivateKey = graphql(
   `
-query getPrivateKey($id: ID!) {
-  privateKey(entityId: $id) {
-    ...PrivateKey
-  }
-}
-`,
+    query GetPrivateKey($uniqueName: String!) {
+      privateKeyByUniqueName(uniqueName: $uniqueName) {
+        ...PrivateKey
+      }
+    }
+  `,
   [PrivateKeyFragment],
 );
 
 /**
- * GraphQL mutation to create a private key.
+ * Mutation to create a new private key.
  */
 const createPrivateKey = graphql(
   `
-  mutation CreatePrivateKey(
-    $applicationId: ID!,
-    $name: String!,
-    $privateKeyType: PrivateKeyType!,
-    $provider: String!
-    $region: String!
-    $size: ClusterServiceSize
-    $type: ClusterServiceType
-    $blockchainNodes: [ID!]
-  ) {
-    createPrivateKey(
-      applicationId: $applicationId,
-      name: $name,
-      privateKeyType: $privateKeyType,
-      provider: $provider,
-      region: $region
-      size: $size
-      type: $type
-      blockchainNodes: $blockchainNodes
+    mutation CreatePrivateKey(
+      $applicationId: ID!
+      $name: String!
+      $privateKeyType: PrivateKeyType!
+      $provider: String!
+      $region: String!
+      $size: ClusterServiceSize
+      $type: ClusterServiceType
+      $blockchainNodes: [ID!]
     ) {
-      ...PrivateKey
+      createPrivateKey(
+        applicationId: $applicationId
+        name: $name
+        privateKeyType: $privateKeyType
+        provider: $provider
+        region: $region
+        size: $size
+        type: $type
+        blockchainNodes: $blockchainNodes
+      ) {
+        ...PrivateKey
+      }
     }
-  }
-`,
+  `,
   [PrivateKeyFragment],
 );
 
+/**
+ * Arguments required to create a private key.
+ */
 export type CreatePrivateKeyArgs = Omit<VariablesOf<typeof createPrivateKey>, "applicationId" | "blockchainNodes"> & {
   applicationUniqueName: string;
   blockchainNodeUniqueNames?: string[];
 };
 
+/**
+ * Mutation to restart a private key.
+ */
 const restartPrivateKey = graphql(
   `
-  mutation RestartPrivateKey($id: ID!) {
-    restartPrivateKey(entityId: $id) {
-      ...PrivateKey
+    mutation RestartPrivateKey($uniqueName: String!) {
+      restartPrivateKeyByUniqueName(uniqueName: $uniqueName) {
+        ...PrivateKey
+      }
     }
-  }
-`,
+  `,
   [PrivateKeyFragment],
 );
 
 /**
- * Creates a function to list private keys for a given application.
+ * Creates a function to list private keys for an application.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an application ID and returns a list of private keys.
- * @throws Will throw an error if the application ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const privateKeys = await client.privateKey.list('applicationId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches private keys for an application
+ * @throws If the application cannot be found or the request fails
  */
 export const privateKeyList = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((applicationId: Id) => Promise<PrivateKey[]>) => {
-  return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId);
+): ((applicationUniqueName: string) => Promise<PrivateKey[]>) => {
+  return async (applicationUniqueName: string) => {
     const {
-      privateKeys: { items },
-    } = await gqlClient.request(getPrivateKeys, { id });
+      privateKeysByUniqueName: { items },
+    } = await gqlClient.request(getPrivateKeys, { applicationUniqueName });
     return items;
   };
 };
 
 /**
- * Creates a function to read a specific private key.
+ * Creates a function to fetch a specific private key.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes a private key ID and returns the private key details.
- * @throws Will throw an error if the private key ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const privateKey = await client.privateKey.read('privateKeyId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single private key by unique name
+ * @throws If the private key cannot be found or the request fails
  */
 export const privatekeyRead = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((privatekeyId: Id) => Promise<PrivateKey>) => {
-  return async (privatekeyId: Id) => {
-    const id = validate(IdSchema, privatekeyId);
-    const { privateKey } = await gqlClient.request(getPrivateKey, { id });
+): ((privateKeyUniqueName: string) => Promise<PrivateKey>) => {
+  return async (privateKeyUniqueName: string) => {
+    const { privateKeyByUniqueName: privateKey } = await gqlClient.request(getPrivateKey, {
+      uniqueName: privateKeyUniqueName,
+    });
     return privateKey;
   };
 };
@@ -151,11 +149,10 @@ export const privatekeyRead = (
 /**
  * Creates a function to create a new private key.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes private key creation arguments and returns a promise resolving to the created private key.
- * @throws Will throw an error if the application ID is invalid.
- *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates new private key with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
 export const privateKeyCreate = (
   gqlClient: GraphQLClient,
@@ -172,10 +169,19 @@ export const privateKeyCreate = (
   };
 };
 
+/**
+ * Creates a function to restart a private key.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that restarts private key by unique name
+ * @throws If the private key cannot be found or the restart fails
+ */
 export const privateKeyRestart =
   (gqlClient: GraphQLClient, _options: ClientOptions) =>
-  async (keyId: Id): Promise<PrivateKey> => {
-    const id = validate(IdSchema, keyId);
-    const { restartPrivateKey: privateKey } = await gqlClient.request(restartPrivateKey, { id });
+  async (privateKeyUniqueName: string): Promise<PrivateKey> => {
+    const { restartPrivateKeyByUniqueName: privateKey } = await gqlClient.request(restartPrivateKey, {
+      uniqueName: privateKeyUniqueName,
+    });
     return privateKey;
   };

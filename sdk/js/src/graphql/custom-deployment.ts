@@ -1,11 +1,10 @@
 import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
- * Fragment for the CustomDeployment type.
+ * Fragment containing core custom deployment fields.
  */
 const CustomDeploymentFragment = graphql(`
   fragment CustomDeployment on CustomDeployment {
@@ -27,151 +26,166 @@ const CustomDeploymentFragment = graphql(`
 `);
 
 /**
- * Represents a custom deployment with its details.
+ * Type representing a custom deployment entity.
  */
 export type CustomDeployment = ResultOf<typeof CustomDeploymentFragment>;
 
 /**
- * GraphQL query to fetch custom deployments for a given application.
+ * Query to fetch custom deployments for an application.
  */
 const getCustomDeployments = graphql(
   `
-query getCustomDeployments($id: ID!) {
-  customDeployments(applicationId: $id) {
-    items {
-      ...CustomDeployment
+    query getCustomDeployments($applicationUniqueName: String!) {
+      customDeploymentsByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...CustomDeployment
+        }
+      }
     }
-  }
-}`,
+  `,
   [CustomDeploymentFragment],
 );
 
 /**
- * GraphQL query to fetch a specific custom deployment by its ID.
+ * Query to fetch a specific custom deployment.
  */
 const getCustomDeployment = graphql(
   `
-query getCustomDeployment($id: ID!) {
-  customDeployment(entityId: $id) {
-    ...CustomDeployment
-  }
-}
-`,
+    query getCustomDeployment($uniqueName: String!) {
+      customDeploymentByUniqueName(uniqueName: $uniqueName) {
+        ...CustomDeployment
+      }
+    }
+  `,
   [CustomDeploymentFragment],
 );
 
+/**
+ * Mutation to edit a custom deployment.
+ */
 const editCustomDeployment = graphql(
   `
-mutation EditCustomDeployment($entityId: ID!, $imageTag: String) {
-  editCustomDeployment(entityId: $entityId, imageTag: $imageTag) {
-    ...CustomDeployment
-  }
-}
-`,
+    mutation EditCustomDeployment($uniqueName: String!, $imageTag: String) {
+      editCustomDeploymentByUniqueName(uniqueName: $uniqueName, imageTag: $imageTag) {
+        ...CustomDeployment
+      }
+    }
+  `,
   [CustomDeploymentFragment],
 );
 
+/**
+ * Mutation to create a custom deployment.
+ */
 const createCustomDeployment = graphql(
   `
-mutation CreateCustomDeployment(
-  $applicationId: ID!,
-  $name: String!,
-  $imageTag: String!,
-  $imageName: String!,
-  $imageRepository: String!,
-  $environmentVariables: JSON,
-  $port: Int!,
-  $provider: String!,
-  $region: String!
-) {
-  createCustomDeployment(
-    applicationId: $applicationId,
-    name: $name,
-    imageTag: $imageTag,
-    imageName: $imageName,
-    imageRepository: $imageRepository,
-    port: $port,
-    environmentVariables: $environmentVariables,
-    provider: $provider,
-    region: $region
-  ) {
-    ...CustomDeployment
-  }
-}
-`,
+    mutation CreateCustomDeployment(
+      $applicationId: ID!
+      $name: String!
+      $imageTag: String!
+      $imageName: String!
+      $imageRepository: String!
+      $environmentVariables: JSON
+      $port: Int!
+      $provider: String!
+      $region: String!
+    ) {
+      createCustomDeployment(
+        applicationId: $applicationId
+        name: $name
+        imageTag: $imageTag
+        imageName: $imageName
+        imageRepository: $imageRepository
+        port: $port
+        environmentVariables: $environmentVariables
+        provider: $provider
+        region: $region
+      ) {
+        ...CustomDeployment
+      }
+    }
+  `,
   [CustomDeploymentFragment],
 );
 
+/**
+ * Arguments required to create a custom deployment.
+ */
 export type CreateCustomDeploymentArgs = Omit<VariablesOf<typeof createCustomDeployment>, "applicationId"> & {
   applicationUniqueName: string;
 };
 
+/**
+ * Mutation to restart a custom deployment.
+ */
 const restartCustomDeployment = graphql(
   `
-  mutation RestartCustomDeployment($id: ID!) {
-    restartCustomDeployment(entityId: $id) {
-      ...CustomDeployment
+    mutation RestartCustomDeployment($uniqueName: String!) {
+      restartCustomDeploymentByUniqueName(uniqueName: $uniqueName) {
+        ...CustomDeployment
+      }
     }
-  }
-`,
+  `,
   [CustomDeploymentFragment],
 );
 
 /**
- * Creates a function to list custom deployments for a given application.
+ * Creates a function to list custom deployments for an application.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an application ID and returns a list of custom deployments.
- * @throws Will throw an error if the application ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const deployments = await client.customDeployment.list('applicationId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches custom deployments for an application
+ * @throws If the application cannot be found or the request fails
  */
 export const customdeploymentList = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((applicationId: Id) => Promise<CustomDeployment[]>) => {
-  return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId);
+): ((applicationUniqueName: string) => Promise<CustomDeployment[]>) => {
+  return async (applicationUniqueName: string) => {
     const {
-      customDeployments: { items },
-    } = await gqlClient.request(getCustomDeployments, { id });
+      customDeploymentsByUniqueName: { items },
+    } = await gqlClient.request(getCustomDeployments, { applicationUniqueName });
     return items;
   };
 };
 
 /**
- * Creates a function to read a specific custom deployment.
+ * Creates a function to fetch a specific custom deployment.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes a custom deployment ID and returns the deployment details.
- * @throws Will throw an error if the custom deployment ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const deployment = await client.customDeployment.read('deploymentId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single custom deployment by unique name
+ * @throws If the custom deployment cannot be found or the request fails
  */
 export const customdeploymentRead = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((customdeploymentId: Id) => Promise<CustomDeployment>) => {
-  return async (customdeploymentId: Id) => {
-    const id = validate(IdSchema, customdeploymentId);
-    const { customDeployment } = await gqlClient.request(getCustomDeployment, { id });
+): ((customDeploymentUniqueName: string) => Promise<CustomDeployment>) => {
+  return async (customDeploymentUniqueName: string) => {
+    const { customDeploymentByUniqueName: customDeployment } = await gqlClient.request(getCustomDeployment, {
+      uniqueName: customDeploymentUniqueName,
+    });
     return customDeployment;
   };
 };
 
+/**
+ * Creates a function to update a custom deployment.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that updates a custom deployment with a new image tag
+ * @throws If the custom deployment cannot be found or the update fails
+ */
 export const customdeploymentUpdate = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((customdeploymentId: Id, imageTag: string) => Promise<CustomDeployment>) => {
-  return async (customdeploymentId: Id, imageTag: string) => {
-    const id = validate(IdSchema, customdeploymentId);
-    const { editCustomDeployment: cd } = await gqlClient.request(editCustomDeployment, { entityId: id, imageTag });
+): ((customDeploymentUniqueName: string, imageTag: string) => Promise<CustomDeployment>) => {
+  return async (customDeploymentUniqueName: string, imageTag: string) => {
+    const { editCustomDeploymentByUniqueName: cd } = await gqlClient.request(editCustomDeployment, {
+      uniqueName: customDeploymentUniqueName,
+      imageTag,
+    });
     return cd;
   };
 };
@@ -179,9 +193,10 @@ export const customdeploymentUpdate = (
 /**
  * Creates a function to create a new custom deployment.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes custom deployment creation arguments and returns a promise resolving to the created custom deployment.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates a new custom deployment with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
 export const customdeploymentCreate = (
   gqlClient: GraphQLClient,
@@ -198,10 +213,19 @@ export const customdeploymentCreate = (
   };
 };
 
+/**
+ * Creates a function to restart a custom deployment.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that restarts a custom deployment by unique name
+ * @throws If the custom deployment cannot be found or the restart fails
+ */
 export const customDeploymentRestart =
   (gqlClient: GraphQLClient, _options: ClientOptions) =>
-  async (deploymentId: Id): Promise<CustomDeployment> => {
-    const id = validate(IdSchema, deploymentId);
-    const { restartCustomDeployment: customDeployment } = await gqlClient.request(restartCustomDeployment, { id });
+  async (customDeploymentUniqueName: string): Promise<CustomDeployment> => {
+    const { restartCustomDeploymentByUniqueName: customDeployment } = await gqlClient.request(restartCustomDeployment, {
+      uniqueName: customDeploymentUniqueName,
+    });
     return customDeployment;
   };

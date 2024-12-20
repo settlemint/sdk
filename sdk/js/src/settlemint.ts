@@ -73,14 +73,6 @@ import {
   privatekeyRead,
 } from "./graphql/private-key.js";
 import {
-  type CreateSmartContractSetArgs,
-  type SmartContractSet,
-  smartContractSetCreate,
-  smartContractSetList,
-  smartContractSetRead,
-  smartContractSetRestart,
-} from "./graphql/smart-contract-set.js";
-import {
   type CreateStorageArgs,
   type Storage,
   storageCreate,
@@ -162,12 +154,6 @@ export interface SettlemintClient {
     create: (args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>;
     update: (customDeploymentUniqueName: string, imageTag: string) => Promise<CustomDeployment>;
     restart: (customDeploymentUniqueName: string) => Promise<CustomDeployment>;
-  };
-  smartContractSet: {
-    list: (applicationUniqueName: string) => Promise<SmartContractSet[]>;
-    read: (smartContractSetUniqueName: string) => Promise<SmartContractSet>;
-    create: (args: CreateSmartContractSetArgs) => Promise<SmartContractSet>;
-    restart: (smartContractSetUniqueName: string) => Promise<SmartContractSet>;
   };
   foundry: {
     env: (blockchainNodeUniqueName: string) => Promise<Record<string, string>>;
@@ -292,12 +278,6 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       create: customdeploymentCreate(gqlClient, options),
       update: customdeploymentUpdate(gqlClient, options),
       restart: customDeploymentRestart(gqlClient, options),
-    },
-    smartContractSet: {
-      list: smartContractSetList(gqlClient, options),
-      read: smartContractSetRead(gqlClient, options),
-      create: smartContractSetCreate(gqlClient, options),
-      restart: smartContractSetRestart(gqlClient, options),
     },
     foundry: {
       env: getEnv(gqlClient, options),

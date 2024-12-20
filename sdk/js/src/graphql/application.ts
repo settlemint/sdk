@@ -6,7 +6,7 @@ import { workspaceRead } from "./workspace.js";
 /**
  * GraphQL fragment containing core application fields.
  */
-const ApplicationFragment = graphql(`
+export const ApplicationFragment = graphql(`
   fragment Application on Application {
     id
     uniqueName

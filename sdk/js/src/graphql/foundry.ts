@@ -1,17 +1,17 @@
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import type { Id } from "@settlemint/sdk-utils";
-import { IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 import type { ClientOptions } from "../helpers/client-options.schema.js";
 
 /**
- * GraphQL query to fetch Foundry environment configuration.
+ * Query to fetch Foundry environment configuration for a blockchain node.
  */
-const getFoundryEnvConfig = graphql(`
-  query getFoundryEnvConfig($blockchainNodeId: String!) {
-    foundryEnvConfig(blockchainNodeId: $blockchainNodeId)
-  }
-`);
+const getFoundryEnvConfig = graphql(
+  `
+    query GetFoundryEnvConfig($blockchainNodeUniqueName: String!) {
+      foundryEnvConfigByUniqueName(blockchainNodeUniqueName: $blockchainNodeUniqueName)
+    }
+  `,
+);
 
 /**
  * Variables for the Foundry environment config query.
@@ -23,10 +23,17 @@ export type GetFoundryEnvConfigVariables = VariablesOf<typeof getFoundryEnvConfi
  */
 export type GetFoundryEnvConfigResult = ResultOf<typeof getFoundryEnvConfig>;
 
-export function getEnv(gqlClient: GraphQLClient, options: ClientOptions) {
-  return async (blockchainNodeId: Id) => {
-    validate(IdSchema, blockchainNodeId);
-    const { foundryEnvConfig } = await gqlClient.request(getFoundryEnvConfig, { blockchainNodeId });
-    return foundryEnvConfig as Record<string, string>;
+/**
+ * Creates a function to fetch Foundry environment configuration.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches Foundry environment configuration for a blockchain node
+ * @throws If the blockchain node cannot be found or the request fails
+ */
+export const getEnv = (gqlClient: GraphQLClient, _options: ClientOptions) => {
+  return async (blockchainNodeUniqueName: string): Promise<Record<string, string>> => {
+    const { foundryEnvConfigByUniqueName } = await gqlClient.request(getFoundryEnvConfig, { blockchainNodeUniqueName });
+    return foundryEnvConfigByUniqueName as Record<string, string>;
   };
-}
+};

@@ -1,11 +1,10 @@
 import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
- * GraphQL fragment for the Integration type.
+ * GraphQL fragment containing core integration fields.
  */
 const IntegrationFragment = graphql(`
   fragment Integration on Integration {
@@ -29,71 +28,72 @@ const IntegrationFragment = graphql(`
 `);
 
 /**
- * Represents integration tools with their details.
+ * Type representing an integration tool entity.
  */
 export type IntegrationTool = ResultOf<typeof IntegrationFragment>;
 
 /**
- * GraphQL query to fetch integrations for a given application.
+ * Query to fetch integrations for an application.
  */
 const getIntegrations = graphql(
   `
-query getIntegrations($id: ID!) {
-  integrations(applicationId: $id) {
-    items {
-      ...Integration
+    query GetIntegrations($applicationUniqueName: String!) {
+      integrationsByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...Integration
+        }
+      }
     }
-  }
-}`,
+  `,
   [IntegrationFragment],
 );
 
 /**
- * GraphQL query to fetch a specific integration by its ID.
+ * Query to fetch a specific integration.
  */
 const getIntegration = graphql(
   `
-query getIntegration($id: ID!) {
-  integration(entityId: $id) {
-    ...Integration
-  }
-}
-`,
+    query GetIntegration($uniqueName: String!) {
+      integrationByUniqueName(uniqueName: $uniqueName) {
+        ...Integration
+      }
+    }
+  `,
   [IntegrationFragment],
 );
 
 /**
- * GraphQL mutation to create a new integration.
+ * Mutation to create a new integration.
  */
 const createIntegration = graphql(
   `
-  mutation createIntegration(
-    $applicationId: ID!
-    $name: String!
-    $integrationType: IntegrationType!
-    $provider: String!
-    $region: String!
-    $size: ClusterServiceSize
-    $type: ClusterServiceType
-  ) {
-    createIntegration(
-      applicationId: $applicationId
-      name: $name
-      integrationType: $integrationType
-      provider: $provider
-      region: $region
-      size: $size
-      type: $type
+    mutation CreateIntegration(
+      $applicationId: ID!
+      $name: String!
+      $integrationType: IntegrationType!
+      $provider: String!
+      $region: String!
+      $size: ClusterServiceSize
+      $type: ClusterServiceType
     ) {
-      ...Integration
+      createIntegration(
+        applicationId: $applicationId
+        name: $name
+        integrationType: $integrationType
+        provider: $provider
+        region: $region
+        size: $size
+        type: $type
+      ) {
+        ...Integration
+      }
     }
-  }
-`,
+  `,
   [IntegrationFragment],
 );
 
 /**
- * Arguments for creating an integration tool.
+ * Arguments required to create an integration tool.
  */
 export type CreateIntegrationToolArgs = Omit<
   VariablesOf<typeof createIntegration>,
@@ -104,80 +104,65 @@ export type CreateIntegrationToolArgs = Omit<
   loadBalancerUniqueName?: string;
 };
 
+/**
+ * Mutation to restart an integration.
+ */
 const restartIntegrationTool = graphql(
   `
-  mutation RestartIntegrationTool($id: ID!) {
-    restartIntegration(entityId: $id) {
-      ...Integration
+    mutation RestartIntegrationTool($uniqueName: String!) {
+      restartIntegrationByUniqueName(uniqueName: $uniqueName) {
+        ...Integration
+      }
     }
-  }
-`,
+  `,
   [IntegrationFragment],
 );
 
 /**
- * Creates a function to list integration tools for a given application.
+ * Creates a function to list integration tools for an application.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an application ID and returns a list of integration tools.
- * @throws Will throw an error if the application ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const integrationTools = await client.integrationTool.list('applicationId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches integration tools for an application
+ * @throws If the application cannot be found or the request fails
  */
 export const integrationToolList = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((applicationId: Id) => Promise<IntegrationTool[]>) => {
-  return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId);
+): ((applicationUniqueName: string) => Promise<IntegrationTool[]>) => {
+  return async (applicationUniqueName: string) => {
     const {
-      integrations: { items },
-    } = await gqlClient.request(getIntegrations, { id });
+      integrationsByUniqueName: { items },
+    } = await gqlClient.request(getIntegrations, { applicationUniqueName });
     return items;
   };
 };
 
 /**
- * Creates a function to read a specific integration tool.
+ * Creates a function to fetch a specific integration tool.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an integration tool ID and returns the tool details.
- * @throws Will throw an error if the integration tool ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const integrationTool = await client.integrationTool.read('integrationToolId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single integration tool by unique name
+ * @throws If the integration tool cannot be found or the request fails
  */
 export const integrationToolRead = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((integrationId: Id) => Promise<IntegrationTool>) => {
-  return async (integrationId: Id) => {
-    const id = validate(IdSchema, integrationId);
-    const { integration } = await gqlClient.request(getIntegration, { id });
-    return integration;
+): ((integrationUniqueName: string) => Promise<IntegrationTool>) => {
+  return async (integrationUniqueName: string) => {
+    const { integrationByUniqueName } = await gqlClient.request(getIntegration, { uniqueName: integrationUniqueName });
+    return integrationByUniqueName;
   };
 };
 
 /**
  * Creates a function to create a new integration tool.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes integration tool creation arguments and returns the created tool.
- * @throws Will throw an error if the arguments are invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const integrationTool = await client.integrationTool.create({
- *   applicationId: 'appId',
- *   name: 'My Integration',
- *   type: 'HASURA'
- * });
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates new integration tool with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
 export const integrationToolCreate = (
   gqlClient: GraphQLClient,
@@ -195,21 +180,18 @@ export const integrationToolCreate = (
 };
 
 /**
- * Creates a function to restart a specific integration tool.
+ * Creates a function to restart an integration tool.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an integration tool ID and returns the restarted tool.
- * @throws Will throw an error if the integration tool ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const restartedIntegrationTool = await client.integrationTool.restart('integrationToolId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that restarts integration tool by unique name
+ * @throws If the integration tool cannot be found or the restart fails
  */
 export const integrationToolRestart =
   (gqlClient: GraphQLClient, _options: ClientOptions) =>
-  async (toolId: Id): Promise<IntegrationTool> => {
-    const id = validate(IdSchema, toolId);
-    const { restartIntegration: integration } = await gqlClient.request(restartIntegrationTool, { id });
+  async (integrationUniqueName: string): Promise<IntegrationTool> => {
+    const { restartIntegrationByUniqueName: integration } = await gqlClient.request(restartIntegrationTool, {
+      uniqueName: integrationUniqueName,
+    });
     return integration;
   };

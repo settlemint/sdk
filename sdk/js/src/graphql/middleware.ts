@@ -1,11 +1,10 @@
 import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
- * GraphQL fragment for the Middleware type.
+ * GraphQL fragment containing core middleware fields.
  */
 const MiddlewareFragment = graphql(`
   fragment Middleware on Middleware {
@@ -41,82 +40,86 @@ const MiddlewareFragment = graphql(`
 `);
 
 /**
- * Represents middleware with its details.
+ * Type representing a middleware entity.
  */
 export type Middleware = ResultOf<typeof MiddlewareFragment>;
 
 /**
- * GraphQL query to fetch middlewares for a given application.
+ * Query to fetch middlewares for an application.
  */
 const getMiddlewares = graphql(
   `
-query getMiddlewares($id: ID!, $noCache: Boolean = false) {
-  middlewares(applicationId: $id) {
-    items {
-      ...Middleware
+    query GetMiddlewares($applicationUniqueName: String!, $noCache: Boolean = false) {
+      middlewaresByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...Middleware
+        }
+      }
     }
-  }
-}`,
+  `,
   [MiddlewareFragment],
 );
 
 /**
- * GraphQL query to fetch a specific middleware by its ID.
+ * Query to fetch a specific middleware.
  */
 const getMiddleware = graphql(
   `
-query getMiddleware($id: ID!, $noCache: Boolean = true) {
-  middleware(entityId: $id) {
-    ...Middleware
-  }
-}
-`,
+    query GetMiddleware($uniqueName: String!, $noCache: Boolean = true) {
+      middlewareByUniqueName(uniqueName: $uniqueName) {
+        ...Middleware
+      }
+    }
+  `,
   [MiddlewareFragment],
 );
 
 /**
- * GraphQL mutation to create a middleware.
+ * Mutation to create a new middleware.
  */
 const createMiddleware = graphql(
   `
-  mutation createMiddleware(
-    $applicationId: ID!
-    $name: String!
-    $provider: String!
-    $region: String!
-    $size: ClusterServiceSize
-    $type: ClusterServiceType
-    $interface: MiddlewareType!
-    $storageId: ID
-    $smartContractSetId: ID
-    $blockchainNodeId: ID
-    $loadBalancerId: ID
-    $abis: [SmartContractPortalMiddlewareAbiInputDto!]
-    $includePredeployedAbis: [String!]
-    $noCache: Boolean = false
-  ) {
-    createMiddleware(
-      applicationId: $applicationId
-      name: $name
-      provider: $provider
-      region: $region
-      size: $size
-      type: $type
-      interface: $interface
-      storageId: $storageId
-      smartContractSetId: $smartContractSetId
-      blockchainNodeId: $blockchainNodeId
-      loadBalancerId: $loadBalancerId
-      abis: $abis
-      includePredeployedAbis: $includePredeployedAbis
+    mutation CreateMiddleware(
+      $applicationId: ID!
+      $name: String!
+      $provider: String!
+      $region: String!
+      $size: ClusterServiceSize
+      $type: ClusterServiceType
+      $interface: MiddlewareType!
+      $storageId: ID
+      $smartContractSetId: ID
+      $blockchainNodeId: ID
+      $loadBalancerId: ID
+      $abis: [SmartContractPortalMiddlewareAbiInputDto!]
+      $includePredeployedAbis: [String!]
+      $noCache: Boolean = false
     ) {
-      ...Middleware
+      createMiddleware(
+        applicationId: $applicationId
+        name: $name
+        provider: $provider
+        region: $region
+        size: $size
+        type: $type
+        interface: $interface
+        storageId: $storageId
+        smartContractSetId: $smartContractSetId
+        blockchainNodeId: $blockchainNodeId
+        loadBalancerId: $loadBalancerId
+        abis: $abis
+        includePredeployedAbis: $includePredeployedAbis
+      ) {
+        ...Middleware
+      }
     }
-  }
-`,
+  `,
   [MiddlewareFragment],
 );
 
+/**
+ * Arguments required to create a middleware.
+ */
 export type CreateMiddlewareArgs = Omit<
   VariablesOf<typeof createMiddleware>,
   "applicationId" | "blockchainNode" | "loadBalancer" | "smartContractSet" | "storage"
@@ -128,61 +131,56 @@ export type CreateMiddlewareArgs = Omit<
   storageUniqueName?: string;
 };
 
+/**
+ * Mutation to restart a middleware.
+ */
 const restartMiddleware = graphql(
   `
-  mutation RestartMiddleware($id: ID!, $noCache: Boolean = false) {
-    restartMiddleware(entityId: $id) {
-      ...Middleware
+    mutation RestartMiddleware($uniqueName: String!, $noCache: Boolean = false) {
+      restartMiddlewareByUniqueName(uniqueName: $uniqueName) {
+        ...Middleware
+      }
     }
-  }
-`,
+  `,
   [MiddlewareFragment],
 );
 
 /**
- * Creates a function to list middlewares for a given application.
+ * Creates a function to list middlewares for an application.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an application ID and returns a list of middlewares.
- * @throws Will throw an error if the application ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const middlewares = await client.middleware.list('applicationId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches middlewares for an application
+ * @throws If the application cannot be found or the request fails
  */
 export const middlewareList = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((applicationId: Id) => Promise<Middleware[]>) => {
-  return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId);
+): ((applicationUniqueName: string) => Promise<Middleware[]>) => {
+  return async (applicationUniqueName: string) => {
     const {
-      middlewares: { items },
-    } = await gqlClient.request(getMiddlewares, { id });
+      middlewaresByUniqueName: { items },
+    } = await gqlClient.request(getMiddlewares, { applicationUniqueName });
     return items;
   };
 };
 
 /**
- * Creates a function to read a specific middleware.
+ * Creates a function to fetch a specific middleware.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes a middleware ID and returns the middleware details.
- * @throws Will throw an error if the middleware ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const middleware = await client.middleware.read('middlewareId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single middleware by unique name
+ * @throws If the middleware cannot be found or the request fails
  */
 export const middlewareRead = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((middlewareId: Id) => Promise<Middleware>) => {
-  return async (middlewareId: Id) => {
-    const id = validate(IdSchema, middlewareId);
-    const { middleware } = await gqlClient.request(getMiddleware, { id });
+): ((middlewareUniqueName: string) => Promise<Middleware>) => {
+  return async (middlewareUniqueName: string) => {
+    const { middlewareByUniqueName: middleware } = await gqlClient.request(getMiddleware, {
+      uniqueName: middlewareUniqueName,
+    });
     return middleware;
   };
 };
@@ -190,9 +188,10 @@ export const middlewareRead = (
 /**
  * Creates a function to create a new middleware.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes middleware creation arguments and returns a promise resolving to the created middleware.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates new middleware with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
 export const middlewareCreate = (
   gqlClient: GraphQLClient,
@@ -209,10 +208,19 @@ export const middlewareCreate = (
   };
 };
 
+/**
+ * Creates a function to restart a middleware.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that restarts middleware by unique name
+ * @throws If the middleware cannot be found or the restart fails
+ */
 export const middlewareRestart =
   (gqlClient: GraphQLClient, _options: ClientOptions) =>
-  async (middlewareId: Id): Promise<Middleware> => {
-    const id = validate(IdSchema, middlewareId);
-    const { restartMiddleware: middleware } = await gqlClient.request(restartMiddleware, { id });
+  async (middlewareUniqueName: string): Promise<Middleware> => {
+    const { restartMiddlewareByUniqueName: middleware } = await gqlClient.request(restartMiddleware, {
+      uniqueName: middlewareUniqueName,
+    });
     return middleware;
   };
