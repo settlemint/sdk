@@ -152,9 +152,30 @@ describe("Setup a smart contract set using the SDK", () => {
     deployCommand.stdout.off("data", onDeployOutput);
     expect(deployOutput).toInclude("successfully deployed 🚀");
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
+
+    const resetCommand = runCommand(
+      COMMAND_TEST_SCOPE,
+      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
+      {
+        cwd: projectDir,
+      },
+    );
+    // Confirm deployment and reset
+    const onResetOutput = (message: string) => {
+      if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
+        resetCommand.stdin.cork();
+        resetCommand.stdin.write("y");
+        resetCommand.stdin.uncork();
+      }
+    };
+    resetCommand.stdout.on("data", onResetOutput);
+    const { output: outputReset } = await resetCommand.result;
+    resetCommand.stdout.off("data", onResetOutput);
+    expect(outputReset).toInclude("successfully deployed 🚀");
+    expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test("Hardhat - Reset & Deploy smart contract set (remote) - With nodes and private key selection", async () => {
+  test("Hardhat - Select node and private key for deploying smart contract set (remote)", async () => {
     const resetCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--reset"], {
       cwd: projectDir,
       env: {
@@ -183,7 +204,7 @@ describe("Setup a smart contract set using the SDK", () => {
 
       if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("y");
+        resetCommand.stdin.write("n"); // No need to deploy again
         resetCommand.stdin.uncork();
       }
     };
@@ -191,9 +212,6 @@ describe("Setup a smart contract set using the SDK", () => {
     resetCommand.stdout.on("data", onResetOutput);
     const { output: outputReset } = await resetCommand.result;
     resetCommand.stdout.off("data", onResetOutput);
-
-    expect(outputReset).toInclude("successfully deployed 🚀");
-    expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
 
     const nodeListString = nodeListCapture.join("\n");
     expect(nodeListString).toContain(NODE_NAME);
