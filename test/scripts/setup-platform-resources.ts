@@ -246,6 +246,14 @@ async function createBlockchainNodeMinioAndIpfs() {
   ]);
 
   const [networkResult, hasuraResult, minioResult, ipfsResult] = results;
+
+  expect([networkResult?.status, hasuraResult?.status, minioResult?.status, ipfsResult?.status]).toEqual([
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+  ]);
+
   if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkResult.value.output).toInclude("Blockchain node is deployed");
@@ -271,13 +279,6 @@ async function createBlockchainNodeMinioAndIpfs() {
     );
     expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
   }
-
-  expect([networkResult?.status, hasuraResult?.status, minioResult?.status, ipfsResult?.status]).toEqual([
-    "fulfilled",
-    "fulfilled",
-    "fulfilled",
-    "fulfilled",
-  ]);
 
   if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);

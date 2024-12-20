@@ -2,8 +2,13 @@ import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, te
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { $, type ShellError } from "bun";
-import { NODE_NAME_2_WITH_PK } from "./constants/test-resources";
-import { NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
+import {
+  NODE_NAME,
+  NODE_NAME_2_WITH_PK,
+  NODE_NAME_3_WITHOUT_PK,
+  PRIVATE_KEY_2_NAME,
+  PRIVATE_KEY_SMART_CONTRACTS_NAME,
+} from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
@@ -149,24 +154,27 @@ describe("Setup a smart contract set using the SDK", () => {
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test("Hardhat - Reset & Deploy smart contract set (remote) - Blockchain Node Selection", async (done) => {
+  test("Hardhat - Reset & Deploy smart contract set (remote) - With nodes and private key selection", async () => {
     const resetCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--reset"], {
       cwd: projectDir,
     });
 
     const nodeListCapture: string[] = [];
-    const onDeployOutput = (message: string) => {
+    const privateKeyCapture: string[] = [];
+    const onResetOutput = (message: string) => {
       if (message.includes("Which blockchain node do you want to connect to?")) {
         nodeListCapture.push(message);
 
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // Press enter
+        resetCommand.stdin.write("\n"); // Choose the first option
         resetCommand.stdin.uncork();
       }
 
       if (message.includes("Which private key do you want to deploy from?")) {
+        privateKeyCapture.push(message);
+
         resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // Press enter
+        resetCommand.stdin.write("\n"); // Choose the first option
         resetCommand.stdin.uncork();
       }
 
@@ -177,15 +185,20 @@ describe("Setup a smart contract set using the SDK", () => {
       }
     };
 
-    resetCommand.stdout.on("data", onDeployOutput);
+    resetCommand.stdout.on("data", onResetOutput);
     const { output: outputReset } = await resetCommand.result;
-    resetCommand.stdout.off("data", onDeployOutput);
+    resetCommand.stdout.off("data", onResetOutput);
 
     expect(outputReset).toInclude("successfully deployed 🚀");
     expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
 
     const nodeListString = nodeListCapture.join("\n");
-    expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
+    expect(nodeListString).toContain(NODE_NAME);
     expect(nodeListString).toContain(NODE_NAME_2_WITH_PK);
+    expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
+
+    const privateKeyString = privateKeyCapture.join("\n");
+    expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
+    expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME);
   });
 });
