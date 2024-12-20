@@ -2,6 +2,9 @@ import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
+import { blockchainNodeRead } from "./blockchain-node.js";
+import { loadBalancerRead } from "./load-balancer.js";
+import { storageRead } from "./storage.js";
 
 /**
  * GraphQL fragment containing core middleware fields.
@@ -88,7 +91,6 @@ const createMiddleware = graphql(
       $type: ClusterServiceType
       $interface: MiddlewareType!
       $storageId: ID
-      $smartContractSetId: ID
       $blockchainNodeId: ID
       $loadBalancerId: ID
       $abis: [SmartContractPortalMiddlewareAbiInputDto!]
@@ -104,7 +106,6 @@ const createMiddleware = graphql(
         type: $type
         interface: $interface
         storageId: $storageId
-        smartContractSetId: $smartContractSetId
         blockchainNodeId: $blockchainNodeId
         loadBalancerId: $loadBalancerId
         abis: $abis
@@ -122,12 +123,11 @@ const createMiddleware = graphql(
  */
 export type CreateMiddlewareArgs = Omit<
   VariablesOf<typeof createMiddleware>,
-  "applicationId" | "blockchainNode" | "loadBalancer" | "smartContractSet" | "storage"
+  "applicationId" | "blockchainNodeId" | "loadBalancerId" | "storageId"
 > & {
   applicationUniqueName: string;
   blockchainNodeUniqueName?: string;
   loadBalancerUniqueName?: string;
-  smartContractSetUniqueName?: string;
   storageUniqueName?: string;
 };
 
@@ -198,11 +198,24 @@ export const middlewareCreate = (
   options: ClientOptions,
 ): ((args: CreateMiddlewareArgs) => Promise<Middleware>) => {
   return async (args: CreateMiddlewareArgs) => {
-    const { applicationUniqueName, ...otherArgs } = args;
-    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const { applicationUniqueName, blockchainNodeUniqueName, loadBalancerUniqueName, storageUniqueName, ...otherArgs } =
+      args;
+    const [application, blockchainNode, loadBalancer, storage] = await Promise.all([
+      applicationRead(gqlClient, options)(applicationUniqueName),
+      blockchainNodeUniqueName
+        ? blockchainNodeRead(gqlClient, options)(blockchainNodeUniqueName)
+        : Promise.resolve(undefined),
+      loadBalancerUniqueName
+        ? loadBalancerRead(gqlClient, options)(loadBalancerUniqueName)
+        : Promise.resolve(undefined),
+      storageUniqueName ? storageRead(gqlClient, options)(storageUniqueName) : Promise.resolve(undefined),
+    ]);
     const { createMiddleware: middleware } = await gqlClient.request(createMiddleware, {
       ...otherArgs,
       applicationId: application.id,
+      blockchainNodeId: blockchainNode?.id,
+      loadBalancerId: loadBalancer?.id,
+      storageId: storage?.id,
     });
     return middleware;
   };

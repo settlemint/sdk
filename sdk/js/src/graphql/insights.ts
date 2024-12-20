@@ -1,4 +1,6 @@
 import { applicationRead } from "@/graphql/application.js";
+import { blockchainNodeRead } from "@/graphql/blockchain-node.js";
+import { loadBalancerRead } from "@/graphql/load-balancer.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
@@ -173,11 +175,21 @@ export const insightsCreate = (
   options: ClientOptions,
 ): ((args: CreateInsightsArgs) => Promise<Insights>) => {
   return async (args: CreateInsightsArgs) => {
-    const { applicationUniqueName, ...otherArgs } = args;
-    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const { applicationUniqueName, blockchainNodeUniqueName, loadBalancerUniqueName, ...otherArgs } = args;
+    const [application, blockchainNode, loadBalancer] = await Promise.all([
+      applicationRead(gqlClient, options)(applicationUniqueName),
+      blockchainNodeUniqueName
+        ? blockchainNodeRead(gqlClient, options)(blockchainNodeUniqueName)
+        : Promise.resolve(undefined),
+      loadBalancerUniqueName
+        ? loadBalancerRead(gqlClient, options)(loadBalancerUniqueName)
+        : Promise.resolve(undefined),
+    ]);
     const { createInsights: insights } = await gqlClient.request(createInsights, {
       ...otherArgs,
       applicationId: application.id,
+      blockchainNode: blockchainNode?.id,
+      loadBalancer: loadBalancer?.id,
     });
     return insights;
   };

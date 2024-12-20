@@ -95,13 +95,8 @@ const createIntegration = graphql(
 /**
  * Arguments required to create an integration tool.
  */
-export type CreateIntegrationToolArgs = Omit<
-  VariablesOf<typeof createIntegration>,
-  "applicationId" | "blockchainNode" | "loadBalancer"
-> & {
+export type CreateIntegrationToolArgs = Omit<VariablesOf<typeof createIntegration>, "applicationId"> & {
   applicationUniqueName: string;
-  blockchainNodeUniqueName?: string;
-  loadBalancerUniqueName?: string;
 };
 
 /**

@@ -2,6 +2,7 @@ import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
+import { blockchainNodeRead } from "./blockchain-node.js";
 
 /**
  * GraphQL fragment containing core private key fields.
@@ -159,11 +160,17 @@ export const privateKeyCreate = (
   options: ClientOptions,
 ): ((args: CreatePrivateKeyArgs) => Promise<PrivateKey>) => {
   return async (args: CreatePrivateKeyArgs) => {
-    const { applicationUniqueName, ...otherArgs } = args;
+    const { applicationUniqueName, blockchainNodeUniqueNames, ...otherArgs } = args;
     const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const blockchainNodes = blockchainNodeUniqueNames
+      ? await Promise.all(
+          blockchainNodeUniqueNames.map((uniqueName) => blockchainNodeRead(gqlClient, options)(uniqueName)),
+        )
+      : [];
     const { createPrivateKey: privateKey } = await gqlClient.request(createPrivateKey, {
       ...otherArgs,
       applicationId: application.id,
+      blockchainNodes: blockchainNodes.map((node) => node?.id),
     });
     return privateKey;
   };
