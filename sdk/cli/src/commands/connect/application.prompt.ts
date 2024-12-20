@@ -8,7 +8,7 @@ export async function applicationPrompt(
   applications: Application[],
   accept: boolean,
 ): Promise<Application> {
-  const defaultApplication = applications.find((application) => application.id === env.SETTLEMINT_APPLICATION);
+  const defaultApplication = applications.find((application) => application.uniqueName === env.SETTLEMINT_APPLICATION);
   const defaultPossible = accept && defaultApplication;
 
   if (defaultPossible) {

@@ -7,7 +7,7 @@ export async function workspacePrompt(
   workspaces: Workspace[],
   accept: boolean,
 ): Promise<Workspace> {
-  const defaultWorkspace = workspaces.find((workspace) => workspace.id === env.SETTLEMINT_WORKSPACE);
+  const defaultWorkspace = workspaces.find((workspace) => workspace.uniqueName === env.SETTLEMINT_WORKSPACE);
   const defaultPossible = accept && defaultWorkspace;
 
   if (defaultPossible) {
