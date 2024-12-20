@@ -3,6 +3,7 @@ import { workspaceCreateCommand } from "@/commands/platform/workspace/create";
 import { Command } from "@commander-js/extra-typings";
 import { applicationAccessTokenCreateCommand } from "./apllication-access-tokens/create";
 import { applicationCreateCommand } from "./application/create";
+import { blockchainNodeCreateCommand } from "./blockchain-node/create";
 import { insightsCreateCommand } from "./insights/create";
 import { integrationToolCreateCommand } from "./integration-tools/create";
 import { middlewareCreateCommand } from "./middleware/create";
@@ -22,6 +23,7 @@ export function createCommand(): Command {
     .addCommand(workspaceCreateCommand())
     .addCommand(applicationCreateCommand())
     .addCommand(blockchainNetworkCreateCommand())
+    .addCommand(blockchainNodeCreateCommand())
     .addCommand(privateKeyCreateCommand())
     .addCommand(middlewareCreateCommand())
     .addCommand(storageCreateCommand())

@@ -77,7 +77,7 @@ export function getCreateCommand({
     const autoAccept = !!acceptDefaults || isInCi;
     const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-    const instance = await instancePrompt(env, autoAccept);
+    const instance = env.SETTLEMINT_INSTANCE ?? (await instancePrompt(env, autoAccept));
     const accessToken = usePersonalAccessToken
       ? (await getInstanceCredentials(instance))?.personalAccessToken
       : env.SETTLEMINT_ACCESS_TOKEN;

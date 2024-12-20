@@ -9,7 +9,7 @@ import { blockchainNetworkBesuCreateCommand } from "./besu/create";
  */
 export function blockchainNetworkCreateCommand(): Command {
   return new Command("blockchain-network")
-    .alias("bn")
+    .alias("bnw")
     .description("Create a blockchain network in the SettleMint platform")
     .addCommand(blockchainNetworkBesuCreateCommand());
 }

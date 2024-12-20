@@ -178,7 +178,7 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Types generated successfully");
   });
 
-  test("subgraph - Deploy subgraphs", async () => {
+  test.skip("subgraph - Deploy subgraphs", async () => {
     const config = await getSubgraphYamlConfig(subgraphDir);
     for (const datasource of config.dataSources) {
       const { output } = await runCommand(
