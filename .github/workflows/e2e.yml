@@ -36,7 +36,7 @@ jobs:
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
         with:
-          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          ref: ${{ github.head_ref || github.ref }}
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@f23fbf3b586540a96f4f5849a5e04c7e56e1e804 # v1
