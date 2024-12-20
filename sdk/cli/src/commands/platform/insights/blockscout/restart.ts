@@ -11,8 +11,8 @@ export function blockscoutRestartCommand() {
     subType: "blockscout",
     alias: "bs",
     envKey: "SETTLEMINT_BLOCKSCOUT",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.insights.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.insights.restart(uniqueName);
     },
   });
 }

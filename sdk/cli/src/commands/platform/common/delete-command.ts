@@ -94,8 +94,12 @@ ${createExamples([
         instance,
       });
 
-      const isDefaultId = uniqueName === "default";
-      const serviceUniqueName = isDefaultId ? (typeof env[envKey] === "string" ? env[envKey] : null) : uniqueName;
+      const isDefaultUniqueName = uniqueName === "default";
+      const serviceUniqueName = isDefaultUniqueName
+        ? typeof env[envKey] === "string"
+          ? env[envKey]
+          : null
+        : uniqueName;
 
       if (!serviceUniqueName) {
         throw new Error(
@@ -111,7 +115,7 @@ ${createExamples([
         stopMessage: `${capitalizeFirstLetter(type)} deleted`,
       });
 
-      if (isDefaultId) {
+      if (isDefaultUniqueName) {
         const newEnv: Partial<DotEnv> = {
           SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
           SETTLEMINT_INSTANCE: instance,
@@ -122,7 +126,7 @@ ${createExamples([
       }
 
       if (wait) {
-        await waitForCompletion({ settlemint, type, id: serviceUniqueName, action: "destroy" });
+        await waitForCompletion({ settlemint, type, uniqueName: serviceUniqueName, action: "destroy" });
       }
 
       outro(`${capitalizeFirstLetter(type)} ${result.name} deleted successfully`);

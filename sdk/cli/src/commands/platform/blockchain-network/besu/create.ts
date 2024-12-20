@@ -78,8 +78,8 @@ export function blockchainNetworkBesuCreateCommand() {
                 mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
                     SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_BLOCKCHAIN_NETWORK: result.id,
-                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.id,
+                    SETTLEMINT_BLOCKCHAIN_NETWORK: result.uniqueName,
+                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
                   };
                 },
               };
@@ -95,7 +95,7 @@ export function blockchainNetworkBesuCreateCommand() {
       {
         description: "Create a Besu blockchain network in a different application",
         command:
-          "platform create blockchain-network besu my-network --application-id 123456789 --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
+          "platform create blockchain-network besu my-network --application app-123 --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
       },
     ],
   });

@@ -15,31 +15,31 @@ export function blockscoutInsightsCreateCommand() {
     alias: "bs",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
-        .option("--application-id <applicationId>", "Application ID")
-        .option("--load-balancer-id <loadBalancerId>", "Load Balancer ID (mutually exclusive with blockchain-node-id)")
+        .option("--application <application>", "Application unique name")
+        .option("--load-balancer <loadBalancer>", "Load Balancer unique name (mutually exclusive with blockchain-node)")
         .option(
-          "--blockchain-node-id <blockchainNodeId>",
-          "Blockchain Node ID (mutually exclusive with load-balancer-id)",
+          "--blockchain-node <blockchainNode>",
+          "Blockchain Node unique name (mutually exclusive with load-balancer)",
         )
         .action(
-          async (
-            name,
-            { applicationId, provider, region, size, type, blockchainNodeId, loadBalancerId, ...defaultArgs },
-          ) => {
+          async (name, { application, provider, region, size, type, blockchainNode, loadBalancer, ...defaultArgs }) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNode = loadBalancerId ? undefined : (blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
-              const loadBalancer = loadBalancerId ?? (blockchainNode ? undefined : env.SETTLEMINT_LOAD_BALANCER!);
+              const blockchainNodeUniqueName = loadBalancer
+                ? undefined
+                : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+              const loadBalancerUniqueName = blockchainNodeUniqueName
+                ? undefined
+                : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
               const result = await settlemint.insights.create({
                 name,
-                applicationId: application,
+                applicationUniqueName: application ?? env.SETTLEMINT_APPLICATION!,
                 insightsCategory: "BLOCKCHAIN_EXPLORER",
                 provider,
                 region,
                 size,
                 type,
-                blockchainNode,
-                loadBalancer,
+                blockchainNodeUniqueName,
+                loadBalancerUniqueName,
               });
               return {
                 result,
@@ -62,7 +62,7 @@ export function blockscoutInsightsCreateCommand() {
       },
       {
         description: "Create a Blockscout insights service in a different application",
-        command: "platform create insights blockscout my-blockscout --application-id 123456789",
+        command: "platform create insights blockscout my-blockscout --application app-123",
       },
     ],
   });

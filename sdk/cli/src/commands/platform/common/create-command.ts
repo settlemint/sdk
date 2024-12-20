@@ -54,8 +54,8 @@ export function getCreateCommand({
         settlemintClient: SettlemintClient,
         env: Partial<DotEnv>,
       ) => Promise<{
-        result: { id: string; name: string };
-        waitFor?: { resourceType: ResourceType; id: string; name: string };
+        result: { id: string; name: string; uniqueName: string };
+        waitFor?: { resourceType: ResourceType; id: string; name: string; uniqueName: string };
         mapDefaultEnv?: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
       }>,
     ) => void | Promise<void>,
@@ -102,7 +102,7 @@ export function getCreateCommand({
       await waitForCompletion({
         settlemint,
         type: waitFor?.resourceType ?? type,
-        id: waitFor?.id ?? result.id,
+        uniqueName: waitFor?.uniqueName ?? result.uniqueName,
         action: "deploy",
       });
 

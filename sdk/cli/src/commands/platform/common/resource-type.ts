@@ -6,7 +6,6 @@ export type ResourceType =
   | "blockchain node"
   | "custom deployment"
   | "private key"
-  | "smart contract set"
   | "middleware"
   | "integration tool"
   | "storage"
@@ -20,7 +19,6 @@ export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient>
   "blockchain node": "blockchainNode",
   "custom deployment": "customDeployment",
   "private key": "privateKey",
-  "smart contract set": "smartContractSet",
   middleware: "middleware",
   "integration tool": "integrationTool",
   storage: "storage",

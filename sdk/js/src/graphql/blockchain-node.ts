@@ -28,6 +28,7 @@ const BlockchainNodeFragment = graphql(`
       ... on AbstractClusterService {
         id
         name
+        uniqueName
       }
     }
     privateKeys {

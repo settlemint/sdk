@@ -18,6 +18,7 @@ const BlockchainNetworkFragment = graphql(`
       ... on BlockchainNode {
         id
         name
+        uniqueName
       }
     }
   }

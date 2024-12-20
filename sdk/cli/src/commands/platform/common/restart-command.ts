@@ -58,11 +58,14 @@ ${createExamples([
   },
 ])}`,
     )
-    .argument("<id>", `The id of the ${type}, use 'default' to restart the default one from your .env file`)
+    .argument(
+      "<uniqueName>",
+      `The unique name of the ${type}, use 'default' to restart the default one from your .env file`,
+    )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
     .option("-w, --wait", "Wait until restarted")
-    .action(async (id, { acceptDefaults, prod, wait }) => {
+    .action(async (uniqueName, { acceptDefaults, prod, wait }) => {
       intro(`Restarting ${type} in the SettleMint platform`);
 
       const autoAccept = !!acceptDefaults || isInCi;
@@ -81,25 +84,29 @@ ${createExamples([
         instance,
       });
 
-      const isDefaultId = id === "default";
-      const serviceId = isDefaultId ? (typeof env[envKey] === "string" ? env[envKey] : null) : id;
+      const isDefaultUniqueName = uniqueName === "default";
+      const serviceUniqueName = isDefaultUniqueName
+        ? typeof env[envKey] === "string"
+          ? env[envKey]
+          : null
+        : uniqueName;
 
-      if (!serviceId) {
+      if (!serviceUniqueName) {
         throw new Error(
-          `No default ${type} found in your .env file. Please provide a valid ${type} ID or set a default ${type} first.`,
+          `No default ${type} found in your .env file. Please provide a valid ${type} unique name or set a default ${type} first.`,
         );
       }
 
       const result = await spinner({
         startMessage: `Restarting ${type}`,
         task: async () => {
-          return restartFunction(settlemint, serviceId);
+          return restartFunction(settlemint, serviceUniqueName);
         },
         stopMessage: `${capitalizeFirstLetter(type)} restart initiated`,
       });
 
       if (wait) {
-        await waitForCompletion({ settlemint, type, id: serviceId, action: "restart" });
+        await waitForCompletion({ settlemint, type, uniqueName: serviceUniqueName, action: "restart" });
       }
 
       outro(`${capitalizeFirstLetter(type)} ${result.name} restart initiated successfully`);
