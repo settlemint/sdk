@@ -59,7 +59,7 @@ export function hardhatDeployRemoteCommand() {
         instance,
       });
 
-      const nodeId = autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : blockchainNodeId;
+      const nodeId = blockchainNodeId ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
       let node: BlockchainNode | undefined = undefined;
       if (!nodeId) {
         const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
