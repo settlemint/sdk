@@ -2,10 +2,6 @@ import { beforeAll, describe, expect, it, mock } from "bun:test";
 import { missingAccessTokenError, missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getApplicationOrPersonalAccessToken } from "./get-app-or-personal-token";
 
-const mockSdkUtils = (mockReturn: unknown) => {
-  return mock.module("@settlemint/sdk-utils", () => mockReturn);
-};
-
 const mockConfig = (mockReturn: unknown) => {
   return mock.module("@/utils/config", () => mockReturn);
 };
@@ -21,11 +17,6 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Application access token - Returns application access token when set", async () => {
-    mockSdkUtils({
-      loadEnv: mock(() => ({
-        SETTLEMINT_ACCESS_TOKEN: appToken,
-      })),
-    });
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
@@ -33,8 +24,9 @@ describe("getApplicationOrPersonalAccessToken", () => {
     });
 
     const result = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      },
       instance: "test-instance",
       prefer: "application",
       strict: true,
@@ -44,11 +36,6 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Application access token - Non strict mode - Fallback to personal access token if no application access token", async () => {
-    mockSdkUtils({
-      loadEnv: mock(() => ({
-        SETTLEMINT_ACCESS_TOKEN: undefined,
-      })),
-    });
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
@@ -56,8 +43,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
     });
 
     const result = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {},
       instance: "test-instance",
       prefer: "application",
       strict: false,
@@ -67,11 +53,6 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Application access token - Strict mode - Error if no application access token", async () => {
-    mockSdkUtils({
-      loadEnv: mock(() => ({
-        SETTLEMINT_ACCESS_TOKEN: undefined,
-      })),
-    });
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
@@ -79,8 +60,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
     });
 
     const result = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {},
       instance: "test-instance",
       prefer: "application",
       strict: true,
@@ -93,8 +73,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
       })),
     });
     const result2 = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {},
       instance: "test-instance",
       prefer: "application",
       strict: true,
@@ -103,11 +82,6 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Personal access token - Returns personal access token when set", async () => {
-    mockSdkUtils({
-      loadEnv: mock(() => ({
-        SETTLEMINT_ACCESS_TOKEN: appToken,
-      })),
-    });
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
@@ -115,8 +89,9 @@ describe("getApplicationOrPersonalAccessToken", () => {
     });
 
     const result = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      },
       instance: "test-instance",
       prefer: "personal",
       strict: true,
@@ -126,11 +101,6 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Personal access token - Non strict mode - Fallback to application access token if no personal access token", async () => {
-    mockSdkUtils({
-      loadEnv: mock(() => ({
-        SETTLEMINT_ACCESS_TOKEN: appToken,
-      })),
-    });
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: undefined,
@@ -138,8 +108,9 @@ describe("getApplicationOrPersonalAccessToken", () => {
     });
 
     const result = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      },
       instance: "test-instance",
       prefer: "personal",
       strict: false,
@@ -149,11 +120,6 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Personal access token - Strict mode - Error if no personal access token", async () => {
-    mockSdkUtils({
-      loadEnv: mock(() => ({
-        SETTLEMINT_ACCESS_TOKEN: appToken,
-      })),
-    });
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: undefined,
@@ -161,8 +127,9 @@ describe("getApplicationOrPersonalAccessToken", () => {
     });
 
     const result = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: false,
+      env: {
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      },
       instance: "test-instance",
       prefer: "personal",
       strict: true,

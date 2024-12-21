@@ -77,8 +77,7 @@ export function getCreateCommand({
 
     const instance = await instancePrompt(env, autoAccept);
     const accessToken = await getApplicationOrPersonalAccessToken({
-      validateEnv: false,
-      prod: !!prod,
+      env,
       instance,
       prefer: usePersonalAccessToken ? "personal" : "application",
       strict: true,
