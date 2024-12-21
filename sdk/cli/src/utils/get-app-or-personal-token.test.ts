@@ -29,13 +29,13 @@ describe("getApplicationOrPersonalAccessToken", () => {
       },
       instance: "test-instance",
       prefer: "application",
-      strict: true,
+      allowFallback: false,
     });
 
     expect(result).toBe(appToken);
   });
 
-  it("Preference - Application access token - Non strict mode - Fallback to personal access token if no application access token", async () => {
+  it("Preference - Application access token - Fallback allowed - Fallback to personal access token if no application access token", async () => {
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
@@ -46,13 +46,13 @@ describe("getApplicationOrPersonalAccessToken", () => {
       env: {},
       instance: "test-instance",
       prefer: "application",
-      strict: false,
+      allowFallback: true,
     });
 
     expect(result).toBe(personalToken);
   });
 
-  it("Preference - Application access token - Strict mode - Error if no application access token", async () => {
+  it("Preference - Application access token - Fallback disallowed - Error if no application access token", async () => {
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
@@ -63,7 +63,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
       env: {},
       instance: "test-instance",
       prefer: "application",
-      strict: true,
+      allowFallback: false,
     });
     expect(result).toBe(missingAccessTokenError(true));
 
@@ -76,7 +76,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
       env: {},
       instance: "test-instance",
       prefer: "application",
-      strict: true,
+      allowFallback: false,
     });
     expect(result2).toBe(missingAccessTokenError(false));
   });
@@ -94,13 +94,13 @@ describe("getApplicationOrPersonalAccessToken", () => {
       },
       instance: "test-instance",
       prefer: "personal",
-      strict: true,
+      allowFallback: false,
     });
 
     expect(result).toBe(personalToken);
   });
 
-  it("Preference - Personal access token - Non strict mode - Fallback to application access token if no personal access token", async () => {
+  it("Preference - Personal access token - Fallback allowed - Fallback to application access token if no personal access token", async () => {
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: undefined,
@@ -113,13 +113,13 @@ describe("getApplicationOrPersonalAccessToken", () => {
       },
       instance: "test-instance",
       prefer: "personal",
-      strict: false,
+      allowFallback: true,
     });
 
     expect(result).toBe(appToken);
   });
 
-  it("Preference - Personal access token - Strict mode - Error if no personal access token", async () => {
+  it("Preference - Personal access token - Fallback disallowed - Error if no personal access token", async () => {
     mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: undefined,
@@ -132,7 +132,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
       },
       instance: "test-instance",
       prefer: "personal",
-      strict: true,
+      allowFallback: false,
     });
 
     expect(result).toBe(missingPersonalAccessTokenError());

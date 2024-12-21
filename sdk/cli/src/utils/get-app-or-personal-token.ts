@@ -6,12 +6,12 @@ export const getApplicationOrPersonalAccessToken = async ({
   env,
   instance,
   prefer,
-  strict,
+  allowFallback,
 }: {
   env: Partial<DotEnv>;
   instance: string;
   prefer: "application" | "personal";
-  strict: boolean;
+  allowFallback: boolean;
 }) => {
   const applicationAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
   const personalAccessToken = (await getInstanceCredentials(instance))?.personalAccessToken;
@@ -22,7 +22,7 @@ export const getApplicationOrPersonalAccessToken = async ({
     return preferredToken;
   }
 
-  if (!strict && fallbackToken) {
+  if (allowFallback && fallbackToken) {
     return fallbackToken;
   }
 
