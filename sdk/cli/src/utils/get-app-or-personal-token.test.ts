@@ -6,8 +6,8 @@ const mockConfig = (mockReturn: unknown) => {
   return mock.module("@/utils/config", () => mockReturn);
 };
 
-const appToken = "app-token-123";
-const personalToken = "personal-token-456";
+const appToken = "sm_aat_123";
+const personalToken = "sm_pat_456";
 
 describe("getApplicationOrPersonalAccessToken", () => {
   beforeAll(() => {
