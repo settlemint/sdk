@@ -1,7 +1,7 @@
 import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
-import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
@@ -45,12 +45,14 @@ export function hardhatDeployRemoteCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
-      if (!accessToken) {
-        return missingAccessTokenError();
-      }
-
       const instance = await instancePrompt(env, true);
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: "application",
+        allowFallback: true,
+      });
+
       const settlemint = createSettleMintClient({
         accessToken,
         instance,

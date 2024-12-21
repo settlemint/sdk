@@ -1,6 +1,6 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
-import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -39,11 +39,13 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
         );
       }
 
-      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
-      if (!accessToken) {
-        return missingAccessTokenError();
-      }
       const instance = await instancePrompt(env, true);
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: "application",
+        allowFallback: false,
+      });
 
       const settlemint = createSettleMintClient({
         accessToken,
