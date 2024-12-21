@@ -1,34 +1,59 @@
-import { beforeEach, describe, expect, it, mock } from "bun:test";
-import {} from "@/error/missing-config-error";
+import { beforeAll, describe, expect, it, mock } from "bun:test";
+import { missingAccessTokenError, missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getApplicationOrPersonalAccessToken } from "./get-app-or-personal-token";
 
+const mockSdkUtils = (mockReturn: unknown) => {
+  return mock.module("@settlemint/sdk-utils", () => mockReturn);
+};
+
+const mockConfig = (mockReturn: unknown) => {
+  return mock.module("@/utils/config", () => mockReturn);
+};
+
+const appToken = "app-token-123";
+const personalToken = "personal-token-456";
+
 describe("getApplicationOrPersonalAccessToken", () => {
-  const mockLoadEnv = mock(() => ({
-    SETTLEMINT_ACCESS_TOKEN: "app-token-123",
-  }));
-
-  const mockGetInstanceCredentials = mock(() => ({
-    personalAccessToken: "personal-token-456",
-  }));
-
-  // Mock cancel to prevent process exit
-  const mockCancel = mock((message: string) => {
-    throw new Error(message);
+  beforeAll(() => {
+    mock.module("@settlemint/sdk-utils/terminal", () => ({
+      cancel: (message: string) => message,
+    }));
   });
 
-  beforeEach(() => {
-    mockLoadEnv.mockClear();
-    mockGetInstanceCredentials.mockClear();
-    mockCancel.mockClear();
+  it("Preference - Application access token - Returns application access token when set", async () => {
+    mockSdkUtils({
+      loadEnv: mock(() => ({
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      })),
+    });
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: personalToken,
+      })),
+    });
+
+    const result = await getApplicationOrPersonalAccessToken({
+      validateEnv: false,
+      prod: false,
+      instance: "test-instance",
+      prefer: "application",
+      strict: true,
+    });
+
+    expect(result).toBe(appToken);
   });
 
-  it('should prefer application token when preference is "application"', async () => {
-    mock.module("@settlemint/sdk-utils", () => ({
-      loadEnv: mockLoadEnv,
-    }));
-    mock.module("@/utils/config", () => ({
-      getInstanceCredentials: mockGetInstanceCredentials,
-    }));
+  it("Preference - Application access token - Non strict mode - Fallback to personal access token if no application access token", async () => {
+    mockSdkUtils({
+      loadEnv: mock(() => ({
+        SETTLEMINT_ACCESS_TOKEN: undefined,
+      })),
+    });
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: personalToken,
+      })),
+    });
 
     const result = await getApplicationOrPersonalAccessToken({
       validateEnv: false,
@@ -38,16 +63,79 @@ describe("getApplicationOrPersonalAccessToken", () => {
       strict: false,
     });
 
-    expect(result).toBe("app-token-123");
+    expect(result).toBe(personalToken);
   });
 
-  it('should prefer personal token when preference is "personal"', async () => {
-    mock.module("@settlemint/sdk-utils", () => ({
-      loadEnv: mockLoadEnv,
-    }));
-    mock.module("@/utils/config", () => ({
-      getInstanceCredentials: mockGetInstanceCredentials,
-    }));
+  it("Preference - Application access token - Strict mode - Error if no application access token", async () => {
+    mockSdkUtils({
+      loadEnv: mock(() => ({
+        SETTLEMINT_ACCESS_TOKEN: undefined,
+      })),
+    });
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: personalToken,
+      })),
+    });
+
+    const result = await getApplicationOrPersonalAccessToken({
+      validateEnv: false,
+      prod: false,
+      instance: "test-instance",
+      prefer: "application",
+      strict: true,
+    });
+    expect(result).toBe(missingAccessTokenError(true));
+
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: undefined,
+      })),
+    });
+    const result2 = await getApplicationOrPersonalAccessToken({
+      validateEnv: false,
+      prod: false,
+      instance: "test-instance",
+      prefer: "application",
+      strict: true,
+    });
+    expect(result2).toBe(missingAccessTokenError(false));
+  });
+
+  it("Preference - Personal access token - Returns personal access token when set", async () => {
+    mockSdkUtils({
+      loadEnv: mock(() => ({
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      })),
+    });
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: personalToken,
+      })),
+    });
+
+    const result = await getApplicationOrPersonalAccessToken({
+      validateEnv: false,
+      prod: false,
+      instance: "test-instance",
+      prefer: "personal",
+      strict: true,
+    });
+
+    expect(result).toBe(personalToken);
+  });
+
+  it("Preference - Personal access token - Non strict mode - Fallback to application access token if no personal access token", async () => {
+    mockSdkUtils({
+      loadEnv: mock(() => ({
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      })),
+    });
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: undefined,
+      })),
+    });
 
     const result = await getApplicationOrPersonalAccessToken({
       validateEnv: false,
@@ -57,6 +145,29 @@ describe("getApplicationOrPersonalAccessToken", () => {
       strict: false,
     });
 
-    expect(result).toBe("personal-token-456");
+    expect(result).toBe(appToken);
+  });
+
+  it("Preference - Personal access token - Strict mode - Error if no personal access token", async () => {
+    mockSdkUtils({
+      loadEnv: mock(() => ({
+        SETTLEMINT_ACCESS_TOKEN: appToken,
+      })),
+    });
+    mockConfig({
+      getInstanceCredentials: mock(() => ({
+        personalAccessToken: undefined,
+      })),
+    });
+
+    const result = await getApplicationOrPersonalAccessToken({
+      validateEnv: false,
+      prod: false,
+      instance: "test-instance",
+      prefer: "personal",
+      strict: true,
+    });
+
+    expect(result).toBe(missingPersonalAccessTokenError());
   });
 });
