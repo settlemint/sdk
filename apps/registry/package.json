@@ -54,7 +54,7 @@
     "react-hook-form": "7.54.2",
     "react-is": "19.0.0",
     "sonner": "1.7.1",
-    "tailwind-merge": "2.5.5",
+    "tailwind-merge": "2.6.0",
     "tailwindcss-animate": "1.0.7",
     "ts-morph": "24.0.0",
     "usehooks-ts": "3.1.0",
