@@ -41,7 +41,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
         "x-auth-token": accessToken,
       },
     });
-    const nameSuffix = toGenerate.length === 1 ? "" : capitalizeFirstLetter(name);
+    const nameSuffix = capitalizeFirstLetter(name);
     template.push(
       ...[
         `
