@@ -56,6 +56,11 @@ jobs:
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@de808b1eea699e761c404bda44ba8f21aba30b2c # v1
 
+      - name: Download workspace config
+        uses: actions/download-artifact@v4
+        with:
+          name: workspace-config
+
       - name: Install Bun dependencies
         run: bun install
 
@@ -68,3 +73,13 @@ jobs:
           SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE_E2E_TESTS }}
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ secrets.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ vars.DISABLE_CONCURRENT_DEPLOYMENT }}
+          DISABLE_WORKSPACE_DELETE: true
+
+      - name: Upload workspace config
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v4
+        with:
+          name: workspace-config
+          path: |
+            .env
+            .env.local

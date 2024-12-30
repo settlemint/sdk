@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import isInCi from "is-in-ci";
 import {
   AAT_NAME,
   APPLICATION_NAME,
@@ -31,8 +32,19 @@ process.env.NODE_ENV = "development";
 const COMMAND_TEST_SCOPE = __filename;
 const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
-async function cleanup() {
-  if (process.env.DISABLE_WORKSPACE_DELETE) {
+async function cleanUpPreviousRuns() {
+  if (!isInCi) {
+    return;
+  }
+  // Make the CI use the same workspace for all runs for one week, create a new workspace each Monday
+  const isMondayBefore7am = new Date().getDay() === 1 && new Date().getHours() < 7;
+  if (isMondayBefore7am) {
+    await cleanup(true);
+  }
+}
+
+async function cleanup(force = false) {
+  if (process.env.DISABLE_WORKSPACE_DELETE && !force) {
     console.log("Skipping delete of workspace and application");
     return;
   }
@@ -65,6 +77,7 @@ async function cleanup() {
 beforeAll(async () => {
   try {
     await login();
+    await cleanUpPreviousRuns();
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
     await createBlockchainNodeMinioAndIpfs();
