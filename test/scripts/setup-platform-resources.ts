@@ -267,6 +267,21 @@ async function createBlockchainNodeMinioAndIpfs() {
     "fulfilled",
   ]);
 
+  if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
+    expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
+    expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
+  }
+
+  if (minioResult?.status === "fulfilled" && minioResult.value) {
+    expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
+    expect(minioResult.value.output).toInclude("Storage is deployed");
+  }
+
+  if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
+    expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
+    expect(ipfsResult.value.output).toInclude("Storage is deployed");
+  }
+
   if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkResult.value.output).toInclude("Blockchain node is deployed");
@@ -291,21 +306,6 @@ async function createBlockchainNodeMinioAndIpfs() {
       `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAME} created successfully`,
     );
     expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
-  }
-
-  if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
-    expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
-    expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
-  }
-
-  if (minioResult?.status === "fulfilled" && minioResult.value) {
-    expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
-    expect(minioResult.value.output).toInclude("Storage is deployed");
-  }
-
-  if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
-    expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
-    expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 }
 
@@ -387,11 +387,12 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "besu",
             "--node-type",
             "NON_VALIDATOR",
-            "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
             NODE_NAME_2_WITH_PK,
           ]).result,
     () =>
@@ -404,11 +405,12 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "besu",
             "--node-type",
             "NON_VALIDATOR",
-            "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
             NODE_NAME_3_WITHOUT_PK,
           ]).result,
   ]);

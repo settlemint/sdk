@@ -92,14 +92,17 @@ jobs:
           DISABLE_WORKSPACE_DELETE: true
 
       - name: Get env file
+        if: ${{ !cancelled() }}
         id: env-file
         run: echo "ENV_CONTENTS=$(cat .env)" >> $GITHUB_OUTPUT
 
       - name: Get env.local file
+        if: ${{ !cancelled() }}
         id: env-file-local
         run: echo "ENV_LOCAL_CONTENTS=$(cat .env.local)" >> $GITHUB_OUTPUT
 
       - name: Save workspace config (env)
+        if: ${{ !cancelled() }}
         uses: Skandalik/save-secret@v1.0.0
         with:
           github_token: ${{ env.E2E_GITHUB_TOKEN }}
@@ -107,6 +110,7 @@ jobs:
           secret_value: ${{ steps.env-file.outputs.ENV_CONTENTS }}
 
       - name: Save workspace config (env.local)
+        if: ${{ !cancelled() }}
         uses: Skandalik/save-secret@v1.0.0
         with:
           github_token: ${{ env.E2E_GITHUB_TOKEN }}
