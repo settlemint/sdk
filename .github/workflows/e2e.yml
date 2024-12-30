@@ -44,7 +44,7 @@ jobs:
           E2E_GITHUB_TOKEN: "op://platform/SDK E2E/github-token"
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
           SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
-          E2E_DISABLE_CONCURRENT_DEPLOYMENT: "op://platform/SDK E2E/disable-concurrent-deployment"
+          DISABLE_CONCURRENT_DEPLOYMENT: "op://platform/SDK E2E/disable-concurrent-deployment"
 
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
@@ -86,7 +86,7 @@ jobs:
       - name: Run the E2E tests
         run: bun test:e2e
         env:
-          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE_E2E_TESTS }}
+          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
           DISABLE_WORKSPACE_DELETE: true
