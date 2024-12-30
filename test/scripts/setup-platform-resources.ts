@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import isInCi from "is-in-ci";
 import {
   AAT_NAME,
   APPLICATION_NAME,
@@ -31,8 +32,19 @@ process.env.NODE_ENV = "development";
 const COMMAND_TEST_SCOPE = __filename;
 const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
-async function cleanup() {
-  if (process.env.DISABLE_WORKSPACE_DELETE) {
+async function cleanUpPreviousRuns() {
+  if (!isInCi) {
+    return;
+  }
+  // Make the CI use the same workspace for all runs for one week, create a new workspace each Monday
+  const isMondayBefore7am = new Date().getDay() === 1 && new Date().getHours() < 7;
+  if (isMondayBefore7am) {
+    await cleanup(true);
+  }
+}
+
+async function cleanup(force = false) {
+  if (process.env.DISABLE_WORKSPACE_DELETE && !force) {
     console.log("Skipping delete of workspace and application");
     return;
   }
@@ -65,6 +77,7 @@ async function cleanup() {
 beforeAll(async () => {
   try {
     await login();
+    await cleanUpPreviousRuns();
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
     await createBlockchainNodeMinioAndIpfs();
@@ -119,7 +132,7 @@ async function addWorkspaceCredits() {
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
   const settlemint = await setupSettleMintClient();
   if (!isLocalEnv()) {
-    await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 100);
+    await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 5_000);
   }
 }
 
@@ -191,6 +204,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
           ]).result,
     () =>
       hasHasuraIntegration
@@ -207,6 +221,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             HASURA_NAME,
           ]).result,
     () =>
@@ -224,6 +239,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             MINIO_NAME,
           ]).result,
     () =>
@@ -241,6 +257,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             IPFS_NAME,
           ]).result,
   ]);
@@ -253,6 +270,21 @@ async function createBlockchainNodeMinioAndIpfs() {
     "fulfilled",
     "fulfilled",
   ]);
+
+  if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
+    expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
+    expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
+  }
+
+  if (minioResult?.status === "fulfilled" && minioResult.value) {
+    expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
+    expect(minioResult.value.output).toInclude("Storage is deployed");
+  }
+
+  if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
+    expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
+    expect(ipfsResult.value.output).toInclude("Storage is deployed");
+  }
 
   if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
@@ -272,27 +304,13 @@ async function createBlockchainNodeMinioAndIpfs() {
       "--region",
       CLUSTER_REGION,
       "--wait",
+      "--restart-if-timeout",
       PRIVATE_KEY_SMART_CONTRACTS_NAME,
     ]).result;
     expect(privateKeyHsmCreateCommandOutput).toInclude(
       `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAME} created successfully`,
     );
     expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
-  }
-
-  if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
-    expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
-    expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
-  }
-
-  if (minioResult?.status === "fulfilled" && minioResult.value) {
-    expect(minioResult.value.output).toInclude(`Storage ${MINIO_NAME} created successfully`);
-    expect(minioResult.value.output).toInclude("Storage is deployed");
-  }
-
-  if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
-    expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
-    expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 }
 
@@ -322,6 +340,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--region",
             CLUSTER_REGION,
             "--wait",
+            "--restart-if-timeout",
             PRIVATE_KEY_NAME,
           ]).result,
     () =>
@@ -340,6 +359,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             "--include-predeployed-abis",
             "StarterKitERC20Registry",
             "StarterKitERC20Factory",
@@ -362,6 +382,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             BLOCKSCOUT_NAME,
           ]).result,
     () =>
@@ -374,11 +395,13 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "besu",
             "--node-type",
             "NON_VALIDATOR",
-            "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
+            "--restart-if-timeout",
             NODE_NAME_2_WITH_PK,
           ]).result,
     () =>
@@ -391,11 +414,13 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "besu",
             "--node-type",
             "NON_VALIDATOR",
-            "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
+            "--restart-if-timeout",
             NODE_NAME_3_WITHOUT_PK,
           ]).result,
   ]);
@@ -457,6 +482,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             GRAPH_NAME,
           ]).result,
     () =>
@@ -475,6 +501,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--region",
             CLUSTER_REGION,
             "--wait",
+            "--restart-if-timeout",
             PRIVATE_KEY_2_NAME,
           ]).result,
   ]);
