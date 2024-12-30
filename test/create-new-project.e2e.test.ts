@@ -53,14 +53,6 @@ describe("Setup a project using the SDK", () => {
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
 
-  // test("Create Minio storage on the platform", () => {
-  //   // Optional, can be done later
-  // });
-
-  // test("Create custom deployment on the platform", () => {
-  //   // Optional, can be done later
-  // });
-
   test("Validate that .env file has the correct values", async () => {
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
 
