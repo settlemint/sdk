@@ -66,9 +66,11 @@ jobs:
 
       - name: Save workspace config
         if: '!cancelled()'
-        run: op item edit --vault platform "SDK E2E" "env[password]=$(cat .env)" && op item edit --vault platform "SDK E2E" "env\.local[password]=$(cat .env.local)"
+        run: op --debug item edit "${SECRET_NAME}" --vault "${VAULT}" "env[password]=$(cat .env)" && op --debug item edit "${SECRET_NAME}" --vault "${VAULT}" "env\.local[password]=$(cat .env.local)"
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          SECRET_NAME: "SDK E2E"
+          VAULT: "platform"
 
       - name: Install Bun dependencies
         run: bun install
