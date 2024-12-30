@@ -73,6 +73,8 @@ jobs:
         run: |
           echo $ENV_E2E > .env
           echo $ENV_E2E_LOCAL > .env.local
+          echo $ENV_E2E
+          echo $ENV_E2E_LOCAL
         env:
           ENV_E2E: ${{ secrets.ENV_E2E }}
           ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
