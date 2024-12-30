@@ -90,12 +90,13 @@ describe("Setup a project using the SDK", () => {
 
   test("Install dependencies and link SDK to use local one", async () => {
     const env = { NODE_ENV: "production" };
-    await $`bun link`.cwd("./sdk/cli");
     await $`bun install`.cwd(projectDir).env({
       ...process.env,
       ...env,
     });
-    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
+    // Delete the node_modules/@settlemint folder
+    // It will automatically use the local ones when deleted
+    await $`rm -rf ./node_modules/@settlemint`.cwd(projectDir);
   });
 
   test("Connect starter kit", async () => {

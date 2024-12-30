@@ -1,7 +1,22 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
-import { ApplicationFragment, workspaceRead } from "./workspace.js";
+import { workspaceRead } from "./workspace.js";
+
+/**
+ * GraphQL fragment containing core application fields.
+ */
+const ApplicationFragment = graphql(`
+  fragment Application on Application {
+    id
+    uniqueName
+    name
+    workspace {
+      id
+      uniqueName
+    }
+  }
+`);
 
 /**
  * Type representing an application entity.

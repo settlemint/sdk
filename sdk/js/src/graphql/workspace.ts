@@ -4,21 +4,6 @@ import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
- * GraphQL fragment containing core application fields.
- */
-export const ApplicationFragment = graphql(`
-  fragment Application on Application {
-    id
-    uniqueName
-    name
-    workspace {
-      id
-      uniqueName
-    }
-  }
-`);
-
-/**
  * GraphQL fragment containing core workspace fields.
  */
 const WorkspaceFragment = graphql(
@@ -28,11 +13,12 @@ const WorkspaceFragment = graphql(
       uniqueName
       name
       applications {
-        ...Application
+        id
+        uniqueName
+        name
       }
     }
   `,
-  [ApplicationFragment],
 );
 
 /**
@@ -48,16 +34,13 @@ const getWorkspacesAndApplications = graphql(
     query getWorkspacesAndApplications {
       workspaces {
         ...Workspace
-        applications {
-          ...Application
-        }
         childWorkspaces {
           ...Workspace
         }
       }
     }
   `,
-  [WorkspaceFragment, ApplicationFragment],
+  [WorkspaceFragment],
 );
 
 /**
@@ -68,13 +51,10 @@ const getWorkspace = graphql(
     query getWorkspace($uniqueName: String!) {
       workspaceByUniqueName(uniqueName: $uniqueName) {
         ...Workspace
-        applications {
-          ...Application
-        }
       }
     }
   `,
-  [WorkspaceFragment, ApplicationFragment],
+  [WorkspaceFragment],
 );
 
 /**
@@ -109,13 +89,10 @@ const createWorkspace = graphql(
         taxIdValue: $taxIdValue
       ) {
         ...Workspace
-        applications {
-          ...Application
-        }
       }
     }
   `,
-  [WorkspaceFragment, ApplicationFragment],
+  [WorkspaceFragment],
 );
 
 export type CreateWorkspaceArgs = VariablesOf<typeof createWorkspace>;
@@ -128,13 +105,10 @@ const deleteWorkspace = graphql(
     mutation deleteWorkspace($id: ID!) {
       deleteWorkspace(workspaceId: $id) {
         ...Workspace
-        applications {
-          ...Application
-        }
       }
     }
   `,
-  [WorkspaceFragment, ApplicationFragment],
+  [WorkspaceFragment],
 );
 
 /**
