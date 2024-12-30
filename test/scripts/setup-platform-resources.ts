@@ -132,7 +132,7 @@ async function addWorkspaceCredits() {
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
   const settlemint = await setupSettleMintClient();
   if (!isLocalEnv()) {
-    await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 100);
+    await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 5_000);
   }
 }
 
