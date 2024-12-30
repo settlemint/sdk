@@ -33,6 +33,19 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'e2e') }}
     runs-on: namespace-profile-sdk
     steps:
+      - name: Setup 1Password
+        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load secrets
+        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        env:
+          E2E_GITHUB_TOKEN: "op://platform/SDK E2E/github-token"
+          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
+          SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
+          E2E_DISABLE_CONCURRENT_DEPLOYMENT: "op://platform/SDK E2E/disable-concurrent-deployment"
+
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
 
@@ -60,11 +73,23 @@ jobs:
         run: |
           echo $ENV_E2E > .env
           echo $ENV_E2E_LOCAL > .env.local
-          cat .env
-          cat .env.local
         env:
           ENV_E2E: ${{ secrets.ENV_E2E }}
           ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
+
+      - name: Install Bun dependencies
+        run: bun install
+
+      - name: Run build
+        run: bunx turbo build
+
+      - name: Run the E2E tests
+        run: bun test:e2e
+        env:
+          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE_E2E_TESTS }}
+          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
+          DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
+          DISABLE_WORKSPACE_DELETE: true
 
       - name: Get env file
         id: env-file
@@ -77,27 +102,13 @@ jobs:
       - name: Save workspace config (env)
         uses: Skandalik/save-secret@v1.0.0
         with:
-          github_token: ${{ secrets.E2E_GITHUB_TOKEN }}
+          github_token: ${{ env.E2E_GITHUB_TOKEN }}
           secret_name: ENV_E2E
           secret_value: ${{ steps.env-file.outputs.ENV_CONTENTS }}
 
       - name: Save workspace config (env.local)
         uses: Skandalik/save-secret@v1.0.0
         with:
-          github_token: ${{ secrets.E2E_GITHUB_TOKEN }}
+          github_token: ${{ env.E2E_GITHUB_TOKEN }}
           secret_name: ENV_E2E_LOCAL
           secret_value: ${{ steps.env-file-local.outputs.ENV_LOCAL_CONTENTS }}
-
-      - name: Install Bun dependencies
-        run: bun install
-
-      - name: Run build
-        run: bunx turbo build
-
-      - name: Run the E2E tests
-        run: bun test:e2e
-        env:
-          SETTLEMINT_INSTANCE: ${{ secrets.SETTLEMINT_INSTANCE_E2E_TESTS }}
-          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ secrets.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
-          DISABLE_CONCURRENT_DEPLOYMENT: ${{ vars.DISABLE_CONCURRENT_DEPLOYMENT }}
-          DISABLE_WORKSPACE_DELETE: true
