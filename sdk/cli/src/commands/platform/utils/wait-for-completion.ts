@@ -77,7 +77,7 @@ export async function waitForCompletion({
 
           if (Date.now() - startTime > maxTimeout) {
             throw new TimeoutError(
-              `Operation timed out after ${maxTimeout / 60_000} minutes for ${type} with id ${id}`,
+              `Operation timed out after ${maxTimeout / 60_000} minutes for ${type} with unique name ${uniqueName}`,
             );
           }
           await new Promise((resolve) => setTimeout(resolve, 5_000));
