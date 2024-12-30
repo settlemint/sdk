@@ -16,6 +16,7 @@ type DefaultArgs = {
   default?: true | undefined;
   prod?: true | undefined;
   wait?: true | undefined;
+  restartIfTimeout?: true | undefined;
 };
 
 /**
@@ -67,9 +68,10 @@ export function getCreateCommand({
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
     .option("-w, --wait", "Wait until deployed")
+    .option("-r, --restart-if-timeout", "Restart if wait time is exceeded")
     .option("--prod", "Connect to production environment");
 
-  execute(cmd, async ({ acceptDefaults, prod, default: isDefault, wait }, createFunction) => {
+  execute(cmd, async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout }, createFunction) => {
     intro(`Creating ${type} in the SettleMint platform`);
 
     const autoAccept = !!acceptDefaults || isInCi;
@@ -102,6 +104,7 @@ export function getCreateCommand({
         type: waitFor?.resourceType ?? type,
         uniqueName: waitFor?.uniqueName ?? result.uniqueName,
         action: "deploy",
+        restartIfTimeout,
       });
 
       if (waitFor) {
