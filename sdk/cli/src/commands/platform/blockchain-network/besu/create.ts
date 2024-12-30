@@ -78,7 +78,7 @@ export function blockchainNetworkBesuCreateCommand() {
                   : undefined,
                 mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
-                    SETTLEMINT_APPLICATION: application,
+                    SETTLEMINT_APPLICATION: applicationUniqueName,
                     SETTLEMINT_BLOCKCHAIN_NETWORK: result.uniqueName,
                     SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
                   };
