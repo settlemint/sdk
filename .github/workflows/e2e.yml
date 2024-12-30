@@ -66,11 +66,25 @@ jobs:
 
       - name: Save workspace config
         if: '!cancelled()'
-        run: op --debug item edit "${SECRET_NAME}" --vault "${VAULT}" "env[password]=$(cat .env)" && op --debug item edit "${SECRET_NAME}" --vault "${VAULT}" "env\.local[password]=$(cat .env.local)"
+        run: |
+          op item get "SDK E2E" --vault "platform" --format json > env-secret.json
+          # Update the JSON file
+          jq --arg new_env "$(cat .env)" --arg new_envlocal "$(cat .env.local)" '
+            .fields |= map(
+              if .label == "env" then
+                .value = $new_env
+              elif .label == "env.local" then
+                .value = $new_envlocal
+              else
+                .
+              end
+            )
+          ' env-secret.json > env-secret_updated.json
+          mv env-secret_updated.json env-secret.json
+          cat env-secret.json | op item edit --vault platform "SDK E2E"
+          rm env-secret.json
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-          SECRET_NAME: "SDK E2E"
-          VAULT: "platform"
 
       - name: Install Bun dependencies
         run: bun install
@@ -88,6 +102,22 @@ jobs:
 
       - name: Save workspace config
         if: '!cancelled()'
-        run: op item edit --vault platform "SDK E2E" "env[password]=$(cat .env)" && op item edit --vault platform "SDK E2E" "env\.local[password]=$(cat .env.local)"
+        run: |
+          op item get "SDK E2E" --vault "platform" --format json > env-secret.json
+          # Update the JSON file
+          jq --arg new_env "$(cat .env)" --arg new_envlocal "$(cat .env.local)" '
+            .fields |= map(
+              if .label == "env" then
+                .value = $new_env
+              elif .label == "env.local" then
+                .value = $new_envlocal
+              else
+                .
+              end
+            )
+          ' env-secret.json > env-secret_updated.json
+          mv env-secret_updated.json env-secret.json
+          cat env-secret.json | op item edit --vault platform "SDK E2E"
+          rm env-secret.json
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
