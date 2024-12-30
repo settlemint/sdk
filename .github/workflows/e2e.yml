@@ -33,9 +33,6 @@ jobs:
     if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'e2e') }}
     runs-on: namespace-profile-sdk
     steps:
-      - name: Install 1Password CLI
-        uses: 1password/install-cli-action@v1
-
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
 
@@ -60,33 +57,34 @@ jobs:
         uses: foundry-rs/foundry-toolchain@de808b1eea699e761c404bda44ba8f21aba30b2c # v1
 
       - name: Get workspace config
-        run: op read -f --out-file .env "op://platform/SDK E2E/env" && op read -f --out-file .env.local "op://platform/SDK E2E/env.local"
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-
-      - name: Save workspace config
-        if: '!cancelled()'
         run: |
-          op item get --debug "SDK E2E" --vault "platform" --format json > env-secret.json
-          cat env-secret.json
-          # Update the JSON file
-          jq --arg new_env "$(cat .env)" --arg new_envlocal "$(cat .env.local)" '
-            .fields |= map(
-              if .label == "env" then
-                .value = $new_env
-              elif .label == "env.local" then
-                .value = $new_envlocal
-              else
-                .
-              end
-            )
-          ' env-secret.json > env-secret_updated.json
-          cat env-secret_updated.json
-          mv env-secret_updated.json env-secret.json
-          cat env-secret.json | op item edit --debug --vault platform "SDK E2E"
-          rm env-secret.json
+          echo $ENV_E2E > .env
+          echo $ENV_E2E_LOCAL > .env.local
         env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          ENV_E2E: ${{ secrets.ENV_E2E }}
+          ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
+
+      - name: Get env file
+        id: env-file
+        run: echo "::set-output name=env::$(cat .env)"
+
+      - name: Get env.local file
+        id: env-file-local
+        run: echo "::set-output name=env::$(cat .env.local)"
+
+      - name: Save workspace config (env)
+        uses: Skandalik/save-secret@v1.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          secret_name: ENV_E2E
+          secret_value: ${{ steps.env-file.outputs.env }}
+
+      - name: Save workspace config (env.local)
+        uses: Skandalik/save-secret@v1.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          secret_name: ENV_E2E_LOCAL
+          secret_value: ${{ steps.env-file-local.outputs.env }}
 
       - name: Install Bun dependencies
         run: bun install
@@ -101,25 +99,3 @@ jobs:
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ secrets.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ vars.DISABLE_CONCURRENT_DEPLOYMENT }}
           DISABLE_WORKSPACE_DELETE: true
-
-      - name: Save workspace config
-        if: '!cancelled()'
-        run: |
-          op item get "SDK E2E" --vault "platform" --format json > env-secret.json
-          # Update the JSON file
-          jq --arg new_env "$(cat .env)" --arg new_envlocal "$(cat .env.local)" '
-            .fields |= map(
-              if .label == "env" then
-                .value = $new_env
-              elif .label == "env.local" then
-                .value = $new_envlocal
-              else
-                .
-              end
-            )
-          ' env-secret.json > env-secret_updated.json
-          mv env-secret_updated.json env-secret.json
-          cat env-secret.json | op item edit --vault platform "SDK E2E"
-          rm env-secret.json
-        env:
-          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
