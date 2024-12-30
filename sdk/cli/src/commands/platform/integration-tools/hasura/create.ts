@@ -32,7 +32,7 @@ export function hasuraIntegrationCreateCommand() {
               result,
               mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
                 return {
-                  SETTLEMINT_APPLICATION: application,
+                  SETTLEMINT_APPLICATION: applicationUniqueName,
                   SETTLEMINT_HASURA: result.uniqueName,
                   ...getHasuraEndpoints(result),
                 };

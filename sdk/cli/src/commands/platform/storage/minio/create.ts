@@ -32,7 +32,7 @@ export function minioStorageCreateCommand() {
               result,
               mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
-                  SETTLEMINT_APPLICATION: application,
+                  SETTLEMINT_APPLICATION: applicationUniqueName,
                   SETTLEMINT_MINIO: result.uniqueName,
                   ...getMinioEndpoints(result),
                 };

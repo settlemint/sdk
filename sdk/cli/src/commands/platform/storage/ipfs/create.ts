@@ -32,6 +32,7 @@ export function ipfsStorageCreateCommand() {
               result,
               mapDefaultEnv: (): Partial<DotEnv> => {
                 return {
+                  SETTLEMINT_APPLICATION: applicationUniqueName,
                   SETTLEMINT_IPFS: result.uniqueName,
                   ...getIpfsEndpoints(result),
                 };

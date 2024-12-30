@@ -97,7 +97,7 @@ export function connectCommand(): Command {
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,
           ...(await getGraphEndpoint(thegraph, env)),
-          SETTLEMINT_PORTAL: portal?.id,
+          SETTLEMINT_PORTAL: portal?.uniqueName,
           ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
           SETTLEMINT_MINIO: minio?.uniqueName,

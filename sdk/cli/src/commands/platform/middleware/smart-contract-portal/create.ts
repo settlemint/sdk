@@ -91,7 +91,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 result,
                 mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
                   return {
-                    SETTLEMINT_APPLICATION: application,
+                    SETTLEMINT_APPLICATION: applicationUniqueName,
                     SETTLEMINT_PORTAL: result.uniqueName,
                     ...getPortalEndpoints(result),
                   };

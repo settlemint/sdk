@@ -37,7 +37,7 @@ export function graphMiddlewareCreateCommand() {
               mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
                 const graphMiddleware = await settlemint.middleware.read(result.uniqueName);
                 return {
-                  SETTLEMINT_APPLICATION: application,
+                  SETTLEMINT_APPLICATION: applicationUniqueName,
                   SETTLEMINT_THEGRAPH: result.uniqueName,
                   ...(await getGraphEndpoint(graphMiddleware, env)),
                 };
