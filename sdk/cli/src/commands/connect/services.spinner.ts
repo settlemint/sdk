@@ -28,7 +28,7 @@ import { spinner } from "@settlemint/sdk-utils/terminal";
  */
 export async function servicesSpinner(
   settlemint: SettlemintClient,
-  application: Application,
+  application: Omit<Application, "workspace">,
 ): Promise<{
   blockchainNetworks: BlockchainNetwork[];
   blockchainNodes: BlockchainNode[];

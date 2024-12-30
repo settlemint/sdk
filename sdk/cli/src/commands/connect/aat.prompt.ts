@@ -20,7 +20,7 @@ import { z } from "zod";
  */
 export async function applicationAccessTokenPrompt(
   env: Partial<DotEnv>,
-  application: Application,
+  application: Omit<Application, "workspace">,
   settlemint: SettlemintClient,
   accept: boolean,
 ): Promise<string> {
