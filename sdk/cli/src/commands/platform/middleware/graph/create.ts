@@ -21,6 +21,7 @@ export function graphMiddlewareCreateCommand() {
           return baseAction(defaultArgs, async (settlemint, env) => {
             const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
             const blockchainNodeUniqueName = blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
+
             const result = await settlemint.middleware.create({
               name,
               applicationUniqueName,

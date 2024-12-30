@@ -1,14 +1,14 @@
 import { describe, expect, test } from "bun:test";
 import { Command } from "@commander-js/extra-typings";
-import { blockchainNetworkBesuCreateCommand } from "./create.js";
+import { blockchainNodeBesuCreateCommand } from "./create.js";
 
-describe("besuNetworkCreateCommand", () => {
+describe("besuNodeCreateCommand", () => {
   test("executes command with required arguments", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      blockchainNetworkBesuCreateCommand()
+      blockchainNodeBesuCreateCommand()
         .exitOverride()
         .action((args, options) => {
           commandArgs = args;
@@ -19,23 +19,23 @@ describe("besuNetworkCreateCommand", () => {
       "node",
       "test",
       "besu",
-      "test-network",
+      "test-node",
+      "--node-type",
+      "VALIDATOR",
       "--accept-defaults",
       "--provider",
       "gke",
       "--region",
       "europe",
-      "--node-name",
-      "validator-1",
     ]);
 
     // Validate command was executed with correct arguments
-    expect(commandArgs).toBe("test-network");
+    expect(commandArgs).toBe("test-node");
     expect(commandOptions).toEqual({
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
-      nodeName: "validator-1",
+      nodeType: "VALIDATOR",
       size: "SMALL",
       type: "SHARED",
     });
@@ -46,7 +46,7 @@ describe("besuNetworkCreateCommand", () => {
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      blockchainNetworkBesuCreateCommand()
+      blockchainNodeBesuCreateCommand()
         .exitOverride()
         .action((args, options) => {
           commandArgs = args;
@@ -57,42 +57,39 @@ describe("besuNetworkCreateCommand", () => {
       "node",
       "test",
       "besu",
-      "test-network",
+      "test-node",
+      "--blockchain-network-id",
+      "12345",
+      "--node-type",
+      "NON_VALIDATOR",
+      "--node-identity",
+      "0x1234567890abcdef",
       "--accept-defaults",
       "--provider",
       "gke",
       "--region",
       "europe",
-      "--node-name",
-      "validator-1",
-      "--chain-id",
-      "12345",
-      "--gas-limit",
-      "10000000",
-      "--seconds-per-block",
-      "5",
     ]);
 
-    expect(commandArgs).toBe("test-network");
+    expect(commandArgs).toBe("test-node");
     expect(commandOptions).toEqual({
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
-      nodeName: "validator-1",
-      chainId: 12345,
-      gasLimit: "10000000",
-      secondsPerBlock: 5,
+      blockchainNetworkId: "12345",
+      nodeType: "NON_VALIDATOR",
+      nodeIdentity: "0x1234567890abcdef",
       size: "SMALL",
       type: "SHARED",
     });
   });
 
-  test("executes command with application unique name", () => {
+  test("executes command with application id", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
     program.addCommand(
-      blockchainNetworkBesuCreateCommand()
+      blockchainNodeBesuCreateCommand()
         .exitOverride()
         .action((args, options) => {
           commandArgs = args;
@@ -103,29 +100,32 @@ describe("besuNetworkCreateCommand", () => {
       "node",
       "test",
       "besu",
-      "test-network",
+      "test-node",
+      "--blockchain-network-id",
+      "12345",
+      "--node-type",
+      "NON_VALIDATOR",
       "--accept-defaults",
       "--provider",
       "gke",
       "--region",
       "europe",
-      "--node-name",
-      "validator-1",
-      "--application",
-      "test-app",
+      "--application-id",
+      "123456789",
       "--size",
       "LARGE",
       "--type",
       "DEDICATED",
     ]);
 
-    expect(commandArgs).toBe("test-network");
+    expect(commandArgs).toBe("test-node");
     expect(commandOptions).toEqual({
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
-      nodeName: "validator-1",
-      application: "test-app",
+      blockchainNetworkId: "12345",
+      nodeType: "NON_VALIDATOR",
+      applicationId: "123456789",
       size: "LARGE",
       type: "DEDICATED",
     });

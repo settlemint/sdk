@@ -1076,6 +1076,7 @@ type ArbitrumBlockchainNode implements AbstractClusterService & AbstractEntity &
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -1385,6 +1386,7 @@ type ArbitrumGoerliBlockchainNode implements AbstractClusterService & AbstractEn
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -1694,6 +1696,7 @@ type ArbitrumSepoliaBlockchainNode implements AbstractClusterService & AbstractE
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -2228,6 +2231,7 @@ type AvalancheBlockchainNode implements AbstractClusterService & AbstractEntity 
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -2549,6 +2553,7 @@ type AvalancheFujiBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -3181,6 +3186,7 @@ type BesuIbftv2BlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -3652,6 +3658,7 @@ type BesuQBFTBlockchainNode implements AbstractClusterService & AbstractEntity &
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -4450,6 +4457,7 @@ interface BlockchainNode implements AbstractClusterService & AbstractEntity {
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -4655,6 +4663,7 @@ type BscBlockchainNode implements AbstractClusterService & AbstractEntity & Bloc
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -5126,6 +5135,7 @@ type BscTestnetBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -5761,6 +5771,7 @@ type CordaBlockchainNode implements AbstractClusterService & AbstractEntity & Bl
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -5863,7 +5874,7 @@ type CordappSmartContractSet implements AbstractClusterService & AbstractEntity 
   applicationDashBoardDependantsTree: DependantsTree!
 
   """The blockchain node associated with this smart contract set"""
-  blockchainNode: BlockchainNodeType!
+  blockchainNode: BlockchainNodeType
 
   """Date and time when the entity was created"""
   createdAt: DateTime!
@@ -7041,6 +7052,12 @@ type EVMLoadBalancer implements AbstractClusterService & AbstractEntity & LoadBa
   version: String
 }
 
+"""Environment type for the application"""
+enum Environment {
+  Development
+  Production
+}
+
 type ExposableWalletKeyVerification {
   """Unique identifier of the entity"""
   id: ID!
@@ -7113,6 +7130,7 @@ type FabricBlockchainNode implements AbstractClusterService & AbstractEntity & B
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -7548,7 +7566,7 @@ type FabricSmartContractSet implements AbstractClusterService & AbstractEntity &
   applicationDashBoardDependantsTree: DependantsTree!
 
   """The blockchain node associated with this smart contract set"""
-  blockchainNode: BlockchainNodeType!
+  blockchainNode: BlockchainNodeType
 
   """Date and time when the entity was created"""
   createdAt: DateTime!
@@ -7915,6 +7933,7 @@ type FantomMainnetBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -8224,6 +8243,7 @@ type FantomTestnetBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -8540,6 +8560,7 @@ type GethBlockchainNode implements AbstractClusterService & AbstractEntity & Blo
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -8858,6 +8879,7 @@ type GethCliqueBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -9314,6 +9336,7 @@ type GethGoerliBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -9785,6 +9808,7 @@ type GethRinkebyBlockchainNode implements AbstractClusterService & AbstractEntit
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -10094,6 +10118,7 @@ type GethVenidiumBlockchainNode implements AbstractClusterService & AbstractEnti
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -10983,6 +11008,7 @@ type HederaMainnetBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -11292,6 +11318,7 @@ type HederaTestnetBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -11601,6 +11628,7 @@ type HoleskyBlockchainNode implements AbstractClusterService & AbstractEntity & 
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -13831,7 +13859,7 @@ type Mutation {
     applicationId: ID!
 
     """Unique identifier of the blockchain node"""
-    blockchainNodeId: ID!
+    blockchainNodeId: ID
 
     """Disk space in MiB"""
     diskSpace: Int
@@ -13940,6 +13968,9 @@ type Mutation {
 
     """The endorsement policy for Fabric Raft consensus"""
     endorsementPolicy: FabricEndorsementPolicy
+
+    """Production or development environment"""
+    environment: Environment
 
     """The EVM stack size for Besu networks"""
     evmStackSize: Int
@@ -15612,6 +15643,7 @@ type OptimismBlockchainNode implements AbstractClusterService & AbstractEntity &
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -15921,6 +15953,7 @@ type OptimismGoerliBlockchainNode implements AbstractClusterService & AbstractEn
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -16230,6 +16263,7 @@ type OptimismSepoliaBlockchainNode implements AbstractClusterService & AbstractE
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -16860,6 +16894,7 @@ type PolygonAmoyBlockchainNode implements AbstractClusterService & AbstractEntit
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -17169,6 +17204,7 @@ type PolygonBlockchainNode implements AbstractClusterService & AbstractEntity & 
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -17319,6 +17355,7 @@ type PolygonEdgeBlockchainNode implements AbstractClusterService & AbstractEntit
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -17966,6 +18003,7 @@ type PolygonMumbaiBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -18287,6 +18325,7 @@ type PolygonSupernetBlockchainNode implements AbstractClusterService & AbstractE
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -18614,6 +18653,7 @@ type PolygonZkEvmBlockchainNode implements AbstractClusterService & AbstractEnti
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -18923,6 +18963,7 @@ type PolygonZkEvmTestnetBlockchainNode implements AbstractClusterService & Abstr
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -19494,7 +19535,7 @@ type Query {
   ): PaginatedCustomDeployment!
   foundryEnvConfig(blockchainNodeId: String!): JSON!
   foundryEnvConfigByUniqueName(blockchainNodeUniqueName: String!): JSON!
-  getUseCases: [UseCaseDto!]!
+  getUseCases: [UseCase!]!
   getUser(userId: ID): User!
 
   """Get a Insights service"""
@@ -20433,6 +20474,7 @@ type QuorumQBFTBlockchainNode implements AbstractClusterService & AbstractEntity
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -20991,6 +21033,7 @@ type SepoliaBlockchainNode implements AbstractClusterService & AbstractEntity & 
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -21349,7 +21392,7 @@ interface SmartContractSet implements AbstractClusterService & AbstractEntity {
   applicationDashBoardDependantsTree: DependantsTree!
 
   """The blockchain node associated with this smart contract set"""
-  blockchainNode: BlockchainNodeType!
+  blockchainNode: BlockchainNodeType
 
   """Date and time when the entity was created"""
   createdAt: DateTime!
@@ -21518,7 +21561,7 @@ type SoliditySmartContractSet implements AbstractClusterService & AbstractEntity
   applicationDashBoardDependantsTree: DependantsTree!
 
   """The blockchain node associated with this smart contract set"""
-  blockchainNode: BlockchainNodeType!
+  blockchainNode: BlockchainNodeType
 
   """Date and time when the entity was created"""
   createdAt: DateTime!
@@ -21868,6 +21911,7 @@ type SoneiumMinatoBlockchainNode implements AbstractClusterService & AbstractEnt
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -22456,6 +22500,7 @@ type TezosBlockchainNode implements AbstractClusterService & AbstractEntity & Bl
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -22573,7 +22618,7 @@ type TezosSmartContractSet implements AbstractClusterService & AbstractEntity & 
   applicationDashBoardDependantsTree: DependantsTree!
 
   """The blockchain node associated with this smart contract set"""
-  blockchainNode: BlockchainNodeType!
+  blockchainNode: BlockchainNodeType
 
   """Date and time when the entity was created"""
   createdAt: DateTime!
@@ -22914,6 +22959,7 @@ type TezosTestnetBlockchainNode implements AbstractClusterService & AbstractEnti
 
   """Unique identifier of the entity"""
   id: ID!
+  isEvm: Boolean!
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -23044,7 +23090,7 @@ enum Tooltip {
   WORKSPACE_DROPDOWN_TOOLTIP
 }
 
-type UseCaseDto {
+type UseCase {
   """Use Case Description"""
   description: String!
 
@@ -23053,6 +23099,83 @@ type UseCaseDto {
 
   """Use Case Name"""
   name: String!
+
+  """Use Case Services Configuration"""
+  services: UseCaseService!
+}
+
+type UseCaseService {
+  development: UseCaseServiceEnvironment
+  production: UseCaseServiceEnvironment
+}
+
+type UseCaseServiceBlockchainNetwork {
+  """Blockchain Network Name"""
+  name: String!
+
+  """Blockchain Network Node Name"""
+  nodeName: String!
+}
+
+type UseCaseServiceBlockchainNode {
+  """Blockchain Node Name"""
+  name: String!
+  nodeType: NodeType!
+}
+
+type UseCaseServiceEnvironment {
+  blockchainNetworks: [UseCaseServiceBlockchainNetwork!]
+  blockchainNodes: [UseCaseServiceBlockchainNode!]
+  insights: [UseCaseServiceInsight!]
+  integrations: [UseCaseServiceIntegration!]
+  loadBalancers: [UseCaseServiceLoadBalancer!]
+  middlewares: [UseCaseServiceMiddleware!]
+  privateKeys: [UseCaseServicePrivateKey!]
+  smartContractSets: [UseCaseServiceSmartContractSet!]
+  storages: [UseCaseServiceStorage!]
+}
+
+type UseCaseServiceInsight {
+  insightsCategory: InsightsCategory!
+
+  """Insight Name"""
+  name: String!
+}
+
+type UseCaseServiceIntegration {
+  integrationType: IntegrationType!
+
+  """Integration Name"""
+  name: String!
+}
+
+type UseCaseServiceLoadBalancer {
+  """LoadBalancer Name"""
+  name: String!
+}
+
+type UseCaseServiceMiddleware {
+  interface: MiddlewareType!
+
+  """Middleware Name"""
+  name: String!
+}
+
+type UseCaseServicePrivateKey {
+  """Private Key Name"""
+  name: String!
+  privateKeyType: PrivateKeyType!
+}
+
+type UseCaseServiceSmartContractSet {
+  """Smart Contract Set Name"""
+  name: String!
+}
+
+type UseCaseServiceStorage {
+  """Storage Name"""
+  name: String!
+  storageProtocol: StorageProtocol!
 }
 
 """A user"""

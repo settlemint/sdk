@@ -6,8 +6,14 @@ export function missingConfigError(type: ServiceType) {
   return cancel(`Please connect to your ${type} service first. Use the "settlemint connect" command to do this.`);
 }
 
-export function missingAccessTokenError() {
-  return cancel("No access token found, please run `settlemint connect` to connect to your instance");
+export function missingAccessTokenError(personalAccessTokenExists: boolean) {
+  if (personalAccessTokenExists) {
+    return cancel("No access token found, please run `settlemint connect` to connect to your instance.");
+  }
+
+  return cancel(
+    "No personal access token found, please run `settlemint login`, then run `settlemint connect` to connect using an application access token.",
+  );
 }
 
 export function missingPersonalAccessTokenError() {

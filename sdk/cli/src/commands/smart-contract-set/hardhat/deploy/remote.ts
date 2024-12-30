@@ -1,7 +1,7 @@
 import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
-import { missingAccessTokenError } from "@/error/missing-config-error";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
@@ -45,43 +45,52 @@ export function hardhatDeployRemoteCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
-      if (!accessToken) {
-        return missingAccessTokenError();
-      }
-
       const instance = await instancePrompt(env, true);
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: "application",
+        allowFallback: true,
+      });
+
       const settlemint = createSettleMintClient({
         accessToken,
         instance,
       });
 
+      const nodeUniqueName = blockchainNodeUniqueName ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
       let node: BlockchainNode | undefined = undefined;
-      if (!blockchainNodeUniqueName) {
-        const blockchainNodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
-        if (blockchainNodes.length === 0) {
-          cancel("No blockchain nodes found. Please create a blockchain node and try again.");
+      if (!nodeUniqueName) {
+        const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+        const evmNodes = nodes.filter((node) => node.isEvm);
+        if (evmNodes.length === 0) {
+          cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");
         }
 
         const nodesWithPrivateKey = await Promise.all(
-          blockchainNodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)),
+          nodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)),
         );
         const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
           (node) => node.privateKeys && node.privateKeys.length > 0,
         );
         if (nodesWithActivePrivateKey.length === 0) {
           cancel(
-            "No blockchain nodes with private keys found. Please activate a private key on your blockchain node and try again.",
+            "No EVM blockchain nodes with private keys found. Please activate a private key on your EVM blockchain node and try again.",
           );
         }
 
         const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, autoAccept);
         if (!blockchainNode) {
-          cancel("No Blockchain Node selected. Please select one to continue.");
+          cancel("No EVM blockchain node selected. Please select one to continue.");
         }
         node = blockchainNode;
       } else {
-        node = await settlemint.blockchainNode.read(blockchainNodeUniqueName);
+        node = await settlemint.blockchainNode.read(nodeUniqueName);
+        if (!node.isEvm) {
+          cancel(
+            "The specified blockchain node is not an EVM blockchain node. Please specify an EVM blockchain node to continue.",
+          );
+        }
       }
 
       const envConfig = await settlemint.foundry.env(node.uniqueName);

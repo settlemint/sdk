@@ -13,7 +13,10 @@ import {
   MINIO_NAME,
   NETWORK_NAME,
   NODE_NAME,
+  NODE_NAME_2_WITH_PK,
+  NODE_NAME_3_WITHOUT_PK,
   PORTAL_NAME,
+  PRIVATE_KEY_2_NAME,
   PRIVATE_KEY_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAME,
   WORKSPACE_NAME,
@@ -65,8 +68,8 @@ beforeAll(async () => {
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
     await createBlockchainNodeMinioAndIpfs();
-    await createPrivateKeySmartcontractSetPortalAndBlockscout();
-    await createGraphMiddleware();
+    await createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode();
+    await createGraphMiddlewareAndActivatedPrivateKey();
   } catch (err) {
     console.error("Failed to create resources", err);
     await cleanup();
@@ -76,19 +79,45 @@ beforeAll(async () => {
 
 afterAll(cleanup);
 
-async function resourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
+async function setupSettleMintClient() {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  return createSettleMintClient({
+    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+    instance: env.SETTLEMINT_INSTANCE!,
+  });
+}
+
+async function defaultResourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
   const env: Partial<DotEnv> = await loadEnv(false, false);
   return envNames.every((envName) => env[envName] !== undefined);
+}
+
+async function blockchainNodeAlreadyCreated(blockchainNodeName: string) {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  const settlemint = await setupSettleMintClient();
+  const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+  return nodes.some((node) => node.name === blockchainNodeName);
+}
+
+async function privateKeyAlreadyCreated(privateKeyName: string) {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  const settlemint = await setupSettleMintClient();
+  const privateKeys = await settlemint.privateKey.list(env.SETTLEMINT_APPLICATION!);
+  return privateKeys.some((privateKey) => privateKey.name === privateKeyName);
+}
+
+async function findBlockchainNodeByName(blockchainNodeName: string) {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  const settlemint = await setupSettleMintClient();
+  const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+  return nodes.find((node) => node.name === blockchainNodeName);
 }
 
 async function addWorkspaceCredits() {
   // Add some credits so the workspace will not be auto paused
   const env: Partial<DotEnv> = await loadEnv(false, false);
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
-  const settlemint = createSettleMintClient({
-    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
-    instance: env.SETTLEMINT_INSTANCE!,
-  });
+  const settlemint = await setupSettleMintClient();
   if (!isLocalEnv()) {
     const workspace = await settlemint.workspace.read(env.SETTLEMINT_WORKSPACE!);
     await settlemint.workspace.addCredits(workspace.id, 100);
@@ -96,7 +125,7 @@ async function addWorkspaceCredits() {
 }
 
 async function createWorkspaceAndApplication() {
-  const hasWorkspace = await resourceAlreadyCreated(["SETTLEMINT_WORKSPACE"]);
+  const hasWorkspace = await defaultResourceAlreadyCreated(["SETTLEMINT_WORKSPACE"]);
   if (!hasWorkspace) {
     const { output: workspaceOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -124,7 +153,7 @@ async function createWorkspaceAndApplication() {
     await addWorkspaceCredits();
   }
 
-  const hasApplication = await resourceAlreadyCreated(["SETTLEMINT_APPLICATION"]);
+  const hasApplication = await defaultResourceAlreadyCreated(["SETTLEMINT_APPLICATION"]);
   if (!hasApplication) {
     const { output: applicationOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -139,11 +168,11 @@ async function createWorkspaceAndApplication() {
 }
 
 async function createBlockchainNodeMinioAndIpfs() {
-  const hasBlockchainNetwork = await resourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NETWORK"]);
-  const hasBlockchainNode = await resourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
-  const hasHasuraIntegration = await resourceAlreadyCreated(["SETTLEMINT_HASURA"]);
-  const hasMinioStorage = await resourceAlreadyCreated(["SETTLEMINT_MINIO"]);
-  const hasIpfsStorage = await resourceAlreadyCreated(["SETTLEMINT_IPFS"]);
+  const hasBlockchainNetwork = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NETWORK"]);
+  const hasBlockchainNode = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
+  const hasHasuraIntegration = await defaultResourceAlreadyCreated(["SETTLEMINT_HASURA"]);
+  const hasMinioStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_MINIO"]);
+  const hasIpfsStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_IPFS"]);
   const results = await deployResources([
     () =>
       hasBlockchainNetwork && hasBlockchainNode
@@ -268,10 +297,12 @@ async function createBlockchainNodeMinioAndIpfs() {
   }
 }
 
-async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
-  const hasPrivateKey = await resourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
-  const hasPortalMiddleware = await resourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
-  const hasBlockscoutInsights = await resourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
+async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
+  const hasPrivateKey = await defaultResourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
+  const hasPortalMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
+  const hasBlockscoutInsights = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
+  const hasBlockchainNodeWithPk = await blockchainNodeAlreadyCreated(NODE_NAME_2_WITH_PK);
+  const hasBlockchainNodeWithoutPk = await blockchainNodeAlreadyCreated(NODE_NAME_3_WITHOUT_PK);
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
   const results = await deployResources([
@@ -334,15 +365,51 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "--wait",
             BLOCKSCOUT_NAME,
           ]).result,
+    () =>
+      hasBlockchainNodeWithPk
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "blockchain-node",
+            "besu",
+            "--node-type",
+            "NON_VALIDATOR",
+            "--accept-defaults",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            NODE_NAME_2_WITH_PK,
+          ]).result,
+    () =>
+      hasBlockchainNodeWithoutPk
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "blockchain-node",
+            "besu",
+            "--node-type",
+            "NON_VALIDATOR",
+            "--accept-defaults",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            NODE_NAME_3_WITHOUT_PK,
+          ]).result,
   ]);
 
-  const [privateKeyResult, portalResult, blockscoutResult] = results;
+  const [privateKeyResult, portalResult, blockscoutResult, nodeWithPkResult, nodeWithoutPkResult] = results;
 
-  expect([privateKeyResult?.status, portalResult?.status, blockscoutResult?.status]).toEqual([
-    "fulfilled",
-    "fulfilled",
-    "fulfilled",
-  ]);
+  expect([
+    privateKeyResult?.status,
+    portalResult?.status,
+    blockscoutResult?.status,
+    nodeWithPkResult?.status,
+    nodeWithoutPkResult?.status,
+  ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
 
   if (privateKeyResult?.status === "fulfilled" && privateKeyResult.value) {
     expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
@@ -358,29 +425,72 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
     expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
     expect(blockscoutResult.value.output).toInclude("Insights is deployed");
   }
+
+  if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
+    expect(nodeWithPkResult.value.output).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
+  }
+
+  if (nodeWithoutPkResult?.status === "fulfilled" && nodeWithoutPkResult.value) {
+    expect(nodeWithoutPkResult.value.output).toInclude(
+      `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
+    );
+  }
 }
 
-async function createGraphMiddleware() {
-  const hasGraphMiddleware = await resourceAlreadyCreated(["SETTLEMINT_THEGRAPH"]);
-  if (hasGraphMiddleware) {
-    return;
+async function createGraphMiddlewareAndActivatedPrivateKey() {
+  const hasGraphMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_THEGRAPH"]);
+  const hasPrivateKey2 = await privateKeyAlreadyCreated(PRIVATE_KEY_2_NAME);
+  const blockchainNodeWithPk = await findBlockchainNodeByName(NODE_NAME_2_WITH_PK);
+
+  const results = await deployResources([
+    () =>
+      hasGraphMiddleware
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "middleware",
+            "graph",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            GRAPH_NAME,
+          ]).result,
+    () =>
+      hasPrivateKey2
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "private-key",
+            "hsm-ecdsa-p256",
+            "--blockchain-node-id",
+            blockchainNodeWithPk!.id,
+            "--accept-defaults",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--wait",
+            PRIVATE_KEY_2_NAME,
+          ]).result,
+  ]);
+
+  const [graphMiddlewareResult, privateKey2Result] = results;
+  expect([graphMiddlewareResult?.status, privateKey2Result?.status]).toEqual(["fulfilled", "fulfilled"]);
+
+  if (graphMiddlewareResult?.status === "fulfilled" && graphMiddlewareResult.value) {
+    expect(graphMiddlewareResult.value.output).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
+    expect(graphMiddlewareResult.value.output).toInclude("Middleware is deployed");
   }
-  const { output: graphOutput } = await runCommand(COMMAND_TEST_SCOPE, [
-    "platform",
-    "create",
-    "middleware",
-    "graph",
-    "--provider",
-    CLUSTER_PROVIDER,
-    "--region",
-    CLUSTER_REGION,
-    "--accept-defaults",
-    "--default",
-    "--wait",
-    GRAPH_NAME,
-  ]).result;
-  expect(graphOutput).toInclude(`Middleware ${GRAPH_NAME} created successfully`);
-  expect(graphOutput).toInclude("Middleware is deployed");
+  if (privateKey2Result?.status === "fulfilled" && privateKey2Result.value) {
+    expect(privateKey2Result.value.output).toInclude(`Private key ${PRIVATE_KEY_2_NAME} created successfully`);
+    expect(privateKey2Result.value.output).toInclude("Private key is deployed");
+  }
 }
 
 async function login() {
@@ -400,7 +510,7 @@ async function logout() {
 }
 
 async function createApplicationAccessToken() {
-  const hasAat = await resourceAlreadyCreated(["SETTLEMINT_ACCESS_TOKEN"]);
+  const hasAat = await defaultResourceAlreadyCreated(["SETTLEMINT_ACCESS_TOKEN"]);
   if (hasAat) {
     return;
   }
