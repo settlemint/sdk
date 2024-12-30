@@ -204,6 +204,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
           ]).result,
     () =>
       hasHasuraIntegration
@@ -220,6 +221,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             HASURA_NAME,
           ]).result,
     () =>
@@ -237,6 +239,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             MINIO_NAME,
           ]).result,
     () =>
@@ -254,6 +257,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             IPFS_NAME,
           ]).result,
   ]);
@@ -300,6 +304,7 @@ async function createBlockchainNodeMinioAndIpfs() {
       "--region",
       CLUSTER_REGION,
       "--wait",
+      "--restart-if-timeout",
       PRIVATE_KEY_SMART_CONTRACTS_NAME,
     ]).result;
     expect(privateKeyHsmCreateCommandOutput).toInclude(
@@ -335,6 +340,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--region",
             CLUSTER_REGION,
             "--wait",
+            "--restart-if-timeout",
             PRIVATE_KEY_NAME,
           ]).result,
     () =>
@@ -353,6 +359,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             "--include-predeployed-abis",
             "StarterKitERC20Registry",
             "StarterKitERC20Factory",
@@ -375,6 +382,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             BLOCKSCOUT_NAME,
           ]).result,
     () =>
@@ -393,6 +401,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--wait",
+            "--restart-if-timeout",
             NODE_NAME_2_WITH_PK,
           ]).result,
     () =>
@@ -411,6 +420,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             CLUSTER_REGION,
             "--accept-defaults",
             "--wait",
+            "--restart-if-timeout",
             NODE_NAME_3_WITHOUT_PK,
           ]).result,
   ]);
@@ -472,6 +482,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             GRAPH_NAME,
           ]).result,
     () =>
@@ -490,6 +501,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--region",
             CLUSTER_REGION,
             "--wait",
+            "--restart-if-timeout",
             PRIVATE_KEY_2_NAME,
           ]).result,
   ]);
