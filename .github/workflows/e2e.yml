@@ -60,31 +60,33 @@ jobs:
         run: |
           echo $ENV_E2E > .env
           echo $ENV_E2E_LOCAL > .env.local
+          cat .env
+          cat .env.local
         env:
           ENV_E2E: ${{ secrets.ENV_E2E }}
           ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
 
       - name: Get env file
         id: env-file
-        run: echo "::set-output name=env::$(cat .env)"
+        run: echo "ENV_CONTENTS=$(cat .env)" >> $GITHUB_OUTPUT
 
       - name: Get env.local file
         id: env-file-local
-        run: echo "::set-output name=env::$(cat .env.local)"
+        run: echo "ENV_LOCAL_CONTENTS=$(cat .env.local)" >> $GITHUB_OUTPUT
 
       - name: Save workspace config (env)
         uses: Skandalik/save-secret@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           secret_name: ENV_E2E
-          secret_value: ${{ steps.env-file.outputs.env }}
+          secret_value: ${{ steps.env-file.outputs.ENV_CONTENTS }}
 
       - name: Save workspace config (env.local)
         uses: Skandalik/save-secret@v1.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           secret_name: ENV_E2E_LOCAL
-          secret_value: ${{ steps.env-file-local.outputs.env }}
+          secret_value: ${{ steps.env-file-local.outputs.ENV_LOCAL_CONTENTS }}
 
       - name: Install Bun dependencies
         run: bun install
