@@ -67,7 +67,7 @@ jobs:
       - name: Save workspace config
         if: '!cancelled()'
         run: |
-          op item get "SDK E2E" --vault "platform" --format json > env-secret.json
+          op item get --debug "SDK E2E" --vault "platform" --format json > env-secret.json
           # Update the JSON file
           jq --arg new_env "$(cat .env)" --arg new_envlocal "$(cat .env.local)" '
             .fields |= map(
@@ -81,7 +81,7 @@ jobs:
             )
           ' env-secret.json > env-secret_updated.json
           mv env-secret_updated.json env-secret.json
-          cat env-secret.json | op item edit --vault platform "SDK E2E"
+          cat env-secret.json | op item edit --debug --vault platform "SDK E2E"
           rm env-secret.json
         env:
           OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
