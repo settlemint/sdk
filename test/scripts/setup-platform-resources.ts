@@ -272,6 +272,11 @@ async function createBlockchainNodeMinioAndIpfs() {
     "fulfilled",
   ]);
 
+  if (networkResult?.status === "fulfilled" && networkResult.value) {
+    expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
+    expect(networkResult.value.output).toInclude("Blockchain node is deployed");
+  }
+
   if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
     expect(hasuraResult.value.output).toInclude(`Integration tool ${HASURA_NAME} created successfully`);
     expect(hasuraResult.value.output).toInclude("Integration tool is deployed");
@@ -287,9 +292,8 @@ async function createBlockchainNodeMinioAndIpfs() {
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 
-  if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
-    expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
-    expect(networkResult.value.output).toInclude("Blockchain node is deployed");
+  const hasPrivateKey = await privateKeyAlreadyCreated(PRIVATE_KEY_SMART_CONTRACTS_NAME);
+  if (!hasPrivateKey) {
     const env: Partial<DotEnv> = await loadEnv(false, false);
     const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -453,12 +457,14 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
 
   if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
     expect(nodeWithPkResult.value.output).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
+    expect(nodeWithPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 
   if (nodeWithoutPkResult?.status === "fulfilled" && nodeWithoutPkResult.value) {
     expect(nodeWithoutPkResult.value.output).toInclude(
       `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
     );
+    expect(nodeWithoutPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 }
 
