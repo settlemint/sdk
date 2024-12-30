@@ -71,10 +71,8 @@ jobs:
 
       - name: Get workspace config
         run: |
-          echo $ENV_E2E > .env
-          echo $ENV_E2E_LOCAL > .env.local
-          echo $ENV_E2E
-          echo $ENV_E2E_LOCAL
+          echo $ENV_E2E | base64 --decode > .env
+          echo $ENV_E2E_LOCAL | base64 --decode > .env.local
         env:
           ENV_E2E: ${{ secrets.ENV_E2E }}
           ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
@@ -96,12 +94,12 @@ jobs:
       - name: Get env file
         if: ${{ !cancelled() }}
         id: env-file
-        run: echo "ENV_CONTENTS=$(cat .env)" >> $GITHUB_OUTPUT
+        run: echo "ENV_CONTENTS=$(cat .env | base64)" >> $GITHUB_OUTPUT
 
       - name: Get env.local file
         if: ${{ !cancelled() }}
         id: env-file-local
-        run: echo "ENV_LOCAL_CONTENTS=$(cat .env.local)" >> $GITHUB_OUTPUT
+        run: echo "ENV_LOCAL_CONTENTS=$(cat .env.local | base64)" >> $GITHUB_OUTPUT
 
       - name: Save workspace config (env)
         if: ${{ !cancelled() }}
