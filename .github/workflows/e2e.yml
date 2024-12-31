@@ -91,28 +91,10 @@ jobs:
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
           DISABLE_WORKSPACE_DELETE: true
 
-      - name: Get env file
+      - name: Save workspace config
         if: ${{ !cancelled() }}
-        id: env-file
-        run: echo "ENV_CONTENTS=$(cat .env | base64)" >> $GITHUB_OUTPUT
+        run: |
+          echo "${{ env.E2E_GITHUB_TOKEN }}" | gh auth login --with-token
+          gh secret set ENV_E2E --body $(cat .env | base64)
+          gh secret set ENV_E2E_LOCAL --body $(cat .env.local | base64)
 
-      - name: Get env.local file
-        if: ${{ !cancelled() }}
-        id: env-file-local
-        run: echo "ENV_LOCAL_CONTENTS=$(cat .env.local | base64)" >> $GITHUB_OUTPUT
-
-      - name: Save workspace config (env)
-        if: ${{ !cancelled() }}
-        uses: Skandalik/save-secret@9e20e6ca638cbb0984ec72e280c40dcb3934f978 # v1.0.1
-        with:
-          github_token: ${{ env.E2E_GITHUB_TOKEN }}
-          secret_name: ENV_E2E
-          secret_value: ${{ steps.env-file.outputs.ENV_CONTENTS }}
-
-      - name: Save workspace config (env.local)
-        if: ${{ !cancelled() }}
-        uses: Skandalik/save-secret@9e20e6ca638cbb0984ec72e280c40dcb3934f978 # v1.0.1
-        with:
-          github_token: ${{ env.E2E_GITHUB_TOKEN }}
-          secret_name: ENV_E2E_LOCAL
-          secret_value: ${{ steps.env-file-local.outputs.ENV_LOCAL_CONTENTS }}
