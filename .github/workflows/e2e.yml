@@ -95,8 +95,8 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
-          gh secret set ENV_E2E --body $(cat .env | base64)
-          gh secret set ENV_E2E_LOCAL --body $(cat .env.local | base64)
+          gh secret set ENV_E2E --body "$(cat .env | base64)"
+          gh secret set ENV_E2E_LOCAL --body "$(cat .env.local | base64)"
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
