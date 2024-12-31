@@ -53,23 +53,6 @@ describe("Setup a project using the SDK", () => {
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
 
-  test("Install dependencies and use local sdk packages", async () => {
-    const env = { NODE_ENV: "production" };
-    await $`bun install`.cwd(projectDir).env({
-      ...process.env,
-      ...env,
-    });
-    // Delete the node_modules/@settlemint folder
-    // It will automatically use the local ones when deleted
-    await $`rm -rf ./node_modules/@settlemint`.cwd(projectDir);
-  });
-
-  test("Connect starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
-      .result;
-    expect(output).toInclude("Connected to SettleMint");
-  });
-
   test("Validate that .env file has the correct values", async () => {
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
 
@@ -103,6 +86,23 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKSCOUT).toBeString();
     expect(env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
+  });
+
+  test("Install dependencies and use local sdk packages", async () => {
+    const env = { NODE_ENV: "production" };
+    await $`bun install`.cwd(projectDir).env({
+      ...process.env,
+      ...env,
+    });
+    // Delete the node_modules/@settlemint folder
+    // It will automatically use the local ones when deleted
+    await $`rm -rf ./node_modules/@settlemint`.cwd(projectDir);
+  });
+
+  test("Connect starter kit", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
+      .result;
+    expect(output).toInclude("Connected to SettleMint");
   });
 
   test("contracts - Install dependencies", async () => {
