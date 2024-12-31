@@ -71,17 +71,17 @@ jobs:
 
       - name: Get workspace config
         run: |
-          echo $ENV_E2E | base64 --decode > .env
-          echo $ENV_E2E_LOCAL | base64 --decode > .env.local
+          echo $ENV_E2E > .env
+          echo $ENV_E2E_LOCAL > .env.local
         env:
           ENV_E2E: ${{ secrets.ENV_E2E }}
           ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
 
-      - name: Install Bun dependencies
-        run: bun install
+      # - name: Install Bun dependencies
+      #   run: bun install
 
-      - name: Run build
-        run: bunx turbo build
+      # - name: Run build
+      #   run: bunx turbo build
 
       # - name: Run the E2E tests
       #   run: bun test:e2e
@@ -95,10 +95,8 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
-          gh secret set ENV_E2E --body "$(cat .env | base64)"
-          echo $(cat .env.local)
-          echo $(cat .env.local | base64)
-          gh secret set ENV_E2E_LOCAL --body "$(cat .env.local | base64)"
+          gh secret set ENV_E2E < .env
+          gh secret set ENV_E2E_LOCAL < .env.local
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
