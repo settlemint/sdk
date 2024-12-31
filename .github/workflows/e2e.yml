@@ -103,7 +103,7 @@ jobs:
 
       - name: Save workspace config (env)
         if: ${{ !cancelled() }}
-        uses: Skandalik/save-secret@v1.0.0
+        uses: Skandalik/save-secret@aa2dc403f68d66f11d0c74d11cfee051e82e67a2 # v1.0.0
         with:
           github_token: ${{ env.E2E_GITHUB_TOKEN }}
           secret_name: ENV_E2E
@@ -111,7 +111,7 @@ jobs:
 
       - name: Save workspace config (env.local)
         if: ${{ !cancelled() }}
-        uses: Skandalik/save-secret@v1.0.0
+        uses: Skandalik/save-secret@aa2dc403f68d66f11d0c74d11cfee051e82e67a2 # v1.0.0
         with:
           github_token: ${{ env.E2E_GITHUB_TOKEN }}
           secret_name: ENV_E2E_LOCAL
