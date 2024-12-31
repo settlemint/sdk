@@ -24,7 +24,7 @@ export async function blockscoutPrompt(
   }
 
   const defaultBlockscout =
-    insights.find((insight) => insight.id === env.SETTLEMINT_BLOCKSCOUT) ??
+    insights.find((insight) => insight.uniqueName === env.SETTLEMINT_BLOCKSCOUT) ??
     (insights.length === 1 ? insights[0] : undefined);
   const defaultPossible = accept; // is optional
 

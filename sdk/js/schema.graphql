@@ -13796,7 +13796,7 @@ type Mutation {
 
     """Validity period of the personal access token"""
     validityPeriod: AccessTokenValidityPeriod!
-  ): PersonalAccessToken!
+  ): PersonalAccessTokenCreateResultDto!
 
   """Creates a new PrivateKey service"""
   createPrivateKey(
@@ -16633,6 +16633,23 @@ type PersonalAccessToken {
 
   """Date and time when the entity was last updated"""
   updatedAt: DateTime!
+}
+
+type PersonalAccessTokenCreateResultDto {
+  """The expiration date of the Personal Access Token"""
+  expiresAt: DateTime
+
+  """Unique identifier of the entity"""
+  id: ID!
+
+  """The name of the Personal Access Token"""
+  name: String!
+
+  """The scopes of the Personal Access Token"""
+  scopes: [String!]!
+
+  """The token string of the Personal Access Token (not masked)"""
+  token: String!
 }
 
 type PincodeWalletKeyVerification implements WalletKeyVerification {

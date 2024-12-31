@@ -20,7 +20,7 @@ export async function blockchainNetworkPrompt(
   }
 
   const defaultNetwork =
-    networks.find((network) => network.id === env.SETTLEMINT_BLOCKCHAIN_NETWORK) ??
+    networks.find((network) => network.uniqueName === env.SETTLEMINT_BLOCKCHAIN_NETWORK) ??
     (networks.length === 1 ? networks[0] : undefined);
   const defaultPossible = accept; // is optional
 

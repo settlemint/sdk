@@ -1,17 +1,18 @@
+import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
+import { blockchainNetworkRead } from "./blockchain-network.js";
 
 /**
- * Fragment for the BlockchainNode type.
+ * Fragment containing core blockchain node fields.
  */
 const BlockchainNodeFragment = graphql(`
   fragment BlockchainNode on BlockchainNode {
     __typename
     id
-    name
     uniqueName
+    name
     status
     isEvm
     endpoints {
@@ -28,6 +29,7 @@ const BlockchainNodeFragment = graphql(`
       ... on AbstractClusterService {
         id
         name
+        uniqueName
       }
     }
     privateKeys {
@@ -42,157 +44,170 @@ const BlockchainNodeFragment = graphql(`
 `);
 
 /**
- * Represents a blockchain node with its details.
+ * Type representing a blockchain node entity.
  */
 export type BlockchainNode = ResultOf<typeof BlockchainNodeFragment>;
 
 /**
- * GraphQL query to fetch blockchain nodes for a given application.
+ * Query to fetch blockchain nodes for an application.
  */
 const getBlockchainNodes = graphql(
   `
-query getBlockchainNodes($id: ID!) {
-blockchainNodes(applicationId: $id) {
-  items {
-    ...BlockchainNode
-  }
-}
-}`,
+    query getBlockchainNodes($applicationUniqueName: String!) {
+      blockchainNodesByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...BlockchainNode
+        }
+      }
+    }
+  `,
   [BlockchainNodeFragment],
 );
 
 /**
- * GraphQL query to fetch a specific blockchain node by its ID.
+ * Query to fetch a specific blockchain node.
  */
 const getBlockchainNode = graphql(
   `
-query getBlockchainNode($id: ID!) {
-  blockchainNode(entityId: $id) {
-    ...BlockchainNode
-  }
-}
-`,
+    query getBlockchainNode($uniqueName: String!) {
+      blockchainNodeByUniqueName(uniqueName: $uniqueName) {
+        ...BlockchainNode
+      }
+    }
+  `,
   [BlockchainNodeFragment],
 );
 
 /**
- * GraphQL mutation to create a blockchain node.
+ * Mutation to create a blockchain node.
  */
 const createBlockchainNode = graphql(
   `
-  mutation createBlockchainNode(
-    $applicationId: ID!
-    $blockchainNetworkId: ID!
-    $name: String!
-    $provider: String!
-    $region: String!
-    $size: ClusterServiceSize
-    $type: ClusterServiceType
-    $nodeType: NodeType
-    $keyMaterial: ID
-  ) {
-    createBlockchainNode(
-      applicationId: $applicationId
-      blockchainNetworkId: $blockchainNetworkId
-      name: $name
-      provider: $provider
-      region: $region
-      size: $size
-      type: $type
-      nodeType: $nodeType
-      keyMaterial: $keyMaterial
+    mutation createBlockchainNode(
+      $applicationId: ID!
+      $blockchainNetworkId: ID!
+      $name: String!
+      $provider: String!
+      $region: String!
+      $size: ClusterServiceSize
+      $type: ClusterServiceType
+      $nodeType: NodeType
+      $keyMaterial: ID
     ) {
-      ...BlockchainNode
+      createBlockchainNode(
+        applicationId: $applicationId
+        blockchainNetworkId: $blockchainNetworkId
+        name: $name
+        provider: $provider
+        region: $region
+        size: $size
+        type: $type
+        nodeType: $nodeType
+        keyMaterial: $keyMaterial
+      ) {
+        ...BlockchainNode
+      }
     }
-  }
-`,
-  [BlockchainNodeFragment],
-);
-
-export type CreateBlockchainNodeArgs = VariablesOf<typeof createBlockchainNode>;
-
-const restartBlockchainNode = graphql(
-  `
-  mutation RestartBlockchainNode($id: ID!) {
-    restartBlockchainNode(entityId: $id) {
-      ...BlockchainNode
-    }
-  }
-`,
+  `,
   [BlockchainNodeFragment],
 );
 
 /**
- * Creates a function to list blockchain nodes for a given application.
- *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an application ID and returns a list of blockchain nodes.
- * @throws Will throw an error if the application ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const nodes = await client.blockchainNode.list('applicationId');
+ * Arguments required to create a blockchain node.
  */
-export const blockchainNodeList = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((applicationId: Id) => Promise<BlockchainNode[]>) => {
-  return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId);
+export type CreateBlockchainNodeArgs = Omit<
+  VariablesOf<typeof createBlockchainNode>,
+  "applicationId" | "blockchainNetworkId"
+> & {
+  applicationUniqueName: string;
+  blockchainNetworkUniqueName: string;
+};
+
+/**
+ * Mutation to restart a blockchain node.
+ */
+const restartBlockchainNode = graphql(
+  `
+    mutation RestartBlockchainNode($uniqueName: String!) {
+      restartBlockchainNodeByUniqueName(uniqueName: $uniqueName) {
+        ...BlockchainNode
+      }
+    }
+  `,
+  [BlockchainNodeFragment],
+);
+
+/**
+ * Creates a function to list blockchain nodes for an application.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches blockchain nodes for an application
+ * @throws If the application cannot be found or the request fails
+ */
+export const blockchainNodeList = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (applicationUniqueName: string) => {
     const {
-      blockchainNodes: { items },
-    } = await gqlClient.request(getBlockchainNodes, { id });
+      blockchainNodesByUniqueName: { items },
+    } = await gqlClient.request(getBlockchainNodes, { applicationUniqueName });
     return items;
   };
 };
 
 /**
- * Creates a function to read a specific blockchain node.
+ * Creates a function to fetch a specific blockchain node.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes a blockchain node ID and returns the node details.
- * @throws Will throw an error if the blockchain node ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const node = await client.blockchainNode.read('nodeId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single blockchain node by unique name
+ * @throws If the blockchain node cannot be found or the request fails
  */
-export const blockchainNodeRead = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((blockchainNodeId: Id) => Promise<BlockchainNode>) => {
-  return async (blockchainNodeId: Id) => {
-    const id = validate(IdSchema, blockchainNodeId);
-    const { blockchainNode } = await gqlClient.request(getBlockchainNode, { id });
-    return blockchainNode;
+export const blockchainNodeRead = (gqlClient: GraphQLClient, options: ClientOptions) => {
+  return async (blockchainNodeUniqueName: string) => {
+    const { blockchainNodeByUniqueName } = await gqlClient.request(getBlockchainNode, {
+      uniqueName: blockchainNodeUniqueName,
+    });
+    return blockchainNodeByUniqueName;
   };
 };
 
 /**
  * Creates a function to create a new blockchain node.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes blockchain node creation arguments and returns a promise resolving to the created blockchain node.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates a new blockchain node with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
-export const blockchainNodeCreate = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>) => {
+export const blockchainNodeCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (args: CreateBlockchainNodeArgs) => {
-    validate(IdSchema, args.applicationId);
-    validate(IdSchema, args.blockchainNetworkId);
-    const { createBlockchainNode: blockchainNode } = await gqlClient.request(createBlockchainNode, args);
+    const { applicationUniqueName, blockchainNetworkUniqueName, ...otherArgs } = args;
+    const [application, blockchainNetwork] = await Promise.all([
+      applicationRead(gqlClient, options)(applicationUniqueName),
+      blockchainNetworkRead(gqlClient, options)(blockchainNetworkUniqueName),
+    ]);
+    const { createBlockchainNode: blockchainNode } = await gqlClient.request(createBlockchainNode, {
+      ...otherArgs,
+      applicationId: application.id,
+      blockchainNetworkId: blockchainNetwork.id,
+    });
     return blockchainNode;
   };
 };
 
+/**
+ * Creates a function to restart a blockchain node.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that restarts a blockchain node by unique name
+ * @throws If the blockchain node cannot be found or the restart fails
+ */
 export const blockchainNodeRestart =
   (gqlClient: GraphQLClient, _options: ClientOptions) =>
-  async (nodeId: Id): Promise<BlockchainNode> => {
-    const id = validate(IdSchema, nodeId);
-    const { restartBlockchainNode: blockchainNode } = await gqlClient.request(restartBlockchainNode, { id });
+  async (blockchainNodeUniqueName: string): Promise<BlockchainNode> => {
+    const { restartBlockchainNodeByUniqueName: blockchainNode } = await gqlClient.request(restartBlockchainNode, {
+      uniqueName: blockchainNodeUniqueName,
+    });
     return blockchainNode;
   };

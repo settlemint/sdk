@@ -10,8 +10,8 @@ export function minioRestartCommand() {
     type: "storage",
     alias: "m",
     envKey: "SETTLEMINT_MINIO",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.storage.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.storage.restart(uniqueName);
     },
   });
 }

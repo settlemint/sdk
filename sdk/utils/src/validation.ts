@@ -33,6 +33,7 @@ export {
 } from "./validation/access-token.schema.js";
 export { DotEnvSchema, DotEnvSchemaPartial, type DotEnv, type DotEnvPartial } from "./validation/dot-env.schema.js";
 export { IdSchema, type Id } from "./validation/id.schema.js";
+export { UniqueNameSchema } from "./validation/unique-name.schema.js";
 export {
   UrlOrPathSchema,
   UrlPathSchema,

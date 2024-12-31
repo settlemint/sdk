@@ -47,8 +47,8 @@ describe("ipfsStorageCreateCommand", () => {
       "gke",
       "--region",
       "europe",
-      "--application-id",
-      "123456789",
+      "--application",
+      "my-app",
       "--size",
       "MEDIUM",
       "--type",
@@ -59,7 +59,7 @@ describe("ipfsStorageCreateCommand", () => {
     expect(commandOptions).toEqual({
       provider: "gke",
       region: "europe",
-      applicationId: "123456789",
+      application: "my-app",
       size: "MEDIUM",
       type: "DEDICATED",
     });

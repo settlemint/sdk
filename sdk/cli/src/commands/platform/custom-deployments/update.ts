@@ -21,21 +21,21 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
     .alias("cd")
     .argument("<tag>", "The tag to update the custom deployment to")
     .option(
-      "--id <id>",
-      "The ID of the custom deployment to update. If not provided, will use SETTLEMINT_CUSTOM_DEPLOYMENT from env",
+      "--unique-name <uniqueName>",
+      "The unique name of the custom deployment to update. If not provided, will use SETTLEMINT_CUSTOM_DEPLOYMENT from env",
     )
     .option("--prod", "Connect to your production environment")
     .option("--wait", "Wait for the custom deployment to be redeployed")
     .description("Update a custom deployment in the SettleMint platform")
-    .action(async (tag, { id, prod, wait }) => {
+    .action(async (tag, { uniqueName, prod, wait }) => {
       intro("Updating custom deployment in the SettleMint platform");
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const customDeploymentId = id ?? env.SETTLEMINT_CUSTOM_DEPLOYMENT;
-      if (!customDeploymentId) {
+      const customDeploymentUniqueName = uniqueName ?? env.SETTLEMINT_CUSTOM_DEPLOYMENT;
+      if (!customDeploymentUniqueName) {
         throw new Error(
-          "No custom deployment ID specified. Please provide it either via the --id flag or by setting the SETTLEMINT_CUSTOM_DEPLOYMENT environment variable",
+          "No custom deployment unique name specified. Please provide it either via the --unique-name flag or by setting the SETTLEMINT_CUSTOM_DEPLOYMENT environment variable",
         );
       }
 
@@ -55,13 +55,18 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
       const customDeployment = await spinner({
         startMessage: "Updating custom deployment",
         task: async () => {
-          return settlemint.customDeployment.update(customDeploymentId, tag);
+          return settlemint.customDeployment.update(customDeploymentUniqueName, tag);
         },
         stopMessage: "Custom deployment updated",
       });
 
       if (wait) {
-        await waitForCompletion({ settlemint, type: "custom deployment", id: customDeployment.id, action: "deploy" });
+        await waitForCompletion({
+          settlemint,
+          type: "custom deployment",
+          uniqueName: customDeployment.uniqueName,
+          action: "deploy",
+        });
       }
 
       outro(`${customDeployment.name} updated to ${tag}`);

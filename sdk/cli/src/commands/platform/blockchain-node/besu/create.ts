@@ -20,10 +20,10 @@ export function blockchainNodeBesuCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option(
-          "-a, --application-id <applicationId>",
-          "The application ID to create the node in (defaults to application from env)",
+          "-a, --application <application>",
+          "The application unique name to create the node in (defaults to application from env)",
         )
-        .option("--blockchain-network-id <blockchainNetworkId>", "Blockchain network to add this node to")
+        .option("--blockchain-network <blockchainNetwork>", "Blockchain network unique name to add this node to")
         .option("--node-identity <nodeIdentity>", "EC DSA P256 private key to use as the node identity")
         .addOption(
           new Option("--node-type <nodeType>", "Type of the node")
@@ -34,12 +34,12 @@ export function blockchainNodeBesuCreateCommand() {
           async (
             name,
             {
-              applicationId,
+              application,
               provider,
               region,
               size,
               type,
-              blockchainNetworkId,
+              blockchainNetwork,
               nodeType,
               nodeIdentity,
               acceptDefaults,
@@ -48,25 +48,25 @@ export function blockchainNodeBesuCreateCommand() {
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
               const autoAccept = !!acceptDefaults || isInCi;
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-              if (!application) {
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+              if (!applicationUniqueName) {
                 cancel("No application found. Please specify an application or run `settlemint connect` to continue.");
               }
 
-              let networkId = blockchainNetworkId ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
-              if (!networkId) {
-                const networks = await settlemint.blockchainNetwork.list(application);
+              let networkUniqueName = blockchainNetwork ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
+              if (!networkUniqueName) {
+                const networks = await settlemint.blockchainNetwork.list(applicationUniqueName);
                 const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
                 if (!network) {
                   cancel("No network found. Please specify a network to continue.");
                 }
-                networkId = network?.id;
+                networkUniqueName = network?.id;
               }
 
               const result = await settlemint.blockchainNode.create({
-                applicationId: application,
+                applicationUniqueName,
                 name,
-                blockchainNetworkId: networkId,
+                blockchainNetworkUniqueName: networkUniqueName,
                 nodeType,
                 keyMaterial: nodeIdentity,
                 provider,
@@ -79,7 +79,7 @@ export function blockchainNodeBesuCreateCommand() {
                 result,
                 mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
-                    SETTLEMINT_APPLICATION: application,
+                    SETTLEMINT_APPLICATION: applicationUniqueName,
                     SETTLEMINT_BLOCKCHAIN_NODE: result.id,
                   };
                 },

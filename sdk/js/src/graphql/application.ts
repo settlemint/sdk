@@ -1,137 +1,162 @@
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
+import { workspaceRead } from "./workspace.js";
 
 /**
- * GraphQL fragment for the Application type.
- * This fragment is used to fetch the basic details of an application.
+ * GraphQL fragment containing core application fields.
  */
-export const ApplicationFragment = graphql(`
+const ApplicationFragment = graphql(`
   fragment Application on Application {
     id
+    uniqueName
     name
-    workspace { id }
+    workspace {
+      id
+      uniqueName
+    }
   }
 `);
 
 /**
- * Represents an application with its details.
- * This type is derived from the ApplicationFragment.
+ * Type representing an application entity.
  */
 export type Application = ResultOf<typeof ApplicationFragment>;
 
+/**
+ * Query to fetch applications for a workspace.
+ */
 const listApplications = graphql(
   `
-  query ListApplications($workspaceId: ID!) {
-    workspace (workspaceId: $workspaceId) {
-      applications {
+    query ListApplications($workspaceUniqueName: String!) {
+      workspaceByUniqueName(uniqueName: $workspaceUniqueName) {
+        applications {
+          ...Application
+        }
+      }
+    }
+  `,
+  [ApplicationFragment],
+);
+
+/**
+ * Query to fetch a specific application.
+ */
+const readApplication = graphql(
+  `
+    query ReadApplication($applicationUniqueName: String!) {
+      applicationByUniqueName(uniqueName: $applicationUniqueName) {
         ...Application
       }
     }
-  }
   `,
   [ApplicationFragment],
 );
-
-const readApplication = graphql(
-  `
-  query ReadApplication($id: ID!) {
-    application(applicationId: $id) {
-      ...Application
-    }
-  }
-  `,
-  [ApplicationFragment],
-);
-
-const createApplication = graphql(
-  `
-  mutation CreateApplication(
-    $name: String!
-    $workspaceId: ID!
-  ) {
-    createApplication(
-      name: $name
-      workspaceId: $workspaceId
-    ) {
-      ...Application
-    }
-  }
-  `,
-  [ApplicationFragment],
-);
-
-const deleteApplication = graphql(
-  `
-  mutation DeleteApplication($id: ID!) {
-    deleteApplication(id: $id) {
-      ...Application
-    }
-  }
-  `,
-  [ApplicationFragment],
-);
-
-export type CreateApplicationArgs = VariablesOf<typeof createApplication>;
 
 /**
- * Lists all applications in a workspace.
+ * Mutation to create a new application.
+ */
+const createApplication = graphql(
+  `
+    mutation CreateApplication($name: String!, $workspaceId: ID!) {
+      createApplication(name: $name, workspaceId: $workspaceId) {
+        ...Application
+      }
+    }
+  `,
+  [ApplicationFragment],
+);
+
+/**
+ * Mutation to delete an application.
+ */
+const deleteApplication = graphql(
+  `
+    mutation DeleteApplication($id: ID!) {
+      deleteApplication(id: $id) {
+        ...Application
+      }
+    }
+  `,
+  [ApplicationFragment],
+);
+
+/**
+ * Arguments required to create an application.
+ */
+export type CreateApplicationArgs = Omit<VariablesOf<typeof createApplication>, "workspaceId"> & {
+  workspaceUniqueName: string;
+};
+
+/**
+ * Creates a function to list applications in a workspace.
  *
- * @param gqlClient - The GraphQL client instance used to execute the query.
- * @param options - Configuration options for the client.
- * @returns A function that accepts the workspace ID and returns a promise resolving to an array of applications.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches applications for a workspace
+ * @throws If the workspace cannot be found or the request fails
  */
 export const applicationList = (gqlClient: GraphQLClient, options: ClientOptions) => {
-  return async (workspaceId: Id): Promise<Application[]> => {
-    const id = validate(IdSchema, workspaceId);
+  return async (workspaceUniqueName: string): Promise<Application[]> => {
     const {
-      workspace: { applications },
-    } = await gqlClient.request(listApplications, { workspaceId: id });
+      workspaceByUniqueName: { applications },
+    } = await gqlClient.request(listApplications, { workspaceUniqueName });
     return applications;
   };
 };
 
 /**
- * Reads a specific application by ID.
+ * Creates a function to fetch a specific application.
  *
- * @param gqlClient - The GraphQL client instance used to execute the query.
- * @param options - Configuration options for the client.
- * @returns A function that accepts the application ID and returns a promise resolving to the application details.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single application by unique name
+ * @throws If the application cannot be found or the request fails
  */
 export const applicationRead = (gqlClient: GraphQLClient, options: ClientOptions) => {
-  return async (applicationId: Id): Promise<Application> => {
-    const id = validate(IdSchema, applicationId);
-    const { application } = await gqlClient.request(readApplication, { id });
+  return async (applicationUniqueName: string): Promise<Application> => {
+    const { applicationByUniqueName: application } = await gqlClient.request(readApplication, {
+      applicationUniqueName,
+    });
     return application;
   };
 };
 
 /**
- * Creates a new application.
+ * Creates a function to create a new application.
  *
- * @param gqlClient - The GraphQL client instance used to execute the mutation.
- * @param options - Configuration options for the client.
- * @returns A function that accepts the arguments for creating an application and returns a promise resolving to the created application.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates a new application with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
 export const applicationCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (args: CreateApplicationArgs): Promise<Application> => {
-    const { createApplication: application } = await gqlClient.request(createApplication, args);
+    const { workspaceUniqueName, ...otherArgs } = args;
+    const workspace = await workspaceRead(gqlClient, options)(workspaceUniqueName);
+    const { createApplication: application } = await gqlClient.request(createApplication, {
+      ...otherArgs,
+      workspaceId: workspace.id,
+    });
     return application;
   };
 };
 
 /**
- * Deletes an existing application.
+ * Creates a function to delete an application.
  *
- * @param gqlClient - The GraphQL client instance used to execute the mutation.
- * @param options - Configuration options for the client.
- * @returns A function that accepts the ID of the application to delete and returns a promise resolving to the deleted application.
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that deletes an application by unique name
+ * @throws If the application cannot be found or the deletion fails
  */
 export const applicationDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
-  return async (applicationId: Id): Promise<Application> => {
-    const id = validate(IdSchema, applicationId);
-    const { deleteApplication: application } = await gqlClient.request(deleteApplication, { id });
+  return async (applicationUniqueName: string): Promise<Application> => {
+    // TODO: dedicated mutation on platform
+    const applicationToDelete = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const { deleteApplication: application } = await gqlClient.request(deleteApplication, {
+      id: applicationToDelete.id,
+    });
     return application;
   };
 };

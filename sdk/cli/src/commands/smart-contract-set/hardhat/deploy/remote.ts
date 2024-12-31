@@ -23,8 +23,8 @@ export function hardhatDeployRemoteCommand() {
     .option("--parameters <parameters>", "A relative path to a JSON file to use for the module parameters")
     .option("--strategy <strategy>", `Set the deployment strategy to use (default: "basic")`)
     .option(
-      "--blockchain-node-id <blockchainNodeId>",
-      "Blockchain Node ID (optional, defaults to the blockchain node in the environment)",
+      "--blockchain-node <blockchainNode>",
+      "Blockchain Node unique name (optional, defaults to the blockchain node in the environment)",
     )
     .option("--prod", "Connect to your production environment")
     .option("-a, --accept-defaults", "Accept the default and previously set values");
@@ -40,7 +40,7 @@ export function hardhatDeployRemoteCommand() {
       strategy,
       prod,
       acceptDefaults,
-      blockchainNodeId,
+      blockchainNode: blockchainNodeUniqueName,
     }) => {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
@@ -58,16 +58,18 @@ export function hardhatDeployRemoteCommand() {
         instance,
       });
 
-      const nodeId = blockchainNodeId ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
+      const nodeUniqueName = blockchainNodeUniqueName ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
       let node: BlockchainNode | undefined = undefined;
-      if (!nodeId) {
+      if (!nodeUniqueName) {
         const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
         const evmNodes = nodes.filter((node) => node.isEvm);
         if (evmNodes.length === 0) {
           cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");
         }
 
-        const nodesWithPrivateKey = await Promise.all(evmNodes.map((node) => settlemint.blockchainNode.read(node.id)));
+        const nodesWithPrivateKey = await Promise.all(
+          nodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)),
+        );
         const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
           (node) => node.privateKeys && node.privateKeys.length > 0,
         );
@@ -83,7 +85,7 @@ export function hardhatDeployRemoteCommand() {
         }
         node = blockchainNode;
       } else {
-        node = await settlemint.blockchainNode.read(nodeId);
+        node = await settlemint.blockchainNode.read(nodeUniqueName);
         if (!node.isEvm) {
           cancel(
             "The specified blockchain node is not an EVM blockchain node. Please specify an EVM blockchain node to continue.",
@@ -91,7 +93,7 @@ export function hardhatDeployRemoteCommand() {
         }
       }
 
-      const envConfig = await settlemint.foundry.env(node.id);
+      const envConfig = await settlemint.foundry.env(node.uniqueName);
       const hardhatConfig = await getHardhatConfigData(envConfig);
       if (verify && !hardhatConfig?.etherscan?.apiKey) {
         cancel(

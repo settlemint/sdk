@@ -1,12 +1,40 @@
+import { applicationRead } from "@/graphql/application.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 const createApplicationAccessToken = graphql(
   `
-    mutation CreateApplicationAccessToken($applicationId: ID!, $blockchainNetworkScope: BlockchainNetworkScopeInputType!, $blockchainNodeScope: BlockchainNodeScopeInputType!, $customDeploymentScope: CustomDeploymentScopeInputType!, $insightsScope: InsightsScopeInputType!, $integrationScope: IntegrationScopeInputType!, $loadBalancerScope: LoadBalancerScopeInputType!, $middlewareScope: MiddlewareScopeInputType!, $name: String!, $privateKeyScope: PrivateKeyScopeInputType!, $smartContractSetScope: SmartContractSetScopeInputType!, $storageScope: StorageScopeInputType!, $validityPeriod: AccessTokenValidityPeriod!) {
-      createApplicationAccessToken(applicationId: $applicationId, blockchainNetworkScope: $blockchainNetworkScope, blockchainNodeScope: $blockchainNodeScope, customDeploymentScope: $customDeploymentScope, insightsScope: $insightsScope, integrationScope: $integrationScope, loadBalancerScope: $loadBalancerScope, middlewareScope: $middlewareScope, name: $name, privateKeyScope: $privateKeyScope, smartContractSetScope: $smartContractSetScope, storageScope: $storageScope, validityPeriod: $validityPeriod) {
+    mutation CreateApplicationAccessToken(
+      $applicationId: ID!,
+      $blockchainNetworkScope: BlockchainNetworkScopeInputType!,
+      $blockchainNodeScope: BlockchainNodeScopeInputType!,
+      $customDeploymentScope: CustomDeploymentScopeInputType!,
+      $insightsScope: InsightsScopeInputType!,
+      $integrationScope: IntegrationScopeInputType!,
+      $loadBalancerScope: LoadBalancerScopeInputType!,
+      $middlewareScope: MiddlewareScopeInputType!,
+      $name: String!,
+      $privateKeyScope: PrivateKeyScopeInputType!,
+      $smartContractSetScope: SmartContractSetScopeInputType!,
+      $storageScope: StorageScopeInputType!,
+      $validityPeriod: AccessTokenValidityPeriod!
+    ) {
+      createApplicationAccessToken(
+        applicationId: $applicationId,
+        blockchainNetworkScope: $blockchainNetworkScope,
+        blockchainNodeScope: $blockchainNodeScope,
+        customDeploymentScope: $customDeploymentScope,
+        insightsScope: $insightsScope,
+        integrationScope: $integrationScope,
+        loadBalancerScope: $loadBalancerScope,
+        middlewareScope: $middlewareScope,
+        name: $name,
+        privateKeyScope: $privateKeyScope,
+        smartContractSetScope: $smartContractSetScope,
+        storageScope: $storageScope,
+        validityPeriod: $validityPeriod
+      ) {
         token
       }
     }
@@ -14,7 +42,10 @@ const createApplicationAccessToken = graphql(
   [],
 );
 
-export type CreateApplicationAccessTokenArgs = VariablesOf<typeof createApplicationAccessToken>;
+export type CreateApplicationAccessTokenArgs = Omit<
+  VariablesOf<typeof createApplicationAccessToken>,
+  "applicationId"
+> & { applicationUniqueName: string };
 
 /**
  * Creates a new application.
@@ -25,10 +56,14 @@ export type CreateApplicationAccessTokenArgs = VariablesOf<typeof createApplicat
  */
 export const applicationAccessTokenCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (args: CreateApplicationAccessTokenArgs): Promise<string> => {
-    validate(IdSchema, args.applicationId);
+    const { applicationUniqueName, ...otherArgs } = args;
+    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
     const { createApplicationAccessToken: applicationAccessToken } = await gqlClient.request(
       createApplicationAccessToken,
-      args,
+      {
+        ...otherArgs,
+        applicationId: application.id,
+      },
     );
     if (!applicationAccessToken.token) {
       throw new Error("Failed to create application access token");

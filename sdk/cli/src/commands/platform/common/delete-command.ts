@@ -46,11 +46,11 @@ export function getDeleteCommand({
   return new Command(sanitizeCommandName(name))
     .alias(alias)
     .description(
-      `Delete a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to delete the default ${type} from your .env file.
+      `Delete a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to delete the default ${type} from your .env file.
 ${createExamples([
   {
-    description: `Deletes the specified ${type} by id`,
-    command: `platform delete ${type} <${type}-id>`,
+    description: `Deletes the specified ${type} by unique name`,
+    command: `platform delete ${type} <${type}-unique-name>`,
   },
   {
     description: `Deletes the default ${type} in the production environment`,
@@ -58,16 +58,19 @@ ${createExamples([
   },
   {
     description: `Force deletes the specified ${type} without confirmation`,
-    command: `platform delete ${type} <${type}-id> --force`,
+    command: `platform delete ${type} <${type}-unique-name> --force`,
   },
 ])}`,
     )
-    .argument("<id>", `The id of the ${type}, use 'default' to delete the default one from your .env file`)
+    .argument(
+      "<uniqueName>",
+      `The unique name of the ${type}, use 'default' to delete the default one from your .env file`,
+    )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
     .option("-w, --wait", "Wait until destroyed")
     .option("-f, --force", `Force delete the ${type} without confirmation`)
-    .action(async (id, { acceptDefaults, prod, force, wait }) => {
+    .action(async (uniqueName, { acceptDefaults, prod, force, wait }) => {
       intro(`Deleting ${type} in the SettleMint platform`);
 
       if (!force) {
@@ -90,10 +93,14 @@ ${createExamples([
         instance,
       });
 
-      const isDefaultId = id === "default";
-      const serviceId = isDefaultId ? (typeof env[envKey] === "string" ? env[envKey] : null) : id;
+      const isDefaultUniqueName = uniqueName === "default";
+      const serviceUniqueName = isDefaultUniqueName
+        ? typeof env[envKey] === "string"
+          ? env[envKey]
+          : null
+        : uniqueName;
 
-      if (!serviceId) {
+      if (!serviceUniqueName) {
         throw new Error(
           `No default ${type} found in your .env file. Please provide a valid ${type} ID or set a default ${type} first.`,
         );
@@ -102,12 +109,12 @@ ${createExamples([
       const result = await spinner({
         startMessage: `Deleting ${type}`,
         task: async () => {
-          return deleteFunction(settlemint, serviceId);
+          return deleteFunction(settlemint, serviceUniqueName);
         },
         stopMessage: `${capitalizeFirstLetter(type)} deleted`,
       });
 
-      if (isDefaultId) {
+      if (isDefaultUniqueName) {
         const newEnv: Partial<DotEnv> = {
           SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
           SETTLEMINT_INSTANCE: instance,
@@ -118,7 +125,7 @@ ${createExamples([
       }
 
       if (wait) {
-        await waitForCompletion({ settlemint, type, id: serviceId, action: "destroy" });
+        await waitForCompletion({ settlemint, type, uniqueName: serviceUniqueName, action: "destroy" });
       }
 
       outro(`${capitalizeFirstLetter(type)} ${result.name} deleted successfully`);

@@ -60,9 +60,9 @@ describe("privateKeyHdCreateCommand", () => {
       "gke",
       "--region",
       "europe",
-      "--application-id",
-      "123456789",
-      "--blockchain-node-id",
+      "--application",
+      "my-app",
+      "--blockchain-node",
       "node-1",
     ]);
 
@@ -71,8 +71,8 @@ describe("privateKeyHdCreateCommand", () => {
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
-      applicationId: "123456789",
-      blockchainNodeId: "node-1",
+      application: "my-app",
+      blockchainNode: "node-1",
       size: "SMALL",
       type: "SHARED",
     });

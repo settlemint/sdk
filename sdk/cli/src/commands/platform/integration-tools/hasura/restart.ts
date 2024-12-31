@@ -11,8 +11,8 @@ export function hasuraRestartCommand() {
     subType: "hasura",
     alias: "ha",
     envKey: "SETTLEMINT_HASURA",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.integrationTool.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.integrationTool.restart(uniqueName);
     },
   });
 }

@@ -87,7 +87,7 @@ describe("besuNetworkCreateCommand", () => {
     });
   });
 
-  test("executes command with application id", () => {
+  test("executes command with application unique name", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
@@ -111,8 +111,8 @@ describe("besuNetworkCreateCommand", () => {
       "europe",
       "--node-name",
       "validator-1",
-      "--application-id",
-      "123456789",
+      "--application",
+      "test-app",
       "--size",
       "LARGE",
       "--type",
@@ -125,7 +125,7 @@ describe("besuNetworkCreateCommand", () => {
       provider: "gke",
       region: "europe",
       nodeName: "validator-1",
-      applicationId: "123456789",
+      application: "test-app",
       size: "LARGE",
       type: "DEDICATED",
     });

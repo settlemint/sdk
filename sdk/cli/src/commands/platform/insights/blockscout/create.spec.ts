@@ -47,9 +47,9 @@ describe("blockscoutInsightsCreateCommand", () => {
       "gke",
       "--region",
       "europe",
-      "--application-id",
-      "123456789",
-      "--load-balancer-id",
+      "--application",
+      "app-123",
+      "--load-balancer",
       "lb-123",
     ]);
 
@@ -57,8 +57,8 @@ describe("blockscoutInsightsCreateCommand", () => {
     expect(commandOptions).toEqual({
       provider: "gke",
       region: "europe",
-      applicationId: "123456789",
-      loadBalancerId: "lb-123",
+      application: "app-123",
+      loadBalancer: "lb-123",
       size: "SMALL",
       type: "SHARED",
     });
