@@ -61,6 +61,12 @@ jobs:
         with:
           bun-version-file: package.json
 
+      - name: Install Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        with:
+          node-version-file: package.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup git user
         run: |
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
