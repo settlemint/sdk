@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, exists, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import {
   getSubgraphYamlConfig,
@@ -49,8 +49,12 @@ describe("Setup a project using the SDK", () => {
     ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
-    await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
-    await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    if (await exists(join(__dirname, "../.env"))) {
+      await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
+    }
+    if (await exists(join(__dirname, "../.env.local"))) {
+      await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    }
   });
 
   test("Validate that .env file has the correct values", async () => {
@@ -90,13 +94,12 @@ describe("Setup a project using the SDK", () => {
 
   test("Install dependencies and link SDK to use local one", async () => {
     const env = { NODE_ENV: "production" };
+    await $`bun link`.cwd("./sdk/cli");
     await $`bun install`.cwd(projectDir).env({
       ...process.env,
       ...env,
     });
-    // Delete the node_modules/@settlemint folder
-    // It will automatically use the local ones when deleted
-    await $`rm -rf ./node_modules/@settlemint`.cwd(projectDir);
+    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
   });
 
   test("Connect starter kit", async () => {

@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, exists, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import {
   getSubgraphConfig,
@@ -45,8 +45,12 @@ describe("Build and deploy a subgraph using the SDK", () => {
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
     await $`bun install`.cwd(projectDir);
-    await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
-    await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    if (await exists(join(__dirname, "../.env"))) {
+      await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
+    }
+    if (await exists(join(__dirname, "../.env.local"))) {
+      await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    }
   });
 
   test("Deploy smart contract and get address info", async () => {

@@ -61,6 +61,12 @@ jobs:
         with:
           bun-version-file: package.json
 
+      - name: Install Node.js
+        uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
+        with:
+          node-version-file: package.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Setup git user
         run: |
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
@@ -68,14 +74,6 @@ jobs:
 
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@de808b1eea699e761c404bda44ba8f21aba30b2c # v1
-
-      - name: Get workspace config
-        run: |
-          echo $ENV_E2E | base64 --decode > .env
-          echo $ENV_E2E_LOCAL | base64 --decode > .env.local
-        env:
-          ENV_E2E: ${{ secrets.ENV_E2E }}
-          ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
 
       - name: Install Bun dependencies
         run: bun install
@@ -86,14 +84,43 @@ jobs:
       - name: Run the E2E tests
         run: bun test:e2e
         env:
-          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
           DISABLE_WORKSPACE_DELETE: true
+          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
+          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
+          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
+          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
+          SETTLEMINT_BLOCKCHAIN_NETWORK: ${{ secrets.SETTLEMINT_BLOCKCHAIN_NETWORK }}
+          SETTLEMINT_BLOCKCHAIN_NODE: ${{ secrets.SETTLEMINT_BLOCKCHAIN_NODE }}
+          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
+          SETTLEMINT_IPFS_API_ENDPOINT: ${{ secrets.SETTLEMINT_IPFS_API_ENDPOINT }}
+          SETTLEMINT_IPFS_GATEWAY_ENDPOINT: ${{ secrets.SETTLEMINT_IPFS_GATEWAY_ENDPOINT }}
+          SETTLEMINT_IPFS_PINNING_ENDPOINT: ${{ secrets.SETTLEMINT_IPFS_PINNING_ENDPOINT }}
+          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
+          SETTLEMINT_MINIO_ACCESS_KEY: ${{ secrets.SETTLEMINT_MINIO_ACCESS_KEY }}
+          SETTLEMINT_MINIO_ENDPOINT: ${{ secrets.SETTLEMINT_MINIO_ENDPOINT }}
+          SETTLEMINT_MINIO_SECRET_KEY: ${{ secrets.SETTLEMINT_MINIO_SECRET_KEY }}
+          SETTLEMINT_BLOCKSCOUT: ${{ secrets.SETTLEMINT_BLOCKSCOUT }}
+          SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: ${{ secrets.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT }}
+          SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: ${{ secrets.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT }}
+          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
+          SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: ${{ secrets.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT }}
+          SETTLEMINT_PORTAL_REST_ENDPOINT: ${{ secrets.SETTLEMINT_PORTAL_REST_ENDPOINT }}
+          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
+          SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ${{ secrets.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS }}
+          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
+          SETTLEMINT_HASURA_ENDPOINT: ${{ secrets.SETTLEMINT_HASURA_ENDPOINT }}
+          SETTLEMINT_HASURA_ADMIN_SECRET: ${{ secrets.SETTLEMINT_HASURA_ADMIN_SECRET }}
+          SETTLEMINT_HASURA_DATABASE_URL: ${{ secrets.SETTLEMINT_HASURA_DATABASE_URL }}
+          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
 
       - name: Save workspace config
         if: ${{ !cancelled() }}
-        run: echo $E2E_GITHUB_TOKEN | gh auth login --with-token && gh secret set ENV_E2E --body "$(cat .env | base64)" && gh secret set ENV_E2E_LOCAL --body "$(cat .env.local | base64)"
+        run: |
+          echo $E2E_GITHUB_TOKEN | gh auth login --with-token
+          gh secret set -f .env
+          gh secret set -f .env.local
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
