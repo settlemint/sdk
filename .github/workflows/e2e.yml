@@ -77,19 +77,19 @@ jobs:
           ENV_E2E: ${{ secrets.ENV_E2E }}
           ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
 
-      # - name: Install Bun dependencies
-      #   run: bun install
+      - name: Install Bun dependencies
+        run: bun install
 
-      # - name: Run build
-      #   run: bunx turbo build
+      - name: Run build
+        run: bunx turbo build
 
-      # - name: Run the E2E tests
-      #   run: bun test:e2e
-      #   env:
-      #     SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
-      #     SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
-      #     DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
-      #     DISABLE_WORKSPACE_DELETE: true
+      - name: Run the E2E tests
+        run: bun test:e2e
+        env:
+          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
+          DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
+          DISABLE_WORKSPACE_DELETE: true
 
       - name: Save workspace config
         if: ${{ !cancelled() }}
