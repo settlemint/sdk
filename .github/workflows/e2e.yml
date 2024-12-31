@@ -69,14 +69,6 @@ jobs:
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@de808b1eea699e761c404bda44ba8f21aba30b2c # v1
 
-      - name: Get workspace config
-        run: |
-          echo $ENV_E2E > .env
-          echo $ENV_E2E_LOCAL > .env.local
-        env:
-          ENV_E2E: ${{ secrets.ENV_E2E }}
-          ENV_E2E_LOCAL: ${{ secrets.ENV_E2E_LOCAL }}
-
       - name: Install Bun dependencies
         run: bun install
 
@@ -86,17 +78,29 @@ jobs:
       - name: Run the E2E tests
         run: bun test:e2e
         env:
-          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
           DISABLE_WORKSPACE_DELETE: true
+          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
+          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
+          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
+          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
+          SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
+          SETTLEMINT_BLOCKCHAIN_NETWORK: ${{ secrets.SETTLEMINT_BLOCKCHAIN_NETWORK }}
+          SETTLEMINT_BLOCKCHAIN_NODE: ${{ secrets.SETTLEMINT_BLOCKCHAIN_NODE }}
+          SETTLEMINT_IPFS: ${{ secrets.SETTLEMINT_IPFS }}
+          SETTLEMINT_MINIO: ${{ secrets.SETTLEMINT_MINIO }}
+          SETTLEMINT_BLOCKSCOUT: ${{ secrets.SETTLEMINT_BLOCKSCOUT }}
+          SETTLEMINT_PORTAL: ${{ secrets.SETTLEMINT_PORTAL }}
+          SETTLEMINT_THEGRAPH: ${{ secrets.SETTLEMINT_THEGRAPH }}
+          SETTLEMINT_HASURA: ${{ secrets.SETTLEMINT_HASURA }}
+          SETTLEMINT_HD_PRIVATE_KEY: ${{ secrets.SETTLEMINT_HD_PRIVATE_KEY }}
 
       - name: Save workspace config
         if: ${{ !cancelled() }}
         run: |
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
-          gh secret set ENV_E2E < .env
-          gh secret set ENV_E2E_LOCAL < .env.local
+          gh secret set -f .env
+          gh secret set -f .env.local
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
