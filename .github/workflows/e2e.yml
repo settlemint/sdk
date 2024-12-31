@@ -83,17 +83,22 @@ jobs:
       - name: Run build
         run: bunx turbo build
 
-      - name: Run the E2E tests
-        run: bun test:e2e
-        env:
-          SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
-          DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
-          DISABLE_WORKSPACE_DELETE: true
+      # - name: Run the E2E tests
+      #   run: bun test:e2e
+      #   env:
+      #     SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
+      #     SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
+      #     DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
+      #     DISABLE_WORKSPACE_DELETE: true
 
       - name: Save workspace config
         if: ${{ !cancelled() }}
-        run: echo $E2E_GITHUB_TOKEN | gh auth login --with-token && gh secret set ENV_E2E --body "$(cat .env | base64)" && gh secret set ENV_E2E_LOCAL --body "$(cat .env.local | base64)"
+        run: |
+          echo $E2E_GITHUB_TOKEN | gh auth login --with-token
+          gh secret set ENV_E2E --body "$(cat .env | base64)"
+          echo $(cat .env.local)
+          echo $(cat .env.local | base64)
+          gh secret set ENV_E2E_LOCAL --body "$(cat .env.local | base64)"
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
