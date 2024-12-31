@@ -53,7 +53,7 @@ describe("Setup a project using the SDK", () => {
     await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
   });
 
-  test("Install dependencies and link SDK to use local one", async () => {
+  test("Install dependencies and use local sdk packages", async () => {
     const env = { NODE_ENV: "production" };
     await $`bun install`.cwd(projectDir).env({
       ...process.env,
