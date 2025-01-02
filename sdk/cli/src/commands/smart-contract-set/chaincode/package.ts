@@ -14,16 +14,16 @@ interface PackageChaincodeOptions {
 export function packageChaincodeCommand() {
   const cmd = new Command("package")
     .description("Package a chaincode")
-    .requiredOption("--name <name>", "Name of the output file")
+    .argument("<name>", "Name of the chaincode")
     .requiredOption("--version <version>", "Version of the chaincode")
     .requiredOption("--path <path>", "Path to the chaincode")
     .requiredOption("--lang <language>", "Language the chaincode is written in");
 
-  cmd.action(async function packageAction(options) {
-    note(`Packaging chaincode ${options.version}...`);
+  cmd.action(async function packageAction(name, options) {
+    note(`Packaging chaincode ${name}...`);
 
     try {
-      const { name, version, path: ccPath, lang } = options;
+      const { version, path: ccPath, lang } = options;
 
       const ccPackageJsonPath = path.join(ccPath, "package.json");
       await ensureCcPackageJsonExists(ccPath);
@@ -47,9 +47,9 @@ export function packageChaincodeCommand() {
         await unlink(ccPackageJsonPath);
       }
 
-      outro("Chaincode is packaged successfully");
+      outro(`Chaincode ${name} is packaged successfully`);
     } catch (error) {
-      cancel(`Chaincode packaging failed: ${error instanceof Error ? error.message : String(error)}`);
+      cancel(`Chaincode ${name} packaging failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   });
 
