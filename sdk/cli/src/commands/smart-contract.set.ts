@@ -1,4 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
+import { packageChaincodeCommand } from "./smart-contract-set/chaincode/package";
 import { createCommand } from "./smart-contract-set/create";
 import { foundryBuildCommand } from "./smart-contract-set/foundry/build";
 import { foundryFormatCommand } from "./smart-contract-set/foundry/format";
@@ -39,11 +40,15 @@ export function smartContractSetCommand(): Command {
   subgraph.addCommand(subgraphCodegenCommand());
   subgraph.addCommand(subgraphDeployCommand());
 
+  const chaincode = new Command("chaincode").alias("cc");
+  chaincode.addCommand(packageChaincodeCommand());
+
   return new Command("smart-contract-set")
     .alias("scs")
     .description("Manage smart contract sets")
     .addCommand(createCommand())
     .addCommand(foundry)
     .addCommand(hardhat)
-    .addCommand(subgraph);
+    .addCommand(subgraph)
+    .addCommand(chaincode);
 }
