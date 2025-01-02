@@ -1,5 +1,5 @@
-import { copyFile, unlink } from "node:fs/promises";
-import path from "node:path";
+import { copyFile, mkdir, unlink } from "node:fs/promises";
+import path, { dirname } from "node:path";
 import { Command } from "@commander-js/extra-typings";
 import { executeCommand, exists } from "@settlemint/sdk-utils";
 import { cancel, note, outro } from "@settlemint/sdk-utils/terminal";
@@ -25,15 +25,8 @@ export function packageChaincodeCommand() {
     try {
       const { name, version, path: ccPath, lang } = options;
 
-      // Handle package.json if it exists
-      const rootPackageJsonPath = path.join(process.cwd(), "package.json");
       const ccPackageJsonPath = path.join(ccPath, "package.json");
-
-      // Copy package.json if it exists in root
-      const hasRootPackageJson = await exists(rootPackageJsonPath);
-      if (hasRootPackageJson) {
-        await copyFile(rootPackageJsonPath, ccPackageJsonPath);
-      }
+      await ensureCcPackageJsonExists(ccPath);
 
       // Execute peer lifecycle chaincode package command
       await executeCommand("peer", [
@@ -61,4 +54,18 @@ export function packageChaincodeCommand() {
   });
 
   return cmd;
+}
+
+async function ensureCcPackageJsonExists(ccPath: string) {
+  const rootPackageJsonPath = path.join(process.cwd(), "package.json");
+  const ccPackageJsonPath = path.join(ccPath, "package.json");
+  if (await exists(ccPackageJsonPath)) {
+    return;
+  }
+
+  const hasRootPackageJson = await exists(rootPackageJsonPath);
+  if (hasRootPackageJson) {
+    await mkdir(dirname(ccPackageJsonPath), { recursive: true });
+    await copyFile(rootPackageJsonPath, ccPackageJsonPath);
+  }
 }
