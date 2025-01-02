@@ -13,11 +13,11 @@ interface PackageOptions {
 
 export function packageChaincodeCommand() {
   const cmd = new Command("package")
-    .description("Package the chaincode for deployment")
-    .requiredOption("--name <name>", "Chaincode name")
-    .requiredOption("--version <version>", "Chaincode version")
-    .requiredOption("--path <path>", "Path to chaincode source")
-    .requiredOption("--lang <language>", "Chaincode language")
+    .description("Package a chaincode")
+    .requiredOption("--name <name>", "Name of the output file")
+    .requiredOption("--version <version>", "Version of the chaincode")
+    .requiredOption("--path <path>", "Path to the chaincode")
+    .requiredOption("--lang <language>", "Language the chaincode is written in")
     .action(async (options) => {
       try {
         await packageChaincode({
