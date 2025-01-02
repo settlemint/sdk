@@ -4,7 +4,7 @@ import { Command } from "@commander-js/extra-typings";
 import { executeCommand } from "@settlemint/sdk-utils";
 import { cancel, note, outro } from "@settlemint/sdk-utils/terminal";
 
-interface PackageOptions {
+interface PackageChaincodeOptions {
   name: string;
   version: string;
   path: string;
@@ -19,13 +19,10 @@ export function packageChaincodeCommand() {
     .requiredOption("--path <path>", "Path to the chaincode")
     .requiredOption("--lang <language>", "Language the chaincode is written in")
     .action(async (options) => {
+      note(`Packaging chaincode ${options.version}...`);
       try {
-        await packageChaincode({
-          name: options.name,
-          version: options.version,
-          path: options.path,
-          lang: options.lang,
-        });
+        await packageChaincode(options);
+        outro("Chaincode is packaged successfully");
       } catch (error) {
         cancel(`Chaincode packaging failed: ${error instanceof Error ? error.message : String(error)}`);
       }
@@ -34,10 +31,8 @@ export function packageChaincodeCommand() {
   return cmd;
 }
 
-async function packageChaincode(options: PackageOptions) {
+async function packageChaincode(options: PackageChaincodeOptions) {
   const { name, version, path: ccPath, lang } = options;
-
-  note(`Packaging chaincode ${version}...`);
 
   // Handle package.json if it exists
   const rootPackageJson = Bun.file(path.join(process.cwd(), "package.json"));
@@ -68,6 +63,4 @@ async function packageChaincode(options: PackageOptions) {
   if (await ccPackageJson.exists()) {
     await unlink(ccPackageJsonPath);
   }
-
-  outro("Chaincode is packaged successfully");
 }
