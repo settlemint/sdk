@@ -21,7 +21,7 @@ export function packageChaincodeCommand() {
     .requiredOption("--path <path>", "Path to the chaincode")
     .requiredOption("--lang <language>", "Language the chaincode is written in");
 
-  cmd.action(async (options) => {
+  cmd.action(async function packageAction(options) {
     console.log("\n📋 Command Action Started");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     console.log("Options received:", JSON.stringify(options, null, 2));
