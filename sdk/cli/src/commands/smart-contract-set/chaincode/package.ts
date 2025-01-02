@@ -12,8 +12,6 @@ interface PackageChaincodeOptions {
 }
 
 export function packageChaincodeCommand() {
-  console.log("\n🚀 Initializing package command...");
-
   const cmd = new Command("package")
     .description("Package a chaincode")
     .requiredOption("--name <name>", "Name of the output file")
@@ -25,88 +23,42 @@ export function packageChaincodeCommand() {
     note(`Packaging chaincode ${options.version}...`);
 
     try {
-      console.log("\n🏃 Starting packageChaincode function...");
+      const { name, version, path: ccPath, lang } = options;
 
-      // Package.json handling logs
+      // Handle package.json if it exists
       const rootPackageJsonPath = path.join(process.cwd(), "package.json");
-      console.log(`\n📦 Checking for root package.json at: ${rootPackageJsonPath}`);
+      const ccPackageJsonPath = path.join(ccPath, "package.json");
 
-      const ccPackageJsonPath = path.join(options.path, "package.json");
-      console.log(`📦 Target chaincode package.json path: ${ccPackageJsonPath}`);
-
+      // Copy package.json if it exists in root
       const hasRootPackageJson = await exists(rootPackageJsonPath);
-      console.log(`📋 Root package.json exists: ${hasRootPackageJson}`);
-
       if (hasRootPackageJson) {
-        console.log("📝 Copying package.json to chaincode directory...");
+        await copyFile(rootPackageJsonPath, ccPackageJsonPath);
       }
 
-      console.log("\n🔧 Executing peer command...");
-      console.log(
-        "Command:",
-        "peer",
-        [
-          "lifecycle",
-          "chaincode",
-          "package",
-          `./${options.name}.tar.gz`,
-          "--path",
-          options.path,
-          "--lang",
-          options.lang,
-          "--label",
-          `${options.name}_${options.version}`,
-        ].join(" "),
-      );
+      // Execute peer lifecycle chaincode package command
+      await executeCommand("peer", [
+        "lifecycle",
+        "chaincode",
+        "package",
+        `./${name}.tar.gz`,
+        "--path",
+        ccPath,
+        "--lang",
+        lang,
+        "--label",
+        `${name}_${version}`,
+      ]);
 
-      await packageChaincode(options);
+      // Cleanup package.json if we copied it
+      if (await exists(ccPackageJsonPath)) {
+        await unlink(ccPackageJsonPath);
+      }
 
-      console.log("\n✅ Package creation completed");
       outro("Chaincode is packaged successfully");
     } catch (error) {
       cancel(`Chaincode packaging failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   });
 
-  console.log("📦 Package command initialized and ready");
   return cmd;
-}
-
-async function packageChaincode(options: PackageChaincodeOptions) {
-  console.log("\n⚙️ packageChaincode function started");
-  const { name, version, path: ccPath, lang } = options;
-
-  // Handle package.json if it exists
-  const rootPackageJsonPath = path.join(process.cwd(), "package.json");
-  const ccPackageJsonPath = path.join(ccPath, "package.json");
-
-  // Copy package.json if it exists in root
-  const hasRootPackageJson = await exists(rootPackageJsonPath);
-  if (hasRootPackageJson) {
-    console.log("📄 Copying root package.json to chaincode directory");
-    await copyFile(rootPackageJsonPath, ccPackageJsonPath);
-  }
-
-  console.log("\n🚀 Executing peer lifecycle chaincode package command");
-  // Execute peer lifecycle chaincode package command
-  await executeCommand("peer", [
-    "lifecycle",
-    "chaincode",
-    "package",
-    `./${name}.tar.gz`,
-    "--path",
-    ccPath,
-    "--lang",
-    lang,
-    "--label",
-    `${name}_${version}`,
-  ]);
-
-  // Cleanup package.json if we copied it
-  if (await exists(ccPackageJsonPath)) {
-    console.log("\n🧹 Cleaning up temporary package.json");
-    await unlink(ccPackageJsonPath);
-  }
-
-  console.log("\n✨ packageChaincode function completed");
 }
