@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, exists, loadEnv } from "@settlemint/sdk-utils";
 import { $ } from "bun";
 import {
   getSubgraphYamlConfig,
@@ -49,17 +49,13 @@ describe("Setup a project using the SDK", () => {
     ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your project is ready to go!");
-    await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
-    await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    if (await exists(join(__dirname, "../.env"))) {
+      await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
+    }
+    if (await exists(join(__dirname, "../.env.local"))) {
+      await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    }
   });
-
-  // test("Create Minio storage on the platform", () => {
-  //   // Optional, can be done later
-  // });
-
-  // test("Create custom deployment on the platform", () => {
-  //   // Optional, can be done later
-  // });
 
   test("Validate that .env file has the correct values", async () => {
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);

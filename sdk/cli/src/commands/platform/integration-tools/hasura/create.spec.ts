@@ -47,15 +47,15 @@ describe("hasuraIntegrationCreateCommand", () => {
       "gke",
       "--region",
       "europe",
-      "--application-id",
-      "123456789",
+      "--application",
+      "app-123",
     ]);
 
     expect(commandArgs).toBe("test-hasura");
     expect(commandOptions).toEqual({
       provider: "gke",
       region: "europe",
-      applicationId: "123456789",
+      application: "app-123",
       size: "SMALL",
       type: "SHARED",
     });

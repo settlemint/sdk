@@ -11,8 +11,8 @@ export function smartContractPortalRestartCommand() {
     subType: "smart-contract-portal",
     alias: "scp",
     envKey: "SETTLEMINT_PORTAL",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.middleware.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.middleware.restart(uniqueName);
     },
   });
 }

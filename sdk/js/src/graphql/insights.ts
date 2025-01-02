@@ -1,15 +1,18 @@
+import { applicationRead } from "@/graphql/application.js";
+import { blockchainNodeRead } from "@/graphql/blockchain-node.js";
+import { loadBalancerRead } from "@/graphql/load-balancer.js";
 import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
 
 /**
- * GraphQL fragment for the Insights type.
+ * GraphQL fragment containing core insights fields.
  */
 const InsightsFragment = graphql(`
   fragment Insights on Insights {
     __typename
     id
+    uniqueName
     name
     status
     insightsCategory
@@ -27,133 +30,134 @@ const InsightsFragment = graphql(`
 `);
 
 /**
- * Represents insights with their details.
+ * Type representing an insights entity.
  */
 export type Insights = ResultOf<typeof InsightsFragment>;
 
 /**
- * GraphQL query to fetch insights for a given application.
+ * Query to fetch insights for an application.
  */
 const getInsights = graphql(
   `
-query getInsights($id: ID!) {
-  insightsList(applicationId: $id) {
-    items {
-      ...Insights
+    query GetInsights($applicationUniqueName: String!) {
+      insightsListByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...Insights
+        }
+      }
     }
-  }
-}`,
+  `,
   [InsightsFragment],
 );
 
 /**
- * GraphQL query to fetch a specific insight by its ID.
+ * Query to fetch a specific insight.
  */
 const getInsight = graphql(
   `
-query getInsights($id: ID!) {
-  insights(entityId: $id) {
-    ...Insights
-  }
-}
-`,
+    query GetInsight($uniqueName: String!) {
+      insightsByUniqueName(uniqueName: $uniqueName) {
+        ...Insights
+      }
+    }
+  `,
   [InsightsFragment],
 );
 
 /**
- * GraphQL mutation to create insights.
+ * Mutation to create insights.
  */
 const createInsights = graphql(
   `
-  mutation createInsights(
-    $applicationId: ID!
-    $name: String!
-    $insightsCategory: InsightsCategory!
-    $provider: String!
-    $region: String!
-    $size: ClusterServiceSize
-    $type: ClusterServiceType
-    $blockchainNode: ID
-    $loadBalancer: ID
-  ) {
-    createInsights(
-      applicationId: $applicationId
-      name: $name
-      insightsCategory: $insightsCategory
-      provider: $provider
-      region: $region
-      size: $size
-      type: $type
-      blockchainNode: $blockchainNode
-      loadBalancer: $loadBalancer
+    mutation CreateInsights(
+      $applicationId: ID!
+      $name: String!
+      $insightsCategory: InsightsCategory!
+      $provider: String!
+      $region: String!
+      $size: ClusterServiceSize
+      $type: ClusterServiceType
+      $blockchainNode: ID
+      $loadBalancer: ID
     ) {
-      ...Insights
+      createInsights(
+        applicationId: $applicationId
+        name: $name
+        insightsCategory: $insightsCategory
+        provider: $provider
+        region: $region
+        size: $size
+        type: $type
+        blockchainNode: $blockchainNode
+        loadBalancer: $loadBalancer
+      ) {
+        ...Insights
+      }
     }
-  }
-`,
+  `,
   [InsightsFragment],
 );
 
 /**
- * Arguments for creating insights.
+ * Arguments required to create insights.
  */
-export type CreateInsightsArgs = VariablesOf<typeof createInsights>;
+export type CreateInsightsArgs = Omit<
+  VariablesOf<typeof createInsights>,
+  "applicationId" | "blockchainNode" | "loadBalancer"
+> & {
+  applicationUniqueName: string;
+  blockchainNodeUniqueName?: string;
+  loadBalancerUniqueName?: string;
+};
 
+/**
+ * Mutation to restart insights.
+ */
 const restartInsights = graphql(
   `
-  mutation RestartInsights($id: ID!) {
-    restartInsights(entityId: $id) {
-      ...Insights
+    mutation RestartInsights($uniqueName: String!) {
+      restartInsightsByUniqueName(uniqueName: $uniqueName) {
+        ...Insights
+      }
     }
-  }
-`,
+  `,
   [InsightsFragment],
 );
 
 /**
- * Creates a function to list insights for a given application.
+ * Creates a function to list insights for an application.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an application ID and returns a list of insights.
- * @throws Will throw an error if the application ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const insights = await client.insights.list('applicationId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches insights for an application
+ * @throws If the application cannot be found or the request fails
  */
 export const insightsList = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((applicationId: Id) => Promise<Insights[]>) => {
-  return async (applicationId: Id) => {
-    const id = validate(IdSchema, applicationId);
+): ((applicationUniqueName: string) => Promise<Insights[]>) => {
+  return async (applicationUniqueName: string) => {
     const {
-      insightsList: { items },
-    } = await gqlClient.request(getInsights, { id });
+      insightsListByUniqueName: { items },
+    } = await gqlClient.request(getInsights, { applicationUniqueName });
     return items;
   };
 };
 
 /**
- * Creates a function to read a specific insight.
+ * Creates a function to fetch a specific insight.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes an insight ID and returns the insight details.
- * @throws Will throw an error if the insight ID is invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const insight = await client.insights.read('insightId');
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that fetches a single insight by unique name
+ * @throws If the insight cannot be found or the request fails
  */
 export const insightsRead = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
-): ((insightsId: Id) => Promise<Insights>) => {
-  return async (insightsId: Id) => {
-    const id = validate(IdSchema, insightsId);
-    const { insights } = await gqlClient.request(getInsight, { id });
+): ((insightsUniqueName: string) => Promise<Insights>) => {
+  return async (insightsUniqueName: string) => {
+    const { insightsByUniqueName: insights } = await gqlClient.request(getInsight, { uniqueName: insightsUniqueName });
     return insights;
   };
 };
@@ -161,36 +165,49 @@ export const insightsRead = (
 /**
  * Creates a function to create new insights.
  *
- * @param gqlClient - The GraphQL client to use for the request.
- * @param options - The SettleMint client options.
- * @returns A function that takes insights creation arguments and returns the created insights.
- * @throws Will throw an error if the arguments are invalid.
- *
- * @example
- * const client = createSettleMintClient({ ... });
- * const insights = await client.insights.create({
- *   applicationId: 'appId',
- *   name: 'My Insights',
- *   provider: 'aws',
- *   region: 'us-east-1',
- *   insightsCategory: 'GRAFANA'
- * });
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that creates new insights with the provided configuration
+ * @throws If the creation fails or validation errors occur
  */
 export const insightsCreate = (
   gqlClient: GraphQLClient,
   options: ClientOptions,
 ): ((args: CreateInsightsArgs) => Promise<Insights>) => {
   return async (args: CreateInsightsArgs) => {
-    validate(IdSchema, args.applicationId);
-    const { createInsights: insights } = await gqlClient.request(createInsights, args);
+    const { applicationUniqueName, blockchainNodeUniqueName, loadBalancerUniqueName, ...otherArgs } = args;
+    const [application, blockchainNode, loadBalancer] = await Promise.all([
+      applicationRead(gqlClient, options)(applicationUniqueName),
+      blockchainNodeUniqueName
+        ? blockchainNodeRead(gqlClient, options)(blockchainNodeUniqueName)
+        : Promise.resolve(undefined),
+      loadBalancerUniqueName
+        ? loadBalancerRead(gqlClient, options)(loadBalancerUniqueName)
+        : Promise.resolve(undefined),
+    ]);
+    const { createInsights: insights } = await gqlClient.request(createInsights, {
+      ...otherArgs,
+      applicationId: application.id,
+      blockchainNode: blockchainNode?.id,
+      loadBalancer: loadBalancer?.id,
+    });
     return insights;
   };
 };
 
+/**
+ * Creates a function to restart insights.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @param options - Client configuration options
+ * @returns Function that restarts insights by unique name
+ * @throws If the insights cannot be found or the restart fails
+ */
 export const insightsRestart =
   (gqlClient: GraphQLClient, _options: ClientOptions) =>
-  async (insightsId: Id): Promise<Insights> => {
-    const id = validate(IdSchema, insightsId);
-    const { restartInsights: insights } = await gqlClient.request(restartInsights, { id });
+  async (insightsUniqueName: string): Promise<Insights> => {
+    const { restartInsightsByUniqueName: insights } = await gqlClient.request(restartInsights, {
+      uniqueName: insightsUniqueName,
+    });
     return insights;
   };

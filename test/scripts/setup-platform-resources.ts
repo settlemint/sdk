@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import isInCi from "is-in-ci";
 import {
   AAT_NAME,
   APPLICATION_NAME,
@@ -31,8 +32,19 @@ process.env.NODE_ENV = "development";
 const COMMAND_TEST_SCOPE = __filename;
 const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
-async function cleanup() {
-  if (process.env.DISABLE_WORKSPACE_DELETE) {
+async function cleanUpPreviousRuns() {
+  if (!isInCi) {
+    return;
+  }
+  // Make the CI use the same workspace for all runs for one week, create a new workspace each Monday
+  const isMondayBefore7am = new Date().getDay() === 1 && new Date().getHours() < 7;
+  if (isMondayBefore7am) {
+    await cleanup(true);
+  }
+}
+
+async function cleanup(force = false) {
+  if (process.env.DISABLE_WORKSPACE_DELETE && !force) {
     console.log("Skipping delete of workspace and application");
     return;
   }
@@ -65,6 +77,7 @@ async function cleanup() {
 beforeAll(async () => {
   try {
     await login();
+    await cleanUpPreviousRuns();
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
     await createBlockchainNodeMinioAndIpfs();
@@ -119,7 +132,8 @@ async function addWorkspaceCredits() {
   expect(env.SETTLEMINT_WORKSPACE).toBeString();
   const settlemint = await setupSettleMintClient();
   if (!isLocalEnv()) {
-    await settlemint.workspace.addCredits(env.SETTLEMINT_WORKSPACE!, 100);
+    const workspace = await settlemint.workspace.read(env.SETTLEMINT_WORKSPACE!);
+    await settlemint.workspace.addCredits(workspace.id, 5_000);
   }
 }
 
@@ -191,6 +205,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
           ]).result,
     () =>
       hasHasuraIntegration
@@ -207,6 +222,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             HASURA_NAME,
           ]).result,
     () =>
@@ -224,6 +240,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             MINIO_NAME,
           ]).result,
     () =>
@@ -241,6 +258,7 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             IPFS_NAME,
           ]).result,
   ]);
@@ -254,30 +272,9 @@ async function createBlockchainNodeMinioAndIpfs() {
     "fulfilled",
   ]);
 
-  if (!hasBlockchainNode && networkResult?.status === "fulfilled" && networkResult.value) {
+  if (networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
     expect(networkResult.value.output).toInclude("Blockchain node is deployed");
-    const env: Partial<DotEnv> = await loadEnv(false, false);
-    const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
-      "platform",
-      "create",
-      "private-key",
-      "hsm-ecdsa-p256",
-      "--blockchain-node-id",
-      env.SETTLEMINT_BLOCKCHAIN_NODE!,
-      "--accept-defaults",
-      "--default",
-      "--provider",
-      CLUSTER_PROVIDER,
-      "--region",
-      CLUSTER_REGION,
-      "--wait",
-      PRIVATE_KEY_SMART_CONTRACTS_NAME,
-    ]).result;
-    expect(privateKeyHsmCreateCommandOutput).toInclude(
-      `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAME} created successfully`,
-    );
-    expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
   }
 
   if (hasuraResult?.status === "fulfilled" && hasuraResult.value) {
@@ -293,6 +290,32 @@ async function createBlockchainNodeMinioAndIpfs() {
   if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
+  }
+
+  const hasPrivateKey = await privateKeyAlreadyCreated(PRIVATE_KEY_SMART_CONTRACTS_NAME);
+  if (!hasPrivateKey) {
+    const env: Partial<DotEnv> = await loadEnv(false, false);
+    const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "private-key",
+      "hsm-ecdsa-p256",
+      "--blockchain-node",
+      env.SETTLEMINT_BLOCKCHAIN_NODE!,
+      "--accept-defaults",
+      "--default",
+      "--provider",
+      CLUSTER_PROVIDER,
+      "--region",
+      CLUSTER_REGION,
+      "--wait",
+      "--restart-if-timeout",
+      PRIVATE_KEY_SMART_CONTRACTS_NAME,
+    ]).result;
+    expect(privateKeyHsmCreateCommandOutput).toInclude(
+      `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAME} created successfully`,
+    );
+    expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
   }
 }
 
@@ -313,7 +336,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "create",
             "private-key",
             "hd-ecdsa-p256",
-            "--blockchain-node-id",
+            "--blockchain-node",
             env.SETTLEMINT_BLOCKCHAIN_NODE!,
             "--accept-defaults",
             "--default",
@@ -322,6 +345,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--region",
             CLUSTER_REGION,
             "--wait",
+            "--restart-if-timeout",
             PRIVATE_KEY_NAME,
           ]).result,
     () =>
@@ -340,6 +364,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             "--include-predeployed-abis",
             "StarterKitERC20Registry",
             "StarterKitERC20Factory",
@@ -362,6 +387,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             BLOCKSCOUT_NAME,
           ]).result,
     () =>
@@ -374,11 +400,13 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "besu",
             "--node-type",
             "NON_VALIDATOR",
-            "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
+            "--restart-if-timeout",
             NODE_NAME_2_WITH_PK,
           ]).result,
     () =>
@@ -391,11 +419,13 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "besu",
             "--node-type",
             "NON_VALIDATOR",
-            "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
+            "--restart-if-timeout",
             NODE_NAME_3_WITHOUT_PK,
           ]).result,
   ]);
@@ -427,12 +457,14 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
 
   if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
     expect(nodeWithPkResult.value.output).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
+    expect(nodeWithPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 
   if (nodeWithoutPkResult?.status === "fulfilled" && nodeWithoutPkResult.value) {
     expect(nodeWithoutPkResult.value.output).toInclude(
       `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
     );
+    expect(nodeWithoutPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 }
 
@@ -457,6 +489,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--accept-defaults",
             "--default",
             "--wait",
+            "--restart-if-timeout",
             GRAPH_NAME,
           ]).result,
     () =>
@@ -467,14 +500,15 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "create",
             "private-key",
             "hsm-ecdsa-p256",
-            "--blockchain-node-id",
-            blockchainNodeWithPk!.id,
+            "--blockchain-node",
+            blockchainNodeWithPk!.uniqueName,
             "--accept-defaults",
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
             CLUSTER_REGION,
             "--wait",
+            "--restart-if-timeout",
             PRIVATE_KEY_2_NAME,
           ]).result,
   ]);

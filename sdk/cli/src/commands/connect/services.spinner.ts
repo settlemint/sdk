@@ -28,7 +28,7 @@ import { spinner } from "@settlemint/sdk-utils/terminal";
  */
 export async function servicesSpinner(
   settlemint: SettlemintClient,
-  application: Application,
+  application: Omit<Application, "workspace">,
 ): Promise<{
   blockchainNetworks: BlockchainNetwork[];
   blockchainNodes: BlockchainNode[];
@@ -53,14 +53,14 @@ export async function servicesSpinner(
         insights,
         customDeployment,
       ] = await Promise.all([
-        settlemint.blockchainNetwork.list(application.id),
-        settlemint.blockchainNode.list(application.id),
-        settlemint.middleware.list(application.id),
-        settlemint.integrationTool.list(application.id),
-        settlemint.storage.list(application.id),
-        settlemint.privateKey.list(application.id),
-        settlemint.insights.list(application.id),
-        settlemint.customDeployment.list(application.id),
+        settlemint.blockchainNetwork.list(application.uniqueName),
+        settlemint.blockchainNode.list(application.uniqueName),
+        settlemint.middleware.list(application.uniqueName),
+        settlemint.integrationTool.list(application.uniqueName),
+        settlemint.storage.list(application.uniqueName),
+        settlemint.privateKey.list(application.uniqueName),
+        settlemint.insights.list(application.uniqueName),
+        settlemint.customDeployment.list(application.uniqueName),
       ]);
       return {
         blockchainNetworks,

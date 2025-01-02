@@ -20,7 +20,7 @@ import { z } from "zod";
  */
 export async function applicationAccessTokenPrompt(
   env: Partial<DotEnv>,
-  application: Application,
+  application: Omit<Application, "workspace">,
   settlemint: SettlemintClient,
   accept: boolean,
 ): Promise<string> {
@@ -62,7 +62,7 @@ export async function applicationAccessTokenPrompt(
     });
 
     const aat = await settlemint.applicationAccessToken.create({
-      applicationId: application.id,
+      applicationUniqueName: application.uniqueName,
       name,
       blockchainNetworkScope: {
         type: "ALL",

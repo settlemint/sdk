@@ -58,7 +58,7 @@ describe("besuNodeCreateCommand", () => {
       "test",
       "besu",
       "test-node",
-      "--blockchain-network-id",
+      "--blockchain-network",
       "12345",
       "--node-type",
       "NON_VALIDATOR",
@@ -76,7 +76,7 @@ describe("besuNodeCreateCommand", () => {
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
-      blockchainNetworkId: "12345",
+      blockchainNetwork: "12345",
       nodeType: "NON_VALIDATOR",
       nodeIdentity: "0x1234567890abcdef",
       size: "SMALL",
@@ -84,7 +84,7 @@ describe("besuNodeCreateCommand", () => {
     });
   });
 
-  test("executes command with application id", () => {
+  test("executes command with application", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();
@@ -101,7 +101,7 @@ describe("besuNodeCreateCommand", () => {
       "test",
       "besu",
       "test-node",
-      "--blockchain-network-id",
+      "--blockchain-network",
       "12345",
       "--node-type",
       "NON_VALIDATOR",
@@ -110,7 +110,7 @@ describe("besuNodeCreateCommand", () => {
       "gke",
       "--region",
       "europe",
-      "--application-id",
+      "--application",
       "123456789",
       "--size",
       "LARGE",
@@ -123,9 +123,9 @@ describe("besuNodeCreateCommand", () => {
       acceptDefaults: true,
       provider: "gke",
       region: "europe",
-      blockchainNetworkId: "12345",
+      blockchainNetwork: "12345",
       nodeType: "NON_VALIDATOR",
-      applicationId: "123456789",
+      application: "123456789",
       size: "LARGE",
       type: "DEDICATED",
     });

@@ -45,6 +45,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
 
   const tadaConfig = {
     name: "@0no-co/graphqlsp",
+    trackFieldUsage: false,
     schemas: [
       ...(hasura
         ? [
@@ -53,7 +54,6 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
               schema: "hasura-schema.graphql",
               tadaOutputLocation: "hasura-env.d.ts",
               tadaTurboLocation: "hasura-cache.d.ts",
-              trackFieldUsage: false,
             },
           ]
         : []),
@@ -65,7 +65,6 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
               schema: `the-graph-schema-${name}.graphql`,
               tadaOutputLocation: `the-graph-env-${name}.d.ts`,
               tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
-              trackFieldUsage: false,
             };
           })
         : []),
@@ -76,7 +75,6 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
               schema: "portal-schema.graphql",
               tadaOutputLocation: "portal-env.d.ts",
               tadaTurboLocation: "portal-cache.d.ts",
-              trackFieldUsage: false,
             },
           ]
         : []),
@@ -87,7 +85,6 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
               schema: "blockscout-schema.graphql",
               tadaOutputLocation: "blockscout-env.d.ts",
               tadaTurboLocation: "blockscout-cache.d.ts",
-              trackFieldUsage: false,
             },
           ]
         : []),

@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
+import { exists } from "@settlemint/sdk-utils";
 import { $, type ShellError } from "bun";
 import {
   NODE_NAME,
@@ -44,8 +45,12 @@ describe("Setup a smart contract set using the SDK", () => {
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
     await $`bun install`.cwd(projectDir);
-    await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
-    await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    if (await exists(join(__dirname, "../.env"))) {
+      await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
+    }
+    if (await exists(join(__dirname, "../.env.local"))) {
+      await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
+    }
   });
 
   test("Foundry - Build smart contract set", async () => {

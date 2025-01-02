@@ -15,21 +15,13 @@ describe("applicationCreateCommand", () => {
           commandOptions = options;
         }),
     );
-    program.parse([
-      "node",
-      "test",
-      "application",
-      "test-app",
-      "--accept-defaults",
-      "--workspace-id",
-      "test-workspace-id",
-    ]);
+    program.parse(["node", "test", "application", "test-app", "--accept-defaults", "--workspace", "test-workspace"]);
 
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-app");
     expect(commandOptions).toEqual({
       acceptDefaults: true,
-      workspaceId: "test-workspace-id",
+      workspace: "test-workspace",
     });
   });
 
@@ -45,7 +37,7 @@ describe("applicationCreateCommand", () => {
           commandOptions = options;
         }),
     );
-    program.parse(["node", "test", "application", "test-app", "--default"]);
+    program.parse(["node", "test", "application", "test-app", "-d"]);
 
     expect(commandArgs).toBe("test-app");
     expect(commandOptions).toEqual({
@@ -65,12 +57,12 @@ describe("applicationCreateCommand", () => {
           commandOptions = options;
         }),
     );
-    program.parse(["node", "test", "application", "test-app", "--prod", "--workspace-id", "test-workspace-id"]);
+    program.parse(["node", "test", "application", "test-app", "--prod", "--workspace", "test-workspace"]);
 
     expect(commandArgs).toBe("test-app");
     expect(commandOptions).toEqual({
       prod: true,
-      workspaceId: "test-workspace-id",
+      workspace: "test-workspace",
     });
   });
 });

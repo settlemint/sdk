@@ -10,8 +10,8 @@ export function ipfsRestartCommand() {
     type: "storage",
     alias: "ip",
     envKey: "SETTLEMINT_IPFS",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.storage.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.storage.restart(uniqueName);
     },
   });
 }

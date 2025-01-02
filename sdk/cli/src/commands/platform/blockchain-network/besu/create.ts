@@ -17,8 +17,8 @@ export function blockchainNetworkBesuCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option(
-          "-a, --application-id <applicationId>",
-          "The application ID to create the network in (defaults to application from env)",
+          "-a, --application <application>",
+          "The unique name of the application to create the network in (defaults to application from env)",
         )
         .requiredOption("--node-name <name>", "Name of the node")
         .option("--chain-id <chainId>", "The chain ID for the network", parseNumber)
@@ -31,7 +31,7 @@ export function blockchainNetworkBesuCreateCommand() {
           async (
             name,
             {
-              applicationId,
+              application,
               chainId,
               contractSizeLimit,
               evmStackSize,
@@ -47,10 +47,10 @@ export function blockchainNetworkBesuCreateCommand() {
             },
           ) => {
             return baseAction(defaultArgs, async (settlemint, env) => {
-              const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
               const result = await settlemint.blockchainNetwork.create({
                 name,
-                applicationId: application,
+                applicationUniqueName,
                 nodeName: nodeName,
                 consensusAlgorithm: "BESU_QBFT",
                 chainId,
@@ -78,9 +78,9 @@ export function blockchainNetworkBesuCreateCommand() {
                   : undefined,
                 mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
-                    SETTLEMINT_APPLICATION: application,
-                    SETTLEMINT_BLOCKCHAIN_NETWORK: result.id,
-                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.id,
+                    SETTLEMINT_APPLICATION: applicationUniqueName,
+                    SETTLEMINT_BLOCKCHAIN_NETWORK: result.uniqueName,
+                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
                   };
                 },
               };
@@ -96,7 +96,7 @@ export function blockchainNetworkBesuCreateCommand() {
       {
         description: "Create a Besu blockchain network in a different application",
         command:
-          "platform create blockchain-network besu my-network --application-id 123456789 --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
+          "platform create blockchain-network besu my-network --application app-123 --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5",
       },
     ],
   });

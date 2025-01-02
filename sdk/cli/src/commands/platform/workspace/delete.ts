@@ -11,8 +11,8 @@ export function workspaceDeleteCommand() {
     type: "workspace",
     alias: "w",
     envKey: "SETTLEMINT_WORKSPACE",
-    deleteFunction: async (settlemint, id) => {
-      return settlemint.workspace.delete(id);
+    deleteFunction: async (settlemint, uniqueName) => {
+      return settlemint.workspace.delete(uniqueName);
     },
   });
 }

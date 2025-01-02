@@ -15,18 +15,18 @@ export function graphMiddlewareCreateCommand() {
     alias: "gr",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
-        .option("--application-id <applicationId>", "Application ID")
-        .option("--blockchain-node-id <blockchainNodeId>", "Blockchain Node ID")
-        .action(async (name, { applicationId, blockchainNodeId, provider, region, size, type, ...defaultArgs }) => {
+        .option("--application <application>", "Application unique name")
+        .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
+        .action(async (name, { application, blockchainNode, provider, region, size, type, ...defaultArgs }) => {
           return baseAction(defaultArgs, async (settlemint, env) => {
-            const application = applicationId ?? env.SETTLEMINT_APPLICATION!;
-            const blockchainNode = blockchainNodeId ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
+            const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+            const blockchainNodeUniqueName = blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
 
             const result = await settlemint.middleware.create({
               name,
-              applicationId: application,
+              applicationUniqueName,
               interface: "HA_GRAPH",
-              blockchainNodeId: blockchainNode,
+              blockchainNodeUniqueName,
               provider,
               region,
               size,
@@ -35,11 +35,11 @@ export function graphMiddlewareCreateCommand() {
             return {
               result,
               mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                const resource = await settlemint.middleware.read(result.id);
+                const graphMiddleware = await settlemint.middleware.read(result.uniqueName);
                 return {
-                  SETTLEMINT_APPLICATION: application,
-                  SETTLEMINT_THEGRAPH: result.id,
-                  ...(await getGraphEndpoint(resource, env)),
+                  SETTLEMINT_APPLICATION: applicationUniqueName,
+                  SETTLEMINT_THEGRAPH: result.uniqueName,
+                  ...(await getGraphEndpoint(graphMiddleware, env)),
                 };
               },
             };
@@ -53,8 +53,7 @@ export function graphMiddlewareCreateCommand() {
       },
       {
         description: "Create a graph middleware in a different application",
-        command:
-          "platform create middleware graph my-graph --application-id 123456789 --blockchain-node-id node-123 --storage-id storage-123",
+        command: "platform create middleware graph my-graph --application my-app --blockchain-node node-123",
       },
     ],
   });

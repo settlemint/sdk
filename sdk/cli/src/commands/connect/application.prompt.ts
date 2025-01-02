@@ -5,10 +5,10 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function applicationPrompt(
   env: Partial<DotEnv>,
-  applications: Application[],
+  applications: Omit<Application, "workspace">[],
   accept: boolean,
-): Promise<Application> {
-  const defaultApplication = applications.find((application) => application.id === env.SETTLEMINT_APPLICATION);
+): Promise<Omit<Application, "workspace">> {
+  const defaultApplication = applications.find((application) => application.uniqueName === env.SETTLEMINT_APPLICATION);
   const defaultPossible = accept && defaultApplication;
 
   if (defaultPossible) {

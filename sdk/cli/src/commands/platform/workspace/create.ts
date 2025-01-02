@@ -146,7 +146,7 @@ export function workspaceCreateCommand() {
                 result,
                 mapDefaultEnv: (): Partial<DotEnv> => {
                   return {
-                    SETTLEMINT_WORKSPACE: result.id,
+                    SETTLEMINT_WORKSPACE: result.uniqueName,
                   };
                 },
               };

@@ -47,18 +47,18 @@ describe("graphCreateCommand", () => {
       "gke",
       "--region",
       "europe",
-      "--blockchain-node-id",
+      "--blockchain-node",
       "node-123",
-      "--application-id",
-      "123456789",
+      "--application",
+      "my-app",
     ]);
 
     expect(commandArgs).toBe("test-graph");
     expect(commandOptions).toEqual({
       provider: "gke",
       region: "europe",
-      blockchainNodeId: "node-123",
-      applicationId: "123456789",
+      blockchainNode: "node-123",
+      application: "my-app",
       size: "SMALL",
       type: "SHARED",
     });

@@ -10,8 +10,8 @@ export function customDeploymentRestartCommand() {
     type: "custom deployment",
     alias: "cd",
     envKey: "SETTLEMINT_CUSTOM_DEPLOYMENT",
-    restartFunction: async (settlemint, id) => {
-      return settlemint.customDeployment.restart(id);
+    restartFunction: async (settlemint, uniqueName) => {
+      return settlemint.customDeployment.restart(uniqueName);
     },
     usePersonalAccessToken: false,
   });
