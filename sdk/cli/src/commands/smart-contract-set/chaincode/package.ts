@@ -1,7 +1,7 @@
-import { unlink } from "node:fs/promises";
+import { copyFile, unlink } from "node:fs/promises";
 import path from "node:path";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils";
+import { executeCommand, exists } from "@settlemint/sdk-utils";
 import { cancel, note, outro } from "@settlemint/sdk-utils/terminal";
 
 interface PackageChaincodeOptions {
@@ -22,12 +22,6 @@ export function packageChaincodeCommand() {
     .requiredOption("--lang <language>", "Language the chaincode is written in");
 
   cmd.action(async function packageAction(options) {
-    console.log("\n📋 Command Action Started");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("Options received:", JSON.stringify(options, null, 2));
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-
-    console.log("\n📢 About to show note...");
     note(`Packaging chaincode ${options.version}...`);
 
     try {
@@ -40,8 +34,7 @@ export function packageChaincodeCommand() {
       const ccPackageJsonPath = path.join(options.path, "package.json");
       console.log(`📦 Target chaincode package.json path: ${ccPackageJsonPath}`);
 
-      const rootPackageJson = Bun.file(rootPackageJsonPath);
-      const hasRootPackageJson = await rootPackageJson.exists();
+      const hasRootPackageJson = await exists(rootPackageJsonPath);
       console.log(`📋 Root package.json exists: ${hasRootPackageJson}`);
 
       if (hasRootPackageJson) {
@@ -71,8 +64,6 @@ export function packageChaincodeCommand() {
       console.log("\n✅ Package creation completed");
       outro("Chaincode is packaged successfully");
     } catch (error) {
-      console.log("\n❌ Error occurred during packaging");
-      console.error("Error details:", error);
       cancel(`Chaincode packaging failed: ${error instanceof Error ? error.message : String(error)}`);
     }
   });
@@ -86,15 +77,14 @@ async function packageChaincode(options: PackageChaincodeOptions) {
   const { name, version, path: ccPath, lang } = options;
 
   // Handle package.json if it exists
-  const rootPackageJson = Bun.file(path.join(process.cwd(), "package.json"));
+  const rootPackageJsonPath = path.join(process.cwd(), "package.json");
   const ccPackageJsonPath = path.join(ccPath, "package.json");
-  const ccPackageJson = Bun.file(ccPackageJsonPath);
 
   // Copy package.json if it exists in root
-  const hasRootPackageJson = await rootPackageJson.exists();
+  const hasRootPackageJson = await exists(rootPackageJsonPath);
   if (hasRootPackageJson) {
     console.log("📄 Copying root package.json to chaincode directory");
-    await Bun.write(ccPackageJson, rootPackageJson);
+    await copyFile(rootPackageJsonPath, ccPackageJsonPath);
   }
 
   console.log("\n🚀 Executing peer lifecycle chaincode package command");
@@ -113,7 +103,7 @@ async function packageChaincode(options: PackageChaincodeOptions) {
   ]);
 
   // Cleanup package.json if we copied it
-  if (await ccPackageJson.exists()) {
+  if (await exists(ccPackageJsonPath)) {
     console.log("\n🧹 Cleaning up temporary package.json");
     await unlink(ccPackageJsonPath);
   }
