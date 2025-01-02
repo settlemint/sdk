@@ -12,67 +12,70 @@ interface PackageChaincodeOptions {
 }
 
 export function packageChaincodeCommand() {
+  console.log("\n🚀 Initializing package command...");
+
   const cmd = new Command("package")
     .description("Package a chaincode")
     .requiredOption("--name <name>", "Name of the output file")
     .requiredOption("--version <version>", "Version of the chaincode")
     .requiredOption("--path <path>", "Path to the chaincode")
-    .requiredOption("--lang <language>", "Language the chaincode is written in")
-    .action(async (options) => {
-      console.log("\n📋 Command Action Started");
-      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      console.log("Options received:", JSON.stringify(options, null, 2));
-      console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    .requiredOption("--lang <language>", "Language the chaincode is written in");
 
-      console.log("\n📢 About to show note...");
-      note(`Packaging chaincode ${options.version}...`);
+  cmd.action(async (options) => {
+    console.log("\n📋 Command Action Started");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("Options received:", JSON.stringify(options, null, 2));
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
 
-      try {
-        console.log("\n🏃 Starting packageChaincode function...");
+    console.log("\n📢 About to show note...");
+    note(`Packaging chaincode ${options.version}...`);
 
-        // Package.json handling logs
-        const rootPackageJsonPath = path.join(process.cwd(), "package.json");
-        console.log(`\n📦 Checking for root package.json at: ${rootPackageJsonPath}`);
+    try {
+      console.log("\n🏃 Starting packageChaincode function...");
 
-        const ccPackageJsonPath = path.join(options.path, "package.json");
-        console.log(`📦 Target chaincode package.json path: ${ccPackageJsonPath}`);
+      // Package.json handling logs
+      const rootPackageJsonPath = path.join(process.cwd(), "package.json");
+      console.log(`\n📦 Checking for root package.json at: ${rootPackageJsonPath}`);
 
-        const rootPackageJson = Bun.file(rootPackageJsonPath);
-        const hasRootPackageJson = await rootPackageJson.exists();
-        console.log(`📋 Root package.json exists: ${hasRootPackageJson}`);
+      const ccPackageJsonPath = path.join(options.path, "package.json");
+      console.log(`📦 Target chaincode package.json path: ${ccPackageJsonPath}`);
 
-        if (hasRootPackageJson) {
-          console.log("📝 Copying package.json to chaincode directory...");
-        }
+      const rootPackageJson = Bun.file(rootPackageJsonPath);
+      const hasRootPackageJson = await rootPackageJson.exists();
+      console.log(`📋 Root package.json exists: ${hasRootPackageJson}`);
 
-        console.log("\n🔧 Executing peer command...");
-        console.log(
-          "Command:",
-          "peer",
-          [
-            "lifecycle",
-            "chaincode",
-            "package",
-            `./${options.name}.tar.gz`,
-            "--path",
-            options.path,
-            "--lang",
-            options.lang,
-            "--label",
-            `${options.name}_${options.version}`,
-          ].join(" "),
-        );
-
-        await packageChaincode(options);
-
-        console.log("\n✅ Package creation completed");
-        outro("Chaincode is packaged successfully");
-      } catch (error) {
-        console.log("\n❌ Error occurred during packaging");
-        console.error("Error details:", error);
-        cancel(`Chaincode packaging failed: ${error instanceof Error ? error.message : String(error)}`);
+      if (hasRootPackageJson) {
+        console.log("📝 Copying package.json to chaincode directory...");
       }
-    });
+
+      console.log("\n🔧 Executing peer command...");
+      console.log(
+        "Command:",
+        "peer",
+        [
+          "lifecycle",
+          "chaincode",
+          "package",
+          `./${options.name}.tar.gz`,
+          "--path",
+          options.path,
+          "--lang",
+          options.lang,
+          "--label",
+          `${options.name}_${options.version}`,
+        ].join(" "),
+      );
+
+      await packageChaincode(options);
+
+      console.log("\n✅ Package creation completed");
+      outro("Chaincode is packaged successfully");
+    } catch (error) {
+      console.log("\n❌ Error occurred during packaging");
+      console.error("Error details:", error);
+      cancel(`Chaincode packaging failed: ${error instanceof Error ? error.message : String(error)}`);
+    }
+  });
 
   console.log("📦 Package command initialized and ready");
   return cmd;
