@@ -64,7 +64,7 @@
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
     "@types/bun": "1.1.14",
-    "@types/node": "22.10.3",
+    "@types/node": "22.10.4",
     "@types/react": "19.0.1",
     "@types/react-dom": "19.0.2",
     "babel-plugin-react-compiler": "latest",
