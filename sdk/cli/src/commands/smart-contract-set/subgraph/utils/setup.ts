@@ -2,9 +2,8 @@ import { rm } from "node:fs/promises";
 import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
 import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
-import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
-import { cancel } from "@settlemint/sdk-utils/terminal";
 import semver from "semver";
 import { getSubgraphYamlConfig } from "./subgraph-config";
 
@@ -12,15 +11,10 @@ export interface SubgraphSetupParams {
   env: Partial<DotEnv>;
   instance: string;
   accessToken: string;
-  autoAccept: boolean;
+  theGraphMiddleware?: Middleware;
 }
 
-export async function subgraphSetup({ env, instance, accessToken, autoAccept }: SubgraphSetupParams) {
-  const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
-  if (!theGraphMiddleware) {
-    cancel("No Graph Middleware selected. Please select one to continue.");
-  }
-
+export async function subgraphSetup({ env, instance, accessToken, theGraphMiddleware }: SubgraphSetupParams) {
   const generated = await isGenerated();
   if (generated) {
     await executeCommand("forge", ["build"]);
@@ -39,7 +33,7 @@ export async function subgraphSetup({ env, instance, accessToken, autoAccept }: 
     await rm("./subgraph/build", { recursive: true, force: true });
   }
 
-  const isFixedNetwork = (theGraphMiddleware.entityVersion ?? 4) >= 4;
+  const isFixedNetwork = (theGraphMiddleware?.entityVersion ?? 4) >= 4;
   const network = isFixedNetwork ? "settlemint" : sanitizeName(await getNodeName({ env, instance, accessToken }), 30);
 
   if (generated) {
@@ -80,11 +74,9 @@ export async function subgraphSetup({ env, instance, accessToken, autoAccept }: 
   }
 
   await updateSubgraphYamlConfig(yamlConfig);
-
-  return theGraphMiddleware;
 }
 
-async function getTheGraphMiddleware({
+export async function getTheGraphMiddleware({
   env,
   instance,
   accessToken,
