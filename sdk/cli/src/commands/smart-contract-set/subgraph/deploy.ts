@@ -92,7 +92,7 @@ export function subgraphDeployCommand() {
         accessToken,
         instance,
       });
-      const middleware = await settlemintClient.middleware.read(env.SETTLEMINT_THEGRAPH!);
+      const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
       const graphEndpoints = await getGraphEndpoint(middleware, env);
       await writeEnvSpinner(!!prod, {
         ...env,
