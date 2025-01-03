@@ -30,7 +30,7 @@ jobs:
   e2e:
     name: E2E
     timeout-minutes: 60  # Ensures the job never runs longer than 1 hour
-    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'e2e') }}
+    if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'e2e') || github.event_name == 'workflow_dispatch' }}
     runs-on: namespace-profile-sdk
     steps:
       - name: Setup 1Password
@@ -88,7 +88,6 @@ jobs:
           DISABLE_WORKSPACE_DELETE: true
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           SETTLEMINT_INSTANCE: ${{ env.SETTLEMINT_INSTANCE }}
-          SETTLEMINT_ACCESS_TOKEN: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
           SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
           SETTLEMINT_APPLICATION: ${{ secrets.SETTLEMINT_APPLICATION }}
           SETTLEMINT_BLOCKCHAIN_NETWORK: ${{ secrets.SETTLEMINT_BLOCKCHAIN_NETWORK }}
@@ -120,7 +119,8 @@ jobs:
         run: |
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
           gh secret set -f .env
+          sed '/SETTLEMINT_ACCESS_TOKEN/d' .env.local > .env.local.tmp
+          mv .env.local.tmp .env.local
           gh secret set -f .env.local
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
-
