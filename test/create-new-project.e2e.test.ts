@@ -7,6 +7,7 @@ import {
   getSubgraphYamlConfig,
   updateSubgraphYamlConfig,
 } from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
+import { registerLinkedDependencies, updatePackageJsonToUseLinkedDependencies } from "./utils/link-dependencies";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
@@ -94,12 +95,15 @@ describe("Setup a project using the SDK", () => {
 
   test("Install dependencies and link SDK to use local one", async () => {
     const env = { NODE_ENV: "production" };
-    await $`bun link`.cwd("./sdk/cli");
+    await registerLinkedDependencies();
+    await updatePackageJsonToUseLinkedDependencies(projectDir);
+    await updatePackageJsonToUseLinkedDependencies(dAppDir);
+    await updatePackageJsonToUseLinkedDependencies(contractsDir);
+    await updatePackageJsonToUseLinkedDependencies(subgraphDir);
     await $`bun install`.cwd(projectDir).env({
       ...process.env,
       ...env,
     });
-    await $`bun link @settlemint/sdk-cli`.cwd(projectDir);
   });
 
   test("Connect starter kit", async () => {
@@ -174,7 +178,7 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Types generated successfully");
   });
 
-  test.skip("subgraph - Deploy subgraphs", async () => {
+  test("subgraph - Deploy subgraphs", async () => {
     const config = await getSubgraphYamlConfig(subgraphDir);
     for (const datasource of config.dataSources) {
       const { output } = await runCommand(
@@ -214,5 +218,6 @@ describe("Setup a project using the SDK", () => {
     const env = { NODE_ENV: "production" };
     await $`bun lint`.cwd(projectDir).env(env);
     await $`bun check-types`.cwd(projectDir).env(env);
+    await $`bun run build`.cwd(projectDir).env(env);
   });
 });
