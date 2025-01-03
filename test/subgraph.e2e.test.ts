@@ -73,13 +73,9 @@ describe("Build and deploy a subgraph using the SDK", () => {
   });
 
   test("Build subgraph", async () => {
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "build", "--accept-defaults"],
-      {
-        cwd: projectDir,
-      },
-    ).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "build"], {
+      cwd: projectDir,
+    }).result;
     expect(output).toInclude("Build completed");
     const subgraphYaml = await getSubgraphYamlConfig(projectDir);
     expect(subgraphYaml.dataSources).toHaveLength(4);
@@ -87,13 +83,9 @@ describe("Build and deploy a subgraph using the SDK", () => {
   });
 
   test("Codegen subgraph", async () => {
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "codegen", "--accept-defaults"],
-      {
-        cwd: projectDir,
-      },
-    ).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "codegen"], {
+      cwd: projectDir,
+    }).result;
     expect(output).toInclude("Types generated successfully");
   });
 

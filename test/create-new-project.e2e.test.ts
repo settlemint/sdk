@@ -157,24 +157,16 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("subgraph - Build subgraph", async () => {
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "build", "--accept-defaults"],
-      {
-        cwd: subgraphDir,
-      },
-    ).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "build"], {
+      cwd: subgraphDir,
+    }).result;
     expect(output).toInclude("Build completed");
   });
 
   test("subgraph - Codegen subgraph", async () => {
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "codegen", "--accept-defaults"],
-      {
-        cwd: subgraphDir,
-      },
-    ).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "codegen"], {
+      cwd: subgraphDir,
+    }).result;
     expect(output).toInclude("Types generated successfully");
   });
 

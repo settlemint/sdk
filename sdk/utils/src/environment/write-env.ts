@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { tryParseJson } from "@/core/json.js";
 import { exists, projectRoot } from "@/filesystem.js";
+import { tryParseJson } from "@/json.js";
 import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";

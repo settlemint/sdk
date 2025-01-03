@@ -30,6 +30,7 @@ export function runCommand(
   args: string[],
   options: { env?: Record<string, string>; cwd?: string; stdin?: string } = {},
 ) {
+  let hasAccessTokenInOutput = false;
   const cwd = options.cwd ?? resolve(__dirname, "../../");
   const cliEntry = existsSync(CLI_DEV_ENTRY_POINT) ? CLI_DEV_ENTRY_POINT : CLI_PROD_ENTRY_POINT;
   const cmds = [cliEntry, ...args];
@@ -47,12 +48,20 @@ export function runCommand(
   const output: string[] = [];
   const errors: string[] = [];
   proc.stdout.on("data", (data) => {
-    output.push(data.toString());
-    console.log(data.toString());
+    const dataString = data.toString();
+    if (!hasAccessTokenInOutput) {
+      hasAccessTokenInOutput = checkOutputForAccessToken(dataString);
+    }
+    output.push(dataString);
+    console.log(dataString);
   });
   proc.stderr.on("data", (data) => {
-    errors.push(data.toString());
-    console.error(data.toString());
+    const dataString = data.toString();
+    if (!hasAccessTokenInOutput) {
+      hasAccessTokenInOutput = checkOutputForAccessToken(dataString);
+    }
+    errors.push(dataString);
+    console.error(dataString);
   });
   if (!commandsRunning[testScope]) {
     commandsRunning[testScope] = [];
@@ -64,6 +73,10 @@ export function runCommand(
       const index = commandsRunning[testScope]?.indexOf(proc) ?? -1;
       if (index > -1) {
         commandsRunning[testScope]?.splice(index, 1);
+      }
+      if (hasAccessTokenInOutput) {
+        reject(new Error("Access token found in output"));
+        return;
       }
       if (code === 0 || code === null || code === 143) {
         resolve({ output: output.join("\n"), cwd });
@@ -98,4 +111,8 @@ function killProcess(pid: number) {
           console.error(`Failed to kill process ${pid}`, { pkillError, killError });
         });
     });
+}
+
+function checkOutputForAccessToken(output: string) {
+  return /sm_(pat|aat|sat)_[0-9a-zA-Z]+/g.test(output);
 }

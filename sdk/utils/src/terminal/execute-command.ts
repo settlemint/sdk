@@ -1,4 +1,5 @@
 import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
+import { maskTokens } from "./mask-tokens.js";
 
 interface ExecuteCommandOptions extends SpawnOptionsWithoutStdio {
   silent?: boolean;
@@ -22,14 +23,16 @@ export async function executeCommand(
   process.stdin.pipe(child.stdin);
   const output: string[] = [];
   return new Promise((resolve, reject) => {
-    child.stdout.on("data", (data) => {
+    child.stdout.on("data", (data: Buffer | string) => {
+      const maskedData = maskTokens(data.toString());
       if (!options?.silent) {
-        process.stdout.write(data);
+        process.stdout.write(maskedData);
       }
-      output.push(data.toString());
+      output.push(maskedData);
     });
-    child.stderr.on("data", (data) => {
-      process.stderr.write(data);
+    child.stderr.on("data", (data: Buffer | string) => {
+      const maskedData = maskTokens(data.toString());
+      process.stderr.write(maskedData);
     });
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {
