@@ -44,7 +44,6 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
         env,
         instance,
         prefer: "application",
-        allowFallback: false,
       });
 
       const settlemint = createSettleMintClient({

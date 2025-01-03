@@ -32,7 +32,6 @@ export function subgraphDeployCommand() {
         env,
         instance,
         prefer: "application",
-        allowFallback: false,
       });
 
       const theGraphMiddleware = await subgraphSetup({
