@@ -22,16 +22,21 @@ export async function executeCommand(
   const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
   process.stdin.pipe(child.stdin);
   const output: string[] = [];
-  const writeOutput = (data: Buffer | string) => {
-    const maskedData = maskTokens(data.toString());
-    if (!options?.silent) {
-      process.stderr.write(maskedData);
-    }
-    output.push(maskedData);
-  };
   return new Promise((resolve, reject) => {
-    child.stdout.on("data", writeOutput);
-    child.stderr.on("data", writeOutput);
+    child.stdout.on("data", (data: Buffer | string) => {
+      const maskedData = maskTokens(data.toString());
+      if (!options?.silent) {
+        process.stdout.write(maskedData);
+      }
+      output.push(maskedData);
+    });
+    child.stderr.on("data", (data: Buffer | string) => {
+      const maskedData = maskTokens(data.toString());
+      if (!options?.silent) {
+        process.stderr.write(maskedData);
+      }
+      output.push(maskedData);
+    });
     child.on("error", (err) => reject(err));
     child.on("close", (code) => {
       if (code === 0 || code === null || code === 143) {
