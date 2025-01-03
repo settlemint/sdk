@@ -94,16 +94,13 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Install dependencies and link SDK to use local one", async () => {
-    const env = { NODE_ENV: "production" };
+    const env = { ...process.env, NODE_ENV: "production" };
     await registerLinkedDependencies();
     await updatePackageJsonToUseLinkedDependencies(projectDir);
     await updatePackageJsonToUseLinkedDependencies(dAppDir);
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
-    await $`bun install`.cwd(projectDir).env({
-      ...process.env,
-      ...env,
-    });
+    await $`bun install`.cwd(projectDir).env(env);
   });
 
   test("Connect starter kit", async () => {
@@ -207,7 +204,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Build starter kit", async () => {
-    const env = { NODE_ENV: "production" };
+    const env = { ...process.env, NODE_ENV: "production" };
     await $`bun lint`.cwd(projectDir).env(env);
     await $`bun check-types`.cwd(projectDir).env(env);
     await $`bun run build`.cwd(projectDir).env(env);
