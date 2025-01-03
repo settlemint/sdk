@@ -14,7 +14,7 @@ import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemin
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { subgraphNamePrompt } from "../prompts/subgraph-name.prompt";
-import { getTheGraphMiddleware, subgraphSetup } from "./utils/setup";
+import { getTheGraphMiddleware, getTheGraphNetwork, subgraphSetup } from "./utils/setup";
 import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
 
 export function subgraphDeployCommand() {
@@ -40,11 +40,9 @@ export function subgraphDeployCommand() {
         cancel("No Graph Middleware selected. Please select one to continue.");
       }
 
+      const network = await getTheGraphNetwork({ theGraphMiddleware, env, instance, accessToken });
       await subgraphSetup({
-        env,
-        instance,
-        accessToken,
-        theGraphMiddleware,
+        network,
       });
 
       const subgraphYamlFile = await getSubgraphYamlFile();
