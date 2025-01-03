@@ -1,5 +1,6 @@
 import select from "@inquirer/select";
 import type { Workspace } from "@settlemint/sdk-js";
+import { cancel } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function workspacePrompt(
@@ -15,7 +16,7 @@ export async function workspacePrompt(
   }
 
   if (workspaces.length === 0) {
-    throw new Error("No workspaces found");
+    cancel("No workspaces found");
   }
 
   const workspace = await select({
@@ -28,7 +29,7 @@ export async function workspacePrompt(
   });
 
   if (!workspace) {
-    throw new Error("No workspace selected");
+    cancel("No workspace selected");
   }
 
   return workspace;

@@ -4,7 +4,7 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { cancel, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -90,7 +90,7 @@ ${createExamples([
         : uniqueName;
 
       if (!serviceUniqueName) {
-        throw new Error(
+        cancel(
           `No default ${type} found in your .env file. Please provide a valid ${type} unique name or set a default ${type} first.`,
         );
       }
