@@ -102,8 +102,8 @@ export type CreateWorkspaceArgs = VariablesOf<typeof createWorkspace>;
  */
 const deleteWorkspace = graphql(
   `
-    mutation deleteWorkspace($id: ID!) {
-      deleteWorkspace(workspaceId: $id) {
+    mutation deleteWorkspace($uniqueName: String!) {
+      deleteWorkspaceByUniqueName(uniqueName: $uniqueName) {
         ...Workspace
       }
     }
@@ -187,9 +187,9 @@ export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions
  */
 export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (workspaceUniqueName: string) => {
-    // TODO: dedicated mutation on platform
-    const workspaceToDelete = await workspaceRead(gqlClient, options)(workspaceUniqueName);
-    const { deleteWorkspace: workspace } = await gqlClient.request(deleteWorkspace, { id: workspaceToDelete.id });
+    const { deleteWorkspaceByUniqueName: workspace } = await gqlClient.request(deleteWorkspace, {
+      uniqueName: workspaceUniqueName,
+    });
     return workspace;
   };
 };

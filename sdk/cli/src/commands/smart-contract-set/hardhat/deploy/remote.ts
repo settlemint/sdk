@@ -50,7 +50,6 @@ export function hardhatDeployRemoteCommand() {
         env,
         instance,
         prefer: "application",
-        allowFallback: true,
       });
 
       const settlemint = createSettleMintClient({

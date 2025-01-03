@@ -1,3 +1,4 @@
+import { join } from "node:path";
 import { cancel } from "@/terminal.js";
 import { type DotEnv, type DotEnvPartial, DotEnvSchema, DotEnvSchemaPartial, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
@@ -37,7 +38,13 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   if (prod) {
     process.env.NODE_ENV = "production";
   }
-  let { parsed } = config({ convention: "nextjs", logLevel: "error", overload: true, quiet: true, path });
+  let { parsed } = config({
+    convention: "nextjs",
+    logLevel: "error",
+    overload: true,
+    quiet: true,
+    path: join(path, ".env"),
+  });
 
   if (!parsed) {
     parsed = {};

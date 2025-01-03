@@ -32,7 +32,6 @@ export function subgraphDeployCommand() {
         env,
         instance,
         prefer: "application",
-        allowFallback: false,
       });
 
       const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
@@ -99,6 +98,7 @@ export function subgraphDeployCommand() {
       const graphEndpoints = await getGraphEndpoint(middleware, env);
       await writeEnvSpinner(!!prod, {
         ...env,
+        SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
         ...graphEndpoints,
       });
     });
