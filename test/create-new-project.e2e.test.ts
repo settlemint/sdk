@@ -94,16 +94,13 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("Install dependencies and link SDK to use local one", async () => {
-    const env = { NODE_ENV: "production" };
+    const env = { ...process.env, NODE_ENV: "production" };
     await registerLinkedDependencies();
     await updatePackageJsonToUseLinkedDependencies(projectDir);
     await updatePackageJsonToUseLinkedDependencies(dAppDir);
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
-    await $`bun install`.cwd(projectDir).env({
-      ...process.env,
-      ...env,
-    });
+    await $`bun install`.cwd(projectDir).env(env);
   });
 
   test("Connect starter kit", async () => {
@@ -157,24 +154,16 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("subgraph - Build subgraph", async () => {
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "build", "--accept-defaults"],
-      {
-        cwd: subgraphDir,
-      },
-    ).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "build"], {
+      cwd: subgraphDir,
+    }).result;
     expect(output).toInclude("Build completed");
   });
 
   test("subgraph - Codegen subgraph", async () => {
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "codegen", "--accept-defaults"],
-      {
-        cwd: subgraphDir,
-      },
-    ).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "codegen"], {
+      cwd: subgraphDir,
+    }).result;
     expect(output).toInclude("Types generated successfully");
   });
 
@@ -214,8 +203,8 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test.skip("Build starter kit", async () => {
-    const env = { NODE_ENV: "production" };
+  test("Build starter kit", async () => {
+    const env = { ...process.env, NODE_ENV: "production" };
     await $`bun lint`.cwd(projectDir).env(env);
     await $`bun check-types`.cwd(projectDir).env(env);
     await $`bun run build`.cwd(projectDir).env(env);

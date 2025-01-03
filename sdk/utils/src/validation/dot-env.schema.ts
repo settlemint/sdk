@@ -1,4 +1,4 @@
-import { tryParseJson } from "@/core/json.js";
+import { tryParseJson } from "@/json.js";
 import { z } from "zod";
 import { ApplicationAccessTokenSchema, PersonalAccessTokenSchema } from "./access-token.schema.js";
 import { UniqueNameSchema } from "./unique-name.schema.js";

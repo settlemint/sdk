@@ -1,7 +1,7 @@
 import type { HardhatConfig } from "@/utils/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, cancel } from "@settlemint/sdk-utils";
 import { writeEnvSpinner } from "../../connect/write-env.spinner";
 
 /**
@@ -39,7 +39,7 @@ export async function addressPrompt({
   }
 
   if (possiblePrivateKeys.length === 0) {
-    throw new Error("No private key is activated on the node to sign the transaction.");
+    cancel("No private key is activated on the node to sign the transaction.");
   }
 
   const address = await select({

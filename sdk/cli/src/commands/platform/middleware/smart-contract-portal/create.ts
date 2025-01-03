@@ -3,7 +3,7 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { Option } from "@commander-js/extra-typings";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, cancel } from "@settlemint/sdk-utils";
 
 /**
  * Creates and returns the 'smart-contract-portal' middleware command for the SettleMint SDK.
@@ -71,7 +71,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                   parsedAbis.push(...parsedAbiResults);
                 } catch (err) {
                   const error = err as Error;
-                  throw new Error(`Failed to read or parse ABI file: ${error.message}`);
+                  cancel(`Failed to read or parse ABI file: ${error.message}`);
                 }
               }
               const result = await settlemint.middleware.create({

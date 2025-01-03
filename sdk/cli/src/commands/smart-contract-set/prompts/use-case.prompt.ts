@@ -1,5 +1,6 @@
 import { SMART_CONTRACT_SETS } from "@/constants/smart-contract-sets";
 import select from "@inquirer/select";
+import { cancel } from "@settlemint/sdk-utils";
 
 /**
  * Prompts the user to select a smart contract set use case or validates a provided one
@@ -10,12 +11,12 @@ import select from "@inquirer/select";
  */
 export async function useCasePrompt(argument?: string): Promise<string> {
   if (SMART_CONTRACT_SETS.length === 0) {
-    throw new Error("No use cases found");
+    cancel("No use cases found");
   }
 
   if (argument) {
     if (!SMART_CONTRACT_SETS.includes(argument)) {
-      throw new Error(`No use case found with name '${argument}'`);
+      cancel(`No use case found with name '${argument}'`);
     }
     return argument;
   }

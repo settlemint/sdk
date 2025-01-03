@@ -59,7 +59,7 @@ export function subgraphDeployCommand() {
           !currentConfig ||
           currentConfig?.datasources.some((ds) => ds.address === "0x0000000000000000000000000000000000000000")
         ) {
-          throw new Error(
+          cancel(
             'The "subgraph/subgraph.config.json" config has not been set, ensure all the contracts listed have an address added',
           );
         }

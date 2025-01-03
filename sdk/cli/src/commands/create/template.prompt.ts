@@ -1,9 +1,10 @@
 import select from "@inquirer/select";
+import { cancel } from "@settlemint/sdk-utils";
 import type { Template } from "@settlemint/sdk-utils/package-manager";
 
 export async function templatePrompt(templates: Template[], argument?: string): Promise<Template> {
   if (templates.length === 0) {
-    throw new Error("No templates found");
+    cancel("No templates found");
   }
 
   const defaultInstance = argument;
@@ -11,7 +12,7 @@ export async function templatePrompt(templates: Template[], argument?: string): 
   if (defaultInstance) {
     const template = templates.find((template) => template.value === argument);
     if (!template) {
-      throw new Error(`No template found with name '${argument}'`);
+      cancel(`No template found with name '${argument}'`);
     }
     return template;
   }
