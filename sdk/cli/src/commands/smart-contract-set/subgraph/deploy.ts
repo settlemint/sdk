@@ -95,6 +95,7 @@ export function subgraphDeployCommand() {
       const graphEndpoints = await getGraphEndpoint(middleware, env);
       await writeEnvSpinner(!!prod, {
         ...env,
+        SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
         ...graphEndpoints,
       });
     });

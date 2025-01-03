@@ -72,8 +72,8 @@ const createApplication = graphql(
  */
 const deleteApplication = graphql(
   `
-    mutation DeleteApplication($id: ID!) {
-      deleteApplication(id: $id) {
+    mutation DeleteApplication($uniqueName: String!) {
+      deleteApplicationByUniqueName(uniqueName: $uniqueName) {
         ...Application
       }
     }
@@ -152,10 +152,8 @@ export const applicationCreate = (gqlClient: GraphQLClient, options: ClientOptio
  */
 export const applicationDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
   return async (applicationUniqueName: string): Promise<Application> => {
-    // TODO: dedicated mutation on platform
-    const applicationToDelete = await applicationRead(gqlClient, options)(applicationUniqueName);
-    const { deleteApplication: application } = await gqlClient.request(deleteApplication, {
-      id: applicationToDelete.id,
+    const { deleteApplicationByUniqueName: application } = await gqlClient.request(deleteApplication, {
+      uniqueName: applicationUniqueName,
     });
     return application;
   };
