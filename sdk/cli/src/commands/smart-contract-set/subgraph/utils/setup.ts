@@ -1,26 +1,19 @@
 import { rm } from "node:fs/promises";
 import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
-import { sanitizeName } from "@/commands/smart-contract-set/subgraph/utils/sanitize-name";
 import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
-import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
-import { cancel } from "@settlemint/sdk-utils/terminal";
 import semver from "semver";
+import { sanitizeName } from "./sanitize-name";
 import { getSubgraphYamlConfig } from "./subgraph-config";
 
+export const SETTLEMINT_NETWORK = "settlemint";
+
 export interface SubgraphSetupParams {
-  env: Partial<DotEnv>;
-  instance: string;
-  accessToken: string;
-  autoAccept: boolean;
+  network: string;
 }
 
-export async function subgraphSetup({ env, instance, accessToken, autoAccept }: SubgraphSetupParams) {
-  const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
-  if (!theGraphMiddleware) {
-    cancel("No Graph Middleware selected. Please select one to continue.");
-  }
-
+export async function subgraphSetup({ network }: SubgraphSetupParams) {
   const generated = await isGenerated();
   if (generated) {
     await executeCommand("forge", ["build"]);
@@ -38,9 +31,6 @@ export async function subgraphSetup({ env, instance, accessToken, autoAccept }: 
   if (await exists("./subgraph/build")) {
     await rm("./subgraph/build", { recursive: true, force: true });
   }
-
-  const isFixedNetwork = (theGraphMiddleware.entityVersion ?? 4) >= 4;
-  const network = isFixedNetwork ? "settlemint" : sanitizeName(await getNodeName({ env, instance, accessToken }), 30);
 
   if (generated) {
     const { command, args } = await getPackageManagerExecutable();
@@ -80,16 +70,14 @@ export async function subgraphSetup({ env, instance, accessToken, autoAccept }: 
   }
 
   await updateSubgraphYamlConfig(yamlConfig);
-
-  return theGraphMiddleware;
 }
 
-async function getTheGraphMiddleware({
+export async function getTheGraphMiddleware({
   env,
   instance,
   accessToken,
   autoAccept,
-}: Pick<SubgraphSetupParams, "env" | "instance" | "accessToken" | "autoAccept">) {
+}: { env: Partial<DotEnv>; instance: string; accessToken: string; autoAccept: boolean }) {
   const settlemintClient = createSettleMintClient({
     accessToken,
     instance,
@@ -105,11 +93,21 @@ async function getTheGraphMiddleware({
   return theGraphPrompt(env, middlewares, autoAccept);
 }
 
+export async function getTheGraphNetwork({
+  theGraphMiddleware,
+  env,
+  instance,
+  accessToken,
+}: { theGraphMiddleware: Middleware; env: Partial<DotEnv>; instance: string; accessToken: string }) {
+  const isFixedNetwork = (theGraphMiddleware?.entityVersion ?? 4) >= 4;
+  return isFixedNetwork ? SETTLEMINT_NETWORK : sanitizeName(await getNodeName({ env, instance, accessToken }), 30);
+}
+
 async function getNodeName({
   env,
   instance,
   accessToken,
-}: Pick<SubgraphSetupParams, "env" | "instance" | "accessToken">) {
+}: { env: Partial<DotEnv>; instance: string; accessToken: string }) {
   if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
     return "localhost";
   }
