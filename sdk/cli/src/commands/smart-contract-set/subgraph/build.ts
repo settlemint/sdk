@@ -21,7 +21,6 @@ export function subgraphBuildCommand() {
         env,
         instance,
         prefer: "application",
-        allowFallback: true,
       });
 
       await subgraphSetup({

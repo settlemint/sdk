@@ -75,7 +75,6 @@ ${createExamples([
         env,
         instance,
         prefer: usePersonalAccessToken ? "personal" : "application",
-        allowFallback: false,
       });
 
       const settlemint = createSettleMintClient({
