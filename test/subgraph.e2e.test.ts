@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { type DotEnv, exists, loadEnv } from "@settlemint/sdk-utils";
@@ -26,8 +26,8 @@ async function cleanup() {
   }
 }
 
-//beforeAll(cleanup);
-//afterAll(cleanup);
+beforeAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -89,7 +89,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
     expect(output).toInclude("Types generated successfully");
   });
 
-  test("Deploy subgraphs invalid", async () => {
+  test("Deploy subgraphs (invalid subgraph.config.json)", async () => {
     const command = runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "deploy", "--accept-defaults"], {
       cwd: projectDir,
     });
