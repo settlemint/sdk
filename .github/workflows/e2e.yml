@@ -119,7 +119,8 @@ jobs:
         run: |
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
           gh secret set -f .env
+          sed '/SETTLEMINT_ACCESS_TOKEN/d' .env.local > .env.local.tmp
+          mv .env.local.tmp .env.local
           gh secret set -f .env.local
-          gh secret delete SETTLEMINT_ACCESS_TOKEN
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
