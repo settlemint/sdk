@@ -3,4 +3,3 @@
 *-env.d.ts
 *-cache.d.ts
 lib/settlemint/
-docs/**/*.md

@@ -10,11 +10,11 @@
     "email": "support@settlemint.com",
     "url": "https://settlemint.com"
   },
-  "homepage": "https://github.com/settlemint/sdk/blob/main/packages/sdk/README.md",
+  "homepage": "https://github.com/settlemint/sdk/blob/main/sdk/cli/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/settlemint/sdk.git",
-    "directory": "packages/sdk"
+    "directory": "sdk/cli"
   },
   "bugs": {
     "url": "https://github.com/settlemint/sdk/issues",

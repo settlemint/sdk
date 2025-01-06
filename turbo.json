@@ -76,7 +76,8 @@
     },
     "docs": {
       "dependsOn": ["^build"],
-      "outputs": ["sdk/cli/docs/**"]
+      "inputs": ["src/**"],
+      "outputs": ["docs/**"]
     }
   }
 }

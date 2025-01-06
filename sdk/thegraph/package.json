@@ -10,11 +10,11 @@
     "email": "support@settlemint.com",
     "url": "https://settlemint.com"
   },
-  "homepage": "https://github.com/settlemint/sdk/blob/main/packages/js/README.md",
+  "homepage": "https://github.com/settlemint/sdk/blob/main/sdk/thegraph/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/settlemint/sdk.git",
-    "directory": "packages/thegraph"
+    "directory": "sdk/thegraph"
   },
   "bugs": {
     "url": "https://github.com/settlemint/sdk/issues",
