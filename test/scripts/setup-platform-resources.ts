@@ -89,7 +89,7 @@ async function setupSettleMintClient() {
 
 async function defaultResourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
   const env: Partial<DotEnv> = await loadEnv(false, false);
-  return envNames.every((envName) => env[envName] !== undefined);
+  return envNames.every((envName) => typeof env[envName] === "string" && env[envName].trim() !== "");
 }
 
 async function blockchainNodeAlreadyCreated(blockchainNodeName: string) {
