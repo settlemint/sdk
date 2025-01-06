@@ -76,10 +76,12 @@ export function codegenCommand(): Command {
 
         await Promise.all(promises);
 
-        await generateOutput({
-          output: undefined,
-          tsconfig: undefined,
-        });
+        if (hasura || portal || thegraph || blockscout) {
+          await generateOutput({
+            output: undefined,
+            tsconfig: undefined,
+          });
+        }
 
         outro("Codegen complete");
       })
