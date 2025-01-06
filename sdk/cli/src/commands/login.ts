@@ -17,8 +17,9 @@ import { personalAccessTokenPrompt } from "./connect/pat.prompt";
  */
 export function loginCommand(): Command {
   return new Command("login")
-    .description(
-      `Login to your SettleMint account.\n${createExamples([
+    .description("Login to your SettleMint account.")
+    .usage(
+      createExamples([
         {
           description: "Login to your SettleMint account",
           command: "login",
@@ -28,7 +29,7 @@ export function loginCommand(): Command {
           command: "login --token-stdin --accept-defaults",
           commandPrefix: "cat ~/my_token.txt | ",
         },
-      ])}`,
+      ]),
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("-d, --default", "Set this instance as the default")

@@ -45,17 +45,19 @@ export function getRestartCommand({
   return new Command(commandName)
     .alias(alias)
     .description(
-      `Restart a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to restart the default ${type} from your .env file.
-${createExamples([
-  {
-    description: `Restarts the specified ${type} by id`,
-    command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
-  },
-  {
-    description: `Restarts the default ${type} in the production environment`,
-    command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
-  },
-])}`,
+      `Restart a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to restart the default ${type} from your .env file.`,
+    )
+    .usage(
+      createExamples([
+        {
+          description: `Restarts the specified ${type} by id`,
+          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
+        },
+        {
+          description: `Restarts the default ${type} in the production environment`,
+          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
+        },
+      ]),
     )
     .argument(
       "<uniqueName>",

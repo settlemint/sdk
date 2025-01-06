@@ -5,9 +5,9 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter, intro } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
@@ -46,21 +46,23 @@ export function getDeleteCommand({
   return new Command(sanitizeCommandName(name))
     .alias(alias)
     .description(
-      `Delete a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to delete the default ${type} from your .env file.
-${createExamples([
-  {
-    description: `Deletes the specified ${type} by unique name`,
-    command: `platform delete ${type} <${type}-unique-name>`,
-  },
-  {
-    description: `Deletes the default ${type} in the production environment`,
-    command: `platform delete ${type} default --prod`,
-  },
-  {
-    description: `Force deletes the specified ${type} without confirmation`,
-    command: `platform delete ${type} <${type}-unique-name> --force`,
-  },
-])}`,
+      `Delete a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to delete the default ${type} from your .env file.`,
+    )
+    .usage(
+      createExamples([
+        {
+          description: `Deletes the specified ${type} by unique name`,
+          command: `platform delete ${type} <${type}-unique-name>`,
+        },
+        {
+          description: `Deletes the default ${type} in the production environment`,
+          command: `platform delete ${type} default --prod`,
+        },
+        {
+          description: `Force deletes the specified ${type} without confirmation`,
+          command: `platform delete ${type} <${type}-unique-name> --force`,
+        },
+      ]),
     )
     .argument(
       "<uniqueName>",

@@ -63,7 +63,8 @@ export function getCreateCommand({
 }) {
   const cmd = new Command(sanitizeCommandName(name))
     .alias(alias)
-    .description(`Create a new ${type} in the SettleMint platform.\n${createExamples(examples)}`)
+    .description(`Create a new ${type} in the SettleMint platform.`)
+    .usage(createExamples(examples))
     .argument("<name>", `The ${type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
