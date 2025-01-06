@@ -1,4 +1,5 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
@@ -10,7 +11,11 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     return;
   }
 
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  const accessToken = await getApplicationOrPersonalAccessToken({
+    env,
+    instance: env.SETTLEMINT_INSTANCE,
+    prefer: "application",
+  });
   if (!accessToken) {
     return;
   }

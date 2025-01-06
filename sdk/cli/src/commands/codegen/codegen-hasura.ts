@@ -1,16 +1,22 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { note } from "../../../../utils/src/terminal/note";
 
 export async function codegenHasura(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  const accessToken = await getApplicationOrPersonalAccessToken({
+    env,
+    instance: env.SETTLEMINT_INSTANCE,
+    prefer: "application",
+  });
   const adminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET;
   const databaseUrl = env.SETTLEMINT_HASURA_DATABASE_URL;
 
   // Early return if required Hasura environment variables are missing during runtime
   if (process.env.NODE_ENV !== "production" && (!gqlEndpoint || !accessToken || !adminSecret)) {
-    console.warn("[Codegen] Missing required Hasura environment variables");
+    note("[Codegen] Missing required Hasura environment variables", "warn");
     return;
   }
 

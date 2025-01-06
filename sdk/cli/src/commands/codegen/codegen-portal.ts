@@ -1,4 +1,5 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -8,7 +9,14 @@ export async function codegenPortal(env: DotEnv) {
     return;
   }
 
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  const accessToken = await getApplicationOrPersonalAccessToken({
+    env,
+    instance: env.SETTLEMINT_INSTANCE,
+    prefer: "application",
+  });
+  if (!accessToken) {
+    return;
+  }
 
   await generateSchema({
     input: gqlEndpoint,

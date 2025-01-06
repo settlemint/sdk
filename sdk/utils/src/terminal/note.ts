@@ -1,6 +1,12 @@
 import { maskTokens } from "@/terminal/mask-tokens.js";
+import { yellowBright } from "yoctocolors";
 
-export const note = (message: string): void => {
+export const note = (message: string, level: "info" | "warn" = "info"): void => {
   console.log("");
-  console.log(maskTokens(message));
+  const maskedMessage = maskTokens(message);
+  if (level === "warn") {
+    console.warn(yellowBright(maskedMessage));
+  } else {
+    console.log(maskedMessage);
+  }
 };

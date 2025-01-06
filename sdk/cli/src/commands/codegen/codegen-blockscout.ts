@@ -1,6 +1,7 @@
 import { rm, writeFile } from "node:fs/promises";
 import { basename, resolve } from "node:path";
 import { writeTemplate } from "@/commands/codegen/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils";
 
@@ -10,7 +11,11 @@ export async function codegenBlockscout(env: DotEnv) {
     return;
   }
 
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  const accessToken = await getApplicationOrPersonalAccessToken({
+    env,
+    instance: env.SETTLEMINT_INSTANCE,
+    prefer: "application",
+  });
   if (!accessToken) {
     return;
   }
