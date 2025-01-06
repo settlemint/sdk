@@ -1,5 +1,6 @@
 import { writeFile } from "node:fs/promises";
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
 
@@ -14,7 +15,11 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
     };
   }
 
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
+  const accessToken = await getApplicationOrPersonalAccessToken({
+    env,
+    instance: env.SETTLEMINT_INSTANCE,
+    prefer: "application",
+  });
   if (!accessToken) {
     return {
       hasura: false,
