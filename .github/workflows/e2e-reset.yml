@@ -1,0 +1,64 @@
+on:
+  schedule:
+    - cron: '0 6 * * 0' # runs every Sunday morning at 6AM UTC
+  workflow_dispatch:
+
+name: E2E reset
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  actions: write
+  checks: write
+  contents: write
+  deployments: write
+  id-token: write
+  issues: write
+  discussions: write
+  packages: write
+  pages: write
+  pull-requests: write
+  repository-projects: write
+  security-events: write
+  statuses: write
+
+jobs:
+  e2e:
+    name: E2E reset
+    runs-on: namespace-profile-sdk
+    steps:
+      - name: Setup 1Password
+        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load secrets
+        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        env:
+          E2E_GITHUB_TOKEN: "op://platform/SDK E2E/github-token"
+          SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
+          SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
+
+      - name: Login to SettleMint
+        uses: settlemint/settlemint-action@main
+        with:
+          instance: ${{ env.SETTLEMINT_INSTANCE }}
+          personal-access-token: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
+          access-token: "dummy"
+          auto-connect: false
+          workspace: ${{ secrets.SETTLEMINT_WORKSPACE }}
+
+      - name: Delete workspace
+        run: |
+          settlemint platform delete workspace --accept-defaults --force default
+
+      - name: Delete all secrets
+        run: |
+          echo $E2E_GITHUB_TOKEN | gh auth login --with-token
+          gh secret list | while read -r secret _; do
+            gh secret delete "$secret"
+          done
+        env:
+          E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
