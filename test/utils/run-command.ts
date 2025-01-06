@@ -8,7 +8,7 @@ import { isLocalEnv } from "./is-local-env";
 const commandsRunning: Record<string, ChildProcessWithoutNullStreams[]> = {};
 
 const DEFAULT_ENV: Record<string, string> = {
-  ...process.env,
+  ...(Object.fromEntries(Object.entries(process.env).filter(([_, value]) => value !== "")) as Record<string, string>),
   SETTLEMINT_ACCESS_TOKEN: process.env.SETTLEMINT_ACCESS_TOKEN!,
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   CI: isInCi ? "true" : "false",
