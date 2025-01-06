@@ -65,6 +65,6 @@ sdkcli.addCommand(logoutCommand());
  * });
  * ```
  */
-sdkcli.parseAsync(process.argv).catch((reason) => {
-  cancel(reason);
+sdkcli.parseAsync(process.argv).catch((reason: Error) => {
+  cancel(reason.message);
 });

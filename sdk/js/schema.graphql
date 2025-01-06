@@ -14154,6 +14154,9 @@ type Mutation {
   deleteApplication(id: ID!): Application!
   deleteApplicationAccessToken(id: String!): ApplicationAccessTokenDto!
 
+  """Delete an application by its unique name"""
+  deleteApplicationByUniqueName(uniqueName: String!): Application!
+
   """Delete a BlockchainNetwork service"""
   deleteBlockchainNetwork(
     """The unique identifier of the entity"""
@@ -14267,6 +14270,9 @@ type Mutation {
   deleteUserWallet(id: String!): UserWallet!
   deleteUserWalletVerification(id: String!): Boolean!
   deleteWorkspace(workspaceId: ID!): Workspace!
+
+  """Delete a workspace by its unique name"""
+  deleteWorkspaceByUniqueName(uniqueName: String!): Workspace!
   deleteWorkspaceInvite(
     """Unique identifier of the invite to delete"""
     inviteId: ID!
