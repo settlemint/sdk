@@ -37,9 +37,10 @@ async function cleanUpPreviousRuns() {
     return;
   }
   // Make the CI use the same workspace for all runs for one week, create a new workspace each Monday
-  const isMondayBefore7am = new Date().getDay() === 1 && new Date().getHours() < 7;
+  const isMondayBefore7am = new Date().getDay() === 1 && new Date().getHours() < 12;
   if (isMondayBefore7am) {
     await cleanup(true);
+    await login();
   }
 }
 
