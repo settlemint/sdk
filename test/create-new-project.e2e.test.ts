@@ -7,7 +7,11 @@ import {
   getSubgraphYamlConfig,
   updateSubgraphYamlConfig,
 } from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
-import { registerLinkedDependencies, updatePackageJsonToUseLinkedDependencies } from "./utils/link-dependencies";
+import {
+  registerLinkedDependencies,
+  unlinkLinkedDependencies,
+  updatePackageJsonToUseLinkedDependencies,
+} from "./utils/link-dependencies";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
@@ -24,6 +28,7 @@ setDefaultTimeout(15 * 60_000);
 
 async function cleanup() {
   try {
+    await unlinkLinkedDependencies();
     await rmdir(projectDir, { recursive: true });
   } catch (err) {
     console.log("Failed to delete project dir", err);

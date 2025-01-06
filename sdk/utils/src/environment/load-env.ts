@@ -49,11 +49,13 @@ export async function loadEnvironmentEnv<T extends boolean = true>(
   if (!parsed) {
     parsed = {};
   }
-
+  const defaultEnv = Object.fromEntries(
+    Object.entries(process.env).filter(([_, value]) => typeof value === "string" && value !== ""),
+  ) as Record<string, string>;
   try {
     return validate(validateEnv ? DotEnvSchema : DotEnvSchemaPartial, {
       ...parsed,
-      ...process.env,
+      ...defaultEnv,
     }) as T extends true ? DotEnv : DotEnvPartial;
   } catch (error) {
     cancel((error as Error).message);
