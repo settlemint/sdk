@@ -1,4 +1,4 @@
-# [settlemint](../settlemint.md) > connect
+## [settlemint](../settlemint.md) > connect
 
 <pre>Usage: settlemint connect [options]
 
@@ -9,3 +9,4 @@ Options:
   -a, --accept-defaults  Accept the default and previously set values
   -h, --help             display help for command
 </pre>
+

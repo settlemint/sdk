@@ -9,7 +9,7 @@ export function createExamples(examples: CommandExample[]) {
 
 ${examples
   .map(({ description, command, commandPrefix }) => {
-    return `  # ${description}\n  $ ${commandPrefix ?? ""}bunx @settlemint/sdk-cli@latest ${command}`;
+    return `  # ${description}\n  $ ${commandPrefix ?? ""}settlemint ${command}`;
   })
   .join("\n\n")}`;
 }

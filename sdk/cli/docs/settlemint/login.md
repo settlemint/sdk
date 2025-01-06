@@ -1,13 +1,13 @@
-# [settlemint](../settlemint.md) > login
+## [settlemint](../settlemint.md) > login
 
 <pre>Usage: settlemint login 
 Examples:
 
   # Login to your SettleMint account
-  $ bunx @settlemint/sdk-cli@latest login
+  $ settlemint login
 
   # Login to your SettleMint account using a token from STDIN
-  $ cat ~/my_token.txt | bunx @settlemint/sdk-cli@latest login --token-stdin --accept-defaults
+  $ cat ~/my_token.txt | settlemint login --token-stdin --accept-defaults
 
 Login to your SettleMint account.
 
@@ -19,3 +19,4 @@ Options:
                              in the .env file)
   -h, --help                 display help for command
 </pre>
+

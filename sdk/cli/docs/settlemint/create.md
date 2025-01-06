@@ -1,4 +1,4 @@
-# [settlemint](../settlemint.md) > create
+## [settlemint](../settlemint.md) > create
 
 <pre>Usage: settlemint create [options]
 
@@ -10,3 +10,4 @@ Options:
                              are @settlemint/starterkit-asset-tokenization
   -h, --help                 display help for command
 </pre>
+

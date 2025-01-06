@@ -22,16 +22,18 @@ export async function createDocs(command: Command) {
       console.warn(`Skipping ${command.name()} because it's too deep`);
       return;
     }
+    const location = path.join(docsDir, ...parentPath.slice(0, 2));
     const helpText = help.formatHelp(command, help);
-    const location = path.join(docsDir, ...parentPath);
     await mkdir(location, { recursive: true });
-    const docPath = path.join(location, `${command.name().toLowerCase()}.md`);
+    // filename is the command name or the third parent path (if it exists)
+    const filename = parentPath.length > 2 ? parentPath[2] : command.name();
+    const docPath = path.join(location, `${filename.toLowerCase()}.md`);
     const helpTextWithLinks = addLinksToChildCommands(
       command.name(),
       helpText,
       command.commands.map((c) => c.name()),
     );
-    await writeFile(docPath, `${createTitle(parentPath, command.name())}\n\n<pre>${helpTextWithLinks}</pre>`, {
+    await writeFile(docPath, `${createTitle(parentPath, command.name())}\n\n<pre>${helpTextWithLinks}</pre>\n\n`, {
       flag: "a",
     });
     // Process subcommands recursively
@@ -45,9 +47,9 @@ export async function createDocs(command: Command) {
 
 function createTitle(parentPath: string[], commandName: string) {
   if (parentPath.length === 0) {
-    return `# ${commandName}`;
+    return `## ${commandName}`;
   }
-  return `# ${parentPath
+  return `## ${parentPath
     .map((part) => {
       const levels = parentPath.length - parentPath.indexOf(part);
       const prefix = "../".repeat(levels) || "./";

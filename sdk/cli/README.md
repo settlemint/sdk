@@ -45,4 +45,4 @@ Then following the next steps in your terminal.
 
 ## Commands
 
-See the [documentation](./docs/index.md) for available commands.
+See the [documentation](./docs/settlemint.md) for available commands.

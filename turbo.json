@@ -9,7 +9,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
     "build": {
-      "dependsOn": ["^build", "codegen"],
+      "dependsOn": ["^build", "codegen", "docs"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
@@ -58,7 +58,7 @@
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "docs"],
       "cache": false,
       "persistent": true
     },

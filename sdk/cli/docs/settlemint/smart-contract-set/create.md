@@ -1,4 +1,4 @@
-# [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > create
+## [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > create
 
 <pre>Usage: settlemint smart-contract-set create [options]
 
@@ -23,3 +23,4 @@ Options:
   --prod                     Connect to your production environment
   -h, --help                 display help for command
 </pre>
+

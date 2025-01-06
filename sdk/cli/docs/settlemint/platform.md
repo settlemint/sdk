@@ -1,4 +1,4 @@
-# [settlemint](../settlemint.md) > platform
+## [settlemint](../settlemint.md) > platform
 
 <pre>Usage: settlemint platform [options] [command]
 
@@ -14,3 +14,4 @@ Commands:
   <a href="./platform/restart.md">restart</a>         Restart a resource in the SettleMint platform
   help [command]  display help for command
 </pre>
+
