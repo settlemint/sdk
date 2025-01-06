@@ -2,18 +2,31 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { $ } from "bun";
 
+const SDK_PACKAGES = [
+  "cli",
+  "js",
+  "blockscout",
+  "hasura",
+  "ipfs",
+  "minio",
+  "next",
+  "portal",
+  "thegraph",
+  "utils",
+] as const;
+
+const SDK_DIR = join(__dirname, "../../", "sdk");
+
 export async function registerLinkedDependencies() {
-  const sdkDir = join(__dirname, "../../", "sdk");
-  await $`bun link`.cwd(join(sdkDir, "cli"));
-  await $`bun link`.cwd(join(sdkDir, "js"));
-  await $`bun link`.cwd(join(sdkDir, "blockscout"));
-  await $`bun link`.cwd(join(sdkDir, "hasura"));
-  await $`bun link`.cwd(join(sdkDir, "ipfs"));
-  await $`bun link`.cwd(join(sdkDir, "minio"));
-  await $`bun link`.cwd(join(sdkDir, "next"));
-  await $`bun link`.cwd(join(sdkDir, "portal"));
-  await $`bun link`.cwd(join(sdkDir, "thegraph"));
-  await $`bun link`.cwd(join(sdkDir, "utils"));
+  for (const pkg of SDK_PACKAGES) {
+    await $`bun link`.cwd(join(SDK_DIR, pkg));
+  }
+}
+
+export async function unlinkLinkedDependencies() {
+  for (const pkg of SDK_PACKAGES) {
+    await $`bun unlink`.cwd(join(SDK_DIR, pkg));
+  }
 }
 
 export async function updatePackageJsonToUseLinkedDependencies(projectDir: string) {
