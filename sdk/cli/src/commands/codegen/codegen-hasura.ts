@@ -1,8 +1,8 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
+import { note } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { note } from "../../../../utils/src/terminal/note";
 
 export async function codegenHasura(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
