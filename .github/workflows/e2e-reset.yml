@@ -41,18 +41,15 @@ jobs:
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
           SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
 
-      - name: Login to SettleMint
+      - name: Login to SettleMint and delete workspace
         uses: settlemint/settlemint-action@main
         with:
           instance: ${{ env.SETTLEMINT_INSTANCE }}
           personal-access-token: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
-          access-token: "dummy"
+          access-token: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           auto-connect: false
           workspace: ${{ secrets.SETTLEMINT_WORKSPACE }}
-
-      - name: Delete workspace
-        run: |
-          settlemint platform delete workspace --accept-defaults --force default
+          command: platform delete workspace --accept-defaults --force default
 
       - name: Delete all secrets
         run: |
