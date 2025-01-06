@@ -3,29 +3,33 @@ import input from "@inquirer/input";
 import password from "@inquirer/password";
 import type { Application, SettlemintClient } from "@settlemint/sdk-js";
 import { ApplicationAccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
 import { z } from "zod";
+
 /**
  * Prompts the user for the access token of their SettleMint application.
  * If the access token is already present in the environment variables and valid,
  * it will be used. Otherwise, the user will be prompted to enter it.
  *
- * @param env - Partial environment variables, potentially containing a pre-configured access token.
- * @returns A promise that resolves to the validated access token.
- * @throws Will throw an error if the input validation fails.
+ * @param env - Partial environment variables, potentially containing a pre-configured access token
+ * @param application - The application to create the access token for
+ * @param settlemint - The SettleMint client instance
+ * @param accept - Whether to accept existing token without prompting
+ * @returns A promise that resolves to the validated access token
+ * @throws Will throw an error if the input validation fails
  *
  * @example
  * const env: Partial<DotEnv> = { SETTLEMINT_ACCESS_TOKEN: "your-access-token" };
- * const accessToken = await accessTokenPrompt(env);
- * console.log(accessToken); // Output: your-access-token or user input
+ * const accessToken = await applicationAccessTokenPrompt(env, application, settlemint, false);
  */
 export async function applicationAccessTokenPrompt(
   env: Partial<DotEnv>,
   application: Omit<Application, "workspace">,
   settlemint: SettlemintClient,
   accept: boolean,
-): Promise<string> {
+): Promise<string | undefined> {
   const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
-  const defaultPossible = accept && defaultAccessToken;
+  const defaultPossible = (accept || isInCi) && defaultAccessToken;
 
   if (defaultPossible) {
     return defaultAccessToken;
