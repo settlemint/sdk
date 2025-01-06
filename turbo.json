@@ -73,6 +73,10 @@
     },
     "typecheck": {
       "dependsOn": ["^build", "codegen"]
+    },
+    "docs": {
+      "dependsOn": ["^build"],
+      "outputs": ["sdk/cli/docs/**"]
     }
   }
 }

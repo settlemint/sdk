@@ -137,7 +137,7 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Run tests and checks
-        run: bunx turbo format lint typecheck build attw publint registry test:coverage publish-npm --env-mode=loose
+        run: bunx turbo format lint typecheck build attw publint registry test:coverage publish-npm docs --env-mode=loose
 
       - name: Check typings of E2E tests
         run: bun test:typecheck
