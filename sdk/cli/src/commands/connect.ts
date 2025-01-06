@@ -12,7 +12,7 @@ import {
 } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, note } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
@@ -85,6 +85,24 @@ export function connectCommand(): Command {
         const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
         const cDeployment = await customDeploymentPrompt(env, customDeployment, autoAccept);
         const blockscout = await blockscoutPrompt(env, insights, autoAccept);
+
+        if (autoAccept) {
+          const selectedServices = [
+            `Workspace: ${workspace.name}`,
+            `Application: ${application.name}`,
+            blockchainNode && `Blockchain Network: ${blockchainNode?.blockchainNetwork?.name}`,
+            blockchainNode && `Blockchain Node: ${blockchainNode?.name}`,
+            hasura && `Hasura: ${hasura?.name}`,
+            thegraph && `TheGraph: ${thegraph?.name}`,
+            portal && `Portal: ${portal?.name}`,
+            ipfs && `IPFS: ${ipfs?.name}`,
+            minio && `MinIO: ${minio?.name}`,
+            hdPrivateKey && `HD Private Key: ${hdPrivateKey?.name}`,
+            cDeployment && `Custom Deployment: ${cDeployment?.name}`,
+            blockscout && `Blockscout: ${blockscout?.name}`,
+          ];
+          note(`Selected services:\n  • ${selectedServices.filter(Boolean).join("\n  • ")}\n`);
+        }
 
         await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: aatToken,
