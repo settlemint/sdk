@@ -20,3 +20,15 @@
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
 </div>
+
+## Contributing
+
+We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
+
+1. Fork the repository
+2. Create a new branch for your feature or bug fix
+3. Make your changes and commit them with a clear commit message
+4. Push your changes to your fork
+5. Create a pull request to the main repository
+
+Please ensure that your code follows the existing style and includes appropriate tests and documentation.

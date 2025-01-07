@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-blockscout">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/{{ package-name }}">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -35,60 +35,11 @@
 
 ## About
 
-The SettleMint Blockscout SDK provides a seamless way to interact with Blockscout APIs for blockchain data exploration and analysis. It enables you to easily query transaction data, blocks, addresses, smart contracts and more from your SettleMint-powered blockchain networks.
-
-For detailed information about using Blockscout with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/insights/).
+{{ about }}
 
 ## API Reference
 
-### Creating a Blockscout Client
-
-#### Server-side Usage
-
-```typescript
-import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
-
-const { client } = createBlockscoutClient({
-  instance: 'https://your-blockscout-instance.com',
-  accessToken: 'your-access-token',
-});
-```
-
-#### Browser-side Usage
-
-```typescript
-import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
-
-const { client } = createBlockscoutClient({});
-```
-
-### Making GraphQL Queries
-
-```typescript
-import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
-
-const { client, graphql } = createBlockscoutClient({
-  instance: 'https://your-blockscout-instance.com',
-  accessToken: 'your-access-token',
-});
-
-// Define your query using the type-safe graphql template literal
-const query = graphql(`
-  query GetTransaction($hash: String!) {
-    transaction(hash: $hash) {
-      hash
-      blockNumber
-      value
-      gasUsed
-    }
-  }
-`);
-
-// Execute the query
-const result = await client.request(query, {
-  hash: "0x123abc..."
-});
-```
+{{ api-reference }}
 
 ## Contributing
 
