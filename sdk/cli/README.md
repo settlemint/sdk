@@ -29,6 +29,7 @@
 ## Table of Contents
 
 - [About](#about)
+- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -36,6 +37,10 @@
 ## About
 
 The SettleMint CLI provides a command-line interface for interacting with the SettleMint platform. It enables you to manage your blockchain networks, deploy smart contracts, configure your SettleMint infrastructure directly from the terminal.
+
+## Usage
+
+TODO: define default
 
 ## API Reference
 

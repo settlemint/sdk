@@ -29,6 +29,7 @@
 ## Table of Contents
 
 - [About](#about)
+- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -36,6 +37,10 @@
 ## About
 
 The SettleMint Next.js SDK provides a seamless integration layer between Next.js applications and the SettleMint platform. It offers a collection of utilities, hooks, and components specifically designed for Next.js applications, making it easy to interact with SettleMint's services while following Next.js best practices.
+
+## Usage
+
+TODO: define default
 
 ## API Reference
 

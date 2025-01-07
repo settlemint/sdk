@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { exists, readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 
@@ -6,6 +6,7 @@ interface Placeholders {
   "package-name": string;
   about: string;
   "api-reference": string;
+  usage: string;
 }
 
 /**
@@ -37,12 +38,15 @@ async function generateReadme() {
       const { name } = tryParseJson<{ name: string }>(packageJson);
       const about = (await readFile(join(sdkDir, pkg, "docs", "ABOUT.md"), "utf-8")).trim();
       const apiReference = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
+      const usagePath = join(sdkDir, pkg, "docs", "USAGE.md");
+      const usage = (await exists(usagePath)) ? (await readFile(usagePath, "utf-8")).trim() : "TODO: define default";
       await writeFile(
         readmePath,
         replacePlaceholders(template, {
           "package-name": name,
           about,
           "api-reference": apiReference,
+          usage,
         }),
       );
       console.log(`Successfully generated README.md for ${pkg}`);

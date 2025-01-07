@@ -29,6 +29,7 @@
 ## Table of Contents
 
 - [About](#about)
+- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -39,7 +40,7 @@ The SettleMint Blockscout SDK provides a seamless way to interact with Blockscou
 
 For detailed information about using Blockscout with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/insights/).
 
-## API Reference
+## Usage
 
 ### Creating a Blockscout Client
 
@@ -89,6 +90,10 @@ const result = await client.request(query, {
   hash: "0x123abc..."
 });
 ```
+
+## API Reference
+
+TODO
 
 ## Contributing
 

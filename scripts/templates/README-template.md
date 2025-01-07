@@ -29,6 +29,7 @@
 ## Table of Contents
 
 - [About](#about)
+- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -36,6 +37,10 @@
 ## About
 
 {{ about }}
+
+## Usage
+
+{{ usage }}
 
 ## API Reference
 
