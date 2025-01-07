@@ -1,4 +1,4 @@
-# [settlemint](../settlemint.md) > create
+<h1><a href="../settlemint.md">settlemint</a> > create</h1>
 
 <pre>Usage: settlemint create [options]
 

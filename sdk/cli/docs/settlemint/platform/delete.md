@@ -1,4 +1,4 @@
-# [settlemint](../../settlemint.md) > [platform](../platform.md) > delete
+<h1><a href="../../settlemint.md">settlemint</a> > <a href="../platform.md">platform</a> > delete</h1>
 
 <pre>Usage: settlemint platform delete|d [options] [command]
 
@@ -20,9 +20,7 @@ Commands:
   help [command]                        display help for command
 </pre>
 
-<h2 id="delete-workspace">
-  <a href="../delete.md">delete</a> > workspace
-</h2>
+<h3 id="delete-workspace"><a href="../delete.md">delete</a> > workspace</h3>
 
 <pre>Usage: settlemint platform delete workspace|w 
 Examples:
@@ -51,9 +49,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="delete-application">
-  <a href="../delete.md">delete</a> > application
-</h2>
+<h3 id="delete-application"><a href="../delete.md">delete</a> > application</h3>
 
 <pre>Usage: settlemint platform delete application|a 
 Examples:

@@ -1,4 +1,4 @@
-# [settlemint](../../settlemint.md) > [platform](../platform.md) > restart
+<h1><a href="../../settlemint.md">settlemint</a> > <a href="../platform.md">platform</a> > restart</h1>
 
 <pre>Usage: settlemint platform restart [options] [command]
 
@@ -18,9 +18,7 @@ Commands:
   help [command]                                display help for command
 </pre>
 
-<h2 id="restart-blockchain-network">
-  <a href="../restart.md">restart</a> > blockchain-network
-</h2>
+<h3 id="restart-blockchain-network"><a href="../restart.md">restart</a> > blockchain-network</h3>
 
 <pre>Usage: settlemint platform restart blockchain-network|bn 
 Examples:
@@ -47,9 +45,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-custom-deployment">
-  <a href="../restart.md">restart</a> > custom-deployment
-</h2>
+<h3 id="restart-custom-deployment"><a href="../restart.md">restart</a> > custom-deployment</h3>
 
 <pre>Usage: settlemint platform restart custom-deployment|cd 
 Examples:
@@ -76,9 +72,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-insights">
-  <a href="../restart.md">restart</a> > insights
-</h2>
+<h3 id="restart-insights"><a href="../restart.md">restart</a> > insights</h3>
 
 <pre>Usage: settlemint platform restart insights|in [options] [command]
 
@@ -88,16 +82,14 @@ Options:
   -h, --help                            display help for command
 
 Commands:
-  <a href="./insights/blockscout.md">blockscout|bs</a> [options] &lt;uniqueName&gt;  Restart a insights in the SettleMint
+  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;uniqueName&gt;  Restart a insights in the SettleMint
                                         platform. Provide the insights ID or
                                         use &#039;default&#039; to restart the default
                                         insights from your .env file.
   help [command]                        display help for command
 </pre>
 
-<h2 id="restart-insights-blockscout">
-  <a href="../../restart.md">restart</a> > <a href="../insights.md">insights</a> > blockscout
-</h2>
+<h3 id="insights-blockscout"><a href="./restart.md">restart</a> > <a href="#restart-insights">insights</a> > blockscout</h3>
 
 <pre>Usage: settlemint platform restart insights blockscout|bs 
 Examples:
@@ -122,9 +114,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-integration-tool">
-  <a href="../restart.md">restart</a> > integration-tool
-</h2>
+<h3 id="restart-integration-tool"><a href="../restart.md">restart</a> > integration-tool</h3>
 
 <pre>Usage: settlemint platform restart integration-tool|it [options] [command]
 
@@ -134,7 +124,7 @@ Options:
   -h, --help                        display help for command
 
 Commands:
-  <a href="./integration-tool/hasura.md">hasura|ha</a> [options] &lt;uniqueName&gt;  Restart a integration tool in the
+  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;uniqueName&gt;  Restart a integration tool in the
                                     SettleMint platform. Provide the
                                     integration tool ID or use &#039;default&#039; to
                                     restart the default integration tool from
@@ -142,9 +132,7 @@ Commands:
   help [command]                    display help for command
 </pre>
 
-<h2 id="restart-integration-tool-hasura">
-  <a href="../../restart.md">restart</a> > <a href="../integration-tool.md">integration-tool</a> > hasura
-</h2>
+<h3 id="integration-tool-hasura"><a href="./restart.md">restart</a> > <a href="#restart-integration-tool">integration-tool</a> > hasura</h3>
 
 <pre>Usage: settlemint platform restart integration-tool hasura|ha 
 Examples:
@@ -170,9 +158,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-middleware">
-  <a href="../restart.md">restart</a> > middleware
-</h2>
+<h3 id="restart-middleware"><a href="../restart.md">restart</a> > middleware</h3>
 
 <pre>Usage: settlemint platform restart middleware|mw [options] [command]
 
@@ -182,14 +168,12 @@ Options:
   -h, --help                                        display help for command
 
 Commands:
-  <a href="./middleware/graph.md">graph|gr</a> [options] &lt;uniqueName&gt;                   Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
-  <a href="./middleware/smart-contract-portal.md">smart-contract-portal|scp</a> [options] &lt;uniqueName&gt;  Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
+  <a href="#middleware-graph">graph|gr</a> [options] &lt;uniqueName&gt;                   Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
+  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;uniqueName&gt;  Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
   help [command]                                    display help for command
 </pre>
 
-<h2 id="restart-middleware-graph">
-  <a href="../../restart.md">restart</a> > <a href="../middleware.md">middleware</a> > graph
-</h2>
+<h3 id="middleware-graph"><a href="./restart.md">restart</a> > <a href="#restart-middleware">middleware</a> > graph</h3>
 
 <pre>Usage: settlemint platform restart middleware graph|gr 
 Examples:
@@ -214,9 +198,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-middleware-smart-contract-portal">
-  <a href="../../restart.md">restart</a> > <a href="../middleware.md">middleware</a> > smart-contract-portal
-</h2>
+<h3 id="middleware-smart-contract-portal"><a href="./restart.md">restart</a> > <a href="#restart-middleware">middleware</a> > smart-contract-portal</h3>
 
 <pre>Usage: settlemint platform restart middleware smart-contract-portal|scp 
 Examples:
@@ -241,9 +223,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-private-key">
-  <a href="../restart.md">restart</a> > private-key
-</h2>
+<h3 id="restart-private-key"><a href="../restart.md">restart</a> > private-key</h3>
 
 <pre>Usage: settlemint platform restart private-key|pk [options] [command]
 
@@ -253,13 +233,11 @@ Options:
   -h, --help                               display help for command
 
 Commands:
-  <a href="./private-key/hd-ecdsa-p256.md">hd-ecdsa-p256|hd</a> [options] &lt;uniqueName&gt;  Restart a private key in the SettleMint platform. Provide the private key ID or use &#039;default&#039; to restart the default private key from your .env file.
+  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;uniqueName&gt;  Restart a private key in the SettleMint platform. Provide the private key ID or use &#039;default&#039; to restart the default private key from your .env file.
   help [command]                           display help for command
 </pre>
 
-<h2 id="restart-private-key-hd-ecdsa-p256">
-  <a href="../../restart.md">restart</a> > <a href="../private-key.md">private-key</a> > hd-ecdsa-p256
-</h2>
+<h3 id="private-key-hd-ecdsa-p256"><a href="./restart.md">restart</a> > <a href="#restart-private-key">private-key</a> > hd-ecdsa-p256</h3>
 
 <pre>Usage: settlemint platform restart private-key hd-ecdsa-p256|hd 
 Examples:
@@ -284,9 +262,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-storage">
-  <a href="../restart.md">restart</a> > storage
-</h2>
+<h3 id="restart-storage"><a href="../restart.md">restart</a> > storage</h3>
 
 <pre>Usage: settlemint platform restart storage|st [options] [command]
 
@@ -296,20 +272,18 @@ Options:
   -h, --help                      display help for command
 
 Commands:
-  <a href="./storage/ipfs.md">ipfs|ip</a> [options] &lt;uniqueName&gt;  Restart a storage in the SettleMint platform.
+  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;uniqueName&gt;  Restart a storage in the SettleMint platform.
                                   Provide the storage ID or use &#039;default&#039; to
                                   restart the default storage from your .env
                                   file.
-  <a href="./storage/minio.md">minio|m</a> [options] &lt;uniqueName&gt;  Restart a storage in the SettleMint platform.
+  <a href="#storage-minio">minio|m</a> [options] &lt;uniqueName&gt;  Restart a storage in the SettleMint platform.
                                   Provide the storage ID or use &#039;default&#039; to
                                   restart the default storage from your .env
                                   file.
   help [command]                  display help for command
 </pre>
 
-<h2 id="restart-storage-ipfs">
-  <a href="../../restart.md">restart</a> > <a href="../storage.md">storage</a> > ipfs
-</h2>
+<h3 id="storage-ipfs"><a href="./restart.md">restart</a> > <a href="#restart-storage">storage</a> > ipfs</h3>
 
 <pre>Usage: settlemint platform restart storage ipfs|ip 
 Examples:
@@ -334,9 +308,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-storage-minio">
-  <a href="../../restart.md">restart</a> > <a href="../storage.md">storage</a> > minio
-</h2>
+<h3 id="storage-minio"><a href="./restart.md">restart</a> > <a href="#restart-storage">storage</a> > minio</h3>
 
 <pre>Usage: settlemint platform restart storage minio|m 
 Examples:

@@ -1,4 +1,4 @@
-# [settlemint](../../settlemint.md) > [platform](../platform.md) > update
+<h1><a href="../../settlemint.md">settlemint</a> > <a href="../platform.md">platform</a> > update</h1>
 
 <pre>Usage: settlemint platform update|u [options] [command]
 
@@ -12,9 +12,7 @@ Commands:
   help [command]                                        display help for command
 </pre>
 
-<h2 id="update-custom-deployment">
-  <a href="../update.md">update</a> > custom-deployment
-</h2>
+<h3 id="update-custom-deployment"><a href="../update.md">update</a> > custom-deployment</h3>
 
 <pre>Usage: settlemint platform update custom-deployment|custom-deployments [options] &lt;tag&gt;
 

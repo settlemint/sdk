@@ -1,4 +1,4 @@
-# [settlemint](../settlemint.md) > login
+<h1><a href="../settlemint.md">settlemint</a> > login</h1>
 
 <pre>Usage: settlemint login 
 Examples:

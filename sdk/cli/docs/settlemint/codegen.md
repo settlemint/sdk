@@ -1,4 +1,4 @@
-# [settlemint](../settlemint.md) > codegen
+<h1><a href="../settlemint.md">settlemint</a> > codegen</h1>
 
 <pre>Usage: settlemint codegen [options]
 

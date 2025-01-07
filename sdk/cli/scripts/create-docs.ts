@@ -8,6 +8,8 @@ const exitOverride = () => {
 };
 const sdkCli = sdkCliCommand(exitOverride);
 
+const MAX_DEPTH = 2;
+
 export async function createDocs(command: Command) {
   console.log("Starting documentation generation...");
   const help = new Help();
@@ -24,18 +26,18 @@ export async function createDocs(command: Command) {
       console.warn(`Skipping ${command.name()} because it's too deep`);
       return;
     }
-    const location = join(docsDir, ...parentPath.slice(0, 2));
+    const location = join(docsDir, ...parentPath.slice(0, MAX_DEPTH));
     const helpText = escapeHtml(help.formatHelp(command, help));
     await mkdir(location, { recursive: true });
-    const useParentFile = parentPath.length > 2;
-    const filename = useParentFile ? parentPath[2] : command.name();
+    const useParentFile = parentPath.length > MAX_DEPTH;
+    const filename = useParentFile ? parentPath[MAX_DEPTH] : command.name();
     const docPath = join(location, `${filename.toLowerCase()}.md`);
     console.log(`Generating documentation for ${command.name()} at ${docPath}`);
     const helpTextWithLinks = addLinksToChildCommands(
       command.name(),
       helpText,
       command.commands.map((c) => c.name()),
-      useParentFile,
+      parentPath.length >= MAX_DEPTH,
     );
     await writeFile(
       docPath,
@@ -55,28 +57,43 @@ export async function createDocs(command: Command) {
 }
 
 function createTitle(parentPath: string[], commandName: string, useParentFile: boolean) {
-  const parents = parentPath.map((part) => {
-    const levels = parentPath.length - parentPath.indexOf(part);
+  if (parentPath.length === 0) {
+    return `# ${commandName}`;
+  }
+  const parentsToShow = useParentFile ? parentPath.slice(2) : parentPath;
+  const parent = parentPath[parentPath.length - 1];
+  const parents = parentsToShow.map((part, index: number) => {
+    if (useParentFile && index > 0) {
+      const parent = parentsToShow[index - 1];
+      return {
+        name: part,
+        url: `#${parent.toLowerCase()}-${part.toLowerCase()}`,
+      };
+    }
+    let levels = parentPath.length - parentPath.indexOf(part);
+    if (useParentFile && levels >= MAX_DEPTH) {
+      levels = 0;
+    }
     const prefix = "../".repeat(levels) || "./";
     return {
       name: part,
       url: `${prefix}${part.toLowerCase()}.md`,
     };
   });
-  if (parentPath.length === 0) {
-    return `# ${commandName}`;
+
+  if (!useParentFile) {
+    return `<h1>${parents
+      .map((parent) => {
+        return `<a href="${parent.url}">${escapeHtml(parent.name)}</a>`;
+      })
+      .join(" > ")} > ${commandName}</h1>`;
   }
-  if (useParentFile) {
-    const parentsToShow = parents.slice(2);
-    return `<h2 id="${parentsToShow.map((p) => p.name.toLowerCase()).join("-")}-${commandName.toLowerCase()}">
-  ${parentsToShow.map((p) => `<a href="${p.url}">${escapeHtml(p.name)}</a>`).join(" > ")} > ${escapeHtml(commandName)}
-</h2>`;
-  }
-  return `# ${parents
+
+  return `<h3 id="${parent.toLowerCase()}-${commandName.toLowerCase()}">${parents
     .map((parent) => {
-      return `[${parent.name}](${parent.url})`;
+      return `<a href="${parent.url}">${escapeHtml(parent.name)}</a>`;
     })
-    .join(" > ")} > ${commandName}`;
+    .join(" > ")} > ${commandName}</h3>`;
 }
 
 function addLinksToChildCommands(commandName: string, helpText: string, childCommands: string[], onSamePage: boolean) {
@@ -89,7 +106,7 @@ function addLinksToChildCommands(commandName: string, helpText: string, childCom
     // Create regex that matches the command name at the start of a line
     const regex = new RegExp(`^(\\s{2})(${childCommand}[a-zA-Z\\|]+|${childCommand})\\b`, "gm");
     // Replace with link while preserving any leading whitespace
-    if (!onSamePage) {
+    if (onSamePage) {
       updatedText = updatedText.replace(
         regex,
         `$1<a href="#${commandName.toLowerCase()}-${childCommand.toLowerCase()}">$2</a>`,

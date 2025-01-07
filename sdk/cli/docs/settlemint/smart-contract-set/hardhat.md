@@ -1,4 +1,4 @@
-# [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > hardhat
+<h1><a href="../../settlemint.md">settlemint</a> > <a href="../smart-contract-set.md">smart-contract-set</a> > hardhat</h1>
 
 <pre>Usage: settlemint smart-contract-set hardhat|h [options] [command]
 
@@ -16,9 +16,7 @@ Commands:
   help [command]     display help for command
 </pre>
 
-<h2 id="hardhat-build">
-  <a href="../hardhat.md">hardhat</a> > build
-</h2>
+<h3 id="hardhat-build"><a href="../hardhat.md">hardhat</a> > build</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat build [options]
 
@@ -28,9 +26,7 @@ Options:
   -h, --help  Get list of possible hardhat compile options
 </pre>
 
-<h2 id="hardhat-deploy">
-  <a href="../hardhat.md">hardhat</a> > deploy
-</h2>
+<h3 id="hardhat-deploy"><a href="../hardhat.md">hardhat</a> > deploy</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy [options] [command]
 
@@ -38,16 +34,14 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  <a href="./deploy/local.md">local</a> [options]   Deploy the smart contracts using Hardhat/ignition to the
+  <a href="#deploy-local">local</a> [options]   Deploy the smart contracts using Hardhat/ignition to the
                     local development network
-  <a href="./deploy/remote.md">remote</a> [options]  Deploy the smart contracts using Hardhat/ignition to the
+  <a href="#deploy-remote">remote</a> [options]  Deploy the smart contracts using Hardhat/ignition to the
                     remote network on the platform
   help [command]    display help for command
 </pre>
 
-<h2 id="hardhat-deploy-local">
-  <a href="../../hardhat.md">hardhat</a> > <a href="../deploy.md">deploy</a> > local
-</h2>
+<h3 id="deploy-local"><a href="./hardhat.md">hardhat</a> > <a href="#hardhat-deploy">deploy</a> > local</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy local [options]
 
@@ -63,9 +57,7 @@ Options:
   -h, --help                     display help for command
 </pre>
 
-<h2 id="hardhat-deploy-remote">
-  <a href="../../hardhat.md">hardhat</a> > <a href="../deploy.md">deploy</a> > remote
-</h2>
+<h3 id="deploy-remote"><a href="./hardhat.md">hardhat</a> > <a href="#hardhat-deploy">deploy</a> > remote</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy remote [options]
 
@@ -93,9 +85,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h2 id="hardhat-network">
-  <a href="../hardhat.md">hardhat</a> > network
-</h2>
+<h3 id="hardhat-network"><a href="../hardhat.md">hardhat</a> > network</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat network [options]
 
@@ -105,9 +95,7 @@ Options:
   -h, --help  Get list of possible hardhat node options
 </pre>
 
-<h2 id="hardhat-script">
-  <a href="../hardhat.md">hardhat</a> > script
-</h2>
+<h3 id="hardhat-script"><a href="../hardhat.md">hardhat</a> > script</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat script [options] [command]
 
@@ -115,16 +103,14 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  <a href="./script/remote.md">remote</a> [options]  Run a Hardhat script to deploy a contract on the platform
+  <a href="#script-remote">remote</a> [options]  Run a Hardhat script to deploy a contract on the platform
                     or interact with a deployed contract.
-  <a href="./script/local.md">local</a> [options]   Run a Hardhat script to deploy a contract on the platform
+  <a href="#script-local">local</a> [options]   Run a Hardhat script to deploy a contract on the platform
                     or interact with a deployed contract.
   help [command]    display help for command
 </pre>
 
-<h2 id="hardhat-script-remote">
-  <a href="../../hardhat.md">hardhat</a> > <a href="../script.md">script</a> > remote
-</h2>
+<h3 id="script-remote"><a href="./hardhat.md">hardhat</a> > <a href="#hardhat-script">script</a> > remote</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat script remote [options]
 
@@ -144,9 +130,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h2 id="hardhat-script-local">
-  <a href="../../hardhat.md">hardhat</a> > <a href="../script.md">script</a> > local
-</h2>
+<h3 id="script-local"><a href="./hardhat.md">hardhat</a> > <a href="#hardhat-script">script</a> > local</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat script local [options]
 
@@ -160,9 +144,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="hardhat-test">
-  <a href="../hardhat.md">hardhat</a> > test
-</h2>
+<h3 id="hardhat-test"><a href="../hardhat.md">hardhat</a> > test</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat test [options]
 

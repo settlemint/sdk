@@ -1,4 +1,4 @@
-# [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > create
+<h1><a href="../../settlemint.md">settlemint</a> > <a href="../smart-contract-set.md">smart-contract-set</a> > create</h1>
 
 <pre>Usage: settlemint smart-contract-set create [options]
 
