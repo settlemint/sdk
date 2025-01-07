@@ -31,6 +31,7 @@ type DefaultArgs = {
  * @param options.execute.cmd - The Commander command instance to configure with options and action
  * @param options.execute.baseAction - Base action function that handles common create functionality like env loading and client setup
  * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
+ * @param options.requiresDeployment - Whether the resource requires deployment (defaults to true)
  * @returns A configured Commander command for creating the specified resource type
  */
 export function getCreateCommand({
@@ -40,6 +41,7 @@ export function getCreateCommand({
   examples,
   execute,
   usePersonalAccessToken = true,
+  requiresDeployment = true,
 }: {
   name: string;
   type: ResourceType;
@@ -60,6 +62,7 @@ export function getCreateCommand({
     ) => void | Promise<void>,
   ) => void;
   usePersonalAccessToken?: boolean;
+  requiresDeployment?: boolean;
 }) {
   const cmd = new Command(sanitizeCommandName(name))
     .alias(alias)
@@ -68,9 +71,14 @@ export function getCreateCommand({
     .argument("<name>", `The ${type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
-    .option("-w, --wait", "Wait until deployed")
-    .option("-r, --restart-if-timeout", "Restart if wait time is exceeded")
+
     .option("--prod", "Connect to production environment");
+
+  if (requiresDeployment) {
+    cmd
+      .option("-w, --wait", "Wait until deployed")
+      .option("-r, --restart-if-timeout", "Restart if wait time is exceeded");
+  }
 
   execute(cmd, async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout }, createFunction) => {
     intro(`Creating ${type} in the SettleMint platform`);

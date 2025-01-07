@@ -43,8 +43,6 @@ Arguments:
 Options:
   -a, --accept-defaults                  Accept the default values
   -d, --default                          Save as default workspace
-  -w, --wait                             Wait until deployed
-  -r, --restart-if-timeout               Restart if wait time is exceeded
   --prod                                 Connect to production environment
   --company-name &lt;companyName&gt;           Company name
   --address-line-1 &lt;addressLine1&gt;        Address line 1
@@ -81,8 +79,6 @@ Arguments:
 Options:
   -a, --accept-defaults        Accept the default values
   -d, --default                Save as default application
-  -w, --wait                   Wait until deployed
-  -r, --restart-if-timeout     Restart if wait time is exceeded
   --prod                       Connect to production environment
   -w, --workspace &lt;workspace&gt;  The workspace unique name to create the
                                application in (defaults to workspace from env)
@@ -123,9 +119,9 @@ Arguments:
 Options:
   -a, --accept-defaults            Accept the default values
   -d, --default                    Save as default blockchain network
+  --prod                           Connect to production environment
   -w, --wait                       Wait until deployed
   -r, --restart-if-timeout         Restart if wait time is exceeded
-  --prod                           Connect to production environment
   --provider &lt;provider&gt;            Network provider
   --region &lt;region&gt;                Deployment region
   --size &lt;size&gt;                    Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -182,9 +178,9 @@ Arguments:
 Options:
   -a, --accept-defaults                     Accept the default values
   -d, --default                             Save as default blockchain node
+  --prod                                    Connect to production environment
   -w, --wait                                Wait until deployed
   -r, --restart-if-timeout                  Restart if wait time is exceeded
-  --prod                                    Connect to production environment
   --provider &lt;provider&gt;                     Network provider
   --region &lt;region&gt;                         Deployment region
   --size &lt;size&gt;                             Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
@@ -235,9 +231,9 @@ Arguments:
 Options:
   -a, --accept-defaults               Accept the default values
   -d, --default                       Save as default private key
+  --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --prod                              Connect to production environment
   --provider &lt;provider&gt;               Network provider
   --region &lt;region&gt;                   Deployment region
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -271,9 +267,9 @@ Arguments:
 Options:
   -a, --accept-defaults               Accept the default values
   -d, --default                       Save as default private key
+  --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --prod                              Connect to production environment
   --provider &lt;provider&gt;               Network provider
   --region &lt;region&gt;                   Deployment region
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -319,9 +315,9 @@ Arguments:
 Options:
   -a, --accept-defaults               Accept the default values
   -d, --default                       Save as default middleware
+  --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --prod                              Connect to production environment
   --provider &lt;provider&gt;               Network provider
   --region &lt;region&gt;                   Deployment region
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -352,9 +348,9 @@ Arguments:
 Options:
   -a, --accept-defaults                                   Accept the default values
   -d, --default                                           Save as default middleware
+  --prod                                                  Connect to production environment
   -w, --wait                                              Wait until deployed
   -r, --restart-if-timeout                                Restart if wait time is exceeded
-  --prod                                                  Connect to production environment
   --provider &lt;provider&gt;                                   Network provider
   --region &lt;region&gt;                                       Deployment region
   --size &lt;size&gt;                                           Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
@@ -401,9 +397,9 @@ Arguments:
 Options:
   -a, --accept-defaults        Accept the default values
   -d, --default                Save as default storage
+  --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
-  --prod                       Connect to production environment
   --provider &lt;provider&gt;        Network provider
   --region &lt;region&gt;            Deployment region
   --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -433,9 +429,9 @@ Arguments:
 Options:
   -a, --accept-defaults        Accept the default values
   -d, --default                Save as default storage
+  --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
-  --prod                       Connect to production environment
   --provider &lt;provider&gt;        Network provider
   --region &lt;region&gt;            Deployment region
   --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -480,9 +476,9 @@ Arguments:
 Options:
   -a, --accept-defaults        Accept the default values
   -d, --default                Save as default integration tool
+  --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
-  --prod                       Connect to production environment
   --provider &lt;provider&gt;        Network provider
   --region &lt;region&gt;            Deployment region
   --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -527,9 +523,9 @@ Arguments:
 Options:
   -a, --accept-defaults               Accept the default values
   -d, --default                       Save as default insights
+  --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --prod                              Connect to production environment
   --provider &lt;provider&gt;               Network provider
   --region &lt;region&gt;                   Deployment region
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
@@ -566,8 +562,6 @@ Arguments:
 Options:
   -a, --accept-defaults            Accept the default values
   -d, --default                    Save as default application access token
-  -w, --wait                       Wait until deployed
-  -r, --restart-if-timeout         Restart if wait time is exceeded
   --prod                           Connect to production environment
   -a, --application &lt;application&gt;  The application unique name to create the
                                    application access token for (defaults to

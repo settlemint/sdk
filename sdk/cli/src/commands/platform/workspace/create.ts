@@ -170,5 +170,6 @@ export function workspaceCreateCommand() {
         command: "platform create workspace my-workspace -d",
       },
     ],
+    requiresDeployment: false,
   });
 }
