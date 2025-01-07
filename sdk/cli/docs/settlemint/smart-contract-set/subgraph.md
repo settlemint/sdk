@@ -1,4 +1,4 @@
-## [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > subgraph
+# [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > subgraph
 
 <pre>Usage: settlemint smart-contract-set subgraph|sg [options] [command]
 
@@ -14,7 +14,7 @@ Commands:
   help [command]                   display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [subgraph](../subgraph.md) > build
+<h2 id="subgraph-build"><a href="../subgraph.md">subgraph</a> > build</h2>
 
 <pre>Usage: settlemint smart-contract-set subgraph build [options]
 
@@ -24,7 +24,7 @@ Options:
   -h, --help  display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [subgraph](../subgraph.md) > codegen
+<h2 id="subgraph-codegen"><a href="../subgraph.md">subgraph</a> > codegen</h2>
 
 <pre>Usage: settlemint smart-contract-set subgraph codegen [options]
 
@@ -34,7 +34,7 @@ Options:
   -h, --help  display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [subgraph](../subgraph.md) > deploy
+<h2 id="subgraph-deploy"><a href="../subgraph.md">subgraph</a> > deploy</h2>
 
 <pre>Usage: settlemint smart-contract-set subgraph deploy [options] [subgraphName]
 
