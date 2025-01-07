@@ -8,11 +8,11 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  <a href="./smart-contract-set/create.md">create</a> [options]  Bootstrap your smart contract set
-  <a href="./smart-contract-set/foundry.md">foundry|f</a>         Foundry commands for building, testing and deploying smart
+  <a href="#smart-contract-set-create">create</a> [options]  Bootstrap your smart contract set
+  <a href="#smart-contract-set-foundry">foundry|f</a>         Foundry commands for building, testing and deploying smart
                     contracts
-  <a href="./smart-contract-set/hardhat.md">hardhat|h</a>         Hardhat commands for Ethereum development environment
-  <a href="./smart-contract-set/subgraph.md">subgraph|sg</a>       Commands for managing TheGraph subgraphs for smart contract
+  <a href="#smart-contract-set-hardhat">hardhat|h</a>         Hardhat commands for Ethereum development environment
+  <a href="#smart-contract-set-subgraph">subgraph|sg</a>       Commands for managing TheGraph subgraphs for smart contract
                     indexing
   help [command]    display help for command
 </pre>

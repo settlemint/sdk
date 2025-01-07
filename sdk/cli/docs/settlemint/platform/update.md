@@ -8,11 +8,13 @@ Options:
   -h, --help                                            display help for command
 
 Commands:
-  <a href="./update/custom-deployment.md">custom-deployment|custom</a>-deployments [options] &lt;tag&gt;  Update a custom deployment in the SettleMint platform
+  <a href="#update-custom-deployment">custom-deployment|custom</a>-deployments [options] &lt;tag&gt;  Update a custom deployment in the SettleMint platform
   help [command]                                        display help for command
 </pre>
 
-<h2 id="update-custom-deployment"><a href="../update.md">update</a> > custom-deployment</h2>
+<h2 id="update-custom-deployment">
+  <a href="../update.md">update</a> > custom-deployment
+</h2>
 
 <pre>Usage: settlemint platform update custom-deployment|custom-deployments [options] &lt;tag&gt;
 

@@ -67,9 +67,10 @@ function createTitle(parentPath: string[], commandName: string, useParentFile: b
     return `# ${commandName}`;
   }
   if (useParentFile) {
-    const parent = parents[2];
-    const parentId = parents[parents.length - 1].name.toLowerCase();
-    return `<h2 id="${parentId}-${commandName.toLowerCase()}"><a href="${parent.url}">${escapeHtml(parent.name)}</a> > ${escapeHtml(commandName)}</h2>`;
+    const parentsToShow = parents.slice(2);
+    return `<h2 id="${parentsToShow.map((p) => p.name.toLowerCase()).join("-")}-${commandName.toLowerCase()}">
+  ${parentsToShow.map((p) => `<a href="${p.url}">${escapeHtml(p.name)}</a>`).join(" > ")} > ${escapeHtml(commandName)}
+</h2>`;
   }
   return `# ${parents
     .map((parent) => {
@@ -88,7 +89,7 @@ function addLinksToChildCommands(commandName: string, helpText: string, childCom
     // Create regex that matches the command name at the start of a line
     const regex = new RegExp(`^(\\s{2})(${childCommand}[a-zA-Z\\|]+|${childCommand})\\b`, "gm");
     // Replace with link while preserving any leading whitespace
-    if (onSamePage) {
+    if (!onSamePage) {
       updatedText = updatedText.replace(
         regex,
         `$1<a href="#${commandName.toLowerCase()}-${childCommand.toLowerCase()}">$2</a>`,
