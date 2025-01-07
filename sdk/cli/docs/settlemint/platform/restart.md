@@ -18,7 +18,7 @@ Commands:
   help [command]                                display help for command
 </pre>
 
-<h3 id="restart-blockchain-network"><a href="#home">restart</a> > blockchain-network</h3>
+<h2 id="restart-blockchain-network"><a href="#home">restart</a> > blockchain-network</h2>
 
 <pre>Usage: settlemint platform restart blockchain-network|bn 
 Examples:
@@ -45,7 +45,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-custom-deployment"><a href="#home">restart</a> > custom-deployment</h3>
+<h2 id="restart-custom-deployment"><a href="#home">restart</a> > custom-deployment</h2>
 
 <pre>Usage: settlemint platform restart custom-deployment|cd 
 Examples:
@@ -72,7 +72,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-insights"><a href="#home">restart</a> > insights</h3>
+<h2 id="restart-insights"><a href="#home">restart</a> > insights</h2>
 
 <pre>Usage: settlemint platform restart insights|in [options] [command]
 
@@ -114,7 +114,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-integration-tool"><a href="#home">restart</a> > integration-tool</h3>
+<h2 id="restart-integration-tool"><a href="#home">restart</a> > integration-tool</h2>
 
 <pre>Usage: settlemint platform restart integration-tool|it [options] [command]
 
@@ -158,7 +158,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-middleware"><a href="#home">restart</a> > middleware</h3>
+<h2 id="restart-middleware"><a href="#home">restart</a> > middleware</h2>
 
 <pre>Usage: settlemint platform restart middleware|mw [options] [command]
 
@@ -223,7 +223,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-private-key"><a href="#home">restart</a> > private-key</h3>
+<h2 id="restart-private-key"><a href="#home">restart</a> > private-key</h2>
 
 <pre>Usage: settlemint platform restart private-key|pk [options] [command]
 
@@ -262,7 +262,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-storage"><a href="#home">restart</a> > storage</h3>
+<h2 id="restart-storage"><a href="#home">restart</a> > storage</h2>
 
 <pre>Usage: settlemint platform restart storage|st [options] [command]
 

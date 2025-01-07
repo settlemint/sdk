@@ -15,7 +15,7 @@ Commands:
   help [command]     display help for command
 </pre>
 
-<h3 id="foundry-build"><a href="#home">foundry</a> > build</h3>
+<h2 id="foundry-build"><a href="#home">foundry</a> > build</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry build [options]
 
@@ -25,7 +25,7 @@ Options:
   -h, --help  Get list of possible forge options
 </pre>
 
-<h3 id="foundry-format"><a href="#home">foundry</a> > format</h3>
+<h2 id="foundry-format"><a href="#home">foundry</a> > format</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry format [options]
 
@@ -35,7 +35,7 @@ Options:
   -h, --help  Get list of possible forge options
 </pre>
 
-<h3 id="foundry-network"><a href="#home">foundry</a> > network</h3>
+<h2 id="foundry-network"><a href="#home">foundry</a> > network</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry network [options]
 
@@ -45,7 +45,7 @@ Options:
   -h, --help  Get list of possible anvil options
 </pre>
 
-<h3 id="foundry-test"><a href="#home">foundry</a> > test</h3>
+<h2 id="foundry-test"><a href="#home">foundry</a> > test</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry test [options]
 

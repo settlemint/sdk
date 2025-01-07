@@ -92,11 +92,12 @@ function createTitle(parentPath: string[], commandName: string, useParentFile: b
       .join(" > ")} > ${commandName}</h1>`;
   }
 
-  return `<h3 id="${parent.toLowerCase()}-${commandName.toLowerCase()}">${parents
+  const level = parents.length + 1;
+  return `<h${level} id="${parent.toLowerCase()}-${commandName.toLowerCase()}">${parents
     .map((parent) => {
       return `<a href="${parent.url}">${escapeHtml(parent.name)}</a>`;
     })
-    .join(" > ")} > ${commandName}</h3>`;
+    .join(" > ")} > ${commandName}</h${level}>`;
 }
 
 function addLinksToChildCommands(commandName: string, helpText: string, childCommands: string[], onSamePage: boolean) {

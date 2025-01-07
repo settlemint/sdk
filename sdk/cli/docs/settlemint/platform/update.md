@@ -12,7 +12,7 @@ Commands:
   help [command]                                        display help for command
 </pre>
 
-<h3 id="update-custom-deployment"><a href="#home">update</a> > custom-deployment</h3>
+<h2 id="update-custom-deployment"><a href="#home">update</a> > custom-deployment</h2>
 
 <pre>Usage: settlemint platform update custom-deployment|custom-deployments [options] &lt;tag&gt;
 

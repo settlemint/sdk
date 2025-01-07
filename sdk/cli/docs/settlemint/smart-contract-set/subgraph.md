@@ -14,7 +14,7 @@ Commands:
   help [command]                   display help for command
 </pre>
 
-<h3 id="subgraph-build"><a href="#home">subgraph</a> > build</h3>
+<h2 id="subgraph-build"><a href="#home">subgraph</a> > build</h2>
 
 <pre>Usage: settlemint smart-contract-set subgraph build [options]
 
@@ -24,7 +24,7 @@ Options:
   -h, --help  display help for command
 </pre>
 
-<h3 id="subgraph-codegen"><a href="#home">subgraph</a> > codegen</h3>
+<h2 id="subgraph-codegen"><a href="#home">subgraph</a> > codegen</h2>
 
 <pre>Usage: settlemint smart-contract-set subgraph codegen [options]
 
@@ -34,7 +34,7 @@ Options:
   -h, --help  display help for command
 </pre>
 
-<h3 id="subgraph-deploy"><a href="#home">subgraph</a> > deploy</h3>
+<h2 id="subgraph-deploy"><a href="#home">subgraph</a> > deploy</h2>
 
 <pre>Usage: settlemint smart-contract-set subgraph deploy [options] [subgraphName]
 
