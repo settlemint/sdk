@@ -98,5 +98,6 @@ export function applicationAccessTokenCreateCommand() {
         command: "platform create aat my-token",
       },
     ],
+    requiresDeployment: false,
   });
 }

@@ -1,5 +1,6 @@
 import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { createExamples } from "@/commands/platform/utils/create-examples";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
@@ -12,6 +13,34 @@ import isInCi from "is-in-ci";
 export function hardhatDeployRemoteCommand() {
   const cmd = new Command("remote")
     .description("Deploy the smart contracts using Hardhat/ignition to the remote network on the platform")
+    .usage(
+      createExamples([
+        {
+          description: "Deploy smart contracts to remote network using Hardhat/Ignition",
+          command: "scs hardhat deploy remote",
+        },
+        {
+          description: "Deploy a specific Ignition module to remote network",
+          command: "scs hardhat deploy remote --module ignition/modules/custom.ts",
+        },
+        {
+          description: "Deploy with a clean deployment state to remote network",
+          command: "scs hardhat deploy remote --reset",
+        },
+        {
+          description: "Deploy and verify contracts on remote network",
+          command: "scs hardhat deploy remote --verify",
+        },
+        {
+          description: "Deploy to remote network with specific blockchain node",
+          command: "scs hardhat deploy remote --blockchain-node my-node",
+        },
+        {
+          description: "Deploy to production environment",
+          command: "scs hardhat deploy remote --prod",
+        },
+      ]),
+    )
     .option(
       "-m, --module <ignitionmodule>",
       'The module to deploy with Ignition, defaults to "ignition/modules/main.ts"',

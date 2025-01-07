@@ -1,6 +1,7 @@
 import { dirname } from "node:path";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
+import { createExamples } from "@/commands/platform/utils/create-examples";
 import {
   getSubgraphConfig,
   getSubgraphYamlConfig,
@@ -20,9 +21,21 @@ import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
 export function subgraphDeployCommand() {
   return new Command("deploy")
     .description("Deploy the subgraph")
+    .usage(
+      createExamples([
+        {
+          description: "Deploy the subgraph",
+          command: "scs subgraph deploy",
+        },
+        {
+          description: "Deploy the subgraph with a specific name",
+          command: "scs subgraph deploy my-subgraph",
+        },
+      ]),
+    )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
-    .argument("[subgraphName]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
+    .argument("[subgraph-name]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
     .action(async (subgraphName, { prod, acceptDefaults }) => {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);

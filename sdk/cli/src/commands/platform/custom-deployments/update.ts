@@ -17,7 +17,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  */
 export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?: boolean; wait?: boolean }> {
   return new Command("custom-deployment")
-    .alias("custom-deployments")
     .alias("cd")
     .argument("<tag>", "The tag to update the custom deployment to")
     .option(

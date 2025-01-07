@@ -48,5 +48,6 @@ export function applicationCreateCommand() {
         command: "platform create application my-app --workspace my-workspace",
       },
     ],
+    requiresDeployment: false,
   });
 }

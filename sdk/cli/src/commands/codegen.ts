@@ -11,6 +11,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
+import { createExamples } from "./platform/utils/create-examples";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
@@ -30,6 +31,18 @@ export function codegenCommand(): Command {
       )
       // Set the command description
       .description("Generate GraphQL and REST types and queries")
+      .usage(
+        createExamples([
+          {
+            description: "Generate GraphQL types and queries for your dApp",
+            command: "codegen",
+          },
+          {
+            description: "Generate GraphQL types and queries for specific TheGraph subgraphs",
+            command: "codegen --thegraph-subgraph-names subgraph1 subgraph2",
+          },
+        ]),
+      )
       // Define the action to be executed when the command is run
       .action(async ({ prod, thegraphSubgraphNames }) => {
         intro("Generating GraphQL types and queries for your dApp");
