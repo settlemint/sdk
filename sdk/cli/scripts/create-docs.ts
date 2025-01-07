@@ -1,6 +1,7 @@
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Command, type CommandUnknownOpts, Help } from "@commander-js/extra-typings";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { sdkCliCommand } from "../src/commands";
 
 const exitOverride = () => {
@@ -71,28 +72,29 @@ export async function createDocs(command: Command) {
 
 function createTitle(parentPath: string[], commandName: string, useParentFile: boolean) {
   if (parentPath.length === 0) {
-    return `# ${commandName}`;
+    return "# SettleMint CLI";
   }
   const parentsToShow = useParentFile ? parentPath.slice(2) : parentPath;
   const parent = parentPath[parentPath.length - 1];
   const parents = parentsToShow.map((part, index: number) => {
+    const label = userFriendlyCommandName(part);
     if (useParentFile && index > 0) {
       const parent = parentsToShow[index - 1];
       return {
-        name: part,
+        label,
         url: `#${parent.toLowerCase()}-${part.toLowerCase()}`,
       };
     }
     if (useParentFile) {
       return {
-        name: part,
+        label,
         url: "#home",
       };
     }
     const levels = parentPath.length - parentPath.indexOf(part);
     const prefix = "../".repeat(levels) || "./";
     return {
-      name: part,
+      label,
       url: `${prefix}${part.toLowerCase()}.md`,
     };
   });
@@ -100,17 +102,17 @@ function createTitle(parentPath: string[], commandName: string, useParentFile: b
   if (!useParentFile) {
     return `<h1 id="home">${parents
       .map((parent) => {
-        return `<a href="${parent.url}">${escapeHtml(parent.name)}</a>`;
+        return `<a href="${parent.url}">${escapeHtml(parent.label)}</a>`;
       })
-      .join(" > ")} > ${commandName}</h1>`;
+      .join(" > ")} > ${userFriendlyCommandName(commandName)}</h1>`;
   }
 
   const level = parents.length + 1;
   return `<h${level} id="${parent.toLowerCase()}-${commandName.toLowerCase()}">${parents
     .map((parent) => {
-      return `<a href="${parent.url}">${escapeHtml(parent.name)}</a>`;
+      return `<a href="${parent.url}">${escapeHtml(parent.label)}</a>`;
     })
-    .join(" > ")} > ${commandName}</h${level}>`;
+    .join(" > ")} > ${userFriendlyCommandName(commandName)}</h${level}>`;
 }
 
 function addLinksToChildCommands(commandName: string, helpText: string, childCommands: string[], onSamePage: boolean) {
@@ -145,6 +147,13 @@ function escapeHtml(text: string) {
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+}
+
+function userFriendlyCommandName(commandName: string) {
+  if (commandName === "settlemint") {
+    return "SettleMint CLI";
+  }
+  return capitalizeFirstLetter(commandName.replace(/-/g, " "));
 }
 
 createDocs(sdkCli).catch((err) => {

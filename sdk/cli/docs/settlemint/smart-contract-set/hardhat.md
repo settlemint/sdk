@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../../settlemint.md">settlemint</a> > <a href="../smart-contract-set.md">smart-contract-set</a> > hardhat</h1>
+<h1 id="home"><a href="../../settlemint.md">SettleMint CLI</a> > <a href="../smart-contract-set.md">Smart contract set</a> > Hardhat</h1>
 
 <pre>Usage: settlemint smart-contract-set hardhat|h [options] [command]
 
@@ -16,7 +16,7 @@ Commands:
   help [command]     display help for command
 </pre>
 
-<h2 id="hardhat-build"><a href="#home">hardhat</a> > build</h2>
+<h2 id="hardhat-build"><a href="#home">Hardhat</a> > Build</h2>
 
 <pre>Usage: settlemint smart-contract-set hardhat build [options]
 
@@ -26,7 +26,7 @@ Options:
   -h, --help  Get list of possible hardhat compile options
 </pre>
 
-<h2 id="hardhat-deploy"><a href="#home">hardhat</a> > deploy</h2>
+<h2 id="hardhat-deploy"><a href="#home">Hardhat</a> > Deploy</h2>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy [options] [command]
 
@@ -41,7 +41,7 @@ Commands:
   help [command]    display help for command
 </pre>
 
-<h3 id="deploy-local"><a href="#home">hardhat</a> > <a href="#hardhat-deploy">deploy</a> > local</h3>
+<h3 id="deploy-local"><a href="#home">Hardhat</a> > <a href="#hardhat-deploy">Deploy</a> > Local</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy local [options]
 
@@ -57,7 +57,7 @@ Options:
   -h, --help                     display help for command
 </pre>
 
-<h3 id="deploy-remote"><a href="#home">hardhat</a> > <a href="#hardhat-deploy">deploy</a> > remote</h3>
+<h3 id="deploy-remote"><a href="#home">Hardhat</a> > <a href="#hardhat-deploy">Deploy</a> > Remote</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy remote [options]
 
@@ -85,7 +85,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h2 id="hardhat-network"><a href="#home">hardhat</a> > network</h2>
+<h2 id="hardhat-network"><a href="#home">Hardhat</a> > Network</h2>
 
 <pre>Usage: settlemint smart-contract-set hardhat network [options]
 
@@ -95,7 +95,7 @@ Options:
   -h, --help  Get list of possible hardhat node options
 </pre>
 
-<h2 id="hardhat-script"><a href="#home">hardhat</a> > script</h2>
+<h2 id="hardhat-script"><a href="#home">Hardhat</a> > Script</h2>
 
 <pre>Usage: settlemint smart-contract-set hardhat script [options] [command]
 
@@ -110,7 +110,7 @@ Commands:
   help [command]    display help for command
 </pre>
 
-<h3 id="script-remote"><a href="#home">hardhat</a> > <a href="#hardhat-script">script</a> > remote</h3>
+<h3 id="script-remote"><a href="#home">Hardhat</a> > <a href="#hardhat-script">Script</a> > Remote</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat script remote [options]
 
@@ -130,7 +130,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h3 id="script-local"><a href="#home">hardhat</a> > <a href="#hardhat-script">script</a> > local</h3>
+<h3 id="script-local"><a href="#home">Hardhat</a> > <a href="#hardhat-script">Script</a> > Local</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat script local [options]
 
@@ -144,7 +144,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="hardhat-test"><a href="#home">hardhat</a> > test</h2>
+<h2 id="hardhat-test"><a href="#home">Hardhat</a> > Test</h2>
 
 <pre>Usage: settlemint smart-contract-set hardhat test [options]
 

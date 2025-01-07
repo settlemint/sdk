@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../settlemint.md">settlemint</a> > smart-contract-set</h1>
+<h1 id="home"><a href="../settlemint.md">SettleMint CLI</a> > Smart contract set</h1>
 
 <pre>Usage: settlemint smart-contract-set|scs [options] [command]
 

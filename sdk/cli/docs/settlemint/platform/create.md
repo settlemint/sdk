@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../../settlemint.md">settlemint</a> > <a href="../platform.md">platform</a> > create</h1>
+<h1 id="home"><a href="../../settlemint.md">SettleMint CLI</a> > <a href="../platform.md">Platform</a> > Create</h1>
 
 <pre>Usage: settlemint platform create|c [options] [command]
 
@@ -21,7 +21,7 @@ Commands:
   help [command]                                 display help for command
 </pre>
 
-<h2 id="create-workspace"><a href="#home">create</a> > workspace</h2>
+<h2 id="create-workspace"><a href="#home">Create</a> > Workspace</h2>
 
 <pre>Usage: settlemint platform create workspace|w 
 Examples:
@@ -57,7 +57,7 @@ Options:
   -h, --help                             display help for command
 </pre>
 
-<h2 id="create-application"><a href="#home">create</a> > application</h2>
+<h2 id="create-application"><a href="#home">Create</a> > Application</h2>
 
 <pre>Usage: settlemint platform create application|a 
 Examples:
@@ -85,7 +85,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h2 id="create-blockchain-network"><a href="#home">create</a> > blockchain-network</h2>
+<h2 id="create-blockchain-network"><a href="#home">Create</a> > Blockchain network</h2>
 
 <pre>Usage: settlemint platform create blockchain-network|bnw [options] [command]
 
@@ -100,7 +100,7 @@ Commands:
   help [command]           display help for command
 </pre>
 
-<h3 id="blockchain-network-besu"><a href="#home">create</a> > <a href="#create-blockchain-network">blockchain-network</a> > besu</h3>
+<h3 id="blockchain-network-besu"><a href="#home">Create</a> > <a href="#create-blockchain-network">Blockchain network</a> > Besu</h3>
 
 <pre>Usage: settlemint platform create blockchain-network besu|b 
 Examples:
@@ -141,7 +141,7 @@ Options:
   -h, --help                       display help for command
 </pre>
 
-<h2 id="create-blockchain-node"><a href="#home">create</a> > blockchain-node</h2>
+<h2 id="create-blockchain-node"><a href="#home">Create</a> > Blockchain node</h2>
 
 <pre>Usage: settlemint platform create blockchain-node|bn [options] [command]
 
@@ -156,7 +156,7 @@ Commands:
   help [command]           display help for command
 </pre>
 
-<h3 id="blockchain-node-besu"><a href="#home">create</a> > <a href="#create-blockchain-node">blockchain-node</a> > besu</h3>
+<h3 id="blockchain-node-besu"><a href="#home">Create</a> > <a href="#create-blockchain-node">Blockchain node</a> > Besu</h3>
 
 <pre>Usage: settlemint platform create blockchain-node besu|b 
 Examples:
@@ -192,7 +192,7 @@ Options:
   -h, --help                                display help for command
 </pre>
 
-<h2 id="create-private-key"><a href="#home">create</a> > private-key</h2>
+<h2 id="create-private-key"><a href="#home">Create</a> > Private key</h2>
 
 <pre>Usage: settlemint platform create private-key|pk [options] [command]
 
@@ -209,7 +209,7 @@ Commands:
   help [command]                      display help for command
 </pre>
 
-<h3 id="private-key-hd-ecdsa-p256"><a href="#home">create</a> > <a href="#create-private-key">private-key</a> > hd-ecdsa-p256</h3>
+<h3 id="private-key-hd-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Hd ecdsa p256</h3>
 
 <pre>Usage: settlemint platform create private-key hd-ecdsa-p256|hd 
 Examples:
@@ -245,7 +245,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h3 id="private-key-hsm-ecdsa-p256"><a href="#home">create</a> > <a href="#create-private-key">private-key</a> > hsm-ecdsa-p256</h3>
+<h3 id="private-key-hsm-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Hsm ecdsa p256</h3>
 
 <pre>Usage: settlemint platform create private-key hsm-ecdsa-p256|hd 
 Examples:
@@ -281,7 +281,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h2 id="create-middleware"><a href="#home">create</a> > middleware</h2>
+<h2 id="create-middleware"><a href="#home">Create</a> > Middleware</h2>
 
 <pre>Usage: settlemint platform create middleware|mw [options] [command]
 
@@ -296,7 +296,7 @@ Commands:
   help [command]                              display help for command
 </pre>
 
-<h3 id="middleware-graph"><a href="#home">create</a> > <a href="#create-middleware">middleware</a> > graph</h3>
+<h3 id="middleware-graph"><a href="#home">Create</a> > <a href="#create-middleware">Middleware</a> > Graph</h3>
 
 <pre>Usage: settlemint platform create middleware graph|gr 
 Examples:
@@ -329,7 +329,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h3 id="middleware-smart-contract-portal"><a href="#home">create</a> > <a href="#create-middleware">middleware</a> > smart-contract-portal</h3>
+<h3 id="middleware-smart-contract-portal"><a href="#home">Create</a> > <a href="#create-middleware">Middleware</a> > Smart contract portal</h3>
 
 <pre>Usage: settlemint platform create middleware smart-contract-portal|scp 
 Examples:
@@ -363,7 +363,7 @@ Options:
   -h, --help                                              display help for command
 </pre>
 
-<h2 id="create-storage"><a href="#home">create</a> > storage</h2>
+<h2 id="create-storage"><a href="#home">Create</a> > Storage</h2>
 
 <pre>Usage: settlemint platform create storage|st [options] [command]
 
@@ -378,7 +378,7 @@ Commands:
   help [command]            display help for command
 </pre>
 
-<h3 id="storage-ipfs"><a href="#home">create</a> > <a href="#create-storage">storage</a> > ipfs</h3>
+<h3 id="storage-ipfs"><a href="#home">Create</a> > <a href="#create-storage">Storage</a> > Ipfs</h3>
 
 <pre>Usage: settlemint platform create storage ipfs|ip 
 Examples:
@@ -410,7 +410,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h3 id="storage-minio"><a href="#home">create</a> > <a href="#create-storage">storage</a> > minio</h3>
+<h3 id="storage-minio"><a href="#home">Create</a> > <a href="#create-storage">Storage</a> > Minio</h3>
 
 <pre>Usage: settlemint platform create storage minio|m 
 Examples:
@@ -442,7 +442,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h2 id="create-integration-tool"><a href="#home">create</a> > integration-tool</h2>
+<h2 id="create-integration-tool"><a href="#home">Create</a> > Integration tool</h2>
 
 <pre>Usage: settlemint platform create integration-tool|it [options] [command]
 
@@ -457,7 +457,7 @@ Commands:
   help [command]              display help for command
 </pre>
 
-<h3 id="integration-tool-hasura"><a href="#home">create</a> > <a href="#create-integration-tool">integration-tool</a> > hasura</h3>
+<h3 id="integration-tool-hasura"><a href="#home">Create</a> > <a href="#create-integration-tool">Integration tool</a> > Hasura</h3>
 
 <pre>Usage: settlemint platform create integration-tool hasura|ha 
 Examples:
@@ -489,7 +489,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h2 id="create-insights"><a href="#home">create</a> > insights</h2>
+<h2 id="create-insights"><a href="#home">Create</a> > Insights</h2>
 
 <pre>Usage: settlemint platform create insights|in [options] [command]
 
@@ -504,7 +504,7 @@ Commands:
   help [command]                  display help for command
 </pre>
 
-<h3 id="insights-blockscout"><a href="#home">create</a> > <a href="#create-insights">insights</a> > blockscout</h3>
+<h3 id="insights-blockscout"><a href="#home">Create</a> > <a href="#create-insights">Insights</a> > Blockscout</h3>
 
 <pre>Usage: settlemint platform create insights blockscout|bs 
 Examples:
@@ -540,7 +540,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h2 id="create-application-access-token"><a href="#home">create</a> > application-access-token</h2>
+<h2 id="create-application-access-token"><a href="#home">Create</a> > Application access token</h2>
 
 <pre>Usage: settlemint platform create application-access-token|aat 
 Examples:

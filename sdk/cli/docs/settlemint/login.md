@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../settlemint.md">settlemint</a> > login</h1>
+<h1 id="home"><a href="../settlemint.md">SettleMint CLI</a> > Login</h1>
 
 <pre>Usage: settlemint login 
 Examples:

@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../../settlemint.md">settlemint</a> > <a href="../platform.md">platform</a> > restart</h1>
+<h1 id="home"><a href="../../settlemint.md">SettleMint CLI</a> > <a href="../platform.md">Platform</a> > Restart</h1>
 
 <pre>Usage: settlemint platform restart [options] [command]
 
@@ -18,7 +18,7 @@ Commands:
   help [command]                                display help for command
 </pre>
 
-<h2 id="restart-blockchain-network"><a href="#home">restart</a> > blockchain-network</h2>
+<h2 id="restart-blockchain-network"><a href="#home">Restart</a> > Blockchain network</h2>
 
 <pre>Usage: settlemint platform restart blockchain-network|bn 
 Examples:
@@ -45,7 +45,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-custom-deployment"><a href="#home">restart</a> > custom-deployment</h2>
+<h2 id="restart-custom-deployment"><a href="#home">Restart</a> > Custom deployment</h2>
 
 <pre>Usage: settlemint platform restart custom-deployment|cd 
 Examples:
@@ -72,7 +72,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-insights"><a href="#home">restart</a> > insights</h2>
+<h2 id="restart-insights"><a href="#home">Restart</a> > Insights</h2>
 
 <pre>Usage: settlemint platform restart insights|in [options] [command]
 
@@ -89,7 +89,7 @@ Commands:
   help [command]                        display help for command
 </pre>
 
-<h3 id="insights-blockscout"><a href="#home">restart</a> > <a href="#restart-insights">insights</a> > blockscout</h3>
+<h3 id="insights-blockscout"><a href="#home">Restart</a> > <a href="#restart-insights">Insights</a> > Blockscout</h3>
 
 <pre>Usage: settlemint platform restart insights blockscout|bs 
 Examples:
@@ -114,7 +114,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-integration-tool"><a href="#home">restart</a> > integration-tool</h2>
+<h2 id="restart-integration-tool"><a href="#home">Restart</a> > Integration tool</h2>
 
 <pre>Usage: settlemint platform restart integration-tool|it [options] [command]
 
@@ -132,7 +132,7 @@ Commands:
   help [command]                    display help for command
 </pre>
 
-<h3 id="integration-tool-hasura"><a href="#home">restart</a> > <a href="#restart-integration-tool">integration-tool</a> > hasura</h3>
+<h3 id="integration-tool-hasura"><a href="#home">Restart</a> > <a href="#restart-integration-tool">Integration tool</a> > Hasura</h3>
 
 <pre>Usage: settlemint platform restart integration-tool hasura|ha 
 Examples:
@@ -158,7 +158,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-middleware"><a href="#home">restart</a> > middleware</h2>
+<h2 id="restart-middleware"><a href="#home">Restart</a> > Middleware</h2>
 
 <pre>Usage: settlemint platform restart middleware|mw [options] [command]
 
@@ -173,7 +173,7 @@ Commands:
   help [command]                                    display help for command
 </pre>
 
-<h3 id="middleware-graph"><a href="#home">restart</a> > <a href="#restart-middleware">middleware</a> > graph</h3>
+<h3 id="middleware-graph"><a href="#home">Restart</a> > <a href="#restart-middleware">Middleware</a> > Graph</h3>
 
 <pre>Usage: settlemint platform restart middleware graph|gr 
 Examples:
@@ -198,7 +198,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="middleware-smart-contract-portal"><a href="#home">restart</a> > <a href="#restart-middleware">middleware</a> > smart-contract-portal</h3>
+<h3 id="middleware-smart-contract-portal"><a href="#home">Restart</a> > <a href="#restart-middleware">Middleware</a> > Smart contract portal</h3>
 
 <pre>Usage: settlemint platform restart middleware smart-contract-portal|scp 
 Examples:
@@ -223,7 +223,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-private-key"><a href="#home">restart</a> > private-key</h2>
+<h2 id="restart-private-key"><a href="#home">Restart</a> > Private key</h2>
 
 <pre>Usage: settlemint platform restart private-key|pk [options] [command]
 
@@ -237,7 +237,7 @@ Commands:
   help [command]                           display help for command
 </pre>
 
-<h3 id="private-key-hd-ecdsa-p256"><a href="#home">restart</a> > <a href="#restart-private-key">private-key</a> > hd-ecdsa-p256</h3>
+<h3 id="private-key-hd-ecdsa-p256"><a href="#home">Restart</a> > <a href="#restart-private-key">Private key</a> > Hd ecdsa p256</h3>
 
 <pre>Usage: settlemint platform restart private-key hd-ecdsa-p256|hd 
 Examples:
@@ -262,7 +262,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="restart-storage"><a href="#home">restart</a> > storage</h2>
+<h2 id="restart-storage"><a href="#home">Restart</a> > Storage</h2>
 
 <pre>Usage: settlemint platform restart storage|st [options] [command]
 
@@ -283,7 +283,7 @@ Commands:
   help [command]                  display help for command
 </pre>
 
-<h3 id="storage-ipfs"><a href="#home">restart</a> > <a href="#restart-storage">storage</a> > ipfs</h3>
+<h3 id="storage-ipfs"><a href="#home">Restart</a> > <a href="#restart-storage">Storage</a> > Ipfs</h3>
 
 <pre>Usage: settlemint platform restart storage ipfs|ip 
 Examples:
@@ -308,7 +308,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="storage-minio"><a href="#home">restart</a> > <a href="#restart-storage">storage</a> > minio</h3>
+<h3 id="storage-minio"><a href="#home">Restart</a> > <a href="#restart-storage">Storage</a> > Minio</h3>
 
 <pre>Usage: settlemint platform restart storage minio|m 
 Examples:

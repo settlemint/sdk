@@ -76,7 +76,7 @@
     },
     "docs": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**"],
+      "inputs": ["src/**", "scripts/create-docs.ts"],
       "outputs": ["docs/**"]
     }
   }

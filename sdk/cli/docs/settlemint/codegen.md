@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../settlemint.md">settlemint</a> > codegen</h1>
+<h1 id="home"><a href="../settlemint.md">SettleMint CLI</a> > Codegen</h1>
 
 <pre>Usage: settlemint codegen [options]
 

@@ -1,4 +1,4 @@
-<h1 id="home"><a href="../../settlemint.md">settlemint</a> > <a href="../smart-contract-set.md">smart-contract-set</a> > foundry</h1>
+<h1 id="home"><a href="../../settlemint.md">SettleMint CLI</a> > <a href="../smart-contract-set.md">Smart contract set</a> > Foundry</h1>
 
 <pre>Usage: settlemint smart-contract-set foundry|f [options] [command]
 
@@ -15,7 +15,7 @@ Commands:
   help [command]     display help for command
 </pre>
 
-<h2 id="foundry-build"><a href="#home">foundry</a> > build</h2>
+<h2 id="foundry-build"><a href="#home">Foundry</a> > Build</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry build [options]
 
@@ -25,7 +25,7 @@ Options:
   -h, --help  Get list of possible forge options
 </pre>
 
-<h2 id="foundry-format"><a href="#home">foundry</a> > format</h2>
+<h2 id="foundry-format"><a href="#home">Foundry</a> > Format</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry format [options]
 
@@ -35,7 +35,7 @@ Options:
   -h, --help  Get list of possible forge options
 </pre>
 
-<h2 id="foundry-network"><a href="#home">foundry</a> > network</h2>
+<h2 id="foundry-network"><a href="#home">Foundry</a> > Network</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry network [options]
 
@@ -45,7 +45,7 @@ Options:
   -h, --help  Get list of possible anvil options
 </pre>
 
-<h2 id="foundry-test"><a href="#home">foundry</a> > test</h2>
+<h2 id="foundry-test"><a href="#home">Foundry</a> > Test</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry test [options]
 

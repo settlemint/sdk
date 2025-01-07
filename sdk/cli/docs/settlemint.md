@@ -1,4 +1,4 @@
-# settlemint
+# SettleMint CLI
 
 <p>Welcome to the SettleMint CLI documentation. This command-line interface provides tools for managing your SettleMint projects, smart contracts, and platform resources.</p>
 
