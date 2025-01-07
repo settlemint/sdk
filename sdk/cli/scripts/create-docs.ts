@@ -70,10 +70,7 @@ function createTitle(parentPath: string[], commandName: string, useParentFile: b
         url: `#${parent.toLowerCase()}-${part.toLowerCase()}`,
       };
     }
-    let levels = parentPath.length - parentPath.indexOf(part);
-    if (useParentFile && levels >= MAX_DEPTH) {
-      levels = 0;
-    }
+    const levels = useParentFile ? 0 : parentPath.length - parentPath.indexOf(part);
     const prefix = "../".repeat(levels) || "./";
     return {
       name: part,
