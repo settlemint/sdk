@@ -137,36 +137,10 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Run tests and checks
-        run: bunx turbo format lint typecheck build attw publint registry test:coverage publish-npm docs --env-mode=loose
+        run: bunx turbo format lint typecheck build attw publint test:coverage publish-npm docs --env-mode=loose
 
       - name: Check typings of E2E tests
         run: bun test:typecheck
-
-      - name: Make index
-        run: |
-          echo "Creating index.html with list of JSON files in apps/registry/public/"
-          cd apps/registry/public
-          echo "<html><head><title>Registry Files</title><script src='https://cdn.tailwindcss.com'></script></head><body class='bg-gray-100 dark:bg-gray-900'><div class='container mx-auto px-4 py-8 max-w-3xl'><h1 class='text-3xl font-bold mb-6 text-gray-800 dark:text-white border-b-2 border-blue-500 pb-2'>Registry Files</h1><ul class='space-y-4'>" > index.html
-          for file in *.json; do
-            echo "<li class='bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow duration-300'><span class='font-mono text-sm text-gray-600 dark:text-gray-400'>bunx shadcn@latest add</span> <a href='https://settlemint.github.io/sdk/$file' class='text-blue-600 dark:text-blue-400 hover:underline'>https://settlemint.github.io/sdk/$file</a></span></li>" >> index.html
-          done
-          echo "</ul></div><script>if (window.matchMedia('(prefers-color-scheme: dark)').matches) { document.documentElement.classList.add('dark') }</script></body></html>" >> index.html
-          cd ../../..
-          echo "Created index.html in apps/registry/public/"
-
-      - name: Upload static files as artifact
-        id: deployment
-        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
-        with:
-          path: apps/registry/public
-
-      - name: Login to GitHub Container Registry
-        if: ${{ github.event_name != 'pull_request' }}
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create or update PR comment
         if: ${{ github.event_name == 'pull_request' }}
@@ -187,7 +161,6 @@ jobs:
                 | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` | |
                 | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` | |
                 | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` | |
-                | Registry |  | `ghcr.io/settlemint/btp-sdk-registry:${{ env.VERSION }}` |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
@@ -196,81 +169,3 @@ jobs:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
           file_pattern: 'package.json **/package.json **/schema.graphql sdk/cli/docs/**/*.md'
-
-      # This is super unstable and we publish the registry to github pages which is fine for now
-      # - name: Check if packages are published
-      #   if: ${{ github.event_name != 'pull_request' }}
-      #   run: |
-      #     echo "Checking if packages are published..."
-      #     MAX_ATTEMPTS=120
-      #     DELAY=10
-      #     ATTEMPT=1
-
-      #     check_package() {
-      #       local package=$1
-      #       local version=$2
-      #       echo "Checking $package@$version..."
-      #       if bun pm view "$package@$version" version &>/dev/null; then
-      #         echo "$package@$version is published."
-      #         return 0
-      #       else
-      #         echo "$package@$version is not yet published."
-      #         return 1
-      #       fi
-      #     }
-
-      #     while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
-      #       ALL_PUBLISHED=true
-
-      #       for dir in ./packages/*; do
-      #         if [ -f "$dir/package.json" ]; then
-      #           PACKAGE_NAME=$(jq -r .name "$dir/package.json")
-      #           PACKAGE_VERSION=$(jq -r .version "$dir/package.json")
-
-      #           if ! check_package "$PACKAGE_NAME" "$PACKAGE_VERSION"; then
-      #             ALL_PUBLISHED=false
-      #             break
-      #           fi
-      #         fi
-      #       done
-
-      #       if $ALL_PUBLISHED; then
-      #         echo "All packages are published."
-      #         break
-      #       fi
-
-      #       if [ $ATTEMPT -eq $MAX_ATTEMPTS ]; then
-      #         echo "Timeout: Not all packages were published within the expected time."
-      #         exit 1
-      #       fi
-
-      #       echo "Waiting for 10 seconds before next check (Attempt $ATTEMPT/$MAX_ATTEMPTS)..."
-      #       sleep $DELAY
-      #       ATTEMPT=$((ATTEMPT + 1))
-      #     done
-
-      # - name: Build docker containers
-      #   if: ${{ github.event_name != 'pull_request' }}
-      #   uses: nick-fields/retry@7152eba30c6575329ac0576536151aca5a72780e # v3
-      #   with:
-      #     timeout_minutes: 15
-      #     max_attempts: 3
-      #     retry_wait_seconds: 30
-      #     command: bunx turbo docker --env-mode=loose
-      #   env:
-      #     TAG: ${{ env.TAG }}
-      #     VERSION: ${{ env.VERSION }}
-
-  deploy:
-    name: Deploy to Registry to GitHub Pages
-    if: ${{ github.event_name != 'pull_request' && !startsWith(github.ref, 'refs/tags/') }}
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs:
-      - packages
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

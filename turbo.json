@@ -3,25 +3,10 @@
   "ui": "tui",
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
-    "registry:build": {
-      "dependsOn": ["^build", "registry:codegen", "registry"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
-    },
     "build": {
       "dependsOn": ["^build", "codegen", "docs"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
-    },
-    "registry:connect": {
-      "dependsOn": ["^build"],
-      "inputs": ["settlemint.config.mjs", ".env.local"],
-      "outputs": ["settlemint.config.mjs", ".env.local"]
-    },
-    "registry:codegen": {
-      "dependsOn": ["registry:connect"],
-      "inputs": ["graphql/**"],
-      "outputs": [".settlemint/**"]
     },
     "codegen": {
       "inputs": ["graphql/**"],
