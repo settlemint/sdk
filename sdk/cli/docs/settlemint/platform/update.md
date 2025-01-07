@@ -5,16 +5,17 @@
 Update a resource in the SettleMint platform
 
 Options:
-  -h, --help                                            display help for command
+  -h, --help                            display help for command
 
 Commands:
-  <a href="#update-custom-deployment">custom-deployment|custom</a>-deployments [options] &lt;tag&gt;  Update a custom deployment in the SettleMint platform
-  help [command]                                        display help for command
+  <a href="#update-custom-deployment">custom-deployment|cd</a> [options] &lt;tag&gt;  Update a custom deployment in the
+                                        SettleMint platform
+  help [command]                        display help for command
 </pre>
 
 <h2 id="update-custom-deployment"><a href="#home">Update</a> > Custom deployment</h2>
 
-<pre>Usage: settlemint platform update custom-deployment|custom-deployments [options] &lt;tag&gt;
+<pre>Usage: settlemint platform update custom-deployment|cd [options] &lt;tag&gt;
 
 Update a custom deployment in the SettleMint platform
 

@@ -1,6 +1,13 @@
 <h1 id="home"><a href="../settlemint.md">SettleMint CLI</a> > Codegen</h1>
 
-<pre>Usage: settlemint codegen [options]
+<pre>Usage: settlemint codegen 
+Examples:
+
+  # Generate GraphQL types and queries for your dApp
+  $ settlemint codegen
+
+  # Generate GraphQL types and queries for specific TheGraph subgraphs
+  $ settlemint codegen --thegraph-subgraph-names subgraph1 subgraph2
 
 Generate GraphQL and REST types and queries
 

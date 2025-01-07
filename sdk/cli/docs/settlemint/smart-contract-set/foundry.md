@@ -2,7 +2,7 @@
 
 <pre>Usage: settlemint smart-contract-set foundry|f [options] [command]
 
-Foundry commands for building, testing and deploying smart contracts
+Foundry commands for building and testing smart contracts
 
 Options:
   -h, --help         display help for command
@@ -17,7 +17,17 @@ Commands:
 
 <h2 id="foundry-build"><a href="#home">Foundry</a> > Build</h2>
 
-<pre>Usage: settlemint smart-contract-set foundry build [options]
+<pre>Usage: settlemint smart-contract-set foundry build 
+Examples:
+
+  # Build the smart contracts using Foundry
+  $ settlemint scs foundry build
+
+  # Get list of possible Forge build options
+  $ settlemint scs foundry build --help
+
+  # Build the smart contracts with additional Forge options
+  $ settlemint scs foundry build --optimize --force
 
 Build the smart contracts using Foundry/forge
 
@@ -27,7 +37,17 @@ Options:
 
 <h2 id="foundry-format"><a href="#home">Foundry</a> > Format</h2>
 
-<pre>Usage: settlemint smart-contract-set foundry format [options]
+<pre>Usage: settlemint smart-contract-set foundry format 
+Examples:
+
+  # Format the smart contracts using Foundry
+  $ settlemint scs foundry format
+
+  # Get list of possible Forge format options
+  $ settlemint scs foundry format --help
+
+  # Format the smart contracts with additional Forge options
+  $ settlemint scs foundry format --check
 
 Format the smart contracts using Foundry/forge
 
@@ -37,7 +57,17 @@ Options:
 
 <h2 id="foundry-network"><a href="#home">Foundry</a> > Network</h2>
 
-<pre>Usage: settlemint smart-contract-set foundry network [options]
+<pre>Usage: settlemint smart-contract-set foundry network 
+Examples:
+
+  # Start a development network using Foundry
+  $ settlemint scs foundry network
+
+  # Get list of possible Anvil options
+  $ settlemint scs foundry network --help
+
+  # Start a development network using Foundry with a specific port
+  $ settlemint scs foundry network --port 3000
 
 Start a development network Foundry/anvil
 
@@ -47,7 +77,17 @@ Options:
 
 <h2 id="foundry-test"><a href="#home">Foundry</a> > Test</h2>
 
-<pre>Usage: settlemint smart-contract-set foundry test [options]
+<pre>Usage: settlemint smart-contract-set foundry test 
+Examples:
+
+  # Run tests using Foundry
+  $ settlemint scs foundry test
+
+  # Get list of possible Forge test options
+  $ settlemint scs foundry test --help
+
+  # Run a specific test function
+  $ settlemint scs foundry test --match-test testToken
 
 Test the smart contracts using Foundry/forge
 

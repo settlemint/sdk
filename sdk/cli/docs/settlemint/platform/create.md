@@ -359,7 +359,7 @@ Options:
   --load-balancer &lt;loadBalancer&gt;                          Load Balancer unique name (mutually exclusive with blockchain-node)
   --blockchain-node &lt;blockchainNode&gt;                      Blockchain Node unique name (mutually exclusive with load-balancer)
   --abis &lt;abis...&gt;                                        Path to abi file(s)
-  --include-predeployed-abis &lt;includePredeployedAbis...&gt;  Include pre-deployed abis (choices: &quot;StarterKitERC20Registry&quot;, &quot;StarterKitERC20Factory&quot;, &quot;StarterKitERC20&quot;, &quot;StarterKitERC20DexFactory&quot;, &quot;StarterKitERC20Dex&quot;)
+  --include-predeployed-abis &lt;includePredeployedAbis...&gt;  Include pre-deployed abis (choices: &quot;Bond&quot;, &quot;BondFactory&quot;, &quot;CryptoCurrency&quot;, &quot;CryptoCurrencyFactory&quot;, &quot;Equity&quot;, &quot;EquityFactory&quot;, &quot;StableCoin&quot;, &quot;StableCoinFactory&quot;)
   -h, --help                                              display help for command
 </pre>
 

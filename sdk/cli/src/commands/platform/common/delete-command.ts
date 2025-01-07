@@ -1,6 +1,5 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
-import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
@@ -65,14 +64,13 @@ export function getDeleteCommand({
       ]),
     )
     .argument(
-      "<uniqueName>",
+      "<unique-name>",
       `The unique name of the ${type}, use 'default' to delete the default one from your .env file`,
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
-    .option("-w, --wait", "Wait until destroyed")
     .option("-f, --force", `Force delete the ${type} without confirmation`)
-    .action(async (uniqueName, { acceptDefaults, prod, force, wait }) => {
+    .action(async (uniqueName, { acceptDefaults, prod, force }) => {
       intro(`Deleting ${type} in the SettleMint platform`);
 
       if (!force) {
@@ -123,10 +121,6 @@ export function getDeleteCommand({
         };
         await writeEnvSpinner(!!prod, newEnv);
         note(`${capitalizeFirstLetter(type)} removed as default`);
-      }
-
-      if (wait) {
-        await waitForCompletion({ settlemint, type, uniqueName: serviceUniqueName, action: "destroy" });
       }
 
       outro(`${capitalizeFirstLetter(type)} ${result.name} deleted successfully`);

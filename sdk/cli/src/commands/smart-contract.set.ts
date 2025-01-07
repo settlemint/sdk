@@ -23,7 +23,7 @@ import { subgraphDeployCommand } from "./smart-contract-set/subgraph/deploy";
 export function smartContractSetCommand(): Command {
   const foundry = new Command("foundry")
     .alias("f")
-    .description("Foundry commands for building, testing and deploying smart contracts");
+    .description("Foundry commands for building and testing smart contracts");
   foundry.addCommand(foundryBuildCommand());
   foundry.addCommand(foundryFormatCommand());
   foundry.addCommand(foundryNetworkCommand());
@@ -31,7 +31,7 @@ export function smartContractSetCommand(): Command {
 
   const hardhat = new Command("hardhat")
     .alias("h")
-    .description("Hardhat commands for Ethereum development environment");
+    .description("Hardhat commands for building, testing and deploying smart contracts");
   hardhat.addCommand(hardhatBuildCommand());
   hardhat.addCommand(hardhatDeployCommand());
   hardhat.addCommand(hardhatNetworkCommand());

@@ -5,13 +5,13 @@
 Commands for managing TheGraph subgraphs for smart contract indexing
 
 Options:
-  -h, --help                       display help for command
+  -h, --help                        display help for command
 
 Commands:
-  <a href="#subgraph-build">build</a>                            Build the subgraph
-  <a href="#subgraph-codegen">codegen</a>                          Codegen the subgraph types
-  <a href="#subgraph-deploy">deploy</a> [options] [subgraphName]  Deploy the subgraph
-  help [command]                   display help for command
+  <a href="#subgraph-build">build</a>                             Build the subgraph
+  <a href="#subgraph-codegen">codegen</a>                           Codegen the subgraph types
+  <a href="#subgraph-deploy">deploy</a> [options] [subgraph-name]  Deploy the subgraph
+  help [command]                    display help for command
 </pre>
 
 <h2 id="subgraph-build"><a href="#home">Subgraph</a> > Build</h2>
@@ -36,12 +36,19 @@ Options:
 
 <h2 id="subgraph-deploy"><a href="#home">Subgraph</a> > Deploy</h2>
 
-<pre>Usage: settlemint smart-contract-set subgraph deploy [options] [subgraphName]
+<pre>Usage: settlemint smart-contract-set subgraph deploy 
+Examples:
+
+  # Deploy the subgraph
+  $ settlemint scs subgraph deploy
+
+  # Deploy the subgraph with a specific name
+  $ settlemint scs subgraph deploy my-subgraph
 
 Deploy the subgraph
 
 Arguments:
-  subgraphName           The name of the subgraph to deploy (defaults to value
+  subgraph-name          The name of the subgraph to deploy (defaults to value
                          in .env if not provided)
 
 Options:

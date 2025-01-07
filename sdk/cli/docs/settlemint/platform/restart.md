@@ -5,17 +5,17 @@
 Restart a resource in the SettleMint platform
 
 Options:
-  -h, --help                                    display help for command
+  -h, --help                                     display help for command
 
 Commands:
-  <a href="#restart-blockchain-network">blockchain-network|bn</a> [options] &lt;uniqueName&gt;  Restart a blockchain network in the SettleMint platform. Provide the blockchain network ID or use &#039;default&#039; to restart the default blockchain network from your .env file.
-  <a href="#restart-custom-deployment">custom-deployment|cd</a> [options] &lt;uniqueName&gt;   Restart a custom deployment in the SettleMint platform. Provide the custom deployment ID or use &#039;default&#039; to restart the default custom deployment from your .env file.
-  <a href="#restart-insights">insights|in</a>                                   Restart an insights service in the SettleMint platform
-  <a href="#restart-integration-tool">integration-tool|it</a>                           Restart an integration tool service in the SettleMint platform
-  <a href="#restart-middleware">middleware|mw</a>                                 Restart a middleware service in the SettleMint platform
-  <a href="#restart-private-key">private-key|pk</a>                                Restart a private key in the SettleMint platform
-  <a href="#restart-storage">storage|st</a>                                    Restart a storage service in the SettleMint platform
-  help [command]                                display help for command
+  <a href="#restart-blockchain-network">blockchain-network|bn</a> [options] &lt;unique-name&gt;  Restart a blockchain network in the SettleMint platform. Provide the blockchain network ID or use &#039;default&#039; to restart the default blockchain network from your .env file.
+  <a href="#restart-custom-deployment">custom-deployment|cd</a> [options] &lt;unique-name&gt;   Restart a custom deployment in the SettleMint platform. Provide the custom deployment ID or use &#039;default&#039; to restart the default custom deployment from your .env file.
+  <a href="#restart-insights">insights|in</a>                                    Restart an insights service in the SettleMint platform
+  <a href="#restart-integration-tool">integration-tool|it</a>                            Restart an integration tool service in the SettleMint platform
+  <a href="#restart-middleware">middleware|mw</a>                                  Restart a middleware service in the SettleMint platform
+  <a href="#restart-private-key">private-key|pk</a>                                 Restart a private key in the SettleMint platform
+  <a href="#restart-storage">storage|st</a>                                     Restart a storage service in the SettleMint platform
+  help [command]                                 display help for command
 </pre>
 
 <h2 id="restart-blockchain-network"><a href="#home">Restart</a> > Blockchain network</h2>
@@ -34,7 +34,7 @@ network ID or use &#039;default&#039; to restart the default blockchain network 
 .env file.
 
 Arguments:
-  uniqueName             The unique name of the blockchain network, use
+  unique-name            The unique name of the blockchain network, use
                          &#039;default&#039; to restart the default one from your .env
                          file
 
@@ -61,7 +61,7 @@ deployment ID or use &#039;default&#039; to restart the default custom deploymen
 your .env file.
 
 Arguments:
-  uniqueName             The unique name of the custom deployment, use
+  unique-name            The unique name of the custom deployment, use
                          &#039;default&#039; to restart the default one from your .env
                          file
 
@@ -79,14 +79,11 @@ Options:
 Restart an insights service in the SettleMint platform
 
 Options:
-  -h, --help                            display help for command
+  -h, --help                             display help for command
 
 Commands:
-  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;uniqueName&gt;  Restart a insights in the SettleMint
-                                        platform. Provide the insights ID or
-                                        use &#039;default&#039; to restart the default
-                                        insights from your .env file.
-  help [command]                        display help for command
+  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;unique-name&gt;  Restart a insights in the SettleMint platform. Provide the insights ID or use &#039;default&#039; to restart the default insights from your .env file.
+  help [command]                         display help for command
 </pre>
 
 <h3 id="insights-blockscout"><a href="#home">Restart</a> > <a href="#restart-insights">Insights</a> > Blockscout</h3>
@@ -104,7 +101,7 @@ Restart a insights in the SettleMint platform. Provide the insights ID or use
 &#039;default&#039; to restart the default insights from your .env file.
 
 Arguments:
-  uniqueName             The unique name of the insights, use &#039;default&#039; to
+  unique-name            The unique name of the insights, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:
@@ -121,15 +118,15 @@ Options:
 Restart an integration tool service in the SettleMint platform
 
 Options:
-  -h, --help                        display help for command
+  -h, --help                         display help for command
 
 Commands:
-  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;uniqueName&gt;  Restart a integration tool in the
-                                    SettleMint platform. Provide the
-                                    integration tool ID or use &#039;default&#039; to
-                                    restart the default integration tool from
-                                    your .env file.
-  help [command]                    display help for command
+  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;unique-name&gt;  Restart a integration tool in the
+                                     SettleMint platform. Provide the
+                                     integration tool ID or use &#039;default&#039; to
+                                     restart the default integration tool from
+                                     your .env file.
+  help [command]                     display help for command
 </pre>
 
 <h3 id="integration-tool-hasura"><a href="#home">Restart</a> > <a href="#restart-integration-tool">Integration tool</a> > Hasura</h3>
@@ -148,7 +145,7 @@ tool ID or use &#039;default&#039; to restart the default integration tool from 
 file.
 
 Arguments:
-  uniqueName             The unique name of the integration tool, use &#039;default&#039;
+  unique-name            The unique name of the integration tool, use &#039;default&#039;
                          to restart the default one from your .env file
 
 Options:
@@ -165,12 +162,12 @@ Options:
 Restart a middleware service in the SettleMint platform
 
 Options:
-  -h, --help                                        display help for command
+  -h, --help                                         display help for command
 
 Commands:
-  <a href="#middleware-graph">graph|gr</a> [options] &lt;uniqueName&gt;                   Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
-  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;uniqueName&gt;  Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
-  help [command]                                    display help for command
+  <a href="#middleware-graph">graph|gr</a> [options] &lt;unique-name&gt;                   Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
+  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;unique-name&gt;  Restart a middleware in the SettleMint platform. Provide the middleware ID or use &#039;default&#039; to restart the default middleware from your .env file.
+  help [command]                                     display help for command
 </pre>
 
 <h3 id="middleware-graph"><a href="#home">Restart</a> > <a href="#restart-middleware">Middleware</a> > Graph</h3>
@@ -188,7 +185,7 @@ Restart a middleware in the SettleMint platform. Provide the middleware ID or
 use &#039;default&#039; to restart the default middleware from your .env file.
 
 Arguments:
-  uniqueName             The unique name of the middleware, use &#039;default&#039; to
+  unique-name            The unique name of the middleware, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:
@@ -213,7 +210,7 @@ Restart a middleware in the SettleMint platform. Provide the middleware ID or
 use &#039;default&#039; to restart the default middleware from your .env file.
 
 Arguments:
-  uniqueName             The unique name of the middleware, use &#039;default&#039; to
+  unique-name            The unique name of the middleware, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:
@@ -230,11 +227,11 @@ Options:
 Restart a private key in the SettleMint platform
 
 Options:
-  -h, --help                               display help for command
+  -h, --help                                display help for command
 
 Commands:
-  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;uniqueName&gt;  Restart a private key in the SettleMint platform. Provide the private key ID or use &#039;default&#039; to restart the default private key from your .env file.
-  help [command]                           display help for command
+  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;unique-name&gt;  Restart a private key in the SettleMint platform. Provide the private key ID or use &#039;default&#039; to restart the default private key from your .env file.
+  help [command]                            display help for command
 </pre>
 
 <h3 id="private-key-hd-ecdsa-p256"><a href="#home">Restart</a> > <a href="#restart-private-key">Private key</a> > Hd ecdsa p256</h3>
@@ -252,7 +249,7 @@ Restart a private key in the SettleMint platform. Provide the private key ID or
 use &#039;default&#039; to restart the default private key from your .env file.
 
 Arguments:
-  uniqueName             The unique name of the private key, use &#039;default&#039; to
+  unique-name            The unique name of the private key, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:
@@ -269,18 +266,18 @@ Options:
 Restart a storage service in the SettleMint platform
 
 Options:
-  -h, --help                      display help for command
+  -h, --help                       display help for command
 
 Commands:
-  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;uniqueName&gt;  Restart a storage in the SettleMint platform.
-                                  Provide the storage ID or use &#039;default&#039; to
-                                  restart the default storage from your .env
-                                  file.
-  <a href="#storage-minio">minio|m</a> [options] &lt;uniqueName&gt;  Restart a storage in the SettleMint platform.
-                                  Provide the storage ID or use &#039;default&#039; to
-                                  restart the default storage from your .env
-                                  file.
-  help [command]                  display help for command
+  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;unique-name&gt;  Restart a storage in the SettleMint
+                                   platform. Provide the storage ID or use
+                                   &#039;default&#039; to restart the default storage
+                                   from your .env file.
+  <a href="#storage-minio">minio|m</a> [options] &lt;unique-name&gt;  Restart a storage in the SettleMint
+                                   platform. Provide the storage ID or use
+                                   &#039;default&#039; to restart the default storage
+                                   from your .env file.
+  help [command]                   display help for command
 </pre>
 
 <h3 id="storage-ipfs"><a href="#home">Restart</a> > <a href="#restart-storage">Storage</a> > Ipfs</h3>
@@ -298,7 +295,7 @@ Restart a storage in the SettleMint platform. Provide the storage ID or use
 &#039;default&#039; to restart the default storage from your .env file.
 
 Arguments:
-  uniqueName             The unique name of the storage, use &#039;default&#039; to
+  unique-name            The unique name of the storage, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:
@@ -323,7 +320,7 @@ Restart a storage in the SettleMint platform. Provide the storage ID or use
 &#039;default&#039; to restart the default storage from your .env file.
 
 Arguments:
-  uniqueName             The unique name of the storage, use &#039;default&#039; to
+  unique-name            The unique name of the storage, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:

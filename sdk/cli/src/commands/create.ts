@@ -2,7 +2,7 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { namePrompt } from "@/commands/create/name.prompt";
 import { templatePrompt } from "@/commands/create/template.prompt";
-import { Command } from "@commander-js/extra-typings";
+import { Command, Option } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -23,9 +23,10 @@ export function createCommand(): Command {
       // Set the command description
       .description("Bootstrap your SettleMint project")
       .option("-n, --project-name <name>", "The name for your SettleMint project")
-      .option(
-        "-t, --template <template>",
-        `The template for your SettleMint project, options are ${templates.map((templates) => templates.value).join(", ")}`,
+      .addOption(
+        new Option("-t, --template <template>", "Thehe template for your SettleMint project").choices(
+          templates.map((templates) => templates.value),
+        ),
       )
       // Define the action to be executed when the command is run
       .action(async ({ projectName, template }) => {

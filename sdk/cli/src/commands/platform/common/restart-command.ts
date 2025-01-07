@@ -60,7 +60,7 @@ export function getRestartCommand({
       ]),
     )
     .argument(
-      "<uniqueName>",
+      "<unique-name>",
       `The unique name of the ${type}, use 'default' to restart the default one from your .env file`,
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
