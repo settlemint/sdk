@@ -137,7 +137,7 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Run tests and checks
-        run: bunx turbo format lint typecheck build attw publint registry test:coverage publish-npm --env-mode=loose
+        run: bunx turbo format lint typecheck build attw publint registry test:coverage publish-npm docs --env-mode=loose
 
       - name: Check typings of E2E tests
         run: bun test:typecheck
@@ -195,7 +195,7 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
-          file_pattern: 'package.json **/schema.graphql'
+          file_pattern: 'package.json **/package.json **/schema.graphql sdk/cli/docs/**/*.md'
 
       # This is super unstable and we publish the registry to github pages which is fine for now
       # - name: Check if packages are published

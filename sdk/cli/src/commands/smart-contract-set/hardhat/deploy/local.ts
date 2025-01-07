@@ -1,9 +1,30 @@
+import { createExamples } from "@/commands/platform/utils/create-examples";
 import { Command } from "@commander-js/extra-typings";
 import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 
 export function hardhatDeployLocalCommand() {
   return new Command("local")
     .description("Deploy the smart contracts using Hardhat/ignition to the local development network")
+    .usage(
+      createExamples([
+        {
+          description: "Deploy smart contracts to local network using Hardhat/Ignition",
+          command: "scs hardhat deploy local",
+        },
+        {
+          description: "Deploy a specific Ignition module",
+          command: "scs hardhat deploy local --module ignition/modules/custom.ts",
+        },
+        {
+          description: "Deploy with a clean deployment state",
+          command: "scs hardhat deploy local --reset",
+        },
+        {
+          description: "Deploy and verify contracts on Etherscan",
+          command: "scs hardhat deploy local --verify",
+        },
+      ]),
+    )
     .option(
       "-m, --module <ignitionmodule>",
       'The module to deploy with Ignition, defaults to "ignition/modules/main.ts"',

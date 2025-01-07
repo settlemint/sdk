@@ -26,11 +26,14 @@ export function smartContractPortalMiddlewareCreateCommand() {
         .option("--abis <abis...>", "Path to abi file(s)")
         .addOption(
           new Option("--include-predeployed-abis <includePredeployedAbis...>", "Include pre-deployed abis").choices([
-            "StarterKitERC20Registry",
-            "StarterKitERC20Factory",
-            "StarterKitERC20",
-            "StarterKitERC20DexFactory",
-            "StarterKitERC20Dex",
+            "Bond",
+            "BondFactory",
+            "CryptoCurrency",
+            "CryptoCurrencyFactory",
+            "Equity",
+            "EquityFactory",
+            "StableCoin",
+            "StableCoinFactory",
           ]),
         )
         .action(

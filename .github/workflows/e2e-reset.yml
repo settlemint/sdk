@@ -45,7 +45,6 @@ jobs:
         uses: settlemint/settlemint-action@main
         with:
           instance: ${{ env.SETTLEMINT_INSTANCE }}
-          personal-access-token: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           access-token: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
           auto-connect: false
           workspace: ${{ secrets.SETTLEMINT_WORKSPACE }}

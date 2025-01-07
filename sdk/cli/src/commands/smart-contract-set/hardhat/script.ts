@@ -3,7 +3,7 @@ import { hardhatScriptLocalCommand } from "./script/local";
 import { hardhatScriptRemoteCommand } from "./script/remote";
 
 export function hardhatScriptCommand() {
-  const script = new Command("script");
+  const script = new Command("script").description("Run a script using Hardhat");
   script.addCommand(hardhatScriptRemoteCommand());
   script.addCommand(hardhatScriptLocalCommand());
 

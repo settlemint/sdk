@@ -1,3 +1,4 @@
+import { createExamples } from "@/commands/platform/utils/create-examples";
 import { mapPassthroughOptions } from "@/utils/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
 import { executeCommand } from "@settlemint/sdk-utils";
@@ -5,6 +6,22 @@ import { executeCommand } from "@settlemint/sdk-utils";
 export function foundryBuildCommand() {
   return new Command("build")
     .description("Build the smart contracts using Foundry/forge")
+    .usage(
+      createExamples([
+        {
+          description: "Build the smart contracts using Foundry",
+          command: "scs foundry build",
+        },
+        {
+          description: "Get list of possible Forge build options",
+          command: "scs foundry build --help",
+        },
+        {
+          description: "Build the smart contracts with additional Forge options",
+          command: "scs foundry build --optimize --force",
+        },
+      ]),
+    )
     .helpOption(false)
     .option("-h, --help", "Get list of possible forge options")
     .passThroughOptions()
