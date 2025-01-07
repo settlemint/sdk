@@ -18,7 +18,7 @@ Commands:
   help [command]                                display help for command
 </pre>
 
-<h3 id="restart-blockchain-network"><a href="../restart.md">restart</a> > blockchain-network</h3>
+<h3 id="restart-blockchain-network"><a href="./restart.md">restart</a> > blockchain-network</h3>
 
 <pre>Usage: settlemint platform restart blockchain-network|bn 
 Examples:
@@ -45,7 +45,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-custom-deployment"><a href="../restart.md">restart</a> > custom-deployment</h3>
+<h3 id="restart-custom-deployment"><a href="./restart.md">restart</a> > custom-deployment</h3>
 
 <pre>Usage: settlemint platform restart custom-deployment|cd 
 Examples:
@@ -72,7 +72,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-insights"><a href="../restart.md">restart</a> > insights</h3>
+<h3 id="restart-insights"><a href="./restart.md">restart</a> > insights</h3>
 
 <pre>Usage: settlemint platform restart insights|in [options] [command]
 
@@ -114,7 +114,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-integration-tool"><a href="../restart.md">restart</a> > integration-tool</h3>
+<h3 id="restart-integration-tool"><a href="./restart.md">restart</a> > integration-tool</h3>
 
 <pre>Usage: settlemint platform restart integration-tool|it [options] [command]
 
@@ -158,7 +158,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-middleware"><a href="../restart.md">restart</a> > middleware</h3>
+<h3 id="restart-middleware"><a href="./restart.md">restart</a> > middleware</h3>
 
 <pre>Usage: settlemint platform restart middleware|mw [options] [command]
 
@@ -223,7 +223,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-private-key"><a href="../restart.md">restart</a> > private-key</h3>
+<h3 id="restart-private-key"><a href="./restart.md">restart</a> > private-key</h3>
 
 <pre>Usage: settlemint platform restart private-key|pk [options] [command]
 
@@ -262,7 +262,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="restart-storage"><a href="../restart.md">restart</a> > storage</h3>
+<h3 id="restart-storage"><a href="./restart.md">restart</a> > storage</h3>
 
 <pre>Usage: settlemint platform restart storage|st [options] [command]
 

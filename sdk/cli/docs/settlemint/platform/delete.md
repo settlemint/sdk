@@ -20,7 +20,7 @@ Commands:
   help [command]                        display help for command
 </pre>
 
-<h3 id="delete-workspace"><a href="../delete.md">delete</a> > workspace</h3>
+<h3 id="delete-workspace"><a href="./delete.md">delete</a> > workspace</h3>
 
 <pre>Usage: settlemint platform delete workspace|w 
 Examples:
@@ -49,7 +49,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="delete-application"><a href="../delete.md">delete</a> > application</h3>
+<h3 id="delete-application"><a href="./delete.md">delete</a> > application</h3>
 
 <pre>Usage: settlemint platform delete application|a 
 Examples:

@@ -16,7 +16,7 @@ Commands:
   help [command]     display help for command
 </pre>
 
-<h3 id="hardhat-build"><a href="../hardhat.md">hardhat</a> > build</h3>
+<h3 id="hardhat-build"><a href="./hardhat.md">hardhat</a> > build</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat build [options]
 
@@ -26,7 +26,7 @@ Options:
   -h, --help  Get list of possible hardhat compile options
 </pre>
 
-<h3 id="hardhat-deploy"><a href="../hardhat.md">hardhat</a> > deploy</h3>
+<h3 id="hardhat-deploy"><a href="./hardhat.md">hardhat</a> > deploy</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat deploy [options] [command]
 
@@ -85,7 +85,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h3 id="hardhat-network"><a href="../hardhat.md">hardhat</a> > network</h3>
+<h3 id="hardhat-network"><a href="./hardhat.md">hardhat</a> > network</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat network [options]
 
@@ -95,7 +95,7 @@ Options:
   -h, --help  Get list of possible hardhat node options
 </pre>
 
-<h3 id="hardhat-script"><a href="../hardhat.md">hardhat</a> > script</h3>
+<h3 id="hardhat-script"><a href="./hardhat.md">hardhat</a> > script</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat script [options] [command]
 
@@ -144,7 +144,7 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h3 id="hardhat-test"><a href="../hardhat.md">hardhat</a> > test</h3>
+<h3 id="hardhat-test"><a href="./hardhat.md">hardhat</a> > test</h3>
 
 <pre>Usage: settlemint smart-contract-set hardhat test [options]
 

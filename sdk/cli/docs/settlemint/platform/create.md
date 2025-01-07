@@ -21,7 +21,7 @@ Commands:
   help [command]                                 display help for command
 </pre>
 
-<h3 id="create-workspace"><a href="../create.md">create</a> > workspace</h3>
+<h3 id="create-workspace"><a href="./create.md">create</a> > workspace</h3>
 
 <pre>Usage: settlemint platform create workspace|w 
 Examples:
@@ -59,7 +59,7 @@ Options:
   -h, --help                             display help for command
 </pre>
 
-<h3 id="create-application"><a href="../create.md">create</a> > application</h3>
+<h3 id="create-application"><a href="./create.md">create</a> > application</h3>
 
 <pre>Usage: settlemint platform create application|a 
 Examples:
@@ -89,7 +89,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h3 id="create-blockchain-network"><a href="../create.md">create</a> > blockchain-network</h3>
+<h3 id="create-blockchain-network"><a href="./create.md">create</a> > blockchain-network</h3>
 
 <pre>Usage: settlemint platform create blockchain-network|bnw [options] [command]
 
@@ -145,7 +145,7 @@ Options:
   -h, --help                       display help for command
 </pre>
 
-<h3 id="create-blockchain-node"><a href="../create.md">create</a> > blockchain-node</h3>
+<h3 id="create-blockchain-node"><a href="./create.md">create</a> > blockchain-node</h3>
 
 <pre>Usage: settlemint platform create blockchain-node|bn [options] [command]
 
@@ -196,7 +196,7 @@ Options:
   -h, --help                                display help for command
 </pre>
 
-<h3 id="create-private-key"><a href="../create.md">create</a> > private-key</h3>
+<h3 id="create-private-key"><a href="./create.md">create</a> > private-key</h3>
 
 <pre>Usage: settlemint platform create private-key|pk [options] [command]
 
@@ -285,7 +285,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h3 id="create-middleware"><a href="../create.md">create</a> > middleware</h3>
+<h3 id="create-middleware"><a href="./create.md">create</a> > middleware</h3>
 
 <pre>Usage: settlemint platform create middleware|mw [options] [command]
 
@@ -367,7 +367,7 @@ Options:
   -h, --help                                              display help for command
 </pre>
 
-<h3 id="create-storage"><a href="../create.md">create</a> > storage</h3>
+<h3 id="create-storage"><a href="./create.md">create</a> > storage</h3>
 
 <pre>Usage: settlemint platform create storage|st [options] [command]
 
@@ -446,7 +446,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h3 id="create-integration-tool"><a href="../create.md">create</a> > integration-tool</h3>
+<h3 id="create-integration-tool"><a href="./create.md">create</a> > integration-tool</h3>
 
 <pre>Usage: settlemint platform create integration-tool|it [options] [command]
 
@@ -493,7 +493,7 @@ Options:
   -h, --help                   display help for command
 </pre>
 
-<h3 id="create-insights"><a href="../create.md">create</a> > insights</h3>
+<h3 id="create-insights"><a href="./create.md">create</a> > insights</h3>
 
 <pre>Usage: settlemint platform create insights|in [options] [command]
 
@@ -544,7 +544,7 @@ Options:
   -h, --help                          display help for command
 </pre>
 
-<h3 id="create-application-access-token"><a href="../create.md">create</a> > application-access-token</h3>
+<h3 id="create-application-access-token"><a href="./create.md">create</a> > application-access-token</h3>
 
 <pre>Usage: settlemint platform create application-access-token|aat 
 Examples:
