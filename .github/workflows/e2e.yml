@@ -45,6 +45,7 @@ jobs:
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
           SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
           DISABLE_CONCURRENT_DEPLOYMENT: "op://platform/SDK E2E/disable-concurrent-deployment"
+          SLACK_WEBHOOK_URL: "op://platform/SDK E2E/e2e-slack-webhook"
 
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
@@ -82,6 +83,7 @@ jobs:
         run: bunx turbo build
 
       - name: Run the E2E tests
+        id: e2e
         run: bun test:e2e
         env:
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
@@ -124,3 +126,14 @@ jobs:
           gh secret set -f .env.local
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
+
+      - name: Send Slack notification
+        if: ${{ !cancelled() }}
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ env.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "${{ steps.e2e.outcome == 'success' && ':white_check_mark: E2E SDK Tests Passed' || ':x: E2E SDK Tests Failed' }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{github.run_id }}|View E2E SDK Run Details>"
+            }
