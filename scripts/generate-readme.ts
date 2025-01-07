@@ -1,5 +1,12 @@
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { tryParseJson } from "@settlemint/sdk-utils";
+
+interface Placeholders {
+  "package-name": string;
+  about: string;
+  "api-reference": string;
+}
 
 /**
  * Generates README.md files for each SDK package
@@ -26,7 +33,18 @@ async function generateReadme() {
 
       // Write README file
       console.log(`Writing README for ${pkg}...`);
-      await writeFile(readmePath, template);
+      const packageJson = await readFile(join(sdkDir, pkg, "package.json"), "utf-8");
+      const { name } = tryParseJson<{ name: string }>(packageJson);
+      const about = (await readFile(join(sdkDir, pkg, "docs", "ABOUT.md"), "utf-8")).trim();
+      const apiReference = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
+      await writeFile(
+        readmePath,
+        replacePlaceholders(template, {
+          "package-name": name,
+          about,
+          "api-reference": apiReference,
+        }),
+      );
       console.log(`Successfully generated README.md for ${pkg}`);
     }
 
@@ -35,6 +53,18 @@ async function generateReadme() {
     console.error("Error generating README files:", error);
     process.exit(1);
   }
+}
+
+/**
+ * Replaces placeholders in a template string with provided values
+ * @param template - The template string containing placeholders
+ * @param placeholders - Object containing placeholder values
+ * @returns The template with placeholders replaced
+ */
+function replacePlaceholders(template: string, placeholders: Placeholders): string {
+  return Object.entries(placeholders).reduce((result, [key, value]) => {
+    return result.replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value);
+  }, template);
 }
 
 // Execute the script

@@ -7,7 +7,7 @@
     Integrate SettleMint into your application with ease.
   </p>
 </p>
-<br/>
+
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
 <a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-cli" alt="License"></a>
@@ -26,45 +26,33 @@
   <br />
 </div>
 
-## Getting started
+## Table of Contents
 
-First we will create a new Next JS project using the following command.
+- [About](#about)
+- [API Reference](#api-reference)
+- [Contributing](#contributing)
+- [License](#license)
 
-```bash
-# Using npx
-npx @settlemint/sdk-cli@latest create
+## About
 
-# Using bun
-bunx @settlemint/sdk-cli@latest create
+The SettleMint CLI provides a command-line interface for interacting with the SettleMint platform. It enables you to manage your blockchain networks, deploy smart contracts, configure your SettleMint infrastructure directly from the terminal.
 
-# Using pnpm
-pnpm dlx @settlemint/sdk-cli@latest create
-```
+## API Reference
 
-Then following the next steps in your terminal.
+See the [documentation](./docs/settlemint.md) for available commands.
 
+## Contributing
 
-## Local development
+We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
 
-### Debugging
+1. Fork the repository
+2. Create a new branch for your feature or bug fix
+3. Make your changes and commit them with a clear commit message
+4. Push your changes to your fork
+5. Create a pull request to the main repository
 
-To debug with interactive input you need to start the command from the terminal and then attach the debugger.
+Please ensure that your code follows the existing style and includes appropriate tests and documentation.
 
-```bash
-bun --inspect-wait=localhost:6499/ sdk/cli/src/cli.ts create
-# Attach the debugger using the "SDK: Attach to process" configuration
+## License
 
-# Run from the directory created by the create command
-bun --inspect-wait=localhost:6499/ sdk/cli/src/cli.ts connect
-# Attach the debugger using the "SDK: Attach to process" configuration
-```
-
-### e2e tests
-
-Create a ".env" file in the root folder of this project.
-
-```env
-SETTLEMINT_ACCESS_TOKEN_E2E_TESTS="sm_pat_xxx"
-SETTLEMINT_INSTANCE="https://me.settlemint.be"
-DISABLE_WORKSPACE_DELETE=true
-```
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.

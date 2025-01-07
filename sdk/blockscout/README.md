@@ -10,8 +10,8 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-portal" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-portal" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-portal" alt="npm"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-blockscout" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk-blockscout" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-blockscout" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-portal">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-blockscout">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -35,11 +35,9 @@
 
 ## About
 
-The SettleMint Smart Contract Portal SDK provides a seamless way to interact with the Smart Contract Portal Middleware API. It enables you to easily interact with your smart contracts using a REST or GraphQL API.
+The SettleMint Blockscout SDK provides a seamless way to interact with Blockscout APIs for blockchain data exploration and analysis. It enables you to easily query transaction data, blocks, addresses, smart contracts and more from your SettleMint-powered blockchain networks.
 
-The SDK offers a type-safe interface for all Portal API operations, with comprehensive error handling and validation. It integrates smoothly with modern TypeScript applications while providing a simple and intuitive developer experience.
-
-For detailed information about using the Smart Contract Portal Middleware, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/middleware/#the-smart-contract-portal-middleware).
+For detailed information about using Blockscout with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/insights/).
 
 ## API Reference
 
