@@ -83,6 +83,7 @@ jobs:
         run: bunx turbo build
 
       - name: Run the E2E tests
+        id: e2e
         run: bun test:e2e
         env:
           DISABLE_CONCURRENT_DEPLOYMENT: ${{ env.DISABLE_CONCURRENT_DEPLOYMENT }}
@@ -127,12 +128,12 @@ jobs:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
       - name: Send Slack notification
-        if: always()
+        if: !cancelled()
         uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
             {
-              "text": "${{ steps.e2e_tests.outcome == 'success' && ':white_check_mark: E2E SDK Tests Passed' || ':x: E2E SDK Tests Failed' }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{github.run_id }}|View E2E SDK Run Details>"
+              "text": "${{ steps.e2e.outcome == 'success' && ':white_check_mark: E2E SDK Tests Passed' || ':x: E2E SDK Tests Failed' }}\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{github.run_id }}|View E2E SDK Run Details>"
             }
