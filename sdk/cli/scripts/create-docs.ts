@@ -39,9 +39,22 @@ export async function createDocs(command: Command) {
       command.commands.map((c) => c.name()),
       parentPath.length >= MAX_DEPTH,
     );
+    const description =
+      parentPath.length === 0
+        ? `<p>Welcome to the SettleMint CLI documentation. This command-line interface provides tools for managing your SettleMint projects, smart contracts, and platform resources.</p>
+
+<p>To get started:</p>
+<ul>
+  <li>Use <code>settlemint login</code> to authenticate with your SettleMint account</li>
+  <li>Create a new project with <code>settlemint create</code></li>
+  <li>Connect your project to SettleMint using <code>settlemint connect</code></li>
+</ul>
+
+<p>Browse through the available commands below to learn more about each one. You can click the command names to view detailed documentation, or use <code>settlemint [command] --help</code> in your terminal.</p>\n\n`
+        : "";
     await writeFile(
       docPath,
-      `${createTitle(parentPath, command.name(), useParentFile)}\n\n<pre>${helpTextWithLinks}</pre>\n\n`,
+      `${createTitle(parentPath, command.name(), useParentFile)}\n\n${description}<pre>${helpTextWithLinks}</pre>\n\n`,
       {
         flag: "a",
       },

@@ -195,7 +195,7 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
-          file_pattern: 'package.json **/schema.graphql'
+          file_pattern: 'package.json **/package.json **/schema.graphql sdk/cli/docs/settlemint.md'
 
       # This is super unstable and we publish the registry to github pages which is fine for now
       # - name: Check if packages are published
