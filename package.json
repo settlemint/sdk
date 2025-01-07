@@ -27,10 +27,7 @@
     "build": "turbo build",
     "dev": "turbo dev --concurrency=12",
     "lint": "turbo lint",
-    "registry:connect": "turbo registry:connect",
-    "registry:codegen": "turbo registry:codegen",
     "codegen": "turbo codegen",
-    "registry": "turbo registry",
     "publish-npm": "turbo publish-npm",
     "docker": "turbo docker",
     "deploy": "turbo deploy",
@@ -57,7 +54,7 @@
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "bun@1.1.40",
+  "packageManager": "bun@1.1.42",
   "workspaces": ["sdk/*", "apps/*"],
   "trustedDependencies": [
     "@biomejs/biome",
