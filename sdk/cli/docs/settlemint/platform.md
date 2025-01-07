@@ -1,4 +1,4 @@
-<h1><a href="../settlemint.md">settlemint</a> > platform</h1>
+<h1 id="home"><a href="../settlemint.md">settlemint</a> > platform</h1>
 
 <pre>Usage: settlemint platform [options] [command]
 

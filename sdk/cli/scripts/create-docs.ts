@@ -70,7 +70,13 @@ function createTitle(parentPath: string[], commandName: string, useParentFile: b
         url: `#${parent.toLowerCase()}-${part.toLowerCase()}`,
       };
     }
-    const levels = useParentFile ? 0 : parentPath.length - parentPath.indexOf(part);
+    if (useParentFile) {
+      return {
+        name: part,
+        url: "#home",
+      };
+    }
+    const levels = parentPath.length - parentPath.indexOf(part);
     const prefix = "../".repeat(levels) || "./";
     return {
       name: part,
@@ -79,7 +85,7 @@ function createTitle(parentPath: string[], commandName: string, useParentFile: b
   });
 
   if (!useParentFile) {
-    return `<h1>${parents
+    return `<h1 id="home">${parents
       .map((parent) => {
         return `<a href="${parent.url}">${escapeHtml(parent.name)}</a>`;
       })
