@@ -128,7 +128,7 @@ jobs:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
       - name: Send Slack notification
-        if: !cancelled()
+        if: ${{ !cancelled() }}
         uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
