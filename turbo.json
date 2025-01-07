@@ -78,6 +78,11 @@
       "dependsOn": ["^build"],
       "inputs": ["src/**", "scripts/create-docs.ts"],
       "outputs": ["docs/**"]
+    },
+    "//#generate-readme": {
+      "dependsOn": ["^build"],
+      "inputs": ["scripts/generate-readme.ts"],
+      "outputs": ["sdk/**/README.md"]
     }
   }
 }

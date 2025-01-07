@@ -1,4 +1,4 @@
-import { mkdir, rm, writeFile } from "node:fs/promises";
+import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Command, type CommandUnknownOpts, Help } from "@commander-js/extra-typings";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -17,9 +17,14 @@ export async function createDocs(command: Command) {
   const docsDir = join(__dirname, "..", "docs");
 
   // Create docs directory if it doesn't exist
-  console.log(`Cleaning and creating docs directory at ${docsDir}`);
-  await rm(docsDir, { recursive: true, force: true });
-  await mkdir(docsDir, { recursive: true });
+  console.log(`Cleaning docs directory at ${docsDir}`);
+  await rm(join(docsDir, "settlemint.md"));
+  const entries = await readdir(docsDir, { withFileTypes: true });
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      await rm(join(docsDir, entry.name), { recursive: true, force: true });
+    }
+  }
 
   // Get help text for command and write to file
   async function writeHelpToFile(command: Command | CommandUnknownOpts, help: Help, parentPath: string[] = []) {
