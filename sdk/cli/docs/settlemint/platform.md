@@ -1,4 +1,4 @@
-## [settlemint](../settlemint.md) > platform
+# [settlemint](../settlemint.md) > platform
 
 <pre>Usage: settlemint platform [options] [command]
 

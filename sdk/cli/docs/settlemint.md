@@ -1,4 +1,4 @@
-## settlemint
+# settlemint
 
 <pre>Usage: settlemint [command]
 

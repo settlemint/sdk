@@ -1,4 +1,4 @@
-## [settlemint](../settlemint.md) > login
+# [settlemint](../settlemint.md) > login
 
 <pre>Usage: settlemint login 
 Examples:
@@ -15,7 +15,7 @@ Options:
   -a, --accept-defaults      Accept the default and previously set values
   -d, --default              Set this instance as the default
   --token-stdin              Provide a token using STDIN
-  -i, --instance <instance>  The instance to login to (defaults to the instance
+  -i, --instance &lt;instance&gt;  The instance to login to (defaults to the instance
                              in the .env file)
   -h, --help                 display help for command
 </pre>

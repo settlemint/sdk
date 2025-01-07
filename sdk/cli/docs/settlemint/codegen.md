@@ -1,4 +1,4 @@
-## [settlemint](../settlemint.md) > codegen
+# [settlemint](../settlemint.md) > codegen
 
 <pre>Usage: settlemint codegen [options]
 
@@ -6,7 +6,7 @@ Generate GraphQL and REST types and queries
 
 Options:
   --prod                                         Connect to your production environment
-  --thegraph-subgraph-names <subgraph-names...>  The name(s) of the TheGraph subgraph(s) to generate (skip if you want to generate all)
+  --thegraph-subgraph-names &lt;subgraph-names...&gt;  The name(s) of the TheGraph subgraph(s) to generate (skip if you want to generate all)
   -h, --help                                     display help for command
 </pre>
 

@@ -1,4 +1,4 @@
-## [settlemint](../settlemint.md) > connect
+# [settlemint](../settlemint.md) > connect
 
 <pre>Usage: settlemint connect [options]
 

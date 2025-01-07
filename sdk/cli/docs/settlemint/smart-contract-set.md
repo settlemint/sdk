@@ -1,4 +1,4 @@
-## [settlemint](../settlemint.md) > smart-contract-set
+# [settlemint](../settlemint.md) > smart-contract-set
 
 <pre>Usage: settlemint smart-contract-set|scs [options] [command]
 

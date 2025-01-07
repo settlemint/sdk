@@ -1,4 +1,4 @@
-## [settlemint](../settlemint.md) > logout
+# [settlemint](../settlemint.md) > logout
 
 <pre>Usage: settlemint logout [options]
 

@@ -1,4 +1,4 @@
-## [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > foundry
+# [settlemint](../../settlemint.md) > [smart-contract-set](../smart-contract-set.md) > foundry
 
 <pre>Usage: settlemint smart-contract-set foundry|f [options] [command]
 
@@ -15,7 +15,7 @@ Commands:
   help [command]     display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [foundry](../foundry.md) > build
+<h2 id="foundry-build"><a href="../foundry.md">foundry</a> > build</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry build [options]
 
@@ -25,7 +25,7 @@ Options:
   -h, --help  Get list of possible forge options
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [foundry](../foundry.md) > format
+<h2 id="foundry-format"><a href="../foundry.md">foundry</a> > format</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry format [options]
 
@@ -35,7 +35,7 @@ Options:
   -h, --help  Get list of possible forge options
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [foundry](../foundry.md) > network
+<h2 id="foundry-network"><a href="../foundry.md">foundry</a> > network</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry network [options]
 
@@ -45,7 +45,7 @@ Options:
   -h, --help  Get list of possible anvil options
 </pre>
 
-## [settlemint](../../../settlemint.md) > [smart-contract-set](../../smart-contract-set.md) > [foundry](../foundry.md) > test
+<h2 id="foundry-test"><a href="../foundry.md">foundry</a> > test</h2>
 
 <pre>Usage: settlemint smart-contract-set foundry test [options]
 

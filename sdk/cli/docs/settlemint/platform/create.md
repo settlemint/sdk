@@ -1,4 +1,4 @@
-## [settlemint](../../settlemint.md) > [platform](../platform.md) > create
+# [settlemint](../../settlemint.md) > [platform](../platform.md) > create
 
 <pre>Usage: settlemint platform create|c [options] [command]
 
@@ -8,8 +8,8 @@ Options:
   -h, --help                                     display help for command
 
 Commands:
-  <a href="./create/workspace.md">workspace|w</a> [options] <name>                   Create a new workspace in the SettleMint platform.
-  <a href="./create/application.md">application|a</a> [options] <name>                 Create a new application in the SettleMint platform.
+  <a href="./create/workspace.md">workspace|w</a> [options] &lt;name&gt;                   Create a new workspace in the SettleMint platform.
+  <a href="./create/application.md">application|a</a> [options] &lt;name&gt;                 Create a new application in the SettleMint platform.
   <a href="./create/blockchain-network.md">blockchain-network|bnw</a>                         Create a blockchain network in the SettleMint platform
   <a href="./create/blockchain-node.md">blockchain-node|bn</a>                             Create a blockchain node in the SettleMint platform
   <a href="./create/private-key.md">private-key|pk</a>                                 Create a private key in the SettleMint platform
@@ -17,20 +17,20 @@ Commands:
   <a href="./create/storage.md">storage|st</a>                                     Create a storage service in the SettleMint platform
   <a href="./create/integration-tool.md">integration-tool|it</a>                            Create a new integration tool
   <a href="./create/insights.md">insights|in</a>                                    Create a new insights
-  <a href="./create/application.md">application</a>-access-token|aat [options] <name>  Create a new application access token in the SettleMint platform.
+  <a href="./create/application.md">application</a>-access-token|aat [options] &lt;name&gt;  Create a new application access token in the SettleMint platform.
   help [command]                                 display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > workspace
+<h2 id="create-workspace"><a href="../create.md">create</a> > workspace</h2>
 
 <pre>Usage: settlemint platform create workspace|w 
 Examples:
 
   # Create a workspace with company details
-  $ settlemint platform create workspace my-workspace --name "SettleMint" --tax-id-type eu_vat --tax-id-value BE0661674810
+  $ settlemint platform create workspace my-workspace --name &quot;SettleMint&quot; --tax-id-type eu_vat --tax-id-value BE0661674810
 
   # Create a workspace with address details
-  $ settlemint platform create workspace my-workspace --line1 "123 Main St" --city "Brussels" --postal-code "1000" --country BE
+  $ settlemint platform create workspace my-workspace --line1 &quot;123 Main St&quot; --city &quot;Brussels&quot; --postal-code &quot;1000&quot; --country BE
 
   # Create a workspace and save as default
   $ settlemint platform create workspace my-workspace -d
@@ -46,20 +46,20 @@ Options:
   -w, --wait                             Wait until deployed
   -r, --restart-if-timeout               Restart if wait time is exceeded
   --prod                                 Connect to production environment
-  --company-name <companyName>           Company name
-  --address-line-1 <addressLine1>        Address line 1
-  --address-line-2 <addressLine2>        Address line 2
-  --city <city>                          City
-  --postal-code <code>                   Postal code
-  --country <country>                    Country
-  --tax-id-value <value>                 Tax ID value
-  --tax-id-type <type>                   Tax ID type (e.g. 'eu_vat' for European VAT number like 'ATU12345678', 'us_ein' for US EIN like '12-3456789') (choices: "ad_nrt", "ar_cuit", "au_abn", "au_arn", "eu_vat", "bh_vat", "by_tin", "bo_tin", "br_cnpj", "br_cpf", "bg_uic", "ca_bn", "ca_gst_hst", "ca_pst_bc", "ca_pst_mb", "ca_pst_sk", "ca_qst", "cl_tin", "cn_tin", "co_nit", "cr_tin", "hr_oib", "do_rcn", "ec_ruc", "eg_tin", "sv_nit", "eu_oss_vat", "ge_vat", "de_stn", "hk_br", "hu_tin", "is_vat", "in_gst", "id_npwp", "il_vat", "jp_cn", "jp_rn", "jp_trn", "kz_bin", "ke_pin", "li_uid", "li_vat", "my_frp", "my_itn", "my_sst", "mx_rfc", "md_vat", "ma_vat", "nz_gst", "ng_tin", "no_vat", "no_voec", "om_vat", "pe_ruc", "ph_tin", "ro_tin", "ru_inn", "ru_kpp", "sa_vat", "rs_pib", "sg_gst", "sg_uen", "si_tin", "za_vat", "kr_brn", "es_cif", "ch_uid", "ch_vat", "tw_vat", "tz_vat", "th_vat", "tr_tin", "ua_vat", "ae_trn", "gb_vat", "us_ein", "uy_ruc", "uz_tin", "uz_vat", "ve_rif", "vn_tin")
-  --payment-method-id <paymentMethodId>  Payment method ID
-  --parent-id <parentId>                 Parent workspace ID
+  --company-name &lt;companyName&gt;           Company name
+  --address-line-1 &lt;addressLine1&gt;        Address line 1
+  --address-line-2 &lt;addressLine2&gt;        Address line 2
+  --city &lt;city&gt;                          City
+  --postal-code &lt;code&gt;                   Postal code
+  --country &lt;country&gt;                    Country
+  --tax-id-value &lt;value&gt;                 Tax ID value
+  --tax-id-type &lt;type&gt;                   Tax ID type (e.g. &#039;eu_vat&#039; for European VAT number like &#039;ATU12345678&#039;, &#039;us_ein&#039; for US EIN like &#039;12-3456789&#039;) (choices: &quot;ad_nrt&quot;, &quot;ar_cuit&quot;, &quot;au_abn&quot;, &quot;au_arn&quot;, &quot;eu_vat&quot;, &quot;bh_vat&quot;, &quot;by_tin&quot;, &quot;bo_tin&quot;, &quot;br_cnpj&quot;, &quot;br_cpf&quot;, &quot;bg_uic&quot;, &quot;ca_bn&quot;, &quot;ca_gst_hst&quot;, &quot;ca_pst_bc&quot;, &quot;ca_pst_mb&quot;, &quot;ca_pst_sk&quot;, &quot;ca_qst&quot;, &quot;cl_tin&quot;, &quot;cn_tin&quot;, &quot;co_nit&quot;, &quot;cr_tin&quot;, &quot;hr_oib&quot;, &quot;do_rcn&quot;, &quot;ec_ruc&quot;, &quot;eg_tin&quot;, &quot;sv_nit&quot;, &quot;eu_oss_vat&quot;, &quot;ge_vat&quot;, &quot;de_stn&quot;, &quot;hk_br&quot;, &quot;hu_tin&quot;, &quot;is_vat&quot;, &quot;in_gst&quot;, &quot;id_npwp&quot;, &quot;il_vat&quot;, &quot;jp_cn&quot;, &quot;jp_rn&quot;, &quot;jp_trn&quot;, &quot;kz_bin&quot;, &quot;ke_pin&quot;, &quot;li_uid&quot;, &quot;li_vat&quot;, &quot;my_frp&quot;, &quot;my_itn&quot;, &quot;my_sst&quot;, &quot;mx_rfc&quot;, &quot;md_vat&quot;, &quot;ma_vat&quot;, &quot;nz_gst&quot;, &quot;ng_tin&quot;, &quot;no_vat&quot;, &quot;no_voec&quot;, &quot;om_vat&quot;, &quot;pe_ruc&quot;, &quot;ph_tin&quot;, &quot;ro_tin&quot;, &quot;ru_inn&quot;, &quot;ru_kpp&quot;, &quot;sa_vat&quot;, &quot;rs_pib&quot;, &quot;sg_gst&quot;, &quot;sg_uen&quot;, &quot;si_tin&quot;, &quot;za_vat&quot;, &quot;kr_brn&quot;, &quot;es_cif&quot;, &quot;ch_uid&quot;, &quot;ch_vat&quot;, &quot;tw_vat&quot;, &quot;tz_vat&quot;, &quot;th_vat&quot;, &quot;tr_tin&quot;, &quot;ua_vat&quot;, &quot;ae_trn&quot;, &quot;gb_vat&quot;, &quot;us_ein&quot;, &quot;uy_ruc&quot;, &quot;uz_tin&quot;, &quot;uz_vat&quot;, &quot;ve_rif&quot;, &quot;vn_tin&quot;)
+  --payment-method-id &lt;paymentMethodId&gt;  Payment method ID
+  --parent-id &lt;parentId&gt;                 Parent workspace ID
   -h, --help                             display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > application
+<h2 id="create-application"><a href="../create.md">create</a> > application</h2>
 
 <pre>Usage: settlemint platform create application|a 
 Examples:
@@ -84,12 +84,12 @@ Options:
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
   --prod                       Connect to production environment
-  -w, --workspace <workspace>  The workspace unique name to create the
+  -w, --workspace &lt;workspace&gt;  The workspace unique name to create the
                                application in (defaults to workspace from env)
   -h, --help                   display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > blockchain-network
+<h2 id="create-blockchain-network"><a href="../create.md">create</a> > blockchain-network</h2>
 
 <pre>Usage: settlemint platform create blockchain-network|bnw [options] [command]
 
@@ -99,12 +99,12 @@ Options:
   -h, --help               display help for command
 
 Commands:
-  <a href="./blockchain-network/besu.md">besu|b</a> [options] <name>  Create a new blockchain network in the SettleMint
+  <a href="#blockchain-network-besu">besu|b</a> [options] &lt;name&gt;  Create a new blockchain network in the SettleMint
                            platform.
   help [command]           display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [blockchain-network](../blockchain-network.md) > besu
+<h2 id="blockchain-network-besu"><a href="../../create.md">create</a> > besu</h2>
 
 <pre>Usage: settlemint platform create blockchain-network besu|b 
 Examples:
@@ -126,26 +126,26 @@ Options:
   -w, --wait                       Wait until deployed
   -r, --restart-if-timeout         Restart if wait time is exceeded
   --prod                           Connect to production environment
-  --provider <provider>            Network provider
-  --region <region>                Deployment region
-  --size <size>                    Network size (choices: "CUSTOM", "LARGE",
-                                   "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                    Network type (choices: "DEDICATED",
-                                   "SHARED", default: "SHARED")
-  -a, --application <application>  The unique name of the application to create
+  --provider &lt;provider&gt;            Network provider
+  --region &lt;region&gt;                Deployment region
+  --size &lt;size&gt;                    Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                   &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                    Network type (choices: &quot;DEDICATED&quot;,
+                                   &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  -a, --application &lt;application&gt;  The unique name of the application to create
                                    the network in (defaults to application from
                                    env)
-  --node-name <name>               Name of the node
-  --chain-id <chainId>             The chain ID for the network
-  --contract-size-limit <limit>    Maximum contract size limit
-  --evm-stack-size <size>          EVM stack size
-  --gas-limit <limit>              Block gas limit
-  --gas-price <price>              Gas price in wei
-  --seconds-per-block <seconds>    Block time in seconds
+  --node-name &lt;name&gt;               Name of the node
+  --chain-id &lt;chainId&gt;             The chain ID for the network
+  --contract-size-limit &lt;limit&gt;    Maximum contract size limit
+  --evm-stack-size &lt;size&gt;          EVM stack size
+  --gas-limit &lt;limit&gt;              Block gas limit
+  --gas-price &lt;price&gt;              Gas price in wei
+  --seconds-per-block &lt;seconds&gt;    Block time in seconds
   -h, --help                       display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > blockchain-node
+<h2 id="create-blockchain-node"><a href="../create.md">create</a> > blockchain-node</h2>
 
 <pre>Usage: settlemint platform create blockchain-node|bn [options] [command]
 
@@ -155,12 +155,12 @@ Options:
   -h, --help               display help for command
 
 Commands:
-  <a href="./blockchain-node/besu.md">besu|b</a> [options] <name>  Create a new blockchain node in the SettleMint
+  <a href="#blockchain-node-besu">besu|b</a> [options] &lt;name&gt;  Create a new blockchain node in the SettleMint
                            platform.
   help [command]           display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [blockchain-node](../blockchain-node.md) > besu
+<h2 id="blockchain-node-besu"><a href="../../create.md">create</a> > besu</h2>
 
 <pre>Usage: settlemint platform create blockchain-node besu|b 
 Examples:
@@ -185,18 +185,18 @@ Options:
   -w, --wait                                Wait until deployed
   -r, --restart-if-timeout                  Restart if wait time is exceeded
   --prod                                    Connect to production environment
-  --provider <provider>                     Network provider
-  --region <region>                         Deployment region
-  --size <size>                             Network size (choices: "CUSTOM", "LARGE", "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                             Network type (choices: "DEDICATED", "SHARED", default: "SHARED")
-  -a, --application <application>           The application unique name to create the node in (defaults to application from env)
-  --blockchain-network <blockchainNetwork>  Blockchain network unique name to add this node to
-  --node-identity <nodeIdentity>            EC DSA P256 private key to use as the node identity
-  --node-type <nodeType>                    Type of the node (choices: "VALIDATOR", "NON_VALIDATOR")
+  --provider &lt;provider&gt;                     Network provider
+  --region &lt;region&gt;                         Deployment region
+  --size &lt;size&gt;                             Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                             Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  -a, --application &lt;application&gt;           The application unique name to create the node in (defaults to application from env)
+  --blockchain-network &lt;blockchainNetwork&gt;  Blockchain network unique name to add this node to
+  --node-identity &lt;nodeIdentity&gt;            EC DSA P256 private key to use as the node identity
+  --node-type &lt;nodeType&gt;                    Type of the node (choices: &quot;VALIDATOR&quot;, &quot;NON_VALIDATOR&quot;)
   -h, --help                                display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > private-key
+<h2 id="create-private-key"><a href="../create.md">create</a> > private-key</h2>
 
 <pre>Usage: settlemint platform create private-key|pk [options] [command]
 
@@ -206,14 +206,14 @@ Options:
   -h, --help                          display help for command
 
 Commands:
-  <a href="./private-key/hd-ecdsa-p256.md">hd-ecdsa-p256|hd</a> [options] <name>   Create a new private key in the
+  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;name&gt;   Create a new private key in the
                                       SettleMint platform.
-  <a href="./private-key/hsm-ecdsa-p256.md">hsm-ecdsa-p256|hd</a> [options] <name>  Create a new private key in the
+  <a href="#private-key-hsm-ecdsa-p256">hsm-ecdsa-p256|hd</a> [options] &lt;name&gt;  Create a new private key in the
                                       SettleMint platform.
   help [command]                      display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [private-key](../private-key.md) > hd-ecdsa-p256
+<h2 id="private-key-hd-ecdsa-p256"><a href="../../create.md">create</a> > hd-ecdsa-p256</h2>
 
 <pre>Usage: settlemint platform create private-key hd-ecdsa-p256|hd 
 Examples:
@@ -238,18 +238,18 @@ Options:
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
   --prod                              Connect to production environment
-  --provider <provider>               Network provider
-  --region <region>                   Deployment region
-  --size <size>                       Network size (choices: "CUSTOM", "LARGE",
-                                      "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                       Network type (choices: "DEDICATED",
-                                      "SHARED", default: "SHARED")
-  --application <application>         Application unique name
-  --blockchain-node <blockchainNode>  Blockchain Node unique name
+  --provider &lt;provider&gt;               Network provider
+  --region &lt;region&gt;                   Deployment region
+  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
+                                      &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --application &lt;application&gt;         Application unique name
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name
   -h, --help                          display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [private-key](../private-key.md) > hsm-ecdsa-p256
+<h2 id="private-key-hsm-ecdsa-p256"><a href="../../create.md">create</a> > hsm-ecdsa-p256</h2>
 
 <pre>Usage: settlemint platform create private-key hsm-ecdsa-p256|hd 
 Examples:
@@ -274,18 +274,18 @@ Options:
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
   --prod                              Connect to production environment
-  --provider <provider>               Network provider
-  --region <region>                   Deployment region
-  --size <size>                       Network size (choices: "CUSTOM", "LARGE",
-                                      "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                       Network type (choices: "DEDICATED",
-                                      "SHARED", default: "SHARED")
-  --application <application>         Application unique name
-  --blockchain-node <blockchainNode>  Blockchain Node unique name
+  --provider &lt;provider&gt;               Network provider
+  --region &lt;region&gt;                   Deployment region
+  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
+                                      &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --application &lt;application&gt;         Application unique name
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name
   -h, --help                          display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > middleware
+<h2 id="create-middleware"><a href="../create.md">create</a> > middleware</h2>
 
 <pre>Usage: settlemint platform create middleware|mw [options] [command]
 
@@ -295,12 +295,12 @@ Options:
   -h, --help                                  display help for command
 
 Commands:
-  <a href="./middleware/graph.md">graph|gr</a> [options] <name>                   Create a new middleware in the SettleMint platform.
-  <a href="./middleware/smart-contract-portal.md">smart-contract-portal|scp</a> [options] <name>  Create a new middleware in the SettleMint platform.
+  <a href="#middleware-graph">graph|gr</a> [options] &lt;name&gt;                   Create a new middleware in the SettleMint platform.
+  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;name&gt;  Create a new middleware in the SettleMint platform.
   help [command]                              display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [middleware](../middleware.md) > graph
+<h2 id="middleware-graph"><a href="../../create.md">create</a> > graph</h2>
 
 <pre>Usage: settlemint platform create middleware graph|gr 
 Examples:
@@ -322,18 +322,18 @@ Options:
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
   --prod                              Connect to production environment
-  --provider <provider>               Network provider
-  --region <region>                   Deployment region
-  --size <size>                       Network size (choices: "CUSTOM", "LARGE",
-                                      "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                       Network type (choices: "DEDICATED",
-                                      "SHARED", default: "SHARED")
-  --application <application>         Application unique name
-  --blockchain-node <blockchainNode>  Blockchain Node unique name
+  --provider &lt;provider&gt;               Network provider
+  --region &lt;region&gt;                   Deployment region
+  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
+                                      &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --application &lt;application&gt;         Application unique name
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name
   -h, --help                          display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [middleware](../middleware.md) > smart-contract-portal
+<h2 id="middleware-smart-contract-portal"><a href="../../create.md">create</a> > smart-contract-portal</h2>
 
 <pre>Usage: settlemint platform create middleware smart-contract-portal|scp 
 Examples:
@@ -355,19 +355,19 @@ Options:
   -w, --wait                                              Wait until deployed
   -r, --restart-if-timeout                                Restart if wait time is exceeded
   --prod                                                  Connect to production environment
-  --provider <provider>                                   Network provider
-  --region <region>                                       Deployment region
-  --size <size>                                           Network size (choices: "CUSTOM", "LARGE", "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                                           Network type (choices: "DEDICATED", "SHARED", default: "SHARED")
-  --application <application>                             Application unique name
-  --load-balancer <loadBalancer>                          Load Balancer unique name (mutually exclusive with blockchain-node)
-  --blockchain-node <blockchainNode>                      Blockchain Node unique name (mutually exclusive with load-balancer)
-  --abis <abis...>                                        Path to abi file(s)
-  --include-predeployed-abis <includePredeployedAbis...>  Include pre-deployed abis (choices: "StarterKitERC20Registry", "StarterKitERC20Factory", "StarterKitERC20", "StarterKitERC20DexFactory", "StarterKitERC20Dex")
+  --provider &lt;provider&gt;                                   Network provider
+  --region &lt;region&gt;                                       Deployment region
+  --size &lt;size&gt;                                           Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                                           Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --application &lt;application&gt;                             Application unique name
+  --load-balancer &lt;loadBalancer&gt;                          Load Balancer unique name (mutually exclusive with blockchain-node)
+  --blockchain-node &lt;blockchainNode&gt;                      Blockchain Node unique name (mutually exclusive with load-balancer)
+  --abis &lt;abis...&gt;                                        Path to abi file(s)
+  --include-predeployed-abis &lt;includePredeployedAbis...&gt;  Include pre-deployed abis (choices: &quot;StarterKitERC20Registry&quot;, &quot;StarterKitERC20Factory&quot;, &quot;StarterKitERC20&quot;, &quot;StarterKitERC20DexFactory&quot;, &quot;StarterKitERC20Dex&quot;)
   -h, --help                                              display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > storage
+<h2 id="create-storage"><a href="../create.md">create</a> > storage</h2>
 
 <pre>Usage: settlemint platform create storage|st [options] [command]
 
@@ -377,12 +377,12 @@ Options:
   -h, --help                display help for command
 
 Commands:
-  <a href="./storage/ipfs.md">ipfs|ip</a> [options] <name>  Create a new storage in the SettleMint platform.
-  <a href="./storage/minio.md">minio|m</a> [options] <name>  Create a new storage in the SettleMint platform.
+  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;name&gt;  Create a new storage in the SettleMint platform.
+  <a href="#storage-minio">minio|m</a> [options] &lt;name&gt;  Create a new storage in the SettleMint platform.
   help [command]            display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [storage](../storage.md) > ipfs
+<h2 id="storage-ipfs"><a href="../../create.md">create</a> > ipfs</h2>
 
 <pre>Usage: settlemint platform create storage ipfs|ip 
 Examples:
@@ -404,17 +404,17 @@ Options:
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
   --prod                       Connect to production environment
-  --provider <provider>        Network provider
-  --region <region>            Deployment region
-  --size <size>                Network size (choices: "CUSTOM", "LARGE",
-                               "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                Network type (choices: "DEDICATED", "SHARED",
-                               default: "SHARED")
-  --application <application>  Application unique name
+  --provider &lt;provider&gt;        Network provider
+  --region &lt;region&gt;            Deployment region
+  --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                               &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
+                               default: &quot;SHARED&quot;)
+  --application &lt;application&gt;  Application unique name
   -h, --help                   display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [storage](../storage.md) > minio
+<h2 id="storage-minio"><a href="../../create.md">create</a> > minio</h2>
 
 <pre>Usage: settlemint platform create storage minio|m 
 Examples:
@@ -436,17 +436,17 @@ Options:
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
   --prod                       Connect to production environment
-  --provider <provider>        Network provider
-  --region <region>            Deployment region
-  --size <size>                Network size (choices: "CUSTOM", "LARGE",
-                               "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                Network type (choices: "DEDICATED", "SHARED",
-                               default: "SHARED")
-  --application <application>  Application unique name
+  --provider &lt;provider&gt;        Network provider
+  --region &lt;region&gt;            Deployment region
+  --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                               &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
+                               default: &quot;SHARED&quot;)
+  --application &lt;application&gt;  Application unique name
   -h, --help                   display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > integration-tool
+<h2 id="create-integration-tool"><a href="../create.md">create</a> > integration-tool</h2>
 
 <pre>Usage: settlemint platform create integration-tool|it [options] [command]
 
@@ -456,12 +456,12 @@ Options:
   -h, --help                  display help for command
 
 Commands:
-  <a href="./integration-tool/hasura.md">hasura|ha</a> [options] <name>  Create a new integration tool in the SettleMint
+  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;name&gt;  Create a new integration tool in the SettleMint
                               platform.
   help [command]              display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [integration-tool](../integration-tool.md) > hasura
+<h2 id="integration-tool-hasura"><a href="../../create.md">create</a> > hasura</h2>
 
 <pre>Usage: settlemint platform create integration-tool hasura|ha 
 Examples:
@@ -483,17 +483,17 @@ Options:
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
   --prod                       Connect to production environment
-  --provider <provider>        Network provider
-  --region <region>            Deployment region
-  --size <size>                Network size (choices: "CUSTOM", "LARGE",
-                               "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                Network type (choices: "DEDICATED", "SHARED",
-                               default: "SHARED")
-  --application <application>  Application unique name
+  --provider &lt;provider&gt;        Network provider
+  --region &lt;region&gt;            Deployment region
+  --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                               &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
+                               default: &quot;SHARED&quot;)
+  --application &lt;application&gt;  Application unique name
   -h, --help                   display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > insights
+<h2 id="create-insights"><a href="../create.md">create</a> > insights</h2>
 
 <pre>Usage: settlemint platform create insights|in [options] [command]
 
@@ -503,12 +503,12 @@ Options:
   -h, --help                      display help for command
 
 Commands:
-  <a href="./insights/blockscout.md">blockscout|bs</a> [options] <name>  Create a new insights in the SettleMint
+  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;name&gt;  Create a new insights in the SettleMint
                                   platform.
   help [command]                  display help for command
 </pre>
 
-## [settlemint](../../../../settlemint.md) > [platform](../../../platform.md) > [create](../../create.md) > [insights](../insights.md) > blockscout
+<h2 id="insights-blockscout"><a href="../../create.md">create</a> > blockscout</h2>
 
 <pre>Usage: settlemint platform create insights blockscout|bs 
 Examples:
@@ -530,21 +530,21 @@ Options:
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
   --prod                              Connect to production environment
-  --provider <provider>               Network provider
-  --region <region>                   Deployment region
-  --size <size>                       Network size (choices: "CUSTOM", "LARGE",
-                                      "MEDIUM", "SMALL", default: "SMALL")
-  --type <type>                       Network type (choices: "DEDICATED",
-                                      "SHARED", default: "SHARED")
-  --application <application>         Application unique name
-  --load-balancer <loadBalancer>      Load Balancer unique name (mutually
+  --provider &lt;provider&gt;               Network provider
+  --region &lt;region&gt;                   Deployment region
+  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
+                                      &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --application &lt;application&gt;         Application unique name
+  --load-balancer &lt;loadBalancer&gt;      Load Balancer unique name (mutually
                                       exclusive with blockchain-node)
-  --blockchain-node <blockchainNode>  Blockchain Node unique name (mutually
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name (mutually
                                       exclusive with load-balancer)
   -h, --help                          display help for command
 </pre>
 
-## [settlemint](../../../settlemint.md) > [platform](../../platform.md) > [create](../create.md) > application-access-token
+<h2 id="create-application-access-token"><a href="../create.md">create</a> > application-access-token</h2>
 
 <pre>Usage: settlemint platform create application-access-token|aat 
 Examples:
@@ -569,12 +569,12 @@ Options:
   -w, --wait                       Wait until deployed
   -r, --restart-if-timeout         Restart if wait time is exceeded
   --prod                           Connect to production environment
-  -a, --application <application>  The application unique name to create the
+  -a, --application &lt;application&gt;  The application unique name to create the
                                    application access token for (defaults to
                                    application from env)
-  -v, --validity-period <period>   The validity period for the token (choices:
-                                   "DAYS_7", "DAYS_30", "DAYS_60", "DAYS_90",
-                                   "NONE", default: "DAYS_7")
+  -v, --validity-period &lt;period&gt;   The validity period for the token (choices:
+                                   &quot;DAYS_7&quot;, &quot;DAYS_30&quot;, &quot;DAYS_60&quot;, &quot;DAYS_90&quot;,
+                                   &quot;NONE&quot;, default: &quot;DAYS_7&quot;)
   -h, --help                       display help for command
 </pre>
 
