@@ -47,7 +47,7 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:86](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L86)
+Defined in: [sdk/hasura/src/hasura.ts:111](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L111)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -74,8 +74,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:90](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L90) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:91](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L91) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:115](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L115) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:116](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L116) |
 
 ##### Throws
 
@@ -85,16 +85,41 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 
 ```ts
 import { createHasuraClient } from '@settlemint/sdk-hasura';
+import type { introspection } from "@schemas/hasura-env";
 
 // Server-side usage
-const { client, graphql } = createHasuraClient({
+const { client, graphql } = createHasuraClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
 });
 
 // Browser-side usage
-const { client, graphql } = createHasuraClient({});
+const { client, graphql } = createHasuraClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({});
 
 // Making GraphQL queries
 const query = graphql(`

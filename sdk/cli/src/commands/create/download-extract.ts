@@ -9,11 +9,6 @@ import { downloadTemplate } from "giget";
  * @param targetDir - The directory to extract the template to
  * @returns A Promise that resolves when the download and extraction are complete
  * @throws Will throw an error if the download or extraction fails
- *
- * @example
- * ```typescript
- * await downloadAndExtractNpmPackage("asset-tokenization", "/path/to/project");
- * ```
  */
 export async function downloadAndExtractNpmPackage(template: Template["value"], targetDir: string): Promise<void> {
   // Create target directory if it doesn't exist

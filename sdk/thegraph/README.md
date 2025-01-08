@@ -49,9 +49,9 @@ For detailed information about using TheGraph with the SettleMint platform, chec
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:62](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L62)
+Defined in: [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L121)
 
-Creates a Portal client using URQL
+Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
 ##### Type Parameters
 
@@ -63,23 +63,81 @@ Creates a Portal client using URQL
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
-| `clientOptions`? | `RequestConfig` | Optional configuration for the URQL client. |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URLs, access token and subgraph name - For browser-side: just subgraph name |
+| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
 
 `object`
 
-An object containing the URQL client and the initialized graphql function.
+An object containing:
+         - client: The configured GraphQL client instance
+         - graphql: The initialized gql.tada function for type-safe queries
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:66](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L66) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:67](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L67) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:125](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L125) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:126](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L126) |
 
 ##### Throws
 
-Will throw an error if the options fail validation.
+Will throw an error if the options fail validation against ClientOptionsSchema
+
+##### Example
+
+```ts
+import { createTheGraphClient } from '@settlemint/sdk-thegraph';
+import type { introspection } from '@schemas/the-graph-env-starterkits';
+
+// Server-side usage
+const { client, graphql } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
+  instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  subgraphName: 'starterkits'
+});
+
+// Browser-side usage
+const { client, graphql } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
+  subgraphName: 'starterkits'
+});
+
+// Making GraphQL queries
+const query = graphql(`
+  query SearchAssets {
+    assets {
+      id
+      name
+      symbol
+    }
+  }
+`);
+
+const result = await client.request(query);
+```
 
 ### Type Aliases
 
@@ -87,9 +145,9 @@ Will throw an error if the options fail validation.
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:31](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L31)
+Defined in: [sdk/thegraph/src/thegraph.ts:34](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L34)
 
-Type definition for client options derived from the ClientOptionsSchema.
+Type definition for client options derived from the ClientOptionsSchema
 
 ***
 
@@ -99,7 +157,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L10)
 
-Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+Type definition for GraphQL client configuration options
 
 ### Variables
 
@@ -107,9 +165,12 @@ Options for configuring the URQL client, excluding 'url' and 'exchanges'.
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>\>; `runtime`: `ZodLiteral`\<`"server"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}\>\]\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L15)
+Defined in: [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L18)
 
-Schema for validating client options for the Portal client.
+Schema for validating client options for the TheGraph client.
+Defines two possible runtime configurations:
+1. Server-side with instance URLs, access token and subgraph name
+2. Browser-side with just subgraph name
 
 ## Contributing
 

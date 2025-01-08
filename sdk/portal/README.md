@@ -49,7 +49,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L76)
+Defined in: [sdk/portal/src/portal.ts:101](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L101)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -74,8 +74,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:80](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L80) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:81](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L81) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:105](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L105) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:106](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L106) |
 
 ##### Throws
 
@@ -85,16 +85,41 @@ If the provided options fail validation
 
 ```ts
 import { createPortalClient } from '@settlemint/sdk-portal';
+import type { introspection } from "@schemas/portal-env";
 
 // Server-side usage
-const { client, graphql } = createPortalClient({
+export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
   runtime: "server",
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
 });
 
 // Browser-side usage
-const { client, graphql } = createPortalClient({});
+export const { client: portalBrowserClient, graphql: portalBrowserGraphql } = createPortalClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({});
 
 // Making GraphQL queries
 const query = graphql(`

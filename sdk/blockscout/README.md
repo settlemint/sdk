@@ -47,7 +47,7 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 > **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:81](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L81)
+Defined in: [sdk/blockscout/src/blockscout.ts:106](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L106)
 
 Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
@@ -72,8 +72,8 @@ An object containing the GraphQL client and initialized gql.tada function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:85](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L85) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:86](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L86) |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:110](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L110) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:111](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L111) |
 
 ##### Throws
 
@@ -83,15 +83,40 @@ Will throw an error if the options fail validation
 
 ```ts
 import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
+import type { introspection } from "@schemas/blockscout-env";
 
 // Server-side usage
-const { client, graphql } = createBlockscoutClient({
+const { client, graphql } = createBlockscoutClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
 });
 
 // Browser-side usage
-const { client, graphql } = createBlockscoutClient({});
+const { client, graphql } = createBlockscoutClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({});
 
 // Making GraphQL queries
 const query = graphql(`

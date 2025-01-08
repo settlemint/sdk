@@ -52,15 +52,40 @@ function getFullUrl(options: ClientOptions): string {
  * @throws Will throw an error if the options fail validation
  * @example
  * import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
+ * import type { introspection } from "@schemas/blockscout-env";
  *
  * // Server-side usage
- * const { client, graphql } = createBlockscoutClient({
+ * const { client, graphql } = createBlockscoutClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
  *   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
  * });
  *
  * // Browser-side usage
- * const { client, graphql } = createBlockscoutClient({});
+ * const { client, graphql } = createBlockscoutClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({});
  *
  * // Making GraphQL queries
  * const query = graphql(`

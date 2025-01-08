@@ -45,15 +45,6 @@ export function sdkCliCommand(exitOverride: (() => void) | undefined = undefined
      * Handles any errors that occur during execution.
      *
      * @throws {Error} If an unexpected error occurs during command execution.
-     *
-     * @example
-     * ```typescript
-     * sdkcli.parseAsync(process.argv).catch(async (reason) => {
-     *   printCancel("An unexpected error occurred. Please report it as a bug:");
-     *   console.error(reason);
-     *   process.exit(1);
-     * });
-     * ```
      */
     sdkcli.parseAsync(process.argv).catch((reason: Error) => {
       cancel(reason.message);

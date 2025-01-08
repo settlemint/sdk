@@ -59,16 +59,41 @@ function getFullUrl(options: ClientOptions): string {
  * @throws Will throw an error if the options fail validation against ClientOptionsSchema
  * @example
  * import { createHasuraClient } from '@settlemint/sdk-hasura';
+ * import type { introspection } from "@schemas/hasura-env";
  *
  * // Server-side usage
- * const { client, graphql } = createHasuraClient({
+ * const { client, graphql } = createHasuraClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
  *   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
  *   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
  * });
  *
  * // Browser-side usage
- * const { client, graphql } = createHasuraClient({});
+ * const { client, graphql } = createHasuraClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({});
  *
  * // Making GraphQL queries
  * const query = graphql(`
