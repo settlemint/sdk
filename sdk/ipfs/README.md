@@ -52,7 +52,7 @@ TODO: define default
 
 > **createIpfsClient**(`options`): `object`
 
-Defined in: [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/ipfs/src/ipfs.ts#L23)
+Defined in: [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/ipfs/src/ipfs.ts#L23)
 
 Creates an IPFS client for client-side use.
 
@@ -91,7 +91,7 @@ const { client } = createIpfsClient({
 
 > **createServerIpfsClient**(`options`): `object`
 
-Defined in: [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/ipfs/src/ipfs.ts#L46)
+Defined in: [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/ipfs/src/ipfs.ts#L46)
 
 Creates an IPFS client for server-side use with additional authentication.
 

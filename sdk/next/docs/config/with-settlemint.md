@@ -4,7 +4,7 @@
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
-Defined in: [config/with-settlemint.ts:18](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/next/src/config/with-settlemint.ts#L18)
+Defined in: [config/with-settlemint.ts:18](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/next/src/config/with-settlemint.ts#L18)
 
 Modifies the passed in Next.js configuration with SettleMint-specific settings
 

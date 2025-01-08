@@ -4,7 +4,7 @@
 
 > **proxyMiddleware**(`request`): `NextResponse` \| `undefined`
 
-Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/next/src/middlewares/proxy.ts#L22)
+Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/next/src/middlewares/proxy.ts#L22)
 
 Middleware function to handle proxy requests
 

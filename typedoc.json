@@ -4,6 +4,7 @@
   "cleanOutputDir": false,
   "entryFileName": "REFERENCE.md",
   "readme": "none",
+  "exclude": ["**/node_modules/**"],
 
   // Content organization
   "groupOrder": ["Variables", "Functions", "*"],

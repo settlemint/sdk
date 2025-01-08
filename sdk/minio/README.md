@@ -52,7 +52,7 @@ TODO: define default
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/minio/src/minio.ts#L28)
+Defined in: [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/minio/src/minio.ts#L28)
 
 Creates a Portal client for server-side use with additional authentication.
 
