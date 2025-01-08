@@ -56,6 +56,36 @@ function getFullUrl(options: ClientOptions): string {
  *          - client: The configured GraphQL client instance
  *          - graphql: The initialized gql.tada function for type-safe queries
  * @throws Will throw an error if the options fail validation against ClientOptionsSchema
+ * @example
+ * // Server-side usage
+ * const { client } = createBlockscoutClient({
+ *   instance: 'https://your-blockscout-instance.com',
+ *   accessToken: 'your-access-token'
+ * });
+ *
+ * // Browser-side usage
+ * const { client } = createBlockscoutClient({});
+ *
+ * // Making GraphQL queries
+ * const { client, graphql } = createBlockscoutClient({
+ *   instance: 'https://your-blockscout-instance.com',
+ *   accessToken: 'your-access-token'
+ * });
+ *
+ * const query = graphql(`
+ *   query GetTransaction($hash: String!) {
+ *     transaction(hash: $hash) {
+ *       hash
+ *       blockNumber
+ *       value
+ *       gasUsed
+ *     }
+ *   }
+ * `);
+ *
+ * const result = await client.request(query, {
+ *   hash: "0x123abc..."
+ * });
  */
 export function createBlockscoutClient<const Setup extends AbstractSetupSchema>(
   options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,

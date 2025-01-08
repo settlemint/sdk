@@ -177,16 +177,18 @@ export interface SettlemintClient {
  * @throws {ValidationError} If provided options fail schema validation
  *
  * @example
+ * import { createSettleMintClient } from '@settlemint/sdk-js';
+ *
  * const client = createSettleMintClient({
- *   accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
+ *   accessToken: 'your_access_token',
  *   instance: 'https://console.settlemint.com'
  * });
  *
- * // List all workspaces
+ * // List workspaces
  * const workspaces = await client.workspace.list();
  *
- * // Read a specific blockchain network
- * const network = await client.blockchainNetwork.read('network-unique-name');
+ * // Read a specific workspace
+ * const workspace = await client.workspace.read('workspace-unique-name');
  */
 export function createSettleMintClient(options: ClientOptions): SettlemintClient {
   ensureServer();

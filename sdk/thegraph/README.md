@@ -29,7 +29,6 @@
 ## Table of Contents
 
 - [About](#about)
-- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -42,25 +41,11 @@ The SDK offers a type-safe interface for all TheGraph operations, with comprehen
 
 For detailed information about using TheGraph with the SettleMint platform, check out our  [official documentation](https://console.settlemint.com/documentation/docs/using-platform/middleware/#the-graph-middleware).
 
-## Usage
-
-TODO: define default
-
 ## API Reference
 
-## Variables
+### Functions
 
-### ClientOptionsSchema
-
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>\>; `runtime`: `ZodLiteral`\<`"server"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}\>\]\>
-
-Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L15)
-
-Schema for validating client options for the Portal client.
-
-## Functions
-
-### createTheGraphClient()
+#### createTheGraphClient()
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
@@ -68,20 +53,20 @@ Defined in: [sdk/thegraph/src/thegraph.ts:62](https://github.com/settlemint/sdk/
 
 Creates a Portal client using URQL
 
-#### Type Parameters
+##### Type Parameters
 
 | Type Parameter |
 | ------ |
 | `Setup` *extends* `AbstractSetupSchema` |
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | `Omit`\<\{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
 | `clientOptions`? | `RequestConfig` | Optional configuration for the URQL client. |
 
-#### Returns
+##### Returns
 
 `object`
 
@@ -92,13 +77,13 @@ An object containing the URQL client and the initialized graphql function.
 | `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:66](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L66) |
 | `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:67](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L67) |
 
-#### Throws
+##### Throws
 
 Will throw an error if the options fail validation.
 
-## Type Aliases
+### Type Aliases
 
-### ClientOptions
+#### ClientOptions
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
 
@@ -108,13 +93,23 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 ***
 
-### RequestConfig
+#### RequestConfig
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
 Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L10)
 
 Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+
+### Variables
+
+#### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>\>; `runtime`: `ZodLiteral`\<`"server"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}\>\]\>
+
+Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L15)
+
+Schema for validating client options for the Portal client.
 
 ## Contributing
 

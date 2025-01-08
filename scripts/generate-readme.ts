@@ -1,4 +1,4 @@
-import { exists, readFile, readdir, writeFile } from "node:fs/promises";
+import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 
@@ -6,7 +6,10 @@ interface Placeholders {
   "package-name": string;
   about: string;
   "api-reference": string;
-  usage: string;
+}
+
+interface PlaceholdersToc {
+  "toc-contents": string;
 }
 
 /**
@@ -39,19 +42,16 @@ async function generateReadme() {
       const { name } = tryParseJson<{ name: string }>(packageJson);
       const about = (await readFile(join(sdkDir, pkg, "docs", "ABOUT.md"), "utf-8")).trim();
       const apiReferenceRaw = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
-      // Fix hyperlinks in API reference by removing './' prefix and updating reference.md to readme.md
-      const apiReference = apiReferenceRaw.replace(/\]\(\.\//g, "](").replace(/REFERENCE\.md/gi, "README.md");
-      const usagePath = join(sdkDir, pkg, "docs", "USAGE.md");
-      const usage = (await exists(usagePath)) ? (await readFile(usagePath, "utf-8")).trim() : "TODO: define default";
-      await writeFile(
-        readmePath,
-        replacePlaceholders(template, {
-          "package-name": name,
-          about,
-          "api-reference": apiReference,
-          usage,
-        }),
-      );
+      const apiReference = processApiReference(apiReferenceRaw);
+
+      const templateWithoutToc = replacePlaceholders(template, {
+        "package-name": name,
+        about,
+        "api-reference": apiReference,
+      });
+
+      const toc = getTocContents(templateWithoutToc);
+      await writeFile(readmePath, replacePlaceholders(templateWithoutToc, { "toc-contents": toc }));
       console.log(`Successfully generated README.md for ${pkg}`);
     }
 
@@ -62,16 +62,38 @@ async function generateReadme() {
   }
 }
 
-/**
- * Replaces placeholders in a template string with provided values
- * @param template - The template string containing placeholders
- * @param placeholders - Object containing placeholder values
- * @returns The template with placeholders replaced
- */
-function replacePlaceholders(template: string, placeholders: Placeholders): string {
+function replacePlaceholders(template: string, placeholders: Placeholders | PlaceholdersToc): string {
   return Object.entries(placeholders).reduce((result, [key, value]) => {
     return result.replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value);
   }, template);
+}
+
+function getTocContents(templateContents: string): string {
+  // Extract all H2 headings from the template
+  const h2Matches = templateContents.match(/^##\s+(.+)$/gm);
+  if (!h2Matches) {
+    return "";
+  }
+
+  // Convert matches to TOC entries with links
+  return `## Table of Contents
+
+${h2Matches
+  .map((match) => {
+    const title = match.replace(/^##\s+/, "");
+    const anchor = title.toLowerCase().replace(/\s+/g, "-");
+    return `- [${title}](#${anchor})`;
+  })
+  .join("\n")}`;
+}
+
+function processApiReference(content: string): string {
+  return content
+    .replace(/REFERENCE\.md/gi, "README.md")
+    .replace(/^#####\s+/gm, "###### ")
+    .replace(/^####\s+/gm, "##### ")
+    .replace(/^###\s+/gm, "#### ")
+    .replace(/^##\s+/gm, "### ");
 }
 
 // Execute the script

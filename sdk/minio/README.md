@@ -29,7 +29,6 @@
 ## Table of Contents
 
 - [About](#about)
-- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -40,15 +39,11 @@ The SettleMint MinIO SDK provides a simple way to interact with MinIO object sto
 
 For detailed information about using MinIO with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/storage/).
 
-## Usage
-
-TODO: define default
-
 ## API Reference
 
-## Functions
+### Functions
 
-### createServerMinioClient()
+#### createServerMinioClient()
 
 > **createServerMinioClient**(`options`): `object`
 
@@ -56,7 +51,7 @@ Defined in: [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/v
 
 Creates a Portal client for server-side use with additional authentication.
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
@@ -66,7 +61,7 @@ Creates a Portal client for server-side use with additional authentication.
 | `options.instance` | `string` | - |
 | `options.secretKey` | `string` | - |
 
-#### Returns
+##### Returns
 
 `object`
 
@@ -76,11 +71,11 @@ An object containing the GraphQL client and the initialized graphql function.
 | ------ | ------ | ------ |
 | `client` | `Client` | [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/minio/src/minio.ts#L28) |
 
-#### Throws
+##### Throws
 
 Will throw an error if not called on the server or if the options fail validation.
 
-#### Example
+##### Example
 
 ```ts
 const { client, graphql } = createServerPortalClient<{

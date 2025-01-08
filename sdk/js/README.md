@@ -29,7 +29,6 @@
 ## Table of Contents
 
 - [About](#about)
-- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -38,50 +37,21 @@
 
 The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint platform's GraphQL API. It enables you to interact with the platform's services in a fully typed manner, providing compile-time safety and autocompletion support.
 
-## Usage
-
-Here are some examples of how to use the SettleMint JavaScript SDK:
-
-### List Workspaces
-
-```typescript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
-
-### Read a Specific Blockchain Network
-
-```typescript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-
-const networkId = 'your_network_id';
-const network = await client.blockchainNetwork.read(networkId);
-console.log(network);
-```
-
 ## API Reference
 
-## Functions
+### Functions
 
-### createSettleMintClient()
+#### createSettleMintClient()
 
 > **createSettleMintClient**(`options`): [`SettlemintClient`](README.md#settlemintclient)
 
-Defined in: [sdk/js/src/settlemint.ts:191](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/settlemint.ts#L191)
+Defined in: [sdk/js/src/settlemint.ts:193](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/settlemint.ts#L193)
 
 Creates a SettleMint client with the provided options. The client provides methods to interact with
 various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
 integration tools, storage, private keys, insights and custom deployments.
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
@@ -89,46 +59,48 @@ integration tools, storage, private keys, insights and custom deployments.
 | `options.accessToken` | `string` | - |
 | `options.instance` | `string` | - |
 
-#### Returns
+##### Returns
 
 [`SettlemintClient`](README.md#settlemintclient)
 
 A SettleMint client object with resource-specific methods
 
-#### Throws
+##### Throws
 
 If options are invalid or if called in browser environment
 
-#### Throws
+##### Throws
 
 If provided options fail schema validation
 
-#### Example
+##### Example
 
 ```ts
+import { createSettleMintClient } from '@settlemint/sdk-js';
+
 const client = createSettleMintClient({
-  accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
+  accessToken: 'your_access_token',
   instance: 'https://console.settlemint.com'
 });
 
-// List all workspaces
+// List workspaces
 const workspaces = await client.workspace.list();
 
-// Read a specific blockchain network
-const network = await client.blockchainNetwork.read('network-unique-name');
+// Read a specific workspace
+const workspace = await client.workspace.read('workspace-unique-name');
 ```
 
-## Interfaces
+### Interfaces
 
-### SettlemintClient
+#### SettlemintClient
 
 Defined in: [sdk/js/src/settlemint.ts:97](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/settlemint.ts#L97)
 
 Client interface for interacting with the SettleMint platform.
 
-## Type Aliases
+### Type Aliases
 
-### Application
+#### Application
 
 > **Application**: `ResultOf`\<*typeof* `ApplicationFragment`\>
 
@@ -138,7 +110,7 @@ Type representing an application entity.
 
 ***
 
-### BlockchainNetwork
+#### BlockchainNetwork
 
 > **BlockchainNetwork**: `ResultOf`\<*typeof* `BlockchainNetworkFragment`\>
 
@@ -148,7 +120,7 @@ Type representing a blockchain network entity.
 
 ***
 
-### BlockchainNode
+#### BlockchainNode
 
 > **BlockchainNode**: `ResultOf`\<*typeof* `BlockchainNodeFragment`\>
 
@@ -158,7 +130,7 @@ Type representing a blockchain node entity.
 
 ***
 
-### CustomDeployment
+#### CustomDeployment
 
 > **CustomDeployment**: `ResultOf`\<*typeof* `CustomDeploymentFragment`\>
 
@@ -168,7 +140,7 @@ Type representing a custom deployment entity.
 
 ***
 
-### Insights
+#### Insights
 
 > **Insights**: `ResultOf`\<*typeof* `InsightsFragment`\>
 
@@ -178,7 +150,7 @@ Type representing an insights entity.
 
 ***
 
-### IntegrationTool
+#### IntegrationTool
 
 > **IntegrationTool**: `ResultOf`\<*typeof* `IntegrationFragment`\>
 
@@ -188,7 +160,7 @@ Type representing an integration tool entity.
 
 ***
 
-### Middleware
+#### Middleware
 
 > **Middleware**: `ResultOf`\<*typeof* `MiddlewareFragment`\>
 
@@ -198,7 +170,7 @@ Type representing a middleware entity.
 
 ***
 
-### PrivateKey
+#### PrivateKey
 
 > **PrivateKey**: `ResultOf`\<*typeof* `PrivateKeyFragment`\>
 
@@ -208,7 +180,7 @@ Type representing a private key entity.
 
 ***
 
-### Storage
+#### Storage
 
 > **Storage**: `ResultOf`\<*typeof* `StorageFragment`\>
 
@@ -218,7 +190,7 @@ Type representing a storage entity.
 
 ***
 
-### Workspace
+#### Workspace
 
 > **Workspace**: `ResultOf`\<*typeof* `WorkspaceFragment`\>
 

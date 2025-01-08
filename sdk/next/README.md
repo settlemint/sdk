@@ -29,7 +29,6 @@
 ## Table of Contents
 
 - [About](#about)
-- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -38,15 +37,11 @@
 
 The SettleMint Next.js SDK provides a seamless integration layer between Next.js applications and the SettleMint platform. It offers a collection of utilities, hooks, and components specifically designed for Next.js applications, making it easy to interact with SettleMint's services while following Next.js best practices.
 
-## Usage
-
-TODO: define default
-
 ## API Reference
 
-## Functions
+### Functions
 
-### HelloWorld()
+#### HelloWorld()
 
 > **HelloWorld**(`__namedParameters`): `ReactElement`
 
@@ -54,19 +49,19 @@ Defined in: [components/test.tsx:10](https://github.com/settlemint/sdk/blob/v0.8
 
 A simple Hello World component that greets the user.
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type |
 | ------ | ------ |
 | `__namedParameters` | `HelloWorldProps` |
 
-#### Returns
+##### Returns
 
 `ReactElement`
 
 ***
 
-### proxyMiddleware()
+#### proxyMiddleware()
 
 > **proxyMiddleware**(`request`): `NextResponse` \| `undefined`
 
@@ -74,19 +69,19 @@ Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v0.
 
 Middleware function to handle proxy requests
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `request` | `NextRequest` | The incoming Next.js request |
 
-#### Returns
+##### Returns
 
 `NextResponse` \| `undefined`
 
 A modified NextResponse for proxy routes, or undefined for non-proxy routes
 
-#### Example
+##### Example
 
 ```typescript
 import { proxyMiddleware } from './middleware/proxy';
@@ -98,7 +93,7 @@ export default function middleware(request: NextRequest) {
 
 ***
 
-### withSettleMint()
+#### withSettleMint()
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
@@ -106,26 +101,26 @@ Defined in: [config/with-settlemint.ts:18](https://github.com/settlemint/sdk/blo
 
 Modifies the passed in Next.js configuration with SettleMint-specific settings
 
-#### Type Parameters
+##### Type Parameters
 
 | Type Parameter |
 | ------ |
 | `C` *extends* `NextConfig` |
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `nextConfig` | `C` | The original Next.js configuration |
 | `options` | `WithSettleMintOptions` | Options for customizing the SettleMint configuration |
 
-#### Returns
+##### Returns
 
 `Promise`\<`C`\>
 
 A Promise that resolves to the modified Next.js configuration
 
-#### Throws
+##### Throws
 
 If the SettleMint configuration cannot be read or processed
 

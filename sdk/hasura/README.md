@@ -29,7 +29,6 @@
 ## Table of Contents
 
 - [About](#about)
-- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -40,25 +39,11 @@ The SettleMint Hasura SDK provides a seamless way to interact with Hasura GraphQ
 
 For detailed information about using Hasura with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/backend-as-a-service/).
 
-## Usage
-
-TODO: define default
-
 ## API Reference
 
-## Variables
+### Functions
 
-### ClientOptionsSchema
-
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
-
-Defined in: [sdk/hasura/src/hasura.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L15)
-
-Schema for validating client options for the Portal client.
-
-## Functions
-
-### createHasuraClient()
+#### createHasuraClient()
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
@@ -66,20 +51,20 @@ Defined in: [sdk/hasura/src/hasura.ts:53](https://github.com/settlemint/sdk/blob
 
 Creates a Portal client using URQL
 
-#### Type Parameters
+##### Type Parameters
 
 | Type Parameter |
 | ------ |
 | `Setup` *extends* `AbstractSetupSchema` |
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
 | `clientOptions`? | `RequestConfig` | Optional configuration for the URQL client. |
 
-#### Returns
+##### Returns
 
 `object`
 
@@ -90,13 +75,13 @@ An object containing the URQL client and the initialized graphql function.
 | `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:57](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L57) |
 | `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:58](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L58) |
 
-#### Throws
+##### Throws
 
 Will throw an error if the options fail validation.
 
 ***
 
-### createPostgresPool()
+#### createPostgresPool()
 
 > **createPostgresPool**(`databaseUrl`): `Pool`
 
@@ -104,25 +89,25 @@ Defined in: [sdk/hasura/src/postgres.ts:63](https://github.com/settlemint/sdk/bl
 
 Creates a Drizzle client for database operations with schema typings
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `databaseUrl` | `string` | The PostgreSQL connection URL |
 
-#### Returns
+##### Returns
 
 `Pool`
 
 The initialized Drizzle client with proper schema typings
 
-#### Throws
+##### Throws
 
 If called from browser runtime or if validation fails
 
-## Type Aliases
+### Type Aliases
 
-### ClientOptions
+#### ClientOptions
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
 
@@ -132,13 +117,23 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 ***
 
-### RequestConfig
+#### RequestConfig
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
 Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L10)
 
 Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+
+### Variables
+
+#### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+
+Defined in: [sdk/hasura/src/hasura.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L15)
+
+Schema for validating client options for the Portal client.
 
 ## Contributing
 

@@ -60,39 +60,39 @@ To create a new project from a starter kit template, use the `create` command wi
 settlemint create --project-name <project-name> --template <template-name>
 ```
 
-### Installing dependencies
+#### Installing dependencies
 
 To install the dependencies for your project, use the `dependencies` command.
 
-#### Using bun
+##### Using bun
 
 ```bash
 bun install
 bun run dependencies
 ```
 
-#### Using npm
+##### Using npm
 
 ```bash
 npm install
 npm run dependencies
 ```
 
-####   Using yarn
+##### Using yarn
 
 ```bash
 yarn install
 yarn run dependencies
 ```
 
-#### Using pnpm
+##### Using pnpm
 
 ```bash
 pnpm install
 pnpm run dependencies
 ```
 
-### Connecting to your SettleMint infrastructure
+#### Connecting to your SettleMint infrastructure
 
 After creating your project, you'll need to connect it to your SettleMint infrastructure. This requires setting up environment variables with your SettleMint credentials and infrastructure details.
 
@@ -102,7 +102,7 @@ You can use the `connect` command to automatically configure your project and se
 settlemint connect
 ```
 
-### Deploying your smart contracts and subgraphs
+#### Deploying your smart contracts and subgraphs
 
 To deploy your smart contracts and subgraphs, you can use the `deploy` command.
 
@@ -116,7 +116,7 @@ To deploy your subgraphs, use the `subgraph` command.
 settlemint scs subgraph deploy --accept-defaults <subgraph-name>
 ```
 
-## Generating code for your dApp
+#### Generating code for your dApp
 
 After deploying your smart contracts and subgraphs, you can generate TypeScript code for your dApp to interact with them. The `codegen` command will generate type-safe code for your integrations with the services selected in the `connect` command.
 
@@ -124,13 +124,13 @@ After deploying your smart contracts and subgraphs, you can generate TypeScript 
 settlemint codegen
 ```
 
-### Start your dApp in development mode
+#### Start your dApp in development mode
 
 ```bash
 bun run dev
 ```
 
-## Creating a new project from a smart contract template
+### Creating a new project from a smart contract template
 
 To create a new project from a smart contract template, use the `create` command with the `--use-case` flag:
 
@@ -138,7 +138,7 @@ To create a new project from a smart contract template, use the `create` command
 settlemint scs create --project-name <project-name> --use-case <use-case-name>
 ```
 
-## Testing your smart contracts on a local network
+#### Testing your smart contracts on a local network
 
 To test your smart contracts, you can use the `test` command.
 
@@ -146,7 +146,7 @@ To test your smart contracts, you can use the `test` command.
 settlemint scs foundry test
 ```
 
-### Deploying your smart contracts and subgraphs
+#### Deploying your smart contracts and subgraphs
 
 To deploy your smart contracts and subgraphs, you can use the `deploy` command.
 
@@ -162,7 +162,7 @@ settlemint scs subgraph deploy --accept-defaults <subgraph-name>
 
 ## API Reference
 
-See the [documentation](docs/settlemint.md) for available commands.
+See the [documentation](./docs/settlemint.md) for available commands.
 
 ## Contributing
 

@@ -12,7 +12,7 @@ export default {
   mergeModulesMergeMode: "project",
 
   // Content organization
-  groupOrder: ["Variables", "Functions", "*"],
+  groupOrder: ["Functions", "*"],
   excludeNotDocumented: true,
 
   // Formatting options

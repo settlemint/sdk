@@ -29,7 +29,6 @@
 ## Table of Contents
 
 - [About](#about)
-- [Usage](#usage)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
 - [License](#license)
@@ -40,15 +39,11 @@ The SettleMint IPFS SDK provides a simple way to interact with IPFS (InterPlanet
 
 For detailed information about using IPFS with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/storage/).
 
-## Usage
-
-TODO: define default
-
 ## API Reference
 
-## Functions
+### Functions
 
-### createIpfsClient()
+#### createIpfsClient()
 
 > **createIpfsClient**(`options`): `object`
 
@@ -56,14 +51,14 @@ Defined in: [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/v0.
 
 Creates an IPFS client for client-side use.
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | \{ `instance`: `string`; \} | The client options for configuring the IPFS client. |
 | `options.instance` | `string` | - |
 
-#### Returns
+##### Returns
 
 `object`
 
@@ -73,11 +68,11 @@ An object containing the IPFS client.
 | ------ | ------ | ------ |
 | `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L23) |
 
-#### Throws
+##### Throws
 
 Will throw an error if the options fail validation.
 
-#### Example
+##### Example
 
 ```ts
 const { client } = createIpfsClient({
@@ -87,7 +82,7 @@ const { client } = createIpfsClient({
 
 ***
 
-### createServerIpfsClient()
+#### createServerIpfsClient()
 
 > **createServerIpfsClient**(`options`): `object`
 
@@ -95,7 +90,7 @@ Defined in: [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/v0.
 
 Creates an IPFS client for server-side use with additional authentication.
 
-#### Parameters
+##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
@@ -103,7 +98,7 @@ Creates an IPFS client for server-side use with additional authentication.
 | `options.accessToken` | `string` | - |
 | `options.instance` | `string` | - |
 
-#### Returns
+##### Returns
 
 `object`
 
@@ -113,11 +108,11 @@ An object containing the authenticated IPFS client.
 | ------ | ------ | ------ |
 | `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L46) |
 
-#### Throws
+##### Throws
 
 Will throw an error if not called on the server or if the options fail validation.
 
-#### Example
+##### Example
 
 ```ts
 const { client } = createServerIpfsClient({
