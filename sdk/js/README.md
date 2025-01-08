@@ -75,7 +75,7 @@ console.log(network);
 
 > **createSettleMintClient**(`options`): [`SettlemintClient`](REFERENCE.md#settlemintclient)
 
-Defined in: [sdk/js/src/settlemint.ts:191](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/settlemint.ts#L191)
+Defined in: [sdk/js/src/settlemint.ts:191](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/settlemint.ts#L191)
 
 Creates a SettleMint client with the provided options. The client provides methods to interact with
 various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
@@ -122,7 +122,7 @@ const network = await client.blockchainNetwork.read('network-unique-name');
 
 ### SettlemintClient
 
-Defined in: [sdk/js/src/settlemint.ts:97](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/settlemint.ts#L97)
+Defined in: [sdk/js/src/settlemint.ts:97](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/settlemint.ts#L97)
 
 Client interface for interacting with the SettleMint platform.
 
@@ -132,7 +132,7 @@ Client interface for interacting with the SettleMint platform.
 
 > **Application**: `ResultOf`\<*typeof* `ApplicationFragment`\>
 
-Defined in: [sdk/js/src/graphql/application.ts:23](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/application.ts#L23)
+Defined in: [sdk/js/src/graphql/application.ts:23](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/application.ts#L23)
 
 Type representing an application entity.
 
@@ -142,7 +142,7 @@ Type representing an application entity.
 
 > **BlockchainNetwork**: `ResultOf`\<*typeof* `BlockchainNetworkFragment`\>
 
-Defined in: [sdk/js/src/graphql/blockchain-network.ts:29](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/blockchain-network.ts#L29)
+Defined in: [sdk/js/src/graphql/blockchain-network.ts:29](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/blockchain-network.ts#L29)
 
 Type representing a blockchain network entity.
 
@@ -152,7 +152,7 @@ Type representing a blockchain network entity.
 
 > **BlockchainNode**: `ResultOf`\<*typeof* `BlockchainNodeFragment`\>
 
-Defined in: [sdk/js/src/graphql/blockchain-node.ts:48](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/blockchain-node.ts#L48)
+Defined in: [sdk/js/src/graphql/blockchain-node.ts:48](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/blockchain-node.ts#L48)
 
 Type representing a blockchain node entity.
 
@@ -162,7 +162,7 @@ Type representing a blockchain node entity.
 
 > **CustomDeployment**: `ResultOf`\<*typeof* `CustomDeploymentFragment`\>
 
-Defined in: [sdk/js/src/graphql/custom-deployment.ts:30](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/custom-deployment.ts#L30)
+Defined in: [sdk/js/src/graphql/custom-deployment.ts:30](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/custom-deployment.ts#L30)
 
 Type representing a custom deployment entity.
 
@@ -172,7 +172,7 @@ Type representing a custom deployment entity.
 
 > **Insights**: `ResultOf`\<*typeof* `InsightsFragment`\>
 
-Defined in: [sdk/js/src/graphql/insights.ts:34](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/insights.ts#L34)
+Defined in: [sdk/js/src/graphql/insights.ts:34](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/insights.ts#L34)
 
 Type representing an insights entity.
 
@@ -182,7 +182,7 @@ Type representing an insights entity.
 
 > **IntegrationTool**: `ResultOf`\<*typeof* `IntegrationFragment`\>
 
-Defined in: [sdk/js/src/graphql/integration-tool.ts:32](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/integration-tool.ts#L32)
+Defined in: [sdk/js/src/graphql/integration-tool.ts:32](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/integration-tool.ts#L32)
 
 Type representing an integration tool entity.
 
@@ -192,7 +192,7 @@ Type representing an integration tool entity.
 
 > **Middleware**: `ResultOf`\<*typeof* `MiddlewareFragment`\>
 
-Defined in: [sdk/js/src/graphql/middleware.ts:47](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/middleware.ts#L47)
+Defined in: [sdk/js/src/graphql/middleware.ts:47](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/middleware.ts#L47)
 
 Type representing a middleware entity.
 
@@ -202,7 +202,7 @@ Type representing a middleware entity.
 
 > **PrivateKey**: `ResultOf`\<*typeof* `PrivateKeyFragment`\>
 
-Defined in: [sdk/js/src/graphql/private-key.ts:23](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/private-key.ts#L23)
+Defined in: [sdk/js/src/graphql/private-key.ts:23](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/private-key.ts#L23)
 
 Type representing a private key entity.
 
@@ -212,7 +212,7 @@ Type representing a private key entity.
 
 > **Storage**: `ResultOf`\<*typeof* `StorageFragment`\>
 
-Defined in: [sdk/js/src/graphql/storage.ts:32](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/storage.ts#L32)
+Defined in: [sdk/js/src/graphql/storage.ts:32](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/storage.ts#L32)
 
 Type representing a storage entity.
 
@@ -222,7 +222,7 @@ Type representing a storage entity.
 
 > **Workspace**: `ResultOf`\<*typeof* `WorkspaceFragment`\>
 
-Defined in: [sdk/js/src/graphql/workspace.ts:26](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/js/src/graphql/workspace.ts#L26)
+Defined in: [sdk/js/src/graphql/workspace.ts:26](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/js/src/graphql/workspace.ts#L26)
 
 Type representing a workspace entity.
 

@@ -93,7 +93,78 @@ const result = await client.request(query, {
 
 ## API Reference
 
-TODO
+## Variables
+
+### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+
+Defined in: [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/blockscout/src/blockscout.ts#L18)
+
+Schema for validating client options for the Blockscout client.
+Defines two possible runtime configurations:
+1. Server-side with instance URL and access token
+2. Browser-side with no additional configuration needed
+
+## Functions
+
+### createBlockscoutClient()
+
+> **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+
+Defined in: [sdk/blockscout/src/blockscout.ts:60](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/blockscout/src/blockscout.ts#L60)
+
+Creates a Blockscout GraphQL client with proper type safety using gql.tada
+
+#### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Setup` *extends* `AbstractSetupSchema` |
+
+#### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL and access token - For browser-side: no additional configuration needed |
+| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
+
+#### Returns
+
+`object`
+
+An object containing:
+         - client: The configured GraphQL client instance
+         - graphql: The initialized gql.tada function for type-safe queries
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:64](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/blockscout/src/blockscout.ts#L64) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:65](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/blockscout/src/blockscout.ts#L65) |
+
+#### Throws
+
+Will throw an error if the options fail validation against ClientOptionsSchema
+
+## Type Aliases
+
+### ClientOptions
+
+> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](REFERENCE.md#clientoptionsschema)\>
+
+Defined in: [sdk/blockscout/src/blockscout.ts:32](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/blockscout/src/blockscout.ts#L32)
+
+Type definition for client options derived from the ClientOptionsSchema.
+
+***
+
+### RequestConfig
+
+> **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
+
+Defined in: [sdk/blockscout/src/blockscout.ts:10](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/blockscout/src/blockscout.ts#L10)
+
+Options for configuring the GraphQL client, excluding 'url' and other configuration options.
 
 ## Contributing
 

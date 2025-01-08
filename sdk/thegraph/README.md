@@ -54,7 +54,7 @@ TODO: define default
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>\>; `runtime`: `ZodLiteral`\<`"server"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}\>\]\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/thegraph/src/thegraph.ts#L15)
+Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/thegraph/src/thegraph.ts#L15)
 
 Schema for validating client options for the Portal client.
 
@@ -64,7 +64,7 @@ Schema for validating client options for the Portal client.
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:62](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/thegraph/src/thegraph.ts#L62)
+Defined in: [sdk/thegraph/src/thegraph.ts:62](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/thegraph/src/thegraph.ts#L62)
 
 Creates a Portal client using URQL
 
@@ -89,8 +89,8 @@ An object containing the URQL client and the initialized graphql function.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:66](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/thegraph/src/thegraph.ts#L66) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:67](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/thegraph/src/thegraph.ts#L67) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:66](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/thegraph/src/thegraph.ts#L66) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:67](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/thegraph/src/thegraph.ts#L67) |
 
 #### Throws
 
@@ -102,7 +102,7 @@ Will throw an error if the options fail validation.
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](REFERENCE.md#clientoptionsschema)\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:31](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/thegraph/src/thegraph.ts#L31)
+Defined in: [sdk/thegraph/src/thegraph.ts:31](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/thegraph/src/thegraph.ts#L31)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -112,7 +112,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/thegraph/src/thegraph.ts#L10)
+Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/thegraph/src/thegraph.ts#L10)
 
 Options for configuring the URQL client, excluding 'url' and 'exchanges'.
 

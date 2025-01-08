@@ -52,7 +52,7 @@ TODO: define default
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/minio/src/minio.ts#L28)
+Defined in: [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/minio/src/minio.ts#L28)
 
 Creates a Portal client for server-side use with additional authentication.
 
@@ -74,7 +74,7 @@ An object containing the GraphQL client and the initialized graphql function.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `Client` | [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/minio/src/minio.ts#L28) |
+| `client` | `Client` | [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/minio/src/minio.ts#L28) |
 
 #### Throws
 
