@@ -71,8 +71,8 @@ integration tools, storage, private keys, insights and custom deployments.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client including access token and instance URL |
-| `options.accessToken` | `string` | - |
-| `options.instance` | `string` | - |
+| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
+| `options.instance` | `string` | The URL of the SettleMint instance to connect to |
 
 ##### Returns
 

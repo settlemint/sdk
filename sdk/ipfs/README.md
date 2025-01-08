@@ -59,7 +59,7 @@ Creates an IPFS client for client-side use
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | \{ `instance`: `string`; \} | Configuration options for the client |
-| `options.instance` | `string` | - |
+| `options.instance` | `string` | The URL of the IPFS instance to connect to |
 
 ##### Returns
 
@@ -105,8 +105,8 @@ Creates an IPFS client for server-side use with authentication
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client including authentication |
-| `options.accessToken` | `string` | - |
-| `options.instance` | `string` | - |
+| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
+| `options.instance` | `string` | The URL of the IPFS instance to connect to |
 
 ##### Returns
 

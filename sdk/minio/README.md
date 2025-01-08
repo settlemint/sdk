@@ -58,10 +58,10 @@ Creates a MinIO client for server-side use with authentication.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | \{ `accessKey`: `string`; `accessToken`: `string`; `instance`: `string`; `secretKey`: `string`; \} | The server client options for configuring the MinIO client |
-| `options.accessKey` | `string` | - |
-| `options.accessToken` | `string` | - |
-| `options.instance` | `string` | - |
-| `options.secretKey` | `string` | - |
+| `options.accessKey` | `string` | The MinIO access key used to authenticate with the MinIO server |
+| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
+| `options.instance` | `string` | The URL of the MinIO instance to connect to |
+| `options.secretKey` | `string` | The MinIO secret key used to authenticate with the MinIO server |
 
 ##### Returns
 

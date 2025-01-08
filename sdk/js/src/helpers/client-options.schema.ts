@@ -5,7 +5,9 @@ import { z } from "zod";
  * Schema for validating SettleMint client options.
  */
 export const ClientOptionsSchema = z.object({
+  /** The access token used to authenticate with the SettleMint platform */
   accessToken: AccessTokenSchema,
+  /** The URL of the SettleMint instance to connect to */
   instance: UrlSchema,
 });
 
