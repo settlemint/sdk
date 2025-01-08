@@ -76,7 +76,7 @@
     },
     "docs": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.json"],
+      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs"],
       "outputs": ["docs/**"]
     },
     "//#generate-readme": {

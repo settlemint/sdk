@@ -57,7 +57,7 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE .",
-    "docs": "typedoc --options '../../typedoc.json' --entryPoints src/index.ts --out ./docs"
+    "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/index.ts --out ./docs"
   },
   "devDependencies": {
     "@types/npmcli__package-json": "^4"

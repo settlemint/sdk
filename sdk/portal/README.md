@@ -54,7 +54,7 @@ TODO: define default
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
 
-Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/portal/src/portal.ts#L15)
+Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L15)
 
 Schema for validating client options for the Portal client.
 
@@ -64,7 +64,7 @@ Schema for validating client options for the Portal client.
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:52](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/portal/src/portal.ts#L52)
+Defined in: [sdk/portal/src/portal.ts:52](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L52)
 
 Creates a Portal client using URQL
 
@@ -89,8 +89,8 @@ An object containing the URQL client and the initialized graphql function.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:56](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/portal/src/portal.ts#L56) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:57](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/portal/src/portal.ts#L57) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:56](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L56) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:57](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L57) |
 
 #### Throws
 
@@ -102,7 +102,7 @@ Will throw an error if the options fail validation.
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](REFERENCE.md#clientoptionsschema)\>
 
-Defined in: [sdk/portal/src/portal.ts:29](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/portal/src/portal.ts#L29)
+Defined in: [sdk/portal/src/portal.ts:29](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L29)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -112,7 +112,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/37196f04b3f6c6ccbf4877bf9084858473baaf88/sdk/portal/src/portal.ts#L10)
+Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L10)
 
 Options for configuring the URQL client, excluding 'url' and 'exchanges'.
 
