@@ -46,6 +46,16 @@ yarn install -g @settlemint/sdk-cli
 settlemint --version
 ```
 
+### Get help for a command
+
+The CLI uses a hierarchical command structure. You can navigate through available commands and subcommands using the `--help` flag at any level.
+
+```bash
+settlemint --help
+settlemint platform --help
+settlemint platform create --help
+```
+
 ### Login to the platform
 
 To use the SettleMint CLI, you first need to authenticate with the platform. Create a Personal Access Token (PAT) on the SettleMint platformand paste it when prompted by the login command.
