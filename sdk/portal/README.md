@@ -100,7 +100,7 @@ Will throw an error if the options fail validation.
 
 ### ClientOptions
 
-> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](REFERENCE.md#clientoptionsschema)\>
+> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
 
 Defined in: [sdk/portal/src/portal.ts:29](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L29)
 

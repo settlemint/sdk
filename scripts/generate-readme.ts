@@ -38,7 +38,9 @@ async function generateReadme() {
       const packageJson = await readFile(join(sdkDir, pkg, "package.json"), "utf-8");
       const { name } = tryParseJson<{ name: string }>(packageJson);
       const about = (await readFile(join(sdkDir, pkg, "docs", "ABOUT.md"), "utf-8")).trim();
-      const apiReference = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
+      const apiReferenceRaw = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
+      // Fix hyperlinks in API reference by removing './' prefix and updating reference.md to readme.md
+      const apiReference = apiReferenceRaw.replace(/\]\(\.\//g, "](").replace(/REFERENCE\.md/gi, "README.md");
       const usagePath = join(sdkDir, pkg, "docs", "USAGE.md");
       const usage = (await exists(usagePath)) ? (await readFile(usagePath, "utf-8")).trim() : "TODO: define default";
       await writeFile(

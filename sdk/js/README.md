@@ -73,7 +73,7 @@ console.log(network);
 
 ### createSettleMintClient()
 
-> **createSettleMintClient**(`options`): [`SettlemintClient`](REFERENCE.md#settlemintclient)
+> **createSettleMintClient**(`options`): [`SettlemintClient`](README.md#settlemintclient)
 
 Defined in: [sdk/js/src/settlemint.ts:191](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/settlemint.ts#L191)
 
@@ -91,7 +91,7 @@ integration tools, storage, private keys, insights and custom deployments.
 
 #### Returns
 
-[`SettlemintClient`](REFERENCE.md#settlemintclient)
+[`SettlemintClient`](README.md#settlemintclient)
 
 A SettleMint client object with resource-specific methods
 

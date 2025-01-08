@@ -452,7 +452,7 @@ const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 
 ### Id
 
-> **Id**: `z.infer`\<*typeof* [`IdSchema`](REFERENCE.md#idschema)\>
+> **Id**: `z.infer`\<*typeof* [`IdSchema`](README.md#idschema)\>
 
 Defined in: [sdk/utils/src/validation/id.schema.ts:17](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/utils/src/validation/id.schema.ts#L17)
 

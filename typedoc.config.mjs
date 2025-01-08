@@ -9,6 +9,7 @@ export default {
   readme: "none",
   exclude: ["**/node_modules/**"],
   gitRevision: `v${packageJson.version}`,
+  mergeModulesMergeMode: "project",
 
   // Content organization
   groupOrder: ["Variables", "Functions", "*"],
@@ -27,5 +28,5 @@ export default {
   hidePageTitle: true,
 
   // Plugins
-  plugin: ["typedoc-plugin-markdown"],
+  plugin: ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules"],
 };
