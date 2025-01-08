@@ -46,7 +46,10 @@ TODO: define default
 
 ## API Reference
 
-TODO
+## Modules
+
+- [hasura](hasura.md)
+- [postgres](postgres.md)
 
 ## Contributing
 

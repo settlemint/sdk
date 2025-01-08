@@ -11,6 +11,8 @@
         "publint": "0.3.0",
         "tsup": "8.3.5",
         "turbo": "2.3.3",
+        "typedoc": "0.27.6",
+        "typedoc-plugin-markdown": "4.4.1",
         "typescript": "5.7.2",
       },
     },
@@ -151,9 +153,6 @@
       },
       "devDependencies": {
         "@0no-co/graphqlsp": "^1",
-        "tsdoc-markdown": "1.0.0",
-        "typedoc": "0.27.6",
-        "typedoc-plugin-markdown": "4.4.1",
       },
     },
     "sdk/minio": {
@@ -752,7 +751,7 @@
 
     "@settlemint/sdk-ipfs": ["@settlemint/sdk-ipfs@workspace:sdk/ipfs", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "kubo-rpc-client": "^5", "zod": "^3" } }],
 
-    "@settlemint/sdk-js": ["@settlemint/sdk-js@workspace:sdk/js", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" }, "devDependencies": { "@0no-co/graphqlsp": "^1", "tsdoc-markdown": "1.0.0", "typedoc": "0.27.6", "typedoc-plugin-markdown": "4.4.1" } }],
+    "@settlemint/sdk-js": ["@settlemint/sdk-js@workspace:sdk/js", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" }, "devDependencies": { "@0no-co/graphqlsp": "^1" } }],
 
     "@settlemint/sdk-minio": ["@settlemint/sdk-minio@workspace:sdk/minio", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "minio": "^8", "zod": "^3" } }],
 
@@ -2077,8 +2076,6 @@
     "ts-morph": ["ts-morph@25.0.0", "", { "dependencies": { "@ts-morph/common": "~0.26.0", "code-block-writer": "^13.0.3" } }, "sha512-ERPTUVO5qF8cEGJgAejGOsCVlbk8d0SDyiJsucKQT5XgqoZslv0Qml+gnui6Yy6o+uQqw5SestyW2HvlVtT/Sg=="],
 
     "tsconfig-paths": ["tsconfig-paths@3.15.0", "", { "dependencies": { "@types/json5": "^0.0.29", "json5": "^1.0.2", "minimist": "^1.2.6", "strip-bom": "^3.0.0" } }, "sha512-2Ac2RgzDe/cn48GvOe3M+o82pEFewD3UPbyoUHHdKasHwJKjds4fLXWf/Ux5kATBKN20oaFGu+jbElp1pos0mg=="],
-
-    "tsdoc-markdown": ["tsdoc-markdown@1.0.0", "", { "peerDependencies": { "typescript": "^5" }, "bin": { "tsdoc": "bin/index.js" } }, "sha512-XSuwiPUpiDLkrLnuzTF46nGbrRylDMrx1b0gyEBtiN9gjqxOMsRwQY1YJgZV8ulXYYHXXl5lxFbJ5Y5y0FxdiA=="],
 
     "tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
 

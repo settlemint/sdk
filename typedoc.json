@@ -1,0 +1,23 @@
+{
+  // Output configuration
+  "outputFileStrategy": "modules",
+  "cleanOutputDir": false,
+  "entryFileName": "REFERENCE.md",
+  "readme": "none",
+
+  // Content organization
+  "groupOrder": ["Variables", "Functions", "*"],
+  "excludeNotDocumented": true,
+
+  // Formatting options
+  "parametersFormat": "table",
+  "interfacePropertiesFormat": "table",
+
+  // Display options
+  "hideBreadcrumbs": true,
+  "hidePageHeader": true,
+  "hidePageTitle": true,
+
+  // Plugins
+  "plugin": ["typedoc-plugin-markdown"]
+}

@@ -46,7 +46,8 @@
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
-    "prepack": "cp ../../LICENSE ."
+    "prepack": "cp ../../LICENSE .",
+    "docs": "typedoc --options '../../typedoc.json' --entryPoints src/thegraph.ts --out ./docs"
   },
   "devDependencies": {},
   "dependencies": {

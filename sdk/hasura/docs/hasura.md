@@ -1,70 +1,20 @@
-<p align="center">
-  <img src="https://github.com/settlemint/sdk/blob/main/logo.svg" width="200px" align="center" alt="SettleMint logo" />
-  <h1 align="center">SettleMint SDK</h1>
-  <p align="center">
-    ✨ <a href="https://settlemint.com">https://settlemint.com</a> ✨
-    <br/>
-    Integrate SettleMint into your application with ease.
-  </p>
-</p>
-
-<p align="center">
-<a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-portal" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-portal" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-portal" alt="npm"></a>
-<a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
-</p>
-
-<div align="center">
-  <a href="https://console.settlemint.com/documentation/">Documentation</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-portal">NPM</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://github.com/settlemint/sdk/issues">Issues</a>
-  <br />
-</div>
-
-## Table of Contents
-
-- [About](#about)
-- [Usage](#usage)
-- [API Reference](#api-reference)
-- [Contributing](#contributing)
-- [License](#license)
-
-## About
-
-The SettleMint Smart Contract Portal SDK provides a seamless way to interact with the Smart Contract Portal Middleware API. It enables you to easily interact with your smart contracts using a REST or GraphQL API.
-
-The SDK offers a type-safe interface for all Portal API operations, with comprehensive error handling and validation. It integrates smoothly with modern TypeScript applications while providing a simple and intuitive developer experience.
-
-For detailed information about using the Smart Contract Portal Middleware, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/middleware/#the-smart-contract-portal-middleware).
-
-## Usage
-
-TODO: define default
-
-## API Reference
-
 ## Variables
 
 ### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
 
-Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/portal/src/portal.ts#L15)
+Defined in: [sdk/hasura/src/hasura.ts:15](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/hasura/src/hasura.ts#L15)
 
 Schema for validating client options for the Portal client.
 
 ## Functions
 
-### createPortalClient()
+### createHasuraClient()
 
-> **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:52](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/portal/src/portal.ts#L52)
+Defined in: [sdk/hasura/src/hasura.ts:53](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/hasura/src/hasura.ts#L53)
 
 Creates a Portal client using URQL
 
@@ -78,7 +28,7 @@ Creates a Portal client using URQL
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
 | `clientOptions`? | `RequestConfig` | Optional configuration for the URQL client. |
 
 #### Returns
@@ -136,7 +86,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -174,7 +124,7 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
@@ -210,7 +160,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -248,7 +198,7 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
@@ -284,7 +234,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -322,11 +272,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\>[]
+> **readFragment**\<`Document`\>(`fragment`): readonly [`ResultOf`](hasura.md#resultofdocument)\<`Document`\>[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2173
 
@@ -346,7 +296,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\>[]
+readonly [`ResultOf`](hasura.md#resultofdocument)\<`Document`\>[]
 
 The unmasked data of the fragment.
 
@@ -356,7 +306,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -394,11 +344,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null`)[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null`)[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2176
 
@@ -418,7 +368,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null`)[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null`)[]
 
 The unmasked data of the fragment.
 
@@ -428,7 +378,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -466,11 +416,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined`)[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined`)[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2179
 
@@ -490,7 +440,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined`)[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined`)[]
 
 The unmasked data of the fragment.
 
@@ -500,7 +450,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -538,11 +488,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`)[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`)[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2182
 
@@ -562,7 +512,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`)[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`)[]
 
 The unmasked data of the fragment.
 
@@ -572,7 +522,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -610,11 +560,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| \{\})[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| \{\})[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2185
 
@@ -634,7 +584,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| \{\})[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| \{\})[]
 
 The unmasked data of the fragment.
 
@@ -644,7 +594,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -682,11 +632,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| \{\})[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| \{\})[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2188
 
@@ -706,7 +656,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| \{\})[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| \{\})[]
 
 The unmasked data of the fragment.
 
@@ -716,7 +666,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -754,11 +704,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\})[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\})[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2191
 
@@ -778,7 +728,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\})[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\})[]
 
 The unmasked data of the fragment.
 
@@ -788,7 +738,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -826,11 +776,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\})[]
+> **readFragment**\<`Document`\>(`fragment`): readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\})[]
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2194
 
@@ -850,7 +800,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-readonly ([`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\})[]
+readonly ([`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\})[]
 
 The unmasked data of the fragment.
 
@@ -860,7 +810,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -898,11 +848,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\>
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\>
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2197
 
@@ -922,7 +872,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\>
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\>
 
 The unmasked data of the fragment.
 
@@ -932,7 +882,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -970,11 +920,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null`
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null`
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2200
 
@@ -994,7 +944,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null`
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null`
 
 The unmasked data of the fragment.
 
@@ -1004,7 +954,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1042,11 +992,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined`
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined`
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2203
 
@@ -1066,7 +1016,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined`
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined`
 
 The unmasked data of the fragment.
 
@@ -1076,7 +1026,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1114,11 +1064,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2206
 
@@ -1138,7 +1088,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined`
 
 The unmasked data of the fragment.
 
@@ -1148,7 +1098,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1186,11 +1136,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| \{\}
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| \{\}
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2209
 
@@ -1210,7 +1160,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| \{\}
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| \{\}
 
 The unmasked data of the fragment.
 
@@ -1220,7 +1170,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1258,11 +1208,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| \{\}
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| \{\}
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2212
 
@@ -1282,7 +1232,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| \{\}
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| \{\}
 
 The unmasked data of the fragment.
 
@@ -1292,7 +1242,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1330,11 +1280,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\}
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\}
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2215
 
@@ -1354,7 +1304,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\}
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `undefined` \| \{\}
 
 The unmasked data of the fragment.
 
@@ -1364,7 +1314,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1402,11 +1352,11 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 #### Call Signature
 
-> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\}
+> **readFragment**\<`Document`\>(`fragment`): [`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\}
 
 Defined in: node\_modules/gql.tada/dist/gql-tada.d.ts:2218
 
@@ -1426,7 +1376,7 @@ Unmasks a fragment mask for a given fragment document and data.
 
 ##### Returns
 
-[`ResultOf`](REFERENCE.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\}
+[`ResultOf`](hasura.md#resultofdocument)\<`Document`\> \| `null` \| `undefined` \| \{\}
 
 The unmasked data of the fragment.
 
@@ -1436,7 +1386,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-This means that you must use [readFragment](REFERENCE.md#readfragment) to unmask these fragment masks
+This means that you must use [readFragment](hasura.md#readfragment) to unmask these fragment masks
 and get to the data. This encourages isolation and only using the data you define
 a part of your codebase to require.
 
@@ -1474,15 +1424,15 @@ const getQuery = (data: ResultOf<typeof bookQuery>) => {
 
 ##### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 ## Type Aliases
 
 ### ClientOptions
 
-> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](REFERENCE.md#clientoptionsschema)\>
+> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](hasura.md#clientoptionsschema)\>
 
-Defined in: [sdk/portal/src/portal.ts:29](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/portal/src/portal.ts#L29)
+Defined in: [sdk/hasura/src/hasura.ts:30](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/hasura/src/hasura.ts#L30)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -1508,7 +1458,7 @@ When graphql is used to create a fragment and is spread into another
 fragment or query, their result types will only contain a “reference” to the
 fragment. This encourages isolation and is known as “fragment masking.”
 
-While [readFragment](REFERENCE.md#readfragment) is used to unmask these fragment masks, this utility
+While [readFragment](hasura.md#readfragment) is used to unmask these fragment masks, this utility
 creates a fragment mask, so you can accept the masked data in the part of your
 codebase that defines a fragment.
 
@@ -1533,7 +1483,7 @@ const getBook = (data: FragmentOf<typeof bookFragment>) => {
 
 #### See
 
-[readFragment](REFERENCE.md#readfragment) for how to read from fragment masks.
+[readFragment](hasura.md#readfragment) for how to read from fragment masks.
 
 ***
 
@@ -1541,7 +1491,7 @@ const getBook = (data: FragmentOf<typeof bookFragment>) => {
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/portal/src/portal.ts#L10)
+Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/b706ce6837337ccab38d338e9a3545ff7aa7abb6/sdk/hasura/src/hasura.ts#L10)
 
 Options for configuring the URQL client, excluding 'url' and 'exchanges'.
 
@@ -1586,11 +1536,3 @@ A utility type returning the `Variables` type of typed GraphQL documents.
 
 This accepts a TadaDocumentNode and returns the attached `Variables` type
 of GraphQL documents.
-
-## Contributing
-
-We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
-
-## License
-
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
