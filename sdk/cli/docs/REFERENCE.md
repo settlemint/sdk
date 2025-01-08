@@ -1,1 +1,0 @@
-See the [documentation](./docs/settlemint.md) for available commands.

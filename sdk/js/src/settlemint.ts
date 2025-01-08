@@ -91,6 +91,9 @@ import {
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
 
+/**
+ * Client interface for interacting with the SettleMint platform.
+ */
 export interface SettlemintClient {
   workspace: {
     list: () => Promise<Workspace[]>;

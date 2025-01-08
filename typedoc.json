@@ -13,6 +13,9 @@
   // Formatting options
   "parametersFormat": "table",
   "interfacePropertiesFormat": "table",
+  "indexFormat": "table",
+  "enumMembersFormat": "table",
+  "typeDeclarationFormat": "table",
 
   // Display options
   "hideBreadcrumbs": true,

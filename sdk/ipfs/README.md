@@ -52,7 +52,7 @@ TODO: define default
 
 > **createIpfsClient**(`options`): `object`
 
-Defined in: [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/ipfs/src/ipfs.ts#L23)
+Defined in: [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/ipfs/src/ipfs.ts#L23)
 
 Creates an IPFS client for client-side use.
 
@@ -69,9 +69,9 @@ Creates an IPFS client for client-side use.
 
 An object containing the IPFS client.
 
-##### client
-
-> **client**: `KuboRPCClient`
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/ipfs/src/ipfs.ts#L23) |
 
 #### Throws
 
@@ -91,7 +91,7 @@ const { client } = createIpfsClient({
 
 > **createServerIpfsClient**(`options`): `object`
 
-Defined in: [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/f376778a94312b023c8be79105ccd5c9be24df15/sdk/ipfs/src/ipfs.ts#L46)
+Defined in: [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/ipfs/src/ipfs.ts#L46)
 
 Creates an IPFS client for server-side use with additional authentication.
 
@@ -109,9 +109,9 @@ Creates an IPFS client for server-side use with additional authentication.
 
 An object containing the authenticated IPFS client.
 
-##### client
-
-> **client**: `KuboRPCClient`
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/398989273c415db55332100246607dfd17e329b5/sdk/ipfs/src/ipfs.ts#L46) |
 
 #### Throws
 

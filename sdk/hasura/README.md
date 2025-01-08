@@ -48,8 +48,10 @@ TODO: define default
 
 ## Modules
 
-- [hasura](hasura.md)
-- [postgres](postgres.md)
+| Module | Description |
+| ------ | ------ |
+| [hasura](hasura.md) | - |
+| [postgres](postgres.md) | - |
 
 ## Contributing
 
