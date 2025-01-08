@@ -1,4 +1,3 @@
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
@@ -126,11 +125,10 @@ const addCredits = graphql(
  * Creates a function to list all workspaces and their applications.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that returns all workspaces sorted by name
  * @throws If the request fails
  */
-export const workspaceList = (gqlClient: GraphQLClient, options: ClientOptions): (() => Promise<Workspace[]>) => {
+export const workspaceList = (gqlClient: GraphQLClient): (() => Promise<Workspace[]>) => {
   return async () => {
     const { workspaces } = await gqlClient.request(getWorkspacesAndApplications);
     const allWorkspaces = workspaces.reduce<Workspace[]>((acc, workspace) => {
@@ -148,14 +146,10 @@ export const workspaceList = (gqlClient: GraphQLClient, options: ClientOptions):
  * Creates a function to read a specific workspace by unique name.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single workspace by unique name
  * @throws If the workspace cannot be found or the request fails
  */
-export const workspaceRead = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((workspaceUniqueName: string) => Promise<Workspace>) => {
+export const workspaceRead = (gqlClient: GraphQLClient): ((workspaceUniqueName: string) => Promise<Workspace>) => {
   return async (workspaceUniqueName: string) => {
     const { workspaceByUniqueName } = await gqlClient.request(getWorkspace, { uniqueName: workspaceUniqueName });
     return workspaceByUniqueName;
@@ -166,11 +160,10 @@ export const workspaceRead = (
  * Creates a function to create a new workspace.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates a new workspace with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
-export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions) => {
+export const workspaceCreate = (gqlClient: GraphQLClient) => {
   return async (createWorkspaceArgs: CreateWorkspaceArgs) => {
     const { createWorkspace: workspace } = await gqlClient.request(createWorkspace, createWorkspaceArgs);
     return workspace;
@@ -181,11 +174,10 @@ export const workspaceCreate = (gqlClient: GraphQLClient, options: ClientOptions
  * Creates a function to delete a workspace.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that deletes a workspace by unique name
  * @throws If the workspace cannot be found or the deletion fails
  */
-export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
+export const workspaceDelete = (gqlClient: GraphQLClient) => {
   return async (workspaceUniqueName: string) => {
     const { deleteWorkspaceByUniqueName: workspace } = await gqlClient.request(deleteWorkspace, {
       uniqueName: workspaceUniqueName,
@@ -198,11 +190,10 @@ export const workspaceDelete = (gqlClient: GraphQLClient, options: ClientOptions
  * Creates a function to add credits to a workspace.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that adds credits to a workspace
  * @throws If the workspace ID is invalid or amount is not positive
  */
-export const workspaceAddCredits = (gqlClient: GraphQLClient, options: ClientOptions) => {
+export const workspaceAddCredits = (gqlClient: GraphQLClient) => {
   return async (workspaceId: Id, amount: number) => {
     const id = validate(IdSchema, workspaceId);
     if (amount <= 0) {

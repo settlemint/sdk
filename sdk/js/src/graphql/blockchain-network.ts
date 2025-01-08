@@ -1,5 +1,4 @@
 import { applicationRead } from "@/graphql/application.js";
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 import { setNetworkDefaults } from "../defaults/blockchain-network-defaults.js";
@@ -24,10 +23,19 @@ const BlockchainNetworkFragment = graphql(`
   }
 `);
 
+type BlockchainNetworkGraphql = ResultOf<typeof BlockchainNetworkFragment>;
+
 /**
  * Type representing a blockchain network entity.
  */
-export type BlockchainNetwork = ResultOf<typeof BlockchainNetworkFragment>;
+export interface BlockchainNetwork extends Pick<BlockchainNetworkGraphql, "id" | "uniqueName" | "name" | "status"> {
+  __typename: BlockchainNetworkGraphql["__typename"];
+  blockchainNodes: {
+    id: string;
+    name: string;
+    uniqueName: string;
+  }[];
+}
 
 /**
  * Query to fetch blockchain networks for an application.
@@ -166,11 +174,10 @@ const restartBlockchainNetwork = graphql(
  * Creates a function to list blockchain networks for a given application.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches networks for an application
  * @throws If the application cannot be found or the request fails
  */
-export const blockchainNetworkList = (gqlClient: GraphQLClient, options: ClientOptions) => {
+export const blockchainNetworkList = (gqlClient: GraphQLClient) => {
   return async (applicationUniqueName: string) => {
     const {
       blockchainNetworksByUniqueName: { items },
@@ -183,11 +190,10 @@ export const blockchainNetworkList = (gqlClient: GraphQLClient, options: ClientO
  * Creates a function to fetch a specific blockchain network.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single network by unique name
  * @throws If the network cannot be found or the request fails
  */
-export const blockchainNetworkRead = (gqlClient: GraphQLClient, options: ClientOptions) => {
+export const blockchainNetworkRead = (gqlClient: GraphQLClient) => {
   return async (blockchainNetworkUniqueName: string) => {
     const { blockchainNetworkByUniqueName } = await gqlClient.request(getBlockchainNetwork, {
       uniqueName: blockchainNetworkUniqueName,
@@ -200,17 +206,15 @@ export const blockchainNetworkRead = (gqlClient: GraphQLClient, options: ClientO
  * Creates a function to create a new blockchain network.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates a new network with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
 export const blockchainNetworkCreate = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>) => {
   return async (args: CreateBlockchainNetworkArgs) => {
     const { applicationUniqueName, ...otherArgs } = args;
-    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const application = await applicationRead(gqlClient)(applicationUniqueName);
     const blockchainNetworkArgs = setNetworkDefaults(otherArgs);
     const { createBlockchainNetwork: blockchainNetwork } = await gqlClient.request(createBlockchainNetwork, {
       ...blockchainNetworkArgs,
@@ -224,11 +228,10 @@ export const blockchainNetworkCreate = (
  * Creates a function to delete a blockchain network.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that deletes a network by unique name
  * @throws If the network cannot be found or the deletion fails
  */
-export const blockchainNetworkDelete = (gqlClient: GraphQLClient, options: ClientOptions) => {
+export const blockchainNetworkDelete = (gqlClient: GraphQLClient) => {
   return async (blockchainNetworkUniqueName: string) => {
     const { deleteBlockchainNetworkByUniqueName: blockchainNetwork } = await gqlClient.request(
       deleteBlockchainNetwork,
@@ -244,12 +247,11 @@ export const blockchainNetworkDelete = (gqlClient: GraphQLClient, options: Clien
  * Creates a function to restart a blockchain network.
  *
  * @param gqlClient - The GraphQL client instance
- * @param _options - Client configuration options
  * @returns Function that restarts a network by unique name
  * @throws If the network cannot be found or the restart fails
  */
 export const blockchainNetworkRestart =
-  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  (gqlClient: GraphQLClient) =>
   async (blockchainNetworkUniqueName: string): Promise<BlockchainNetwork> => {
     const { restartBlockchainNetworkByUniqueName: blockchainNetwork } = await gqlClient.request(
       restartBlockchainNetwork,

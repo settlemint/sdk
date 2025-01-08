@@ -1,5 +1,4 @@
 import { applicationRead } from "@/graphql/application.js";
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 
@@ -133,13 +132,11 @@ const restartCustomDeployment = graphql(
  * Creates a function to list custom deployments for an application.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches custom deployments for an application
  * @throws If the application cannot be found or the request fails
  */
 export const customdeploymentList = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((applicationUniqueName: string) => Promise<CustomDeployment[]>) => {
   return async (applicationUniqueName: string) => {
     const {
@@ -153,13 +150,11 @@ export const customdeploymentList = (
  * Creates a function to fetch a specific custom deployment.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single custom deployment by unique name
  * @throws If the custom deployment cannot be found or the request fails
  */
 export const customdeploymentRead = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((customDeploymentUniqueName: string) => Promise<CustomDeployment>) => {
   return async (customDeploymentUniqueName: string) => {
     const { customDeploymentByUniqueName: customDeployment } = await gqlClient.request(getCustomDeployment, {
@@ -173,13 +168,11 @@ export const customdeploymentRead = (
  * Creates a function to update a custom deployment.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that updates a custom deployment with a new image tag
  * @throws If the custom deployment cannot be found or the update fails
  */
 export const customdeploymentUpdate = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((customDeploymentUniqueName: string, imageTag: string) => Promise<CustomDeployment>) => {
   return async (customDeploymentUniqueName: string, imageTag: string) => {
     const { editCustomDeploymentByUniqueName: cd } = await gqlClient.request(editCustomDeployment, {
@@ -194,17 +187,15 @@ export const customdeploymentUpdate = (
  * Creates a function to create a new custom deployment.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates a new custom deployment with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
 export const customdeploymentCreate = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>) => {
   return async (args: CreateCustomDeploymentArgs) => {
     const { applicationUniqueName, ...otherArgs } = args;
-    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const application = await applicationRead(gqlClient)(applicationUniqueName);
     const { createCustomDeployment: customDeployment } = await gqlClient.request(createCustomDeployment, {
       ...otherArgs,
       applicationId: application.id,
@@ -217,12 +208,11 @@ export const customdeploymentCreate = (
  * Creates a function to restart a custom deployment.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that restarts a custom deployment by unique name
  * @throws If the custom deployment cannot be found or the restart fails
  */
 export const customDeploymentRestart =
-  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  (gqlClient: GraphQLClient) =>
   async (customDeploymentUniqueName: string): Promise<CustomDeployment> => {
     const { restartCustomDeploymentByUniqueName: customDeployment } = await gqlClient.request(restartCustomDeployment, {
       uniqueName: customDeploymentUniqueName,
