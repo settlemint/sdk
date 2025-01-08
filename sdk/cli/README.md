@@ -34,6 +34,7 @@
   - [Globally install the CLI](#globally-install-the-cli)
 - [Examples](#examples)
   - [Get the version of the CLI](#get-the-version-of-the-cli)
+  - [Get help for a command](#get-help-for-a-command)
   - [Login to the platform](#login-to-the-platform)
   - [Creating a new project from a starter kit template](#creating-a-new-project-from-a-starter-kit-template)
     - [Installing dependencies](#installing-dependencies)
@@ -96,6 +97,16 @@ yarn install -g @settlemint/sdk-cli
 
 ```bash
 settlemint --version
+```
+
+### Get help for a command
+
+The CLI uses a hierarchical command structure. You can navigate through available commands and subcommands using the `--help` flag at any level.
+
+```bash
+settlemint --help
+settlemint platform --help
+settlemint platform create --help
 ```
 
 ### Login to the platform
