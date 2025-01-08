@@ -1,7 +1,6 @@
 import { applicationRead } from "@/graphql/application.js";
 import { blockchainNodeRead } from "@/graphql/blockchain-node.js";
 import { loadBalancerRead } from "@/graphql/load-balancer.js";
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 
@@ -128,14 +127,10 @@ const restartInsights = graphql(
  * Creates a function to list insights for an application.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches insights for an application
  * @throws If the application cannot be found or the request fails
  */
-export const insightsList = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((applicationUniqueName: string) => Promise<Insights[]>) => {
+export const insightsList = (gqlClient: GraphQLClient): ((applicationUniqueName: string) => Promise<Insights[]>) => {
   return async (applicationUniqueName: string) => {
     const {
       insightsListByUniqueName: { items },
@@ -148,14 +143,10 @@ export const insightsList = (
  * Creates a function to fetch a specific insight.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single insight by unique name
  * @throws If the insight cannot be found or the request fails
  */
-export const insightsRead = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((insightsUniqueName: string) => Promise<Insights>) => {
+export const insightsRead = (gqlClient: GraphQLClient): ((insightsUniqueName: string) => Promise<Insights>) => {
   return async (insightsUniqueName: string) => {
     const { insightsByUniqueName: insights } = await gqlClient.request(getInsight, { uniqueName: insightsUniqueName });
     return insights;
@@ -166,24 +157,16 @@ export const insightsRead = (
  * Creates a function to create new insights.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates new insights with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
-export const insightsCreate = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((args: CreateInsightsArgs) => Promise<Insights>) => {
+export const insightsCreate = (gqlClient: GraphQLClient): ((args: CreateInsightsArgs) => Promise<Insights>) => {
   return async (args: CreateInsightsArgs) => {
     const { applicationUniqueName, blockchainNodeUniqueName, loadBalancerUniqueName, ...otherArgs } = args;
     const [application, blockchainNode, loadBalancer] = await Promise.all([
-      applicationRead(gqlClient, options)(applicationUniqueName),
-      blockchainNodeUniqueName
-        ? blockchainNodeRead(gqlClient, options)(blockchainNodeUniqueName)
-        : Promise.resolve(undefined),
-      loadBalancerUniqueName
-        ? loadBalancerRead(gqlClient, options)(loadBalancerUniqueName)
-        : Promise.resolve(undefined),
+      applicationRead(gqlClient)(applicationUniqueName),
+      blockchainNodeUniqueName ? blockchainNodeRead(gqlClient)(blockchainNodeUniqueName) : Promise.resolve(undefined),
+      loadBalancerUniqueName ? loadBalancerRead(gqlClient)(loadBalancerUniqueName) : Promise.resolve(undefined),
     ]);
     const { createInsights: insights } = await gqlClient.request(createInsights, {
       ...otherArgs,
@@ -199,12 +182,11 @@ export const insightsCreate = (
  * Creates a function to restart insights.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that restarts insights by unique name
  * @throws If the insights cannot be found or the restart fails
  */
 export const insightsRestart =
-  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  (gqlClient: GraphQLClient) =>
   async (insightsUniqueName: string): Promise<Insights> => {
     const { restartInsightsByUniqueName: insights } = await gqlClient.request(restartInsights, {
       uniqueName: insightsUniqueName,

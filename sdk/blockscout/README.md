@@ -30,6 +30,13 @@
 
 - [About](#about)
 - [API Reference](#api-reference)
+  - [Functions](#functions)
+    - [createBlockscoutClient()](#createblockscoutclient)
+  - [Type Aliases](#type-aliases)
+    - [ClientOptions](#clientoptions)
+    - [RequestConfig](#requestconfig)
+  - [Variables](#variables)
+    - [ClientOptionsSchema](#clientoptionsschema)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -41,38 +48,84 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 ## API Reference
 
-### Creating a Blockscout Client
+### Functions
 
-#### Server-side Usage
+#### createBlockscoutClient()
 
-```typescript
+> **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+
+Defined in: [sdk/blockscout/src/blockscout.ts:106](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L106)
+
+Creates a Blockscout GraphQL client with proper type safety using gql.tada
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Setup` *extends* `AbstractSetupSchema` |
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client |
+| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
+
+##### Returns
+
+`object`
+
+An object containing the GraphQL client and initialized gql.tada function
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:110](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L110) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:111](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L111) |
+
+##### Throws
+
+Will throw an error if the options fail validation
+
+##### Example
+
+```ts
 import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
+import type { introspection } from "@schemas/blockscout-env";
 
-const { client } = createBlockscoutClient({
-  instance: 'https://your-blockscout-instance.com',
-  accessToken: 'your-access-token',
+// Server-side usage
+const { client, graphql } = createBlockscoutClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
+  instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
 });
-```
 
-#### Browser-side Usage
+// Browser-side usage
+const { client, graphql } = createBlockscoutClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({});
 
-```typescript
-import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
-
-const { client } = createBlockscoutClient({});
-```
-
-### Making GraphQL Queries
-
-```typescript
-import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
-
-const { client, graphql } = createBlockscoutClient({
-  instance: 'https://your-blockscout-instance.com',
-  accessToken: 'your-access-token',
-});
-
-// Define your query using the type-safe graphql template literal
+// Making GraphQL queries
 const query = graphql(`
   query GetTransaction($hash: String!) {
     transaction(hash: $hash) {
@@ -84,24 +137,48 @@ const query = graphql(`
   }
 `);
 
-// Execute the query
 const result = await client.request(query, {
   hash: "0x123abc..."
 });
 ```
 
+### Type Aliases
+
+#### ClientOptions
+
+> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
+
+Defined in: [sdk/blockscout/src/blockscout.ts:32](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L32)
+
+Type definition for client options derived from the ClientOptionsSchema
+
+***
+
+#### RequestConfig
+
+> **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
+
+Defined in: [sdk/blockscout/src/blockscout.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L10)
+
+Type definition for GraphQL client configuration options
+
+### Variables
+
+#### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+
+Defined in: [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L18)
+
+Schema for validating client options for the Blockscout client.
+Defines two possible runtime configurations:
+1. Server-side with instance URL and access token
+2. Browser-side with no additional configuration needed
+
 ## Contributing
 
-We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with a clear commit message
-4. Push your changes to your fork
-5. Create a pull request to the main repository
-
-Please ensure that your code follows the existing style and includes appropriate tests and documentation.
+We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.

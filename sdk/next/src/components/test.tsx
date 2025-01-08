@@ -1,11 +1,17 @@
 import type { ReactElement } from "react";
 
-interface HelloWorldProps {
+/**
+ * The props for the HelloWorld component.
+ */
+export interface HelloWorldProps {
   name?: string;
 }
 
 /**
  * A simple Hello World component that greets the user.
+ *
+ * @param props - The props for the HelloWorld component.
+ * @returns A React element that displays a greeting to the user.
  */
 export function HelloWorld({ name = "World" }: HelloWorldProps): ReactElement {
   return (

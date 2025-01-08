@@ -6,18 +6,18 @@ const isProxyRoute = match(["/proxy/*path"]);
 const isHasuraProxyRoute = match(["/proxy/hasura", "/proxy/hasura/*path"]);
 
 /**
- * Middleware function to handle proxy requests
- * @param request - The incoming Next.js request
- * @returns A modified NextResponse for proxy routes, or undefined for non-proxy routes
+ * Middleware function to handle proxy requests by adding appropriate authentication headers.
+ *
+ * @param request - The incoming Next.js request to process
+ * @returns A modified NextResponse with authentication headers for proxy routes, or undefined for non-proxy routes
+ * @throws Will throw an error if environment validation fails
  *
  * @example
- * ```typescript
- * import { proxyMiddleware } from './middleware/proxy';
+ * import { proxyMiddleware } from '@settlemint/sdk-next/middlewares/proxy';
  *
  * export default function middleware(request: NextRequest) {
  *   return proxyMiddleware(request);
  * }
- * ```
  */
 export function proxyMiddleware(request: NextRequest): NextResponse | undefined {
   const env = validate(DotEnvSchema, process.env);

@@ -1,3 +1,9 @@
+/**
+ * Sets the default values for a cluster service.
+ *
+ * @param args - The arguments for creating a cluster service.
+ * @returns The modified arguments with default values set.
+ */
 export function setClusterServiceDefaults<
   Args extends {
     size?: "SMALL" | "MEDIUM" | "LARGE" | "CUSTOM" | null | undefined;

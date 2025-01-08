@@ -3,7 +3,7 @@ import { resolve } from "node:path";
 import { exists } from "../filesystem.js";
 
 /**
- * Array of available templates for project creation.
+ * Available templates for project creation
  */
 export type Template = { value: string; label: string };
 export const templates: Template[] = [
@@ -11,69 +11,30 @@ export const templates: Template[] = [
 ] as const;
 
 /**
- * Checks if the given project name is a valid package name.
+ * Formats a directory path by removing trailing slashes and whitespace
  *
- * @param projectName - The project name to validate
- * @returns True if the project name is valid, false otherwise
- *
+ * @param targetDir - The directory path to format
+ * @returns The formatted directory path
  * @example
- * ```typescript
- * const isValid = isValidPackageName("my-project");
- * console.log(isValid); // true
- * ```
- */
-export function isValidPackageName(projectName: string): boolean {
-  return /^(?:@[a-z\d\-*~][a-z\d\-*._~]*\/)?[a-z\d\-~][a-z\d\-._~]*$/.test(projectName);
-}
-
-/**
- * Converts a project name to a valid package name.
+ * import { formatTargetDir } from "@settlemint/sdk-utils";
  *
- * @param projectName - The project name to convert
- * @returns A valid package name
- *
- * @example
- * ```typescript
- * const validName = toValidPackageName("My Project Name");
- * console.log(validName); // "my-project-name"
- * ```
- */
-export function toValidPackageName(projectName: string): string {
-  return projectName
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/^[._]/, "")
-    .replace(/[^a-z\d\-~]+/g, "-");
-}
-
-/**
- * Formats the target directory string by trimming and removing trailing slashes.
- *
- * @param targetDir - The target directory path to format
- * @returns The formatted target directory path
- *
- * @example
- * ```typescript
- * const formattedDir = formatTargetDir("/path/to/directory/");
- * console.log(formattedDir); // "/path/to/directory"
- * ```
+ * const formatted = formatTargetDir("/path/to/dir/ "); // "/path/to/dir"
  */
 export function formatTargetDir(targetDir: string): string {
   return targetDir?.trim().replace(/\/+$/g, "");
 }
 
 /**
- * Checks if a directory is empty (contains no files or only a .git directory).
+ * Checks if a directory is empty or contains only a .git folder
  *
- * @param path - The path to check
- * @returns True if the directory is empty, false otherwise
- *
+ * @param path - The directory path to check
+ * @returns True if directory is empty or contains only .git, false otherwise
  * @example
- * ```typescript
- * const dirIsEmpty = await isEmpty("/path/to/directory");
- * console.log(dirIsEmpty);
- * ```
+ * import { isEmpty } from "@settlemint/sdk-utils";
+ *
+ * if (await isEmpty("/path/to/dir")) {
+ *   // Directory is empty
+ * }
  */
 export async function isEmpty(path: string): Promise<boolean> {
   const files = await readdir(path);
@@ -81,14 +42,13 @@ export async function isEmpty(path: string): Promise<boolean> {
 }
 
 /**
- * Empties a directory by removing all its contents except for the .git directory.
+ * Removes all contents of a directory except the .git folder
  *
- * @param dir - The directory to empty
- *
+ * @param dir - The directory path to empty
  * @example
- * ```typescript
- * await emptyDir("/path/to/directory");
- * ```
+ * import { emptyDir } from "@settlemint/sdk-utils";
+ *
+ * await emptyDir("/path/to/dir"); // Removes all contents except .git
  */
 export async function emptyDir(dir: string): Promise<void> {
   if (!(await exists(dir))) return;

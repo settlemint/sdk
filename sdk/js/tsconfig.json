@@ -28,6 +28,6 @@
       }
     ]
   },
-  "include": ["src", "../utils/src/validation/schemas.ts", "../utils/src/validation/schemas.test.ts"],
+  "include": ["src"],
   "exclude": ["node_modules", "dist"]
 }

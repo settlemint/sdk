@@ -5,12 +5,13 @@ import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
 /**
- * Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+ * Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
  */
 export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
- * Schema for validating client options for the Portal client.
+ * Schema for validating Portal client configuration options.
+ * Discriminates between server and browser runtime environments.
  */
 export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
   z.object({
@@ -24,16 +25,15 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
 ]);
 
 /**
- * Type definition for client options derived from the ClientOptionsSchema.
+ * Type representing the validated client options.
  */
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Constructs the full URL for the Portal client based on the provided options.
+ * Constructs the Portal GraphQL endpoint URL based on runtime environment.
  *
- * @param options - The client options for configuring the Portal client.
- * @returns The full URL as a string.
- * @throws Will throw an error if called on the client side when runtime is set to "server".
+ * @param options - The validated client options
+ * @returns The complete GraphQL endpoint URL
  */
 function getFullUrl(options: ClientOptions): string {
   return options.runtime === "server"
@@ -42,12 +42,61 @@ function getFullUrl(options: ClientOptions): string {
 }
 
 /**
- * Creates a Portal client using URQL
+ * Creates a Portal GraphQL client with the provided configuration.
  *
- * @param options - The client options for configuring the Portal client.
- * @param clientOptions - Optional configuration for the URQL client.
- * @returns An object containing the URQL client and the initialized graphql function.
- * @throws Will throw an error if the options fail validation.
+ * @param options - Configuration options for the Portal client
+ * @param clientOptions - Additional GraphQL client configuration options
+ * @returns An object containing the configured GraphQL client and graphql helper function
+ * @throws If the provided options fail validation
+ *
+ * @example
+ * import { createPortalClient } from '@settlemint/sdk-portal';
+ * import type { introspection } from "@schemas/portal-env";
+ *
+ * // Server-side usage
+ * export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
+ *   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+ *   runtime: "server",
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ * });
+ *
+ * // Browser-side usage
+ * export const { client: portalBrowserClient, graphql: portalBrowserGraphql } = createPortalClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({});
+ *
+ * // Making GraphQL queries
+ * const query = graphql(`
+ *   query GetPendingTransactions {
+ *     getPendingTransactions {
+ *       count
+ *     }
+ *   }
+ * `);
+ *
+ * const result = await client.request(query);
  */
 export function createPortalClient<const Setup extends AbstractSetupSchema>(
   options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,

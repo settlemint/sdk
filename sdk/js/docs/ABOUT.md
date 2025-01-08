@@ -1,0 +1,1 @@
+The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint platform's GraphQL API. It enables you to interact with the platform's services in a fully typed manner, providing compile-time safety and autocompletion support.

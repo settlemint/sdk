@@ -1,5 +1,4 @@
 import { applicationRead } from "@/graphql/application.js";
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 import { blockchainNodeRead } from "./blockchain-node.js";
@@ -111,13 +110,11 @@ const restartPrivateKey = graphql(
  * Creates a function to list private keys for an application.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches private keys for an application
  * @throws If the application cannot be found or the request fails
  */
 export const privateKeyList = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((applicationUniqueName: string) => Promise<PrivateKey[]>) => {
   return async (applicationUniqueName: string) => {
     const {
@@ -131,14 +128,10 @@ export const privateKeyList = (
  * Creates a function to fetch a specific private key.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single private key by unique name
  * @throws If the private key cannot be found or the request fails
  */
-export const privatekeyRead = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((privateKeyUniqueName: string) => Promise<PrivateKey>) => {
+export const privatekeyRead = (gqlClient: GraphQLClient): ((privateKeyUniqueName: string) => Promise<PrivateKey>) => {
   return async (privateKeyUniqueName: string) => {
     const { privateKeyByUniqueName: privateKey } = await gqlClient.request(getPrivateKey, {
       uniqueName: privateKeyUniqueName,
@@ -151,21 +144,15 @@ export const privatekeyRead = (
  * Creates a function to create a new private key.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates new private key with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
-export const privateKeyCreate = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((args: CreatePrivateKeyArgs) => Promise<PrivateKey>) => {
+export const privateKeyCreate = (gqlClient: GraphQLClient): ((args: CreatePrivateKeyArgs) => Promise<PrivateKey>) => {
   return async (args: CreatePrivateKeyArgs) => {
     const { applicationUniqueName, blockchainNodeUniqueNames, ...otherArgs } = args;
-    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const application = await applicationRead(gqlClient)(applicationUniqueName);
     const blockchainNodes = blockchainNodeUniqueNames
-      ? await Promise.all(
-          blockchainNodeUniqueNames.map((uniqueName) => blockchainNodeRead(gqlClient, options)(uniqueName)),
-        )
+      ? await Promise.all(blockchainNodeUniqueNames.map((uniqueName) => blockchainNodeRead(gqlClient)(uniqueName)))
       : [];
     const { createPrivateKey: privateKey } = await gqlClient.request(createPrivateKey, {
       ...otherArgs,
@@ -180,12 +167,11 @@ export const privateKeyCreate = (
  * Creates a function to restart a private key.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that restarts private key by unique name
  * @throws If the private key cannot be found or the restart fails
  */
 export const privateKeyRestart =
-  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  (gqlClient: GraphQLClient) =>
   async (privateKeyUniqueName: string): Promise<PrivateKey> => {
     const { restartPrivateKeyByUniqueName: privateKey } = await gqlClient.request(restartPrivateKey, {
       uniqueName: privateKeyUniqueName,

@@ -5,6 +5,7 @@ import { z } from "zod";
  * Schema for validating client options for the Portal client.
  */
 export const ClientOptionsSchema = z.object({
+  /** The URL of the IPFS instance to connect to */
   instance: UrlSchema,
 });
 
@@ -18,6 +19,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({
+  /** The access token used to authenticate with the SettleMint platform */
   accessToken: ApplicationAccessTokenSchema,
 });
 

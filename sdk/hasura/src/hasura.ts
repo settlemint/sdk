@@ -5,12 +5,15 @@ import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
 /**
- * Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+ * Type definition for GraphQL client configuration options
  */
 export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
- * Schema for validating client options for the Portal client.
+ * Schema for validating client options for the Hasura client.
+ * Defines two possible runtime configurations:
+ * 1. Server-side with instance URL, access token and admin secret
+ * 2. Browser-side with no additional configuration needed
  */
 export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
   z.object({
@@ -30,11 +33,12 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Constructs the full URL for the Portal client based on the provided options.
+ * Constructs the full URL for the Hasura GraphQL API based on the provided options.
+ * For server-side runtime, uses the provided instance URL.
+ * For browser-side runtime, constructs a proxy URL using window location.
  *
- * @param options - The client options for configuring the Portal client.
- * @returns The full URL as a string.
- * @throws Will throw an error if called on the client side when runtime is set to "server".
+ * @param options - The client options for configuring the Hasura client
+ * @returns The complete GraphQL API URL as a string
  */
 function getFullUrl(options: ClientOptions): string {
   return options.runtime === "server"
@@ -43,12 +47,66 @@ function getFullUrl(options: ClientOptions): string {
 }
 
 /**
- * Creates a Portal client using URQL
+ * Creates a Hasura GraphQL client with proper type safety using gql.tada
  *
- * @param options - The client options for configuring the Portal client.
- * @param clientOptions - Optional configuration for the URQL client.
- * @returns An object containing the URQL client and the initialized graphql function.
- * @throws Will throw an error if the options fail validation.
+ * @param options - Configuration options for the client:
+ *                 - For server-side: instance URL, access token and admin secret
+ *                 - For browser-side: no additional configuration needed
+ * @param clientOptions - Optional GraphQL client configuration options
+ * @returns An object containing:
+ *          - client: The configured GraphQL client instance
+ *          - graphql: The initialized gql.tada function for type-safe queries
+ * @throws Will throw an error if the options fail validation against ClientOptionsSchema
+ * @example
+ * import { createHasuraClient } from '@settlemint/sdk-hasura';
+ * import type { introspection } from "@schemas/hasura-env";
+ *
+ * // Server-side usage
+ * const { client, graphql } = createHasuraClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
+ *   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ *   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+ * });
+ *
+ * // Browser-side usage
+ * const { client, graphql } = createHasuraClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({});
+ *
+ * // Making GraphQL queries
+ * const query = graphql(`
+ *   query GetUsers {
+ *     users {
+ *       id
+ *       name
+ *       email
+ *     }
+ *   }
+ * `);
+ *
+ * const result = await client.request(query);
  */
 export function createHasuraClient<const Setup extends AbstractSetupSchema>(
   options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,

@@ -28,145 +28,195 @@
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [About](#about)
 - [API Reference](#api-reference)
-- [Examples](#examples)
+  - [Functions](#functions)
+    - [createSettleMintClient()](#createsettlemintclient)
+  - [Interfaces](#interfaces)
+    - [SettlemintClient](#settlemintclient)
+  - [Type Aliases](#type-aliases)
+    - [Application](#application)
+    - [BlockchainNetwork](#blockchainnetwork)
+    - [BlockchainNode](#blockchainnode)
+    - [CustomDeployment](#customdeployment)
+    - [Insights](#insights)
+    - [IntegrationTool](#integrationtool)
+    - [Middleware](#middleware)
+    - [PrivateKey](#privatekey)
+    - [Storage](#storage)
+    - [Workspace](#workspace)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+## About
 
-To install the SettleMint SDK, you can use one of the following package managers:
-
-```bash
-# Using npm
-npm install @settlemint/sdk
-
-# Using yarn
-yarn add @settlemint/sdk
-
-# Using pnpm
-pnpm add @settlemint/sdk
-
-# Using Bun
-bun add @settlemint/sdk
-```
-
-We recommend using Bun for faster installation and better performance.
-
-## Usage
-
-To use the SettleMint SDK in your Node.js application, follow these steps:
-
-1. Import the SDK:
-
-```javascript
-import { createSettleMintClient } from '@settlemint/sdk';
-```
-
-2. Create a client instance:
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-```
-
-3. Use the client to interact with SettleMint resources:
-
-```javascript
-// Example: List workspaces
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
+The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint platform's GraphQL API. It enables you to interact with the platform's services in a fully typed manner, providing compile-time safety and autocompletion support.
 
 ## API Reference
 
-The SettleMint SDK provides access to various resources. Here's an overview of the available methods:
+### Functions
 
-### Workspace
+#### createSettleMintClient()
 
-- `workspace.list()`: List all workspaces and their applications
-- `workspace.read(workspaceId)`: Read a specific workspace and its applications
+> **createSettleMintClient**(`options`): [`SettlemintClient`](README.md#settlemintclient)
 
-### Blockchain Network
+Defined in: [sdk/js/src/settlemint.ts:193](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/settlemint.ts#L193)
 
-- `blockchainNetwork.list(applicationId)`: List blockchain networks for a given application
-- `blockchainNetwork.read(blockchainNetworkId)`: Read a specific blockchain network
+Creates a SettleMint client with the provided options. The client provides methods to interact with
+various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
+integration tools, storage, private keys, insights and custom deployments.
 
-### Blockchain Node
+##### Parameters
 
-- `blockchainNode.list(applicationId)`: List blockchain nodes for a given application
-- `blockchainNode.read(blockchainNodeId)`: Read a specific blockchain node
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client including access token and instance URL |
+| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
+| `options.instance` | `string` | The URL of the SettleMint instance to connect to |
 
-### Middleware
+##### Returns
 
-- `middleware.list(applicationId)`: List middlewares for a given application
-- `middleware.read(middlewareId)`: Read a specific middleware
+[`SettlemintClient`](README.md#settlemintclient)
 
-### Integration Tool
+A SettleMint client object with resource-specific methods
 
-- `integrationTool.list(applicationId)`: List integration tools for a given application
-- `integrationTool.read(integrationId)`: Read a specific integration tool
+##### Throws
 
-### Storage
+If options are invalid or if called in browser environment
 
-- `storage.list(applicationId)`: List storage items for a given application
-- `storage.read(storageId)`: Read a specific storage item
+##### Throws
 
-### Private Key
+If provided options fail schema validation
 
-- `privateKey.list(applicationId)`: List private keys for a given application
-- `privateKey.read(privateKeyId)`: Read a specific private key
+##### Example
 
-### Insights
+```ts
+import { createSettleMintClient } from '@settlemint/sdk-js';
 
-- `insights.list(applicationId)`: List insights for a given application
-- `insights.read(insightsId)`: Read a specific insight
-
-## Examples
-
-Here are some examples of how to use the SettleMint SDK:
-
-### List Workspaces
-
-```javascript
 const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  instance: process.env.SETTLEMINT_INSTANCE,
 });
 
+// List workspaces
 const workspaces = await client.workspace.list();
-console.log(workspaces);
+
+// Read a specific workspace
+const workspace = await client.workspace.read('workspace-unique-name');
 ```
 
-### Read a Specific Blockchain Network
+### Interfaces
 
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
+#### SettlemintClient
 
-const networkId = 'your_network_id';
-const network = await client.blockchainNetwork.read(networkId);
-console.log(network);
-```
+Defined in: [sdk/js/src/settlemint.ts:97](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/settlemint.ts#L97)
+
+Client interface for interacting with the SettleMint platform.
+
+### Type Aliases
+
+#### Application
+
+> **Application**: `ResultOf`\<*typeof* `ApplicationFragment`\>
+
+Defined in: [sdk/js/src/graphql/application.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/application.ts#L23)
+
+Type representing an application entity.
+
+***
+
+#### BlockchainNetwork
+
+> **BlockchainNetwork**: `ResultOf`\<*typeof* `BlockchainNetworkFragment`\>
+
+Defined in: [sdk/js/src/graphql/blockchain-network.ts:29](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/blockchain-network.ts#L29)
+
+Type representing a blockchain network entity.
+
+***
+
+#### BlockchainNode
+
+> **BlockchainNode**: `ResultOf`\<*typeof* `BlockchainNodeFragment`\>
+
+Defined in: [sdk/js/src/graphql/blockchain-node.ts:48](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/blockchain-node.ts#L48)
+
+Type representing a blockchain node entity.
+
+***
+
+#### CustomDeployment
+
+> **CustomDeployment**: `ResultOf`\<*typeof* `CustomDeploymentFragment`\>
+
+Defined in: [sdk/js/src/graphql/custom-deployment.ts:30](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/custom-deployment.ts#L30)
+
+Type representing a custom deployment entity.
+
+***
+
+#### Insights
+
+> **Insights**: `ResultOf`\<*typeof* `InsightsFragment`\>
+
+Defined in: [sdk/js/src/graphql/insights.ts:34](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/insights.ts#L34)
+
+Type representing an insights entity.
+
+***
+
+#### IntegrationTool
+
+> **IntegrationTool**: `ResultOf`\<*typeof* `IntegrationFragment`\>
+
+Defined in: [sdk/js/src/graphql/integration-tool.ts:32](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/integration-tool.ts#L32)
+
+Type representing an integration tool entity.
+
+***
+
+#### Middleware
+
+> **Middleware**: `ResultOf`\<*typeof* `MiddlewareFragment`\>
+
+Defined in: [sdk/js/src/graphql/middleware.ts:47](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/middleware.ts#L47)
+
+Type representing a middleware entity.
+
+***
+
+#### PrivateKey
+
+> **PrivateKey**: `ResultOf`\<*typeof* `PrivateKeyFragment`\>
+
+Defined in: [sdk/js/src/graphql/private-key.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/private-key.ts#L23)
+
+Type representing a private key entity.
+
+***
+
+#### Storage
+
+> **Storage**: `ResultOf`\<*typeof* `StorageFragment`\>
+
+Defined in: [sdk/js/src/graphql/storage.ts:32](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/storage.ts#L32)
+
+Type representing a storage entity.
+
+***
+
+#### Workspace
+
+> **Workspace**: `ResultOf`\<*typeof* `WorkspaceFragment`\>
+
+Defined in: [sdk/js/src/graphql/workspace.ts:26](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/js/src/graphql/workspace.ts#L26)
+
+Type representing a workspace entity.
 
 ## Contributing
 
-We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with a clear commit message
-4. Push your changes to your fork
-5. Create a pull request to the main repository
-
-Please ensure that your code follows the existing style and includes appropriate tests and documentation.
+We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.

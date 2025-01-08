@@ -5,7 +5,7 @@ import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
 /**
- * Options for configuring the GraphQL client, excluding 'url' and other configuration options.
+ * Type definition for GraphQL client configuration options
  */
 export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
@@ -27,14 +27,12 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
 ]);
 
 /**
- * Type definition for client options derived from the ClientOptionsSchema.
+ * Type definition for client options derived from the ClientOptionsSchema
  */
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Constructs the full URL for the Blockscout GraphQL API based on the provided options.
- * For server-side runtime, uses the provided instance URL.
- * For browser-side runtime, constructs a proxy URL using window location.
+ * Constructs the full URL for the Blockscout GraphQL API based on the provided options
  *
  * @param options - The client options for configuring the Blockscout client
  * @returns The complete GraphQL API URL as a string
@@ -48,14 +46,62 @@ function getFullUrl(options: ClientOptions): string {
 /**
  * Creates a Blockscout GraphQL client with proper type safety using gql.tada
  *
- * @param options - Configuration options for the client:
- *                 - For server-side: instance URL and access token
- *                 - For browser-side: no additional configuration needed
+ * @param options - Configuration options for the client
  * @param clientOptions - Optional GraphQL client configuration options
- * @returns An object containing:
- *          - client: The configured GraphQL client instance
- *          - graphql: The initialized gql.tada function for type-safe queries
- * @throws Will throw an error if the options fail validation against ClientOptionsSchema
+ * @returns An object containing the GraphQL client and initialized gql.tada function
+ * @throws Will throw an error if the options fail validation
+ * @example
+ * import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
+ * import type { introspection } from "@schemas/blockscout-env";
+ *
+ * // Server-side usage
+ * const { client, graphql } = createBlockscoutClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
+ *   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
+ * });
+ *
+ * // Browser-side usage
+ * const { client, graphql } = createBlockscoutClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({});
+ *
+ * // Making GraphQL queries
+ * const query = graphql(`
+ *   query GetTransaction($hash: String!) {
+ *     transaction(hash: $hash) {
+ *       hash
+ *       blockNumber
+ *       value
+ *       gasUsed
+ *     }
+ *   }
+ * `);
+ *
+ * const result = await client.request(query, {
+ *   hash: "0x123abc..."
+ * });
  */
 export function createBlockscoutClient<const Setup extends AbstractSetupSchema>(
   options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,

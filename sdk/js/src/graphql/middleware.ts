@@ -1,5 +1,4 @@
 import { applicationRead } from "@/graphql/application.js";
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 import { blockchainNodeRead } from "./blockchain-node.js";
@@ -149,15 +148,13 @@ const restartMiddleware = graphql(
  * Creates a function to list middlewares for an application.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches middlewares for an application
  * @throws If the application cannot be found or the request fails
  */
 export const middlewareList = (
   gqlClient: GraphQLClient,
-  options: ClientOptions,
 ): ((applicationUniqueName: string) => Promise<Middleware[]>) => {
-  return async (applicationUniqueName: string) => {
+  return async (applicationUniqueName: string): Promise<Middleware[]> => {
     const {
       middlewaresByUniqueName: { items },
     } = await gqlClient.request(getMiddlewares, { applicationUniqueName });
@@ -169,15 +166,11 @@ export const middlewareList = (
  * Creates a function to fetch a specific middleware.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single middleware by unique name
  * @throws If the middleware cannot be found or the request fails
  */
-export const middlewareRead = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((middlewareUniqueName: string) => Promise<Middleware>) => {
-  return async (middlewareUniqueName: string) => {
+export const middlewareRead = (gqlClient: GraphQLClient): ((middlewareUniqueName: string) => Promise<Middleware>) => {
+  return async (middlewareUniqueName: string): Promise<Middleware> => {
     const { middlewareByUniqueName: middleware } = await gqlClient.request(getMiddleware, {
       uniqueName: middlewareUniqueName,
     });
@@ -189,26 +182,18 @@ export const middlewareRead = (
  * Creates a function to create a new middleware.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates new middleware with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
-export const middlewareCreate = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((args: CreateMiddlewareArgs) => Promise<Middleware>) => {
-  return async (args: CreateMiddlewareArgs) => {
+export const middlewareCreate = (gqlClient: GraphQLClient): ((args: CreateMiddlewareArgs) => Promise<Middleware>) => {
+  return async (args: CreateMiddlewareArgs): Promise<Middleware> => {
     const { applicationUniqueName, blockchainNodeUniqueName, loadBalancerUniqueName, storageUniqueName, ...otherArgs } =
       args;
     const [application, blockchainNode, loadBalancer, storage] = await Promise.all([
-      applicationRead(gqlClient, options)(applicationUniqueName),
-      blockchainNodeUniqueName
-        ? blockchainNodeRead(gqlClient, options)(blockchainNodeUniqueName)
-        : Promise.resolve(undefined),
-      loadBalancerUniqueName
-        ? loadBalancerRead(gqlClient, options)(loadBalancerUniqueName)
-        : Promise.resolve(undefined),
-      storageUniqueName ? storageRead(gqlClient, options)(storageUniqueName) : Promise.resolve(undefined),
+      applicationRead(gqlClient)(applicationUniqueName),
+      blockchainNodeUniqueName ? blockchainNodeRead(gqlClient)(blockchainNodeUniqueName) : Promise.resolve(undefined),
+      loadBalancerUniqueName ? loadBalancerRead(gqlClient)(loadBalancerUniqueName) : Promise.resolve(undefined),
+      storageUniqueName ? storageRead(gqlClient)(storageUniqueName) : Promise.resolve(undefined),
     ]);
     const { createMiddleware: middleware } = await gqlClient.request(createMiddleware, {
       ...otherArgs,
@@ -225,12 +210,11 @@ export const middlewareCreate = (
  * Creates a function to restart a middleware.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that restarts middleware by unique name
  * @throws If the middleware cannot be found or the restart fails
  */
 export const middlewareRestart =
-  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  (gqlClient: GraphQLClient) =>
   async (middlewareUniqueName: string): Promise<Middleware> => {
     const { restartMiddlewareByUniqueName: middleware } = await gqlClient.request(restartMiddleware, {
       uniqueName: middlewareUniqueName,

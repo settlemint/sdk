@@ -57,6 +57,27 @@ async function findMonoRepoPackages(projectDir: string): Promise<string[]> {
   }
 }
 
+/**
+ * Writes environment variables to .env files across a project or monorepo
+ *
+ * @param prod - Whether to write production environment variables
+ * @param env - The environment variables to write
+ * @param secrets - Whether to write to .env.local files for secrets
+ * @returns Promise that resolves when writing is complete
+ * @throws Will throw an error if writing fails
+ * @example
+ * import { writeEnv } from '@settlemint/sdk-utils';
+ *
+ * // Write development environment variables
+ * await writeEnv(false, {
+ *   SETTLEMINT_INSTANCE: 'https://dev.example.com'
+ * }, false);
+ *
+ * // Write production secrets
+ * await writeEnv(true, {
+ *   SETTLEMINT_ACCESS_TOKEN: 'secret-token'
+ * }, true);
+ */
 export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boolean): Promise<void> {
   const projectDir = await projectRoot();
 

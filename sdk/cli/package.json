@@ -37,7 +37,8 @@
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
-    "docs": "bun scripts/create-docs.ts"
+    "docs": "bun scripts/create-docs.ts",
+    "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
     "hardhat": "2.22.17"

@@ -91,6 +91,9 @@ import {
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
 
+/**
+ * Client interface for interacting with the SettleMint platform.
+ */
 export interface SettlemintClient {
   workspace: {
     list: () => Promise<Workspace[]>;
@@ -164,17 +167,28 @@ export interface SettlemintClient {
 }
 
 /**
- * Creates a SettleMint client with the provided options.
+ * Creates a SettleMint client with the provided options. The client provides methods to interact with
+ * various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
+ * integration tools, storage, private keys, insights and custom deployments.
  *
- * @param options - The options for creating the SettleMint client.
- * @returns An object containing various methods to interact with SettleMint resources.
- * @throws Will throw an error if the options are invalid or if called in a browser environment.
+ * @param {ClientOptions} options - Configuration options for the client including access token and instance URL
+ * @returns {SettlemintClient} A SettleMint client object with resource-specific methods
+ * @throws {Error} If options are invalid or if called in browser environment
+ * @throws {ValidationError} If provided options fail schema validation
  *
  * @example
+ * import { createSettleMintClient } from '@settlemint/sdk-js';
+ *
  * const client = createSettleMintClient({
- *   accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
- *   instance: 'https://console.settlemint.com'
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ *   instance: process.env.SETTLEMINT_INSTANCE,
  * });
+ *
+ * // List workspaces
+ * const workspaces = await client.workspace.list();
+ *
+ * // Read a specific workspace
+ * const workspace = await client.workspace.read('workspace-unique-name');
  */
 export function createSettleMintClient(options: ClientOptions): SettlemintClient {
   ensureServer();
@@ -217,73 +231,73 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
 
   return {
     workspace: {
-      list: workspaceList(gqlClient, options),
-      read: workspaceRead(gqlClient, options),
-      create: workspaceCreate(gqlClient, options),
-      delete: workspaceDelete(gqlClient, options),
-      addCredits: workspaceAddCredits(gqlClient, options),
+      list: workspaceList(gqlClient),
+      read: workspaceRead(gqlClient),
+      create: workspaceCreate(gqlClient),
+      delete: workspaceDelete(gqlClient),
+      addCredits: workspaceAddCredits(gqlClient),
     },
     application: {
-      list: applicationList(gqlClient, options),
-      read: applicationRead(gqlClient, options),
-      create: applicationCreate(gqlClient, options),
-      delete: applicationDelete(gqlClient, options),
+      list: applicationList(gqlClient),
+      read: applicationRead(gqlClient),
+      create: applicationCreate(gqlClient),
+      delete: applicationDelete(gqlClient),
     },
     blockchainNetwork: {
-      list: blockchainNetworkList(gqlClient, options),
-      read: blockchainNetworkRead(gqlClient, options),
-      create: blockchainNetworkCreate(gqlClient, options),
-      delete: blockchainNetworkDelete(gqlClient, options),
-      restart: blockchainNetworkRestart(gqlClient, options),
+      list: blockchainNetworkList(gqlClient),
+      read: blockchainNetworkRead(gqlClient),
+      create: blockchainNetworkCreate(gqlClient),
+      delete: blockchainNetworkDelete(gqlClient),
+      restart: blockchainNetworkRestart(gqlClient),
     },
     blockchainNode: {
-      list: blockchainNodeList(gqlClient, options),
-      read: blockchainNodeRead(gqlClient, options),
-      create: blockchainNodeCreate(gqlClient, options),
-      restart: blockchainNodeRestart(gqlClient, options),
+      list: blockchainNodeList(gqlClient),
+      read: blockchainNodeRead(gqlClient),
+      create: blockchainNodeCreate(gqlClient),
+      restart: blockchainNodeRestart(gqlClient),
     },
     middleware: {
-      list: middlewareList(gqlClient, options),
-      read: middlewareRead(gqlClient, options),
-      create: middlewareCreate(gqlClient, options),
-      restart: middlewareRestart(gqlClient, options),
+      list: middlewareList(gqlClient),
+      read: middlewareRead(gqlClient),
+      create: middlewareCreate(gqlClient),
+      restart: middlewareRestart(gqlClient),
     },
     integrationTool: {
-      list: integrationToolList(gqlClient, options),
-      read: integrationToolRead(gqlClient, options),
-      create: integrationToolCreate(gqlClient, options),
-      restart: integrationToolRestart(gqlClient, options),
+      list: integrationToolList(gqlClient),
+      read: integrationToolRead(gqlClient),
+      create: integrationToolCreate(gqlClient),
+      restart: integrationToolRestart(gqlClient),
     },
     storage: {
-      list: storageList(gqlClient, options),
-      read: storageRead(gqlClient, options),
-      create: storageCreate(gqlClient, options),
-      restart: storageRestart(gqlClient, options),
+      list: storageList(gqlClient),
+      read: storageRead(gqlClient),
+      create: storageCreate(gqlClient),
+      restart: storageRestart(gqlClient),
     },
     privateKey: {
-      list: privateKeyList(gqlClient, options),
-      read: privatekeyRead(gqlClient, options),
-      create: privateKeyCreate(gqlClient, options),
-      restart: privateKeyRestart(gqlClient, options),
+      list: privateKeyList(gqlClient),
+      read: privatekeyRead(gqlClient),
+      create: privateKeyCreate(gqlClient),
+      restart: privateKeyRestart(gqlClient),
     },
     insights: {
-      list: insightsList(gqlClient, options),
-      read: insightsRead(gqlClient, options),
-      create: insightsCreate(gqlClient, options),
-      restart: insightsRestart(gqlClient, options),
+      list: insightsList(gqlClient),
+      read: insightsRead(gqlClient),
+      create: insightsCreate(gqlClient),
+      restart: insightsRestart(gqlClient),
     },
     customDeployment: {
-      list: customdeploymentList(gqlClient, options),
-      read: customdeploymentRead(gqlClient, options),
-      create: customdeploymentCreate(gqlClient, options),
-      update: customdeploymentUpdate(gqlClient, options),
-      restart: customDeploymentRestart(gqlClient, options),
+      list: customdeploymentList(gqlClient),
+      read: customdeploymentRead(gqlClient),
+      create: customdeploymentCreate(gqlClient),
+      update: customdeploymentUpdate(gqlClient),
+      restart: customDeploymentRestart(gqlClient),
     },
     foundry: {
-      env: getEnv(gqlClient, options),
+      env: getEnv(gqlClient),
     },
     applicationAccessToken: {
-      create: applicationAccessTokenCreate(gqlClient, options),
+      create: applicationAccessTokenCreate(gqlClient),
     },
   };
 }

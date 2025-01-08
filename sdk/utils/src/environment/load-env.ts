@@ -2,16 +2,25 @@ import { join } from "node:path";
 import { cancel } from "@/terminal.js";
 import { type DotEnv, type DotEnvPartial, DotEnvSchema, DotEnvSchemaPartial, validate } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
+
 /**
  * Loads environment variables from .env files.
  * To enable encryption with dotenvx (https://www.dotenvx.com/docs) run `bunx dotenvx encrypt`
  *
- * @returns A promise that resolves to the validated environment variables.
- * @throws Will throw an error if validation fails.
- *
+ * @param validateEnv - Whether to validate the environment variables against the schema
+ * @param prod - Whether to load production environment variables
+ * @param path - Optional path to the directory containing .env files. Defaults to process.cwd()
+ * @returns A promise that resolves to the validated environment variables
+ * @throws Will throw an error if validation fails and validateEnv is true
  * @example
- * const env = await loadEnv();
+ * import { loadEnv } from '@settlemint/sdk-utils';
+ *
+ * // Load and validate environment variables
+ * const env = await loadEnv(true, false);
  * console.log(env.SETTLEMINT_INSTANCE);
+ *
+ * // Load without validation
+ * const rawEnv = await loadEnv(false, false);
  */
 export async function loadEnv<T extends boolean = true>(
   validateEnv: T,
@@ -21,16 +30,7 @@ export async function loadEnv<T extends boolean = true>(
   return loadEnvironmentEnv(validateEnv, !!prod, path);
 }
 
-/**
- * Loads environment variables for a specific environment.
- *
- * @param environment - The environment to load variables for.
- * @param validateEnv - Whether to validate the environment variables.
- * @param path - The path to load the environment variables from.
- * @returns A promise that resolves to the environment variables, either validated or raw.
- * @throws Will throw an error if validation fails when validateEnv is true.
- */
-export async function loadEnvironmentEnv<T extends boolean = true>(
+async function loadEnvironmentEnv<T extends boolean = true>(
   validateEnv: T,
   prod: boolean,
   path: string = process.cwd(),

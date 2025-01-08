@@ -2,17 +2,12 @@ import { projectRoot } from "@/filesystem/project-root.js";
 import pkgjs from "@npmcli/package-json";
 
 /**
- * Checks if a package is installed in the project's dependencies.
- * @param name - The name of the package to check.
- * @param path - Optional path to the project root. If not provided, it will be determined automatically.
- * @returns A boolean indicating whether the package is installed in any of the dependency types (dependencies, devDependencies, or peerDependencies).
- * @throws {Error} If there's an issue reading the package.json file.
+ * Checks if a package is installed in the project's dependencies, devDependencies, or peerDependencies.
  *
- * @example
- * ```typescript
- * const isInstalled = await isPackageInstalled("react");
- * console.log(isInstalled); // true or false
- * ```
+ * @param name - The name of the package to check
+ * @param path - The path to the project root directory. If not provided, will be automatically determined
+ * @returns Whether the package is installed
+ * @throws If unable to read or parse the package.json file
  */
 export async function isPackageInstalled(name: string, path?: string) {
   // Read the package.json file

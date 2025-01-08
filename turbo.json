@@ -32,9 +32,6 @@
     "docker": {
       "cache": false
     },
-    "deploy": {
-      "outputs": ["apps/asset-tokenization/contracts/ignition/deployments/**"]
-    },
     "attw": {
       "dependsOn": ["build"]
     },
@@ -61,8 +58,13 @@
     },
     "docs": {
       "dependsOn": ["^build"],
-      "inputs": ["src/**", "scripts/create-docs.ts"],
-      "outputs": ["docs/**"]
+      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs"],
+      "outputs": ["docs/**", "!docs/ABOUT.md"]
+    },
+    "//#generate-readme": {
+      "dependsOn": ["^build"],
+      "inputs": ["scripts/generate-readme.ts", "scripts/templates/README-template.md", "sdk/**/docs/**"],
+      "outputs": ["sdk/**/README.md"]
     }
   }
 }

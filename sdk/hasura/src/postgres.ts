@@ -2,7 +2,7 @@ import { runsOnServer } from "@settlemint/sdk-utils/runtime";
 import pg from "pg";
 
 /**
- * Type for the extended Pool events including our custom permanent-failure event
+ * Type definition extending the pg.Pool interface to include custom permanent-failure event
  */
 declare module "pg" {
   interface Pool {
@@ -11,10 +11,18 @@ declare module "pg" {
   }
 }
 
+/**
+ * Utility function to pause execution for a specified duration
+ *
+ * @param ms - The number of milliseconds to sleep
+ * @returns A promise that resolves after the specified duration
+ */
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * Handles database connection errors and retry logic
+ * Configures error handling and recovery mechanisms for a PostgreSQL connection pool
+ *
+ * @param pool - The PostgreSQL connection pool to configure
  */
 function setupErrorHandling(pool: pg.Pool) {
   let retryCount = 0;
@@ -53,12 +61,24 @@ function setupErrorHandling(pool: pg.Pool) {
 }
 
 /**
- * Creates a Drizzle client for database operations with schema typings
+ * Creates a PostgreSQL connection pool with error handling and retry mechanisms
  *
  * @param databaseUrl - The PostgreSQL connection URL
- * @param schemas - Object containing the schema definitions
- * @returns The initialized Drizzle client with proper schema typings
- * @throws {Error} If called from browser runtime or if validation fails
+ * @returns A configured PostgreSQL connection pool
+ * @throws Will throw an error if called from browser runtime
+ * @example
+ * import { createPostgresPool } from '@settlemint/sdk-hasura';
+ *
+ * const pool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL);
+ *
+ * // The pool will automatically handle connection errors and retries
+ * const client = await pool.connect();
+ * try {
+ *   const result = await client.query('SELECT NOW()');
+ *   console.log(result.rows[0]);
+ * } finally {
+ *   client.release();
+ * }
  */
 export function createPostgresPool(databaseUrl: string) {
   if (!runsOnServer) {

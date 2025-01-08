@@ -10,8 +10,8 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-js" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-js" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-js" alt="npm"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-hasura" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk-hasura" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-hasura" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-js">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-hasura">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -28,145 +28,201 @@
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [About](#about)
 - [API Reference](#api-reference)
-- [Examples](#examples)
+  - [Functions](#functions)
+    - [createHasuraClient()](#createhasuraclient)
+    - [createPostgresPool()](#createpostgrespool)
+  - [Type Aliases](#type-aliases)
+    - [ClientOptions](#clientoptions)
+    - [RequestConfig](#requestconfig)
+  - [Variables](#variables)
+    - [ClientOptionsSchema](#clientoptionsschema)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+## About
 
-To install the SettleMint SDK, you can use one of the following package managers:
+The SettleMint Hasura SDK provides a seamless way to interact with Hasura GraphQL APIs for managing application data. It enables you to easily query and mutate data stored in your SettleMint-powered PostgreSQL databases through a type-safe GraphQL interface.
 
-```bash
-# Using npm
-npm install @settlemint/sdk
-
-# Using yarn
-yarn add @settlemint/sdk
-
-# Using pnpm
-pnpm add @settlemint/sdk
-
-# Using Bun
-bun add @settlemint/sdk
-```
-
-We recommend using Bun for faster installation and better performance.
-
-## Usage
-
-To use the SettleMint SDK in your Node.js application, follow these steps:
-
-1. Import the SDK:
-
-```javascript
-import { createSettleMintClient } from '@settlemint/sdk';
-```
-
-2. Create a client instance:
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-```
-
-3. Use the client to interact with SettleMint resources:
-
-```javascript
-// Example: List workspaces
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
+For detailed information about using Hasura with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/backend-as-a-service/).
 
 ## API Reference
 
-The SettleMint SDK provides access to various resources. Here's an overview of the available methods:
+### Functions
 
-### Workspace
+#### createHasuraClient()
 
-- `workspace.list()`: List all workspaces and their applications
-- `workspace.read(workspaceId)`: Read a specific workspace and its applications
+> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-### Blockchain Network
+Defined in: [sdk/hasura/src/hasura.ts:111](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L111)
 
-- `blockchainNetwork.list(applicationId)`: List blockchain networks for a given application
-- `blockchainNetwork.read(blockchainNetworkId)`: Read a specific blockchain network
+Creates a Hasura GraphQL client with proper type safety using gql.tada
 
-### Blockchain Node
+##### Type Parameters
 
-- `blockchainNode.list(applicationId)`: List blockchain nodes for a given application
-- `blockchainNode.read(blockchainNodeId)`: Read a specific blockchain node
+| Type Parameter |
+| ------ |
+| `Setup` *extends* `AbstractSetupSchema` |
 
-### Middleware
+##### Parameters
 
-- `middleware.list(applicationId)`: List middlewares for a given application
-- `middleware.read(middlewareId)`: Read a specific middleware
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL, access token and admin secret - For browser-side: no additional configuration needed |
+| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
-### Integration Tool
+##### Returns
 
-- `integrationTool.list(applicationId)`: List integration tools for a given application
-- `integrationTool.read(integrationId)`: Read a specific integration tool
+`object`
 
-### Storage
+An object containing:
+         - client: The configured GraphQL client instance
+         - graphql: The initialized gql.tada function for type-safe queries
 
-- `storage.list(applicationId)`: List storage items for a given application
-- `storage.read(storageId)`: Read a specific storage item
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:115](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L115) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:116](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L116) |
 
-### Private Key
+##### Throws
 
-- `privateKey.list(applicationId)`: List private keys for a given application
-- `privateKey.read(privateKeyId)`: Read a specific private key
+Will throw an error if the options fail validation against ClientOptionsSchema
 
-### Insights
+##### Example
 
-- `insights.list(applicationId)`: List insights for a given application
-- `insights.read(insightsId)`: Read a specific insight
+```ts
+import { createHasuraClient } from '@settlemint/sdk-hasura';
+import type { introspection } from "@schemas/hasura-env";
 
-## Examples
-
-Here are some examples of how to use the SettleMint SDK:
-
-### List Workspaces
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
+// Server-side usage
+const { client, graphql } = createHasuraClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
+  instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
 });
 
-const workspaces = await client.workspace.list();
-console.log(workspaces);
+// Browser-side usage
+const { client, graphql } = createHasuraClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({});
+
+// Making GraphQL queries
+const query = graphql(`
+  query GetUsers {
+    users {
+      id
+      name
+      email
+    }
+  }
+`);
+
+const result = await client.request(query);
 ```
 
-### Read a Specific Blockchain Network
+***
 
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
+#### createPostgresPool()
 
-const networkId = 'your_network_id';
-const network = await client.blockchainNetwork.read(networkId);
-console.log(network);
+> **createPostgresPool**(`databaseUrl`): `Pool`
+
+Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/postgres.ts#L83)
+
+Creates a PostgreSQL connection pool with error handling and retry mechanisms
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `databaseUrl` | `string` | The PostgreSQL connection URL |
+
+##### Returns
+
+`Pool`
+
+A configured PostgreSQL connection pool
+
+##### Throws
+
+Will throw an error if called from browser runtime
+
+##### Example
+
+```ts
+import { createPostgresPool } from '@settlemint/sdk-hasura';
+
+const pool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL);
+
+// The pool will automatically handle connection errors and retries
+const client = await pool.connect();
+try {
+  const result = await client.query('SELECT NOW()');
+  console.log(result.rows[0]);
+} finally {
+  client.release();
+}
 ```
+
+### Type Aliases
+
+#### ClientOptions
+
+> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
+
+Defined in: [sdk/hasura/src/hasura.ts:33](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L33)
+
+Type definition for client options derived from the ClientOptionsSchema.
+
+***
+
+#### RequestConfig
+
+> **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
+
+Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L10)
+
+Type definition for GraphQL client configuration options
+
+### Variables
+
+#### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+
+Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L18)
+
+Schema for validating client options for the Hasura client.
+Defines two possible runtime configurations:
+1. Server-side with instance URL, access token and admin secret
+2. Browser-side with no additional configuration needed
 
 ## Contributing
 
-We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with a clear commit message
-4. Push your changes to your fork
-5. Create a pull request to the main repository
-
-Please ensure that your code follows the existing style and includes appropriate tests and documentation.
+We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.

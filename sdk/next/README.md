@@ -10,8 +10,8 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-js" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-js" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-js" alt="npm"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-next" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk-next" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-next" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-js">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-next">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -28,145 +28,141 @@
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [About](#about)
 - [API Reference](#api-reference)
-- [Examples](#examples)
+  - [Functions](#functions)
+    - [HelloWorld()](#helloworld)
+    - [proxyMiddleware()](#proxymiddleware)
+    - [withSettleMint()](#withsettlemint)
+  - [Interfaces](#interfaces)
+    - [HelloWorldProps](#helloworldprops)
+    - [WithSettleMintOptions](#withsettlemintoptions)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+## About
 
-To install the SettleMint SDK, you can use one of the following package managers:
-
-```bash
-# Using npm
-npm install @settlemint/sdk
-
-# Using yarn
-yarn add @settlemint/sdk
-
-# Using pnpm
-pnpm add @settlemint/sdk
-
-# Using Bun
-bun add @settlemint/sdk
-```
-
-We recommend using Bun for faster installation and better performance.
-
-## Usage
-
-To use the SettleMint SDK in your Node.js application, follow these steps:
-
-1. Import the SDK:
-
-```javascript
-import { createSettleMintClient } from '@settlemint/sdk';
-```
-
-2. Create a client instance:
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-```
-
-3. Use the client to interact with SettleMint resources:
-
-```javascript
-// Example: List workspaces
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
+The SettleMint Next.js SDK provides a seamless integration layer between Next.js applications and the SettleMint platform. It offers a collection of utilities, hooks, and components specifically designed for Next.js applications, making it easy to interact with SettleMint's services while following Next.js best practices.
 
 ## API Reference
 
-The SettleMint SDK provides access to various resources. Here's an overview of the available methods:
+### Functions
 
-### Workspace
+#### HelloWorld()
 
-- `workspace.list()`: List all workspaces and their applications
-- `workspace.read(workspaceId)`: Read a specific workspace and its applications
+> **HelloWorld**(`props`): `ReactElement`
 
-### Blockchain Network
+Defined in: [components/test.tsx:16](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/components/test.tsx#L16)
 
-- `blockchainNetwork.list(applicationId)`: List blockchain networks for a given application
-- `blockchainNetwork.read(blockchainNetworkId)`: Read a specific blockchain network
+A simple Hello World component that greets the user.
 
-### Blockchain Node
+##### Parameters
 
-- `blockchainNode.list(applicationId)`: List blockchain nodes for a given application
-- `blockchainNode.read(blockchainNodeId)`: Read a specific blockchain node
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `props` | [`HelloWorldProps`](README.md#helloworldprops) | The props for the HelloWorld component. |
 
-### Middleware
+##### Returns
 
-- `middleware.list(applicationId)`: List middlewares for a given application
-- `middleware.read(middlewareId)`: Read a specific middleware
+`ReactElement`
 
-### Integration Tool
+A React element that displays a greeting to the user.
 
-- `integrationTool.list(applicationId)`: List integration tools for a given application
-- `integrationTool.read(integrationId)`: Read a specific integration tool
+***
 
-### Storage
+#### proxyMiddleware()
 
-- `storage.list(applicationId)`: List storage items for a given application
-- `storage.read(storageId)`: Read a specific storage item
+> **proxyMiddleware**(`request`): `NextResponse` \| `undefined`
 
-### Private Key
+Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/middlewares/proxy.ts#L22)
 
-- `privateKey.list(applicationId)`: List private keys for a given application
-- `privateKey.read(privateKeyId)`: Read a specific private key
+Middleware function to handle proxy requests by adding appropriate authentication headers.
 
-### Insights
+##### Parameters
 
-- `insights.list(applicationId)`: List insights for a given application
-- `insights.read(insightsId)`: Read a specific insight
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `request` | `NextRequest` | The incoming Next.js request to process |
 
-## Examples
+##### Returns
 
-Here are some examples of how to use the SettleMint SDK:
+`NextResponse` \| `undefined`
 
-### List Workspaces
+A modified NextResponse with authentication headers for proxy routes, or undefined for non-proxy routes
 
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
+##### Throws
 
-const workspaces = await client.workspace.list();
-console.log(workspaces);
+Will throw an error if environment validation fails
+
+##### Example
+
+```ts
+import { proxyMiddleware } from '@settlemint/sdk-next/middlewares/proxy';
+
+export default function middleware(request: NextRequest) {
+  return proxyMiddleware(request);
+}
 ```
 
-### Read a Specific Blockchain Network
+***
 
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
+#### withSettleMint()
 
-const networkId = 'your_network_id';
-const network = await client.blockchainNetwork.read(networkId);
-console.log(network);
-```
+> **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
+
+Defined in: [config/with-settlemint.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L23)
+
+Modifies the passed in Next.js configuration with SettleMint-specific settings.
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `C` *extends* `NextConfig` |
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `nextConfig` | `C` | The original Next.js configuration |
+| `options` | [`WithSettleMintOptions`](README.md#withsettlemintoptions) | Options for customizing the SettleMint configuration |
+
+##### Returns
+
+`Promise`\<`C`\>
+
+The modified Next.js configuration
+
+##### Throws
+
+If the SettleMint configuration cannot be read or processed
+
+### Interfaces
+
+#### HelloWorldProps
+
+Defined in: [components/test.tsx:6](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/components/test.tsx#L6)
+
+The props for the HelloWorld component.
+
+***
+
+#### WithSettleMintOptions
+
+Defined in: [config/with-settlemint.ts:8](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L8)
+
+Options for configuring the SettleMint configuration.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:12](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L12) |
 
 ## Contributing
 
-We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with a clear commit message
-4. Push your changes to your fork
-5. Create a pull request to the main repository
-
-Please ensure that your code follows the existing style and includes appropriate tests and documentation.
+We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.

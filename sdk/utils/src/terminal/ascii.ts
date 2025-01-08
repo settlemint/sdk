@@ -1,5 +1,15 @@
 import { magentaBright } from "yoctocolors";
 
+/**
+ * Prints the SettleMint ASCII art logo to the console in magenta color.
+ * Used for CLI branding and visual identification.
+ *
+ * @example
+ * import { ascii } from "@settlemint/sdk-utils";
+ *
+ * // Prints the SettleMint logo
+ * ascii();
+ */
 export const ascii = (): void =>
   console.log(
     magentaBright(`

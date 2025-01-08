@@ -3,8 +3,11 @@ import { z } from "zod";
 import { ApplicationAccessTokenSchema, PersonalAccessTokenSchema } from "./access-token.schema.js";
 import { UniqueNameSchema } from "./unique-name.schema.js";
 import { UrlSchema } from "./url.schema.js";
+
 /**
- * Schema for validating access tokens.
+ * Schema for validating environment variables used by the SettleMint SDK.
+ * Defines validation rules and types for configuration values like URLs,
+ * access tokens, workspace names, and service endpoints.
  */
 export const DotEnvSchema = z.object({
   SETTLEMINT_INSTANCE: UrlSchema.default("https://console.settlemint.com"),
@@ -47,7 +50,18 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: z.string().optional(),
 });
 
+/**
+ * Type definition for the environment variables schema.
+ */
 export type DotEnv = z.infer<typeof DotEnvSchema>;
 
+/**
+ * Partial version of the environment variables schema where all fields are optional.
+ * Useful for validating incomplete configurations during development or build time.
+ */
 export const DotEnvSchemaPartial = DotEnvSchema.partial();
+
+/**
+ * Type definition for the partial environment variables schema.
+ */
 export type DotEnvPartial = z.infer<typeof DotEnvSchemaPartial>;

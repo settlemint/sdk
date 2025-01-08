@@ -10,8 +10,8 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-js" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-js" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-js" alt="npm"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-ipfs" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk-ipfs" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-ipfs" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-js">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-ipfs">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -28,145 +28,120 @@
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [About](#about)
 - [API Reference](#api-reference)
-- [Examples](#examples)
+  - [Functions](#functions)
+    - [createIpfsClient()](#createipfsclient)
+    - [createServerIpfsClient()](#createserveripfsclient)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+## About
 
-To install the SettleMint SDK, you can use one of the following package managers:
+The SettleMint IPFS SDK provides a simple way to interact with IPFS (InterPlanetary File System) through the SettleMint platform. It enables you to easily store and retrieve files using IPFS in a decentralized manner.
 
-```bash
-# Using npm
-npm install @settlemint/sdk
-
-# Using yarn
-yarn add @settlemint/sdk
-
-# Using pnpm
-pnpm add @settlemint/sdk
-
-# Using Bun
-bun add @settlemint/sdk
-```
-
-We recommend using Bun for faster installation and better performance.
-
-## Usage
-
-To use the SettleMint SDK in your Node.js application, follow these steps:
-
-1. Import the SDK:
-
-```javascript
-import { createSettleMintClient } from '@settlemint/sdk';
-```
-
-2. Create a client instance:
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-```
-
-3. Use the client to interact with SettleMint resources:
-
-```javascript
-// Example: List workspaces
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
+For detailed information about using IPFS with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/storage/).
 
 ## API Reference
 
-The SettleMint SDK provides access to various resources. Here's an overview of the available methods:
+### Functions
 
-### Workspace
+#### createIpfsClient()
 
-- `workspace.list()`: List all workspaces and their applications
-- `workspace.read(workspaceId)`: Read a specific workspace and its applications
+> **createIpfsClient**(`options`): `object`
 
-### Blockchain Network
+Defined in: [sdk/ipfs/src/ipfs.ts:31](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L31)
 
-- `blockchainNetwork.list(applicationId)`: List blockchain networks for a given application
-- `blockchainNetwork.read(blockchainNetworkId)`: Read a specific blockchain network
+Creates an IPFS client for client-side use
 
-### Blockchain Node
+##### Parameters
 
-- `blockchainNode.list(applicationId)`: List blockchain nodes for a given application
-- `blockchainNode.read(blockchainNodeId)`: Read a specific blockchain node
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | \{ `instance`: `string`; \} | Configuration options for the client |
+| `options.instance` | `string` | The URL of the IPFS instance to connect to |
 
-### Middleware
+##### Returns
 
-- `middleware.list(applicationId)`: List middlewares for a given application
-- `middleware.read(middlewareId)`: Read a specific middleware
+`object`
 
-### Integration Tool
+An object containing the configured IPFS client instance
 
-- `integrationTool.list(applicationId)`: List integration tools for a given application
-- `integrationTool.read(integrationId)`: Read a specific integration tool
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:31](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L31) |
 
-### Storage
+##### Throws
 
-- `storage.list(applicationId)`: List storage items for a given application
-- `storage.read(storageId)`: Read a specific storage item
+Will throw an error if the options fail validation
 
-### Private Key
+##### Example
 
-- `privateKey.list(applicationId)`: List private keys for a given application
-- `privateKey.read(privateKeyId)`: Read a specific private key
+```ts
+import { createIpfsClient } from '@settlemint/sdk-ipfs';
 
-### Insights
-
-- `insights.list(applicationId)`: List insights for a given application
-- `insights.read(insightsId)`: Read a specific insight
-
-## Examples
-
-Here are some examples of how to use the SettleMint SDK:
-
-### List Workspaces
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
+const { client } = createIpfsClient({
+  instance: 'https://ipfs.settlemint.com'
 });
 
-const workspaces = await client.workspace.list();
-console.log(workspaces);
+// Upload a file using Blob
+const blob = new Blob(['Hello, world!'], { type: 'text/plain' });
+const result = await client.add(blob);
+console.log(result.cid.toString());
 ```
 
-### Read a Specific Blockchain Network
+***
 
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
+#### createServerIpfsClient()
+
+> **createServerIpfsClient**(`options`): `object`
+
+Defined in: [sdk/ipfs/src/ipfs.ts:60](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L60)
+
+Creates an IPFS client for server-side use with authentication
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client including authentication |
+| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
+| `options.instance` | `string` | The URL of the IPFS instance to connect to |
+
+##### Returns
+
+`object`
+
+An object containing the authenticated IPFS client instance
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:60](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L60) |
+
+##### Throws
+
+Will throw an error if called on the client side or if options validation fails
+
+##### Example
+
+```ts
+import { createServerIpfsClient } from '@settlemint/sdk-ipfs';
+
+const { client } = createServerIpfsClient({
+  instance: process.env.SETTLEMINT_IPFS_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
 });
 
-const networkId = 'your_network_id';
-const network = await client.blockchainNetwork.read(networkId);
-console.log(network);
+// Upload a file using Blob
+const blob = new Blob(['Hello, world!'], { type: 'text/plain' });
+const result = await client.add(blob);
+console.log(result.cid.toString());
 ```
 
 ## Contributing
 
-We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with a clear commit message
-4. Push your changes to your fork
-5. Create a pull request to the main repository
-
-Please ensure that your code follows the existing style and includes appropriate tests and documentation.
+We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.

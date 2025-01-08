@@ -10,8 +10,8 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-js" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-js" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-js" alt="npm"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-thegraph" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk-thegraph" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-thegraph" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
@@ -20,7 +20,7 @@
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-js">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-thegraph">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -28,145 +28,161 @@
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
+- [About](#about)
 - [API Reference](#api-reference)
-- [Examples](#examples)
+  - [Functions](#functions)
+    - [createTheGraphClient()](#createthegraphclient)
+  - [Type Aliases](#type-aliases)
+    - [ClientOptions](#clientoptions)
+    - [RequestConfig](#requestconfig)
+  - [Variables](#variables)
+    - [ClientOptionsSchema](#clientoptionsschema)
 - [Contributing](#contributing)
 - [License](#license)
 
-## Installation
+## About
 
-To install the SettleMint SDK, you can use one of the following package managers:
+The SettleMint TheGraph SDK provides a seamless way to interact with TheGraph APIs for blockchain data indexing and querying. It enables you to easily create and manage subgraphs, define schemas, and query indexed blockchain data using GraphQL from your SettleMint-powered blockchain networks.
 
-```bash
-# Using npm
-npm install @settlemint/sdk
+The SDK offers a type-safe interface for all TheGraph operations, with comprehensive error handling and validation. It integrates smoothly with modern TypeScript applications while providing a simple and intuitive developer experience.
 
-# Using yarn
-yarn add @settlemint/sdk
-
-# Using pnpm
-pnpm add @settlemint/sdk
-
-# Using Bun
-bun add @settlemint/sdk
-```
-
-We recommend using Bun for faster installation and better performance.
-
-## Usage
-
-To use the SettleMint SDK in your Node.js application, follow these steps:
-
-1. Import the SDK:
-
-```javascript
-import { createSettleMintClient } from '@settlemint/sdk';
-```
-
-2. Create a client instance:
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
-});
-```
-
-3. Use the client to interact with SettleMint resources:
-
-```javascript
-// Example: List workspaces
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
+For detailed information about using TheGraph with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/middleware/#the-graph-middleware).
 
 ## API Reference
 
-The SettleMint SDK provides access to various resources. Here's an overview of the available methods:
+### Functions
 
-### Workspace
+#### createTheGraphClient()
 
-- `workspace.list()`: List all workspaces and their applications
-- `workspace.read(workspaceId)`: Read a specific workspace and its applications
+> **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-### Blockchain Network
+Defined in: [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L121)
 
-- `blockchainNetwork.list(applicationId)`: List blockchain networks for a given application
-- `blockchainNetwork.read(blockchainNetworkId)`: Read a specific blockchain network
+Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
-### Blockchain Node
+##### Type Parameters
 
-- `blockchainNode.list(applicationId)`: List blockchain nodes for a given application
-- `blockchainNode.read(blockchainNodeId)`: Read a specific blockchain node
+| Type Parameter |
+| ------ |
+| `Setup` *extends* `AbstractSetupSchema` |
 
-### Middleware
+##### Parameters
 
-- `middleware.list(applicationId)`: List middlewares for a given application
-- `middleware.read(middlewareId)`: Read a specific middleware
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URLs, access token and subgraph name - For browser-side: just subgraph name |
+| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
-### Integration Tool
+##### Returns
 
-- `integrationTool.list(applicationId)`: List integration tools for a given application
-- `integrationTool.read(integrationId)`: Read a specific integration tool
+`object`
 
-### Storage
+An object containing:
+         - client: The configured GraphQL client instance
+         - graphql: The initialized gql.tada function for type-safe queries
 
-- `storage.list(applicationId)`: List storage items for a given application
-- `storage.read(storageId)`: Read a specific storage item
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:125](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L125) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:126](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L126) |
 
-### Private Key
+##### Throws
 
-- `privateKey.list(applicationId)`: List private keys for a given application
-- `privateKey.read(privateKeyId)`: Read a specific private key
+Will throw an error if the options fail validation against ClientOptionsSchema
 
-### Insights
+##### Example
 
-- `insights.list(applicationId)`: List insights for a given application
-- `insights.read(insightsId)`: Read a specific insight
+```ts
+import { createTheGraphClient } from '@settlemint/sdk-thegraph';
+import type { introspection } from '@schemas/the-graph-env-starterkits';
 
-## Examples
-
-Here are some examples of how to use the SettleMint SDK:
-
-### List Workspaces
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
+// Server-side usage
+const { client, graphql } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
+  instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  subgraphName: 'starterkits'
 });
 
-const workspaces = await client.workspace.list();
-console.log(workspaces);
-```
-
-### Read a Specific Blockchain Network
-
-```javascript
-const client = createSettleMintClient({
-  accessToken: 'your_access_token',
-  instance: 'https://console.settlemint.com'
+// Browser-side usage
+const { client, graphql } = createTheGraphClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    DateTime: Date;
+    JSON: Record<string, unknown>;
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+}>({
+  subgraphName: 'starterkits'
 });
 
-const networkId = 'your_network_id';
-const network = await client.blockchainNetwork.read(networkId);
-console.log(network);
+// Making GraphQL queries
+const query = graphql(`
+  query SearchAssets {
+    assets {
+      id
+      name
+      symbol
+    }
+  }
+`);
+
+const result = await client.request(query);
 ```
+
+### Type Aliases
+
+#### ClientOptions
+
+> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
+
+Defined in: [sdk/thegraph/src/thegraph.ts:34](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L34)
+
+Type definition for client options derived from the ClientOptionsSchema
+
+***
+
+#### RequestConfig
+
+> **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
+
+Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L10)
+
+Type definition for GraphQL client configuration options
+
+### Variables
+
+#### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>\>; `runtime`: `ZodLiteral`\<`"server"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}\>\]\>
+
+Defined in: [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/thegraph/src/thegraph.ts#L18)
+
+Schema for validating client options for the TheGraph client.
+Defines two possible runtime configurations:
+1. Server-side with instance URLs, access token and subgraph name
+2. Browser-side with just subgraph name
 
 ## Contributing
 
-We welcome contributions to the SettleMint SDK! If you'd like to contribute, please follow these steps:
-
-1. Fork the repository
-2. Create a new branch for your feature or bug fix
-3. Make your changes and commit them with a clear commit message
-4. Push your changes to your fork
-5. Create a pull request to the main repository
-
-Please ensure that your code follows the existing style and includes appropriate tests and documentation.
+We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.

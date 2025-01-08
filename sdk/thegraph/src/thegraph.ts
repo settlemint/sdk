@@ -5,12 +5,15 @@ import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
 
 /**
- * Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+ * Type definition for GraphQL client configuration options
  */
 export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
- * Schema for validating client options for the Portal client.
+ * Schema for validating client options for the TheGraph client.
+ * Defines two possible runtime configurations:
+ * 1. Server-side with instance URLs, access token and subgraph name
+ * 2. Browser-side with just subgraph name
  */
 export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
   z.object({
@@ -26,16 +29,16 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
 ]);
 
 /**
- * Type definition for client options derived from the ClientOptionsSchema.
+ * Type definition for client options derived from the ClientOptionsSchema
  */
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Constructs the full URL for the Portal client based on the provided options.
+ * Constructs the full URL for TheGraph GraphQL API based on the provided options
  *
- * @param options - The client options for configuring the Portal client.
- * @returns The full URL as a string.
- * @throws Will throw an error if called on the client side when runtime is set to "server".
+ * @param options - The client options for configuring TheGraph client
+ * @returns The complete GraphQL API URL as a string
+ * @throws Will throw an error if no matching instance is found for the specified subgraph
  */
 function getFullUrl(options: ClientOptions): string {
   if (options.runtime === "server") {
@@ -52,12 +55,68 @@ function getFullUrl(options: ClientOptions): string {
 }
 
 /**
- * Creates a Portal client using URQL
+ * Creates a TheGraph GraphQL client with proper type safety using gql.tada
  *
- * @param options - The client options for configuring the Portal client.
- * @param clientOptions - Optional configuration for the URQL client.
- * @returns An object containing the URQL client and the initialized graphql function.
- * @throws Will throw an error if the options fail validation.
+ * @param options - Configuration options for the client:
+ *                 - For server-side: instance URLs, access token and subgraph name
+ *                 - For browser-side: just subgraph name
+ * @param clientOptions - Optional GraphQL client configuration options
+ * @returns An object containing:
+ *          - client: The configured GraphQL client instance
+ *          - graphql: The initialized gql.tada function for type-safe queries
+ * @throws Will throw an error if the options fail validation against ClientOptionsSchema
+ * @example
+ * import { createTheGraphClient } from '@settlemint/sdk-thegraph';
+ * import type { introspection } from '@schemas/the-graph-env-starterkits';
+ *
+ * // Server-side usage
+ * const { client, graphql } = createTheGraphClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
+ *   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+ *   subgraphName: 'starterkits'
+ * });
+ *
+ * // Browser-side usage
+ * const { client, graphql } = createTheGraphClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     DateTime: Date;
+ *     JSON: Record<string, unknown>;
+ *     Bytes: string;
+ *     Int8: string;
+ *     BigInt: string;
+ *     BigDecimal: string;
+ *     Timestamp: string;
+ *   };
+ * }>({
+ *   subgraphName: 'starterkits'
+ * });
+ *
+ * // Making GraphQL queries
+ * const query = graphql(`
+ *   query SearchAssets {
+ *     assets {
+ *       id
+ *       name
+ *       symbol
+ *     }
+ *   }
+ * `);
+ *
+ * const result = await client.request(query);
  */
 export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,

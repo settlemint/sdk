@@ -168,4 +168,4 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
-          file_pattern: 'package.json **/package.json **/schema.graphql sdk/cli/docs/**/*.md'
+          file_pattern: 'package.json **/package.json **/schema.graphql sdk/cli/docs/**/*.md sdk/**/README.md'

@@ -5,6 +5,7 @@ import { z } from "zod";
  * Schema for validating client options for the Portal client.
  */
 export const ClientOptionsSchema = z.object({
+  /** The URL of the MinIO instance to connect to */
   instance: UrlSchema,
 });
 
@@ -18,8 +19,11 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({
+  /** The access token used to authenticate with the SettleMint platform */
   accessToken: ApplicationAccessTokenSchema,
+  /** The MinIO access key used to authenticate with the MinIO server */
   accessKey: z.string(),
+  /** The MinIO secret key used to authenticate with the MinIO server */
   secretKey: z.string(),
 });
 

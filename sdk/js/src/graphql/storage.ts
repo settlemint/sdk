@@ -1,5 +1,4 @@
 import { applicationRead } from "@/graphql/application.js";
-import type { ClientOptions } from "@/helpers/client-options.schema.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 
@@ -117,14 +116,10 @@ const restartStorage = graphql(
  * Creates a function to list storages for an application.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches storages for an application
  * @throws If the application cannot be found or the request fails
  */
-export const storageList = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((applicationUniqueName: string) => Promise<Storage[]>) => {
+export const storageList = (gqlClient: GraphQLClient): ((applicationUniqueName: string) => Promise<Storage[]>) => {
   return async (applicationUniqueName: string) => {
     const {
       storagesByUniqueName: { items },
@@ -137,14 +132,10 @@ export const storageList = (
  * Creates a function to fetch a specific storage.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that fetches a single storage by unique name
  * @throws If the storage cannot be found or the request fails
  */
-export const storageRead = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((storageUniqueName: string) => Promise<Storage>) => {
+export const storageRead = (gqlClient: GraphQLClient): ((storageUniqueName: string) => Promise<Storage>) => {
   return async (storageUniqueName: string) => {
     const { storageByUniqueName: storage } = await gqlClient.request(getStorage, { uniqueName: storageUniqueName });
     return storage;
@@ -155,17 +146,13 @@ export const storageRead = (
  * Creates a function to create a new storage.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that creates new storage with the provided configuration
  * @throws If the creation fails or validation errors occur
  */
-export const storageCreate = (
-  gqlClient: GraphQLClient,
-  options: ClientOptions,
-): ((args: CreateStorageArgs) => Promise<Storage>) => {
+export const storageCreate = (gqlClient: GraphQLClient): ((args: CreateStorageArgs) => Promise<Storage>) => {
   return async (args: CreateStorageArgs) => {
     const { applicationUniqueName, ...otherArgs } = args;
-    const application = await applicationRead(gqlClient, options)(applicationUniqueName);
+    const application = await applicationRead(gqlClient)(applicationUniqueName);
     const { createStorage: storage } = await gqlClient.request(createStorage, {
       ...otherArgs,
       applicationId: application.id,
@@ -178,12 +165,11 @@ export const storageCreate = (
  * Creates a function to restart a storage.
  *
  * @param gqlClient - The GraphQL client instance
- * @param options - Client configuration options
  * @returns Function that restarts storage by unique name
  * @throws If the storage cannot be found or the restart fails
  */
 export const storageRestart =
-  (gqlClient: GraphQLClient, _options: ClientOptions) =>
+  (gqlClient: GraphQLClient) =>
   async (storageUniqueName: string): Promise<Storage> => {
     const { restartStorageByUniqueName: storage } = await gqlClient.request(restartStorage, {
       uniqueName: storageUniqueName,

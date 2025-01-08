@@ -1,6 +1,12 @@
 import type { CreateBlockchainNetworkArgs } from "../graphql/blockchain-network.js";
 import { setClusterServiceDefaults } from "./cluster-service-defaults.js";
 
+/**
+ * Sets the default values for a blockchain network.
+ *
+ * @param args - The arguments for creating a blockchain network.
+ * @returns The modified arguments with default values set.
+ */
 export function setNetworkDefaults(
   args: Omit<CreateBlockchainNetworkArgs, "applicationUniqueName">,
 ): Omit<CreateBlockchainNetworkArgs, "applicationUniqueName"> {
