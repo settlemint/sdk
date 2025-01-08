@@ -627,7 +627,7 @@ The text with any sensitive tokens masked with asterisks
 import { maskTokens } from "@settlemint/sdk-utils";
 
 // Masks a token in text
-const masked = maskTokens("Token: sm_pat_abc123"); // "Token: ***"
+const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
 ```
 
 ***

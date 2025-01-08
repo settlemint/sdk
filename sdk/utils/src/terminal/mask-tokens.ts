@@ -8,7 +8,7 @@
  * import { maskTokens } from "@settlemint/sdk-utils";
  *
  * // Masks a token in text
- * const masked = maskTokens("Token: sm_pat_abc123"); // "Token: ***"
+ * const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
  */
 export const maskTokens = (output: string): string => {
   return output.replace(/sm_(pat|aat|sat)_[0-9a-zA-Z]+/g, "***");
