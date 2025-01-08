@@ -31,7 +31,7 @@
 - [About](#about)
 - [API Reference](#api-reference)
   - [Functions](#functions)
-    - [createSettleMintClient()](#createsettlemintclient())
+    - [createSettleMintClient()](#createsettlemintclient)
   - [Interfaces](#interfaces)
     - [SettlemintClient](#settlemintclient)
   - [Type Aliases](#type-aliases)

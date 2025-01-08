@@ -31,8 +31,8 @@
 - [About](#about)
 - [API Reference](#api-reference)
   - [Functions](#functions)
-    - [createIpfsClient()](#createipfsclient())
-    - [createServerIpfsClient()](#createserveripfsclient())
+    - [createIpfsClient()](#createipfsclient)
+    - [createServerIpfsClient()](#createserveripfsclient)
 - [Contributing](#contributing)
 - [License](#license)
 

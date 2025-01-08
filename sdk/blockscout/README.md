@@ -31,7 +31,7 @@
 - [About](#about)
 - [API Reference](#api-reference)
   - [Functions](#functions)
-    - [createBlockscoutClient()](#createblockscoutclient())
+    - [createBlockscoutClient()](#createblockscoutclient)
   - [Type Aliases](#type-aliases)
     - [ClientOptions](#clientoptions)
     - [RequestConfig](#requestconfig)

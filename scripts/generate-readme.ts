@@ -82,7 +82,10 @@ ${headingMatches
   .map((match) => {
     const level = match.match(/^(#{2,4})/)?.[0].length || 2;
     const title = match.replace(/^#{2,4}\s+/, "");
-    const anchor = title.toLowerCase().replace(/\s+/g, "-");
+    const anchor = title
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[<>()]/g, "");
     const indent = "  ".repeat(level - 2); // Indent based on heading level
     return `${indent}- [${title}](#${anchor})`;
   })

@@ -31,7 +31,7 @@
 - [About](#about)
 - [API Reference](#api-reference)
   - [Functions](#functions)
-    - [createServerMinioClient()](#createserverminioclient())
+    - [createServerMinioClient()](#createserverminioclient)
 - [Contributing](#contributing)
 - [License](#license)
 
