@@ -1,7 +1,7 @@
 {
   "name": "@settlemint/sdk-blockscout",
   "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
-  "version": "0.5.0",
+  "version": "0.9.0",
   "type": "module",
   "private": false,
   "license": "FSL-1.1-MIT",
@@ -52,7 +52,7 @@
   "devDependencies": {},
   "dependencies": {
     "gql.tada": "^1",
-    "@settlemint/sdk-utils": "workspace:*",
+    "@settlemint/sdk-utils": "0.9.0",
     "graphql-request": "^7",
     "zod": "^3"
   },
