@@ -44,7 +44,7 @@ Here are some examples of how to use the SettleMint JavaScript SDK:
 
 ### List Workspaces
 
-```javascript
+```typescript
 const client = createSettleMintClient({
   accessToken: 'your_access_token',
   instance: 'https://console.settlemint.com'
@@ -56,7 +56,7 @@ console.log(workspaces);
 
 ### Read a Specific Blockchain Network
 
-```javascript
+```typescript
 const client = createSettleMintClient({
   accessToken: 'your_access_token',
   instance: 'https://console.settlemint.com'
@@ -69,47 +69,63 @@ console.log(network);
 
 ## API Reference
 
-The SettleMint JavaScript SDK provides access to various resources. Here's an overview of the available methods:
+## :toolbox: Functions
 
-### Workspace
+- [createSettleMintClient](#gear-createsettlemintclient)
 
-- `workspace.list()`: List all workspaces and their applications
-- `workspace.read(workspaceId)`: Read a specific workspace and its applications
+### :gear: createSettleMintClient
 
-### Blockchain Network
+Creates a SettleMint client with the provided options. The client provides methods to interact with
+various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
+integration tools, storage, private keys, insights and custom deployments.
 
-- `blockchainNetwork.list(applicationId)`: List blockchain networks for a given application
-- `blockchainNetwork.read(blockchainNetworkId)`: Read a specific blockchain network
+| Function | Type |
+| ---------- | ---------- |
+| `createSettleMintClient` | `(options: { [x: string]: any; accessToken?: unknown; instance?: unknown; }) => SettlemintClient` |
 
-### Blockchain Node
+Parameters:
 
-- `blockchainNode.list(applicationId)`: List blockchain nodes for a given application
-- `blockchainNode.read(blockchainNodeId)`: Read a specific blockchain node
+* `options`: - Configuration options for the client including access token and instance URL
 
-### Middleware
 
-- `middleware.list(applicationId)`: List middlewares for a given application
-- `middleware.read(middlewareId)`: Read a specific middleware
+Examples:
 
-### Integration Tool
+const client = createSettleMintClient({
+  accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
+  instance: 'https://console.settlemint.com'
+});
 
-- `integrationTool.list(applicationId)`: List integration tools for a given application
-- `integrationTool.read(integrationId)`: Read a specific integration tool
+// List all workspaces
+const workspaces = await client.workspace.list();
 
-### Storage
+// Read a specific blockchain network
+const network = await client.blockchainNetwork.read('network-unique-name');
 
-- `storage.list(applicationId)`: List storage items for a given application
-- `storage.read(storageId)`: Read a specific storage item
 
-### Private Key
 
-- `privateKey.list(applicationId)`: List private keys for a given application
-- `privateKey.read(privateKeyId)`: Read a specific private key
 
-### Insights
+## :tropical_drink: Interfaces
 
-- `insights.list(applicationId)`: List insights for a given application
-- `insights.read(insightsId)`: Read a specific insight
+- [SettlemintClient](#gear-settlemintclient)
+
+### :gear: SettlemintClient
+
+
+
+| Property | Type | Description |
+| ---------- | ---------- | ---------- |
+| `workspace` | `{ list: () => Promise<ResultOf<any>[]>; read: (workspaceUniqueName: string) => Promise<ResultOf<any>>; create: (args: VariablesOf<any>) => Promise<ResultOf<any>>; delete: (workspaceUniqueName: string) => Promise<...>; addCredits: (workspaceId: Id, amount: number) => Promise<...>; }` |  |
+| `application` | `{ list: (workspaceUniqueName: string) => Promise<ResultOf<any>[]>; read: (applicationUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateApplicationArgs) => Promise<...>; delete: (applicationId: Id) => Promise<...>; }` |  |
+| `blockchainNetwork` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (blockchainNetworkUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateBlockchainNetworkArgs) => Promise<...>; delete: (networkUniqueName: string) => Promise<...>; restart: (networkUniqueName: string) => Promise<...>; }` |  |
+| `blockchainNode` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (blockchainNodeUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateBlockchainNodeArgs) => Promise<...>; restart: (nodeUniqueName: string) => Promise<...>; }` |  |
+| `middleware` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (middlewareUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateMiddlewareArgs) => Promise<...>; restart: (middlewareUniqueName: string) => Promise<...>; }` |  |
+| `integrationTool` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (integrationToolUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateIntegrationToolArgs) => Promise<...>; restart: (integrationToolUniqueName: string) => Promise<...>; }` |  |
+| `storage` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (storageUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateStorageArgs) => Promise<...>; restart: (storageUniqueName: string) => Promise<...>; }` |  |
+| `privateKey` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (privateKeyUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreatePrivateKeyArgs) => Promise<...>; restart: (privateKeyUniqueName: string) => Promise<...>; }` |  |
+| `insights` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (insightsUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateInsightsArgs) => Promise<...>; restart: (insightsUniqueName: string) => Promise<...>; }` |  |
+| `customDeployment` | `{ list: (applicationUniqueName: string) => Promise<ResultOf<any>[]>; read: (customDeploymentUniqueName: string) => Promise<ResultOf<any>>; create: (args: CreateCustomDeploymentArgs) => Promise<...>; update: (customDeploymentUniqueName: string, imageTag: string) => Promise<...>; restart: (customDeploymentUniqueName: ...` |  |
+| `foundry` | `{ env: (blockchainNodeUniqueName: string) => Promise<Record<string, string>>; }` |  |
+| `applicationAccessToken` | `{ create: (args: CreateApplicationAccessTokenArgs) => Promise<string>; }` |  |
 
 ## Contributing
 

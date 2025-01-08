@@ -81,7 +81,7 @@
     },
     "//#generate-readme": {
       "dependsOn": ["^build"],
-      "inputs": ["scripts/generate-readme.ts", "scripts/templates/README-template.md"],
+      "inputs": ["scripts/generate-readme.ts", "scripts/templates/README-template.md", "sdk/**/docs/**"],
       "outputs": ["sdk/**/README.md"]
     }
   }

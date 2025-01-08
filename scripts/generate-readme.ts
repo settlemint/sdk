@@ -24,7 +24,8 @@ async function generateReadme() {
     // Get all SDK package directories
     const sdkDir = join(process.cwd(), "sdk");
     console.log(`Scanning SDK directory: ${sdkDir}`);
-    const packages = await readdir(sdkDir);
+    const sdkDirEntries = await readdir(sdkDir, { withFileTypes: true });
+    const packages = sdkDirEntries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
     console.log(`Found ${packages.length} packages`);
 
     // Generate README for each package
