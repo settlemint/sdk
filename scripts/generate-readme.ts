@@ -42,7 +42,7 @@ async function generateReadme() {
       const { name } = tryParseJson<{ name: string }>(packageJson);
       const about = (await readFile(join(sdkDir, pkg, "docs", "ABOUT.md"), "utf-8")).trim();
       const apiReferenceRaw = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
-      const apiReference = processApiReference(apiReferenceRaw);
+      const apiReference = await processApiReference(apiReferenceRaw);
 
       const templateWithoutToc = replacePlaceholders(template, {
         "package-name": name,
@@ -92,13 +92,29 @@ ${headingMatches
   .join("\n")}`;
 }
 
-function processApiReference(content: string): string {
-  return content
-    .replace(/REFERENCE\.md/gi, "README.md")
-    .replace(/^#####\s+/gm, "###### ")
-    .replace(/^####\s+/gm, "##### ")
-    .replace(/^###\s+/gm, "#### ")
-    .replace(/^##\s+/gm, "### ");
+async function processApiReference(content: string): Promise<string> {
+  const version = await getVersion();
+  return (
+    content
+      .replace(/REFERENCE\.md/gi, "README.md")
+      .replace(/^#####\s+/gm, "###### ")
+      .replace(/^####\s+/gm, "##### ")
+      .replace(/^###\s+/gm, "#### ")
+      .replace(/^##\s+/gm, "### ")
+      // Convert relative links to absolute GitHub links
+      .replace(/\[([^\]]+)\]\((\.\/[^)]+)\)/g, (match, linkText, relativePath) => {
+        // Remove leading ./ from the path
+        const cleanPath = relativePath.replace(/^\.\//, "");
+        return `[${linkText}](https://github.com/settlemint/sdk/tree/v${version}/sdk/cli/${cleanPath})`;
+      })
+  );
+}
+
+async function getVersion(): Promise<string> {
+  const packageJsonPath = join(process.cwd(), "package.json");
+  const packageJson = await readFile(packageJsonPath, "utf-8");
+  const { version } = tryParseJson<{ version: string }>(packageJson);
+  return version;
 }
 
 // Execute the script

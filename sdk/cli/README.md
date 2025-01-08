@@ -221,7 +221,7 @@ settlemint scs subgraph deploy --accept-defaults <subgraph-name>
 
 ## API Reference
 
-See the [documentation](./docs/settlemint.md) for available commands.
+See the [documentation](https://github.com/settlemint/sdk/tree/v0.8.6/sdk/cli/docs/settlemint.md) for available commands.
 
 ## Contributing
 
@@ -229,4 +229,4 @@ We welcome contributions from the community! Please check out our [Contributing]
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](../../LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.
