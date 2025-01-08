@@ -30,6 +30,8 @@
 
 - [About](#about)
 - [API Reference](#api-reference)
+  - [Functions](#functions)
+    - [createServerMinioClient()](#createserverminioclient())
 - [Contributing](#contributing)
 - [License](#license)
 

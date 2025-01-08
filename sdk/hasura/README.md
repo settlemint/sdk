@@ -30,6 +30,14 @@
 
 - [About](#about)
 - [API Reference](#api-reference)
+  - [Functions](#functions)
+    - [createHasuraClient()](#createhasuraclient())
+    - [createPostgresPool()](#createpostgrespool())
+  - [Type Aliases](#type-aliases)
+    - [ClientOptions](#clientoptions)
+    - [RequestConfig](#requestconfig)
+  - [Variables](#variables)
+    - [ClientOptionsSchema](#clientoptionsschema)
 - [Contributing](#contributing)
 - [License](#license)
 

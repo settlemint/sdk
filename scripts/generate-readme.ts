@@ -69,20 +69,22 @@ function replacePlaceholders(template: string, placeholders: Placeholders | Plac
 }
 
 function getTocContents(templateContents: string): string {
-  // Extract all H2 headings from the template
-  const h2Matches = templateContents.match(/^##\s+(.+)$/gm);
-  if (!h2Matches) {
+  // Extract all H2, H3, and H4 headings from the template
+  const headingMatches = templateContents.match(/^(#{2,4})\s+(.+)$/gm);
+  if (!headingMatches) {
     return "";
   }
 
-  // Convert matches to TOC entries with links
+  // Convert matches to TOC entries with links and proper indentation
   return `## Table of Contents
 
-${h2Matches
+${headingMatches
   .map((match) => {
-    const title = match.replace(/^##\s+/, "");
+    const level = match.match(/^(#{2,4})/)?.[0].length || 2;
+    const title = match.replace(/^#{2,4}\s+/, "");
     const anchor = title.toLowerCase().replace(/\s+/g, "-");
-    return `- [${title}](#${anchor})`;
+    const indent = "  ".repeat(level - 2); // Indent based on heading level
+    return `${indent}- [${title}](#${anchor})`;
   })
   .join("\n")}`;
 }

@@ -30,6 +30,13 @@
 
 - [About](#about)
 - [API Reference](#api-reference)
+  - [Functions](#functions)
+    - [HelloWorld()](#helloworld())
+    - [proxyMiddleware()](#proxymiddleware())
+    - [withSettleMint()](#withsettlemint())
+  - [Interfaces](#interfaces)
+    - [HelloWorldProps](#helloworldprops)
+    - [WithSettleMintOptions](#withsettlemintoptions)
 - [Contributing](#contributing)
 - [License](#license)
 
