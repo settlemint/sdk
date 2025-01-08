@@ -1,3 +1,7 @@
+**@settlemint/sdk-js**
+
+***
+
 ## :toolbox: Functions
 
 - [applicationAccessTokenCreate](#gear-applicationaccesstokencreate)
@@ -61,7 +65,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance used to execute the mutation.
 * `options`: - Configuration options for the client.
 
-
 ### :gear: workspaceList
 
 Creates a function to list all workspaces and their applications.
@@ -74,7 +77,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: workspaceRead
 
@@ -89,7 +91,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: workspaceCreate
 
 Creates a function to create a new workspace.
@@ -102,7 +103,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: workspaceDelete
 
@@ -117,7 +117,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: workspaceAddCredits
 
 Creates a function to add credits to a workspace.
@@ -130,7 +129,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: applicationList
 
@@ -145,7 +143,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: applicationRead
 
 Creates a function to fetch a specific application.
@@ -158,7 +155,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: applicationCreate
 
@@ -173,7 +169,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: applicationDelete
 
 Creates a function to delete an application.
@@ -186,7 +181,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: blockchainNetworkList
 
@@ -201,7 +195,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: blockchainNetworkRead
 
 Creates a function to fetch a specific blockchain network.
@@ -214,7 +207,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: blockchainNetworkCreate
 
@@ -229,7 +221,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: blockchainNetworkDelete
 
 Creates a function to delete a blockchain network.
@@ -242,7 +233,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: blockchainNetworkRestart
 
@@ -257,7 +247,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `_options`: - Client configuration options
 
-
 ### :gear: blockchainNodeList
 
 Creates a function to list blockchain nodes for an application.
@@ -270,7 +259,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: blockchainNodeRead
 
@@ -285,7 +273,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: blockchainNodeCreate
 
 Creates a function to create a new blockchain node.
@@ -298,7 +285,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: blockchainNodeRestart
 
@@ -313,7 +299,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: customdeploymentList
 
 Creates a function to list custom deployments for an application.
@@ -326,7 +311,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: customdeploymentRead
 
@@ -341,7 +325,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: customdeploymentUpdate
 
 Creates a function to update a custom deployment.
@@ -354,7 +337,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: customdeploymentCreate
 
@@ -369,7 +351,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: customDeploymentRestart
 
 Creates a function to restart a custom deployment.
@@ -382,7 +363,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: getEnv
 
@@ -397,7 +377,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: insightsList
 
 Creates a function to list insights for an application.
@@ -410,7 +389,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: insightsRead
 
@@ -425,7 +403,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: insightsCreate
 
 Creates a function to create new insights.
@@ -438,7 +415,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: insightsRestart
 
@@ -453,7 +429,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: integrationToolList
 
 Creates a function to list integration tools for an application.
@@ -466,7 +441,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: integrationToolRead
 
@@ -481,7 +455,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: integrationToolCreate
 
 Creates a function to create a new integration tool.
@@ -494,7 +467,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: integrationToolRestart
 
@@ -509,7 +481,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: loadBalancerRead
 
 Creates a function to fetch a specific load balancer.
@@ -522,7 +493,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: storageList
 
@@ -537,7 +507,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: storageRead
 
 Creates a function to fetch a specific storage.
@@ -550,7 +519,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: storageCreate
 
@@ -565,7 +533,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: storageRestart
 
 Creates a function to restart a storage.
@@ -578,7 +545,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: middlewareList
 
@@ -593,7 +559,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: middlewareRead
 
 Creates a function to fetch a specific middleware.
@@ -606,7 +571,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: middlewareCreate
 
@@ -621,7 +585,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: middlewareRestart
 
 Creates a function to restart a middleware.
@@ -634,7 +597,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: privateKeyList
 
@@ -649,7 +611,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: privatekeyRead
 
 Creates a function to fetch a specific private key.
@@ -662,7 +623,6 @@ Parameters:
 
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
-
 
 ### :gear: privateKeyCreate
 
@@ -677,7 +637,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: privateKeyRestart
 
 Creates a function to restart a private key.
@@ -691,7 +650,6 @@ Parameters:
 * `gqlClient`: - The GraphQL client instance
 * `options`: - Client configuration options
 
-
 ### :gear: createSettleMintClient
 
 Creates a SettleMint client with the provided options.
@@ -704,15 +662,12 @@ Parameters:
 
 * `options`: - The options for creating the SettleMint client.
 
-
 Examples:
 
 const client = createSettleMintClient({
   accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
   instance: 'https://console.settlemint.com'
 });
-
-
 
 ## :wrench: Constants
 
@@ -734,5 +689,3 @@ Initializes the GraphQL client with specific configurations.
 | Constant | Type |
 | ---------- | ---------- |
 | `graphql` | `initGraphQLTada<{ introspection: introspection; disableMasking: true; scalars: { DateTime: Date; JSON: Record<string, unknown>; Bytes: string; Int8: string; BigInt: string; BigDecimal: string; Timestamp: string; }; }>` |
-
-

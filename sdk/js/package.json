@@ -47,10 +47,13 @@
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
-    "prepack": "cp ../../LICENSE ."
+    "prepack": "cp ../../LICENSE .",
+    "docs": "typedoc --entryPoints src/settlemint.ts --plugin typedoc-plugin-markdown --out docs/api"
   },
   "devDependencies": {
-    "@0no-co/graphqlsp": "^1"
+    "@0no-co/graphqlsp": "^1",
+    "typedoc": "0.27.6",
+    "typedoc-plugin-markdown": "4.4.1"
   },
   "dependencies": {
     "gql.tada": "^1",
