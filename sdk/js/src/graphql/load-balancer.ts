@@ -11,12 +11,10 @@ const LoadBalancerFragment = graphql(`
   }
 `);
 
-type LoadBalancerGraphql = ResultOf<typeof LoadBalancerFragment>;
-
 /**
  * Type representing a load balancer entity.
  */
-export interface LoadBalancer extends Pick<LoadBalancerGraphql, "id" | "uniqueName"> {}
+export type LoadBalancer = ResultOf<typeof LoadBalancerFragment>;
 
 /**
  * Query to fetch a specific load balancer.

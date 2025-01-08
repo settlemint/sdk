@@ -28,18 +28,10 @@ const InsightsFragment = graphql(`
   }
 `);
 
-type InsightsGraphql = ResultOf<typeof InsightsFragment>;
-
 /**
  * Type representing an insights entity.
  */
-export interface Insights
-  extends Pick<
-    InsightsGraphql,
-    "id" | "uniqueName" | "name" | "status" | "insightsCategory" | "endpoints" | "credentials"
-  > {
-  __typename: InsightsGraphql["__typename"];
-}
+export type Insights = ResultOf<typeof InsightsFragment>;
 
 /**
  * Query to fetch insights for an application.

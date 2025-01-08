@@ -17,15 +17,10 @@ const PrivateKeyFragment = graphql(`
   }
 `);
 
-type PrivateKeyGraphql = ResultOf<typeof PrivateKeyFragment>;
-
 /**
  * Type representing a private key entity.
  */
-export interface PrivateKey
-  extends Pick<PrivateKeyGraphql, "id" | "uniqueName" | "name" | "privateKeyType" | "status"> {
-  __typename: PrivateKeyGraphql["__typename"];
-}
+export type PrivateKey = ResultOf<typeof PrivateKeyFragment>;
 
 /**
  * Query to fetch private keys for an application.

@@ -23,19 +23,10 @@ const BlockchainNetworkFragment = graphql(`
   }
 `);
 
-type BlockchainNetworkGraphql = ResultOf<typeof BlockchainNetworkFragment>;
-
 /**
  * Type representing a blockchain network entity.
  */
-export interface BlockchainNetwork extends Pick<BlockchainNetworkGraphql, "id" | "uniqueName" | "name" | "status"> {
-  __typename: BlockchainNetworkGraphql["__typename"];
-  blockchainNodes: {
-    id: string;
-    name: string;
-    uniqueName: string;
-  }[];
-}
+export type BlockchainNetwork = ResultOf<typeof BlockchainNetworkFragment>;
 
 /**
  * Query to fetch blockchain networks for an application.

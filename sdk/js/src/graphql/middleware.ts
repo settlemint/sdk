@@ -41,26 +41,10 @@ const MiddlewareFragment = graphql(`
   }
 `);
 
-type MiddlewareGraphql = ResultOf<typeof MiddlewareFragment>;
-
 /**
  * Type representing a middleware entity.
  */
-export interface Middleware
-  extends Pick<
-    MiddlewareGraphql,
-    "id" | "uniqueName" | "name" | "status" | "interface" | "entityVersion" | "serviceUrl" | "endpoints" | "credentials"
-  > {
-  __typename: MiddlewareGraphql["__typename"];
-  specVersion?: number;
-  subgraphs?: {
-    name: string;
-    graphqlQueryEndpoint: {
-      displayValue: string;
-      id: string;
-    };
-  }[];
-}
+export type Middleware = ResultOf<typeof MiddlewareFragment>;
 
 /**
  * Query to fetch middlewares for an application.
@@ -174,7 +158,7 @@ export const middlewareList = (
     const {
       middlewaresByUniqueName: { items },
     } = await gqlClient.request(getMiddlewares, { applicationUniqueName });
-    return items as Middleware[];
+    return items;
   };
 };
 
@@ -190,7 +174,7 @@ export const middlewareRead = (gqlClient: GraphQLClient): ((middlewareUniqueName
     const { middlewareByUniqueName: middleware } = await gqlClient.request(getMiddleware, {
       uniqueName: middlewareUniqueName,
     });
-    return middleware as Middleware;
+    return middleware;
   };
 };
 
@@ -218,7 +202,7 @@ export const middlewareCreate = (gqlClient: GraphQLClient): ((args: CreateMiddle
       loadBalancerId: loadBalancer?.id,
       storageId: storage?.id,
     });
-    return middleware as Middleware;
+    return middleware;
   };
 };
 
@@ -235,5 +219,5 @@ export const middlewareRestart =
     const { restartMiddlewareByUniqueName: middleware } = await gqlClient.request(restartMiddleware, {
       uniqueName: middlewareUniqueName,
     });
-    return middleware as Middleware;
+    return middleware;
   };

@@ -42,26 +42,10 @@ const BlockchainNodeFragment = graphql(`
   }
 `);
 
-type BlockchainNodeGraphql = ResultOf<typeof BlockchainNodeFragment>;
-
 /**
  * Type representing a blockchain node entity.
  */
-export interface BlockchainNode
-  extends Pick<BlockchainNodeGraphql, "id" | "uniqueName" | "name" | "status" | "isEvm" | "endpoints" | "credentials"> {
-  __typename: BlockchainNodeGraphql["__typename"];
-  blockchainNetwork: {
-    id: string;
-    name: string;
-    uniqueName: string;
-  };
-  privateKeys: Array<{
-    id: string;
-    name: string;
-    privateKeyType: "ACCESSIBLE_ECDSA_P256" | "HD_ECDSA_P256" | "HSM_ECDSA_P256";
-    address: string;
-  }> | null;
-}
+export type BlockchainNode = ResultOf<typeof BlockchainNodeFragment>;
 
 /**
  * Query to fetch blockchain nodes for an application.
@@ -164,7 +148,7 @@ export const blockchainNodeList = (gqlClient: GraphQLClient) => {
     const {
       blockchainNodesByUniqueName: { items },
     } = await gqlClient.request(getBlockchainNodes, { applicationUniqueName });
-    return items as BlockchainNode[];
+    return items;
   };
 };
 
@@ -180,7 +164,7 @@ export const blockchainNodeRead = (gqlClient: GraphQLClient) => {
     const { blockchainNodeByUniqueName } = await gqlClient.request(getBlockchainNode, {
       uniqueName: blockchainNodeUniqueName,
     });
-    return blockchainNodeByUniqueName as BlockchainNode;
+    return blockchainNodeByUniqueName;
   };
 };
 
@@ -203,7 +187,7 @@ export const blockchainNodeCreate = (gqlClient: GraphQLClient) => {
       applicationId: application.id,
       blockchainNetworkId: blockchainNetwork.id,
     });
-    return blockchainNode as BlockchainNode;
+    return blockchainNode;
   };
 };
 
@@ -220,5 +204,5 @@ export const blockchainNodeRestart =
     const { restartBlockchainNodeByUniqueName: blockchainNode } = await gqlClient.request(restartBlockchainNode, {
       uniqueName: blockchainNodeUniqueName,
     });
-    return blockchainNode as BlockchainNode;
+    return blockchainNode;
   };

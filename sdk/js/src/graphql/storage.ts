@@ -26,18 +26,10 @@ const StorageFragment = graphql(`
   }
 `);
 
-type StorageGraphql = ResultOf<typeof StorageFragment>;
-
 /**
  * Type representing a storage entity.
  */
-export interface Storage
-  extends Pick<
-    StorageGraphql,
-    "id" | "uniqueName" | "name" | "status" | "storageProtocol" | "endpoints" | "credentials"
-  > {
-  __typename: StorageGraphql["__typename"];
-}
+export type Storage = ResultOf<typeof StorageFragment>;
 
 /**
  * Query to fetch storages for an application.

@@ -49,7 +49,7 @@
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE .",
     "docs": "tsdoc --src=src/settlemint.ts --types=Interfaces,Types,Classes,Constants --dest=./docs/REFERENCE.md",
-    "docs-typedoc": "typedoc --plugin typedoc-plugin-markdown --entryPoints src/settlemint.ts --externalPattern 'graphql/**/*.ts' --excludeExternals --outputFileStrategy modules --cleanOutputDir false --out ./docs --entryFileName REFERENCE.md --readme none"
+    "docs-typedoc": "typedoc --plugin typedoc-plugin-markdown --entryPoints src/settlemint.ts --excludeNotDocumented --outputFileStrategy modules --cleanOutputDir false --out ./docs --entryFileName REFERENCE.md --readme none"
   },
   "devDependencies": {
     "@0no-co/graphqlsp": "^1",

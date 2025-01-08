@@ -26,18 +26,10 @@ const IntegrationFragment = graphql(`
   }
 `);
 
-type IntegrationToolGraphql = ResultOf<typeof IntegrationFragment>;
-
 /**
  * Type representing an integration tool entity.
  */
-export interface IntegrationTool
-  extends Pick<
-    IntegrationToolGraphql,
-    "id" | "uniqueName" | "name" | "status" | "integrationType" | "endpoints" | "credentials"
-  > {
-  __typename: IntegrationToolGraphql["__typename"];
-}
+export type IntegrationTool = ResultOf<typeof IntegrationFragment>;
 
 /**
  * Query to fetch integrations for an application.
