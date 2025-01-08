@@ -30,6 +30,10 @@
 
 - [About](#about)
 - [Usage](#usage)
+  - [As a dependency in your package.json](#as-a-dependency-in-your-package.json)
+  - [Globally install the CLI](#globally-install-the-cli)
+- [Examples](#examples)
+  - [Get the version of the CLI](#get-the-version-of-the-cli)
   - [Login to the platform](#login-to-the-platform)
   - [Creating a new project from a starter kit template](#creating-a-new-project-from-a-starter-kit-template)
     - [Installing dependencies](#installing-dependencies)
@@ -49,6 +53,50 @@
 The SettleMint CLI provides a command-line interface for interacting with the SettleMint platform. It enables you to manage your blockchain networks, deploy smart contracts, configure your SettleMint infrastructure directly from the terminal.
 
 ## Usage
+
+### As a dependency in your package.json
+
+```bash
+# npm
+npm install @settlemint/sdk-cli
+npx settlemint --version
+
+# bun
+bun add @settlemint/sdk-cli
+bunx settlemint --version
+
+# pnpm
+pnpm add @settlemint/sdk-cli
+pnpm dlx settlemint --version
+
+# yarn
+yarn add @settlemint/sdk-cli
+yarn create settlemint --version
+```
+
+### Globally install the CLI
+
+```bash
+# npm
+npm install -g @settlemint/sdk-cli
+
+# bun
+bun install -g @settlemint/sdk-cli
+
+# pnpm
+pnpm install -g @settlemint/sdk-cli
+
+# yarn
+yarn install -g @settlemint/sdk-cli
+```
+
+## Examples
+
+### Get the version of the CLI
+
+```bash
+settlemint --version
+```
 
 ### Login to the platform
 
@@ -74,30 +122,20 @@ settlemint create --project-name <project-name> --template <template-name>
 
 To install the dependencies for your project, use the `dependencies` command.
 
-##### Using bun
-
 ```bash
+# bun
 bun install
 bun run dependencies
-```
 
-##### Using npm
-
-```bash
+# npm
 npm install
 npm run dependencies
-```
 
-##### Using yarn
-
-```bash
+# yarn
 yarn install
 yarn run dependencies
-```
 
-##### Using pnpm
-
-```bash
+# pnpm
 pnpm install
 pnpm run dependencies
 ```

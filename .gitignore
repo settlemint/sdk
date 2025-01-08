@@ -50,5 +50,4 @@ test/contracts-subgraphs
 # Docs
 sdk/**/docs/**/*.md
 !sdk/**/docs/ABOUT.md
-!sdk/**/docs/USAGE.md
 !sdk/cli/docs/**/*.md
