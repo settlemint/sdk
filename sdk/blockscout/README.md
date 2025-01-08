@@ -47,7 +47,7 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 > **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:90](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L90)
+Defined in: [sdk/blockscout/src/blockscout.ts:81](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L81)
 
 Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
@@ -61,44 +61,39 @@ Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL and access token - For browser-side: no additional configuration needed |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client |
 | `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
 
 `object`
 
-An object containing:
-         - client: The configured GraphQL client instance
-         - graphql: The initialized gql.tada function for type-safe queries
+An object containing the GraphQL client and initialized gql.tada function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:94](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L94) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:95](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L95) |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:85](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L85) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:86](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L86) |
 
 ##### Throws
 
-Will throw an error if the options fail validation against ClientOptionsSchema
+Will throw an error if the options fail validation
 
 ##### Example
 
 ```ts
+import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
+
 // Server-side usage
-const { client } = createBlockscoutClient({
-  instance: 'https://your-blockscout-instance.com',
-  accessToken: 'your-access-token'
+const { client, graphql } = createBlockscoutClient({
+  instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
 });
 
 // Browser-side usage
-const { client } = createBlockscoutClient({});
+const { client, graphql } = createBlockscoutClient({});
 
 // Making GraphQL queries
-const { client, graphql } = createBlockscoutClient({
-  instance: 'https://your-blockscout-instance.com',
-  accessToken: 'your-access-token'
-});
-
 const query = graphql(`
   query GetTransaction($hash: String!) {
     transaction(hash: $hash) {
@@ -123,7 +118,7 @@ const result = await client.request(query, {
 
 Defined in: [sdk/blockscout/src/blockscout.ts:32](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L32)
 
-Type definition for client options derived from the ClientOptionsSchema.
+Type definition for client options derived from the ClientOptionsSchema
 
 ***
 
@@ -133,7 +128,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 Defined in: [sdk/blockscout/src/blockscout.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/blockscout/src/blockscout.ts#L10)
 
-Options for configuring the GraphQL client, excluding 'url' and other configuration options.
+Type definition for GraphQL client configuration options
 
 ### Variables
 

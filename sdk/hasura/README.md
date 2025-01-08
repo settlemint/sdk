@@ -47,9 +47,9 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:53](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L53)
+Defined in: [sdk/hasura/src/hasura.ts:86](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L86)
 
-Creates a Portal client using URQL
+Creates a Hasura GraphQL client with proper type safety using gql.tada
 
 ##### Type Parameters
 
@@ -61,23 +61,54 @@ Creates a Portal client using URQL
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
-| `clientOptions`? | `RequestConfig` | Optional configuration for the URQL client. |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL, access token and admin secret - For browser-side: no additional configuration needed |
+| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
 
 `object`
 
-An object containing the URQL client and the initialized graphql function.
+An object containing:
+         - client: The configured GraphQL client instance
+         - graphql: The initialized gql.tada function for type-safe queries
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:57](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L57) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:58](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L58) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:90](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L90) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:91](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L91) |
 
 ##### Throws
 
-Will throw an error if the options fail validation.
+Will throw an error if the options fail validation against ClientOptionsSchema
+
+##### Example
+
+```ts
+import { createHasuraClient } from '@settlemint/sdk-hasura';
+
+// Server-side usage
+const { client, graphql } = createHasuraClient({
+  instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+});
+
+// Browser-side usage
+const { client, graphql } = createHasuraClient({});
+
+// Making GraphQL queries
+const query = graphql(`
+  query GetUsers {
+    users {
+      id
+      name
+      email
+    }
+  }
+`);
+
+const result = await client.request(query);
+```
 
 ***
 
@@ -85,9 +116,9 @@ Will throw an error if the options fail validation.
 
 > **createPostgresPool**(`databaseUrl`): `Pool`
 
-Defined in: [sdk/hasura/src/postgres.ts:63](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/postgres.ts#L63)
+Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/postgres.ts#L83)
 
-Creates a Drizzle client for database operations with schema typings
+Creates a PostgreSQL connection pool with error handling and retry mechanisms
 
 ##### Parameters
 
@@ -99,11 +130,28 @@ Creates a Drizzle client for database operations with schema typings
 
 `Pool`
 
-The initialized Drizzle client with proper schema typings
+A configured PostgreSQL connection pool
 
 ##### Throws
 
-If called from browser runtime or if validation fails
+Will throw an error if called from browser runtime
+
+##### Example
+
+```ts
+import { createPostgresPool } from '@settlemint/sdk-hasura';
+
+const pool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL);
+
+// The pool will automatically handle connection errors and retries
+const client = await pool.connect();
+try {
+  const result = await client.query('SELECT NOW()');
+  console.log(result.rows[0]);
+} finally {
+  client.release();
+}
+```
 
 ### Type Aliases
 
@@ -111,7 +159,7 @@ If called from browser runtime or if validation fails
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
 
-Defined in: [sdk/hasura/src/hasura.ts:30](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L30)
+Defined in: [sdk/hasura/src/hasura.ts:33](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L33)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -123,7 +171,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L10)
 
-Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+Type definition for GraphQL client configuration options
 
 ### Variables
 
@@ -131,9 +179,12 @@ Options for configuring the URQL client, excluding 'url' and 'exchanges'.
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
 
-Defined in: [sdk/hasura/src/hasura.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L15)
+Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/hasura/src/hasura.ts#L18)
 
-Schema for validating client options for the Portal client.
+Schema for validating client options for the Hasura client.
+Defines two possible runtime configurations:
+1. Server-side with instance URL, access token and admin secret
+2. Browser-side with no additional configuration needed
 
 ## Contributing
 

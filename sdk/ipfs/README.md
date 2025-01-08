@@ -47,37 +47,44 @@ For detailed information about using IPFS with the SettleMint platform, check ou
 
 > **createIpfsClient**(`options`): `object`
 
-Defined in: [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L23)
+Defined in: [sdk/ipfs/src/ipfs.ts:31](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L31)
 
-Creates an IPFS client for client-side use.
+Creates an IPFS client for client-side use
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `instance`: `string`; \} | The client options for configuring the IPFS client. |
+| `options` | \{ `instance`: `string`; \} | Configuration options for the client |
 | `options.instance` | `string` | - |
 
 ##### Returns
 
 `object`
 
-An object containing the IPFS client.
+An object containing the configured IPFS client instance
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L23) |
+| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:31](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L31) |
 
 ##### Throws
 
-Will throw an error if the options fail validation.
+Will throw an error if the options fail validation
 
 ##### Example
 
 ```ts
+import { createIpfsClient } from '@settlemint/sdk-ipfs';
+
 const { client } = createIpfsClient({
-  instance: 'https://your-ipfs-instance.com',
+  instance: 'https://ipfs.settlemint.com'
 });
+
+// Upload a file using Blob
+const blob = new Blob(['Hello, world!'], { type: 'text/plain' });
+const result = await client.add(blob);
+console.log(result.cid.toString());
 ```
 
 ***
@@ -86,15 +93,15 @@ const { client } = createIpfsClient({
 
 > **createServerIpfsClient**(`options`): `object`
 
-Defined in: [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L46)
+Defined in: [sdk/ipfs/src/ipfs.ts:60](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L60)
 
-Creates an IPFS client for server-side use with additional authentication.
+Creates an IPFS client for server-side use with authentication
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | The server client options for configuring the IPFS client. |
+| `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client including authentication |
 | `options.accessToken` | `string` | - |
 | `options.instance` | `string` | - |
 
@@ -102,23 +109,30 @@ Creates an IPFS client for server-side use with additional authentication.
 
 `object`
 
-An object containing the authenticated IPFS client.
+An object containing the authenticated IPFS client instance
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:46](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L46) |
+| `client` | `KuboRPCClient` | [sdk/ipfs/src/ipfs.ts:60](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/ipfs/src/ipfs.ts#L60) |
 
 ##### Throws
 
-Will throw an error if not called on the server or if the options fail validation.
+Will throw an error if called on the client side or if options validation fails
 
 ##### Example
 
 ```ts
+import { createServerIpfsClient } from '@settlemint/sdk-ipfs';
+
 const { client } = createServerIpfsClient({
-  instance: 'https://your-ipfs-instance.com',
-  accessToken: 'your-access-token',
+  instance: process.env.SETTLEMINT_IPFS_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
 });
+
+// Upload a file using Blob
+const blob = new Blob(['Hello, world!'], { type: 'text/plain' });
+const result = await client.add(blob);
+console.log(result.cid.toString());
 ```
 
 ## Contributing

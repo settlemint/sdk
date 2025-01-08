@@ -49,9 +49,9 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:52](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L52)
+Defined in: [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L76)
 
-Creates a Portal client using URQL
+Creates a Portal GraphQL client with the provided configuration.
 
 ##### Type Parameters
 
@@ -63,23 +63,50 @@ Creates a Portal client using URQL
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | The client options for configuring the Portal client. |
-| `clientOptions`? | `RequestConfig` | Optional configuration for the URQL client. |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the Portal client |
+| `clientOptions`? | `RequestConfig` | Additional GraphQL client configuration options |
 
 ##### Returns
 
 `object`
 
-An object containing the URQL client and the initialized graphql function.
+An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:56](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L56) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:57](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L57) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:80](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L80) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:81](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L81) |
 
 ##### Throws
 
-Will throw an error if the options fail validation.
+If the provided options fail validation
+
+##### Example
+
+```ts
+import { createPortalClient } from '@settlemint/sdk-portal';
+
+// Server-side usage
+const { client, graphql } = createPortalClient({
+  instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+  runtime: "server",
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+});
+
+// Browser-side usage
+const { client, graphql } = createPortalClient({});
+
+// Making GraphQL queries
+const query = graphql(`
+  query GetPendingTransactions {
+    getPendingTransactions {
+      count
+    }
+  }
+`);
+
+const result = await client.request(query);
+```
 
 ### Type Aliases
 
@@ -87,9 +114,9 @@ Will throw an error if the options fail validation.
 
 > **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
 
-Defined in: [sdk/portal/src/portal.ts:29](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L29)
+Defined in: [sdk/portal/src/portal.ts:30](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L30)
 
-Type definition for client options derived from the ClientOptionsSchema.
+Type representing the validated client options.
 
 ***
 
@@ -99,7 +126,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L10)
 
-Options for configuring the URQL client, excluding 'url' and 'exchanges'.
+Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
 ### Variables
 
@@ -107,9 +134,10 @@ Options for configuring the URQL client, excluding 'url' and 'exchanges'.
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
 
-Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L15)
+Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/portal/src/portal.ts#L16)
 
-Schema for validating client options for the Portal client.
+Schema for validating Portal client configuration options.
+Discriminates between server and browser runtime environments.
 
 ## Contributing
 

@@ -47,15 +47,15 @@ For detailed information about using MinIO with the SettleMint platform, check o
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/minio/src/minio.ts#L28)
+Defined in: [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/minio/src/minio.ts#L24)
 
-Creates a Portal client for server-side use with additional authentication.
+Creates a MinIO client for server-side use with authentication.
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessKey`: `string`; `accessToken`: `string`; `instance`: `string`; `secretKey`: `string`; \} | The server client options for configuring the Portal client. |
+| `options` | \{ `accessKey`: `string`; `accessToken`: `string`; `instance`: `string`; `secretKey`: `string`; \} | The server client options for configuring the MinIO client |
 | `options.accessKey` | `string` | - |
 | `options.accessToken` | `string` | - |
 | `options.instance` | `string` | - |
@@ -65,31 +65,28 @@ Creates a Portal client for server-side use with additional authentication.
 
 `object`
 
-An object containing the GraphQL client and the initialized graphql function.
+An object containing the initialized MinIO client
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `Client` | [sdk/minio/src/minio.ts:28](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/minio/src/minio.ts#L28) |
+| `client` | `Client` | [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/minio/src/minio.ts#L24) |
 
 ##### Throws
 
-Will throw an error if not called on the server or if the options fail validation.
+Will throw an error if not called on the server or if the options fail validation
 
 ##### Example
 
 ```ts
-const { client, graphql } = createServerPortalClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-  };
-}>({
-  instance: 'https://your-portal-instance.com',
-  accessToken: 'your-access-token',
-  adminSecret: 'your-admin-secret',
+import { createServerMinioClient } from "@settlemint/sdk-minio";
+
+const { client } = createServerMinioClient({
+  instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+  secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
 });
+client.listBuckets();
 ```
 
 ## Contributing

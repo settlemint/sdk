@@ -180,8 +180,8 @@ export interface SettlemintClient {
  * import { createSettleMintClient } from '@settlemint/sdk-js';
  *
  * const client = createSettleMintClient({
- *   accessToken: 'your_access_token',
- *   instance: 'https://console.settlemint.com'
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ *   instance: process.env.SETTLEMINT_INSTANCE,
  * });
  *
  * // List workspaces

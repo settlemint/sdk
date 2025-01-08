@@ -43,21 +43,23 @@ The SettleMint Next.js SDK provides a seamless integration layer between Next.js
 
 #### HelloWorld()
 
-> **HelloWorld**(`__namedParameters`): `ReactElement`
+> **HelloWorld**(`props`): `ReactElement`
 
-Defined in: [components/test.tsx:10](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/components/test.tsx#L10)
+Defined in: [components/test.tsx:16](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/components/test.tsx#L16)
 
 A simple Hello World component that greets the user.
 
 ##### Parameters
 
-| Parameter | Type |
-| ------ | ------ |
-| `__namedParameters` | `HelloWorldProps` |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `props` | [`HelloWorldProps`](README.md#helloworldprops) | The props for the HelloWorld component. |
 
 ##### Returns
 
 `ReactElement`
+
+A React element that displays a greeting to the user.
 
 ***
 
@@ -67,24 +69,28 @@ A simple Hello World component that greets the user.
 
 Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/middlewares/proxy.ts#L22)
 
-Middleware function to handle proxy requests
+Middleware function to handle proxy requests by adding appropriate authentication headers.
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `request` | `NextRequest` | The incoming Next.js request |
+| `request` | `NextRequest` | The incoming Next.js request to process |
 
 ##### Returns
 
 `NextResponse` \| `undefined`
 
-A modified NextResponse for proxy routes, or undefined for non-proxy routes
+A modified NextResponse with authentication headers for proxy routes, or undefined for non-proxy routes
+
+##### Throws
+
+Will throw an error if environment validation fails
 
 ##### Example
 
-```typescript
-import { proxyMiddleware } from './middleware/proxy';
+```ts
+import { proxyMiddleware } from '@settlemint/sdk-next/middlewares/proxy';
 
 export default function middleware(request: NextRequest) {
   return proxyMiddleware(request);
@@ -97,9 +103,9 @@ export default function middleware(request: NextRequest) {
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
-Defined in: [config/with-settlemint.ts:18](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L18)
+Defined in: [config/with-settlemint.ts:23](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L23)
 
-Modifies the passed in Next.js configuration with SettleMint-specific settings
+Modifies the passed in Next.js configuration with SettleMint-specific settings.
 
 ##### Type Parameters
 
@@ -112,17 +118,39 @@ Modifies the passed in Next.js configuration with SettleMint-specific settings
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `nextConfig` | `C` | The original Next.js configuration |
-| `options` | `WithSettleMintOptions` | Options for customizing the SettleMint configuration |
+| `options` | [`WithSettleMintOptions`](README.md#withsettlemintoptions) | Options for customizing the SettleMint configuration |
 
 ##### Returns
 
 `Promise`\<`C`\>
 
-A Promise that resolves to the modified Next.js configuration
+The modified Next.js configuration
 
 ##### Throws
 
 If the SettleMint configuration cannot be read or processed
+
+### Interfaces
+
+#### HelloWorldProps
+
+Defined in: [components/test.tsx:6](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/components/test.tsx#L6)
+
+The props for the HelloWorld component.
+
+***
+
+#### WithSettleMintOptions
+
+Defined in: [config/with-settlemint.ts:8](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L8)
+
+Options for configuring the SettleMint configuration.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:12](https://github.com/settlemint/sdk/blob/v0.8.6/sdk/next/src/config/with-settlemint.ts#L12) |
 
 ## Contributing
 
