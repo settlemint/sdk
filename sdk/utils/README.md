@@ -58,7 +58,7 @@
     - [writeEnv()](#writeenv)
   - [Interfaces](#interfaces)
     - [ExecuteCommandOptions](#executecommandoptions)
-    - [SpinnerOptions\<R\>](#spinneroptions\r\)
+    - [SpinnerOptions\<R\>](#spinneroptionsr)
   - [Type Aliases](#type-aliases)
     - [DotEnv](#dotenv)
     - [DotEnvPartial](#dotenvpartial)

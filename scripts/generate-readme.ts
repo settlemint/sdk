@@ -85,7 +85,7 @@ ${headingMatches
     const anchor = title
       .toLowerCase()
       .replace(/\s+/g, "-")
-      .replace(/[<>()]/g, "");
+      .replace(/[<>()\\]/g, "");
     const indent = "  ".repeat(level - 2); // Indent based on heading level
     return `${indent}- [${title}](#${anchor})`;
   })
