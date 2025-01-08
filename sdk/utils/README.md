@@ -1232,4 +1232,4 @@ We welcome contributions from the community! Please check out our [Contributing]
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](LICENSE) file for more details.
+The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](../../LICENSE) file for more details.
