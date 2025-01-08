@@ -2,7 +2,7 @@ Here are some examples of how to use the SettleMint JavaScript SDK:
 
 ### List Workspaces
 
-```javascript
+```typescript
 const client = createSettleMintClient({
   accessToken: 'your_access_token',
   instance: 'https://console.settlemint.com'
@@ -14,7 +14,7 @@ console.log(workspaces);
 
 ### Read a Specific Blockchain Network
 
-```javascript
+```typescript
 const client = createSettleMintClient({
   accessToken: 'your_access_token',
   instance: 'https://console.settlemint.com'

@@ -164,17 +164,26 @@ export interface SettlemintClient {
 }
 
 /**
- * Creates a SettleMint client with the provided options.
+ * Creates a SettleMint client with the provided options. The client provides methods to interact with
+ * various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
+ * integration tools, storage, private keys, insights and custom deployments.
  *
- * @param options - The options for creating the SettleMint client.
- * @returns An object containing various methods to interact with SettleMint resources.
- * @throws Will throw an error if the options are invalid or if called in a browser environment.
+ * @param {ClientOptions} options - Configuration options for the client including access token and instance URL
+ * @returns {SettlemintClient} A SettleMint client object with resource-specific methods
+ * @throws {Error} If options are invalid or if called in browser environment
+ * @throws {ValidationError} If provided options fail schema validation
  *
  * @example
  * const client = createSettleMintClient({
  *   accessToken: 'btp_aat_xxxxxxxxxxxxxxxxxxxxxxxx',
  *   instance: 'https://console.settlemint.com'
  * });
+ *
+ * // List all workspaces
+ * const workspaces = await client.workspace.list();
+ *
+ * // Read a specific blockchain network
+ * const network = await client.blockchainNetwork.read('network-unique-name');
  */
 export function createSettleMintClient(options: ClientOptions): SettlemintClient {
   ensureServer();
