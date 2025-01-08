@@ -36,15 +36,10 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
-
 settlemint.config.mjs
 settlemint.config.mjs
-apps/asset-tokenization/contracts/ignition/deployments
 *.deployments.json
-
 .idea
-apps/ro
-apps/registry/public/*.json
 
 # Testing
 test/starter-kit-demo

@@ -32,9 +32,6 @@
     "docker": {
       "cache": false
     },
-    "deploy": {
-      "outputs": ["apps/asset-tokenization/contracts/ignition/deployments/**"]
-    },
     "attw": {
       "dependsOn": ["build"]
     },
