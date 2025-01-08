@@ -111,7 +111,7 @@ async function processApiReference(content: string): Promise<string> {
 }
 
 async function getVersion(): Promise<string> {
-  const packageJsonPath = join(process.cwd(), "package.json");
+  const packageJsonPath = join(__dirname, "..", "package.json");
   const packageJson = await readFile(packageJsonPath, "utf-8");
   const { version } = tryParseJson<{ version: string }>(packageJson);
   return version;
