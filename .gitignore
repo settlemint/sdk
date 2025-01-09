@@ -51,3 +51,6 @@ test/contracts-subgraphs
 sdk/**/docs/**/*.md
 !sdk/**/docs/ABOUT.md
 !sdk/cli/docs/**/*.md
+
+# License
+sdk/**/LICENSE
