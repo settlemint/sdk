@@ -42,6 +42,7 @@
     - [Insights](#insights)
     - [IntegrationTool](#integrationtool)
     - [Middleware](#middleware)
+    - [PlatformConfig](#platformconfig)
     - [PrivateKey](#privatekey)
     - [Storage](#storage)
     - [Workspace](#workspace)
@@ -60,7 +61,7 @@ The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint
 
 > **createSettleMintClient**(`options`): [`SettlemintClient`](README.md#settlemintclient)
 
-Defined in: [sdk/js/src/settlemint.ts:193](https://github.com/settlemint/sdk/blob/v0.9.2/sdk/js/src/settlemint.ts#L193)
+Defined in: [sdk/js/src/settlemint.ts:197](https://github.com/settlemint/sdk/blob/v0.9.2/sdk/js/src/settlemint.ts#L197)
 
 Creates a SettleMint client with the provided options. The client provides methods to interact with
 various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
@@ -109,7 +110,7 @@ const workspace = await client.workspace.read('workspace-unique-name');
 
 #### SettlemintClient
 
-Defined in: [sdk/js/src/settlemint.ts:97](https://github.com/settlemint/sdk/blob/v0.9.2/sdk/js/src/settlemint.ts#L97)
+Defined in: [sdk/js/src/settlemint.ts:98](https://github.com/settlemint/sdk/blob/v0.9.2/sdk/js/src/settlemint.ts#L98)
 
 Client interface for interacting with the SettleMint platform.
 
@@ -182,6 +183,16 @@ Type representing an integration tool entity.
 Defined in: [sdk/js/src/graphql/middleware.ts:47](https://github.com/settlemint/sdk/blob/v0.9.2/sdk/js/src/graphql/middleware.ts#L47)
 
 Type representing a middleware entity.
+
+***
+
+#### PlatformConfig
+
+> **PlatformConfig**: `ResultOf`\<*typeof* `getPlatformConfigQuery`\>\[`"config"`\]
+
+Defined in: [sdk/js/src/graphql/platform.ts:39](https://github.com/settlemint/sdk/blob/v0.9.2/sdk/js/src/graphql/platform.ts#L39)
+
+Type representing the platform configuration.
 
 ***
 
