@@ -18,26 +18,33 @@ export async function useCasePrompt(
     cancel("No use cases found");
   }
 
-  const possibleUseCases = platformConfig.smartContractSets.sets.filter((set) => !set.featureflagged);
+  const useCasesNotFeatureFlagged = platformConfig.smartContractSets.sets.filter((set) => !set.featureflagged);
 
   if (argument) {
     const selectedUseCase = platformConfig.smartContractSets.sets.find((set) => set.id === argument);
     if (!selectedUseCase) {
       cancel(
-        `No use case found with name '${argument}' (possible use cases: ${possibleUseCases.map((set) => set.id).join(", ")})`,
+        `No use case found with id '${argument}'. Possible use cases: '${useCasesNotFeatureFlagged.map((set) => set.id).join(", ")}'`,
       );
     }
     return selectedUseCase;
   }
 
+  if (useCasesNotFeatureFlagged.length === 0) {
+    cancel("No use cases found");
+  }
+
+  if (useCasesNotFeatureFlagged.length === 1) {
+    return useCasesNotFeatureFlagged[0];
+  }
+
   const useCase = await select({
     message: "Which use case do you want to use?",
-    choices: platformConfig.smartContractSets.sets.map((useCase) => ({
+    choices: useCasesNotFeatureFlagged.map((useCase) => ({
       name: useCase.name,
       value: useCase.id,
     })),
   });
 
-  const selectedUseCase = platformConfig.smartContractSets.sets.find((set) => set.id === useCase);
-  return selectedUseCase;
+  return platformConfig.smartContractSets.sets.find((set) => set.id === useCase);
 }

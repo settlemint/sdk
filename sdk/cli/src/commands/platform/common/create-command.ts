@@ -8,15 +8,20 @@ import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
+import { providerPrompt } from "../prompts/provider.prompt";
+import { regionPrompt } from "../prompts/region.prompt";
 import type { ResourceType } from "./resource-type";
+
 type DefaultArgs = {
   acceptDefaults?: true | undefined;
   default?: true | undefined;
   prod?: true | undefined;
   wait?: true | undefined;
   restartIfTimeout?: true | undefined;
+  provider?: string | undefined;
+  region?: string | undefined;
 };
 
 /**
@@ -71,7 +76,6 @@ export function getCreateCommand({
     .argument("<name>", `The ${type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
-
     .option("--prod", "Connect to production environment");
 
   if (requiresDeployment) {
@@ -80,76 +84,92 @@ export function getCreateCommand({
       .option("-r, --restart-if-timeout", "Restart if wait time is exceeded");
   }
 
-  execute(cmd, async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout }, createFunction) => {
-    intro(`Creating ${type} in the SettleMint platform`);
+  execute(
+    cmd,
+    async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout, provider, region }, createFunction) => {
+      intro(`Creating ${type} in the SettleMint platform`);
 
-    const autoAccept = !!acceptDefaults || isInCi;
-    const env: Partial<DotEnv> = await loadEnv(false, !!prod);
+      const autoAccept = !!acceptDefaults || isInCi;
+      const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-    const instance = await instancePrompt(env, autoAccept);
-    const accessToken = await getApplicationOrPersonalAccessToken({
-      env,
-      instance,
-      prefer: usePersonalAccessToken ? "personal" : "application",
-    });
-
-    const settlemint = createSettleMintClient({
-      accessToken,
-      instance,
-    });
-
-    const { result, waitFor, mapDefaultEnv } = await spinner({
-      startMessage: `Creating ${type}`,
-      task: async () => {
-        return createFunction(settlemint, env);
-      },
-      stopMessage: `${capitalizeFirstLetter(type)} created`,
-    });
-
-    if (wait) {
-      await waitForCompletion({
-        settlemint,
-        type: waitFor?.resourceType ?? type,
-        uniqueName: waitFor?.uniqueName ?? result.uniqueName,
-        action: "deploy",
-        restartIfTimeout,
+      const instance = await instancePrompt(env, autoAccept);
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: usePersonalAccessToken ? "personal" : "application",
       });
 
-      if (waitFor) {
-        outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
-      }
-    }
+      const settlemint = createSettleMintClient({
+        accessToken,
+        instance,
+      });
+      const platformConfig = await settlemint.platform.config();
 
-    if (isDefault && typeof mapDefaultEnv === "function") {
-      const defaultEnv = mapDefaultEnv();
-      const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
-      const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;
-      const newEnv: Partial<DotEnv> = isApplicationChanged
-        ? {
-            SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
-            SETTLEMINT_INSTANCE: instance,
-            ...updatedEnv,
-          }
-        : {
-            ...env,
-            ...updatedEnv,
-          };
-      if (isApplicationChanged && updatedEnv.SETTLEMINT_APPLICATION) {
-        newEnv.SETTLEMINT_WORKSPACE = (
-          await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)
-        ).workspace.uniqueName;
-      }
-      if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
-        newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (
-          await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE)
-        ).blockchainNetwork.uniqueName;
-      }
-      await writeEnvSpinner(!!prod, newEnv);
-      note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
-    }
+      if (requiresDeployment) {
+        const selectedProvider = await providerPrompt(platformConfig, provider);
+        if (!selectedProvider) {
+          cancel("No provider selected. Please select a provider to continue.");
+        }
 
-    outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);
-  });
+        const selectedRegion = await regionPrompt(selectedProvider, region);
+        if (!selectedRegion) {
+          cancel("No region selected. Please select a region to continue.");
+        }
+      }
+
+      const { result, waitFor, mapDefaultEnv } = await spinner({
+        startMessage: `Creating ${type}`,
+        task: async () => {
+          return createFunction(settlemint, env);
+        },
+        stopMessage: `${capitalizeFirstLetter(type)} created`,
+      });
+
+      if (wait) {
+        await waitForCompletion({
+          settlemint,
+          type: waitFor?.resourceType ?? type,
+          uniqueName: waitFor?.uniqueName ?? result.uniqueName,
+          action: "deploy",
+          restartIfTimeout,
+        });
+
+        if (waitFor) {
+          outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);
+        }
+      }
+
+      if (isDefault && typeof mapDefaultEnv === "function") {
+        const defaultEnv = mapDefaultEnv();
+        const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
+        const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;
+        const newEnv: Partial<DotEnv> = isApplicationChanged
+          ? {
+              SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
+              SETTLEMINT_INSTANCE: instance,
+              ...updatedEnv,
+            }
+          : {
+              ...env,
+              ...updatedEnv,
+            };
+        if (isApplicationChanged && updatedEnv.SETTLEMINT_APPLICATION) {
+          newEnv.SETTLEMINT_WORKSPACE = (
+            await settlemint.application.read(updatedEnv.SETTLEMINT_APPLICATION)
+          ).workspace.uniqueName;
+        }
+        if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
+          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (
+            await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE)
+          ).blockchainNetwork.uniqueName;
+        }
+        await writeEnvSpinner(!!prod, newEnv);
+        note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
+      }
+
+      outro(`${capitalizeFirstLetter(type)} ${result.name} created successfully`);
+    },
+  );
 
   return cmd;
 }

@@ -43,79 +43,86 @@ export function smartContractPortalMiddlewareCreateCommand() {
               ...defaultArgs
             },
           ) => {
-            return baseAction(defaultArgs, async (settlemint, env) => {
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNodeUniqueName = loadBalancer
-                ? undefined
-                : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
-              const loadBalancerUniqueName = blockchainNodeUniqueName
-                ? undefined
-                : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
-              // Read and parse ABI files if provided
-              const parsedAbis: { name: string; abi: string }[] = [];
-              if (abis && abis.length > 0) {
-                try {
-                  const parsedAbiResults = await Promise.all(
-                    abis.map(async (abiPath): Promise<{ name: string; abi: string }> => {
-                      const abiContent = await Bun.file(abiPath).text();
-                      const filename = basename(abiPath, ".json");
-                      return { name: filename, abi: abiContent };
-                    }),
-                  );
-                  parsedAbis.push(...parsedAbiResults);
-                } catch (err) {
-                  const error = err as Error;
-                  cancel(`Failed to read or parse ABI file: ${error.message}`);
-                }
-              }
-
-              if (includePredeployedAbis && includePredeployedAbis.length > 0) {
-                const instance = await instancePrompt(env, true);
-                const accessToken = await getApplicationOrPersonalAccessToken({
-                  env,
-                  instance,
-                  prefer: "personal",
-                });
-                const settlemint = createSettleMintClient({
-                  accessToken,
-                  instance,
-                });
-
-                const platformConfig = await settlemint.platform.config();
-                const invalidPredeployedAbis = includePredeployedAbis.filter(
-                  (abi) => !platformConfig.preDeployedContracts.some((contract) => contract === abi),
-                );
-                if (invalidPredeployedAbis.length > 0) {
-                  cancel(
-                    `Invalid pre-deployed abis: ${invalidPredeployedAbis.join(", ")}. Possible values: ${platformConfig.preDeployedContracts.join(", ")}`,
-                  );
-                }
-              }
-
-              const result = await settlemint.middleware.create({
-                name,
-                applicationUniqueName,
-                interface: "SMART_CONTRACT_PORTAL",
-                blockchainNodeUniqueName,
-                loadBalancerUniqueName,
-                abis: parsedAbis,
-                includePredeployedAbis,
+            return baseAction(
+              {
+                ...defaultArgs,
                 provider,
                 region,
-                size,
-                type,
-              });
-              return {
-                result,
-                mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                  return {
-                    SETTLEMINT_APPLICATION: applicationUniqueName,
-                    SETTLEMINT_PORTAL: result.uniqueName,
-                    ...getPortalEndpoints(result),
-                  };
-                },
-              };
-            });
+              },
+              async (settlemint, env) => {
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+                const blockchainNodeUniqueName = loadBalancer
+                  ? undefined
+                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+                const loadBalancerUniqueName = blockchainNodeUniqueName
+                  ? undefined
+                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
+                // Read and parse ABI files if provided
+                const parsedAbis: { name: string; abi: string }[] = [];
+                if (abis && abis.length > 0) {
+                  try {
+                    const parsedAbiResults = await Promise.all(
+                      abis.map(async (abiPath): Promise<{ name: string; abi: string }> => {
+                        const abiContent = await Bun.file(abiPath).text();
+                        const filename = basename(abiPath, ".json");
+                        return { name: filename, abi: abiContent };
+                      }),
+                    );
+                    parsedAbis.push(...parsedAbiResults);
+                  } catch (err) {
+                    const error = err as Error;
+                    cancel(`Failed to read or parse ABI file: ${error.message}`);
+                  }
+                }
+
+                if (includePredeployedAbis && includePredeployedAbis.length > 0) {
+                  const instance = await instancePrompt(env, true);
+                  const accessToken = await getApplicationOrPersonalAccessToken({
+                    env,
+                    instance,
+                    prefer: "personal",
+                  });
+                  const settlemint = createSettleMintClient({
+                    accessToken,
+                    instance,
+                  });
+
+                  const platformConfig = await settlemint.platform.config();
+                  const invalidPredeployedAbis = includePredeployedAbis.filter(
+                    (abi) => !platformConfig.preDeployedContracts.some((contract) => contract === abi),
+                  );
+                  if (invalidPredeployedAbis.length > 0) {
+                    cancel(
+                      `Invalid pre-deployed abis: '${invalidPredeployedAbis.join(", ")}'. Possible values: '${platformConfig.preDeployedContracts.join(", ")}'`,
+                    );
+                  }
+                }
+
+                const result = await settlemint.middleware.create({
+                  name,
+                  applicationUniqueName,
+                  interface: "SMART_CONTRACT_PORTAL",
+                  blockchainNodeUniqueName,
+                  loadBalancerUniqueName,
+                  abis: parsedAbis,
+                  includePredeployedAbis,
+                  provider,
+                  region,
+                  size,
+                  type,
+                });
+                return {
+                  result,
+                  mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
+                    return {
+                      SETTLEMINT_APPLICATION: applicationUniqueName,
+                      SETTLEMINT_PORTAL: result.uniqueName,
+                      ...getPortalEndpoints(result),
+                    };
+                  },
+                };
+              },
+            );
           },
         );
     },

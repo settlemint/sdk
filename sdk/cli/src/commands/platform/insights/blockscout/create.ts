@@ -23,36 +23,43 @@ export function blockscoutInsightsCreateCommand() {
         )
         .action(
           async (name, { application, provider, region, size, type, blockchainNode, loadBalancer, ...defaultArgs }) => {
-            return baseAction(defaultArgs, async (settlemint, env) => {
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNodeUniqueName = loadBalancer
-                ? undefined
-                : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
-              const loadBalancerUniqueName = blockchainNodeUniqueName
-                ? undefined
-                : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
-              const result = await settlemint.insights.create({
-                name,
-                applicationUniqueName,
-                insightsCategory: "BLOCKCHAIN_EXPLORER",
+            return baseAction(
+              {
+                ...defaultArgs,
                 provider,
                 region,
-                size,
-                type,
-                blockchainNodeUniqueName,
-                loadBalancerUniqueName,
-              });
-              return {
-                result,
-                mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                  return {
-                    SETTLEMINT_APPLICATION: applicationUniqueName,
-                    SETTLEMINT_BLOCKSCOUT: result.uniqueName,
-                    ...getBlockscoutEndpoints(result),
-                  };
-                },
-              };
-            });
+              },
+              async (settlemint, env) => {
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+                const blockchainNodeUniqueName = loadBalancer
+                  ? undefined
+                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+                const loadBalancerUniqueName = blockchainNodeUniqueName
+                  ? undefined
+                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
+                const result = await settlemint.insights.create({
+                  name,
+                  applicationUniqueName,
+                  insightsCategory: "BLOCKCHAIN_EXPLORER",
+                  provider,
+                  region,
+                  size,
+                  type,
+                  blockchainNodeUniqueName,
+                  loadBalancerUniqueName,
+                });
+                return {
+                  result,
+                  mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
+                    return {
+                      SETTLEMINT_APPLICATION: applicationUniqueName,
+                      SETTLEMINT_BLOCKSCOUT: result.uniqueName,
+                      ...getBlockscoutEndpoints(result),
+                    };
+                  },
+                };
+              },
+            );
           },
         );
     },

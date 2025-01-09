@@ -19,19 +19,11 @@ const getPlatformConfigQuery = graphql(
         deploymentEngineTargets {
           id
           name
-          icon
           disabled
           clusters {
             id
             name
-            icon
             disabled
-            location {
-              id
-              lat
-              long
-            }
-            capabilities
           }
         }
         preDeployedContracts

@@ -46,45 +46,52 @@ export function blockchainNetworkBesuCreateCommand() {
               ...defaultArgs
             },
           ) => {
-            return baseAction(defaultArgs, async (settlemint, env) => {
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-              const result = await settlemint.blockchainNetwork.create({
-                name,
-                applicationUniqueName,
-                nodeName: nodeName,
-                consensusAlgorithm: "BESU_QBFT",
-                chainId,
-                contractSizeLimit,
-                evmStackSize,
-                gasLimit,
-                gasPrice,
-                provider: provider,
-                region: region,
-                secondsPerBlock,
-                size,
-                type,
-              });
+            return baseAction(
+              {
+                ...defaultArgs,
+                provider,
+                region,
+              },
+              async (settlemint, env) => {
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+                const result = await settlemint.blockchainNetwork.create({
+                  name,
+                  applicationUniqueName,
+                  nodeName: nodeName,
+                  consensusAlgorithm: "BESU_QBFT",
+                  chainId,
+                  contractSizeLimit,
+                  evmStackSize,
+                  gasLimit,
+                  gasPrice,
+                  provider: provider,
+                  region: region,
+                  secondsPerBlock,
+                  size,
+                  type,
+                });
 
-              const blockchainNode =
-                result.blockchainNodes.find((item) => item.name === nodeName) ?? result.blockchainNodes[0];
+                const blockchainNode =
+                  result.blockchainNodes.find((item) => item.name === nodeName) ?? result.blockchainNodes[0];
 
-              return {
-                result,
-                waitFor: blockchainNode
-                  ? {
-                      resourceType: "blockchain node",
-                      ...blockchainNode,
-                    }
-                  : undefined,
-                mapDefaultEnv: (): Partial<DotEnv> => {
-                  return {
-                    SETTLEMINT_APPLICATION: applicationUniqueName,
-                    SETTLEMINT_BLOCKCHAIN_NETWORK: result.uniqueName,
-                    SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
-                  };
-                },
-              };
-            });
+                return {
+                  result,
+                  waitFor: blockchainNode
+                    ? {
+                        resourceType: "blockchain node",
+                        ...blockchainNode,
+                      }
+                    : undefined,
+                  mapDefaultEnv: (): Partial<DotEnv> => {
+                    return {
+                      SETTLEMINT_APPLICATION: applicationUniqueName,
+                      SETTLEMINT_BLOCKCHAIN_NETWORK: result.uniqueName,
+                      SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
+                    };
+                  },
+                };
+              },
+            );
           },
         );
     },

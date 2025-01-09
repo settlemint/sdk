@@ -17,28 +17,35 @@ export function hasuraIntegrationCreateCommand() {
       addClusterServiceArgs(cmd)
         .option("--application <application>", "Application unique name")
         .action(async (name, { application, provider, region, size, type, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env) => {
-            const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-            const result = await settlemint.integrationTool.create({
-              name,
-              applicationUniqueName,
-              integrationType: "HASURA",
+          return baseAction(
+            {
+              ...defaultArgs,
               provider,
               region,
-              size,
-              type,
-            });
-            return {
-              result,
-              mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
-                return {
-                  SETTLEMINT_APPLICATION: applicationUniqueName,
-                  SETTLEMINT_HASURA: result.uniqueName,
-                  ...getHasuraEndpoints(result),
-                };
-              },
-            };
-          });
+            },
+            async (settlemint, env) => {
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+              const result = await settlemint.integrationTool.create({
+                name,
+                applicationUniqueName,
+                integrationType: "HASURA",
+                provider,
+                region,
+                size,
+                type,
+              });
+              return {
+                result,
+                mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {
+                  return {
+                    SETTLEMINT_APPLICATION: applicationUniqueName,
+                    SETTLEMINT_HASURA: result.uniqueName,
+                    ...getHasuraEndpoints(result),
+                  };
+                },
+              };
+            },
+          );
         });
     },
     examples: [
