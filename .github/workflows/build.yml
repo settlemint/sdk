@@ -138,9 +138,7 @@ jobs:
 
       - name: Update docs and README
         if: ${{ env.TAG == 'latest' }}
-        run: |
-          bunx turbo docs
-          bunx turbo generate-readme
+        run: bun docs
 
       - name: Run tests and checks
         run: bunx turbo format lint typecheck build attw publint test:coverage publish-npm --env-mode=loose
