@@ -1,6 +1,7 @@
 import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils";
+import { getRegionId } from "../utils/cluster-region";
 
 /**
  * Prompts the user to select a deployment region or validates a provided one
@@ -25,7 +26,10 @@ export async function regionPrompt(
     const selectedRegion = possibleRegions.find((cluster) => cluster.id === argument);
     if (!selectedRegion) {
       cancel(
-        `No region found with id '${argument}'. Possible regions: '${possibleRegions.map((cluster) => cluster.id).join(", ")}'`,
+        `No region found with id '${argument}'. Possible regions: '${possibleRegions
+          .map((cluster) => cluster.id)
+          .sort()
+          .join(", ")}'`,
       );
     }
     return selectedRegion;
@@ -44,14 +48,4 @@ export async function regionPrompt(
   });
 
   return provider.clusters.find((cluster) => cluster.id === region);
-}
-
-/**
- * Extracts the region name from a region ID by removing the provider prefix
- *
- * @param regionId - The full region ID (e.g. 'gke-europe')
- * @returns The region name without the provider prefix (e.g. 'europe')
- */
-function getRegionId(regionId: string) {
-  return regionId.split("-")[1];
 }

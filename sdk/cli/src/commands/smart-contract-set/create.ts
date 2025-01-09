@@ -22,7 +22,10 @@ export function createCommand(): Command {
   return new Command("create")
     .description("Bootstrap your smart contract set")
     .option("-n, --project-name <name>", "The name for your smart contract set project")
-    .option("--use-case <useCase>", "Use case for the smart contract set")
+    .option(
+      "--use-case <useCase>",
+      "Use case for the smart contract set (run `settlemint platform config` to see available use cases)",
+    )
     .option("--prod", "Connect to your production environment")
     .action(async ({ projectName, useCase, prod }) => {
       intro("Creating a new smart contract set");

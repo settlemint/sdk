@@ -24,7 +24,10 @@ export async function useCasePrompt(
     const selectedUseCase = platformConfig.smartContractSets.sets.find((set) => set.id === argument);
     if (!selectedUseCase) {
       cancel(
-        `No use case found with id '${argument}'. Possible use cases: '${useCasesNotFeatureFlagged.map((set) => set.id).join(", ")}'`,
+        `No use case found with id '${argument}'. Possible use cases: '${useCasesNotFeatureFlagged
+          .map((set) => set.id)
+          .sort()
+          .join(", ")}'`,
       );
     }
     return selectedUseCase;

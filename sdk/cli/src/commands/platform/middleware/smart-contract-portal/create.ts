@@ -26,7 +26,10 @@ export function smartContractPortalMiddlewareCreateCommand() {
           "Blockchain Node unique name (mutually exclusive with load-balancer)",
         )
         .option("--abis <abis...>", "Path to abi file(s)")
-        .option("--include-predeployed-abis <includePredeployedAbis...>", "Include pre-deployed abis")
+        .option(
+          "--include-predeployed-abis <includePredeployedAbis...>",
+          "Include pre-deployed abis (run `settlemint platform config` to see available pre-deployed abis)",
+        )
         .action(
           async (
             name,
@@ -93,7 +96,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                   );
                   if (invalidPredeployedAbis.length > 0) {
                     cancel(
-                      `Invalid pre-deployed abis: '${invalidPredeployedAbis.join(", ")}'. Possible values: '${platformConfig.preDeployedContracts.join(", ")}'`,
+                      `Invalid pre-deployed abis: '${invalidPredeployedAbis.join(", ")}'. Possible values: '${platformConfig.preDeployedContracts.sort().join(", ")}'`,
                     );
                   }
                 }

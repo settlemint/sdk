@@ -23,7 +23,10 @@ export async function providerPrompt(
     const selectedProvider = platformConfig.deploymentEngineTargets.find((target) => target.id === argument);
     if (!selectedProvider) {
       cancel(
-        `No provider found with id '${argument}'. Possible providers: '${possibleProviders.map((target) => target.id).join(", ")}'`,
+        `No provider found with id '${argument}'. Possible providers: '${possibleProviders
+          .map((target) => target.id)
+          .sort()
+          .join(", ")}'`,
       );
     }
     return selectedProvider;

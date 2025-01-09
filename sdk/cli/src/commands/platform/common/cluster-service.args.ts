@@ -2,8 +2,14 @@ import { type Command, Option, type OptionValues } from "@commander-js/extra-typ
 
 export function addClusterServiceArgs<Args extends OptionValues>(cmd: Command<[string], Args>) {
   return cmd
-    .requiredOption("--provider <provider>", "Network provider")
-    .requiredOption("--region <region>", "Deployment region")
+    .requiredOption(
+      "--provider <provider>",
+      "Network provider (run `settlemint platform config` to see available providers)",
+    )
+    .requiredOption(
+      "--region <region>",
+      "Deployment region (run `settlemint platform config` to see available regions)",
+    )
     .addOption(
       new Option("--size <size>", "Network size")
         .choices(["CUSTOM", "LARGE", "MEDIUM", "SMALL"])
