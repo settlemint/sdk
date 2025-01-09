@@ -51,12 +51,29 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@settlemint/sdk-utils": "0.9.0",
+    "@settlemint/sdk-utils": "workspace:*",
     "kubo-rpc-client": "^5",
     "zod": "^3"
   },
   "peerDependencies": {},
   "engines": {
     "node": ">=20"
-  }
+  },
+  "keywords": [
+    "settlemint",
+    "blockchain",
+    "blockchain-development",
+    "enterprise-blockchain",
+    "web3",
+    "web3-development",
+    "web3-tools",
+    "sdk",
+    "typescript",
+    "ipfs",
+    "storage",
+    "decentralized-storage",
+    "content-addressing",
+    "file-storage",
+    "pinning-service"
+  ]
 }

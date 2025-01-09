@@ -51,12 +51,28 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@settlemint/sdk-utils": "0.9.0",
+    "@settlemint/sdk-utils": "workspace:*",
     "minio": "^8",
     "zod": "^3"
   },
   "peerDependencies": {},
   "engines": {
     "node": ">=20"
-  }
+  },
+  "keywords": [
+    "settlemint",
+    "blockchain",
+    "blockchain-development",
+    "enterprise-blockchain",
+    "web3",
+    "web3-development",
+    "web3-tools",
+    "sdk",
+    "typescript",
+    "minio",
+    "object-storage",
+    "s3-compatible",
+    "file-storage",
+    "cloud-storage"
+  ]
 }

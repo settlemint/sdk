@@ -1,7 +1,7 @@
-import { mkdir, readdir, rm, writeFile } from "node:fs/promises";
+import { exists, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Command, type CommandUnknownOpts, Help } from "@commander-js/extra-typings";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter, tryParseJson } from "@settlemint/sdk-utils";
 import { sdkCliCommand } from "../src/commands";
 
 const exitOverride = () => {
@@ -18,7 +18,9 @@ export async function createDocs(command: Command) {
 
   // Create docs directory if it doesn't exist
   console.log(`Cleaning docs directory at ${docsDir}`);
-  await rm(join(docsDir, "settlemint.md"));
+  if (await exists(join(docsDir, "settlemint.md"))) {
+    await rm(join(docsDir, "settlemint.md"));
+  }
   const entries = await readdir(docsDir, { withFileTypes: true });
   for (const entry of entries) {
     if (entry.isDirectory()) {
@@ -41,7 +43,7 @@ export async function createDocs(command: Command) {
     console.log(`Generating documentation for ${command.name()} at ${docPath}`);
     const helpTextWithLinks = addLinksToChildCommands(
       command.name(),
-      helpText,
+      await updateVersionInfo(command.name(), helpText),
       command.commands.map((c) => c.name()),
       parentPath.length >= MAX_DEPTH,
     );
@@ -159,6 +161,21 @@ function userFriendlyCommandName(commandName: string) {
     return "SettleMint CLI";
   }
   return capitalizeFirstLetter(commandName.replace(/-/g, " "));
+}
+
+async function updateVersionInfo(commandName: string, helpText: string) {
+  if (commandName !== "settlemint") {
+    return helpText;
+  }
+  const version = await getVersion();
+  return helpText.replace(/CLI for SettleMint \(v\d\.\d\.\d\)/, `CLI for SettleMint (v${version})`);
+}
+
+async function getVersion(): Promise<string> {
+  const packageJsonPath = join(__dirname, "..", "..", "..", "package.json");
+  const packageJson = await readFile(packageJsonPath, "utf-8");
+  const { version } = tryParseJson<{ version: string }>(packageJson)!;
+  return version;
 }
 
 createDocs(sdkCli).catch((err) => {
