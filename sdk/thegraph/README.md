@@ -150,7 +150,7 @@ const result = await client.request(query);
 
 #### ClientOptions
 
-> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
+> **ClientOptions**: \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}
 
 Defined in: [sdk/thegraph/src/thegraph.ts:34](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/thegraph/src/thegraph.ts#L34)
 
@@ -170,7 +170,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>\>; `runtime`: `ZodLiteral`\<`"server"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<[`ClientOptions`](README.md#clientoptions)\>
 
 Defined in: [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/thegraph/src/thegraph.ts#L18)
 

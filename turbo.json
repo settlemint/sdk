@@ -4,7 +4,7 @@
   "dangerouslyDisablePackageManagerCheck": true,
   "tasks": {
     "build": {
-      "dependsOn": ["^build", "codegen", "docs"],
+      "dependsOn": ["^build", "codegen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
@@ -40,7 +40,7 @@
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {
-      "dependsOn": ["^build", "docs"],
+      "dependsOn": ["^build"],
       "cache": false,
       "persistent": true
     },

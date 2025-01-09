@@ -146,7 +146,7 @@ const result = await client.request(query, {
 
 #### ClientOptions
 
-> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
+> **ClientOptions**: \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}
 
 Defined in: [sdk/blockscout/src/blockscout.ts:32](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/blockscout/src/blockscout.ts#L32)
 
@@ -166,7 +166,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<[`ClientOptions`](README.md#clientoptions)\>
 
 Defined in: [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/blockscout/src/blockscout.ts#L18)
 

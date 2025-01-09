@@ -190,7 +190,7 @@ try {
 
 #### ClientOptions
 
-> **ClientOptions**: `z.infer`\<*typeof* [`ClientOptionsSchema`](README.md#clientoptionsschema)\>
+> **ClientOptions**: \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}
 
 Defined in: [sdk/hasura/src/hasura.ts:33](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/hasura/src/hasura.ts#L33)
 
@@ -210,7 +210,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<[`ClientOptions`](README.md#clientoptions)\>
 
 Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/hasura/src/hasura.ts#L18)
 

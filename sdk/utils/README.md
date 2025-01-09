@@ -60,10 +60,16 @@
     - [ExecuteCommandOptions](#executecommandoptions)
     - [SpinnerOptions\<R\>](#spinneroptionsr)
   - [Type Aliases](#type-aliases)
+    - [AccessToken](#accesstoken)
+    - [ApplicationAccessToken](#applicationaccesstoken)
     - [DotEnv](#dotenv)
     - [DotEnvPartial](#dotenvpartial)
     - [Id](#id)
+    - [PersonalAccessToken](#personalaccesstoken)
     - [Template](#template)
+    - [Url](#url)
+    - [UrlOrPath](#urlorpath)
+    - [UrlPath](#urlpath)
   - [Variables](#variables)
     - [AccessTokenSchema](#accesstokenschema)
     - [ApplicationAccessTokenSchema](#applicationaccesstokenschema)
@@ -982,34 +988,147 @@ Options for configuring the spinner behavior
 
 ### Type Aliases
 
+#### AccessToken
+
+> **AccessToken**: `string`
+
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:22](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/access-token.schema.ts#L22)
+
+Schema for validating both application and personal access tokens.
+Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
+
+***
+
+#### ApplicationAccessToken
+
+> **ApplicationAccessToken**: `string`
+
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:8](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/access-token.schema.ts#L8)
+
+Schema for validating application access tokens.
+Application access tokens start with 'sm_aat_' prefix.
+
+***
+
 #### DotEnv
 
-> **DotEnv**: `z.infer`\<*typeof* [`DotEnvSchema`](README.md#dotenvschema)\>
+> **DotEnv**: `object`
 
 Defined in: [sdk/utils/src/validation/dot-env.schema.ts:56](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L56)
 
 Type definition for the environment variables schema.
 
+##### Type declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| <a id="settlemint_access_token"></a> `SETTLEMINT_ACCESS_TOKEN`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L14) |
+| <a id="settlemint_application"></a> `SETTLEMINT_APPLICATION`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:17](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L17) |
+| <a id="settlemint_blockchain_network"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:18](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L18) |
+| <a id="settlemint_blockchain_node"></a> `SETTLEMINT_BLOCKCHAIN_NODE`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:19](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L19) |
+| <a id="settlemint_blockscout"></a> `SETTLEMINT_BLOCKSCOUT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:45](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L45) |
+| <a id="settlemint_blockscout_graphql_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:46](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L46) |
+| <a id="settlemint_blockscout_ui_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:47](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L47) |
+| <a id="settlemint_custom_deployment"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:43](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L43) |
+| <a id="settlemint_custom_deployment_endpoint"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:44](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L44) |
+| <a id="settlemint_hasura"></a> `SETTLEMINT_HASURA`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:21](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L21) |
+| <a id="settlemint_hasura_admin_secret"></a> `SETTLEMINT_HASURA_ADMIN_SECRET`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:23](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L23) |
+| <a id="settlemint_hasura_database_url"></a> `SETTLEMINT_HASURA_DATABASE_URL`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:24](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L24) |
+| <a id="settlemint_hasura_endpoint"></a> `SETTLEMINT_HASURA_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:22](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L22) |
+| <a id="settlemint_hd_private_key"></a> `SETTLEMINT_HD_PRIVATE_KEY`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L34) |
+| <a id="settlemint_instance"></a> `SETTLEMINT_INSTANCE` | `string` | [sdk/utils/src/validation/dot-env.schema.ts:13](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L13) |
+| <a id="settlemint_ipfs"></a> `SETTLEMINT_IPFS`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:39](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L39) |
+| <a id="settlemint_ipfs_api_endpoint"></a> `SETTLEMINT_IPFS_API_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:40](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L40) |
+| <a id="settlemint_ipfs_gateway_endpoint"></a> `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:42](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L42) |
+| <a id="settlemint_ipfs_pinning_endpoint"></a> `SETTLEMINT_IPFS_PINNING_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:41](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L41) |
+| <a id="settlemint_load_balancer"></a> `SETTLEMINT_LOAD_BALANCER`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:20](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L20) |
+| <a id="settlemint_minio"></a> `SETTLEMINT_MINIO`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:35](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L35) |
+| <a id="settlemint_minio_access_key"></a> `SETTLEMINT_MINIO_ACCESS_KEY`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:37](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L37) |
+| <a id="settlemint_minio_endpoint"></a> `SETTLEMINT_MINIO_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L36) |
+| <a id="settlemint_minio_secret_key"></a> `SETTLEMINT_MINIO_SECRET_KEY`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:38](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L38) |
+| <a id="settlemint_new_project_name"></a> `SETTLEMINT_NEW_PROJECT_NAME`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:48](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L48) |
+| <a id="settlemint_personal_access_token"></a> `SETTLEMINT_PERSONAL_ACCESS_TOKEN`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:15](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L15) |
+| <a id="settlemint_portal"></a> `SETTLEMINT_PORTAL`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:31](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L31) |
+| <a id="settlemint_portal_graphql_endpoint"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:32](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L32) |
+| <a id="settlemint_portal_rest_endpoint"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:33](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L33) |
+| <a id="settlemint_smart_contract_address"></a> `SETTLEMINT_SMART_CONTRACT_ADDRESS`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:49](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L49) |
+| <a id="settlemint_smart_contract_deployment_id"></a> `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:50](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L50) |
+| <a id="settlemint_thegraph"></a> `SETTLEMINT_THEGRAPH`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:25](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L25) |
+| <a id="settlemint_thegraph_subgraph_name"></a> `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L30) |
+| <a id="settlemint_thegraph_subgraphs_endpoints"></a> `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`? | `string`[] | [sdk/utils/src/validation/dot-env.schema.ts:26](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L26) |
+| <a id="settlemint_workspace"></a> `SETTLEMINT_WORKSPACE`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:16](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L16) |
+
 ***
 
 #### DotEnvPartial
 
-> **DotEnvPartial**: `z.infer`\<*typeof* [`DotEnvSchemaPartial`](README.md#dotenvschemapartial)\>
+> **DotEnvPartial**: `object`
 
 Defined in: [sdk/utils/src/validation/dot-env.schema.ts:67](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L67)
 
 Type definition for the partial environment variables schema.
 
+##### Type declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| <a id="settlemint_access_token-1"></a> `SETTLEMINT_ACCESS_TOKEN`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L14) |
+| <a id="settlemint_application-1"></a> `SETTLEMINT_APPLICATION`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:17](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L17) |
+| <a id="settlemint_blockchain_network-1"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:18](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L18) |
+| <a id="settlemint_blockchain_node-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:19](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L19) |
+| <a id="settlemint_blockscout-1"></a> `SETTLEMINT_BLOCKSCOUT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:45](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L45) |
+| <a id="settlemint_blockscout_graphql_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:46](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L46) |
+| <a id="settlemint_blockscout_ui_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:47](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L47) |
+| <a id="settlemint_custom_deployment-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:43](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L43) |
+| <a id="settlemint_custom_deployment_endpoint-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:44](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L44) |
+| <a id="settlemint_hasura-1"></a> `SETTLEMINT_HASURA`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:21](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L21) |
+| <a id="settlemint_hasura_admin_secret-1"></a> `SETTLEMINT_HASURA_ADMIN_SECRET`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:23](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L23) |
+| <a id="settlemint_hasura_database_url-1"></a> `SETTLEMINT_HASURA_DATABASE_URL`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:24](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L24) |
+| <a id="settlemint_hasura_endpoint-1"></a> `SETTLEMINT_HASURA_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:22](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L22) |
+| <a id="settlemint_hd_private_key-1"></a> `SETTLEMINT_HD_PRIVATE_KEY`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L34) |
+| <a id="settlemint_instance-1"></a> `SETTLEMINT_INSTANCE`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:13](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L13) |
+| <a id="settlemint_ipfs-1"></a> `SETTLEMINT_IPFS`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:39](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L39) |
+| <a id="settlemint_ipfs_api_endpoint-1"></a> `SETTLEMINT_IPFS_API_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:40](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L40) |
+| <a id="settlemint_ipfs_gateway_endpoint-1"></a> `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:42](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L42) |
+| <a id="settlemint_ipfs_pinning_endpoint-1"></a> `SETTLEMINT_IPFS_PINNING_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:41](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L41) |
+| <a id="settlemint_load_balancer-1"></a> `SETTLEMINT_LOAD_BALANCER`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:20](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L20) |
+| <a id="settlemint_minio-1"></a> `SETTLEMINT_MINIO`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:35](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L35) |
+| <a id="settlemint_minio_access_key-1"></a> `SETTLEMINT_MINIO_ACCESS_KEY`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:37](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L37) |
+| <a id="settlemint_minio_endpoint-1"></a> `SETTLEMINT_MINIO_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L36) |
+| <a id="settlemint_minio_secret_key-1"></a> `SETTLEMINT_MINIO_SECRET_KEY`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:38](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L38) |
+| <a id="settlemint_new_project_name-1"></a> `SETTLEMINT_NEW_PROJECT_NAME`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:48](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L48) |
+| <a id="settlemint_personal_access_token-1"></a> `SETTLEMINT_PERSONAL_ACCESS_TOKEN`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:15](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L15) |
+| <a id="settlemint_portal-1"></a> `SETTLEMINT_PORTAL`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:31](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L31) |
+| <a id="settlemint_portal_graphql_endpoint-1"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:32](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L32) |
+| <a id="settlemint_portal_rest_endpoint-1"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:33](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L33) |
+| <a id="settlemint_smart_contract_address-1"></a> `SETTLEMINT_SMART_CONTRACT_ADDRESS`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:49](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L49) |
+| <a id="settlemint_smart_contract_deployment_id-1"></a> `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:50](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L50) |
+| <a id="settlemint_thegraph-1"></a> `SETTLEMINT_THEGRAPH`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:25](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L25) |
+| <a id="settlemint_thegraph_subgraph_name-1"></a> `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L30) |
+| <a id="settlemint_thegraph_subgraphs_endpoints-1"></a> `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`? | `string`[] | [sdk/utils/src/validation/dot-env.schema.ts:26](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L26) |
+| <a id="settlemint_workspace-1"></a> `SETTLEMINT_WORKSPACE`? | `string` | [sdk/utils/src/validation/dot-env.schema.ts:16](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L16) |
+
 ***
 
 #### Id
 
-> **Id**: `z.infer`\<*typeof* [`IdSchema`](README.md#idschema)\>
+> **Id**: `string`
 
 Defined in: [sdk/utils/src/validation/id.schema.ts:30](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/id.schema.ts#L30)
 
 Type definition for database IDs, inferred from IdSchema.
 Can be either a PostgreSQL UUID string or MongoDB ObjectID string.
+
+***
+
+#### PersonalAccessToken
+
+> **PersonalAccessToken**: `string`
+
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:15](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/access-token.schema.ts#L15)
+
+Schema for validating personal access tokens.
+Personal access tokens start with 'sm_pat_' prefix.
 
 ***
 
@@ -1028,11 +1147,83 @@ Available templates for project creation
 | <a id="label"></a> `label` | `string` | [sdk/utils/src/package-manager/download-and-extract.ts:8](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/package-manager/download-and-extract.ts#L8) |
 | <a id="value"></a> `value` | `string` | [sdk/utils/src/package-manager/download-and-extract.ts:8](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/package-manager/download-and-extract.ts#L8) |
 
+***
+
+#### Url
+
+> **Url**: `string`
+
+Defined in: [sdk/utils/src/validation/url.schema.ts:18](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/url.schema.ts#L18)
+
+Schema for validating URLs.
+
+##### Example
+
+```ts
+import { UrlSchema } from "@settlemint/sdk-utils";
+
+// Validate a URL
+const isValidUrl = UrlSchema.safeParse("https://console.settlemint.com").success;
+// true
+
+// Invalid URLs will fail validation
+const isInvalidUrl = UrlSchema.safeParse("not-a-url").success;
+// false
+```
+
+***
+
+#### UrlOrPath
+
+> **UrlOrPath**: `string`
+
+Defined in: [sdk/utils/src/validation/url.schema.ts:55](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/url.schema.ts#L55)
+
+Schema that accepts either a full URL or a URL path.
+
+##### Example
+
+```ts
+import { UrlOrPathSchema } from "@settlemint/sdk-utils";
+
+// Validate a URL
+const isValidUrl = UrlOrPathSchema.safeParse("https://console.settlemint.com").success;
+// true
+
+// Validate a path
+const isValidPath = UrlOrPathSchema.safeParse("/api/v1/users").success;
+// true
+```
+
+***
+
+#### UrlPath
+
+> **UrlPath**: `string`
+
+Defined in: [sdk/utils/src/validation/url.schema.ts:38](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/url.schema.ts#L38)
+
+Schema for validating URL paths.
+
+##### Example
+
+```ts
+import { UrlPathSchema } from "@settlemint/sdk-utils";
+
+// Validate a URL path
+const isValidPath = UrlPathSchema.safeParse("/api/v1/users").success;
+// true
+
+// Invalid paths will fail validation
+const isInvalidPath = UrlPathSchema.safeParse("not-a-path").success;
+// false
+```
+
 ### Variables
 
 #### AccessTokenSchema
 
-> `const` **AccessTokenSchema**: `ZodString`
+> `const` **AccessTokenSchema**: `ZodString`\<[`AccessToken`](README.md#accesstoken)\>
 
 Defined in: [sdk/utils/src/validation/access-token.schema.ts:21](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/access-token.schema.ts#L21)
 
@@ -1043,7 +1234,7 @@ Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
 
 #### ApplicationAccessTokenSchema
 
-> `const` **ApplicationAccessTokenSchema**: `ZodString`
+> `const` **ApplicationAccessTokenSchema**: `ZodString`\<[`ApplicationAccessToken`](README.md#applicationaccesstoken)\>
 
 Defined in: [sdk/utils/src/validation/access-token.schema.ts:7](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/access-token.schema.ts#L7)
 
@@ -1054,7 +1245,7 @@ Application access tokens start with 'sm_aat_' prefix.
 
 #### DotEnvSchema
 
-> `const` **DotEnvSchema**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_INSTANCE`: `ZodDefault`\<`ZodString`\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_LOAD_BALANCER`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodEffects`\<`ZodOptional`\<`ZodArray`\<`ZodString`\>\>, `undefined` \| `string`[], `unknown`\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodString`\>; \}, `"strip"`, \{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}, \{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `unknown`; `SETTLEMINT_WORKSPACE`: `string`; \}\>
+> `const` **DotEnvSchema**: `ZodObject`\<[`DotEnv`](README.md#dotenv)\>
 
 Defined in: [sdk/utils/src/validation/dot-env.schema.ts:12](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L12)
 
@@ -1066,7 +1257,7 @@ access tokens, workspace names, and service endpoints.
 
 #### DotEnvSchemaPartial
 
-> `const` **DotEnvSchemaPartial**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_INSTANCE`: `ZodOptional`\<`ZodDefault`\<`ZodString`\>\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_LOAD_BALANCER`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodOptional`\<`ZodEffects`\<`ZodOptional`\<`ZodArray`\<`ZodString`\>\>, `undefined` \| `string`[], `unknown`\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; \}, `"strip"`, \{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}, \{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `unknown`; `SETTLEMINT_WORKSPACE`: `string`; \}\>
+> `const` **DotEnvSchemaPartial**: `ZodObject`\<[`DotEnvPartial`](README.md#dotenvpartial)\>
 
 Defined in: [sdk/utils/src/validation/dot-env.schema.ts:62](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/dot-env.schema.ts#L62)
 
@@ -1077,7 +1268,7 @@ Useful for validating incomplete configurations during development or build time
 
 #### IdSchema
 
-> `const` **IdSchema**: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>
+> `const` **IdSchema**: `ZodUnion`\<[`Id`](README.md#id)\>
 
 Defined in: [sdk/utils/src/validation/id.schema.ts:17](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/id.schema.ts#L17)
 
@@ -1101,7 +1292,7 @@ const isValidObjectId = IdSchema.safeParse("507f1f77bcf86cd799439011").success;
 
 #### PersonalAccessTokenSchema
 
-> `const` **PersonalAccessTokenSchema**: `ZodString`
+> `const` **PersonalAccessTokenSchema**: `ZodString`\<[`PersonalAccessToken`](README.md#personalaccesstoken)\>
 
 Defined in: [sdk/utils/src/validation/access-token.schema.ts:14](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/access-token.schema.ts#L14)
 
@@ -1158,7 +1349,7 @@ const isInvalidName = UniqueNameSchema.safeParse("My Workspace!").success;
 
 #### UrlOrPathSchema
 
-> `const` **UrlOrPathSchema**: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>
+> `const` **UrlOrPathSchema**: `ZodUnion`\<[`UrlOrPath`](README.md#urlorpath)\>
 
 Defined in: [sdk/utils/src/validation/url.schema.ts:54](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/url.schema.ts#L54)
 
@@ -1182,7 +1373,7 @@ const isValidPath = UrlOrPathSchema.safeParse("/api/v1/users").success;
 
 #### UrlPathSchema
 
-> `const` **UrlPathSchema**: `ZodString`
+> `const` **UrlPathSchema**: `ZodString`\<[`UrlPath`](README.md#urlpath)\>
 
 Defined in: [sdk/utils/src/validation/url.schema.ts:34](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/url.schema.ts#L34)
 
@@ -1206,7 +1397,7 @@ const isInvalidPath = UrlPathSchema.safeParse("not-a-path").success;
 
 #### UrlSchema
 
-> `const` **UrlSchema**: `ZodString`
+> `const` **UrlSchema**: `ZodString`\<[`Url`](README.md#url)\>
 
 Defined in: [sdk/utils/src/validation/url.schema.ts:17](https://github.com/settlemint/sdk/blob/v0.9.1/sdk/utils/src/validation/url.schema.ts#L17)
 

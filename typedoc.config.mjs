@@ -28,5 +28,5 @@ export default {
   hidePageTitle: true,
 
   // Plugins
-  plugin: ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules"],
+  plugin: ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules", "typedoc-plugin-zod"],
 };
