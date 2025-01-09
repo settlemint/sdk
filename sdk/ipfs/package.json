@@ -58,5 +58,22 @@
   "peerDependencies": {},
   "engines": {
     "node": ">=20"
-  }
+  },
+  "keywords": [
+    "settlemint",
+    "blockchain",
+    "blockchain-development",
+    "enterprise-blockchain",
+    "web3",
+    "web3-development",
+    "web3-tools",
+    "sdk",
+    "typescript",
+    "ipfs",
+    "storage",
+    "decentralized-storage",
+    "content-addressing",
+    "file-storage",
+    "pinning-service"
+  ]
 }

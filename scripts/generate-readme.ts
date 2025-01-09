@@ -25,7 +25,7 @@ async function generateReadme() {
     const template = await readFile(templatePath, "utf-8");
 
     // Get all SDK package directories
-    const sdkDir = join(process.cwd(), "sdk");
+    const sdkDir = join(__dirname, "..", "sdk");
     console.log(`Scanning SDK directory: ${sdkDir}`);
     const sdkDirEntries = await readdir(sdkDir, { withFileTypes: true });
     const packages = sdkDirEntries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
