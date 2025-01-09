@@ -29,20 +29,19 @@ export function createCommand(): Command {
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
       const name = await namePrompt(env, projectName);
+
       const instance = await instancePrompt(env, true);
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,
-        prefer: "application",
+        prefer: "personal",
       });
-
       const settlemint = createSettleMintClient({
         accessToken,
         instance,
       });
 
       const platformConfig = await settlemint.platform.config();
-
       const selectedUseCase = await useCasePrompt(platformConfig, useCase);
       if (!selectedUseCase) {
         cancel("No use case selected. Please select a use case to continue.");

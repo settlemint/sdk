@@ -1,8 +1,10 @@
 import { basename } from "node:path";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
-import { Option } from "@commander-js/extra-typings";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, cancel } from "@settlemint/sdk-utils";
 
 /**
@@ -24,18 +26,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
           "Blockchain Node unique name (mutually exclusive with load-balancer)",
         )
         .option("--abis <abis...>", "Path to abi file(s)")
-        .addOption(
-          new Option("--include-predeployed-abis <includePredeployedAbis...>", "Include pre-deployed abis").choices([
-            "Bond",
-            "BondFactory",
-            "CryptoCurrency",
-            "CryptoCurrencyFactory",
-            "Equity",
-            "EquityFactory",
-            "StableCoin",
-            "StableCoinFactory",
-          ]),
-        )
+        .option("--include-predeployed-abis <includePredeployedAbis...>", "Include pre-deployed abis")
         .action(
           async (
             name,
@@ -77,6 +68,30 @@ export function smartContractPortalMiddlewareCreateCommand() {
                   cancel(`Failed to read or parse ABI file: ${error.message}`);
                 }
               }
+
+              if (includePredeployedAbis && includePredeployedAbis.length > 0) {
+                const instance = await instancePrompt(env, true);
+                const accessToken = await getApplicationOrPersonalAccessToken({
+                  env,
+                  instance,
+                  prefer: "personal",
+                });
+                const settlemint = createSettleMintClient({
+                  accessToken,
+                  instance,
+                });
+
+                const platformConfig = await settlemint.platform.config();
+                const invalidPredeployedAbis = includePredeployedAbis.filter(
+                  (abi) => !platformConfig.preDeployedContracts.some((contract) => contract === abi),
+                );
+                if (invalidPredeployedAbis.length > 0) {
+                  cancel(
+                    `Invalid pre-deployed abis: ${invalidPredeployedAbis.join(", ")}. Possible values: ${platformConfig.preDeployedContracts.join(", ")}`,
+                  );
+                }
+              }
+
               const result = await settlemint.middleware.create({
                 name,
                 applicationUniqueName,

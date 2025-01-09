@@ -5,6 +5,7 @@ import { cancel } from "@settlemint/sdk-utils";
 /**
  * Prompts the user to select a smart contract set use case or validates a provided one
  *
+ * @param platformConfig - The platform configuration
  * @param argument - Optional pre-selected use case
  * @returns The selected use case identifier
  * @throws {Error} If no use cases are available or if provided argument is invalid
