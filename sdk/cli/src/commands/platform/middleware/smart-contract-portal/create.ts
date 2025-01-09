@@ -1,10 +1,7 @@
 import { basename } from "node:path";
-import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
-import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, cancel } from "@settlemint/sdk-utils";
 
 /**
@@ -79,17 +76,6 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 }
 
                 if (includePredeployedAbis && includePredeployedAbis.length > 0) {
-                  const instance = await instancePrompt(env, true);
-                  const accessToken = await getApplicationOrPersonalAccessToken({
-                    env,
-                    instance,
-                    prefer: "personal",
-                  });
-                  const settlemint = createSettleMintClient({
-                    accessToken,
-                    instance,
-                  });
-
                   const platformConfig = await settlemint.platform.config();
                   const invalidPredeployedAbis = includePredeployedAbis.filter(
                     (abi) => !platformConfig.preDeployedContracts.some((contract) => contract === abi),

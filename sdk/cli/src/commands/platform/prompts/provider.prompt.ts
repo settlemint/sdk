@@ -20,7 +20,7 @@ export async function providerPrompt(
   }
 
   if (argument) {
-    const selectedProvider = platformConfig.deploymentEngineTargets.find((target) => target.id === argument);
+    const selectedProvider = possibleProviders.find((target) => target.id === argument);
     if (!selectedProvider) {
       cancel(
         `No provider found with id '${argument}'. Possible providers: '${possibleProviders
