@@ -1,8 +1,10 @@
 import { rmdir } from "node:fs/promises";
 import { join } from "node:path";
-import { SMART_CONTRACT_SETS, SMART_CONTRACT_SET_DETAILS } from "@/constants/smart-contract-sets";
-import { Command, Option } from "@commander-js/extra-typings";
+import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
@@ -17,64 +19,65 @@ import { useCasePrompt } from "./prompts/use-case.prompt";
  * @returns {Command} The configured 'create' command
  */
 export function createCommand(): Command {
-  return (
-    new Command("create")
-      // Set the command description
-      .description("Bootstrap your smart contract set")
-      .option("-n, --project-name <name>", "The name for your smart contract set project")
-      .addOption(
-        new Option("--use-case <useCase>", "Use case for the smart contract set")
-          .choices(SMART_CONTRACT_SETS)
-          .makeOptionMandatory(),
-      )
-      .option("--prod", "Connect to your production environment")
-      .action(async ({ projectName, useCase, prod }) => {
-        intro("Creating a new smart contract set");
+  return new Command("create")
+    .description("Bootstrap your smart contract set")
+    .option("-n, --project-name <name>", "The name for your smart contract set project")
+    .option("--use-case <useCase>", "Use case for the smart contract set")
+    .option("--prod", "Connect to your production environment")
+    .action(async ({ projectName, useCase, prod }) => {
+      intro("Creating a new smart contract set");
 
-        const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-        const name = await namePrompt(env, projectName);
+      const env: Partial<DotEnv> = await loadEnv(false, !!prod);
+      const name = await namePrompt(env, projectName);
+      const instance = await instancePrompt(env, true);
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: "application",
+      });
 
-        const targetDir = formatTargetDir(name);
-        const projectDir = join(process.cwd(), targetDir);
+      const settlemint = createSettleMintClient({
+        accessToken,
+        instance,
+      });
 
-        if ((await exists(projectDir)) && !(await isEmpty(projectDir))) {
-          const confirmEmpty = await confirm({
-            message: `The folder ${projectDir} already exists. Do you want to delete it?`,
-            default: false,
-          });
-          if (!confirmEmpty) {
-            cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
-          }
-          await rmdir(projectDir, { recursive: true });
-        }
+      const platformConfig = await settlemint.platform.config();
 
-        const selectedUseCase = await useCasePrompt(useCase);
+      const selectedUseCase = await useCasePrompt(platformConfig, useCase);
+      if (!selectedUseCase) {
+        cancel("No use case selected. Please select a use case to continue.");
+      }
 
-        if (!selectedUseCase) {
-          cancel("No use case selected. Please select a use case to continue.");
-        }
+      const targetDir = formatTargetDir(name);
+      const projectDir = join(process.cwd(), targetDir);
 
-        await spinner({
-          startMessage: "Scaffolding the smart contract set",
-          task: async () => {
-            const smartContractSet = SMART_CONTRACT_SET_DETAILS.find((set) => set.id === selectedUseCase);
-            if (!smartContractSet) {
-              throw new Error(`No smart contract set found for use case ${selectedUseCase}`);
-            }
-            await executeCommand("forge", [
-              "init",
-              name,
-              "--template",
-              smartContractSet.image.repository,
-              "--branch",
-              `v${smartContractSet.image.tag}`,
-            ]);
-            await setName(name, projectDir);
-          },
-          stopMessage: "Smart contract set fully scaffolded",
+      if ((await exists(projectDir)) && !(await isEmpty(projectDir))) {
+        const confirmEmpty = await confirm({
+          message: `The folder ${projectDir} already exists. Do you want to delete it?`,
+          default: false,
         });
+        if (!confirmEmpty) {
+          cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
+        }
+        await rmdir(projectDir, { recursive: true });
+      }
 
-        outro("Your smart contract set is ready to go!");
-      })
-  );
+      await spinner({
+        startMessage: "Scaffolding the smart contract set",
+        task: async () => {
+          await executeCommand("forge", [
+            "init",
+            name,
+            "--template",
+            selectedUseCase.name, // TODO: Add the image repository
+            "--branch",
+            `v${selectedUseCase.name}`, // TODO: Add the tag
+          ]);
+          await setName(name, projectDir);
+        },
+        stopMessage: "Smart contract set fully scaffolded",
+      });
+
+      outro("Your smart contract set is ready to go!");
+    });
 }

@@ -6081,6 +6081,7 @@ input CreateMultiServiceBlockchainNetworkArgs {
 
   """The preferred maximum bytes for Fabric Raft consensus"""
   preferredMaxBytes: Int = 2
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6133,6 +6134,7 @@ input CreateMultiServiceBlockchainNodeArgs {
 
   """The type of the blockchain node"""
   nodeType: NodeType
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6201,6 +6203,7 @@ input CreateMultiServiceCustomDeploymentArgs {
   The primary domain for the custom deployment. If none is set, the first custom domain or internal domain is used.
   """
   primaryDomain: String
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6245,6 +6248,7 @@ input CreateMultiServiceInsightsArgs {
 
   """Name of the cluster service"""
   name: String!
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6290,6 +6294,7 @@ input CreateMultiServiceIntegrationArgs {
 
   """Name of the cluster service"""
   name: String!
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6328,6 +6333,7 @@ input CreateMultiServiceLoadBalancerArgs {
 
   """Name of the cluster service"""
   name: String!
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6384,6 +6390,7 @@ input CreateMultiServiceMiddlewareArgs {
 
   """ID of the peer node"""
   peerNodeId: ID
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6435,6 +6442,7 @@ input CreateMultiServicePrivateKeyArgs {
 
   """Type of the private key"""
   privateKeyType: PrivateKeyType!
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6473,6 +6481,7 @@ input CreateMultiServiceSmartContractSetArgs {
 
   """Name of the cluster service"""
   name: String!
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -6515,6 +6524,7 @@ input CreateMultiServiceStorageArgs {
 
   """Name of the cluster service"""
   name: String!
+  productName: String!
 
   """Provider of the cluster service"""
   provider: String!
@@ -7636,11 +7646,7 @@ type FabricSmartContractSet implements AbstractClusterService & AbstractEntity &
   """Name of the service"""
   name: String!
   namespace: String!
-
-  """
-  The orderer blockchain node associated with this Fabric smart contract set
-  """
-  ordererBlockchainNode: FabricBlockchainNode!
+  ordererBlockchainNode: FabricBlockchainNode
 
   """Password for the service"""
   password: String!
@@ -8360,6 +8366,7 @@ enum FeatureFlag {
   NEW_APP_DASHBOARD
   RESELLERS
   SMARTCONTRACTSETS
+  STARTERKITS
   STORAGE
 }
 
@@ -13858,14 +13865,8 @@ type Mutation {
     """The unique identifier of the application"""
     applicationId: ID!
 
-    """Unique identifier of the blockchain node"""
-    blockchainNodeId: ID
-
     """Disk space in MiB"""
     diskSpace: Int
-
-    """Unique identifier of the Fabric orderer blockchain node"""
-    fabricOrdererBlockchainNodeId: ID
 
     """CPU limit in cores"""
     limitCpu: Int
@@ -16689,6 +16690,7 @@ type PlatformConfigDto {
   hsmAwsKmsKeysEnabled: Boolean!
   id: ID!
   observability: ObservabilityDto!
+  preDeployedContracts: [String!]!
   smartContractSets: SmartContractSetsDto!
 }
 
@@ -19558,6 +19560,9 @@ type Query {
   ): PaginatedCustomDeployment!
   foundryEnvConfig(blockchainNodeId: String!): JSON!
   foundryEnvConfigByUniqueName(blockchainNodeUniqueName: String!): JSON!
+
+  """Get pricing estimation based on use case and configuration"""
+  getUseCasePricing(codeStudioEnabled: Boolean!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, useCaseId: String!): UseCasePricing!
   getUseCases: [UseCase!]!
   getUser(userId: ID): User!
 
@@ -21148,6 +21153,25 @@ type SepoliaBlockchainNode implements AbstractClusterService & AbstractEntity & 
 
   """Version of the service"""
   version: String
+}
+
+type ServicePricing {
+  blockchainNetworks: [ServicePricingItem!]
+  blockchainNodes: [ServicePricingItem!]
+  customDeployments: [ServicePricingItem!]
+  insights: [ServicePricingItem!]
+  integrations: [ServicePricingItem!]
+  loadBalancers: [ServicePricingItem!]
+  middlewares: [ServicePricingItem!]
+  privateKeys: [ServicePricingItem!]
+  smartContractSets: [ServicePricingItem!]
+  storages: [ServicePricingItem!]
+}
+
+type ServicePricingItem {
+  amount: Float!
+  description: String!
+  unitPrice: Float!
 }
 
 type ServiceRef {
@@ -23125,6 +23149,15 @@ type UseCase {
 
   """Use Case Services Configuration"""
   services: UseCaseService!
+}
+
+type UseCasePricing {
+  codeStudioEnabled: Boolean!
+  currency: String!
+  environment: Environment!
+  estimatedTotalPrice: Float!
+  services: ServicePricing!
+  useCase: String!
 }
 
 type UseCaseService {
