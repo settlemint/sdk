@@ -221,7 +221,7 @@ settlemint scs subgraph deploy --accept-defaults <subgraph-name>
 
 ## API Reference
 
-See the [documentation](https://github.com/settlemint/sdk/tree/v0.9.2/sdk/cli/docs/settlemint.md) for available commands.
+See the [documentation](https://github.com/settlemint/sdk/tree/v0.9.3/sdk/cli/docs/settlemint.md) for available commands.
 
 ## Contributing
 
