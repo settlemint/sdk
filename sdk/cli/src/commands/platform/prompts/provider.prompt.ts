@@ -38,10 +38,12 @@ export async function providerPrompt(
 
   const provider = await select({
     message: "Which provider do you want to use?",
-    choices: platformConfig.deploymentEngineTargets.map((target) => ({
-      name: target.name,
-      value: target.id,
-    })),
+    choices: platformConfig.deploymentEngineTargets
+      .map((target) => ({
+        name: target.name,
+        value: target.id,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
   });
 
   return platformConfig.deploymentEngineTargets.find((target) => target.id === provider);

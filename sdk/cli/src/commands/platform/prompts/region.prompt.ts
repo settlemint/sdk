@@ -41,10 +41,12 @@ export async function regionPrompt(
 
   const region = await select({
     message: "Which region do you want to use?",
-    choices: provider.clusters.map((cluster) => ({
-      name: cluster.name,
-      value: cluster.id,
-    })),
+    choices: provider.clusters
+      .map((cluster) => ({
+        name: cluster.name,
+        value: cluster.id,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
   });
 
   return provider.clusters.find((cluster) => cluster.id === region);

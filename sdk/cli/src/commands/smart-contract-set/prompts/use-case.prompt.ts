@@ -43,10 +43,13 @@ export async function useCasePrompt(
 
   const useCase = await select({
     message: "Which use case do you want to use?",
-    choices: useCasesNotFeatureFlagged.map((useCase) => ({
-      name: useCase.name,
-      value: useCase.id,
-    })),
+
+    choices: useCasesNotFeatureFlagged
+      .map((useCase) => ({
+        name: useCase.name,
+        value: useCase.id,
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name)),
   });
 
   return platformConfig.smartContractSets.sets.find((set) => set.id === useCase);
