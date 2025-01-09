@@ -21569,10 +21569,31 @@ interface SmartContractSet implements AbstractClusterService & AbstractEntity {
   version: String
 }
 
+"""Smart contract set with metadata"""
 type SmartContractSetDto {
+  """Whether this set is behind a feature flag"""
   featureflagged: Boolean!
+
+  """Unique identifier for the smart contract set"""
   id: ID!
+
+  """Container image details for this set"""
+  image: SmartContractSetImageDto!
+
+  """Display name of the smart contract set"""
   name: String!
+}
+
+"""Container image details for a smart contract set"""
+type SmartContractSetImageDto {
+  """Container registry """
+  registry: String!
+
+  """Container image repository name"""
+  repository: String!
+
+  """Container image tag"""
+  tag: String!
 }
 
 """Scope for smart contract set access"""
@@ -21594,8 +21615,12 @@ input SmartContractSetScopeInputType {
 
 union SmartContractSetType = CordappSmartContractSet | FabricSmartContractSet | SoliditySmartContractSet | TezosSmartContractSet
 
+"""Collection of smart contract sets"""
 type SmartContractSetsDto {
+  """Unique identifier for the smart contract sets collection"""
   id: ID!
+
+  """Array of smart contract sets"""
   sets: [SmartContractSetDto!]!
 }
 

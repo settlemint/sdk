@@ -14,6 +14,11 @@ const getPlatformConfigQuery = graphql(
             id
             name
             featureflagged
+            image {
+              repository
+              tag
+              registry
+            }
           }
         }
         deploymentEngineTargets {

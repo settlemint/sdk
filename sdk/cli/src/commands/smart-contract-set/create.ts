@@ -71,9 +71,9 @@ export function createCommand(): Command {
             "init",
             name,
             "--template",
-            selectedUseCase.name, // TODO: Add the image repository
+            selectedUseCase.image.repository,
             "--branch",
-            `v${selectedUseCase.name}`, // TODO: Add the tag
+            `v${selectedUseCase.image.tag}`,
           ]);
           await setName(name, projectDir);
         },
