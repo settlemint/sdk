@@ -16,23 +16,30 @@ export function privateKeyHsmCreateCommand() {
         .option("--application <application>", "Application unique name")
         .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
         .action(async (name, { application, blockchainNode, provider, region, size, type, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env) => {
-            const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-            const blockchainNodeUniqueName = blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
-            const result = await settlemint.privateKey.create({
-              name,
-              applicationUniqueName,
-              privateKeyType: "HSM_ECDSA_P256",
-              blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
+          return baseAction(
+            {
+              ...defaultArgs,
               provider,
               region,
-              size,
-              type,
-            });
-            return {
-              result,
-            };
-          });
+            },
+            async (settlemint, env) => {
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+              const blockchainNodeUniqueName = blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
+              const result = await settlemint.privateKey.create({
+                name,
+                applicationUniqueName,
+                privateKeyType: "HSM_ECDSA_P256",
+                blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
+                provider,
+                region,
+                size,
+                type,
+              });
+              return {
+                result,
+              };
+            },
+          );
         });
     },
     examples: [

@@ -17,28 +17,35 @@ export function minioStorageCreateCommand() {
       addClusterServiceArgs(cmd)
         .option("--application <application>", "Application unique name")
         .action(async (name, { application, provider, region, size, type, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env) => {
-            const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-            const result = await settlemint.storage.create({
-              name,
-              applicationUniqueName,
-              storageProtocol: "MINIO",
+          return baseAction(
+            {
+              ...defaultArgs,
               provider,
               region,
-              size,
-              type,
-            });
-            return {
-              result,
-              mapDefaultEnv: (): Partial<DotEnv> => {
-                return {
-                  SETTLEMINT_APPLICATION: applicationUniqueName,
-                  SETTLEMINT_MINIO: result.uniqueName,
-                  ...getMinioEndpoints(result),
-                };
-              },
-            };
-          });
+            },
+            async (settlemint, env) => {
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+              const result = await settlemint.storage.create({
+                name,
+                applicationUniqueName,
+                storageProtocol: "MINIO",
+                provider,
+                region,
+                size,
+                type,
+              });
+              return {
+                result,
+                mapDefaultEnv: (): Partial<DotEnv> => {
+                  return {
+                    SETTLEMINT_APPLICATION: applicationUniqueName,
+                    SETTLEMINT_MINIO: result.uniqueName,
+                    ...getMinioEndpoints(result),
+                  };
+                },
+              };
+            },
+          );
         });
     },
     examples: [

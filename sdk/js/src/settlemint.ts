@@ -64,6 +64,7 @@ import {
   middlewareRead,
   middlewareRestart,
 } from "./graphql/middleware.js";
+import { type PlatformConfig, getPlatformConfig } from "./graphql/platform.js";
 import {
   type CreatePrivateKeyArgs,
   type PrivateKey,
@@ -163,6 +164,9 @@ export interface SettlemintClient {
   };
   applicationAccessToken: {
     create: (args: CreateApplicationAccessTokenArgs) => Promise<string>;
+  };
+  platform: {
+    config: () => Promise<PlatformConfig>;
   };
 }
 
@@ -299,6 +303,9 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     applicationAccessToken: {
       create: applicationAccessTokenCreate(gqlClient),
     },
+    platform: {
+      config: getPlatformConfig(gqlClient),
+    },
   };
 }
 
@@ -312,3 +319,4 @@ export type { Middleware } from "./graphql/middleware.js";
 export type { PrivateKey } from "./graphql/private-key.js";
 export type { Storage } from "./graphql/storage.js";
 export type { Workspace } from "./graphql/workspace.js";
+export type { PlatformConfig } from "./graphql/platform.js";

@@ -122,8 +122,10 @@ Options:
   --prod                           Connect to production environment
   -w, --wait                       Wait until deployed
   -r, --restart-if-timeout         Restart if wait time is exceeded
-  --provider &lt;provider&gt;            Network provider
-  --region &lt;region&gt;                Deployment region
+  --provider &lt;provider&gt;            Network provider (run `settlemint platform
+                                   config` to see available providers)
+  --region &lt;region&gt;                Deployment region (run `settlemint platform
+                                   config` to see available regions)
   --size &lt;size&gt;                    Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                    &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                    Network type (choices: &quot;DEDICATED&quot;,
@@ -181,8 +183,8 @@ Options:
   --prod                                    Connect to production environment
   -w, --wait                                Wait until deployed
   -r, --restart-if-timeout                  Restart if wait time is exceeded
-  --provider &lt;provider&gt;                     Network provider
-  --region &lt;region&gt;                         Deployment region
+  --provider &lt;provider&gt;                     Network provider (run `settlemint platform config` to see available providers)
+  --region &lt;region&gt;                         Deployment region (run `settlemint platform config` to see available regions)
   --size &lt;size&gt;                             Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                             Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   -a, --application &lt;application&gt;           The application unique name to create the node in (defaults to application from env)
@@ -234,8 +236,12 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider
-  --region &lt;region&gt;                   Deployment region
+  --provider &lt;provider&gt;               Network provider (run `settlemint
+                                      platform config` to see available
+                                      providers)
+  --region &lt;region&gt;                   Deployment region (run `settlemint
+                                      platform config` to see available
+                                      regions)
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                       &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
@@ -270,8 +276,12 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider
-  --region &lt;region&gt;                   Deployment region
+  --provider &lt;provider&gt;               Network provider (run `settlemint
+                                      platform config` to see available
+                                      providers)
+  --region &lt;region&gt;                   Deployment region (run `settlemint
+                                      platform config` to see available
+                                      regions)
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                       &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
@@ -318,8 +328,12 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider
-  --region &lt;region&gt;                   Deployment region
+  --provider &lt;provider&gt;               Network provider (run `settlemint
+                                      platform config` to see available
+                                      providers)
+  --region &lt;region&gt;                   Deployment region (run `settlemint
+                                      platform config` to see available
+                                      regions)
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                       &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
@@ -351,15 +365,15 @@ Options:
   --prod                                                  Connect to production environment
   -w, --wait                                              Wait until deployed
   -r, --restart-if-timeout                                Restart if wait time is exceeded
-  --provider &lt;provider&gt;                                   Network provider
-  --region &lt;region&gt;                                       Deployment region
+  --provider &lt;provider&gt;                                   Network provider (run `settlemint platform config` to see available providers)
+  --region &lt;region&gt;                                       Deployment region (run `settlemint platform config` to see available regions)
   --size &lt;size&gt;                                           Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                                           Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --application &lt;application&gt;                             Application unique name
   --load-balancer &lt;loadBalancer&gt;                          Load Balancer unique name (mutually exclusive with blockchain-node)
   --blockchain-node &lt;blockchainNode&gt;                      Blockchain Node unique name (mutually exclusive with load-balancer)
   --abis &lt;abis...&gt;                                        Path to abi file(s)
-  --include-predeployed-abis &lt;includePredeployedAbis...&gt;  Include pre-deployed abis (choices: &quot;Bond&quot;, &quot;BondFactory&quot;, &quot;CryptoCurrency&quot;, &quot;CryptoCurrencyFactory&quot;, &quot;Equity&quot;, &quot;EquityFactory&quot;, &quot;StableCoin&quot;, &quot;StableCoinFactory&quot;)
+  --include-predeployed-abis &lt;includePredeployedAbis...&gt;  Include pre-deployed abis (run `settlemint platform config` to see available pre-deployed abis)
   -h, --help                                              display help for command
 </pre>
 
@@ -400,8 +414,10 @@ Options:
   --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
-  --provider &lt;provider&gt;        Network provider
-  --region &lt;region&gt;            Deployment region
+  --provider &lt;provider&gt;        Network provider (run `settlemint platform
+                               config` to see available providers)
+  --region &lt;region&gt;            Deployment region (run `settlemint platform
+                               config` to see available regions)
   --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
@@ -432,8 +448,10 @@ Options:
   --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
-  --provider &lt;provider&gt;        Network provider
-  --region &lt;region&gt;            Deployment region
+  --provider &lt;provider&gt;        Network provider (run `settlemint platform
+                               config` to see available providers)
+  --region &lt;region&gt;            Deployment region (run `settlemint platform
+                               config` to see available regions)
   --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
@@ -479,8 +497,10 @@ Options:
   --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
   -r, --restart-if-timeout     Restart if wait time is exceeded
-  --provider &lt;provider&gt;        Network provider
-  --region &lt;region&gt;            Deployment region
+  --provider &lt;provider&gt;        Network provider (run `settlemint platform
+                               config` to see available providers)
+  --region &lt;region&gt;            Deployment region (run `settlemint platform
+                               config` to see available regions)
   --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
@@ -526,8 +546,12 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider
-  --region &lt;region&gt;                   Deployment region
+  --provider &lt;provider&gt;               Network provider (run `settlemint
+                                      platform config` to see available
+                                      providers)
+  --region &lt;region&gt;                   Deployment region (run `settlemint
+                                      platform config` to see available
+                                      regions)
   --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
                                       &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,

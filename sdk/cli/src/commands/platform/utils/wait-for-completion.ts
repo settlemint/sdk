@@ -39,7 +39,8 @@ export async function waitForCompletion({
     serviceType === "workspace" ||
     serviceType === "application" ||
     serviceType === "foundry" ||
-    serviceType === "applicationAccessToken"
+    serviceType === "applicationAccessToken" ||
+    serviceType === "platform"
   ) {
     return true;
   }

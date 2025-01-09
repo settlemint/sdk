@@ -46,45 +46,56 @@ export function blockchainNodeBesuCreateCommand() {
               ...defaultArgs
             },
           ) => {
-            return baseAction(defaultArgs, async (settlemint, env) => {
-              const autoAccept = !!acceptDefaults || isInCi;
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-              if (!applicationUniqueName) {
-                cancel("No application found. Please specify an application or run `settlemint connect` to continue.");
-              }
-
-              let networkUniqueName = blockchainNetwork ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
-              if (!networkUniqueName) {
-                const networks = await settlemint.blockchainNetwork.list(applicationUniqueName);
-                const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
-                if (!network) {
-                  cancel("No network found. Please specify a network to continue.");
-                }
-                networkUniqueName = network?.id;
-              }
-
-              const result = await settlemint.blockchainNode.create({
-                applicationUniqueName,
-                name,
-                blockchainNetworkUniqueName: networkUniqueName,
-                nodeType,
-                keyMaterial: nodeIdentity,
+            return baseAction(
+              {
+                ...defaultArgs,
+                acceptDefaults,
                 provider,
                 region,
-                size,
-                type,
-              });
+              },
+              async (settlemint, env) => {
+                const autoAccept = !!acceptDefaults || isInCi;
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+                if (!applicationUniqueName) {
+                  cancel(
+                    "No application found. Please specify an application or run `settlemint connect` to continue.",
+                  );
+                }
 
-              return {
-                result,
-                mapDefaultEnv: (): Partial<DotEnv> => {
-                  return {
-                    SETTLEMINT_APPLICATION: applicationUniqueName,
-                    SETTLEMINT_BLOCKCHAIN_NODE: result.id,
-                  };
-                },
-              };
-            });
+                let networkUniqueName =
+                  blockchainNetwork ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
+                if (!networkUniqueName) {
+                  const networks = await settlemint.blockchainNetwork.list(applicationUniqueName);
+                  const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
+                  if (!network) {
+                    cancel("No network found. Please specify a network to continue.");
+                  }
+                  networkUniqueName = network?.id;
+                }
+
+                const result = await settlemint.blockchainNode.create({
+                  applicationUniqueName,
+                  name,
+                  blockchainNetworkUniqueName: networkUniqueName,
+                  nodeType,
+                  keyMaterial: nodeIdentity,
+                  provider,
+                  region,
+                  size,
+                  type,
+                });
+
+                return {
+                  result,
+                  mapDefaultEnv: (): Partial<DotEnv> => {
+                    return {
+                      SETTLEMINT_APPLICATION: applicationUniqueName,
+                      SETTLEMINT_BLOCKCHAIN_NODE: result.id,
+                    };
+                  },
+                };
+              },
+            );
           },
         );
     },

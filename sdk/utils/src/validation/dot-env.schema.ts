@@ -10,43 +10,78 @@ import { UrlSchema } from "./url.schema.js";
  * access tokens, workspace names, and service endpoints.
  */
 export const DotEnvSchema = z.object({
+  /** Base URL of the SettleMint platform instance */
   SETTLEMINT_INSTANCE: UrlSchema.default("https://console.settlemint.com"),
+  /** Application access token for authenticating with SettleMint services */
   SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema.optional(),
+  /** Personal access token for authenticating with SettleMint services */
   SETTLEMINT_PERSONAL_ACCESS_TOKEN: PersonalAccessTokenSchema.optional(),
+  /** Unique name of the workspace */
   SETTLEMINT_WORKSPACE: UniqueNameSchema.optional(),
+  /** Unique name of the application */
   SETTLEMINT_APPLICATION: UniqueNameSchema.optional(),
+  /** Unique name of the blockchain network */
   SETTLEMINT_BLOCKCHAIN_NETWORK: UniqueNameSchema.optional(),
+  /** Unique name of the blockchain node */
   SETTLEMINT_BLOCKCHAIN_NODE: UniqueNameSchema.optional(),
+  /** Unique name of the load balancer */
   SETTLEMINT_LOAD_BALANCER: UniqueNameSchema.optional(),
+  /** Unique name of the Hasura instance */
   SETTLEMINT_HASURA: UniqueNameSchema.optional(),
+  /** Endpoint URL for the Hasura GraphQL API */
   SETTLEMINT_HASURA_ENDPOINT: UrlSchema.optional(),
+  /** Admin secret for authenticating with Hasura */
   SETTLEMINT_HASURA_ADMIN_SECRET: z.string().optional(),
+  /** Database connection URL for Hasura */
   SETTLEMINT_HASURA_DATABASE_URL: z.string().optional(),
+  /** Unique name of The Graph instance */
   SETTLEMINT_THEGRAPH: UniqueNameSchema.optional(),
+  /** Array of endpoint URLs for The Graph subgraphs */
   SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: z.preprocess(
     (value) => tryParseJson(value as string, []),
     z.array(UrlSchema).optional(),
   ),
+  /** Name of The Graph subgraph */
   SETTLEMINT_THEGRAPH_SUBGRAPH_NAME: z.string().optional(),
+  /** Unique name of the Smart Contract Portal instance */
   SETTLEMINT_PORTAL: UniqueNameSchema.optional(),
+  /** GraphQL endpoint URL for the Portal */
   SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: UrlSchema.optional(),
+  /** REST endpoint URL for the Portal */
   SETTLEMINT_PORTAL_REST_ENDPOINT: UrlSchema.optional(),
+  /** Unique name of the HD private key */
   SETTLEMINT_HD_PRIVATE_KEY: UniqueNameSchema.optional(),
+  /** Unique name of the MinIO instance */
   SETTLEMINT_MINIO: UniqueNameSchema.optional(),
+  /** Endpoint URL for MinIO */
   SETTLEMINT_MINIO_ENDPOINT: UrlSchema.optional(),
+  /** Access key for MinIO authentication */
   SETTLEMINT_MINIO_ACCESS_KEY: z.string().optional(),
+  /** Secret key for MinIO authentication */
   SETTLEMINT_MINIO_SECRET_KEY: z.string().optional(),
+  /** Unique name of the IPFS instance */
   SETTLEMINT_IPFS: UniqueNameSchema.optional(),
+  /** API endpoint URL for IPFS */
   SETTLEMINT_IPFS_API_ENDPOINT: UrlSchema.optional(),
+  /** Pinning service endpoint URL for IPFS */
   SETTLEMINT_IPFS_PINNING_ENDPOINT: UrlSchema.optional(),
+  /** Gateway endpoint URL for IPFS */
   SETTLEMINT_IPFS_GATEWAY_ENDPOINT: UrlSchema.optional(),
+  /** Unique name of the custom deployment */
   SETTLEMINT_CUSTOM_DEPLOYMENT: UniqueNameSchema.optional(),
+  /** Endpoint URL for the custom deployment */
   SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: UrlSchema.optional(),
+  /** Unique name of the Blockscout instance */
   SETTLEMINT_BLOCKSCOUT: UniqueNameSchema.optional(),
+  /** GraphQL endpoint URL for Blockscout */
   SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: UrlSchema.optional(),
+  /** UI endpoint URL for Blockscout */
   SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: UrlSchema.optional(),
+  /** Name of the new project being created */
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
+  /** Address of the deployed smart contract */
   SETTLEMINT_SMART_CONTRACT_ADDRESS: z.string().optional(),
+  /** Deployment ID of the smart contract */
   SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: z.string().optional(),
 });
 
