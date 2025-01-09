@@ -53,7 +53,7 @@
     "typedoc": "0.27.6",
     "typedoc-plugin-markdown": "4.4.1",
     "typedoc-plugin-merge-modules": "6.1.0",
-    "typescript": "5.7.2"
+    "typescript": "5.7.3"
   },
   "engines": {
     "node": ">=18"
