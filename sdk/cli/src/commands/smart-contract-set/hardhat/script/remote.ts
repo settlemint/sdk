@@ -1,6 +1,7 @@
 import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { missingApplication } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -36,7 +37,7 @@ export function hardhatScriptRemoteCommand() {
       instance,
     });
 
-    let nodeUniqueName = blockchainNodeUniqueName;
+    let nodeUniqueName = blockchainNodeUniqueName ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
     if (!nodeUniqueName) {
       if (!env.SETTLEMINT_APPLICATION) {
         return missingApplication();
@@ -59,11 +60,18 @@ export function hardhatScriptRemoteCommand() {
         );
       }
 
-      const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, autoAccept);
+      const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, acceptDefaults);
       if (!blockchainNode) {
-        cancel("No EVM blockchain node selected. Please select one to continue.");
+        return nothingSelectedError("EVM blockchain node");
       }
       nodeUniqueName = blockchainNode.uniqueName;
+    } else {
+      const node = await settlemint.blockchainNode.read(nodeUniqueName);
+      if (!node.isEvm) {
+        cancel(
+          "The specified blockchain node is not an EVM blockchain node. Please specify an EVM blockchain node to continue.",
+        );
+      }
     }
 
     const envConfig = await settlemint.foundry.env(nodeUniqueName);

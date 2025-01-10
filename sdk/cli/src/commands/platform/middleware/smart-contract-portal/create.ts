@@ -3,9 +3,9 @@ import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt"
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { type DotEnv, cancel } from "@settlemint/sdk-utils";
-import isInCi from "is-in-ci";
 
 /**
  * Creates and returns the 'smart-contract-portal' middleware command for the SettleMint SDK.
@@ -55,7 +55,6 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 region,
               },
               async (settlemint, env) => {
-                const autoAccept = !!acceptDefaults || isInCi;
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -69,9 +68,9 @@ export function smartContractPortalMiddlewareCreateCommand() {
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
-                  const node = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
+                  const node = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
                   if (!node) {
-                    return cancel("No blockchain node selected. Please select one to continue.");
+                    return nothingSelectedError("blockchain node");
                   }
                   blockchainNodeUniqueName = node.uniqueName;
                 }

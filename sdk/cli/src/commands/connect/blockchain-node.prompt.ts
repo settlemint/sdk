@@ -1,3 +1,4 @@
+import { servicePrompt } from "@/utils/prompt.utils";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -13,35 +14,28 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 export async function blockchainNodePrompt(
   env: Partial<DotEnv>,
   nodes: BlockchainNode[],
-  accept: boolean,
+  accept: boolean | undefined,
 ): Promise<BlockchainNode | undefined> {
-  if (nodes.length === 0) {
-    return undefined;
-  }
-
-  const defaultNode =
-    nodes.find((node) => node.uniqueName === env.SETTLEMINT_BLOCKCHAIN_NODE) ??
-    (nodes.length === 1 ? nodes[0] : undefined);
-  const defaultPossible = accept; // is optional
-
-  if (defaultPossible) {
-    return defaultNode;
-  }
-
-  const node = await select({
-    message: "Which blockchain node do you want to connect to?",
-    choices: [
-      ...nodes.map((node) => ({
-        name: node.name,
-        value: node,
-      })),
-      {
-        name: "None",
-        value: undefined,
-      },
-    ],
-    default: defaultNode,
-  });
-
-  return node;
+  return servicePrompt<BlockchainNode>(
+    env,
+    nodes,
+    accept,
+    "SETTLEMINT_BLOCKCHAIN_NODE",
+    async ({ defaultService: defaultNode }) => {
+      return select({
+        message: "Which blockchain node do you want to connect to?",
+        choices: [
+          ...nodes.map((node) => ({
+            name: node.name,
+            value: node,
+          })),
+          {
+            name: "None",
+            value: undefined,
+          },
+        ],
+        default: defaultNode,
+      });
+    },
+  );
 }

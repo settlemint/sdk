@@ -1,6 +1,7 @@
 import { rmdir } from "node:fs/promises";
 import { join } from "node:path";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
@@ -47,7 +48,7 @@ export function createCommand(): Command {
       const platformConfig = await settlemint.platform.config();
       const selectedUseCase = await useCasePrompt(platformConfig, useCase);
       if (!selectedUseCase) {
-        cancel("No use case selected. Please select a use case to continue.");
+        return nothingSelectedError("use case");
       }
 
       const targetDir = formatTargetDir(name);

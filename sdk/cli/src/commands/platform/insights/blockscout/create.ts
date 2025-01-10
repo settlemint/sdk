@@ -2,8 +2,9 @@ import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt"
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
-import { type DotEnv, cancel } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import isInCi from "is-in-ci";
 
 /**
@@ -53,7 +54,7 @@ export function blockscoutInsightsCreateCommand() {
                   const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
                   const node = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
                   if (!node) {
-                    return cancel("No blockchain node selected. Please select one to continue.");
+                    return nothingSelectedError("blockchain node");
                   }
                   blockchainNodeUniqueName = node.uniqueName;
                 }

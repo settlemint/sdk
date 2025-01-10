@@ -1,5 +1,6 @@
 import { workspacePrompt } from "@/commands/connect/workspace.prompt";
-import { type DotEnv, cancel } from "@settlemint/sdk-utils";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
+import type { DotEnv } from "@settlemint/sdk-utils";
 import isInCi from "is-in-ci";
 import { getCreateCommand } from "../common/create-command";
 
@@ -32,7 +33,7 @@ export function applicationCreateCommand() {
                 const workspaces = await settlemint.workspace.list();
                 const workspace = await workspacePrompt(env, workspaces, autoAccept);
                 if (!workspace) {
-                  cancel("No workspace selected. Please select one to continue.");
+                  return nothingSelectedError("workspace");
                 }
                 workspaceUniqueName = workspace.uniqueName;
               }

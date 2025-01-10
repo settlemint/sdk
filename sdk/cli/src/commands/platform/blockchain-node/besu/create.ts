@@ -1,10 +1,9 @@
 import { blockchainNetworkPrompt } from "@/commands/connect/blockchain-network.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { missingApplication } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { cancel } from "@settlemint/sdk-utils/terminal";
-import isInCi from "is-in-ci";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -55,19 +54,17 @@ export function blockchainNodeBesuCreateCommand() {
                 region,
               },
               async (settlemint, env) => {
-                const autoAccept = !!acceptDefaults || isInCi;
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
                 }
 
-                let networkUniqueName =
-                  blockchainNetwork ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NETWORK : undefined);
+                let networkUniqueName = blockchainNetwork;
                 if (!networkUniqueName) {
                   const networks = await settlemint.blockchainNetwork.list(applicationUniqueName);
-                  const network = await blockchainNetworkPrompt(env, networks, acceptDefaults ?? false);
+                  const network = await blockchainNetworkPrompt(env, networks, acceptDefaults);
                   if (!network) {
-                    cancel("No network found. Please specify a network to continue.");
+                    return nothingSelectedError("blockchain network");
                   }
                   networkUniqueName = network?.id;
                 }
