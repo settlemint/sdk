@@ -66,7 +66,7 @@ export function blockchainNodeBesuCreateCommand() {
                   if (!network) {
                     return nothingSelectedError("blockchain network");
                   }
-                  networkUniqueName = network?.id;
+                  networkUniqueName = network?.uniqueName;
                 }
 
                 const result = await settlemint.blockchainNode.create({
@@ -86,7 +86,7 @@ export function blockchainNodeBesuCreateCommand() {
                   mapDefaultEnv: (): Partial<DotEnv> => {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
-                      SETTLEMINT_BLOCKCHAIN_NODE: result.id,
+                      SETTLEMINT_BLOCKCHAIN_NODE: result.uniqueName,
                     };
                   },
                 };
