@@ -19,6 +19,7 @@ describe("servicePrompt", () => {
       envKey: "SETTLEMINT_APPLICATION" as keyof DotEnv,
       defaultHandler: mockDefaultHandler,
     });
+    expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
   });
 
@@ -31,6 +32,7 @@ describe("servicePrompt", () => {
       envKey: "SETTLEMINT_APPLICATION",
       defaultHandler: mockDefaultHandler,
     });
+    expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toEqual({ uniqueName: "service-2" });
   });
 
@@ -43,6 +45,7 @@ describe("servicePrompt", () => {
       envKey: "SETTLEMINT_APPLICATION",
       defaultHandler: mockDefaultHandler,
     });
+    expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toEqual({ uniqueName: "service-1" });
   });
 
@@ -67,7 +70,7 @@ describe("servicePrompt", () => {
     const defaultService = mockServices.find((s) => s.uniqueName === env.SETTLEMINT_APPLICATION);
     mockDefaultHandler.mockImplementation(() => Promise.resolve(defaultService));
 
-    await servicePrompt({
+    const result = await servicePrompt({
       env,
       services: mockServices,
       accept: false,
@@ -76,6 +79,7 @@ describe("servicePrompt", () => {
     });
 
     expect(mockDefaultHandler).toHaveBeenCalledWith({ defaultService });
+    expect(result).toEqual(defaultService!);
   });
 
   it("does not call defaultHandler in CI environment", async () => {
