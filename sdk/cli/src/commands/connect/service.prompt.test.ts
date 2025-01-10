@@ -1,22 +1,18 @@
-import { beforeEach, describe, expect, it, mock } from "bun:test";
+import { describe, expect, it, mock } from "bun:test";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { servicePrompt } from "./service.prompt";
 
+const MOCK_SERVICES = [{ uniqueName: "service-1" }, { uniqueName: "service-2" }, { uniqueName: "service-3" }];
+
 describe("servicePrompt", () => {
-  const mockServices = [{ uniqueName: "service-1" }, { uniqueName: "service-2" }, { uniqueName: "service-3" }];
-
-  const mockDefaultHandler = mock((): Promise<undefined | { uniqueName: string }> => Promise.resolve(undefined));
-
-  beforeEach(() => {
-    mockDefaultHandler.mockReset();
-  });
-
   it("returns undefined if no services available", async () => {
+    const mockDefaultHandler = mock(() => Promise.resolve(undefined));
+
     const result = await servicePrompt({
       env: {},
       services: [],
       accept: false,
-      envKey: "SETTLEMINT_APPLICATION" as keyof DotEnv,
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
@@ -24,12 +20,14 @@ describe("servicePrompt", () => {
   });
 
   it("returns selected service if accept and service exists in env", async () => {
-    const env: Partial<DotEnv> = { SETTLEMINT_APPLICATION: "service-2" };
+    const mockDefaultHandler = mock(() => Promise.resolve(undefined));
+    const env: Partial<DotEnv> = { SETTLEMINT_BLOCKCHAIN_NODE: "service-2" };
+
     const result = await servicePrompt({
       env,
-      services: mockServices,
+      services: MOCK_SERVICES,
       accept: true,
-      envKey: "SETTLEMINT_APPLICATION",
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
@@ -37,27 +35,29 @@ describe("servicePrompt", () => {
   });
 
   it("returns single service if only one available", async () => {
-    const singleService = [{ uniqueName: "service-1" }];
+    const mockDefaultHandler = mock(() => Promise.resolve(undefined));
+    const singleService = [MOCK_SERVICES[0]];
+
     const result = await servicePrompt({
       env: {},
       services: singleService,
       accept: false,
-      envKey: "SETTLEMINT_APPLICATION",
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
-    expect(result).toEqual({ uniqueName: "service-1" });
+    expect(result).toEqual(MOCK_SERVICES[0]);
   });
 
   it("calls defaultHandler when multiple services and no accept", async () => {
     const selectedService = { uniqueName: "service-2" };
-    mockDefaultHandler.mockImplementation(() => Promise.resolve(selectedService));
+    const mockDefaultHandler = mock(() => Promise.resolve(selectedService));
 
     const result = await servicePrompt({
       env: {},
-      services: mockServices,
+      services: MOCK_SERVICES,
       accept: false,
-      envKey: "SETTLEMINT_APPLICATION",
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
     });
 
@@ -66,15 +66,15 @@ describe("servicePrompt", () => {
   });
 
   it("passes default service to handler from env", async () => {
-    const env: Partial<DotEnv> = { SETTLEMINT_APPLICATION: "service-3" };
-    const defaultService = mockServices.find((s) => s.uniqueName === env.SETTLEMINT_APPLICATION);
-    mockDefaultHandler.mockImplementation(() => Promise.resolve(defaultService));
+    const env: Partial<DotEnv> = { SETTLEMINT_BLOCKCHAIN_NODE: "service-3" };
+    const defaultService = MOCK_SERVICES.find((s) => s.uniqueName === env.SETTLEMINT_BLOCKCHAIN_NODE);
+    const mockDefaultHandler = mock(() => Promise.resolve(defaultService));
 
     const result = await servicePrompt({
       env,
-      services: mockServices,
+      services: MOCK_SERVICES,
       accept: false,
-      envKey: "SETTLEMINT_APPLICATION",
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
     });
 
@@ -84,13 +84,13 @@ describe("servicePrompt", () => {
 
   it("does not call defaultHandler in CI environment", async () => {
     const selectedService = { uniqueName: "service-2" };
-    mockDefaultHandler.mockImplementation(() => Promise.resolve(selectedService));
+    const mockDefaultHandler = mock(() => Promise.resolve(selectedService));
 
     const result = await servicePrompt({
       env: {},
-      services: mockServices,
+      services: MOCK_SERVICES,
       accept: false,
-      envKey: "SETTLEMINT_APPLICATION",
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
       isCi: true,
     });
@@ -100,12 +100,14 @@ describe("servicePrompt", () => {
   });
 
   it("returns selected service in CI environment if accept is false and service exists in env", async () => {
-    const env: Partial<DotEnv> = { SETTLEMINT_APPLICATION: "service-2" };
+    const mockDefaultHandler = mock(() => Promise.resolve(undefined));
+    const env: Partial<DotEnv> = { SETTLEMINT_BLOCKCHAIN_NODE: "service-2" };
+
     const result = await servicePrompt({
       env,
-      services: mockServices,
+      services: MOCK_SERVICES,
       accept: false,
-      envKey: "SETTLEMINT_APPLICATION",
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
       isCi: true,
     });
