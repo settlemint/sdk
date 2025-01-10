@@ -2,23 +2,24 @@ import { dirname } from "node:path";
 import { findUp } from "find-up";
 
 /**
- * Finds the root directory of the current project by locating the nearest lockfile
+ * Finds the root directory of the current project by locating the nearest package.json file
  *
- * @param fallbackToCwd - If true, will return the current working directory if no lockfile is found
- * @param cwd - The directory to start searching from
- * @returns The absolute path of the project root directory
- * @throws Will throw an error if no lockfile is found in the directory tree and fallbackToCwd is false
+ * @returns Promise that resolves to the absolute path of the project root directory
+ * @throws Will throw an error if no package.json is found in the directory tree
+ * @example
+ * import { projectRoot } from "@settlemint/sdk-utils";
+ *
+ * // Get project root path
+ * const rootDir = await projectRoot();
+ * console.log(`Project root is at: ${rootDir}`);
  */
-export async function projectRoot(fallbackToCwd = false, cwd = process.cwd()): Promise<string> {
-  const packageJsonPath = await findUp(["package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lockb", "bun.lock"], {
-    cwd,
-  });
+export async function projectRoot(fallbackToCwd = false): Promise<string> {
+  const packageJsonPath = await findUp("package.json");
   if (!packageJsonPath) {
     if (fallbackToCwd) {
-      return cwd;
+      return process.cwd();
     }
-    throw new Error("Unable to find project root - no lockfile found in directory tree");
+    throw new Error("Unable to find project root (no package.json found)");
   }
-  console.log("packageJsonPath", packageJsonPath);
   return dirname(packageJsonPath);
 }
