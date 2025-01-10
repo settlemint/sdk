@@ -3,7 +3,6 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { generateSchema } from "@gql.tada/cli-utils";
 import { note } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { testGqlEndpoint } from "./test-gql-endpoint";
 
 export async function codegenHasura(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
@@ -23,12 +22,6 @@ export async function codegenHasura(env: DotEnv) {
 
   // Generate GraphQL schema if we have the required variables
   if (gqlEndpoint && accessToken && adminSecret) {
-    await testGqlEndpoint({
-      accessToken,
-      hasuraAdminSecret: adminSecret,
-      gqlEndpoint,
-      isHasura: true,
-    });
     await generateSchema({
       input: gqlEndpoint,
       output: "hasura-schema.graphql",
