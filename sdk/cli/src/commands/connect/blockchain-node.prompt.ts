@@ -9,13 +9,16 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  * @param env - The environment variables containing the current configuration
  * @param nodes - The available blockchain nodes to choose from
  * @param accept - Whether to automatically accept default values without prompting
+ * @param filterRunningOnly - Whether to only show running nodes
  * @returns The selected blockchain node, or undefined if no nodes are available or none is selected
  */
 export async function blockchainNodePrompt(
   env: Partial<DotEnv>,
   nodes: BlockchainNode[],
   accept: boolean | undefined,
+  filterRunningOnly = false,
 ): Promise<BlockchainNode | undefined> {
+  const choices = filterRunningOnly ? nodes.filter((node) => node.status === "COMPLETED") : nodes;
   return servicePrompt({
     env,
     services: nodes,
@@ -25,7 +28,7 @@ export async function blockchainNodePrompt(
       return select({
         message: "Which blockchain node do you want to connect to?",
         choices: [
-          ...nodes.map((node) => ({
+          ...choices.map((node) => ({
             name: node.name,
             value: node,
           })),
