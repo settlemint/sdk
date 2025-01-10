@@ -64,7 +64,7 @@
   },
   "dependencies": {
     "is-in-ci": "1.0.0",
-    "@antfu/install-pkg": "^0.5.0",
+    "@antfu/install-pkg": "^1.0.0",
     "@dotenvx/dotenvx": "^1",
     "@manypkg/find-root": "^2.2.3",
     "@npmcli/package-json": "^6",
