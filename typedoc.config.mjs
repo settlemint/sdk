@@ -1,5 +1,6 @@
 import packageJson from "./package.json" with { type: "json" };
 
+
 /** @type {Partial<import("typedoc").TypeDocOptions>} */
 export default {
   // Output configuration
@@ -8,7 +9,7 @@ export default {
   entryFileName: "REFERENCE.md",
   readme: "none",
   exclude: ["**/node_modules/**"],
-  gitRevision: `v${packageJson.version}`,
+  gitRevision: `v${packageJson.version.replace(/-\w+$/, "")}`,
   mergeModulesMergeMode: "project",
 
   // Content organization

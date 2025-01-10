@@ -144,7 +144,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
         with:
-          commit_message: "chore: update docs"
+          commit_message: "chore: update docs [skip ci]"
           branch: main
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
