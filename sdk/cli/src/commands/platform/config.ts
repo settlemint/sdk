@@ -22,7 +22,7 @@ export function configCommand() {
       intro("Getting platform configuration");
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-      const selectedInstance = instance ? sanitizeInstanceUrl(instance) : await instancePrompt(env, false);
+      const selectedInstance = instance ? sanitizeInstanceUrl(instance) : await instancePrompt(env, true);
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance: selectedInstance,
