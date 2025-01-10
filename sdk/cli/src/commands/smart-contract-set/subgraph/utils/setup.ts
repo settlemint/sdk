@@ -1,6 +1,7 @@
 import { rm } from "node:fs/promises";
 import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
+import { missingApplication } from "@/error/missing-config-error";
 import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, executeCommand, exists, getPackageManagerExecutable } from "@settlemint/sdk-utils";
 import semver from "semver";
@@ -88,8 +89,10 @@ export async function getTheGraphMiddleware({
       return defaultTheGraphMiddleware;
     }
   }
-
-  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!);
+  if (!env.SETTLEMINT_APPLICATION) {
+    return missingApplication();
+  }
+  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION);
   return theGraphPrompt(env, middlewares, autoAccept);
 }
 

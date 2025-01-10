@@ -1,5 +1,6 @@
 import { blockchainNetworkPrompt } from "@/commands/connect/blockchain-network.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { missingApplication } from "@/error/missing-config-error";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
@@ -55,11 +56,9 @@ export function blockchainNodeBesuCreateCommand() {
               },
               async (settlemint, env) => {
                 const autoAccept = !!acceptDefaults || isInCi;
-                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
-                  cancel(
-                    "No application found. Please specify an application or run `settlemint connect` to continue.",
-                  );
+                  return missingApplication();
                 }
 
                 let networkUniqueName =

@@ -2,6 +2,7 @@ import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt"
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { createExamples } from "@/commands/platform/utils/create-examples";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
+import { missingApplication } from "@/error/missing-config-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
@@ -89,7 +90,10 @@ export function hardhatDeployRemoteCommand() {
       const nodeUniqueName = blockchainNodeUniqueName ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
       let node: BlockchainNode | undefined = undefined;
       if (!nodeUniqueName) {
-        const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
+        if (!env.SETTLEMINT_APPLICATION) {
+          return missingApplication();
+        }
+        const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION);
         const evmNodes = nodes.filter((node) => node.isEvm);
         if (evmNodes.length === 0) {
           cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");

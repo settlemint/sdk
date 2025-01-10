@@ -1,7 +1,10 @@
+import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
+import { missingApplication } from "@/error/missing-config-error";
 import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, cancel } from "@settlemint/sdk-utils";
+import isInCi from "is-in-ci";
 
 /**
  * Creates and returns the 'blockscout' insights command for the SettleMint SDK.
@@ -22,21 +25,39 @@ export function blockscoutInsightsCreateCommand() {
           "Blockchain Node unique name (mutually exclusive with load-balancer)",
         )
         .action(
-          async (name, { application, provider, region, size, type, blockchainNode, loadBalancer, ...defaultArgs }) => {
+          async (
+            name,
+            { application, provider, region, size, type, blockchainNode, loadBalancer, acceptDefaults, ...defaultArgs },
+          ) => {
             return baseAction(
               {
                 ...defaultArgs,
+                acceptDefaults,
                 provider,
                 region,
               },
               async (settlemint, env) => {
-                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-                const blockchainNodeUniqueName = loadBalancer
+                const autoAccept = !!acceptDefaults || isInCi;
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+                if (!applicationUniqueName) {
+                  return missingApplication();
+                }
+                let blockchainNodeUniqueName = loadBalancer
                   ? undefined
-                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
                 const loadBalancerUniqueName = blockchainNodeUniqueName
                   ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
+                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER);
+
+                if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
+                  const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                  const node = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
+                  if (!node) {
+                    return cancel("No blockchain node selected. Please select one to continue.");
+                  }
+                  blockchainNodeUniqueName = node.uniqueName;
+                }
+
                 const result = await settlemint.insights.create({
                   name,
                   applicationUniqueName,
