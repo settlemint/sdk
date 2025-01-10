@@ -4,6 +4,8 @@ import { generateSchema } from "@gql.tada/cli-utils";
 import { installDependencies, isPackageInstalled, note } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
+const PACKAGE_NAME = "@settlemint/sdk-hasura";
+
 export async function codegenHasura(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
   const accessToken = await getApplicationOrPersonalAccessToken({
@@ -34,7 +36,7 @@ export async function codegenHasura(env: DotEnv) {
   }
 
   // Generate Hasura client template with build time safety
-  const hasuraTemplate = `import { createHasuraClient } from "@settlemint/sdk-hasura";
+  const hasuraTemplate = `import { createHasuraClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/hasura-env";
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
@@ -58,7 +60,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   await writeTemplate(hasuraTemplate, "/lib/settlemint", "hasura.ts");
 
   // Generate Drizzle client template with build time safety
-  const drizzleTemplate = `import { createPostgresPool } from '@settlemint/sdk-hasura/postgres';
+  const drizzleTemplate = `import { createPostgresPool } from "${PACKAGE_NAME}/postgres";
 
 export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL ?? '');
 `;
@@ -66,13 +68,9 @@ export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DAT
   // Always generate the Drizzle template, but with proper build time handling
   await writeTemplate(drizzleTemplate, "/lib/settlemint", "postgres.ts");
 
-  if (!(await isPackageInstalled("is-in-ci"))) {
-    await installDependencies("is-in-ci");
-  }
-
   // Install the package only if it's not already installed
-  if (!(await isPackageInstalled("@settlemint/sdk-hasura"))) {
-    await installDependencies("@settlemint/sdk-hasura");
+  if (!(await isPackageInstalled(PACKAGE_NAME))) {
+    await installDependencies(PACKAGE_NAME);
   }
 
   // Warn about missing database variables only during runtime

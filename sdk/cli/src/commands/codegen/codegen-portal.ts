@@ -1,8 +1,10 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
+import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
+const PACKAGE_NAME = "@settlemint/sdk-portal";
 export async function codegenPortal(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
   if (!gqlEndpoint) {
@@ -27,7 +29,7 @@ export async function codegenPortal(env: DotEnv) {
     },
   });
 
-  const template = `import { createPortalClient } from "@settlemint/sdk-portal";
+  const template = `import { createPortalClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/portal-env";
 
 export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
@@ -48,4 +50,9 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
 });`;
 
   await writeTemplate(template, "/lib/settlemint", "portal.ts");
+
+  // Install the package only if it's not already installed
+  if (!(await isPackageInstalled(PACKAGE_NAME))) {
+    await installDependencies(PACKAGE_NAME);
+  }
 }

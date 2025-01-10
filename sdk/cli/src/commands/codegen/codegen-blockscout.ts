@@ -4,6 +4,9 @@ import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils";
+import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils";
+
+const PACKAGE_NAME = "@settlemint/sdk-blockscout";
 
 export async function codegenBlockscout(env: DotEnv) {
   const endpoint = env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT;
@@ -155,7 +158,7 @@ export async function codegenBlockscout(env: DotEnv) {
     await rm(introspectionJsonPath);
   }
 
-  const template = `import { createBlockscoutClient } from "@settlemint/sdk-blockscout";
+  const template = `import { createBlockscoutClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/blockscout-env";
 
 export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBlockscoutClient<{
@@ -178,4 +181,9 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
 export const blockscoutUiEndpoint = process.env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT!;`;
 
   await writeTemplate(template, "/lib/settlemint", "blockscout.ts");
+
+  // Install the package only if it's not already installed
+  if (!(await isPackageInstalled(PACKAGE_NAME))) {
+    await installDependencies(PACKAGE_NAME);
+  }
 }
