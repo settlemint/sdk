@@ -1,7 +1,7 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import { capitalizeFirstLetter, installDependencies, isPackageInstalled } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter, installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -73,8 +73,9 @@ export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${na
   }
   await writeTemplate(template.join("\n"), "/lib/settlemint", "the-graph.ts");
 
+  const projectDir = await projectRoot();
   // Install the package only if it's not already installed
-  if (!(await isPackageInstalled(PACKAGE_NAME))) {
-    await installDependencies(PACKAGE_NAME);
+  if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
+    await installDependencies(PACKAGE_NAME, projectDir);
   }
 }

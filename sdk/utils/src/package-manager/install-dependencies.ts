@@ -1,4 +1,5 @@
 import { installPackage } from "@antfu/install-pkg";
+import { note } from "../terminal.js";
 
 /**
  * Installs one or more packages as dependencies using the detected package manager
@@ -17,5 +18,13 @@ import { installPackage } from "@antfu/install-pkg";
  * await installDependencies(["express", "cors"]);
  */
 export async function installDependencies(pkgs: string | string[], cwd?: string) {
-  await installPackage(pkgs, { silent: true, additionalArgs: ["--exact"], cwd });
+  try {
+    await installPackage(pkgs, { silent: true, additionalArgs: ["--exact"], cwd });
+  } catch (err) {
+    const error = err instanceof Error ? err.message : "Unknown error";
+    note(
+      `Failed to install ${Array.isArray(pkgs) ? `dependencies '${pkgs.join(", ")}'` : `dependency '${pkgs}'`}: ${error}`,
+      "warn",
+    );
+  }
 }

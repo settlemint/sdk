@@ -4,7 +4,7 @@ import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils";
+import { installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
 
 const PACKAGE_NAME = "@settlemint/sdk-blockscout";
 
@@ -182,8 +182,9 @@ export const blockscoutUiEndpoint = process.env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOIN
 
   await writeTemplate(template, "/lib/settlemint", "blockscout.ts");
 
+  const projectDir = await projectRoot();
   // Install the package only if it's not already installed
-  if (!(await isPackageInstalled(PACKAGE_NAME))) {
-    await installDependencies(PACKAGE_NAME);
+  if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
+    await installDependencies(PACKAGE_NAME, projectDir);
   }
 }
