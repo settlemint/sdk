@@ -1,5 +1,6 @@
 import input from "@inquirer/input";
 import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
 
 /**
  * Prompts the user for the URL of their SettleMint instance.
@@ -13,7 +14,8 @@ import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validati
  * const instanceUrl = await instancePrompt(env);
  * console.log(instanceUrl); // Output: https://example.settlemint.com or user input
  */
-export async function instancePrompt(env: Partial<DotEnv>, accept: boolean): Promise<string> {
+export async function instancePrompt(env: Partial<DotEnv>, accept: boolean | undefined): Promise<string> {
+  const autoAccept = !!accept || isInCi;
   const defaultInstance = env.SETTLEMINT_INSTANCE ?? "https://console.settlemint.com";
   const defaultPossible = accept && defaultInstance;
 

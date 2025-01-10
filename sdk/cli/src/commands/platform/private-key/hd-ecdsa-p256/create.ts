@@ -1,4 +1,7 @@
+import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { missingApplication } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
@@ -16,38 +19,55 @@ export function privateKeyHdCreateCommand() {
       addClusterServiceArgs(cmd)
         .option("--application <application>", "Application unique name")
         .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
-        .action(async (name, { application, blockchainNode, provider, region, size, type, ...defaultArgs }) => {
-          return baseAction(
-            {
-              ...defaultArgs,
-              provider,
-              region,
-            },
-            async (settlemint, env) => {
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-              const blockchainNodeUniqueName = blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!;
-              const result = await settlemint.privateKey.create({
-                name,
-                applicationUniqueName,
-                privateKeyType: "HD_ECDSA_P256",
-                blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
+        .action(
+          async (
+            name,
+            { application, blockchainNode, provider, region, size, type, acceptDefaults, ...defaultArgs },
+          ) => {
+            return baseAction(
+              {
+                ...defaultArgs,
+                acceptDefaults,
                 provider,
                 region,
-                size,
-                type,
-              });
-              return {
-                result,
-                mapDefaultEnv: (): Partial<DotEnv> => {
-                  return {
-                    SETTLEMINT_APPLICATION: applicationUniqueName,
-                    SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
-                  };
-                },
-              };
-            },
-          );
-        });
+              },
+              async (settlemint, env) => {
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+                if (!applicationUniqueName) {
+                  return missingApplication();
+                }
+                let blockchainNodeUniqueName = blockchainNode;
+                if (!blockchainNodeUniqueName) {
+                  const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                  const node = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
+                  if (!node) {
+                    return nothingSelectedError("blockchain node");
+                  }
+                  blockchainNodeUniqueName = node.uniqueName;
+                }
+                const result = await settlemint.privateKey.create({
+                  name,
+                  applicationUniqueName,
+                  privateKeyType: "HD_ECDSA_P256",
+                  blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
+                  provider,
+                  region,
+                  size,
+                  type,
+                });
+                return {
+                  result,
+                  mapDefaultEnv: (): Partial<DotEnv> => {
+                    return {
+                      SETTLEMINT_APPLICATION: applicationUniqueName,
+                      SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
+                    };
+                  },
+                };
+              },
+            );
+          },
+        );
     },
     examples: [
       {

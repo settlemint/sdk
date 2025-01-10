@@ -1,4 +1,5 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { missingApplication } from "@/error/missing-config-error";
 import { parseNumber } from "@/utils/parse-number";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
@@ -53,7 +54,10 @@ export function blockchainNetworkBesuCreateCommand() {
                 region,
               },
               async (settlemint, env) => {
-                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+                if (!applicationUniqueName) {
+                  return missingApplication();
+                }
                 const result = await settlemint.blockchainNetwork.create({
                   name,
                   applicationUniqueName,

@@ -1,15 +1,18 @@
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import select from "@inquirer/select";
 import type { Workspace } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
 
 export async function workspacePrompt(
   env: Partial<DotEnv>,
   workspaces: Workspace[],
-  accept: boolean,
+  accept: boolean | undefined,
 ): Promise<Workspace> {
+  const autoAccept = !!accept || isInCi;
   const defaultWorkspace = workspaces.find((workspace) => workspace.uniqueName === env.SETTLEMINT_WORKSPACE);
-  const defaultPossible = accept && defaultWorkspace;
+  const defaultPossible = autoAccept && defaultWorkspace;
 
   if (defaultPossible) {
     return defaultWorkspace;
@@ -17,6 +20,10 @@ export async function workspacePrompt(
 
   if (workspaces.length === 0) {
     cancel("No workspaces found");
+  }
+
+  if (isInCi) {
+    nothingSelectedError("workspace");
   }
 
   const workspace = await select({

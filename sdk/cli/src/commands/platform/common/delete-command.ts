@@ -8,7 +8,6 @@ import { capitalizeFirstLetter, intro } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import isInCi from "is-in-ci";
 import { deleteConfirmationPrompt } from "../prompts/delete-confirmation.prompt";
 import { createExamples } from "../utils/create-examples";
 import type { ResourceType } from "./resource-type";
@@ -77,10 +76,9 @@ export function getDeleteCommand({
         await deleteConfirmationPrompt(`this ${type}`);
       }
 
-      const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const instance = await instancePrompt(env, autoAccept);
+      const instance = await instancePrompt(env, acceptDefaults);
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

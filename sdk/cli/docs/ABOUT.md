@@ -133,7 +133,17 @@ settlemint codegen
 #### Start your dApp in development mode
 
 ```bash
+# bun
 bun run dev
+
+# npm
+npm run dev
+
+# yarn
+yarn dev
+
+# pnpm
+pnpm dev
 ```
 
 ### Creating a new project from a smart contract template
@@ -144,7 +154,7 @@ To create a new project from a smart contract template, use the `create` command
 settlemint scs create --project-name <project-name> --use-case <use-case-name>
 ```
 
-#### Testing your smart contracts on a local network
+#### Testing your smart contracts
 
 To test your smart contracts, you can use the `test` command.
 

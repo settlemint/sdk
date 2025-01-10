@@ -1,6 +1,9 @@
 import { basename } from "node:path";
+import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
+import { missingApplication } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { type DotEnv, cancel } from "@settlemint/sdk-utils";
 
@@ -40,23 +43,38 @@ export function smartContractPortalMiddlewareCreateCommand() {
               type,
               includePredeployedAbis,
               abis,
+              acceptDefaults,
               ...defaultArgs
             },
           ) => {
             return baseAction(
               {
                 ...defaultArgs,
+                acceptDefaults,
                 provider,
                 region,
               },
               async (settlemint, env) => {
-                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
-                const blockchainNodeUniqueName = loadBalancer
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+                if (!applicationUniqueName) {
+                  return missingApplication();
+                }
+                let blockchainNodeUniqueName = loadBalancer
                   ? undefined
-                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE!);
+                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
                 const loadBalancerUniqueName = blockchainNodeUniqueName
                   ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER!);
+                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER);
+
+                if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
+                  const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                  const node = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
+                  if (!node) {
+                    return nothingSelectedError("blockchain node");
+                  }
+                  blockchainNodeUniqueName = node.uniqueName;
+                }
+
                 // Read and parse ABI files if provided
                 const parsedAbis: { name: string; abi: string }[] = [];
                 if (abis && abis.length > 0) {

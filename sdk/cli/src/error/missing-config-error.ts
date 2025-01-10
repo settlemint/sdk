@@ -19,3 +19,7 @@ export function missingAccessTokenError(personalAccessTokenExists: boolean) {
 export function missingPersonalAccessTokenError() {
   return cancel("No personal access token found for instance, please run `settlemint login` to login to your instance");
 }
+
+export function missingApplication() {
+  return cancel("No application configured, please run `settlemint connect` to connect to your application");
+}

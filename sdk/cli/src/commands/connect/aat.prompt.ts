@@ -26,10 +26,11 @@ export async function applicationAccessTokenPrompt(
   env: Partial<DotEnv>,
   application: Omit<Application, "workspace">,
   settlemint: SettlemintClient,
-  accept: boolean,
+  accept: boolean | undefined,
 ): Promise<string | undefined> {
+  const autoAccept = !!accept || isInCi;
   const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
-  const defaultPossible = accept && defaultAccessToken;
+  const defaultPossible = autoAccept && defaultAccessToken;
 
   if (defaultPossible || isInCi) {
     return defaultAccessToken;

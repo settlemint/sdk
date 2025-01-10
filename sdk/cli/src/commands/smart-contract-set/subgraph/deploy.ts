@@ -7,6 +7,7 @@ import {
   getSubgraphYamlConfig,
   updateSubgraphYamlConfig,
 } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
@@ -49,7 +50,7 @@ export function subgraphDeployCommand() {
 
       const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
       if (!theGraphMiddleware) {
-        cancel("No Graph Middleware selected. Please select one to continue.");
+        return nothingSelectedError("graph middleware");
       }
 
       const network = await getTheGraphNetwork({ theGraphMiddleware, env, instance, accessToken });

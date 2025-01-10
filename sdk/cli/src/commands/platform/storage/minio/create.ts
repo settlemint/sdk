@@ -1,4 +1,5 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { missingApplication } from "@/error/missing-config-error";
 import { getMinioEndpoints } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
@@ -24,7 +25,10 @@ export function minioStorageCreateCommand() {
               region,
             },
             async (settlemint, env) => {
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION!;
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+              if (!applicationUniqueName) {
+                return missingApplication();
+              }
               const result = await settlemint.storage.create({
                 name,
                 applicationUniqueName,

@@ -2,13 +2,14 @@ import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { type CommandExample, createExamples } from "@/commands/platform/utils/create-examples";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { providerPrompt } from "../prompts/provider.prompt";
 import { regionPrompt } from "../prompts/region.prompt";
@@ -108,12 +109,12 @@ export function getCreateCommand({
       if (requiresDeployment) {
         const selectedProvider = await providerPrompt(platformConfig, provider);
         if (!selectedProvider) {
-          cancel("No provider selected. Please select a provider to continue.");
+          return nothingSelectedError("provider");
         }
 
         const selectedRegion = await regionPrompt(selectedProvider, region);
         if (!selectedRegion) {
-          cancel("No region selected. Please select a region to continue.");
+          return nothingSelectedError("region");
         }
       }
 

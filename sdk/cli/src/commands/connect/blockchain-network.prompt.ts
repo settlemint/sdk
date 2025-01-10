@@ -1,3 +1,4 @@
+import { servicePrompt } from "@/commands/connect/service.prompt";
 import select from "@inquirer/select";
 import type { BlockchainNetwork } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -13,33 +14,28 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 export async function blockchainNetworkPrompt(
   env: Partial<DotEnv>,
   networks: BlockchainNetwork[],
-  accept: boolean,
+  accept: boolean | undefined,
 ): Promise<BlockchainNetwork | undefined> {
-  if (networks.length === 0) {
-    return undefined;
-  }
-
-  const defaultNetwork =
-    networks.find((network) => network.uniqueName === env.SETTLEMINT_BLOCKCHAIN_NETWORK) ??
-    (networks.length === 1 ? networks[0] : undefined);
-  const defaultPossible = accept; // is optional
-
-  if (defaultPossible) {
-    return defaultNetwork;
-  }
-
-  return select({
-    message: "Which blockchain network do you want to connect to?",
-    choices: [
-      ...networks.map((network) => ({
-        name: network.name,
-        value: network,
-      })),
-      {
-        name: "None",
-        value: undefined,
-      },
-    ],
-    default: defaultNetwork,
+  return servicePrompt({
+    env,
+    services: networks,
+    accept,
+    envKey: "SETTLEMINT_BLOCKCHAIN_NETWORK",
+    defaultHandler: async ({ defaultService: defaultNetwork }: { defaultService: BlockchainNetwork | undefined }) => {
+      return select({
+        message: "Which blockchain network do you want to connect to?",
+        choices: [
+          ...networks.map((network) => ({
+            name: network.name,
+            value: network,
+          })),
+          {
+            name: "None",
+            value: undefined,
+          },
+        ],
+        default: defaultNetwork,
+      });
+    },
   });
 }

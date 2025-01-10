@@ -2,6 +2,7 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { namePrompt } from "@/commands/create/name.prompt";
 import { templatePrompt } from "@/commands/create/template.prompt";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { Command, Option } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -56,7 +57,7 @@ export function createCommand(): Command {
         const selectedTemplate = await templatePrompt(templates, template);
 
         if (!selectedTemplate) {
-          cancel("No template selected. Please select a template to continue.");
+          return nothingSelectedError("template");
         }
 
         await spinner({
