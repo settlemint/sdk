@@ -34,5 +34,4 @@ export const retryWhenFailed = async <T>(
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-  return undefined;
 };
