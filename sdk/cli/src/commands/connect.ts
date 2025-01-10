@@ -10,6 +10,7 @@ import {
   getMinioEndpoints,
   getPortalEndpoints,
 } from "@/utils/get-cluster-service-endpoint";
+import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, note } from "@settlemint/sdk-utils";
@@ -43,15 +44,16 @@ export function connectCommand(): Command {
     new Command("connect")
       .option("--prod", "Connect to your production environment")
       .option("-a, --accept-defaults", "Accept the default and previously set values")
+      .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
       // Set the command description
       .description("Connects your project to your application on SettleMint")
       // Define the action to be executed when the command is run
-      .action(async ({ acceptDefaults, prod }) => {
+      .action(async ({ acceptDefaults, prod, instance }) => {
         intro("Connecting your dApp to SettleMint");
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-        const instance = await instancePrompt(env, acceptDefaults);
-        const personalAccessToken = await getInstanceCredentials(instance);
+        const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
+        const personalAccessToken = await getInstanceCredentials(selectedInstance);
 
         if (!personalAccessToken) {
           return missingPersonalAccessTokenError();
@@ -61,7 +63,7 @@ export function connectCommand(): Command {
 
         const settlemint = createSettleMintClient({
           accessToken,
-          instance,
+          instance: selectedInstance,
         });
 
         const workspaces = await workspaceSpinner(settlemint);
@@ -104,7 +106,7 @@ export function connectCommand(): Command {
 
         await writeEnvSpinner(!!prod, {
           SETTLEMINT_ACCESS_TOKEN: aatToken,
-          SETTLEMINT_INSTANCE: instance,
+          SETTLEMINT_INSTANCE: selectedInstance,
           SETTLEMINT_WORKSPACE: workspace.uniqueName,
           SETTLEMINT_APPLICATION: application.uniqueName,
           SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNode?.blockchainNetwork?.uniqueName,
