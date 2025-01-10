@@ -6,7 +6,7 @@ import { subgraphNamePrompt } from "@/commands/codegen/subgraph-name.prompt";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
@@ -87,7 +87,10 @@ export function codegenCommand(): Command {
           promises.push(codegenIpfs(env));
         }
 
-        await Promise.all(promises);
+        const results = await Promise.allSettled(promises);
+        if (results.some((r) => r.status === "rejected")) {
+          cancel("An error occurred while generating resources");
+        }
 
         if (hasura || portal || thegraph || blockscout) {
           await generateOutput({

@@ -51,8 +51,8 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
     }),
   ]);
   const thegraph = await Promise.all(
-    theGraphEndpoints.map((endpoint) => {
-      const success = testGqlEndpoint({
+    theGraphEndpoints.map(async (endpoint) => {
+      const success = await testGqlEndpoint({
         accessToken,
         gqlEndpoint: endpoint,
       });
@@ -81,19 +81,17 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
             },
           ]
         : []),
-      ...(thegraph
-        ? thegraph
-            .filter((endpoint) => endpoint.success)
-            .map(({ endpoint }) => {
-              const name = endpoint.split("/").pop()!;
-              return {
-                name: `thegraph-${name}`,
-                schema: `the-graph-schema-${name}.graphql`,
-                tadaOutputLocation: `the-graph-env-${name}.d.ts`,
-                tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
-              };
-            })
-        : []),
+      ...thegraph
+        .filter((endpoint) => endpoint.success)
+        .map(({ endpoint }) => {
+          const name = endpoint.split("/").pop()!;
+          return {
+            name: `thegraph-${name}`,
+            schema: `the-graph-schema-${name}.graphql`,
+            tadaOutputLocation: `the-graph-env-${name}.d.ts`,
+            tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
+          };
+        }),
       ...(portal
         ? [
             {
@@ -135,7 +133,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
   return {
     hasura,
     portal,
-    thegraph,
+    thegraph: thegraph.filter((endpoint) => endpoint.success).length > 0,
     blockscout,
   };
 }

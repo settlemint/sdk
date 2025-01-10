@@ -433,9 +433,9 @@ console.log(`Using ${command} with args: ${args.join(" ")}`);
 
 #### installDependencies()
 
-> **installDependencies**(`pkgs`): `Promise`\<`void`\>
+> **installDependencies**(`pkgs`, `cwd`?): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:18](https://github.com/settlemint/sdk/blob/v0.9.3/sdk/utils/src/package-manager/install-dependencies.ts#L18)
+Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:20](https://github.com/settlemint/sdk/blob/v0.9.3/sdk/utils/src/package-manager/install-dependencies.ts#L20)
 
 Installs one or more packages as dependencies using the detected package manager
 
@@ -444,6 +444,7 @@ Installs one or more packages as dependencies using the detected package manager
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `pkgs` | `string` \| `string`[] | A single package name or array of package names to install |
+| `cwd`? | `string` | The directory to run the installation in |
 
 ##### Returns
 
@@ -705,11 +706,17 @@ outro("Deployment completed successfully!");
 
 #### projectRoot()
 
-> **projectRoot**(): `Promise`\<`string`\>
+> **projectRoot**(`fallbackToCwd`): `Promise`\<`string`\>
 
 Defined in: [sdk/utils/src/filesystem/project-root.ts:16](https://github.com/settlemint/sdk/blob/v0.9.3/sdk/utils/src/filesystem/project-root.ts#L16)
 
 Finds the root directory of the current project by locating the nearest package.json file
+
+##### Parameters
+
+| Parameter | Type | Default value |
+| ------ | ------ | ------ |
+| `fallbackToCwd` | `boolean` | `false` |
 
 ##### Returns
 
