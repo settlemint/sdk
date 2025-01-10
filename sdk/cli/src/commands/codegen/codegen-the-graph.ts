@@ -1,10 +1,11 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter, installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
+const PACKAGE_NAME = "@settlemint/sdk-thegraph";
 export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
   const gqlEndpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS;
   if (!Array.isArray(gqlEndpoints) || gqlEndpoints.length === 0) {
@@ -20,7 +21,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     return;
   }
 
-  const template = [`import { createTheGraphClient } from "@settlemint/sdk-thegraph";`];
+  const template = [`import { createTheGraphClient } from "${PACKAGE_NAME}";`];
 
   const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
     const name = gqlEndpoint.split("/").pop();
@@ -71,4 +72,10 @@ export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${na
     );
   }
   await writeTemplate(template.join("\n"), "/lib/settlemint", "the-graph.ts");
+
+  const projectDir = await projectRoot();
+  // Install the package only if it's not already installed
+  if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
+    await installDependencies(PACKAGE_NAME, projectDir);
+  }
 }

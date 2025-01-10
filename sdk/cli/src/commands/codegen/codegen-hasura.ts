@@ -1,8 +1,9 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import { note } from "@settlemint/sdk-utils";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, installDependencies, isPackageInstalled, note, projectRoot } from "@settlemint/sdk-utils";
+
+const PACKAGE_NAME = "@settlemint/sdk-hasura";
 
 export async function codegenHasura(env: DotEnv) {
   const gqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
@@ -34,7 +35,7 @@ export async function codegenHasura(env: DotEnv) {
   }
 
   // Generate Hasura client template with build time safety
-  const hasuraTemplate = `import { createHasuraClient } from "@settlemint/sdk-hasura";
+  const hasuraTemplate = `import { createHasuraClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/hasura-env";
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
@@ -58,13 +59,19 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   await writeTemplate(hasuraTemplate, "/lib/settlemint", "hasura.ts");
 
   // Generate Drizzle client template with build time safety
-  const drizzleTemplate = `import { createPostgresPool } from '@settlemint/sdk-hasura/postgres';
+  const drizzleTemplate = `import { createPostgresPool } from "${PACKAGE_NAME}/postgres";
 
 export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL ?? '');
 `;
 
   // Always generate the Drizzle template, but with proper build time handling
   await writeTemplate(drizzleTemplate, "/lib/settlemint", "postgres.ts");
+
+  const projectDir = await projectRoot();
+  // Install the package only if it's not already installed
+  if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
+    await installDependencies(PACKAGE_NAME, projectDir);
+  }
 
   // Warn about missing database variables only during runtime
   if (process.env.NODE_ENV !== "production" && !databaseUrl) {
