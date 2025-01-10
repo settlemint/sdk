@@ -3,19 +3,26 @@ import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 /**
  * Tests a GraphQL endpoint with exponential retry.
  *
- * @param env - The environment variables.
- * @param gqlEndpoint - The GraphQL endpoint URL.
- * @param isHasura - Whether the endpoint is a Hasura endpoint.
- * @param maxRetries - Maximum number of retry attempts (default: 3).
- * @returns A boolean indicating whether the endpoint is accessible.
+ * @param accessToken - The application access token for authentication
+ * @param hasuraAdminSecret - The Hasura admin secret if using a Hasura endpoint
+ * @param gqlEndpoint - The GraphQL endpoint URL
+ * @param isHasura - Whether the endpoint is a Hasura endpoint
+ * @param maxRetries - Maximum number of retry attempts (default: 3)
+ * @returns A boolean indicating whether the endpoint is accessible
  */
-export async function testGqlEndpoint(
-  accessToken: ApplicationAccessToken,
-  hasuraAdminSecret?: string,
-  gqlEndpoint?: string,
+export async function testGqlEndpoint({
+  accessToken,
+  hasuraAdminSecret,
+  gqlEndpoint,
   isHasura = false,
   maxRetries = 3,
-): Promise<boolean> {
+}: {
+  accessToken: ApplicationAccessToken;
+  hasuraAdminSecret?: string;
+  gqlEndpoint?: string;
+  isHasura?: boolean;
+  maxRetries?: number;
+}): Promise<boolean> {
   if (!gqlEndpoint) {
     return false;
   }

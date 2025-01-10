@@ -34,12 +34,31 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
     return name && (!thegraphSubgraphNames || thegraphSubgraphNames.includes(name));
   });
 
-  const [hasura, portal, thegraph, blockscout] = await Promise.all([
-    testGqlEndpoint(accessToken, env.SETTLEMINT_HASURA_ADMIN_SECRET, env.SETTLEMINT_HASURA_ENDPOINT, true),
-    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
-    testGqlEndpoint(accessToken, undefined, theGraphEndpoints[0]),
-    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
+  const [hasura, portal, blockscout] = await Promise.all([
+    testGqlEndpoint({
+      accessToken,
+      hasuraAdminSecret: env.SETTLEMINT_HASURA_ADMIN_SECRET,
+      gqlEndpoint: env.SETTLEMINT_HASURA_ENDPOINT,
+      isHasura: true,
+    }),
+    testGqlEndpoint({
+      accessToken,
+      gqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+    }),
+    testGqlEndpoint({
+      accessToken,
+      gqlEndpoint: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
+    }),
   ]);
+  const thegraph = await Promise.all(
+    theGraphEndpoints.map((endpoint) => {
+      const success = testGqlEndpoint({
+        accessToken,
+        gqlEndpoint: endpoint,
+      });
+      return { success, endpoint };
+    }),
+  );
 
   if (!tsconfig.config.compilerOptions) {
     tsconfig.config.compilerOptions = {};
@@ -63,15 +82,17 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
           ]
         : []),
       ...(thegraph
-        ? theGraphEndpoints.map((endpoint) => {
-            const name = endpoint.split("/").pop()!;
-            return {
-              name: `thegraph-${name}`,
-              schema: `the-graph-schema-${name}.graphql`,
-              tadaOutputLocation: `the-graph-env-${name}.d.ts`,
-              tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
-            };
-          })
+        ? thegraph
+            .filter((endpoint) => endpoint.success)
+            .map(({ endpoint }) => {
+              const name = endpoint.split("/").pop()!;
+              return {
+                name: `thegraph-${name}`,
+                schema: `the-graph-schema-${name}.graphql`,
+                tadaOutputLocation: `the-graph-env-${name}.d.ts`,
+                tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
+              };
+            })
         : []),
       ...(portal
         ? [

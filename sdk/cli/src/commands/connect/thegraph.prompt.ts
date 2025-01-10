@@ -9,20 +9,29 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  * @param env - The environment variables containing the current configuration
  * @param middlewares - The available middleware instances to choose from
  * @param accept - Whether to automatically accept default values without prompting
+ * @param filterRunningOnly - Whether to only show running graph middlewares
  * @returns The selected The Graph middleware, or undefined if none is selected
  */
-export async function theGraphPrompt(env: Partial<DotEnv>, middlewares: Middleware[], accept: boolean | undefined) {
-  const possible = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
+export async function theGraphPrompt(
+  env: Partial<DotEnv>,
+  middlewares: Middleware[],
+  accept: boolean | undefined,
+  filterRunningOnly = false,
+) {
+  const graphMiddlewares = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
+  const choices = filterRunningOnly
+    ? graphMiddlewares.filter((middleware) => middleware.status === "COMPLETED")
+    : graphMiddlewares;
   return servicePrompt({
     env,
-    services: possible,
+    services: graphMiddlewares,
     accept,
     envKey: "SETTLEMINT_THEGRAPH",
     defaultHandler: async ({ defaultService: defaultMiddleware }: { defaultService: Middleware | undefined }) => {
       return select({
         message: "Which The Graph instance do you want to connect to?",
         choices: [
-          ...possible.map((middleware) => ({
+          ...choices.map((middleware) => ({
             name: middleware.name,
             value: middleware,
           })),
