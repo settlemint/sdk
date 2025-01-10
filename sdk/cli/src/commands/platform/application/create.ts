@@ -1,4 +1,6 @@
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { workspacePrompt } from "@/commands/connect/workspace.prompt";
+import { type DotEnv, cancel } from "@settlemint/sdk-utils";
+import isInCi from "is-in-ci";
 import { getCreateCommand } from "../common/create-command";
 
 /**
@@ -17,21 +19,37 @@ export function applicationCreateCommand() {
           "-w, --workspace <workspace>",
           "The workspace unique name to create the application in (defaults to workspace from env)",
         )
-        .action(async (name, { workspace, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env) => {
-            const result = await settlemint.application.create({
-              name,
-              workspaceUniqueName: workspace ?? env.SETTLEMINT_WORKSPACE!,
-            });
-            return {
-              result,
-              mapDefaultEnv: (): Partial<DotEnv> => {
-                return {
-                  SETTLEMINT_APPLICATION: result.uniqueName,
-                };
-              },
-            };
-          });
+        .action(async (name, { workspace, acceptDefaults, ...defaultArgs }) => {
+          return baseAction(
+            {
+              ...defaultArgs,
+              acceptDefaults,
+            },
+            async (settlemint, env) => {
+              const autoAccept = !!acceptDefaults || isInCi;
+              let workspaceUniqueName = workspace;
+              if (!workspaceUniqueName) {
+                const workspaces = await settlemint.workspace.list();
+                const workspace = await workspacePrompt(env, workspaces, autoAccept);
+                if (!workspace) {
+                  cancel("No workspace selected. Please select one to continue.");
+                }
+                workspaceUniqueName = workspace.uniqueName;
+              }
+              const result = await settlemint.application.create({
+                name,
+                workspaceUniqueName,
+              });
+              return {
+                result,
+                mapDefaultEnv: (): Partial<DotEnv> => {
+                  return {
+                    SETTLEMINT_APPLICATION: result.uniqueName,
+                  };
+                },
+              };
+            },
+          );
         });
     },
     examples: [
