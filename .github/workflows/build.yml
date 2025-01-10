@@ -137,8 +137,16 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Update docs and README
-        if: ${{ env.TAG == 'latest' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         run: bun docs
+
+      - name: Auto-commit changes to docs and README
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: stefanzweifel/git-auto-commit-action@8621497c8c39c72f3e2a999a26b4ca1b5058a842 # v5
+        with:
+          commit_message: "chore: update docs"
+          branch: main
+          file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
       - name: Run tests and checks
         run: bunx turbo format lint typecheck build attw publint test:coverage publish-npm --env-mode=loose
@@ -172,4 +180,4 @@ jobs:
         with:
           commit_message: "chore: update package versions [skip ci]"
           branch: main
-          file_pattern: 'package.json **/schema.graphql sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
+          file_pattern: 'package.json **/schema.graphql'
