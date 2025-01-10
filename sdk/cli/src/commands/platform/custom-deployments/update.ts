@@ -4,7 +4,7 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -33,7 +33,7 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
 
       const customDeploymentUniqueName = uniqueName ?? env.SETTLEMINT_CUSTOM_DEPLOYMENT;
       if (!customDeploymentUniqueName) {
-        throw new Error(
+        cancel(
           "No custom deployment unique name specified. Please provide it either via the --unique-name flag or by setting the SETTLEMINT_CUSTOM_DEPLOYMENT environment variable",
         );
       }
