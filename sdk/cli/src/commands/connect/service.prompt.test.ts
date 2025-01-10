@@ -14,6 +14,7 @@ describe("servicePrompt", () => {
       accept: false,
       envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
+      isCi: false,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toBeUndefined();
@@ -29,6 +30,7 @@ describe("servicePrompt", () => {
       accept: true,
       envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
+      isCi: false,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toEqual({ uniqueName: "service-2" });
@@ -44,6 +46,7 @@ describe("servicePrompt", () => {
       accept: false,
       envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
+      isCi: false,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toEqual(MOCK_SERVICES[0]);
@@ -59,6 +62,7 @@ describe("servicePrompt", () => {
       accept: false,
       envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
+      isCi: false,
     });
 
     expect(mockDefaultHandler).toHaveBeenCalledWith({ defaultService: undefined });
@@ -76,6 +80,7 @@ describe("servicePrompt", () => {
       accept: false,
       envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
+      isCi: false,
     });
 
     expect(mockDefaultHandler).toHaveBeenCalledWith({ defaultService });
