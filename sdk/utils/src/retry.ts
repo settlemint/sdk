@@ -28,8 +28,9 @@ export const retryWhenFailed = async <T>(
       if (attempt >= maxRetries) {
         throw e;
       }
-      // Exponential backoff
-      const delay = 2 ** attempt * initialSleepTime; // 1s, 2s, 4s
+      // Exponential backoff with jitter to prevent thundering herd
+      const jitter = 0.5 + Math.random();
+      const delay = 2 ** attempt * initialSleepTime * jitter; // 0.5-1.5x of 1s, 2s, 4s base delays
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
