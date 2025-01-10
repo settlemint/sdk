@@ -1,7 +1,7 @@
-import { exists, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { exists, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { type Command, type CommandUnknownOpts, Help } from "@commander-js/extra-typings";
-import { capitalizeFirstLetter, tryParseJson } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { sdkCliCommand } from "../src/commands";
 
 const exitOverride = () => {
@@ -167,15 +167,7 @@ async function updateVersionInfo(commandName: string, helpText: string) {
   if (commandName !== "settlemint") {
     return helpText;
   }
-  const version = await getVersion();
-  return helpText.replace(/CLI for SettleMint \(v\d\.\d\.\d\)/, `CLI for SettleMint (v${version})`);
-}
-
-async function getVersion(): Promise<string> {
-  const packageJsonPath = join(__dirname, "..", "..", "..", "package.json");
-  const packageJson = await readFile(packageJsonPath, "utf-8");
-  const { version } = tryParseJson<{ version: string }>(packageJson)!;
-  return version;
+  return helpText.replace(/CLI for SettleMint \(v\d\.\d\.\d\)/, "CLI for SettleMint");
 }
 
 createDocs(sdkCli).catch((err) => {
