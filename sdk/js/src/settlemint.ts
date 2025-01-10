@@ -1,3 +1,4 @@
+import { retryWhenFailed } from "@settlemint/sdk-utils";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
@@ -205,31 +206,21 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
       "x-auth-token": validatedOptions.accessToken,
     },
     fetch: async (input: URL | RequestInfo, init?: RequestInit) => {
-      const maxRetries = 3;
-      const retryDelay = 1_000;
-
-      for (let attempt = 1; attempt <= maxRetries; attempt++) {
-        try {
-          const response = await fetch(input, init);
-          if (response.ok) {
-            return response;
-          }
-          // Only retry on 5xx server errors, 429 rate limit, timeout, and network errors
-          if (response.status < 500 && response.status !== 429 && response.status !== 408 && response.status !== 0) {
-            return response;
-          }
-          if (attempt === maxRetries) {
-            return response;
-          }
-        } catch (error) {
-          if (attempt === maxRetries) {
-            throw error;
-          }
+      const response = await retryWhenFailed(async () => {
+        const response = await fetch(input, init);
+        if (response.ok) {
+          return response;
         }
-        // Exponential backoff with jitter
-        await new Promise((resolve) => setTimeout(resolve, retryDelay * 2 ** (attempt - 1) * (0.5 + Math.random())));
+        // Only retry on 5xx server errors, 429 rate limit, timeout, and network errors
+        if (response.status < 500 && response.status !== 429 && response.status !== 408 && response.status !== 0) {
+          return response;
+        }
+        throw new Error(response.statusText);
+      });
+      if (!response) {
+        throw new Error("Failed to fetch");
       }
-      throw new Error("Max retries exceeded");
+      return response;
     },
   });
 

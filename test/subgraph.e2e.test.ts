@@ -133,11 +133,14 @@ describe("Build and deploy a subgraph using the SDK", () => {
     }
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
     for (const datasource of config!.datasources) {
-      expect(
-        env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
-          endpoint.endsWith(`/subgraphs/name/${datasource.name.toLowerCase()}`),
-        ),
-      ).toBeTrue();
+      const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
+        endpoint.endsWith(`/subgraphs/name/${datasource.name.toLowerCase()}`),
+      );
+      if (!subgraphDeployed) {
+        expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(datasource.name.toLowerCase());
+      } else {
+        expect(subgraphDeployed).toBeTrue();
+      }
     }
   });
 });

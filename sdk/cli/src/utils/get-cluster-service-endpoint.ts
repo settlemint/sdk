@@ -5,6 +5,7 @@ import type { DotEnv } from "@settlemint/sdk-utils";
 export async function getGraphEndpoint(
   service: Middleware | undefined,
   env: Partial<DotEnv>,
+  graphName?: string,
 ): Promise<Partial<DotEnv>> {
   if (!service || service.__typename !== "HAGraphMiddleware") {
     return {};
@@ -12,8 +13,9 @@ export async function getGraphEndpoint(
 
   const isStarterKit = (id: string) => id.endsWith("-starterkits");
 
-  const testEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) => !isStarterKit(graphqlQueryEndpoint?.id))
-    ?.graphqlQueryEndpoint?.displayValue;
+  const testEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) =>
+    graphName ? graphqlQueryEndpoint?.id.endsWith(graphName) : !isStarterKit(graphqlQueryEndpoint?.id),
+  )?.graphqlQueryEndpoint?.displayValue;
   const starterKitEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) =>
     isStarterKit(graphqlQueryEndpoint?.id),
   )?.graphqlQueryEndpoint?.displayValue;

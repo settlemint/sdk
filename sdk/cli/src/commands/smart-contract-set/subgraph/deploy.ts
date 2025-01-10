@@ -12,8 +12,8 @@ import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
-import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
+import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { executeCommand, getPackageManagerExecutable, loadEnv, retryWhenFailed } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { subgraphNamePrompt } from "../prompts/subgraph-name.prompt";
@@ -112,8 +112,10 @@ export function subgraphDeployCommand() {
         accessToken,
         instance,
       });
-      const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
-      const graphEndpoints = await getGraphEndpoint(middleware, env);
+      const middleware = await retryWhenFailed(() =>
+        getMiddlewareAndValidateSubgraphIsAvailable(theGraphMiddleware.uniqueName, settlemintClient, graphName),
+      );
+      const graphEndpoints = await getGraphEndpoint(middleware, env, graphName);
       await writeEnvSpinner(!!prod, {
         ...env,
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
@@ -126,4 +128,19 @@ async function updateSpecVersion(specVersion: string) {
   const yamlConfig = await getSubgraphYamlConfig();
   yamlConfig.specVersion = specVersion;
   await updateSubgraphYamlConfig(yamlConfig);
+}
+
+async function getMiddlewareAndValidateSubgraphIsAvailable(
+  uniqueName: string,
+  settlemintClient: SettlemintClient,
+  graphName: string,
+) {
+  const middleware = await settlemintClient.middleware.read(uniqueName);
+  if (middleware.__typename === "HAGraphMiddleware") {
+    if (middleware.subgraphs.some((s) => s.name === graphName)) {
+      return middleware;
+    }
+    throw new Error("Subgraph not available");
+  }
+  return middleware;
 }
