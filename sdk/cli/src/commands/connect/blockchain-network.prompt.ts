@@ -16,12 +16,12 @@ export async function blockchainNetworkPrompt(
   networks: BlockchainNetwork[],
   accept: boolean | undefined,
 ): Promise<BlockchainNetwork | undefined> {
-  return servicePrompt<BlockchainNetwork>(
+  return servicePrompt({
     env,
-    networks,
+    services: networks,
     accept,
-    "SETTLEMINT_BLOCKCHAIN_NETWORK",
-    async ({ defaultService: defaultNetwork }) => {
+    envKey: "SETTLEMINT_BLOCKCHAIN_NETWORK",
+    defaultHandler: async ({ defaultService: defaultNetwork }: { defaultService: BlockchainNetwork | undefined }) => {
       return select({
         message: "Which blockchain network do you want to connect to?",
         choices: [
@@ -37,5 +37,5 @@ export async function blockchainNetworkPrompt(
         default: defaultNetwork,
       });
     },
-  );
+  });
 }

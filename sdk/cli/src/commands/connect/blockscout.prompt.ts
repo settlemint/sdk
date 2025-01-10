@@ -19,16 +19,16 @@ export async function blockscoutPrompt(
   accept: boolean | undefined,
 ): Promise<Insights | undefined> {
   const possible = insights.filter((insight) => insight.insightsCategory === "BLOCKCHAIN_EXPLORER");
-  return servicePrompt<Insights>(
+  return servicePrompt({
     env,
-    possible,
+    services: possible,
     accept,
-    "SETTLEMINT_BLOCKSCOUT",
-    async ({ defaultService: defaultBlockscout }) => {
+    envKey: "SETTLEMINT_BLOCKSCOUT",
+    defaultHandler: async ({ defaultService: defaultBlockscout }) => {
       return select({
         message: "Which blockscout instance do you want to connect to?",
         choices: [
-          ...insights.map((insight) => ({
+          ...possible.map((insight) => ({
             name: insight.name,
             value: insight,
           })),
@@ -40,5 +40,5 @@ export async function blockscoutPrompt(
         default: defaultBlockscout,
       });
     },
-  );
+  });
 }

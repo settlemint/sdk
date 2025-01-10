@@ -3,17 +3,27 @@ import type { CustomDeployment } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { servicePrompt } from "./service.prompt";
 
+/**
+ * Prompts the user to select a custom deployment to connect to.
+ *
+ * @param env - The environment variables containing the current configuration
+ * @param customDeployments - The available custom deployments to choose from
+ * @param accept - Whether to automatically accept default values without prompting
+ * @returns The selected custom deployment, or undefined if none is selected
+ */
 export async function customDeploymentPrompt(
   env: Partial<DotEnv>,
   customDeployments: CustomDeployment[],
   accept: boolean | undefined,
 ): Promise<CustomDeployment | undefined> {
-  return servicePrompt(
+  return servicePrompt({
     env,
-    customDeployments,
+    services: customDeployments,
     accept,
-    "SETTLEMINT_CUSTOM_DEPLOYMENT",
-    async ({ defaultService: defaultCustomDeployment }) => {
+    envKey: "SETTLEMINT_CUSTOM_DEPLOYMENT",
+    defaultHandler: async ({
+      defaultService: defaultCustomDeployment,
+    }: { defaultService: CustomDeployment | undefined }) => {
       return select({
         message: "Which Custom Deployment do you want to connect to?",
         choices: [
@@ -29,5 +39,5 @@ export async function customDeploymentPrompt(
         default: defaultCustomDeployment,
       });
     },
-  );
+  });
 }
