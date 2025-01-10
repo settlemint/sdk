@@ -1,7 +1,6 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
-import {} from "@settlemint/sdk-js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import isInCi from "is-in-ci";
