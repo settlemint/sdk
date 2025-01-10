@@ -10,7 +10,6 @@ import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-j
 import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import isInCi from "is-in-ci";
 import { providerPrompt } from "../prompts/provider.prompt";
 import { regionPrompt } from "../prompts/region.prompt";
 import type { ResourceType } from "./resource-type";
@@ -90,10 +89,9 @@ export function getCreateCommand({
     async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout, provider, region }, createFunction) => {
       intro(`Creating ${type} in the SettleMint platform`);
 
-      const autoAccept = !!acceptDefaults || isInCi;
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const instance = await instancePrompt(env, autoAccept);
+      const instance = await instancePrompt(env, acceptDefaults);
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,
