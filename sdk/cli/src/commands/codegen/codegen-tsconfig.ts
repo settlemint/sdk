@@ -35,10 +35,24 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
   });
 
   const [hasura, portal, thegraph, blockscout] = await Promise.all([
-    testGqlEndpoint(accessToken, env.SETTLEMINT_HASURA_ADMIN_SECRET, env.SETTLEMINT_HASURA_ENDPOINT, true),
-    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT),
-    testGqlEndpoint(accessToken, undefined, theGraphEndpoints[0]),
-    testGqlEndpoint(accessToken, undefined, env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT),
+    testGqlEndpoint({
+      accessToken,
+      hasuraAdminSecret: env.SETTLEMINT_HASURA_ADMIN_SECRET,
+      gqlEndpoint: env.SETTLEMINT_HASURA_ENDPOINT,
+      isHasura: true,
+    }),
+    testGqlEndpoint({
+      accessToken,
+      gqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+    }),
+    testGqlEndpoint({
+      accessToken,
+      gqlEndpoint: theGraphEndpoints[0],
+    }),
+    testGqlEndpoint({
+      accessToken,
+      gqlEndpoint: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
+    }),
   ]);
 
   if (!tsconfig.config.compilerOptions) {

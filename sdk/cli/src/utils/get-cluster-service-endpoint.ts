@@ -20,7 +20,7 @@ export async function getGraphEndpoint(
 
   const hasEndpoint =
     testEndpoint && env.SETTLEMINT_ACCESS_TOKEN
-      ? await testGqlEndpoint(env.SETTLEMINT_ACCESS_TOKEN, undefined, testEndpoint)
+      ? await testGqlEndpoint({ accessToken: env.SETTLEMINT_ACCESS_TOKEN, gqlEndpoint: testEndpoint })
       : false;
 
   const endpoints = hasEndpoint

@@ -1,13 +1,12 @@
-import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { createExamples } from "@/commands/platform/utils/create-examples";
+import { selectTargetNode } from "@/commands/smart-contract-set/hardhat/utils/select-target-node";
 import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
-import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
-import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
@@ -88,43 +87,7 @@ export function hardhatDeployRemoteCommand() {
         instance,
       });
 
-      const nodeUniqueName = blockchainNodeUniqueName ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
-      let node: BlockchainNode | undefined = undefined;
-      if (!nodeUniqueName) {
-        if (!env.SETTLEMINT_APPLICATION) {
-          return missingApplication();
-        }
-        const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION);
-        const evmNodes = nodes.filter((node) => node.isEvm);
-        if (evmNodes.length === 0) {
-          cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");
-        }
-
-        const nodesWithPrivateKey = await Promise.all(
-          nodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)),
-        );
-        const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
-          (node) => node.privateKeys && node.privateKeys.length > 0,
-        );
-        if (nodesWithActivePrivateKey.length === 0) {
-          cancel(
-            "No EVM blockchain nodes with private keys found. Please activate a private key on your EVM blockchain node and try again.",
-          );
-        }
-
-        const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, acceptDefaults);
-        if (!blockchainNode) {
-          return nothingSelectedError("EVM blockchain node");
-        }
-        node = blockchainNode;
-      } else {
-        node = await settlemint.blockchainNode.read(nodeUniqueName);
-        if (!node.isEvm) {
-          cancel(
-            "The specified blockchain node is not an EVM blockchain node. Please specify an EVM blockchain node to continue.",
-          );
-        }
-      }
+      const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
 
       const envConfig = await settlemint.foundry.env(node.uniqueName);
       const hardhatConfig = await getHardhatConfigData(envConfig);

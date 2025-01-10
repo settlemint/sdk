@@ -1,3 +1,4 @@
+import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
@@ -18,6 +19,10 @@ export async function codegenPortal(env: DotEnv) {
     return;
   }
 
+  await testGqlEndpoint({
+    accessToken,
+    gqlEndpoint,
+  });
   await generateSchema({
     input: gqlEndpoint,
     output: "portal-schema.graphql",

@@ -1,3 +1,4 @@
+import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
@@ -38,6 +39,10 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
   for (const gqlEndpoint of toGenerate) {
     const name = gqlEndpoint.split("/").pop()!;
     note(`Generating TheGraph subgraph ${name}`);
+    await testGqlEndpoint({
+      accessToken,
+      gqlEndpoint,
+    });
     await generateSchema({
       input: gqlEndpoint,
       output: `the-graph-schema-${name}.graphql`,
