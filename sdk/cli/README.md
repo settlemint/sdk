@@ -43,7 +43,7 @@
     - [Generating code for your dApp](#generating-code-for-your-dapp)
     - [Start your dApp in development mode](#start-your-dapp-in-development-mode)
   - [Creating a new project from a smart contract template](#creating-a-new-project-from-a-smart-contract-template)
-    - [Testing your smart contracts on a local network](#testing-your-smart-contracts-on-a-local-network)
+    - [Testing your smart contracts](#testing-your-smart-contracts)
     - [Deploying your smart contracts and subgraphs](#deploying-your-smart-contracts-and-subgraphs)
 - [API Reference](#api-reference)
 - [Contributing](#contributing)
@@ -186,7 +186,17 @@ settlemint codegen
 #### Start your dApp in development mode
 
 ```bash
+# bun
 bun run dev
+
+# npm
+npm run dev
+
+# yarn
+yarn dev
+
+# pnpm
+pnpm dev
 ```
 
 ### Creating a new project from a smart contract template
@@ -197,7 +207,7 @@ To create a new project from a smart contract template, use the `create` command
 settlemint scs create --project-name <project-name> --use-case <use-case-name>
 ```
 
-#### Testing your smart contracts on a local network
+#### Testing your smart contracts
 
 To test your smart contracts, you can use the `test` command.
 
@@ -221,7 +231,7 @@ settlemint scs subgraph deploy --accept-defaults <subgraph-name>
 
 ## API Reference
 
-See the [documentation](https://github.com/settlemint/sdk/tree/v0.9.3/sdk/cli/docs/settlemint.md) for available commands.
+See the [documentation](https://github.com/settlemint/sdk/tree/v0.9.3-main36c3b4de/sdk/cli/docs/settlemint.md) for available commands.
 
 ## Contributing
 

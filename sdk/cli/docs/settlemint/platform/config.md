@@ -5,7 +5,9 @@
 Get platform configuration
 
 Options:
-  --prod      Connect to your production environment
-  -h, --help  display help for command
+  --prod                     Connect to your production environment
+  -i, --instance &lt;instance&gt;  The instance to connect to (defaults to the
+                             instance in the .env file)
+  -h, --help                 display help for command
 </pre>
 
