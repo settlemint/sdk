@@ -1,7 +1,7 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import { note } from "@settlemint/sdk-utils";
+import { installDependencies, isPackageInstalled, note } from "@settlemint/sdk-utils";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function codegenHasura(env: DotEnv) {
@@ -65,6 +65,15 @@ export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DAT
 
   // Always generate the Drizzle template, but with proper build time handling
   await writeTemplate(drizzleTemplate, "/lib/settlemint", "postgres.ts");
+
+  if (!(await isPackageInstalled("is-in-ci"))) {
+    await installDependencies("is-in-ci");
+  }
+
+  // Install the package only if it's not already installed
+  if (!(await isPackageInstalled("@settlemint/sdk-hasura"))) {
+    await installDependencies("@settlemint/sdk-hasura");
+  }
 
   // Warn about missing database variables only during runtime
   if (process.env.NODE_ENV !== "production" && !databaseUrl) {
