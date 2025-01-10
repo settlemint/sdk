@@ -1,4 +1,4 @@
-import { servicePrompt } from "@/utils/prompt.utils";
+import { servicePrompt } from "@/commands/connect/service.prompt";
 import select from "@inquirer/select";
 import type { BlockchainNetwork } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";

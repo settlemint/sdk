@@ -1,3 +1,4 @@
+import { servicePrompt } from "@/commands/connect/service.prompt";
 import select from "@inquirer/select";
 import type { Insights } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -15,37 +16,29 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 export async function blockscoutPrompt(
   env: Partial<DotEnv>,
   insights: Insights[],
-  accept: boolean,
+  accept: boolean | undefined,
 ): Promise<Insights | undefined> {
   const possible = insights.filter((insight) => insight.insightsCategory === "BLOCKCHAIN_EXPLORER");
-
-  if (possible.length === 0) {
-    return undefined;
-  }
-
-  const defaultBlockscout =
-    insights.find((insight) => insight.uniqueName === env.SETTLEMINT_BLOCKSCOUT) ??
-    (insights.length === 1 ? insights[0] : undefined);
-  const defaultPossible = accept; // is optional
-
-  if (defaultPossible) {
-    return defaultBlockscout;
-  }
-
-  const blockscout = await select({
-    message: "Which blockscout instance do you want to connect to?",
-    choices: [
-      ...insights.map((insight) => ({
-        name: insight.name,
-        value: insight,
-      })),
-      {
-        name: "None",
-        value: undefined,
-      },
-    ],
-    default: defaultBlockscout,
-  });
-
-  return blockscout;
+  return servicePrompt<Insights>(
+    env,
+    possible,
+    accept,
+    "SETTLEMINT_BLOCKSCOUT",
+    async ({ defaultService: defaultBlockscout }) => {
+      return select({
+        message: "Which blockscout instance do you want to connect to?",
+        choices: [
+          ...insights.map((insight) => ({
+            name: insight.name,
+            value: insight,
+          })),
+          {
+            name: "None",
+            value: undefined,
+          },
+        ],
+        default: defaultBlockscout,
+      });
+    },
+  );
 }

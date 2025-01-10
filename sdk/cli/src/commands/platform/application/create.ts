@@ -1,7 +1,6 @@
 import { workspacePrompt } from "@/commands/connect/workspace.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import isInCi from "is-in-ci";
 import { getCreateCommand } from "../common/create-command";
 
 /**
@@ -27,11 +26,10 @@ export function applicationCreateCommand() {
               acceptDefaults,
             },
             async (settlemint, env) => {
-              const autoAccept = !!acceptDefaults || isInCi;
               let workspaceUniqueName = workspace;
               if (!workspaceUniqueName) {
                 const workspaces = await settlemint.workspace.list();
-                const workspace = await workspacePrompt(env, workspaces, autoAccept);
+                const workspace = await workspacePrompt(env, workspaces, acceptDefaults);
                 if (!workspace) {
                   return nothingSelectedError("workspace");
                 }

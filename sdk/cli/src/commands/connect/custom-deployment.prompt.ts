@@ -1,39 +1,33 @@
 import select from "@inquirer/select";
 import type { CustomDeployment } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { servicePrompt } from "./service.prompt";
 
 export async function customDeploymentPrompt(
   env: Partial<DotEnv>,
   customDeployments: CustomDeployment[],
-  accept: boolean,
+  accept: boolean | undefined,
 ): Promise<CustomDeployment | undefined> {
-  if (customDeployments.length === 0) {
-    return undefined;
-  }
-
-  const defaultCustomDeployment =
-    customDeployments.find((customDeployment) => customDeployment.uniqueName === env.SETTLEMINT_CUSTOM_DEPLOYMENT) ??
-    (customDeployments.length === 1 ? customDeployments[0] : undefined);
-  const defaultPossible = accept; // is optional
-
-  if (defaultPossible) {
-    return defaultCustomDeployment;
-  }
-
-  const middleware = await select({
-    message: "Which Custom Deployment do you want to connect to?",
-    choices: [
-      ...customDeployments.map((customDeployment) => ({
-        name: customDeployment.name,
-        value: customDeployment,
-      })),
-      {
-        name: "None",
-        value: undefined,
-      },
-    ],
-    default: defaultCustomDeployment,
-  });
-
-  return middleware;
+  return servicePrompt(
+    env,
+    customDeployments,
+    accept,
+    "SETTLEMINT_CUSTOM_DEPLOYMENT",
+    async ({ defaultService: defaultCustomDeployment }) => {
+      return select({
+        message: "Which Custom Deployment do you want to connect to?",
+        choices: [
+          ...customDeployments.map((customDeployment) => ({
+            name: customDeployment.name,
+            value: customDeployment,
+          })),
+          {
+            name: "None",
+            value: undefined,
+          },
+        ],
+        default: defaultCustomDeployment,
+      });
+    },
+  );
 }

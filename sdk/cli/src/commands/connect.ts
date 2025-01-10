@@ -15,7 +15,6 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, note } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
-import isInCi from "is-in-ci";
 import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
 import { applicationPrompt } from "./connect/application.prompt";
 import { blockchainNodePrompt } from "./connect/blockchain-node.prompt";
@@ -49,10 +48,9 @@ export function connectCommand(): Command {
       // Define the action to be executed when the command is run
       .action(async ({ acceptDefaults, prod }) => {
         intro("Connecting your dApp to SettleMint");
-        const autoAccept = !!acceptDefaults || isInCi;
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-        const instance = await instancePrompt(env, autoAccept);
+        const instance = await instancePrompt(env, acceptDefaults);
         const personalAccessToken = await getInstanceCredentials(instance);
 
         if (!personalAccessToken) {
@@ -68,25 +66,25 @@ export function connectCommand(): Command {
 
         const workspaces = await workspaceSpinner(settlemint);
 
-        const workspace = await workspacePrompt(env, workspaces, autoAccept);
-        const application = await applicationPrompt(env, workspace?.applications ?? [], autoAccept);
+        const workspace = await workspacePrompt(env, workspaces, acceptDefaults);
+        const application = await applicationPrompt(env, workspace?.applications ?? [], acceptDefaults);
 
-        const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, autoAccept);
+        const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, acceptDefaults);
 
         const { middleware, integrationTool, storage, privateKey, insights, customDeployment, blockchainNodes } =
           await servicesSpinner(settlemint, application);
 
-        const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
-        const hasura = await hasuraPrompt(env, integrationTool, autoAccept);
-        const thegraph = await theGraphPrompt(env, middleware, autoAccept);
-        const portal = await portalPrompt(env, middleware, autoAccept);
-        const ipfs = await ipfsPrompt(env, storage, autoAccept);
-        const minio = await minioPrompt(env, storage, autoAccept);
-        const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, autoAccept);
-        const cDeployment = await customDeploymentPrompt(env, customDeployment, autoAccept);
-        const blockscout = await blockscoutPrompt(env, insights, autoAccept);
+        const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
+        const hasura = await hasuraPrompt(env, integrationTool, acceptDefaults);
+        const thegraph = await theGraphPrompt(env, middleware, acceptDefaults);
+        const portal = await portalPrompt(env, middleware, acceptDefaults);
+        const ipfs = await ipfsPrompt(env, storage, acceptDefaults);
+        const minio = await minioPrompt(env, storage, acceptDefaults);
+        const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, acceptDefaults);
+        const cDeployment = await customDeploymentPrompt(env, customDeployment, acceptDefaults);
+        const blockscout = await blockscoutPrompt(env, insights, acceptDefaults);
 
-        if (autoAccept) {
+        if (acceptDefaults) {
           const selectedServices = [
             `Workspace: ${workspace.name}`,
             `Application: ${application.name}`,

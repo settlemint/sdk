@@ -5,7 +5,6 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import isInCi from "is-in-ci";
 
 /**
  * Creates and returns the 'blockscout' insights command for the SettleMint SDK.
@@ -38,7 +37,6 @@ export function blockscoutInsightsCreateCommand() {
                 region,
               },
               async (settlemint, env) => {
-                const autoAccept = !!acceptDefaults || isInCi;
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -52,7 +50,7 @@ export function blockscoutInsightsCreateCommand() {
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
-                  const node = await blockchainNodePrompt(env, blockchainNodes, autoAccept);
+                  const node = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
                   if (!node) {
                     return nothingSelectedError("blockchain node");
                   }
