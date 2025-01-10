@@ -1,5 +1,5 @@
 import { getInstances } from "@/utils/config";
-import { sanitizeInstanceUrl } from "@/utils/sanitize-instance-url";
+import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
 import { cancel } from "@settlemint/sdk-utils";

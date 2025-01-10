@@ -10,10 +10,10 @@ import {
   getMinioEndpoints,
   getPortalEndpoints,
 } from "@/utils/get-cluster-service-endpoint";
-import { sanitizeInstanceUrl } from "@/utils/sanitize-instance-url";
+import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { type DotEnv, UrlSchema, note, validate } from "@settlemint/sdk-utils";
+import { type DotEnv, note } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
@@ -52,10 +52,7 @@ export function connectCommand(): Command {
         intro("Connecting your dApp to SettleMint");
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-        if (instance) {
-          validate(UrlSchema, instance);
-        }
-        const selectedInstance = instance ? sanitizeInstanceUrl(instance) : await instancePrompt(env, true);
+        const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
         const personalAccessToken = await getInstanceCredentials(selectedInstance);
 
         if (!personalAccessToken) {

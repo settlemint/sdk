@@ -1,6 +1,6 @@
 import { loginSpinner } from "@/commands/connect/login.spinner";
 import { createExamples } from "@/commands/platform/utils/create-examples";
-import { sanitizeInstanceUrl } from "@/utils/sanitize-instance-url";
+import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { UrlSchema } from "@settlemint/sdk-utils";
@@ -46,7 +46,9 @@ export function loginCommand(): Command {
       if (instance) {
         validate(UrlSchema, instance);
       }
-      const selectedInstance = instance ? sanitizeInstanceUrl(instance) : await instancePrompt(env, autoAccept, true);
+      const selectedInstance = instance
+        ? sanitizeAndValidateInstanceUrl(instance)
+        : await instancePrompt(env, autoAccept, true);
 
       let personalAccessToken = "";
       if (tokenStdin) {

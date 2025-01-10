@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { sanitizeInstanceUrl } from "./sanitize-instance-url";
+import { sanitizeInstanceUrl } from "./instance-url-utils";
 
 describe("sanitizeInstanceUrl", () => {
   test("removes trailing slashes", () => {

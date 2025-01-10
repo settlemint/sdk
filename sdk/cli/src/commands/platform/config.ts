@@ -1,7 +1,7 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { getRegionId } from "@/commands/platform/utils/cluster-region";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { sanitizeInstanceUrl } from "@/utils/sanitize-instance-url";
+import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { type DotEnv, note } from "@settlemint/sdk-utils";
@@ -22,7 +22,7 @@ export function configCommand() {
       intro("Getting platform configuration");
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-      const selectedInstance = instance ? sanitizeInstanceUrl(instance) : await instancePrompt(env, true);
+      const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance: selectedInstance,
