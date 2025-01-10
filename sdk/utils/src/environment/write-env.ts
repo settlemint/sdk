@@ -79,7 +79,7 @@ async function findMonoRepoPackages(projectDir: string): Promise<string[]> {
  * }, true);
  */
 export async function writeEnv(prod: boolean, env: Partial<DotEnv>, secrets: boolean): Promise<void> {
-  const projectDir = await projectRoot();
+  const projectDir = await projectRoot(false);
 
   if (prod) {
     process.env.NODE_ENV = "production";

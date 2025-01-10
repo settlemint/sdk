@@ -13,9 +13,12 @@ import { findUp } from "find-up";
  * const rootDir = await projectRoot();
  * console.log(`Project root is at: ${rootDir}`);
  */
-export async function projectRoot(): Promise<string> {
+export async function projectRoot(fallbackToCwd = false): Promise<string> {
   const packageJsonPath = await findUp("package.json");
   if (!packageJsonPath) {
+    if (fallbackToCwd) {
+      return process.cwd();
+    }
     throw new Error("Unable to find project root (no package.json found)");
   }
   return dirname(packageJsonPath);
