@@ -6,12 +6,12 @@
  * @param stopOnError - The function to stop on error.
  * @returns The result of the function or undefined if it fails.
  */
-export const retryWhenFailed = async <T>(
+export async function retryWhenFailed<T>(
   fn: () => Promise<T>,
   maxRetries = 5,
   initialSleepTime = 3_000,
   stopOnError?: (error: Error) => boolean,
-): Promise<T | undefined> => {
+): Promise<T | undefined> {
   let attempt = 0;
 
   while (attempt < maxRetries) {
@@ -34,4 +34,4 @@ export const retryWhenFailed = async <T>(
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
-};
+}
