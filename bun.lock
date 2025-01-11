@@ -8,7 +8,7 @@
         "@types/bun": "1.1.16",
         "knip": "5.42.0",
         "lefthook": "1.10.3",
-        "publint": "0.3.0",
+        "publint": "0.3.1",
         "tsup": "8.3.5",
         "turbo": "2.3.3",
         "typedoc": "0.27.6",
@@ -1306,7 +1306,7 @@
 
     "protons-runtime": ["protons-runtime@5.5.0", "", { "dependencies": { "uint8-varint": "^2.0.2", "uint8arraylist": "^2.4.3", "uint8arrays": "^5.0.1" } }, "sha512-EsALjF9QsrEk6gbCx3lmfHxVN0ah7nG3cY7GySD4xf4g8cr7g543zB88Foh897Sr1RQJ9yDCUsoT1i1H/cVUFA=="],
 
-    "publint": ["publint@0.3.0", "", { "dependencies": { "@publint/pack": "^0.1.0", "package-manager-detector": "^0.2.8", "picocolors": "^1.1.1", "sade": "^1.8.1" }, "bin": { "publint": "src/cli.js" } }, "sha512-B7efom03c86OGqN1Jp2mDduiamb5apEuolvlbUeHaa14geCzJKz35oPIiKoXPMvM3tGABEZ1oLfY6xJNvOh69g=="],
+    "publint": ["publint@0.3.1", "", { "dependencies": { "@publint/pack": "^0.1.0", "package-manager-detector": "^0.2.8", "picocolors": "^1.1.1", "sade": "^1.8.1" }, "bin": { "publint": "src/cli.js" } }, "sha512-kZo30Y7aRyF/KmXMiGjkQFuhqQ7+dS6msPUoMUhhCYpVd1bEO3LC2tYueJxzscFAM7P+ayJ5vWGUeoj1xDCmHw=="],
 
     "punycode": ["punycode@2.3.1", "", {}, "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg=="],
 
