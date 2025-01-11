@@ -4,12 +4,14 @@ import isInCi from "is-in-ci";
 /**
  * Prompts the user to select a service from a list of available services.
  *
- * @param env - The environment variables containing the current configuration
- * @param services - The available services to choose from
- * @param accept - Whether to automatically accept default values without prompting
- * @param envKey - The environment variable key to store the selected service
- * @param defaultHandler - Handler function to prompt user for service selection
- * @param isCi - Whether running in CI environment (added so we can easily simulate CI in tests)
+ * @param config - Configuration object containing environment, services and options
+ * @param config.env - The environment variables containing the current configuration
+ * @param config.services - The available services to choose from
+ * @param config.accept - Whether to automatically accept default values without prompting
+ * @param config.envKey - The environment variable key to store the selected service
+ * @param config.defaultHandler - Handler function to prompt user for service selection
+ * @param config.isRequired - Whether the service is required
+ * @param config.isCi - Whether running in CI environment (defaults to isInCi)
  * @returns The selected service, or undefined if none selected
  */
 export async function servicePrompt<Service extends { uniqueName: string }>({
@@ -18,6 +20,7 @@ export async function servicePrompt<Service extends { uniqueName: string }>({
   accept,
   envKey,
   defaultHandler,
+  isRequired = false,
   isCi = isInCi,
 }: {
   env: Partial<DotEnv>;
@@ -25,6 +28,7 @@ export async function servicePrompt<Service extends { uniqueName: string }>({
   accept: boolean | undefined;
   envKey: keyof DotEnv;
   defaultHandler: (config: { defaultService: Service | undefined }) => Promise<Service | undefined>;
+  isRequired?: boolean;
   isCi?: boolean;
 }): Promise<Service | undefined> {
   // Return early if no services available
@@ -46,8 +50,8 @@ export async function servicePrompt<Service extends { uniqueName: string }>({
     return undefined;
   }
 
-  // Auto-select if only one service available
-  if (services.length === 1) {
+  // Auto-select if only one service available and a service is required
+  if (isRequired && services.length === 1) {
     return services[0];
   }
 

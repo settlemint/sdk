@@ -39,7 +39,12 @@ export async function selectTargetNode({
       );
     }
 
-    const blockchainNode = await blockchainNodePrompt(env, nodesWithActivePrivateKey, autoAccept, true);
+    const blockchainNode = await blockchainNodePrompt({
+      env,
+      nodes: nodesWithActivePrivateKey,
+      accept: autoAccept,
+      isRequired: true,
+    });
     if (!blockchainNode) {
       return nothingSelectedError("EVM blockchain node");
     }

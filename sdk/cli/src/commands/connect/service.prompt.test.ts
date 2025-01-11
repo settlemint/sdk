@@ -36,7 +36,7 @@ describe("servicePrompt", () => {
     expect(result).toEqual({ uniqueName: "service-2" });
   });
 
-  it("returns single service if only one available", async () => {
+  it("returns single service if only one available and isRequired is true", async () => {
     const mockDefaultHandler = mock(() => Promise.resolve(undefined));
     const singleService = [MOCK_SERVICES[0]];
 
@@ -46,10 +46,28 @@ describe("servicePrompt", () => {
       accept: false,
       envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
       defaultHandler: mockDefaultHandler,
+      isRequired: true,
       isCi: false,
     });
     expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toEqual(MOCK_SERVICES[0]);
+  });
+
+  it("prompts if service is optional and only one service is available", async () => {
+    const mockDefaultHandler = mock(() => Promise.resolve(undefined));
+    const singleService = [MOCK_SERVICES[0]];
+
+    const result = await servicePrompt({
+      env: {},
+      services: singleService,
+      accept: false,
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
+      defaultHandler: mockDefaultHandler,
+      isRequired: false,
+      isCi: false,
+    });
+    expect(mockDefaultHandler).toHaveBeenCalledWith({ defaultService: undefined });
+    expect(result).toBeUndefined();
   });
 
   it("calls defaultHandler when multiple services and no accept", async () => {
