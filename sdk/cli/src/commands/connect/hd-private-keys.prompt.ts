@@ -6,22 +6,31 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 /**
  * Prompts the user to select an HD private key to use.
  *
- * @param env - The environment variables containing the current configuration
- * @param privateKeys - The available private keys to choose from
- * @param accept - Whether to automatically accept default values without prompting
+ * @param config - Configuration object containing environment, private keys, and options
+ * @param config.env - The environment variables containing the current configuration
+ * @param config.privateKeys - The available private keys to choose from
+ * @param config.accept - Whether to automatically accept default values without prompting
+ * @param config.isRequired - Whether an HD private key is required
  * @returns The selected private key, or undefined if none is selected
  */
-export async function hdPrivateKeyPrompt(
-  env: Partial<DotEnv>,
-  privateKeys: PrivateKey[],
-  accept: boolean | undefined,
-): Promise<PrivateKey | undefined> {
+export async function hdPrivateKeyPrompt({
+  env,
+  privateKeys,
+  accept,
+  isRequired = false,
+}: {
+  env: Partial<DotEnv>;
+  privateKeys: PrivateKey[];
+  accept: boolean | undefined;
+  isRequired?: boolean;
+}): Promise<PrivateKey | undefined> {
   const possible = privateKeys.filter((privateKey) => privateKey.privateKeyType === "HD_ECDSA_P256");
   return servicePrompt({
     env,
     services: possible,
     accept,
     envKey: "SETTLEMINT_HD_PRIVATE_KEY",
+    isRequired,
     defaultHandler: async ({ defaultService: defaultPrivateKey }: { defaultService: PrivateKey | undefined }) => {
       return select({
         message: "Which HD Private Key do you want to use?",
@@ -30,10 +39,14 @@ export async function hdPrivateKeyPrompt(
             name: privateKey.name,
             value: privateKey,
           })),
-          {
-            name: "None",
-            value: undefined,
-          },
+          ...(isRequired
+            ? []
+            : [
+                {
+                  name: "None",
+                  value: undefined,
+                },
+              ]),
         ],
         default: defaultPrivateKey,
       });

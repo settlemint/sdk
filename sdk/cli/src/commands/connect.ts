@@ -73,18 +73,54 @@ export function connectCommand(): Command {
 
         const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, acceptDefaults);
 
-        const { middleware, integrationTool, storage, privateKey, insights, customDeployment, blockchainNodes } =
+        const { middlewares, integrationTools, storages, privateKeys, insights, customDeployments, blockchainNodes } =
           await servicesSpinner(settlemint, application);
 
-        const blockchainNode = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
-        const hasura = await hasuraPrompt(env, integrationTool, acceptDefaults);
-        const thegraph = await theGraphPrompt(env, middleware, acceptDefaults);
-        const portal = await portalPrompt(env, middleware, acceptDefaults);
-        const ipfs = await ipfsPrompt(env, storage, acceptDefaults);
-        const minio = await minioPrompt(env, storage, acceptDefaults);
-        const hdPrivateKey = await hdPrivateKeyPrompt(env, privateKey, acceptDefaults);
-        const cDeployment = await customDeploymentPrompt(env, customDeployment, acceptDefaults);
-        const blockscout = await blockscoutPrompt(env, insights, acceptDefaults);
+        const blockchainNode = await blockchainNodePrompt({
+          env,
+          nodes: blockchainNodes,
+          accept: acceptDefaults,
+        });
+        const hasura = await hasuraPrompt({
+          env,
+          integrations: integrationTools,
+          accept: acceptDefaults,
+        });
+        const thegraph = await theGraphPrompt({
+          env,
+          middlewares,
+          accept: acceptDefaults,
+        });
+        const portal = await portalPrompt({
+          env,
+          middlewares,
+          accept: acceptDefaults,
+        });
+        const ipfs = await ipfsPrompt({
+          env,
+          storages,
+          accept: acceptDefaults,
+        });
+        const minio = await minioPrompt({
+          env,
+          storages,
+          accept: acceptDefaults,
+        });
+        const hdPrivateKey = await hdPrivateKeyPrompt({
+          env,
+          privateKeys,
+          accept: acceptDefaults,
+        });
+        const cDeployment = await customDeploymentPrompt({
+          env,
+          customDeployments,
+          accept: acceptDefaults,
+        });
+        const blockscout = await blockscoutPrompt({
+          env,
+          insights,
+          accept: acceptDefaults,
+        });
 
         if (acceptDefaults) {
           const selectedServices = [
