@@ -6,18 +6,27 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 /**
  * Prompts the user to select a The Graph instance to connect to.
  *
- * @param env - The environment variables containing the current configuration
- * @param middlewares - The available middleware instances to choose from
- * @param accept - Whether to automatically accept default values without prompting
- * @param filterRunningOnly - Whether to only show running graph middlewares
+ * @param options - The options object containing:
+ * @param options.env - The environment variables containing the current configuration
+ * @param options.middlewares - The available middleware instances to choose from
+ * @param options.accept - Whether to automatically accept default values without prompting
+ * @param options.filterRunningOnly - Whether to only show running graph middlewares
+ * @param options.isRequired - Whether a selection is required
  * @returns The selected The Graph middleware, or undefined if none is selected
  */
-export async function theGraphPrompt(
-  env: Partial<DotEnv>,
-  middlewares: Middleware[],
-  accept: boolean | undefined,
+export async function theGraphPrompt({
+  env,
+  middlewares,
+  accept,
   filterRunningOnly = false,
-) {
+  isRequired = false,
+}: {
+  env: Partial<DotEnv>;
+  middlewares: Middleware[];
+  accept?: boolean;
+  filterRunningOnly?: boolean;
+  isRequired?: boolean;
+}) {
   const graphMiddlewares = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
   const choices = filterRunningOnly
     ? graphMiddlewares.filter((middleware) => middleware.status === "COMPLETED")
@@ -27,6 +36,7 @@ export async function theGraphPrompt(
     services: graphMiddlewares,
     accept,
     envKey: "SETTLEMINT_THEGRAPH",
+    isRequired,
     defaultHandler: async ({ defaultService: defaultMiddleware }: { defaultService: Middleware | undefined }) => {
       return select({
         message: "Which The Graph instance do you want to connect to?",
@@ -35,10 +45,14 @@ export async function theGraphPrompt(
             name: middleware.name,
             value: middleware,
           })),
-          {
-            name: "None",
-            value: undefined,
-          },
+          ...(isRequired
+            ? []
+            : [
+                {
+                  name: "None",
+                  value: undefined,
+                },
+              ]),
         ],
         default: defaultMiddleware,
       });

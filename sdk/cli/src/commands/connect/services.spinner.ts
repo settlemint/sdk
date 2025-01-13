@@ -32,12 +32,12 @@ export async function servicesSpinner(
 ): Promise<{
   blockchainNetworks: BlockchainNetwork[];
   blockchainNodes: BlockchainNode[];
-  middleware: Middleware[];
-  integrationTool: IntegrationTool[];
-  storage: Storage[];
-  privateKey: PrivateKey[];
+  middlewares: Middleware[];
+  integrationTools: IntegrationTool[];
+  storages: Storage[];
+  privateKeys: PrivateKey[];
   insights: Insights[];
-  customDeployment: CustomDeployment[];
+  customDeployments: CustomDeployment[];
 }> {
   return spinner({
     startMessage: "Loading your services",
@@ -46,12 +46,12 @@ export async function servicesSpinner(
       const [
         blockchainNetworks,
         blockchainNodes,
-        middleware,
-        integrationTool,
-        storage,
-        privateKey,
+        middlewares,
+        integrationTools,
+        storages,
+        privateKeys,
         insights,
-        customDeployment,
+        customDeployments,
       ] = await Promise.all([
         settlemint.blockchainNetwork.list(application.uniqueName),
         settlemint.blockchainNode.list(application.uniqueName),
@@ -65,12 +65,12 @@ export async function servicesSpinner(
       return {
         blockchainNetworks,
         blockchainNodes,
-        middleware,
-        integrationTool,
-        storage,
-        privateKey,
+        middlewares,
+        integrationTools,
+        storages,
+        privateKeys,
         insights,
-        customDeployment,
+        customDeployments,
       };
     },
   });

@@ -50,7 +50,12 @@ export function blockscoutInsightsCreateCommand() {
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
-                  const node = await blockchainNodePrompt(env, blockchainNodes, acceptDefaults);
+                  const node = await blockchainNodePrompt({
+                    env,
+                    nodes: blockchainNodes,
+                    accept: acceptDefaults,
+                    isRequired: true,
+                  });
                   if (!node) {
                     return nothingSelectedError("blockchain node");
                   }

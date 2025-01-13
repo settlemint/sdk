@@ -62,7 +62,12 @@ export function blockchainNodeBesuCreateCommand() {
                 let networkUniqueName = blockchainNetwork;
                 if (!networkUniqueName) {
                   const networks = await settlemint.blockchainNetwork.list(applicationUniqueName);
-                  const network = await blockchainNetworkPrompt(env, networks, acceptDefaults);
+                  const network = await blockchainNetworkPrompt({
+                    env,
+                    networks,
+                    accept: acceptDefaults,
+                    isRequired: true,
+                  });
                   if (!network) {
                     return nothingSelectedError("blockchain network");
                   }

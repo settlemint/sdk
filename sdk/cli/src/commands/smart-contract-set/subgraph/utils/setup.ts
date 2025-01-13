@@ -93,7 +93,12 @@ export async function getTheGraphMiddleware({
     return missingApplication();
   }
   const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION);
-  return theGraphPrompt(env, middlewares, autoAccept, true);
+  return theGraphPrompt({
+    env,
+    middlewares,
+    accept: autoAccept,
+    isRequired: true,
+  });
 }
 
 export async function getTheGraphNetwork({
