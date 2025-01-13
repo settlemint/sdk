@@ -41,6 +41,9 @@ jobs:
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
           SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
 
+      - name: Checkout repository
+        uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
+
       - name: Login to SettleMint and delete workspace
         uses: settlemint/settlemint-action@main
         with:
