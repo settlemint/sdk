@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { mkdir, rm } from "node:fs/promises";
-import { join, resolve } from "node:path";
+import { basename, join, resolve } from "node:path";
 import { $ } from "bun";
-import { findMonoRepoRoot } from "./mono-repo.js";
+import { findMonoRepoPackages, findMonoRepoRoot } from "./mono-repo.js";
 import { projectRoot } from "./project-root.js";
 
 const TEST_PROJECT_DIR = join(process.cwd(), ".temp-mono-repo-test");
@@ -30,5 +30,23 @@ describe("mono-repo utilities", () => {
     await $`bun install -y`.cwd(TEST_PROJECT_DIR);
     const result = await findMonoRepoRoot(TEST_PROJECT_DIR);
     expect(result).toBeNull();
+  });
+
+  test("findMonoRepoPackages gets list of monorepo packages", async () => {
+    const currentFileRoot = await findMonoRepoRoot(__dirname);
+    const packages = await findMonoRepoPackages(currentFileRoot!);
+    expect(packages.map((p) => basename(p)).sort()).toEqual([
+      "blockscout",
+      "cli",
+      "hasura",
+      "ipfs",
+      "js",
+      "minio",
+      "next",
+      "portal",
+      "sdk",
+      "thegraph",
+      "utils",
+    ]);
   });
 });
