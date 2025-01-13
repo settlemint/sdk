@@ -1,4 +1,4 @@
-name: Test
+name: Build, test and publish
 
 on:
   pull_request:
@@ -144,7 +144,7 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
         with:
-          commit_message: "chore: update docs [skip ci]"
+          commit_message: "chore: update docs"
           branch: main
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
