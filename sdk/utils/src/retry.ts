@@ -11,7 +11,7 @@ export async function retryWhenFailed<T>(
   maxRetries = 5,
   initialSleepTime = 3_000,
   stopOnError?: (error: Error) => boolean,
-): Promise<T | undefined> {
+): Promise<T> {
   let attempt = 0;
 
   while (attempt < maxRetries) {
@@ -28,10 +28,12 @@ export async function retryWhenFailed<T>(
       if (attempt >= maxRetries) {
         throw e;
       }
-      // Exponential backoff with jitter to prevent thundering herd
-      const jitter = 0.5 + Math.random();
-      const delay = 2 ** attempt * initialSleepTime * jitter; // 0.5-1.5x of 1s, 2s, 4s base delays
+      // Exponential backoff with full jitter to prevent thundering herd
+      const jitter = Math.random();
+      const delay = 2 ** attempt * initialSleepTime * jitter; // 0-1x of 1s, 2s, 4s base
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
+
+  throw new Error("Retry failed");
 }
