@@ -27,18 +27,18 @@ It enables seamless interaction with the SettleMint platform's features and serv
 
 ## Packages
 
-| Package | Description | Version |
+| Name | Description | NPM |
 |---------|-------------|---------|
-| [`@settlemint/sdk-blockscout`](sdk/blockscout) | Blockscout integration module for SettleMint SDK, enabling blockchain explorer and analytics functionality | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-blockscout.svg)](https://www.npmjs.com/package/@settlemint/sdk-blockscout) |
-| [`@settlemint/sdk-cli`](sdk/cli) | Command-line interface for SettleMint SDK, providing development tools and project management capabilities | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-cli.svg)](https://www.npmjs.com/package/@settlemint/sdk-cli) |
-| [`@settlemint/sdk-hasura`](sdk/hasura) | Hasura and PostgreSQL integration module for SettleMint SDK, enabling database operations and GraphQL queries | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-hasura.svg)](https://www.npmjs.com/package/@settlemint/sdk-hasura) |
-| [`@settlemint/sdk-ipfs`](sdk/ipfs) | IPFS integration module for SettleMint SDK, enabling decentralized storage and content addressing | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-ipfs.svg)](https://www.npmjs.com/package/@settlemint/sdk-ipfs) |
-| [`@settlemint/sdk-js`](sdk/js) | Core JavaScript SDK for integrating SettleMint's blockchain platform services into your applications | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-js.svg)](https://www.npmjs.com/package/@settlemint/sdk-js) |
-| [`@settlemint/sdk-minio`](sdk/minio) | MinIO integration module for SettleMint SDK, providing S3-compatible object storage capabilities | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-minio.svg)](https://www.npmjs.com/package/@settlemint/sdk-minio) |
-| [`@settlemint/sdk-next`](sdk/next) | Next.js integration module for SettleMint SDK, providing React components and middleware for web applications | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-next.svg)](https://www.npmjs.com/package/@settlemint/sdk-next) |
-| [`@settlemint/sdk-portal`](sdk/portal) | Portal API client module for SettleMint SDK, providing access to smart contract portal services and APIs | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-portal.svg)](https://www.npmjs.com/package/@settlemint/sdk-portal) |
-| [`@settlemint/sdk-thegraph`](sdk/thegraph) | TheGraph integration module for SettleMint SDK, enabling querying and indexing of blockchain data through subgraphs | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-thegraph.svg)](https://www.npmjs.com/package/@settlemint/sdk-thegraph) |
-| [`@settlemint/sdk-utils`](sdk/utils) | Shared utilities and helper functions for SettleMint SDK modules | [![npm version](https://badge.fury.io/js/%40settlemint/sdk-utils.svg)](https://www.npmjs.com/package/@settlemint/sdk-utils) |
+| [`@settlemint/sdk-blockscout`](sdk/blockscout) | Blockscout integration module for SettleMint SDK, enabling blockchain explorer and analytics functionality | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-blockscout)](https://www.npmjs.com/package/@settlemint/sdk-blockscout) |
+| [`@settlemint/sdk-cli`](sdk/cli) | Command-line interface for SettleMint SDK, providing development tools and project management capabilities | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-cli)](https://www.npmjs.com/package/@settlemint/sdk-cli) |
+| [`@settlemint/sdk-hasura`](sdk/hasura) | Hasura and PostgreSQL integration module for SettleMint SDK, enabling database operations and GraphQL queries | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-hasura)](https://www.npmjs.com/package/@settlemint/sdk-hasura) |
+| [`@settlemint/sdk-ipfs`](sdk/ipfs) | IPFS integration module for SettleMint SDK, enabling decentralized storage and content addressing | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-ipfs)](https://www.npmjs.com/package/@settlemint/sdk-ipfs) |
+| [`@settlemint/sdk-js`](sdk/js) | Core JavaScript SDK for integrating SettleMint's blockchain platform services into your applications | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-js)](https://www.npmjs.com/package/@settlemint/sdk-js) |
+| [`@settlemint/sdk-minio`](sdk/minio) | MinIO integration module for SettleMint SDK, providing S3-compatible object storage capabilities | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-minio)](https://www.npmjs.com/package/@settlemint/sdk-minio) |
+| [`@settlemint/sdk-next`](sdk/next) | Next.js integration module for SettleMint SDK, providing React components and middleware for web applications | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-next)](https://www.npmjs.com/package/@settlemint/sdk-next) |
+| [`@settlemint/sdk-portal`](sdk/portal) | Portal API client module for SettleMint SDK, providing access to smart contract portal services and APIs | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-portal)](https://www.npmjs.com/package/@settlemint/sdk-portal) |
+| [`@settlemint/sdk-thegraph`](sdk/thegraph) | TheGraph integration module for SettleMint SDK, enabling querying and indexing of blockchain data through subgraphs | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-thegraph)](https://www.npmjs.com/package/@settlemint/sdk-thegraph) |
+| [`@settlemint/sdk-utils`](sdk/utils) | Shared utilities and helper functions for SettleMint SDK modules | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-utils)](https://www.npmjs.com/package/@settlemint/sdk-utils) |
 
 ## Contributing
 

@@ -63,13 +63,13 @@ async function generateReadme() {
     console.log(`Writing main README to: ${mainReadmePath}`);
 
     // Generate package table on main README
-    const packageTable = ["## Packages\n\n| Package | Description | Version |", "|---------|-------------|---------|"];
+    const packageTable = ["## Packages\n\n| Name | Description | NPM |", "|---------|-------------|---------|"];
     for (const pkg of packages.sort()) {
       const packageJsonPath = join(sdkDir, pkg, "package.json");
       const packageJson = await readFile(packageJsonPath, "utf-8");
       const { name, description } = tryParseJson<{ name: string; description: string }>(packageJson);
       packageTable.push(
-        `| [\`${name}\`](sdk/${pkg}) | ${description} | [![npm version](https://badge.fury.io/js/${name.replace("@", "%40")}.svg)](https://www.npmjs.com/package/${name}) |`,
+        `| [\`${name}\`](sdk/${pkg}) | ${description} | [![npm version](https://img.shields.io/npm/v/${name})](https://www.npmjs.com/package/${name}) |`,
       );
     }
 
