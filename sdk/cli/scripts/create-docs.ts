@@ -167,7 +167,7 @@ async function updateVersionInfo(commandName: string, helpText: string) {
   if (commandName !== "settlemint") {
     return helpText;
   }
-  return helpText.replace(/CLI for SettleMint \(v\d\.\d\.\d\)/, "CLI for SettleMint");
+  return helpText.replace(/CLI for SettleMint \(v\d\.\d\.\d(-\w+)?\)/, "CLI for SettleMint");
 }
 
 createDocs(sdkCli).catch((err) => {

@@ -114,7 +114,7 @@ async function getVersion(): Promise<string> {
   const packageJsonPath = join(__dirname, "..", "package.json");
   const packageJson = await readFile(packageJsonPath, "utf-8");
   const { version } = tryParseJson<{ version: string }>(packageJson);
-  return version;
+  return version.replace(/-\w+$/, "");
 }
 
 // Execute the script
