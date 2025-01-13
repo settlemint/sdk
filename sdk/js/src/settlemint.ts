@@ -1,4 +1,4 @@
-import { retryWhenFailed } from "@settlemint/sdk-utils";
+import { fetchWithRetry } from "@settlemint/sdk-utils";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
@@ -205,23 +205,7 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     headers: {
       "x-auth-token": validatedOptions.accessToken,
     },
-    fetch: async (input: URL | RequestInfo, init?: RequestInit) => {
-      const response = await retryWhenFailed(async () => {
-        const response = await fetch(input, init);
-        if (response.ok) {
-          return response;
-        }
-        // Only retry on 5xx server errors, 429 rate limit, timeout, and network errors
-        if (response.status < 500 && response.status !== 429 && response.status !== 408 && response.status !== 0) {
-          return response;
-        }
-        throw new Error(response.statusText);
-      });
-      if (!response) {
-        throw new Error("Failed to fetch");
-      }
-      return response;
-    },
+    fetch: fetchWithRetry,
   });
 
   return {

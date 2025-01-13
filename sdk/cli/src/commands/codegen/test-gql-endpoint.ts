@@ -1,4 +1,4 @@
-import { retryWhenFailed } from "@settlemint/sdk-utils";
+import { fetchWithRetry } from "@settlemint/sdk-utils";
 import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -24,16 +24,16 @@ export async function testGqlEndpoint({
   if (!gqlEndpoint) {
     return false;
   }
-  const result = await retryWhenFailed(async () => {
-    const response = await fetch(gqlEndpoint, {
-      method: "POST",
-      headers: {
-        "x-auth-token": accessToken,
-        ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: `
+
+  const response = await fetchWithRetry(gqlEndpoint, {
+    method: "POST",
+    headers: {
+      "x-auth-token": accessToken,
+      ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      query: `
           query {
             __schema {
               types {
@@ -42,20 +42,13 @@ export async function testGqlEndpoint({
             }
           }
         `,
-      }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    if (data.errors) {
-      throw new Error("GraphQL errors in response");
-    }
-
-    return true; // Success
+    }),
   });
 
-  return result ?? false;
+  const data: { errors?: unknown[] } = await response.json();
+  if (data.errors) {
+    throw new Error("GraphQL errors in response");
+  }
+
+  return true;
 }
