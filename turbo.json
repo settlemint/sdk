@@ -23,9 +23,6 @@
     "lint": {
       "dependsOn": ["^build", "//#lint:biome"]
     },
-    "format": {
-      "dependsOn": ["//#format:biome"]
-    },
     "//#knip": {
       "cache": false
     },
@@ -34,9 +31,6 @@
     },
     "attw": {
       "dependsOn": ["build"]
-    },
-    "registry": {
-      "outputs": ["public/*.json"]
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {

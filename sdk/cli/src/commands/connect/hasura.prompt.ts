@@ -31,23 +31,10 @@ export async function hasuraPrompt({
     accept,
     envKey: "SETTLEMINT_HASURA",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultHasura }: { defaultService: IntegrationTool | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultHasura, choices }) => {
       return select({
         message: "Which Hasura instance do you want to connect to?",
-        choices: [
-          ...possible.map((integration) => ({
-            name: integration.name,
-            value: integration,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultHasura,
       });
     },

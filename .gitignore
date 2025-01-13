@@ -46,6 +46,7 @@ test/starter-kit-demo
 test/unknown
 test/contracts
 test/contracts-subgraphs
+.temp-mono-repo-test
 
 # Docs
 sdk/**/docs/**/*.md

@@ -30,23 +30,10 @@ export async function blockchainNetworkPrompt({
     accept,
     envKey: "SETTLEMINT_BLOCKCHAIN_NETWORK",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultNetwork }: { defaultService: BlockchainNetwork | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultNetwork, choices }) => {
       return select({
         message: "Which blockchain network do you want to connect to?",
-        choices: [
-          ...networks.map((network) => ({
-            name: network.name,
-            value: network,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultNetwork,
       });
     },

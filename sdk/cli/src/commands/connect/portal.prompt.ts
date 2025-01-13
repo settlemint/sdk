@@ -31,23 +31,10 @@ export async function portalPrompt({
     accept,
     envKey: "SETTLEMINT_PORTAL",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultMiddleware }: { defaultService: Middleware | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultMiddleware, choices }) => {
       return select({
         message: "Which Smart Contract Portal instance do you want to connect to?",
-        choices: [
-          ...possible.map((middleware) => ({
-            name: middleware.name,
-            value: middleware,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultMiddleware,
       });
     },

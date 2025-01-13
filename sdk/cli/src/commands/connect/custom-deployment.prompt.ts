@@ -30,25 +30,10 @@ export async function customDeploymentPrompt({
     accept,
     envKey: "SETTLEMINT_CUSTOM_DEPLOYMENT",
     isRequired,
-    defaultHandler: async ({
-      defaultService: defaultCustomDeployment,
-    }: { defaultService: CustomDeployment | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultCustomDeployment, choices }) => {
       return select({
         message: "Which Custom Deployment do you want to connect to?",
-        choices: [
-          ...customDeployments.map((customDeployment) => ({
-            name: customDeployment.name,
-            value: customDeployment,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultCustomDeployment,
       });
     },

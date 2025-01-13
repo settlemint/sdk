@@ -2,6 +2,14 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 /**
+ * Represents a choice in the prompt.
+ */
+export interface Choice<Service> {
+  name: string;
+  value: Service | undefined;
+}
+
+/**
  * Prompts the user to select a service from a list of available services.
  *
  * @param config - Configuration object containing environment, services and options
@@ -14,7 +22,7 @@ import isInCi from "is-in-ci";
  * @param config.isCi - Whether running in CI environment (defaults to isInCi)
  * @returns The selected service, or undefined if none selected
  */
-export async function servicePrompt<Service extends { uniqueName: string }>({
+export async function servicePrompt<Service extends { uniqueName: string; name: string }>({
   env,
   services,
   accept,
@@ -27,7 +35,10 @@ export async function servicePrompt<Service extends { uniqueName: string }>({
   services: Service[];
   accept: boolean | undefined;
   envKey: keyof DotEnv;
-  defaultHandler: (config: { defaultService: Service | undefined }) => Promise<Service | undefined>;
+  defaultHandler: (config: {
+    defaultService: Service | undefined;
+    choices: Choice<Service>[];
+  }) => Promise<Service | undefined>;
   isRequired?: boolean;
   isCi?: boolean;
 }): Promise<Service | undefined> {
@@ -55,6 +66,20 @@ export async function servicePrompt<Service extends { uniqueName: string }>({
     return services[0];
   }
 
+  const choices = services.map(
+    (service): Choice<Service> => ({
+      name: service.name,
+      value: service,
+    }),
+  );
+
+  if (!isRequired) {
+    choices.push({
+      name: "None",
+      value: undefined,
+    });
+  }
+
   // Prompt user to select service
-  return defaultHandler({ defaultService: selectedService });
+  return defaultHandler({ defaultService: selectedService, choices });
 }

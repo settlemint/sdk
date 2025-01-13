@@ -44,7 +44,7 @@ describe("Setup a smart contract set using the SDK", () => {
     ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
-    await $`bun install`.cwd(projectDir);
+    await $`bun install --save-text-lockfile`.cwd(projectDir);
     if (await exists(join(__dirname, "../.env"))) {
       await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
     }

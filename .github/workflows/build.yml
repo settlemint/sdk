@@ -149,7 +149,7 @@ jobs:
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
       - name: Run tests and checks
-        run: bunx turbo format lint typecheck build attw publint test:coverage publish-npm --env-mode=loose
+        run: bunx turbo lint typecheck build attw publint test:coverage publish-npm --env-mode=loose
 
       - name: Check typings of E2E tests
         run: bun test:typecheck
