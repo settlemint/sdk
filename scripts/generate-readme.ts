@@ -4,13 +4,10 @@ import { tryParseJson } from "@settlemint/sdk-utils";
 import * as mustache from "mustache";
 
 interface Placeholders {
-  "package-name": string;
-  about: string;
-  "api-reference": string;
-}
-
-interface PlaceholdersToc {
-  "toc-contents": string;
+  "package-name"?: string;
+  about?: string;
+  "api-reference"?: string;
+  "toc-contents"?: string;
 }
 
 /**
@@ -54,12 +51,17 @@ async function generateReadme() {
       const toc = getTocContents(templateWithoutToc);
       await writeFile(
         readmePath,
-        replacePlaceholders(templateWithoutToc.replace("!{{{ toc-contents }}}", "{{{ toc-contents }}}"), {
-          "toc-contents": toc,
+        replacePlaceholders(templateWithoutToc.replace("\\{\\{\\{ toc-contents \\}\\}\\}", "{{{ toc-contents }}}"), {
+          "toc-contents": `\n${toc}\n`,
         }),
       );
       console.log(`Successfully generated README.md for ${pkg}`);
     }
+
+    // Main README
+    const mainReadmePath = join(__dirname, "..", "README.md");
+    console.log(`Writing main README to: ${mainReadmePath}`);
+    await writeFile(mainReadmePath, replacePlaceholders(template.replace("\\{\\{\\{ toc-contents \\}\\}\\}", ""), {}));
 
     console.log("README generation completed successfully");
   } catch (error) {
@@ -68,7 +70,7 @@ async function generateReadme() {
   }
 }
 
-function replacePlaceholders(template: string, placeholders: Placeholders | PlaceholdersToc): string {
+function replacePlaceholders(template: string, placeholders: Placeholders): string {
   const mustacheExport = mustache as unknown as { default: { render: typeof mustache.render } };
   return mustacheExport.default.render(template, placeholders);
 }

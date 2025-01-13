@@ -19,15 +19,15 @@
 
 <div align="center">
   <a href="https://console.settlemint.com/documentation/">Documentation</a>
+{{#package-name}}
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://www.npmjs.com/package/{{{ package-name }}}">NPM</a>
+{{/package-name}}
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
 </div>
-
 \{\{\{ toc-contents \}\}\}
-
 {{#about}}
 ## About
 
@@ -38,8 +38,8 @@
 ## API Reference
 
 {{{ api-reference }}}
-{{/api-reference}}
 
+{{/api-reference}}
 ## Contributing
 
 We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
