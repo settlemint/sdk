@@ -1,61 +1,10 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { dirname, join } from "node:path";
+import { writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { exists, projectRoot } from "@/filesystem.js";
-import { tryParseJson } from "@/json.js";
 import type { DotEnv } from "@/validation.js";
 import { config } from "@dotenvx/dotenvx";
 import { deepmerge } from "deepmerge-ts";
-import { glob } from "glob";
-
-async function findMonoRepoRoot(startDir: string): Promise<string | null> {
-  let currentDir = startDir;
-
-  while (currentDir !== "/") {
-    const packageJsonPath = join(currentDir, "package.json");
-
-    if (await exists(packageJsonPath)) {
-      const packageJson = tryParseJson<{ workspaces: string[] }>(await readFile(packageJsonPath, "utf-8"));
-      if (packageJson?.workspaces && Array.isArray(packageJson?.workspaces) && packageJson?.workspaces.length > 0) {
-        return currentDir;
-      }
-    }
-
-    const parentDir = dirname(currentDir);
-    if (parentDir === currentDir) {
-      break; // We've reached the root
-    }
-    currentDir = parentDir;
-  }
-
-  return null;
-}
-
-async function findMonoRepoPackages(projectDir: string): Promise<string[]> {
-  try {
-    const monoRepoRoot = await findMonoRepoRoot(projectDir);
-    if (!monoRepoRoot) {
-      return [projectDir];
-    }
-
-    const packageJsonPath = join(monoRepoRoot, "package.json");
-    const packageJson = tryParseJson<{ workspaces: string[] }>(await readFile(packageJsonPath, "utf-8"));
-    const workspaces = packageJson?.workspaces ?? [];
-
-    const packagePaths = await Promise.all(
-      workspaces.map(async (workspace: string) => {
-        const matches = await glob(join(monoRepoRoot, workspace, "package.json"));
-        return matches.map((match) => join(match, ".."));
-      }),
-    );
-
-    const allPaths = packagePaths.flat();
-    // If no packages found in workspaces, treat as non-monorepo
-    return allPaths.length === 0 ? [projectDir] : [monoRepoRoot, ...allPaths];
-  } catch (error) {
-    // If any error occurs, treat as non-monorepo
-    return [projectDir];
-  }
-}
+import { findMonoRepoPackages } from "../filesystem/mono-repo.js";
 
 /**
  * Writes environment variables to .env files across a project or monorepo
