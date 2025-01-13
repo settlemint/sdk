@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-cli",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Command-line interface for SettleMint SDK, providing development tools and project management capabilities",
   "version": "0.9.0",
   "type": "module",
   "private": false,

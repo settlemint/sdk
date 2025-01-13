@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-js",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Core JavaScript SDK for integrating SettleMint's blockchain platform services into your applications",
   "version": "0.9.0",
   "type": "module",
   "private": false,

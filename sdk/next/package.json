@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-next",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Next.js integration module for SettleMint SDK, providing React components and middleware for web applications",
   "version": "0.9.0",
   "type": "module",
   "private": false,

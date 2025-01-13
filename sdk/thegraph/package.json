@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-thegraph",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "TheGraph integration module for SettleMint SDK, enabling querying and indexing of blockchain data through subgraphs",
   "version": "0.9.0",
   "type": "module",
   "private": false,

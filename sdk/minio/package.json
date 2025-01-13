@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-minio",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "MinIO integration module for SettleMint SDK, providing S3-compatible object storage capabilities",
   "version": "0.9.0",
   "type": "module",
   "private": false,

@@ -1,15 +1,13 @@
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
+import * as mustache from "mustache";
 
 interface Placeholders {
-  "package-name": string;
-  about: string;
-  "api-reference": string;
-}
-
-interface PlaceholdersToc {
-  "toc-contents": string;
+  "package-name"?: string;
+  about?: string;
+  "api-reference"?: string;
+  "toc-contents"?: string;
 }
 
 /**
@@ -51,9 +49,37 @@ async function generateReadme() {
       });
 
       const toc = getTocContents(templateWithoutToc);
-      await writeFile(readmePath, replacePlaceholders(templateWithoutToc, { "toc-contents": toc }));
+      await writeFile(
+        readmePath,
+        replacePlaceholders(templateWithoutToc.replace("\\{\\{\\{ toc-contents \\}\\}\\}", "{{{ toc-contents }}}"), {
+          "toc-contents": `\n${toc}\n`,
+        }),
+      );
       console.log(`Successfully generated README.md for ${pkg}`);
     }
+
+    // Main README
+    const mainReadmePath = join(__dirname, "..", "README.md");
+    console.log(`Writing main README to: ${mainReadmePath}`);
+
+    // Generate package table on main README
+    const packageTable = ["## Packages\n\n| Name | Description | NPM |", "|---------|-------------|---------|"];
+    for (const pkg of packages.sort()) {
+      const packageJsonPath = join(sdkDir, pkg, "package.json");
+      const packageJson = await readFile(packageJsonPath, "utf-8");
+      const { name, description } = tryParseJson<{ name: string; description: string }>(packageJson);
+      packageTable.push(
+        `| [\`${name}\`](sdk/${pkg}) | ${description} | [![npm version](https://img.shields.io/npm/v/${name})](https://www.npmjs.com/package/${name}) |`,
+      );
+    }
+
+    await writeFile(
+      mainReadmePath,
+      replacePlaceholders(template.replace("\\{\\{\\{ toc-contents \\}\\}\\}", ""), {
+        about: `The SettleMint SDK provides a comprehensive set of tools and libraries for integrating blockchain functionality into your applications.
+It enables seamless interaction with the SettleMint platform's features and services.\n\n${packageTable.join("\n")}\n`,
+      }),
+    );
 
     console.log("README generation completed successfully");
   } catch (error) {
@@ -62,10 +88,9 @@ async function generateReadme() {
   }
 }
 
-function replacePlaceholders(template: string, placeholders: Placeholders | PlaceholdersToc): string {
-  return Object.entries(placeholders).reduce((result, [key, value]) => {
-    return result.replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value);
-  }, template);
+function replacePlaceholders(template: string, placeholders: Placeholders): string {
+  const mustacheExport = mustache as unknown as { default: { render: typeof mustache.render } };
+  return mustacheExport.default.render(template, placeholders);
 }
 
 function getTocContents(templateContents: string): string {

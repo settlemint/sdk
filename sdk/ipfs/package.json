@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-ipfs",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "IPFS integration module for SettleMint SDK, enabling decentralized storage and content addressing",
   "version": "0.9.0",
   "type": "module",
   "private": false,

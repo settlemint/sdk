@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-blockscout",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Blockscout integration module for SettleMint SDK, enabling blockchain explorer and analytics functionality",
   "version": "0.9.0",
   "type": "module",
   "private": false,
