@@ -122,10 +122,14 @@ jobs:
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
           [ -f .env ] || touch .env
           [ -f .env.local ] || touch .env.local
-          gh secret set -f .env
-          sed '/SETTLEMINT_ACCESS_TOKEN/d' .env.local > .env.local.tmp
-          mv .env.local.tmp .env.local
-          gh secret set -f .env.local
+          if [ -s .env ]; then
+            gh secret set -f .env
+          fi
+          if [ -s .env.local ]; then
+            sed '/SETTLEMINT_ACCESS_TOKEN/d' .env.local > .env.local.tmp
+            mv .env.local.tmp .env.local
+            gh secret set -f .env.local
+          fi
         env:
           E2E_GITHUB_TOKEN: ${{ env.E2E_GITHUB_TOKEN }}
 
