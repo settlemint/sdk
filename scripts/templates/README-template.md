@@ -10,31 +10,35 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/{{ package-name }}" alt="License"></a>
-<a href="https://www.npmjs.com/package/{{ package-name }}" rel="nofollow"><img src="https://img.shields.io/npm/dw/{{ package-name }}" alt="npm"></a>
+{{#package-name}}
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/{{{ package-name }}}" alt="License"></a>
+<a href="https://www.npmjs.com/package/{{{ package-name }}}" rel="nofollow"><img src="https://img.shields.io/npm/dw/{{{ package-name }}}" alt="npm"></a>
+{{/package-name}}
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
 <div align="center">
   <a href="https://console.settlemint.com/documentation/">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://discord.com/invite/Mt5yqFrey9">Discord</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/{{ package-name }}">NPM</a>
+  <a href="https://www.npmjs.com/package/{{{ package-name }}}">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
 </div>
 
-{{ toc-contents }}
+\{\{\{ toc-contents \}\}\}
 
+{{#about}}
 ## About
 
-{{ about }}
+{{{ about }}}
+{{/about}}
+{{#api-reference}}
 
 ## API Reference
 
-{{ api-reference }}
+{{{ api-reference }}}
+{{/api-reference}}
 
 ## Contributing
 

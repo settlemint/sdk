@@ -1,6 +1,7 @@
 import { readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
+import * as mustache from "mustache";
 
 interface Placeholders {
   "package-name": string;
@@ -51,7 +52,12 @@ async function generateReadme() {
       });
 
       const toc = getTocContents(templateWithoutToc);
-      await writeFile(readmePath, replacePlaceholders(templateWithoutToc, { "toc-contents": toc }));
+      await writeFile(
+        readmePath,
+        replacePlaceholders(templateWithoutToc.replace("!{{{ toc-contents }}}", "{{{ toc-contents }}}"), {
+          "toc-contents": toc,
+        }),
+      );
       console.log(`Successfully generated README.md for ${pkg}`);
     }
 
@@ -63,9 +69,8 @@ async function generateReadme() {
 }
 
 function replacePlaceholders(template: string, placeholders: Placeholders | PlaceholdersToc): string {
-  return Object.entries(placeholders).reduce((result, [key, value]) => {
-    return result.replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, "g"), value);
-  }, template);
+  const mustacheExport = mustache as unknown as { default: { render: typeof mustache.render } };
+  return mustacheExport.default.render(template, placeholders);
 }
 
 function getTocContents(templateContents: string): string {
