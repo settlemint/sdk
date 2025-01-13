@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-hasura",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Hasura and PostgreSQL integration module for SettleMint SDK, enabling database operations and GraphQL queries",
   "version": "0.9.0",
   "type": "module",
   "private": false,

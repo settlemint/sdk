@@ -61,7 +61,22 @@ async function generateReadme() {
     // Main README
     const mainReadmePath = join(__dirname, "..", "README.md");
     console.log(`Writing main README to: ${mainReadmePath}`);
-    await writeFile(mainReadmePath, replacePlaceholders(template.replace("\\{\\{\\{ toc-contents \\}\\}\\}", ""), {}));
+
+    // Generate package table on main README
+    const packageTable = ["## Packages\n\n| Package | Description |", "|---------|-------------|"];
+    for (const pkg of packages.sort()) {
+      const packageJsonPath = join(sdkDir, pkg, "package.json");
+      const packageJson = await readFile(packageJsonPath, "utf-8");
+      const { name, description } = tryParseJson<{ name: string; description: string }>(packageJson);
+      packageTable.push(`| [\`${name}\`](sdk/${pkg}) | ${description} |`);
+    }
+
+    await writeFile(
+      mainReadmePath,
+      replacePlaceholders(template.replace("\\{\\{\\{ toc-contents \\}\\}\\}", ""), {
+        about: packageTable.join("\n"),
+      }),
+    );
 
     console.log("README generation completed successfully");
   } catch (error) {

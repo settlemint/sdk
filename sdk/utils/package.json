@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-utils",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Shared utilities and helper functions for SettleMint SDK modules",
   "version": "0.9.0",
   "type": "module",
   "private": false,

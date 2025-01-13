@@ -1,6 +1,6 @@
 {
   "name": "@settlemint/sdk-portal",
-  "description": "SettleMint SDK, integrate SettleMint into your application with ease.",
+  "description": "Portal API client module for SettleMint SDK, providing access to smart contract portal services and APIs",
   "version": "0.9.0",
   "type": "module",
   "private": false,

@@ -20,6 +20,22 @@
   <br />
 </div>
 
+## About
+
+## Packages
+
+| Package | Description |
+|---------|-------------|
+| [`@settlemint/sdk-blockscout`](sdk/blockscout) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-cli`](sdk/cli) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-hasura`](sdk/hasura) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-ipfs`](sdk/ipfs) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-js`](sdk/js) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-minio`](sdk/minio) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-next`](sdk/next) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-portal`](sdk/portal) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-thegraph`](sdk/thegraph) | SettleMint SDK, integrate SettleMint into your application with ease. |
+| [`@settlemint/sdk-utils`](sdk/utils) | SettleMint SDK, integrate SettleMint into your application with ease. |
 ## Contributing
 
 We welcome contributions from the community! Please check out our [Contributing](../../.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
