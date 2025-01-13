@@ -120,6 +120,8 @@ jobs:
         if: ${{ !cancelled() }}
         run: |
           echo $E2E_GITHUB_TOKEN | gh auth login --with-token
+          [ -f .env ] || touch .env
+          [ -f .env.local ] || touch .env.local
           gh secret set -f .env
           sed '/SETTLEMINT_ACCESS_TOKEN/d' .env.local > .env.local.tmp
           mv .env.local.tmp .env.local
