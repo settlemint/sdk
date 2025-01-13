@@ -49,7 +49,7 @@ For detailed information about using MinIO with the SettleMint platform, check o
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v0.9.7/sdk/minio/src/minio.ts#L24)
+Defined in: [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/minio/src/minio.ts#L24)
 
 Creates a MinIO client for server-side use with authentication.
 
@@ -71,7 +71,7 @@ An object containing the initialized MinIO client
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `Client` | [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v0.9.7/sdk/minio/src/minio.ts#L24) |
+| `client` | `Client` | [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/minio/src/minio.ts#L24) |
 
 ##### Throws
 
