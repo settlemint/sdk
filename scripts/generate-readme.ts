@@ -63,18 +63,21 @@ async function generateReadme() {
     console.log(`Writing main README to: ${mainReadmePath}`);
 
     // Generate package table on main README
-    const packageTable = ["## Packages\n\n| Package | Description |", "|---------|-------------|"];
+    const packageTable = ["## Packages\n\n| Package | Description | Version |", "|---------|-------------|---------|"];
     for (const pkg of packages.sort()) {
       const packageJsonPath = join(sdkDir, pkg, "package.json");
       const packageJson = await readFile(packageJsonPath, "utf-8");
       const { name, description } = tryParseJson<{ name: string; description: string }>(packageJson);
-      packageTable.push(`| [\`${name}\`](sdk/${pkg}) | ${description} |`);
+      packageTable.push(
+        `| [\`${name}\`](sdk/${pkg}) | ${description} | [![npm version](https://badge.fury.io/js/${name.replace("@", "%40")}.svg)](https://www.npmjs.com/package/${name}) |`,
+      );
     }
 
     await writeFile(
       mainReadmePath,
       replacePlaceholders(template.replace("\\{\\{\\{ toc-contents \\}\\}\\}", ""), {
-        about: packageTable.join("\n"),
+        about: `The SettleMint SDK provides a comprehensive set of tools and libraries for integrating blockchain functionality into your applications.
+It enables seamless interaction with the SettleMint platform's features and services.\n\n${packageTable.join("\n")}\n`,
       }),
     );
 
