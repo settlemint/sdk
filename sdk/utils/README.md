@@ -39,6 +39,9 @@
     - [ensureServer()](#ensureserver)
     - [executeCommand()](#executecommand)
     - [exists()](#exists)
+    - [fetchWithRetry()](#fetchwithretry)
+    - [findMonoRepoPackages()](#findmonorepopackages)
+    - [findMonoRepoRoot()](#findmonoreporoot)
     - [formatTargetDir()](#formattargetdir)
     - [getPackageManager()](#getpackagemanager)
     - [getPackageManagerExecutable()](#getpackagemanagerexecutable)
@@ -51,6 +54,7 @@
     - [note()](#note)
     - [outro()](#outro)
     - [projectRoot()](#projectroot)
+    - [retryWhenFailed()](#retrywhenfailed)
     - [setName()](#setname)
     - [spinner()](#spinner)
     - [tryParseJson()](#tryparsejson)
@@ -336,6 +340,80 @@ if (await exists('/path/to/file.txt')) {
   // File exists, safe to read
 }
 ```
+
+***
+
+#### fetchWithRetry()
+
+> **fetchWithRetry**(`input`, `init`?, `maxRetries`?, `initialSleepTime`?): `Promise`\<`Response`\>
+
+Defined in: [sdk/utils/src/retry.ts:52](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/utils/src/retry.ts#L52)
+
+Retry an HTTP request with exponential backoff and jitter.
+Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `input` | `URL` \| `RequestInfo` | `undefined` | The URL or Request object to fetch |
+| `init`? | `RequestInit` | `undefined` | The fetch init options |
+| `maxRetries`? | `number` | `5` | Maximum number of retry attempts |
+| `initialSleepTime`? | `number` | `3_000` | Initial sleep time between retries in ms |
+
+##### Returns
+
+`Promise`\<`Response`\>
+
+The fetch Response
+
+##### Throws
+
+Error if all retries fail
+
+***
+
+#### findMonoRepoPackages()
+
+> **findMonoRepoPackages**(`projectDir`): `Promise`\<`string`[]\>
+
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:49](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/utils/src/filesystem/mono-repo.ts#L49)
+
+Finds all packages in a monorepo
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `projectDir` | `string` | The directory to start searching from |
+
+##### Returns
+
+`Promise`\<`string`[]\>
+
+An array of package directories
+
+***
+
+#### findMonoRepoRoot()
+
+> **findMonoRepoRoot**(`startDir`): `Promise`\<`string` \| `null`\>
+
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:14](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/utils/src/filesystem/mono-repo.ts#L14)
+
+Finds the root directory of a monorepo
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `startDir` | `string` | The directory to start searching from |
+
+##### Returns
+
+`Promise`\<`string` \| `null`\>
+
+The root directory of the monorepo or null if not found
 
 ***
 
@@ -740,6 +818,37 @@ console.log(`Project root is at: ${rootDir}`);
 
 ***
 
+#### retryWhenFailed()
+
+> **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError`?): `Promise`\<`T`\>
+
+Defined in: [sdk/utils/src/retry.ts:9](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/utils/src/retry.ts#L9)
+
+Retry a function when it fails.
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `fn` | () => `Promise`\<`T`\> | `undefined` | The function to retry. |
+| `maxRetries` | `number` | `5` | The maximum number of retries. |
+| `initialSleepTime` | `number` | `3_000` | The initial time to sleep between exponential backoff retries. |
+| `stopOnError`? | (`error`) => `boolean` | `undefined` | The function to stop on error. |
+
+##### Returns
+
+`Promise`\<`T`\>
+
+The result of the function or undefined if it fails.
+
+***
+
 #### setName()
 
 > **setName**(`name`, `path`?): `Promise`\<`void`\>
@@ -915,7 +1024,7 @@ const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 
 > **writeEnv**(`prod`, `env`, `secrets`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/environment/write-env.ts:81](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/utils/src/environment/write-env.ts#L81)
+Defined in: [sdk/utils/src/environment/write-env.ts:30](https://github.com/settlemint/sdk/blob/v0.9.9/sdk/utils/src/environment/write-env.ts#L30)
 
 Writes environment variables to .env files across a project or monorepo
 
