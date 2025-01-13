@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
-import { mkdir } from "node:fs/promises";
+import { mkdir, rm } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { $ } from "bun";
 import { findMonoRepoRoot } from "./mono-repo.js";
@@ -12,7 +12,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  // await rm(TEST_PROJECT_DIR, { recursive: true, force: true });
+  await rm(TEST_PROJECT_DIR, { recursive: true, force: true });
 });
 
 describe("mono-repo utilities", () => {
