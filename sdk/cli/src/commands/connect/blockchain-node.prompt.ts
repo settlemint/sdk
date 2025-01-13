@@ -27,30 +27,19 @@ export async function blockchainNodePrompt({
   filterRunningOnly?: boolean;
   isRequired?: boolean;
 }): Promise<BlockchainNode | undefined> {
-  const choices = filterRunningOnly ? nodes.filter((node) => node.status === "COMPLETED") : nodes;
   return servicePrompt({
     env,
     services: nodes,
     accept,
     envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultNode }: { defaultService: BlockchainNode | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultNode, choices }) => {
+      const filteredChoices = filterRunningOnly
+        ? choices.filter(({ value: node }) => node === undefined || node?.status === "COMPLETED")
+        : choices;
       return select({
         message: "Which blockchain node do you want to connect to?",
-        choices: [
-          ...choices.map((node) => ({
-            name: node.name,
-            value: node,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices: filteredChoices,
         default: defaultNode,
       });
     },

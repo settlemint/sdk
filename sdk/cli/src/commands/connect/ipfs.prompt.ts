@@ -31,23 +31,10 @@ export async function ipfsPrompt({
     accept,
     envKey: "SETTLEMINT_IPFS",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultStorage }: { defaultService: Storage | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultStorage, choices }) => {
       return select({
         message: "Which IPFS instance do you want to connect to?",
-        choices: [
-          ...possible.map((storage) => ({
-            name: storage.name,
-            value: storage,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultStorage,
       });
     },

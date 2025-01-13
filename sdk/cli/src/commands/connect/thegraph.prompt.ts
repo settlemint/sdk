@@ -28,32 +28,19 @@ export async function theGraphPrompt({
   isRequired?: boolean;
 }) {
   const graphMiddlewares = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
-  const choices = filterRunningOnly
-    ? graphMiddlewares.filter((middleware) => middleware.status === "COMPLETED")
-    : graphMiddlewares;
   return servicePrompt({
     env,
     services: graphMiddlewares,
     accept,
     envKey: "SETTLEMINT_THEGRAPH",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultMiddleware }: { defaultService: Middleware | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultMiddleware, choices }) => {
+      const filteredChoices = filterRunningOnly
+        ? choices.filter(({ value: middleware }) => middleware === undefined || middleware?.status === "COMPLETED")
+        : choices;
       return select({
         message: "Which The Graph instance do you want to connect to?",
-        choices: [
-          ...choices.map((middleware) => ({
-            name: middleware.name,
-            value: middleware,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices: filteredChoices,
         default: defaultMiddleware,
       });
     },

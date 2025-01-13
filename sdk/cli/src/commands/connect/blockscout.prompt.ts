@@ -31,23 +31,10 @@ export async function blockscoutPrompt({
     accept,
     envKey: "SETTLEMINT_BLOCKSCOUT",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultBlockscout }) => {
+    defaultHandler: async ({ defaultService: defaultBlockscout, choices }) => {
       return select({
         message: "Which blockscout instance do you want to connect to?",
-        choices: [
-          ...possible.map((insight) => ({
-            name: insight.name,
-            value: insight,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultBlockscout,
       });
     },

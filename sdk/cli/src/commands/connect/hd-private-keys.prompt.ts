@@ -31,23 +31,10 @@ export async function hdPrivateKeyPrompt({
     accept,
     envKey: "SETTLEMINT_HD_PRIVATE_KEY",
     isRequired,
-    defaultHandler: async ({ defaultService: defaultPrivateKey }: { defaultService: PrivateKey | undefined }) => {
+    defaultHandler: async ({ defaultService: defaultPrivateKey, choices }) => {
       return select({
         message: "Which HD Private Key do you want to use?",
-        choices: [
-          ...possible.map((privateKey) => ({
-            name: privateKey.name,
-            value: privateKey,
-          })),
-          ...(isRequired
-            ? []
-            : [
-                {
-                  name: "None",
-                  value: undefined,
-                },
-              ]),
-        ],
+        choices,
         default: defaultPrivateKey,
       });
     },
