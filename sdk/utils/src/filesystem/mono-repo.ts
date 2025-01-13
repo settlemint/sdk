@@ -12,11 +12,13 @@ import { glob } from "glob";
  * @returns The root directory of the monorepo or null if not found
  */
 export async function findMonoRepoRoot(startDir: string): Promise<string | null> {
-  const lockFilePath = await findUp(["package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lockb", "bun.lock"]);
+  const lockFilePath = await findUp(["package-lock.json", "yarn.lock", "pnpm-lock.yaml", "bun.lockb", "bun.lock"], {
+    cwd: startDir,
+  });
   if (lockFilePath) {
-    const packageJsonPath = join(lockFilePath, "package.json");
+    const packageJsonPath = join(dirname(lockFilePath), "package.json");
     const hasWorkSpaces = await packageJsonHasWorkspaces(packageJsonPath);
-    return hasWorkSpaces ? lockFilePath : null;
+    return hasWorkSpaces ? dirname(lockFilePath) : null;
   }
 
   let currentDir = startDir;

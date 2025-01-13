@@ -1,6 +1,5 @@
 import packageJson from "./package.json" with { type: "json" };
 
-
 /** @type {Partial<import("typedoc").TypeDocOptions>} */
 export default {
   // Output configuration
