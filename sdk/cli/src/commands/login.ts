@@ -3,7 +3,6 @@ import { createExamples } from "@/commands/platform/utils/create-examples";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { UrlSchema } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
 import { PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
@@ -43,9 +42,6 @@ export function loginCommand(): Command {
       const autoAccept = !!acceptDefaults || !!tokenStdin;
       const env = await loadEnv(false, false);
 
-      if (instance) {
-        validate(UrlSchema, instance);
-      }
       const selectedInstance = instance
         ? sanitizeAndValidateInstanceUrl(instance)
         : await instancePrompt(env, autoAccept, true);
