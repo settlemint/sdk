@@ -1,4 +1,4 @@
-import { fetchWithRetry } from "@settlemint/sdk-utils";
+import { graphqlFetchWithRetry } from "@settlemint/sdk-utils";
 import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -25,7 +25,7 @@ export async function testGqlEndpoint({
     return false;
   }
 
-  const response = await fetchWithRetry(gqlEndpoint, {
+  await graphqlFetchWithRetry(gqlEndpoint, {
     method: "POST",
     headers: {
       "x-auth-token": accessToken,
@@ -44,11 +44,6 @@ export async function testGqlEndpoint({
         `,
     }),
   });
-
-  const data: { errors?: unknown[] } = await response.json();
-  if (data.errors) {
-    throw new Error("GraphQL errors in response");
-  }
 
   return true;
 }

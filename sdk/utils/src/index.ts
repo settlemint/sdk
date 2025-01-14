@@ -1,5 +1,6 @@
 export * from "./environment.js";
 export * from "./filesystem.js";
+export * from "./http.js";
 export * from "./json.js";
 export * from "./package-manager.js";
 export * from "./retry.js";
