@@ -50,7 +50,7 @@ The SettleMint Next.js SDK provides a seamless integration layer between Next.js
 
 > **HelloWorld**(`props`): `ReactElement`
 
-Defined in: [components/test.tsx:16](https://github.com/settlemint/sdk/blob/v1.0.1/sdk/next/src/components/test.tsx#L16)
+Defined in: [components/test.tsx:16](https://github.com/settlemint/sdk/blob/v1.0.2/sdk/next/src/components/test.tsx#L16)
 
 A simple Hello World component that greets the user.
 
@@ -72,7 +72,7 @@ A React element that displays a greeting to the user.
 
 > **proxyMiddleware**(`request`): `NextResponse` \| `undefined`
 
-Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v1.0.1/sdk/next/src/middlewares/proxy.ts#L22)
+Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v1.0.2/sdk/next/src/middlewares/proxy.ts#L22)
 
 Middleware function to handle proxy requests by adding appropriate authentication headers.
 
@@ -108,7 +108,7 @@ export default function middleware(request: NextRequest) {
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
-Defined in: [config/with-settlemint.ts:23](https://github.com/settlemint/sdk/blob/v1.0.1/sdk/next/src/config/with-settlemint.ts#L23)
+Defined in: [config/with-settlemint.ts:23](https://github.com/settlemint/sdk/blob/v1.0.2/sdk/next/src/config/with-settlemint.ts#L23)
 
 Modifies the passed in Next.js configuration with SettleMint-specific settings.
 
@@ -139,7 +139,7 @@ If the SettleMint configuration cannot be read or processed
 
 #### HelloWorldProps
 
-Defined in: [components/test.tsx:6](https://github.com/settlemint/sdk/blob/v1.0.1/sdk/next/src/components/test.tsx#L6)
+Defined in: [components/test.tsx:6](https://github.com/settlemint/sdk/blob/v1.0.2/sdk/next/src/components/test.tsx#L6)
 
 The props for the HelloWorld component.
 
@@ -147,7 +147,7 @@ The props for the HelloWorld component.
 
 #### WithSettleMintOptions
 
-Defined in: [config/with-settlemint.ts:8](https://github.com/settlemint/sdk/blob/v1.0.1/sdk/next/src/config/with-settlemint.ts#L8)
+Defined in: [config/with-settlemint.ts:8](https://github.com/settlemint/sdk/blob/v1.0.2/sdk/next/src/config/with-settlemint.ts#L8)
 
 Options for configuring the SettleMint configuration.
 
@@ -155,7 +155,7 @@ Options for configuring the SettleMint configuration.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:12](https://github.com/settlemint/sdk/blob/v1.0.1/sdk/next/src/config/with-settlemint.ts#L12) |
+| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:12](https://github.com/settlemint/sdk/blob/v1.0.2/sdk/next/src/config/with-settlemint.ts#L12) |
 
 ## Contributing
 
