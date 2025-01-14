@@ -43,6 +43,7 @@
     - [formatTargetDir()](#formattargetdir)
     - [getPackageManager()](#getpackagemanager)
     - [getPackageManagerExecutable()](#getpackagemanagerexecutable)
+    - [graphqlFetchWithRetry()](#graphqlfetchwithretry)
     - [installDependencies()](#installdependencies)
     - [intro()](#intro)
     - [isEmpty()](#isempty)
@@ -345,7 +346,7 @@ if (await exists('/path/to/file.txt')) {
 
 > **fetchWithRetry**(`input`, `init`?, `maxRetries`?, `initialSleepTime`?): `Promise`\<`Response`\>
 
-Defined in: [sdk/utils/src/retry.ts:52](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/retry.ts#L52)
+Defined in: [sdk/utils/src/http/fetch-with-retry.ts:18](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/http/fetch-with-retry.ts#L18)
 
 Retry an HTTP request with exponential backoff and jitter.
 Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
@@ -369,13 +370,21 @@ The fetch Response
 
 Error if all retries fail
 
+##### Example
+
+```ts
+import { fetchWithRetry } from "@settlemint/sdk-utils";
+
+const response = await fetchWithRetry("https://api.example.com/data");
+```
+
 ***
 
 #### findMonoRepoPackages()
 
 > **findMonoRepoPackages**(`projectDir`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/filesystem/mono-repo.ts:49](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/filesystem/mono-repo.ts#L49)
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:59](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/filesystem/mono-repo.ts#L59)
 
 Finds all packages in a monorepo
 
@@ -391,13 +400,22 @@ Finds all packages in a monorepo
 
 An array of package directories
 
+##### Example
+
+```ts
+import { findMonoRepoPackages } from "@settlemint/sdk-utils";
+
+const packages = await findMonoRepoPackages("/path/to/your/project");
+console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path/to/your/project/packages/ui"]
+```
+
 ***
 
 #### findMonoRepoRoot()
 
 > **findMonoRepoRoot**(`startDir`): `Promise`\<`string` \| `null`\>
 
-Defined in: [sdk/utils/src/filesystem/mono-repo.ts:14](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/filesystem/mono-repo.ts#L14)
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/filesystem/mono-repo.ts#L19)
 
 Finds the root directory of a monorepo
 
@@ -412,6 +430,15 @@ Finds the root directory of a monorepo
 `Promise`\<`string` \| `null`\>
 
 The root directory of the monorepo or null if not found
+
+##### Example
+
+```ts
+import { findMonoRepoRoot } from "@settlemint/sdk-utils";
+
+const root = await findMonoRepoRoot("/path/to/your/project");
+console.log(root); // Output: /path/to/your/project/packages/core
+```
 
 ***
 
@@ -503,6 +530,65 @@ import { getPackageManagerExecutable } from "@settlemint/sdk-utils";
 
 const { command, args } = await getPackageManagerExecutable();
 console.log(`Using ${command} with args: ${args.join(" ")}`);
+```
+
+***
+
+#### graphqlFetchWithRetry()
+
+> **graphqlFetchWithRetry**\<`Data`\>(`input`, `init`?, `maxRetries`?, `initialSleepTime`?): `Promise`\<`Data`\>
+
+Defined in: [sdk/utils/src/http/graphql-fetch-with-retry.ts:34](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/http/graphql-fetch-with-retry.ts#L34)
+
+Executes a GraphQL request with automatic retries using exponential backoff and jitter.
+Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
+Will also retry if the GraphQL response contains errors.
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `Data` |
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `input` | `URL` \| `RequestInfo` | `undefined` | The URL or Request object for the GraphQL endpoint |
+| `init`? | `RequestInit` | `undefined` | Optional fetch configuration options |
+| `maxRetries`? | `number` | `5` | Maximum retry attempts before failing (default: 5) |
+| `initialSleepTime`? | `number` | `3_000` | Initial delay between retries in milliseconds (default: 3000) |
+
+##### Returns
+
+`Promise`\<`Data`\>
+
+The parsed GraphQL response data
+
+##### Throws
+
+Error if all retries fail or if GraphQL response contains errors
+
+##### Example
+
+```ts
+import { graphqlFetchWithRetry } from "@settlemint/sdk-utils";
+
+const data = await graphqlFetchWithRetry<{ user: { id: string } }>(
+  "https://api.example.com/graphql",
+  {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      query: `query GetUser($id: ID!) {
+        user(id: $id) {
+          id
+        }
+      }`,
+      variables: { id: "123" }
+    })
+  }
+);
 ```
 
 ***
@@ -820,7 +906,7 @@ console.log(`Project root is at: ${rootDir}`);
 
 > **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError`?): `Promise`\<`T`\>
 
-Defined in: [sdk/utils/src/retry.ts:9](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/retry.ts#L9)
+Defined in: [sdk/utils/src/retry.ts:14](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/utils/src/retry.ts#L14)
 
 Retry a function when it fails.
 
@@ -844,6 +930,15 @@ Retry a function when it fails.
 `Promise`\<`T`\>
 
 The result of the function or undefined if it fails.
+
+##### Example
+
+```ts
+import { retryWhenFailed } from "@settlemint/sdk-utils";
+import { readFile } from "node:fs/promises";
+
+const result = await retryWhenFailed(() => readFile("/path/to/file.txt"), 3, 1_000);
+```
 
 ***
 

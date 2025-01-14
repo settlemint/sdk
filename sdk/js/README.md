@@ -40,6 +40,7 @@
     - [Insights](#insights)
     - [IntegrationTool](#integrationtool)
     - [Middleware](#middleware)
+    - [MiddlewareWithSubgraphs](#middlewarewithsubgraphs)
     - [PlatformConfig](#platformconfig)
     - [PrivateKey](#privatekey)
     - [Storage](#storage)
@@ -59,7 +60,7 @@ The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint
 
 > **createSettleMintClient**(`options`): [`SettlemintClient`](README.md#settlemintclient)
 
-Defined in: [sdk/js/src/settlemint.ts:198](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/settlemint.ts#L198)
+Defined in: [sdk/js/src/settlemint.ts:201](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/settlemint.ts#L201)
 
 Creates a SettleMint client with the provided options. The client provides methods to interact with
 various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
@@ -108,7 +109,7 @@ const workspace = await client.workspace.read('workspace-unique-name');
 
 #### SettlemintClient
 
-Defined in: [sdk/js/src/settlemint.ts:99](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/settlemint.ts#L99)
+Defined in: [sdk/js/src/settlemint.ts:101](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/settlemint.ts#L101)
 
 Client interface for interacting with the SettleMint platform.
 
@@ -178,9 +179,19 @@ Type representing an integration tool entity.
 
 > **Middleware**: `ResultOf`\<*typeof* `MiddlewareFragment`\>
 
-Defined in: [sdk/js/src/graphql/middleware.ts:47](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/graphql/middleware.ts#L47)
+Defined in: [sdk/js/src/graphql/middleware.ts:40](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/graphql/middleware.ts#L40)
 
 Type representing a middleware entity.
+
+***
+
+#### MiddlewareWithSubgraphs
+
+> **MiddlewareWithSubgraphs**: `ResultOf`\<*typeof* `getGraphMiddlewareSubgraphs`\>\[`"middlewareByUniqueName"`\]
+
+Defined in: [sdk/js/src/graphql/middleware.ts:98](https://github.com/settlemint/sdk/blob/v1.0.0/sdk/js/src/graphql/middleware.ts#L98)
+
+Type representing a middleware entity with subgraphs.
 
 ***
 
