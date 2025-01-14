@@ -21,22 +21,25 @@ export async function telemetry(data: {
       return;
     }
 
-    await Promise.race([
-      fetch(`${targetInstance}/cm/telemetry`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          command,
-          status,
-          message,
-          workspace: env.SETTLEMINT_WORKSPACE,
-          application: env.SETTLEMINT_APPLICATION,
-        }),
-      }).catch(() => {}), // Swallow fetch errors
-      new Promise((resolve) => setTimeout(resolve, 500)), // Timeout after 500ms
-    ]);
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 500);
+
+    await fetch(`${targetInstance}/cm/telemetry`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        command,
+        status,
+        message,
+        workspace: env.SETTLEMINT_WORKSPACE,
+        application: env.SETTLEMINT_APPLICATION,
+      }),
+      signal: controller.signal,
+    });
+
+    clearTimeout(timeout);
   } catch {
     // Swallow any other errors
   }
