@@ -6,7 +6,7 @@ import { subgraphNamePrompt } from "@/commands/codegen/subgraph-name.prompt";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
@@ -60,35 +60,29 @@ export function codegenCommand(): Command {
           stopMessage: "Tested GraphQL schemas",
         });
 
-        const promises: Promise<void>[] = [];
         if (hasura) {
           note("Generating Hasura resources");
-          promises.push(codegenHasura(env));
+          await codegenHasura(env);
         }
         if (portal) {
           note("Generating Portal resources");
-          promises.push(codegenPortal(env));
+          await codegenPortal(env);
         }
         if (thegraph) {
           note("Generating TheGraph resources");
-          promises.push(codegenTheGraph(env, thegraphSubgraphNames));
+          await codegenTheGraph(env, thegraphSubgraphNames);
         }
         if (blockscout) {
           note("Generating Blockscout resources");
-          promises.push(codegenBlockscout(env));
+          await codegenBlockscout(env);
         }
         if (shouldCodegenMinio(env)) {
           note("Generating Minio resources");
-          promises.push(codegenMinio(env));
+          await codegenMinio(env);
         }
         if (shouldCodegenIpfs(env)) {
           note("Generating IPFS resources");
-          promises.push(codegenIpfs(env));
-        }
-
-        const results = await Promise.allSettled(promises);
-        if (results.some((r) => r.status === "rejected")) {
-          cancel("An error occurred while generating resources");
+          await codegenIpfs(env);
         }
 
         if (hasura || portal || thegraph || blockscout) {
