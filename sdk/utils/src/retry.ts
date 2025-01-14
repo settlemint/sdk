@@ -5,6 +5,11 @@
  * @param initialSleepTime - The initial time to sleep between exponential backoff retries.
  * @param stopOnError - The function to stop on error.
  * @returns The result of the function or undefined if it fails.
+ * @example
+ * import { retryWhenFailed } from "@settlemint/sdk-utils";
+ * import { readFile } from "node:fs/promises";
+ *
+ * const result = await retryWhenFailed(() => readFile("/path/to/file.txt"), 3, 1_000);
  */
 export async function retryWhenFailed<T>(
   fn: () => Promise<T>,
@@ -48,6 +53,10 @@ export async function retryWhenFailed<T>(
  * @param initialSleepTime - Initial sleep time between retries in ms
  * @returns The fetch Response
  * @throws Error if all retries fail
+ * @example
+ * import { fetchWithRetry } from "@settlemint/sdk-utils";
+ *
+ * const response = await fetchWithRetry("https://api.example.com/data");
  */
 export async function fetchWithRetry(
   input: RequestInfo | URL,
