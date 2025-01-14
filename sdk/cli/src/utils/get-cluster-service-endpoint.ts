@@ -1,6 +1,6 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { Insights, IntegrationTool, Middleware, SettlemintClient, Storage } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import { type DotEnv, retryWhenFailed } from "@settlemint/sdk-utils";
 
 export async function getGraphEndpoint(
   settlemint: SettlemintClient,
@@ -9,14 +9,12 @@ export async function getGraphEndpoint(
   graphName?: string,
 ): Promise<Partial<DotEnv>> {
   if (!service || service.__typename !== "HAGraphMiddleware") {
-    return { SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: undefined };
+    return {};
   }
 
-  const middleware = await settlemint.middleware.graphSubgraphs(service.uniqueName);
+  const middleware = await retryWhenFailed(() => settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName));
   if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
-    return {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: undefined,
-    };
+    return {};
   }
 
   const isStarterKit = (id: string) => id.endsWith("-starterkits");
