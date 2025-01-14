@@ -3,7 +3,6 @@ import { join } from "node:path";
 import { namePrompt } from "@/commands/create/name.prompt";
 import { templatePrompt } from "@/commands/create/template.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import { telemetry } from "@/utils/telemetry";
 import { Command, Option } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import type { DotEnv } from "@settlemint/sdk-utils";
@@ -34,56 +33,42 @@ export function createCommand(): Command {
       .action(async ({ projectName, template }) => {
         // Display ASCII art and intro message
         intro("Creating a new SettleMint project");
-        try {
-          const env: Partial<DotEnv> = await loadEnv(false, false);
-          const name = await namePrompt(env, projectName);
+        const env: Partial<DotEnv> = await loadEnv(false, false);
+        const name = await namePrompt(env, projectName);
 
-          const targetDir = formatTargetDir(name);
-          const projectDir = join(process.cwd(), targetDir);
-          if (!(await exists(projectDir))) {
-            await mkdir(projectDir, { recursive: true });
-          }
-
-          if (!(await isEmpty(projectDir))) {
-            const confirmEmpty = await confirm({
-              message: `The folder ${projectDir} already exists. Do you want to empty it?`,
-              default: false,
-            });
-            if (!confirmEmpty) {
-              cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
-            }
-            await emptyDir(projectDir);
-          }
-
-          const selectedTemplate = await templatePrompt(templates, template);
-
-          if (!selectedTemplate) {
-            return nothingSelectedError("template");
-          }
-
-          await spinner({
-            startMessage: "Scaffolding the project",
-            task: async () => {
-              await downloadAndExtractNpmPackage(selectedTemplate.value, projectDir);
-              await setName(name, projectDir);
-            },
-            stopMessage: "Project fully scaffolded",
-          });
-
-          outro("Your project is ready to go!");
-          await telemetry({
-            command: "create",
-            status: "success",
-            message: selectedTemplate.value,
-          });
-        } catch (error) {
-          await telemetry({
-            command: "create",
-            status: "error",
-            message: (error as Error).message,
-          });
-          throw error;
+        const targetDir = formatTargetDir(name);
+        const projectDir = join(process.cwd(), targetDir);
+        if (!(await exists(projectDir))) {
+          await mkdir(projectDir, { recursive: true });
         }
+
+        if (!(await isEmpty(projectDir))) {
+          const confirmEmpty = await confirm({
+            message: `The folder ${projectDir} already exists. Do you want to empty it?`,
+            default: false,
+          });
+          if (!confirmEmpty) {
+            cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
+          }
+          await emptyDir(projectDir);
+        }
+
+        const selectedTemplate = await templatePrompt(templates, template);
+
+        if (!selectedTemplate) {
+          return nothingSelectedError("template");
+        }
+
+        await spinner({
+          startMessage: "Scaffolding the project",
+          task: async () => {
+            await downloadAndExtractNpmPackage(selectedTemplate.value, projectDir);
+            await setName(name, projectDir);
+          },
+          stopMessage: "Project fully scaffolded",
+        });
+
+        outro("Your project is ready to go!");
       })
   );
 }
