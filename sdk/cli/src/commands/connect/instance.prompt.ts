@@ -22,9 +22,10 @@ export async function instancePrompt(
   env: Partial<DotEnv>,
   accept: boolean | undefined,
   freeTextInput = false,
+  isCi = isInCi,
 ): Promise<string> {
   const knownInstances = await getInstances();
-  const autoAccept = !!accept || isInCi;
+  const autoAccept = !!accept || isCi;
   const defaultInstance = env.SETTLEMINT_INSTANCE;
   const defaultPossible = autoAccept && defaultInstance;
 
@@ -34,6 +35,10 @@ export async function instancePrompt(
 
   const defaultLoginInstance = await getDefaultInstance();
   const defaultPromptInstance = defaultInstance ?? defaultLoginInstance ?? "https://console.settlemint.com";
+
+  if (isCi) {
+    return defaultPromptInstance;
+  }
 
   if (freeTextInput) {
     const instance = await input({
