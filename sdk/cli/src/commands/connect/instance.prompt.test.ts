@@ -17,23 +17,23 @@ async function restoreBackup() {
   }
 }
 
+beforeAll(async () => {
+  await restoreBackup();
+  if (await exists(CONFIG_DIR)) {
+    await rename(CONFIG_DIR, BACKUP_DIR);
+  }
+});
+
+afterAll(restoreBackup);
+
 describe("instancePrompt", () => {
-  beforeAll(async () => {
-    await restoreBackup();
-    if (await exists(CONFIG_DIR)) {
-      await rename(CONFIG_DIR, BACKUP_DIR);
-    }
-  });
-
-  afterAll(restoreBackup);
-
   afterEach(async () => {
     await removeCredentials(TEST_INSTANCE);
     await removeCredentials(SECOND_INSTANCE);
   });
 
-  test("returns console.settlemint.com when no instance is provided and accept is true", async () => {
-    const result = await instancePrompt({}, true);
+  test("returns console.settlemint.com when no instance is provided and running in CI", async () => {
+    const result = await instancePrompt({}, true, false, true);
     expect(result).toBe("https://console.settlemint.com");
   });
 
@@ -44,8 +44,6 @@ describe("instancePrompt", () => {
   });
 
   test("returns instance from env config when accept is true", async () => {
-    await storeCredentials("test-token", TEST_INSTANCE);
-    await storeCredentials("test-token", SECOND_INSTANCE);
     const env = { SETTLEMINT_INSTANCE: SECOND_INSTANCE };
     const result = await instancePrompt(env, true);
     expect(result).toBe(SECOND_INSTANCE);
