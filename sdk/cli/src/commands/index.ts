@@ -1,5 +1,5 @@
 import { telemetry } from "@/utils/telemetry";
-import { Command, type CommandUnknownOpts } from "@commander-js/extra-typings";
+import { Command } from "@commander-js/extra-typings";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../../package.json";
 import { codegenCommand } from "./codegen";
@@ -11,26 +11,26 @@ import { platformCommand } from "./platform";
 import { smartContractSetCommand } from "./smart-contract.set";
 
 // Extend Command type to include our custom properties
-type ExtendedCommand = CommandUnknownOpts & {
+type ExtendedCommand = Command & {
   _commandPath?: string;
   _lastCommand?: ExtendedCommand;
 };
 
-function getCommandPath(command: CommandUnknownOpts): string {
+function getCommandPath(command: Command): string {
   const parts: string[] = [];
-  let currentCommand: CommandUnknownOpts | null = command;
+  let currentCommand: Command | null = command;
 
   while (currentCommand) {
     if (currentCommand.name() !== "settlemint") {
       parts.unshift(currentCommand.name());
     }
-    currentCommand = currentCommand.parent;
+    currentCommand = currentCommand.parent as Command | null;
   }
 
   return parts.join(" ");
 }
 
-function addHooksToCommand(cmd: CommandUnknownOpts, rootCmd: ExtendedCommand) {
+function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand) {
   const extendedCmd = cmd as ExtendedCommand;
   extendedCmd
     .hook("preAction", async (thisCommand) => {
@@ -53,7 +53,7 @@ function addHooksToCommand(cmd: CommandUnknownOpts, rootCmd: ExtendedCommand) {
 
   // Recursively add hooks to subcommands
   for (const subcmd of cmd.commands) {
-    addHooksToCommand(subcmd, rootCmd);
+    addHooksToCommand(subcmd as Command, rootCmd);
   }
 }
 
@@ -89,7 +89,7 @@ export function sdkCliCommand(exitOverride: (() => void) | undefined = undefined
 
   // Add hooks to all commands including subcommands recursively
   for (const cmd of sdkcli.commands) {
-    addHooksToCommand(cmd, sdkcli);
+    addHooksToCommand(cmd as Command, sdkcli);
   }
 
   if (!exitOverride) {
