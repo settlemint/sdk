@@ -24,7 +24,7 @@ export async function telemetry(data: {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 500);
 
-    await fetch(`${targetInstance}/cm/telemetry`, {
+    await fetch(`${targetInstance}/api/telemetry`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
