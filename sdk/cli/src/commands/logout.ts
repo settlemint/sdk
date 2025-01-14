@@ -15,7 +15,6 @@ export function logoutCommand(): Command {
     .option("--all", "Logout from all instances")
     .action(async (options) => {
       intro("Logging out from SettleMint");
-
       const instances = await getInstances();
 
       if (instances.length === 0) {

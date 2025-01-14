@@ -46,7 +46,6 @@ export function codegenCommand(): Command {
       // Define the action to be executed when the command is run
       .action(async ({ prod, thegraphSubgraphNames }) => {
         intro("Generating GraphQL types and queries for your dApp");
-
         const env: DotEnv = await loadEnv(true, !!prod);
 
         if (!Array.isArray(thegraphSubgraphNames)) {

@@ -38,7 +38,6 @@ export function loginCommand(): Command {
     .option("-i, --instance <instance>", "The instance to login to (defaults to the instance in the .env file)")
     .action(async ({ acceptDefaults, default: isDefault, tokenStdin, instance }, cmd) => {
       intro("Login to your SettleMint account");
-
       const autoAccept = !!acceptDefaults || !!tokenStdin;
       const env = await loadEnv(false, false);
 

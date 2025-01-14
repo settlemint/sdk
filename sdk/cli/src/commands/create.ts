@@ -33,7 +33,6 @@ export function createCommand(): Command {
       .action(async ({ projectName, template }) => {
         // Display ASCII art and intro message
         intro("Creating a new SettleMint project");
-
         const env: Partial<DotEnv> = await loadEnv(false, false);
         const name = await namePrompt(env, projectName);
 

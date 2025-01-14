@@ -51,7 +51,6 @@ export function connectCommand(): Command {
       .action(async ({ acceptDefaults, prod, instance }) => {
         intro("Connecting your dApp to SettleMint");
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-
         const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
         const personalAccessToken = await getInstanceCredentials(selectedInstance);
 
