@@ -3,6 +3,7 @@ import { codegenPortal } from "@/commands/codegen/codegen-portal";
 import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
 import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { subgraphNamePrompt } from "@/commands/codegen/subgraph-name.prompt";
+import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -46,60 +47,72 @@ export function codegenCommand(): Command {
       // Define the action to be executed when the command is run
       .action(async ({ prod, thegraphSubgraphNames }) => {
         intro("Generating GraphQL types and queries for your dApp");
+        try {
+          const env: DotEnv = await loadEnv(true, !!prod);
 
-        const env: DotEnv = await loadEnv(true, !!prod);
+          if (!Array.isArray(thegraphSubgraphNames)) {
+            thegraphSubgraphNames = await subgraphNamePrompt(env);
+          }
 
-        if (!Array.isArray(thegraphSubgraphNames)) {
-          thegraphSubgraphNames = await subgraphNamePrompt(env);
-        }
-
-        const { hasura, portal, thegraph, blockscout } = await spinner({
-          startMessage: "Testing configured GraphQL schema",
-          task: async () => {
-            return codegenTsconfig(env, thegraphSubgraphNames);
-          },
-          stopMessage: "Tested GraphQL schemas",
-        });
-
-        const promises: Promise<void>[] = [];
-        if (hasura) {
-          note("Generating Hasura resources");
-          promises.push(codegenHasura(env));
-        }
-        if (portal) {
-          note("Generating Portal resources");
-          promises.push(codegenPortal(env));
-        }
-        if (thegraph) {
-          note("Generating TheGraph resources");
-          promises.push(codegenTheGraph(env, thegraphSubgraphNames));
-        }
-        if (blockscout) {
-          note("Generating Blockscout resources");
-          promises.push(codegenBlockscout(env));
-        }
-        if (shouldCodegenMinio(env)) {
-          note("Generating Minio resources");
-          promises.push(codegenMinio(env));
-        }
-        if (shouldCodegenIpfs(env)) {
-          note("Generating IPFS resources");
-          promises.push(codegenIpfs(env));
-        }
-
-        const results = await Promise.allSettled(promises);
-        if (results.some((r) => r.status === "rejected")) {
-          cancel("An error occurred while generating resources");
-        }
-
-        if (hasura || portal || thegraph || blockscout) {
-          await generateOutput({
-            output: undefined,
-            tsconfig: undefined,
+          const { hasura, portal, thegraph, blockscout } = await spinner({
+            startMessage: "Testing configured GraphQL schema",
+            task: async () => {
+              return codegenTsconfig(env, thegraphSubgraphNames);
+            },
+            stopMessage: "Tested GraphQL schemas",
           });
-        }
 
-        outro("Codegen complete");
+          const promises: Promise<void>[] = [];
+          if (hasura) {
+            note("Generating Hasura resources");
+            promises.push(codegenHasura(env));
+          }
+          if (portal) {
+            note("Generating Portal resources");
+            promises.push(codegenPortal(env));
+          }
+          if (thegraph) {
+            note("Generating TheGraph resources");
+            promises.push(codegenTheGraph(env, thegraphSubgraphNames));
+          }
+          if (blockscout) {
+            note("Generating Blockscout resources");
+            promises.push(codegenBlockscout(env));
+          }
+          if (shouldCodegenMinio(env)) {
+            note("Generating Minio resources");
+            promises.push(codegenMinio(env));
+          }
+          if (shouldCodegenIpfs(env)) {
+            note("Generating IPFS resources");
+            promises.push(codegenIpfs(env));
+          }
+
+          const results = await Promise.allSettled(promises);
+          if (results.some((r) => r.status === "rejected")) {
+            cancel("An error occurred while generating resources");
+          }
+
+          if (hasura || portal || thegraph || blockscout) {
+            await generateOutput({
+              output: undefined,
+              tsconfig: undefined,
+            });
+          }
+
+          outro("Codegen complete");
+          await telemetry({
+            command: "codegen",
+            status: "success",
+          });
+        } catch (error) {
+          await telemetry({
+            command: "codegen",
+            status: "error",
+            message: (error as Error).message,
+          });
+          throw error;
+        }
       })
   );
 }

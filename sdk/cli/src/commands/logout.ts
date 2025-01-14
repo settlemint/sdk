@@ -1,3 +1,4 @@
+import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
@@ -15,41 +16,54 @@ export function logoutCommand(): Command {
     .option("--all", "Logout from all instances")
     .action(async (options) => {
       intro("Logging out from SettleMint");
+      try {
+        const instances = await getInstances();
 
-      const instances = await getInstances();
+        if (instances.length === 0) {
+          outro("No instances to logout from");
+          return;
+        }
 
-      if (instances.length === 0) {
-        outro("No instances to logout from");
-        return;
-      }
+        if (options.all) {
+          // Logout from all instances
+          await Promise.all(instances.map((instance) => removeCredentials(instance)));
+          outro("Successfully logged out from all instances");
+          return;
+        }
 
-      if (options.all) {
-        // Logout from all instances
-        await Promise.all(instances.map((instance) => removeCredentials(instance)));
-        outro("Successfully logged out from all instances");
-        return;
-      }
+        // If there's only one instance, use that
+        if (instances.length === 1) {
+          const instance = instances[0]!;
+          await removeCredentials(instance);
+          outro(`Successfully logged out from ${instance}`);
+          return;
+        }
 
-      // If there's only one instance, use that
-      if (instances.length === 1) {
-        const instance = instances[0]!;
+        // Let user select which instance to logout from
+        const defaultInstance = await getDefaultInstance();
+        const instance = await select({
+          message: "Select the instance to logout from:",
+          choices: instances.map((instance) => ({
+            value: instance,
+            label: instance,
+            description: instance === defaultInstance ? "(default)" : undefined,
+          })),
+        });
+
         await removeCredentials(instance);
         outro(`Successfully logged out from ${instance}`);
-        return;
+        await telemetry({
+          command: "logout",
+          status: "success",
+          instance,
+        });
+      } catch (error) {
+        await telemetry({
+          command: "logout",
+          status: "error",
+          message: (error as Error).message,
+        });
+        throw error;
       }
-
-      // Let user select which instance to logout from
-      const defaultInstance = await getDefaultInstance();
-      const instance = await select({
-        message: "Select the instance to logout from:",
-        choices: instances.map((instance) => ({
-          value: instance,
-          label: instance,
-          description: instance === defaultInstance ? "(default)" : undefined,
-        })),
-      });
-
-      await removeCredentials(instance);
-      outro(`Successfully logged out from ${instance}`);
     });
 }
