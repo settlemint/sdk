@@ -4,7 +4,7 @@ import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import type { DotEnv } from "@settlemint/sdk-utils";
-import { installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
+import { graphqlFetchWithRetry, installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
 
 const PACKAGE_NAME = "@settlemint/sdk-blockscout";
 
@@ -25,7 +25,7 @@ export async function codegenBlockscout(env: DotEnv) {
 
   // gql.tada has an introspection query which exceeds the max complexity configured in blockscout
   // This query is the same one that blockscout uses on its playground for introspection
-  const response = await fetch(endpoint, {
+  const data = await graphqlFetchWithRetry(endpoint, {
     method: "POST",
     headers: {
       "x-auth-token": accessToken,
@@ -135,17 +135,8 @@ export async function codegenBlockscout(env: DotEnv) {
     }),
   });
 
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
-  if (data.errors) {
-    throw new Error("GraphQL errors in response");
-  }
-
   const introspectionJsonPath = resolve(process.cwd(), "__blockscout-introspection__.json");
-  await writeFile(introspectionJsonPath, JSON.stringify(data.data));
+  await writeFile(introspectionJsonPath, JSON.stringify(data));
 
   try {
     await generateSchema({

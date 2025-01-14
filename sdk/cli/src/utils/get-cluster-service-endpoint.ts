@@ -1,8 +1,9 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
-import type { Insights, IntegrationTool, Middleware, Storage } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { Insights, IntegrationTool, Middleware, SettlemintClient, Storage } from "@settlemint/sdk-js";
+import { type DotEnv, retryWhenFailed } from "@settlemint/sdk-utils";
 
 export async function getGraphEndpoint(
+  settlemint: SettlemintClient,
   service: Middleware | undefined,
   env: Partial<DotEnv>,
   graphName?: string,
@@ -11,12 +12,17 @@ export async function getGraphEndpoint(
     return {};
   }
 
+  const middleware = await retryWhenFailed(() => settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName));
+  if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
+    return {};
+  }
+
   const isStarterKit = (id: string) => id.endsWith("-starterkits");
 
-  const testEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) =>
+  const testEndpoint = middleware.subgraphs.find(({ graphqlQueryEndpoint }) =>
     graphName ? graphqlQueryEndpoint?.id.endsWith(graphName) : !isStarterKit(graphqlQueryEndpoint?.id),
   )?.graphqlQueryEndpoint?.displayValue;
-  const starterKitEndpoint = service.subgraphs.find(({ graphqlQueryEndpoint }) =>
+  const starterKitEndpoint = middleware.subgraphs.find(({ graphqlQueryEndpoint }) =>
     isStarterKit(graphqlQueryEndpoint?.id),
   )?.graphqlQueryEndpoint?.displayValue;
 
@@ -26,7 +32,7 @@ export async function getGraphEndpoint(
       : false;
 
   const endpoints = hasEndpoint
-    ? service.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue)
+    ? middleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue)
     : starterKitEndpoint
       ? [starterKitEndpoint]
       : [];

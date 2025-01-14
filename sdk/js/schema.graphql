@@ -384,6 +384,11 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
   version: String
 }
 
+"""Add-on to enable for the application"""
+enum AddOn {
+  CodeStudio
+}
+
 type AdvancedDeploymentConfig {
   """Deployment configuration"""
   deployment: AdvancedDeploymentConfigDeployment
@@ -6467,11 +6472,9 @@ input CreateMultiServicePrivateKeyArgs {
 input CreateMultiServiceSmartContractSetArgs {
   """Advanced deployment configuration"""
   advancedDeploymentConfig: AdvancedDeploymentConfigInput
-  blockchainNodeRef: String!
 
   """Disk space in MiB"""
   diskSpace: Int
-  fabricOrdererBlockchainNodeRef: String
 
   """CPU limit in cores"""
   limitCpu: Int
@@ -13949,6 +13952,9 @@ type Mutation {
     """The absolute maximum bytes for Fabric Raft consensus"""
     absoluteMaxBytes: Int = 10
 
+    """Add-ons to enable"""
+    addOns: [AddOn!]
+
     """The batch timeout for Fabric Raft consensus"""
     batchTimeout: Float = 2
 
@@ -19562,7 +19568,7 @@ type Query {
   foundryEnvConfigByUniqueName(blockchainNodeUniqueName: String!): JSON!
 
   """Get pricing estimation based on use case and configuration"""
-  getUseCasePricing(codeStudioEnabled: Boolean!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, useCaseId: String!): UseCasePricing!
+  getUseCasePricing(addOns: [AddOn!]!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, useCaseId: String!): UseCasePricing!
   getUseCases: [UseCase!]!
   getUser(userId: ID): User!
 
@@ -23177,7 +23183,7 @@ type UseCase {
 }
 
 type UseCasePricing {
-  codeStudioEnabled: Boolean!
+  addOns: [String!]!
   currency: String!
   environment: Environment!
   estimatedTotalPrice: Float!
