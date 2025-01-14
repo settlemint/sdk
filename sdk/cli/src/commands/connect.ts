@@ -150,7 +150,7 @@ export function connectCommand(): Command {
           SETTLEMINT_HASURA: hasura?.uniqueName,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,
-          ...(await getGraphEndpoint(thegraph, env)),
+          ...(await getGraphEndpoint(settlemint, thegraph, env)),
           SETTLEMINT_PORTAL: portal?.uniqueName,
           ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,

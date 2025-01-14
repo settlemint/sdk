@@ -30,13 +30,6 @@ const MiddlewareFragment = graphql(`
     }
     ... on HAGraphMiddleware {
       specVersion
-      subgraphs(noCache: $noCache) {
-        name
-        graphqlQueryEndpoint {
-          displayValue
-          id
-        }
-      }
     }
   }
 `);
@@ -51,7 +44,7 @@ export type Middleware = ResultOf<typeof MiddlewareFragment>;
  */
 const getMiddlewares = graphql(
   `
-    query GetMiddlewares($applicationUniqueName: String!, $noCache: Boolean = false) {
+    query GetMiddlewares($applicationUniqueName: String!) {
       middlewaresByUniqueName(applicationUniqueName: $applicationUniqueName) {
         items {
           ...Middleware
@@ -67,7 +60,7 @@ const getMiddlewares = graphql(
  */
 const getMiddleware = graphql(
   `
-    query GetMiddleware($uniqueName: String!, $noCache: Boolean = true) {
+    query GetMiddleware($uniqueName: String!) {
       middlewareByUniqueName(uniqueName: $uniqueName) {
         ...Middleware
       }
@@ -75,6 +68,34 @@ const getMiddleware = graphql(
   `,
   [MiddlewareFragment],
 );
+
+/**
+ * Query to fetch a specific middleware with subgraphs.
+ */
+const getGraphMiddlewareSubgraphs = graphql(
+  `
+    query GetMiddleware($uniqueName: String!, $noCache: Boolean = false) {
+      middlewareByUniqueName(uniqueName: $uniqueName) {
+        ...Middleware
+        ... on HAGraphMiddleware {
+          subgraphs(noCache: $noCache) {
+            name
+            graphqlQueryEndpoint {
+              displayValue
+              id
+            }
+          }
+        }
+      }
+    }
+  `,
+  [MiddlewareFragment],
+);
+
+/**
+ * Type representing a middleware entity with subgraphs.
+ */
+export type MiddlewareWithSubgraphs = ResultOf<typeof getGraphMiddlewareSubgraphs>["middlewareByUniqueName"];
 
 /**
  * Mutation to create a new middleware.
@@ -94,7 +115,6 @@ const createMiddleware = graphql(
       $loadBalancerId: ID
       $abis: [SmartContractPortalMiddlewareAbiInputDto!]
       $includePredeployedAbis: [String!]
-      $noCache: Boolean = false
     ) {
       createMiddleware(
         applicationId: $applicationId
@@ -135,7 +155,7 @@ export type CreateMiddlewareArgs = Omit<
  */
 const restartMiddleware = graphql(
   `
-    mutation RestartMiddleware($uniqueName: String!, $noCache: Boolean = false) {
+    mutation RestartMiddleware($uniqueName: String!) {
       restartMiddlewareByUniqueName(uniqueName: $uniqueName) {
         ...Middleware
       }
@@ -173,6 +193,25 @@ export const middlewareRead = (gqlClient: GraphQLClient): ((middlewareUniqueName
   return async (middlewareUniqueName: string): Promise<Middleware> => {
     const { middlewareByUniqueName: middleware } = await gqlClient.request(getMiddleware, {
       uniqueName: middlewareUniqueName,
+    });
+    return middleware;
+  };
+};
+
+/**
+ * Creates a function to fetch a specific middleware.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that fetches a single middleware by unique name
+ * @throws If the middleware cannot be found or the request fails
+ */
+export const graphMiddlewareSubgraphs = (
+  gqlClient: GraphQLClient,
+): ((middlewareUniqueName: string, noCache?: boolean) => Promise<MiddlewareWithSubgraphs>) => {
+  return async (middlewareUniqueName: string, noCache = false): Promise<MiddlewareWithSubgraphs> => {
+    const { middlewareByUniqueName: middleware } = await gqlClient.request(getGraphMiddlewareSubgraphs, {
+      uniqueName: middlewareUniqueName,
+      noCache,
     });
     return middleware;
   };
