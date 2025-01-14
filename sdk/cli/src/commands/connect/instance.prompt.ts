@@ -1,4 +1,4 @@
-import { getInstances } from "@/utils/config";
+import { getDefaultInstance, getInstances } from "@/utils/config";
 import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
@@ -22,20 +22,28 @@ export async function instancePrompt(
   env: Partial<DotEnv>,
   accept: boolean | undefined,
   freeTextInput = false,
+  isCi = isInCi,
 ): Promise<string> {
   const knownInstances = await getInstances();
-  const autoAccept = !!accept || isInCi;
-  const defaultInstance = env.SETTLEMINT_INSTANCE ?? knownInstances[0] ?? "https://console.settlemint.com";
+  const autoAccept = !!accept || isCi;
+  const defaultInstance = env.SETTLEMINT_INSTANCE;
   const defaultPossible = autoAccept && defaultInstance;
 
   if (defaultPossible) {
     return defaultInstance;
   }
 
+  const defaultLoginInstance = await getDefaultInstance();
+  const defaultPromptInstance = defaultInstance ?? defaultLoginInstance ?? "https://console.settlemint.com";
+
+  if (isCi) {
+    return defaultPromptInstance;
+  }
+
   if (freeTextInput) {
     const instance = await input({
       message: "What is the URL of your SettleMint instance?",
-      default: defaultInstance,
+      default: defaultPromptInstance,
       required: true,
       validate(value) {
         try {
@@ -64,6 +72,6 @@ export async function instancePrompt(
         value: instance,
       })),
     ],
-    default: defaultInstance,
+    default: defaultPromptInstance,
   });
 }
