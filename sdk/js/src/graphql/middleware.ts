@@ -74,7 +74,7 @@ const getMiddleware = graphql(
  */
 const getGraphMiddlewareSubgraphs = graphql(
   `
-    query GetMiddleware($uniqueName: String!, $noCache: Boolean = false) {
+    query GetMiddleware($uniqueName: String!, $noCache: Boolean) {
       middlewareByUniqueName(uniqueName: $uniqueName) {
         ...Middleware
         ... on HAGraphMiddleware {

@@ -13,9 +13,9 @@ import { fetchWithRetry } from "./fetch-with-retry.js";
  * @returns The parsed GraphQL response data
  * @throws Error if all retries fail or if GraphQL response contains errors
  * @example
- * import { graphqlWithRetry } from "@settlemint/sdk-utils";
+ * import { graphqlFetchWithRetry } from "@settlemint/sdk-utils";
  *
- * const data = await graphqlWithRetry<{ user: { id: string } }>(
+ * const data = await graphqlFetchWithRetry<{ user: { id: string } }>(
  *   "https://api.example.com/graphql",
  *   {
  *     method: "POST",
