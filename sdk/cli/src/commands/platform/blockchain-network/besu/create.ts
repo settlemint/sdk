@@ -54,27 +54,29 @@ export function blockchainNetworkBesuCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env) => {
+              async (settlemint, env, showSpinner) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
                 }
-                const result = await settlemint.blockchainNetwork.create({
-                  name,
-                  applicationUniqueName,
-                  nodeName: nodeName,
-                  consensusAlgorithm: "BESU_QBFT",
-                  chainId,
-                  contractSizeLimit,
-                  evmStackSize,
-                  gasLimit,
-                  gasPrice,
-                  provider: provider,
-                  region: region,
-                  secondsPerBlock,
-                  size,
-                  type,
-                });
+                const result = await showSpinner(() =>
+                  settlemint.blockchainNetwork.create({
+                    name,
+                    applicationUniqueName,
+                    nodeName: nodeName,
+                    consensusAlgorithm: "BESU_QBFT",
+                    chainId,
+                    contractSizeLimit,
+                    evmStackSize,
+                    gasLimit,
+                    gasPrice,
+                    provider: provider,
+                    region: region,
+                    secondsPerBlock,
+                    size,
+                    type,
+                  }),
+                );
 
                 const blockchainNode =
                   result.blockchainNodes.find((item) => item.name === nodeName) ?? result.blockchainNodes[0];

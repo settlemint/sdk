@@ -54,7 +54,7 @@ export function blockchainNodeBesuCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env) => {
+              async (settlemint, env, showSpinner) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -75,17 +75,19 @@ export function blockchainNodeBesuCreateCommand() {
                   networkUniqueName = network?.uniqueName;
                 }
 
-                const result = await settlemint.blockchainNode.create({
-                  applicationUniqueName,
-                  name,
-                  blockchainNetworkUniqueName: networkUniqueName,
-                  nodeType,
-                  keyMaterial: nodeIdentity,
-                  provider,
-                  region,
-                  size,
-                  type,
-                });
+                const result = await showSpinner(() =>
+                  settlemint.blockchainNode.create({
+                    applicationUniqueName,
+                    name,
+                    blockchainNetworkUniqueName: networkUniqueName,
+                    nodeType,
+                    keyMaterial: nodeIdentity,
+                    provider,
+                    region,
+                    size,
+                    type,
+                  }),
+                );
 
                 return {
                   result,

@@ -37,7 +37,7 @@ export function blockscoutInsightsCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env) => {
+              async (settlemint, env, showSpinner) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -63,17 +63,19 @@ export function blockscoutInsightsCreateCommand() {
                   blockchainNodeUniqueName = node.uniqueName;
                 }
 
-                const result = await settlemint.insights.create({
-                  name,
-                  applicationUniqueName,
-                  insightsCategory: "BLOCKCHAIN_EXPLORER",
-                  provider,
-                  region,
-                  size,
-                  type,
-                  blockchainNodeUniqueName,
-                  loadBalancerUniqueName,
-                });
+                const result = await showSpinner(() =>
+                  settlemint.insights.create({
+                    name,
+                    applicationUniqueName,
+                    insightsCategory: "BLOCKCHAIN_EXPLORER",
+                    provider,
+                    region,
+                    size,
+                    type,
+                    blockchainNodeUniqueName,
+                    loadBalancerUniqueName,
+                  }),
+                );
                 return {
                   result,
                   mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {

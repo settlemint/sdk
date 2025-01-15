@@ -25,20 +25,22 @@ export function hasuraIntegrationCreateCommand() {
               provider,
               region,
             },
-            async (settlemint, env) => {
+            async (settlemint, env, showSpinner) => {
               const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
               if (!applicationUniqueName) {
                 return missingApplication();
               }
-              const result = await settlemint.integrationTool.create({
-                name,
-                applicationUniqueName,
-                integrationType: "HASURA",
-                provider,
-                region,
-                size,
-                type,
-              });
+              const result = await showSpinner(() =>
+                settlemint.integrationTool.create({
+                  name,
+                  applicationUniqueName,
+                  integrationType: "HASURA",
+                  provider,
+                  region,
+                  size,
+                  type,
+                }),
+              );
               return {
                 result,
                 mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {

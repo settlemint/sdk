@@ -25,7 +25,7 @@ export function applicationCreateCommand() {
               ...defaultArgs,
               acceptDefaults,
             },
-            async (settlemint, env) => {
+            async (settlemint, env, showSpinner) => {
               let workspaceUniqueName = workspace;
               if (!workspaceUniqueName) {
                 const workspaces = await settlemint.workspace.list();
@@ -35,10 +35,12 @@ export function applicationCreateCommand() {
                 }
                 workspaceUniqueName = workspace.uniqueName;
               }
-              const result = await settlemint.application.create({
-                name,
-                workspaceUniqueName,
-              });
+              const result = await showSpinner(() =>
+                settlemint.application.create({
+                  name,
+                  workspaceUniqueName,
+                }),
+              );
               return {
                 result,
                 mapDefaultEnv: (): Partial<DotEnv> => {
