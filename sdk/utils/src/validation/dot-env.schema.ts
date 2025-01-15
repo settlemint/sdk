@@ -85,6 +85,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_SMART_CONTRACT_ADDRESS: z.string().optional(),
   /** Deployment ID of the smart contract */
   SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: z.string().optional(),
+  /** Debug mode */
+  SETTLEMINT_DEBUG: z.enum(["true", "false"]).transform((value) => value === "true"),
 });
 
 /**
