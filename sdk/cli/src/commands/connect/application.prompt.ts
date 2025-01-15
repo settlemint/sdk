@@ -29,7 +29,7 @@ export async function applicationPrompt(
   const application = await select({
     message: "Which application do you want to connect to?",
     choices: applications.map((applications) => ({
-      name: applications.name,
+      name: `${applications.name} (${applications.uniqueName})`,
       value: applications,
     })),
     default: defaultApplication,

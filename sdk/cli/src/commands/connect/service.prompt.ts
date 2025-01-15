@@ -68,7 +68,7 @@ export async function servicePrompt<Service extends { uniqueName: string; name: 
 
   const choices = services.map(
     (service): Choice<Service> => ({
-      name: service.name,
+      name: `${service.name} (${service.uniqueName})`,
       value: service,
     }),
   );
