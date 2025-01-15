@@ -803,7 +803,7 @@ const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
 
 #### note()
 
-> **note**(`message`, `level`): `void`
+> **note**(`message`, `level`, `debug`): `void`
 
 Defined in: [sdk/utils/src/terminal/note.ts:20](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/terminal/note.ts#L20)
 
@@ -816,7 +816,8 @@ Any sensitive tokens in the message are masked before display.
 | Parameter | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | `message` | `string` | `undefined` | The message to display as a note |
-| `level` | `"info"` \| `"warn"` | `"info"` | The note level: "info" (default) or "warn" for warning styling |
+| `level` | `"info"` \| `"warn"` \| `"debug"` | `"info"` | The note level: "info" (default) or "warn" for warning styling |
+| `debug` | `boolean` | `false` | - |
 
 ##### Returns
 
@@ -1126,7 +1127,7 @@ Writes environment variables to .env files across a project or monorepo
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `prod` | `boolean` | Whether to write production environment variables |
-| `env` | `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\> | The environment variables to write |
+| `env` | `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_DEBUG`: `boolean`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\> | The environment variables to write |
 | `secrets` | `boolean` | Whether to write to .env.local files for secrets |
 
 ##### Returns
@@ -1223,7 +1224,7 @@ Application access tokens start with 'sm_aat_' prefix.
 
 > **DotEnv**: `object`
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:93](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L93)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:95](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L95)
 
 Type definition for the environment variables schema.
 
@@ -1241,6 +1242,7 @@ Type definition for the environment variables schema.
 | <a id="settlemint_blockscout_ui_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`? | `string` | UI endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:81](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L81) |
 | <a id="settlemint_custom_deployment"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT`? | `string` | Unique name of the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:73](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L73) |
 | <a id="settlemint_custom_deployment_endpoint"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`? | `string` | Endpoint URL for the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:75](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L75) |
+| <a id="settlemint_debug"></a> `SETTLEMINT_DEBUG` | `boolean` | Debug mode | [sdk/utils/src/validation/dot-env.schema.ts:89](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L89) |
 | <a id="settlemint_hasura"></a> `SETTLEMINT_HASURA`? | `string` | Unique name of the Hasura instance | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L30) |
 | <a id="settlemint_hasura_admin_secret"></a> `SETTLEMINT_HASURA_ADMIN_SECRET`? | `string` | Admin secret for authenticating with Hasura | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L34) |
 | <a id="settlemint_hasura_database_url"></a> `SETTLEMINT_HASURA_DATABASE_URL`? | `string` | Database connection URL for Hasura | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L36) |
@@ -1274,7 +1276,7 @@ Type definition for the environment variables schema.
 
 > **DotEnvPartial**: `object`
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:104](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L104)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:106](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L106)
 
 Type definition for the partial environment variables schema.
 
@@ -1292,6 +1294,7 @@ Type definition for the partial environment variables schema.
 | <a id="settlemint_blockscout_ui_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`? | `string` | UI endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:81](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L81) |
 | <a id="settlemint_custom_deployment-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT`? | `string` | Unique name of the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:73](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L73) |
 | <a id="settlemint_custom_deployment_endpoint-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`? | `string` | Endpoint URL for the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:75](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L75) |
+| <a id="settlemint_debug-1"></a> `SETTLEMINT_DEBUG`? | `boolean` | Debug mode | [sdk/utils/src/validation/dot-env.schema.ts:89](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L89) |
 | <a id="settlemint_hasura-1"></a> `SETTLEMINT_HASURA`? | `string` | Unique name of the Hasura instance | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L30) |
 | <a id="settlemint_hasura_admin_secret-1"></a> `SETTLEMINT_HASURA_ADMIN_SECRET`? | `string` | Admin secret for authenticating with Hasura | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L34) |
 | <a id="settlemint_hasura_database_url-1"></a> `SETTLEMINT_HASURA_DATABASE_URL`? | `string` | Database connection URL for Hasura | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L36) |
@@ -1470,7 +1473,7 @@ access tokens, workspace names, and service endpoints.
 
 > `const` **DotEnvSchemaPartial**: `ZodObject`\<[`DotEnvPartial`](README.md#dotenvpartial)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:99](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L99)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:101](https://github.com/settlemint/sdk/blob/v1.0.3/sdk/utils/src/validation/dot-env.schema.ts#L101)
 
 Partial version of the environment variables schema where all fields are optional.
 Useful for validating incomplete configurations during development or build time.
