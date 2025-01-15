@@ -3,6 +3,7 @@ import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { $ } from "bun";
 import {
   getSubgraphConfig,
