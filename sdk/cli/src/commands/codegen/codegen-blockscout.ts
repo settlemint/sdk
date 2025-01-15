@@ -6,6 +6,7 @@ import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-blockscout";
@@ -25,16 +26,17 @@ export async function codegenBlockscout(env: DotEnv) {
     return;
   }
 
-  // gql.tada has an introspection query which exceeds the max complexity configured in blockscout
-  // This query is the same one that blockscout uses on its playground for introspection
-  const data = await graphqlFetchWithRetry(endpoint, {
-    method: "POST",
-    headers: {
-      "x-auth-token": accessToken,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `
+  try {
+    // gql.tada has an introspection query which exceeds the max complexity configured in blockscout
+    // This query is the same one that blockscout uses on its playground for introspection
+    const data = await graphqlFetchWithRetry(endpoint, {
+      method: "POST",
+      headers: {
+        "x-auth-token": accessToken,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
         query IntrospectionQuery {
           __schema {
             queryType { name }
@@ -134,8 +136,13 @@ export async function codegenBlockscout(env: DotEnv) {
           }
         }
         `,
-    }),
-  });
+      }),
+    });
+  } catch (err) {
+    const error = err as Error;
+    note(`GraphQL endpoint '${endpoint}' is not reachable: ${error.message}`, "warn");
+    return;
+  }
 
   const introspectionJsonPath = resolve(process.cwd(), "__blockscout-introspection__.json");
   await writeFile(introspectionJsonPath, JSON.stringify(data));

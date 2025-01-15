@@ -1,6 +1,7 @@
 import { writeFile } from "node:fs/promises";
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
 
@@ -21,6 +22,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
     prefer: "application",
   });
   if (!accessToken) {
+    note("No access token found, skipping codegen for hasura, portal, thegraph and blockscout", "warn");
     return {
       hasura: false,
       portal: false,
