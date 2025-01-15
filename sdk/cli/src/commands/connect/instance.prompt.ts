@@ -30,14 +30,14 @@ export async function instancePrompt(
   const defaultPossible = autoAccept && defaultInstance;
 
   if (defaultPossible) {
-    return defaultInstance;
+    return sanitizeInstanceUrl(defaultInstance);
   }
 
   const defaultLoginInstance = await getDefaultInstance();
   const defaultPromptInstance = defaultInstance ?? defaultLoginInstance ?? "https://console.settlemint.com";
 
   if (isCi) {
-    return defaultPromptInstance;
+    return sanitizeInstanceUrl(defaultPromptInstance);
   }
 
   if (freeTextInput) {
@@ -62,16 +62,16 @@ export async function instancePrompt(
     cancel("No instances found. Please run `settlemint login` to configure an instance.");
   }
   if (knownInstances.length === 1) {
-    return knownInstances[0];
+    return sanitizeInstanceUrl(knownInstances[0]);
   }
   return select({
     message: "What SettleMint instance do you want to connect to?",
     choices: [
       ...knownInstances.map((instance) => ({
         name: instance,
-        value: instance,
+        value: sanitizeInstanceUrl(instance),
       })),
     ],
-    default: defaultPromptInstance,
+    default: sanitizeInstanceUrl(defaultPromptInstance),
   });
 }
