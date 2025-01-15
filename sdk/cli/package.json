@@ -41,7 +41,8 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "hardhat": "2.22.18"
+    "hardhat": "2.22.18",
+    "tinyexec": "0.3.2"
   },
   "devDependencies": {
     "@types/semver": "7.5.8",
