@@ -25,9 +25,7 @@ export async function getGraphEndpoint(
     return middleware;
   });
 
-  const endpoints = theGraphMiddleware.subgraphs
-    .filter((subgraph) => subgraph.graphqlQueryEndpoint?.id)
-    .map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
+  const endpoints = theGraphMiddleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
 
   return {
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: endpoints,
