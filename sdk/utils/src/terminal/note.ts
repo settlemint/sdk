@@ -17,23 +17,14 @@ import { yellowBright } from "yoctocolors";
  * // Display warning note
  * note("Low disk space remaining", "warn");
  */
-export const note = (message: string, level: "info" | "warn" | "debug" = "info", debug = false): void => {
+export const note = (message: string, level: "info" | "warn" = "info"): void => {
   const maskedMessage = maskTokens(message);
 
-  if (level === "info") {
-    console.log("");
-    console.log(maskedMessage);
-    return;
-  }
-
+  console.log("");
   if (level === "warn") {
-    console.log("");
     console.warn(yellowBright(maskedMessage));
     return;
   }
 
-  if (level === "debug" && debug) {
-    console.log("");
-    console.log(maskedMessage);
-  }
+  console.log(maskedMessage);
 };

@@ -3,8 +3,6 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
-import { note } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
 const CONFIG_FILE = join(CONFIG_DIR, "config.json");
@@ -80,27 +78,27 @@ export async function storeCredentials(token: string, instance: string): Promise
  */
 export async function getInstanceCredentials(
   instance: string,
-  env?: Partial<DotEnv>,
+  throwOnMissingInstance = true,
 ): Promise<{ personalAccessToken: string } | undefined> {
   const config = await readConfig();
-  note(`Config from readConfig is ${JSON.stringify(config, null, 2)}`, "debug", env?.SETTLEMINT_DEBUG);
-
   const instanceConfig = config.instances[instance];
-  note(
-    `Instance config is ${instanceConfig ? JSON.stringify(instanceConfig, null, 2) : instanceConfig}`,
-    "debug",
-    env?.SETTLEMINT_DEBUG,
-  );
 
   if (!instanceConfig) {
-    return undefined;
+    if (!throwOnMissingInstance) {
+      return undefined;
+    }
+
+    cancel(
+      `No configuration found for instance '${instance}'${
+        Object.keys(config.instances).length > 0
+          ? `\nConfigured instances:\n${Object.keys(config.instances)
+              .map((i) => `- '${i}'`)
+              .join("\n")}`
+          : ""
+      }`,
+    );
   }
 
-  note(
-    `Returning ${JSON.stringify({ personalAccessToken: instanceConfig.personalAccessToken })}`,
-    "debug",
-    env?.SETTLEMINT_DEBUG,
-  );
   return { personalAccessToken: instanceConfig.personalAccessToken };
 }
 

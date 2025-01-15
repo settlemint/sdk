@@ -10,7 +10,6 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { cancel, executeCommand } from "@settlemint/sdk-utils/terminal";
-import { note } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function hardhatDeployRemoteCommand() {
@@ -78,8 +77,6 @@ export function hardhatDeployRemoteCommand() {
       const env = await loadEnv(false, !!prod);
 
       const instance = await instancePrompt(env, true);
-      note(`Instance is ${instance}`, "debug", env.SETTLEMINT_DEBUG);
-
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

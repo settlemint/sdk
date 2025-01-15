@@ -17,7 +17,7 @@ export async function personalAccessTokenPrompt(
   instance: string,
   accept: boolean,
 ): Promise<string> {
-  const existingConfig = await getInstanceCredentials(instance);
+  const existingConfig = await getInstanceCredentials(instance, false);
   const defaultPersonalAccessToken = env.SETTLEMINT_PERSONAL_ACCESS_TOKEN || existingConfig?.personalAccessToken;
   const defaultPossible = accept && defaultPersonalAccessToken;
 
