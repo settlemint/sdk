@@ -13,6 +13,7 @@ export function ipfsStorageCreateCommand() {
   return getCreateCommand({
     name: "ipfs",
     type: "storage",
+    subType: "IPFS",
     alias: "ip",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

@@ -39,7 +39,7 @@ export async function addressPrompt({
   }
 
   if (possiblePrivateKeys.length === 0) {
-    cancel("No private key is activated on the node to sign the transaction.");
+    cancel("No ECDSA P256 or HSM ECDSA P256 private key is activated on the node to sign the transaction.");
   }
 
   const address = await select({

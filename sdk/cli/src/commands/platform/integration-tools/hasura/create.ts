@@ -13,6 +13,7 @@ export function hasuraIntegrationCreateCommand() {
   return getCreateCommand({
     name: "hasura",
     type: "integration tool",
+    subType: "Hasura",
     alias: "ha",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

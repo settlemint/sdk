@@ -16,6 +16,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
   return getCreateCommand({
     name: "smart-contract-portal",
     type: "middleware",
+    subType: "Smart Contract Portal",
     alias: "scp",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

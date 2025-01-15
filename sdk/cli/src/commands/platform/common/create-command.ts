@@ -30,6 +30,7 @@ type DefaultArgs = {
  * @param options - Configuration options for the create command
  * @param options.name - The name of the command
  * @param options.type - The type of resource to create
+ * @param options.subType - The sub-type of resource to create
  * @param options.alias - Command alias for shorthand usage
  * @param options.examples - Array of example usage strings showing different ways to use the command
  * @param options.execute - Function to configure and execute the create command
@@ -42,6 +43,7 @@ type DefaultArgs = {
 export function getCreateCommand({
   name,
   type,
+  subType,
   alias,
   examples,
   execute,
@@ -50,6 +52,7 @@ export function getCreateCommand({
 }: {
   name: string;
   type: ResourceType;
+  subType?: string;
   alias: string;
   examples: CommandExample[];
   execute: (
@@ -71,9 +74,9 @@ export function getCreateCommand({
 }) {
   const cmd = new Command(sanitizeCommandName(name))
     .alias(alias)
-    .description(`Create a new ${type} in the SettleMint platform.`)
+    .description(`Create a new ${subType ? `${subType} ${type}` : type} in the SettleMint platform.`)
     .usage(createExamples(examples))
-    .argument("<name>", `The ${type} name`)
+    .argument("<name>", `The ${subType ? `${subType} ${type}` : type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
     .option("--prod", "Connect to production environment");

@@ -14,6 +14,7 @@ export function blockchainNetworkBesuCreateCommand() {
   return getCreateCommand({
     name: "besu",
     type: "blockchain network",
+    subType: "Besu",
     alias: "b",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

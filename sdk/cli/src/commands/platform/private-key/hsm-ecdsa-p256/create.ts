@@ -13,7 +13,8 @@ export function privateKeyHsmCreateCommand() {
   return getCreateCommand({
     name: "HSM-ECDSA-P256",
     type: "private key",
-    alias: "hd",
+    subType: "HSM-ECDSA-P256",
+    alias: "hsm",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option("--application <application>", "Application unique name")
