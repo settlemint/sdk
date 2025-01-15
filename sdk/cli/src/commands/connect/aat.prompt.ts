@@ -127,7 +127,7 @@ export async function applicationAccessTokenPrompt(
         validate(ApplicationAccessTokenSchema, value);
         return true;
       } catch (error) {
-        return "Invalid application access token";
+        return "Invalid application access token, it should start with sm_aat_...";
       }
     },
   });

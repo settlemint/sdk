@@ -43,7 +43,7 @@ export async function personalAccessTokenPrompt(
         validate(PersonalAccessTokenSchema, value);
         return true;
       } catch (error) {
-        return "Invalid personal access token";
+        return "Invalid personal access token, it should start with sm_pat_...";
       }
     },
   });
