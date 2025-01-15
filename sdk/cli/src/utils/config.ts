@@ -85,7 +85,15 @@ export async function getInstanceCredentials(
   const instanceConfig = config.instances[instance];
 
   if (!instanceConfig) {
-    cancel(`No configuration found for instance '${instance}'`);
+    cancel(
+      `No configuration found for instance '${instance}'${
+        Object.keys(config.instances).length > 0
+          ? `. Configured instances: ${Object.keys(config.instances)
+              .map((i) => `- '${i}'`)
+              .join("\n")}`
+          : ""
+      }`,
+    );
   }
 
   return { personalAccessToken: instanceConfig.personalAccessToken };
