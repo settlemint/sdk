@@ -108,7 +108,7 @@ export default function middleware(request: NextRequest) {
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
-Defined in: [config/with-settlemint.ts:23](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/next/src/config/with-settlemint.ts#L23)
+Defined in: [config/with-settlemint.ts:24](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/next/src/config/with-settlemint.ts#L24)
 
 Modifies the passed in Next.js configuration with SettleMint-specific settings.
 
@@ -147,7 +147,7 @@ The props for the HelloWorld component.
 
 #### WithSettleMintOptions
 
-Defined in: [config/with-settlemint.ts:8](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/next/src/config/with-settlemint.ts#L8)
+Defined in: [config/with-settlemint.ts:9](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/next/src/config/with-settlemint.ts#L9)
 
 Options for configuring the SettleMint configuration.
 
@@ -155,7 +155,7 @@ Options for configuring the SettleMint configuration.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:12](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/next/src/config/with-settlemint.ts#L12) |
+| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:13](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/next/src/config/with-settlemint.ts#L13) |
 
 ## Contributing
 

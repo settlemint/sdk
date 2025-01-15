@@ -113,7 +113,7 @@ Used for CLI branding and visual identification.
 ##### Example
 
 ```ts
-import { ascii } from "@settlemint/sdk-utils";
+import { ascii } from "@settlemint/sdk-utils/terminal";
 
 // Prints the SettleMint logo
 ascii();
@@ -146,7 +146,7 @@ never - Function does not return as it exits the process
 ##### Example
 
 ```ts
-import { cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 
 // Exits process with error message
 cancel("An error occurred");
@@ -206,7 +206,7 @@ Removes all contents of a directory except the .git folder
 ##### Example
 
 ```ts
-import { emptyDir } from "@settlemint/sdk-utils";
+import { emptyDir } from "@settlemint/sdk-utils/package-manager";
 
 await emptyDir("/path/to/dir"); // Removes all contents except .git
 ```
@@ -232,7 +232,7 @@ If called from a server environment
 ##### Example
 
 ```ts
-import { ensureBrowser } from "@settlemint/sdk-utils";
+import { ensureBrowser } from "@settlemint/sdk-utils/runtime";
 
 // Will throw if running on server
 ensureBrowser();
@@ -259,7 +259,7 @@ If called from a browser environment
 ##### Example
 
 ```ts
-import { ensureServer } from "@settlemint/sdk-utils";
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
 
 // Will throw if running in browser
 ensureServer();
@@ -298,7 +298,7 @@ If the process fails to start or exits with non-zero code
 ##### Example
 
 ```ts
-import { executeCommand } from "@settlemint/sdk-utils";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 
 // Execute git clone
 await executeCommand("git", ["clone", "repo-url"]);
@@ -332,7 +332,7 @@ Promise that resolves to true if the path exists, false otherwise
 ##### Example
 
 ```ts
-import { exists } from "@settlemint/sdk-utils";
+import { exists } from "@settlemint/sdk-utils/filesystem";
 
 // Check if file exists before reading
 if (await exists('/path/to/file.txt')) {
@@ -373,7 +373,7 @@ Error if all retries fail
 ##### Example
 
 ```ts
-import { fetchWithRetry } from "@settlemint/sdk-utils";
+import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 
 const response = await fetchWithRetry("https://api.example.com/data");
 ```
@@ -403,7 +403,7 @@ An array of package directories
 ##### Example
 
 ```ts
-import { findMonoRepoPackages } from "@settlemint/sdk-utils";
+import { findMonoRepoPackages } from "@settlemint/sdk-utils/filesystem";
 
 const packages = await findMonoRepoPackages("/path/to/your/project");
 console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path/to/your/project/packages/ui"]
@@ -434,7 +434,7 @@ The root directory of the monorepo or null if not found
 ##### Example
 
 ```ts
-import { findMonoRepoRoot } from "@settlemint/sdk-utils";
+import { findMonoRepoRoot } from "@settlemint/sdk-utils/filesystem";
 
 const root = await findMonoRepoRoot("/path/to/your/project");
 console.log(root); // Output: /path/to/your/project/packages/core
@@ -465,7 +465,7 @@ The formatted directory path
 ##### Example
 
 ```ts
-import { formatTargetDir } from "@settlemint/sdk-utils";
+import { formatTargetDir } from "@settlemint/sdk-utils/package-manager";
 
 const formatted = formatTargetDir("/path/to/dir/ "); // "/path/to/dir"
 ```
@@ -495,7 +495,7 @@ The name of the package manager
 ##### Example
 
 ```ts
-import { getPackageManager } from "@settlemint/sdk-utils";
+import { getPackageManager } from "@settlemint/sdk-utils/package-manager";
 
 const packageManager = await getPackageManager();
 console.log(`Using ${packageManager}`);
@@ -526,7 +526,7 @@ An object containing the command and arguments for the package manager
 ##### Example
 
 ```ts
-import { getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 
 const { command, args } = await getPackageManagerExecutable();
 console.log(`Using ${command} with args: ${args.join(" ")}`);
@@ -572,7 +572,7 @@ Error if all retries fail or if GraphQL response contains errors
 ##### Example
 
 ```ts
-import { graphqlFetchWithRetry } from "@settlemint/sdk-utils";
+import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
 
 const data = await graphqlFetchWithRetry<{ user: { id: string } }>(
   "https://api.example.com/graphql",
@@ -621,7 +621,7 @@ If package installation fails
 ##### Example
 
 ```ts
-import { installDependencies } from "@settlemint/sdk-utils";
+import { installDependencies } from "@settlemint/sdk-utils/package-manager";
 
 // Install a single package
 await installDependencies("express");
@@ -654,7 +654,7 @@ Any sensitive tokens in the message are masked before display.
 ##### Example
 
 ```ts
-import { intro } from "@settlemint/sdk-utils";
+import { intro } from "@settlemint/sdk-utils/terminal";
 
 // Display intro message
 intro("Starting deployment...");
@@ -685,7 +685,7 @@ True if directory is empty or contains only .git, false otherwise
 ##### Example
 
 ```ts
-import { isEmpty } from "@settlemint/sdk-utils";
+import { isEmpty } from "@settlemint/sdk-utils/package-manager";
 
 if (await isEmpty("/path/to/dir")) {
   // Directory is empty
@@ -698,7 +698,7 @@ if (await isEmpty("/path/to/dir")) {
 
 > **isPackageInstalled**(`name`, `path`?): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:12](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/utils/src/package-manager/is-package-installed.ts#L12)
+Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:17](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/utils/src/package-manager/is-package-installed.ts#L17)
 
 Checks if a package is installed in the project's dependencies, devDependencies, or peerDependencies.
 
@@ -718,6 +718,15 @@ Whether the package is installed
 ##### Throws
 
 If unable to read or parse the package.json file
+
+##### Example
+
+```ts
+import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+
+const isInstalled = await isPackageInstalled("@settlemint/sdk-utils");
+console.log(`@settlemint/sdk-utils is installed: ${isInstalled}`);
+```
 
 ***
 
@@ -757,7 +766,7 @@ Will throw an error if validation fails and validateEnv is true
 ##### Example
 
 ```ts
-import { loadEnv } from '@settlemint/sdk-utils';
+import { loadEnv } from '@settlemint/sdk-utils/environment';
 
 // Load and validate environment variables
 const env = await loadEnv(true, false);
@@ -793,7 +802,7 @@ The text with any sensitive tokens masked with asterisks
 ##### Example
 
 ```ts
-import { maskTokens } from "@settlemint/sdk-utils";
+import { maskTokens } from "@settlemint/sdk-utils/terminal";
 
 // Masks a token in text
 const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
@@ -825,7 +834,7 @@ Any sensitive tokens in the message are masked before display.
 ##### Example
 
 ```ts
-import { note } from "@settlemint/sdk-utils";
+import { note } from "@settlemint/sdk-utils/terminal";
 
 // Display info note
 note("Operation completed successfully");
@@ -858,7 +867,7 @@ Any sensitive tokens in the message are masked before display.
 ##### Example
 
 ```ts
-import { outro } from "@settlemint/sdk-utils";
+import { outro } from "@settlemint/sdk-utils/terminal";
 
 // Display outro message
 outro("Deployment completed successfully!");
@@ -893,7 +902,7 @@ Will throw an error if no package.json is found in the directory tree
 ##### Example
 
 ```ts
-import { projectRoot } from "@settlemint/sdk-utils";
+import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 
 // Get project root path
 const rootDir = await projectRoot();
@@ -970,7 +979,7 @@ If unable to read, update or save the package.json file
 ##### Example
 
 ```ts
-import { setName } from "@settlemint/sdk-utils";
+import { setName } from "@settlemint/sdk-utils/package-manager";
 
 await setName("my-new-project-name");
 ```
@@ -1012,7 +1021,7 @@ Will exit process with code 1 if task fails
 ##### Example
 
 ```ts
-import { spinner } from "@settlemint/sdk-utils";
+import { spinner } from "@settlemint/sdk-utils/terminal";
 
 // Show spinner during async task
 const result = await spinner({
@@ -1078,7 +1087,7 @@ const invalid = tryParseJson<string[]>(
 
 > **validate**\<`T`\>(`schema`, `value`): `T`\[`"_output"`\]
 
-Defined in: [sdk/utils/src/validation.ts:14](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/utils/src/validation.ts#L14)
+Defined in: [sdk/utils/src/validation/validate.ts:16](https://github.com/settlemint/sdk/blob/v1.0.4/sdk/utils/src/validation/validate.ts#L16)
 
 Validates a value against a given Zod schema.
 
@@ -1108,6 +1117,8 @@ Will throw an error if validation fails, with formatted error messages.
 ##### Example
 
 ```ts
+import { validate } from "@settlemint/sdk-utils/validation";
+
 const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 ```
 
@@ -1142,7 +1153,7 @@ Will throw an error if writing fails
 ##### Example
 
 ```ts
-import { writeEnv } from '@settlemint/sdk-utils';
+import { writeEnv } from '@settlemint/sdk-utils/environment';
 
 // Write development environment variables
 await writeEnv(false, {
@@ -1371,7 +1382,7 @@ Schema for validating URLs.
 ##### Example
 
 ```ts
-import { UrlSchema } from "@settlemint/sdk-utils";
+import { UrlSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a URL
 const isValidUrl = UrlSchema.safeParse("https://console.settlemint.com").success;
@@ -1395,7 +1406,7 @@ Schema that accepts either a full URL or a URL path.
 ##### Example
 
 ```ts
-import { UrlOrPathSchema } from "@settlemint/sdk-utils";
+import { UrlOrPathSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a URL
 const isValidUrl = UrlOrPathSchema.safeParse("https://console.settlemint.com").success;
@@ -1419,7 +1430,7 @@ Schema for validating URL paths.
 ##### Example
 
 ```ts
-import { UrlPathSchema } from "@settlemint/sdk-utils";
+import { UrlPathSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a URL path
 const isValidPath = UrlPathSchema.safeParse("/api/v1/users").success;
@@ -1490,7 +1501,7 @@ MongoDB ObjectIDs are 24 hexadecimal characters (e.g. 507f1f77bcf86cd799439011).
 ##### Example
 
 ```ts
-import { IdSchema } from "@settlemint/sdk-utils";
+import { IdSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate PostgreSQL UUID
 const isValidUuid = IdSchema.safeParse("123e4567-e89b-12d3-a456-426614174000").success;
@@ -1545,7 +1556,7 @@ Used for workspace names, application names, service names etc.
 ##### Example
 
 ```ts
-import { UniqueNameSchema } from "@settlemint/sdk-utils";
+import { UniqueNameSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a workspace name
 const isValidName = UniqueNameSchema.safeParse("my-workspace-123").success;
@@ -1569,7 +1580,7 @@ Schema that accepts either a full URL or a URL path.
 ##### Example
 
 ```ts
-import { UrlOrPathSchema } from "@settlemint/sdk-utils";
+import { UrlOrPathSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a URL
 const isValidUrl = UrlOrPathSchema.safeParse("https://console.settlemint.com").success;
@@ -1593,7 +1604,7 @@ Schema for validating URL paths.
 ##### Example
 
 ```ts
-import { UrlPathSchema } from "@settlemint/sdk-utils";
+import { UrlPathSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a URL path
 const isValidPath = UrlPathSchema.safeParse("/api/v1/users").success;
@@ -1617,7 +1628,7 @@ Schema for validating URLs.
 ##### Example
 
 ```ts
-import { UrlSchema } from "@settlemint/sdk-utils";
+import { UrlSchema } from "@settlemint/sdk-utils/validation";
 
 // Validate a URL
 const isValidUrl = UrlSchema.safeParse("https://console.settlemint.com").success;
