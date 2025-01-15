@@ -95,8 +95,8 @@ Options:
   -h, --help               display help for command
 
 Commands:
-  <a href="#blockchain-network-besu">besu|b</a> [options] &lt;name&gt;  Create a new blockchain network in the SettleMint
-                           platform.
+  <a href="#blockchain-network-besu">besu|b</a> [options] &lt;name&gt;  Create a new Besu blockchain network in the
+                           SettleMint platform.
   help [command]           display help for command
 </pre>
 
@@ -111,10 +111,10 @@ Examples:
   # Create a Besu blockchain network in a different application
   $ settlemint platform create blockchain-network besu my-network --application app-123 --node-name validator-1 --chain-id 12345 --gas-limit 10000000 --seconds-per-block 5
 
-Create a new blockchain network in the SettleMint platform.
+Create a new Besu blockchain network in the SettleMint platform.
 
 Arguments:
-  name                             The blockchain network name
+  name                             The Besu blockchain network name
 
 Options:
   -a, --accept-defaults            Accept the default values
@@ -153,7 +153,7 @@ Options:
   -h, --help               display help for command
 
 Commands:
-  <a href="#blockchain-node-besu">besu|b</a> [options] &lt;name&gt;  Create a new blockchain node in the SettleMint
+  <a href="#blockchain-node-besu">besu|b</a> [options] &lt;name&gt;  Create a new Besu blockchain node in the SettleMint
                            platform.
   help [command]           display help for command
 </pre>
@@ -172,10 +172,10 @@ Examples:
   # Create a Besu blockchain node in a different application
   $ settlemint platform create blockchain-node besu my-node --application-id 123456789 --node-type NON_VALIDATOR --accept-defaults
 
-Create a new blockchain node in the SettleMint platform.
+Create a new Besu blockchain node in the SettleMint platform.
 
 Arguments:
-  name                                      The blockchain node name
+  name                                      The Besu blockchain node name
 
 Options:
   -a, --accept-defaults                     Accept the default values
@@ -201,14 +201,14 @@ Options:
 Create a private key in the SettleMint platform
 
 Options:
-  -h, --help                          display help for command
+  -h, --help                           display help for command
 
 Commands:
-  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;name&gt;   Create a new private key in the
-                                      SettleMint platform.
-  <a href="#private-key-hsm-ecdsa-p256">hsm-ecdsa-p256|hd</a> [options] &lt;name&gt;  Create a new private key in the
-                                      SettleMint platform.
-  help [command]                      display help for command
+  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;name&gt;    Create a new HD-ECDSA-P256 private key
+                                       in the SettleMint platform.
+  <a href="#private-key-hsm-ecdsa-p256">hsm-ecdsa-p256|hsm</a> [options] &lt;name&gt;  Create a new HSM-ECDSA-P256 private key
+                                       in the SettleMint platform.
+  help [command]                       display help for command
 </pre>
 
 <h3 id="private-key-hd-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Hd ecdsa p256</h3>
@@ -225,10 +225,10 @@ Examples:
   # Create a private key linked to a blockchain node
   $ settlemint platform create private-key hd-ecdsa-p256 my-key --blockchain-node node-123
 
-Create a new private key in the SettleMint platform.
+Create a new HD-ECDSA-P256 private key in the SettleMint platform.
 
 Arguments:
-  name                                The private key name
+  name                                The HD-ECDSA-P256 private key name
 
 Options:
   -a, --accept-defaults               Accept the default values
@@ -253,7 +253,7 @@ Options:
 
 <h3 id="private-key-hsm-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Hsm ecdsa p256</h3>
 
-<pre>Usage: settlemint platform create private-key hsm-ecdsa-p256|hd 
+<pre>Usage: settlemint platform create private-key hsm-ecdsa-p256|hsm 
 Examples:
 
   # Create a private key and save as default
@@ -265,10 +265,10 @@ Examples:
   # Create a private key linked to a blockchain node
   $ settlemint platform create private-key hsm-ecdsa-p256 my-key --blockchain-node node-123
 
-Create a new private key in the SettleMint platform.
+Create a new HSM-ECDSA-P256 private key in the SettleMint platform.
 
 Arguments:
-  name                                The private key name
+  name                                The HSM-ECDSA-P256 private key name
 
 Options:
   -a, --accept-defaults               Accept the default values
@@ -301,8 +301,8 @@ Options:
   -h, --help                                  display help for command
 
 Commands:
-  <a href="#middleware-graph">graph|gr</a> [options] &lt;name&gt;                   Create a new middleware in the SettleMint platform.
-  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;name&gt;  Create a new middleware in the SettleMint platform.
+  <a href="#middleware-graph">graph|gr</a> [options] &lt;name&gt;                   Create a new The Graph middleware in the SettleMint platform.
+  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;name&gt;  Create a new Smart Contract Portal middleware in the SettleMint platform.
   help [command]                              display help for command
 </pre>
 
@@ -317,10 +317,10 @@ Examples:
   # Create a graph middleware in a different application
   $ settlemint platform create middleware graph my-graph --application my-app --blockchain-node node-123
 
-Create a new middleware in the SettleMint platform.
+Create a new The Graph middleware in the SettleMint platform.
 
 Arguments:
-  name                                The middleware name
+  name                                The The Graph middleware name
 
 Options:
   -a, --accept-defaults               Accept the default values
@@ -354,10 +354,10 @@ Examples:
   # Create a smart contract portal middleware in a different application
   $ settlemint platform create middleware smart-contract-portal my-portal --application my-app --blockchain-node node-123
 
-Create a new middleware in the SettleMint platform.
+Create a new Smart Contract Portal middleware in the SettleMint platform.
 
 Arguments:
-  name                                                    The middleware name
+  name                                                    The Smart Contract Portal middleware name
 
 Options:
   -a, --accept-defaults                                   Accept the default values
@@ -387,8 +387,10 @@ Options:
   -h, --help                display help for command
 
 Commands:
-  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;name&gt;  Create a new storage in the SettleMint platform.
-  <a href="#storage-minio">minio|m</a> [options] &lt;name&gt;  Create a new storage in the SettleMint platform.
+  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;name&gt;  Create a new IPFS storage in the SettleMint
+                            platform.
+  <a href="#storage-minio">minio|m</a> [options] &lt;name&gt;  Create a new MinIO storage in the SettleMint
+                            platform.
   help [command]            display help for command
 </pre>
 
@@ -403,10 +405,10 @@ Examples:
   # Create an IPFS storage in a different application
   $ settlemint platform create storage ipfs my-storage --application app-123
 
-Create a new storage in the SettleMint platform.
+Create a new IPFS storage in the SettleMint platform.
 
 Arguments:
-  name                         The storage name
+  name                         The IPFS storage name
 
 Options:
   -a, --accept-defaults        Accept the default values
@@ -437,10 +439,10 @@ Examples:
   # Create a MinIO storage in a different application
   $ settlemint platform create storage minio my-storage --application app-123
 
-Create a new storage in the SettleMint platform.
+Create a new MinIO storage in the SettleMint platform.
 
 Arguments:
-  name                         The storage name
+  name                         The MinIO storage name
 
 Options:
   -a, --accept-defaults        Accept the default values
@@ -470,8 +472,8 @@ Options:
   -h, --help                  display help for command
 
 Commands:
-  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;name&gt;  Create a new integration tool in the SettleMint
-                              platform.
+  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;name&gt;  Create a new Hasura integration tool in the
+                              SettleMint platform.
   help [command]              display help for command
 </pre>
 
@@ -486,10 +488,10 @@ Examples:
   # Create a Hasura integration in a different application
   $ settlemint platform create integration-tool hasura my-hasura --application app-123
 
-Create a new integration tool in the SettleMint platform.
+Create a new Hasura integration tool in the SettleMint platform.
 
 Arguments:
-  name                         The integration tool name
+  name                         The Hasura integration tool name
 
 Options:
   -a, --accept-defaults        Accept the default values
@@ -519,8 +521,8 @@ Options:
   -h, --help                      display help for command
 
 Commands:
-  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;name&gt;  Create a new insights in the SettleMint
-                                  platform.
+  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;name&gt;  Create a new Blockscout insights in the
+                                  SettleMint platform.
   help [command]                  display help for command
 </pre>
 
@@ -535,10 +537,10 @@ Examples:
   # Create a Blockscout insights service in a different application
   $ settlemint platform create insights blockscout my-blockscout --application app-123
 
-Create a new insights in the SettleMint platform.
+Create a new Blockscout insights in the SettleMint platform.
 
 Arguments:
-  name                                The insights name
+  name                                The Blockscout insights name
 
 Options:
   -a, --accept-defaults               Accept the default values
