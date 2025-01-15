@@ -15,26 +15,12 @@ describe("privateKeyHdCreateCommand", () => {
           commandOptions = options;
         }),
     );
-    program.parse([
-      "node",
-      "test",
-      "accessible-ecdsa-p256",
-      "test-key",
-      "--accept-defaults",
-      "--provider",
-      "gke",
-      "--region",
-      "europe",
-    ]);
+    program.parse(["node", "test", "accessible-ecdsa-p256", "test-key", "--accept-defaults"]);
 
     // Validate command was executed with correct arguments
     expect(commandArgs).toBe("test-key");
     expect(commandOptions).toEqual({
       acceptDefaults: true,
-      provider: "gke",
-      region: "europe",
-      size: "SMALL",
-      type: "SHARED",
     });
   });
 
@@ -56,10 +42,6 @@ describe("privateKeyHdCreateCommand", () => {
       "accessible-ecdsa-p256",
       "test-key",
       "--accept-defaults",
-      "--provider",
-      "gke",
-      "--region",
-      "europe",
       "--application",
       "my-app",
       "--blockchain-node",
@@ -69,12 +51,8 @@ describe("privateKeyHdCreateCommand", () => {
     expect(commandArgs).toBe("test-key");
     expect(commandOptions).toEqual({
       acceptDefaults: true,
-      provider: "gke",
-      region: "europe",
       application: "my-app",
       blockchainNode: "node-1",
-      size: "SMALL",
-      type: "SHARED",
     });
   });
 });

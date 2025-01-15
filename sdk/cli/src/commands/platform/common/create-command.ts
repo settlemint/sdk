@@ -107,7 +107,7 @@ export function getCreateCommand({
       });
       const platformConfig = await settlemint.platform.config();
 
-      if (requiresDeployment) {
+      if (cmd.options.some((option) => option.long === "--provider")) {
         const selectedProvider = await providerPrompt(platformConfig, provider);
         if (!selectedProvider) {
           return nothingSelectedError("provider");
