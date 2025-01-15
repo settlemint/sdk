@@ -14,6 +14,7 @@ export function privateKeyHdCreateCommand() {
   return getCreateCommand({
     name: "HD-ECDSA-P256",
     type: "private key",
+    subType: "HD-ECDSA-P256",
     alias: "hd",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

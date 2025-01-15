@@ -15,6 +15,7 @@ export function blockscoutInsightsCreateCommand() {
   return getCreateCommand({
     name: "blockscout",
     type: "insights",
+    subType: "Blockscout",
     alias: "bs",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

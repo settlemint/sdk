@@ -13,6 +13,7 @@ export function minioStorageCreateCommand() {
   return getCreateCommand({
     name: "minio",
     type: "storage",
+    subType: "MinIO",
     alias: "m",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)

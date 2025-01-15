@@ -15,6 +15,7 @@ export function graphMiddlewareCreateCommand() {
   return getCreateCommand({
     name: "graph",
     type: "middleware",
+    subType: "The Graph",
     alias: "gr",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
