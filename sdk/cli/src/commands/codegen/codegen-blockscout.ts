@@ -26,6 +26,8 @@ export async function codegenBlockscout(env: DotEnv) {
     return;
   }
 
+  const introspectionJsonPath = resolve(process.cwd(), "__blockscout-introspection__.json");
+
   try {
     // gql.tada has an introspection query which exceeds the max complexity configured in blockscout
     // This query is the same one that blockscout uses on its playground for introspection
@@ -138,14 +140,12 @@ export async function codegenBlockscout(env: DotEnv) {
         `,
       }),
     });
+    await writeFile(introspectionJsonPath, JSON.stringify(data));
   } catch (err) {
     const error = err as Error;
     note(`GraphQL endpoint '${endpoint}' is not reachable: ${error.message}`, "warn");
     return;
   }
-
-  const introspectionJsonPath = resolve(process.cwd(), "__blockscout-introspection__.json");
-  await writeFile(introspectionJsonPath, JSON.stringify(data));
 
   try {
     await generateSchema({
