@@ -6,7 +6,7 @@ import { z } from "zod";
  * Used for workspace names, application names, service names etc.
  *
  * @example
- * import { UniqueNameSchema } from "@settlemint/sdk-utils";
+ * import { UniqueNameSchema } from "@settlemint/sdk-utils/validation";
  *
  * // Validate a workspace name
  * const isValidName = UniqueNameSchema.safeParse("my-workspace-123").success;

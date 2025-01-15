@@ -11,7 +11,7 @@ import { glob } from "glob";
  * @param startDir - The directory to start searching from
  * @returns The root directory of the monorepo or null if not found
  * @example
- * import { findMonoRepoRoot } from "@settlemint/sdk-utils";
+ * import { findMonoRepoRoot } from "@settlemint/sdk-utils/filesystem";
  *
  * const root = await findMonoRepoRoot("/path/to/your/project");
  * console.log(root); // Output: /path/to/your/project/packages/core
@@ -51,7 +51,7 @@ export async function findMonoRepoRoot(startDir: string): Promise<string | null>
  * @param projectDir - The directory to start searching from
  * @returns An array of package directories
  * @example
- * import { findMonoRepoPackages } from "@settlemint/sdk-utils";
+ * import { findMonoRepoPackages } from "@settlemint/sdk-utils/filesystem";
  *
  * const packages = await findMonoRepoPackages("/path/to/your/project");
  * console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path/to/your/project/packages/ui"]

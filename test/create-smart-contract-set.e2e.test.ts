@@ -1,7 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { exists } from "@settlemint/sdk-utils";
+import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $, type ShellError } from "bun";
 import {
   NODE_NAME,

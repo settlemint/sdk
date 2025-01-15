@@ -13,9 +13,10 @@ import {
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { type DotEnv, note } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { note } from "@settlemint/sdk-utils/terminal";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
 import { applicationPrompt } from "./connect/application.prompt";
 import { blockchainNodePrompt } from "./connect/blockchain-node.prompt";

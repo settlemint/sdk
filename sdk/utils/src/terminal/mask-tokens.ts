@@ -5,7 +5,7 @@
  * @param output - The text string that may contain sensitive tokens
  * @returns The text with any sensitive tokens masked with asterisks
  * @example
- * import { maskTokens } from "@settlemint/sdk-utils";
+ * import { maskTokens } from "@settlemint/sdk-utils/terminal";
  *
  * // Masks a token in text
  * const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"

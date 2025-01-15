@@ -2,7 +2,9 @@ import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { selectTargetNode } from "../utils/select-target-node";
 

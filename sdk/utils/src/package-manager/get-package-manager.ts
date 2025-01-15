@@ -7,7 +7,7 @@ import { detect } from "package-manager-detector/detect";
  * @param targetDir - The directory to check for package manager (optional, defaults to process.cwd())
  * @returns The name of the package manager
  * @example
- * import { getPackageManager } from "@settlemint/sdk-utils";
+ * import { getPackageManager } from "@settlemint/sdk-utils/package-manager";
  *
  * const packageManager = await getPackageManager();
  * console.log(`Using ${packageManager}`);

@@ -24,7 +24,7 @@ export interface SpinnerOptions<R> {
  * @returns The result from the executed task
  * @throws Will exit process with code 1 if task fails
  * @example
- * import { spinner } from "@settlemint/sdk-utils";
+ * import { spinner } from "@settlemint/sdk-utils/terminal";
  *
  * // Show spinner during async task
  * const result = await spinner({

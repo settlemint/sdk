@@ -1,6 +1,7 @@
 import { createExamples } from "@/commands/platform/utils/create-examples";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatDeployLocalCommand() {
   return new Command("local")

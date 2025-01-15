@@ -1,6 +1,6 @@
 import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 import { getRegionId } from "../utils/cluster-region";
 
 /**

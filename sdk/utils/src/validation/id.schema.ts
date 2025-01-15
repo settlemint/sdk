@@ -6,7 +6,7 @@ import { z } from "zod";
  * MongoDB ObjectIDs are 24 hexadecimal characters (e.g. 507f1f77bcf86cd799439011).
  *
  * @example
- * import { IdSchema } from "@settlemint/sdk-utils";
+ * import { IdSchema } from "@settlemint/sdk-utils/validation";
  *
  * // Validate PostgreSQL UUID
  * const isValidUuid = IdSchema.safeParse("123e4567-e89b-12d3-a456-426614174000").success;

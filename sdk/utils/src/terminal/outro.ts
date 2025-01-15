@@ -7,7 +7,7 @@ import { greenBright, inverse } from "yoctocolors";
  *
  * @param msg - The message to display as conclusion
  * @example
- * import { outro } from "@settlemint/sdk-utils";
+ * import { outro } from "@settlemint/sdk-utils/terminal";
  *
  * // Display outro message
  * outro("Deployment completed successfully!");

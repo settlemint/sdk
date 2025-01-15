@@ -9,7 +9,7 @@ import { note } from "../terminal.js";
  * @returns A promise that resolves when installation is complete
  * @throws If package installation fails
  * @example
- * import { installDependencies } from "@settlemint/sdk-utils";
+ * import { installDependencies } from "@settlemint/sdk-utils/package-manager";
  *
  * // Install a single package
  * await installDependencies("express");

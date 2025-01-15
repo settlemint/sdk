@@ -3,8 +3,8 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function selectTargetNode({
   env,

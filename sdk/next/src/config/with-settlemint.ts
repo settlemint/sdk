@@ -1,4 +1,5 @@
-import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import type { NextConfig } from "next";
 import type { Rewrite } from "next/dist/lib/load-custom-routes.js";
 

@@ -7,7 +7,7 @@ import { magentaBright } from "yoctocolors";
  *
  * @param msg - The message to display as introduction
  * @example
- * import { intro } from "@settlemint/sdk-utils";
+ * import { intro } from "@settlemint/sdk-utils/terminal";
  *
  * // Display intro message
  * intro("Starting deployment...");

@@ -18,11 +18,7 @@ export default defineConfig(({ watch }) => {
       ...sharedConfig,
     },
     {
-      entry: ["src/package-manager.ts"],
-      ...sharedConfig,
-    },
-    {
-      entry: ["src/validation.ts"],
+      entry: ["src/environment.ts"],
       ...sharedConfig,
     },
     {
@@ -30,15 +26,23 @@ export default defineConfig(({ watch }) => {
       ...sharedConfig,
     },
     {
+      entry: ["src/http.ts"],
+      ...sharedConfig,
+    },
+    {
+      entry: ["src/package-manager.ts"],
+      ...sharedConfig,
+    },
+    {
       entry: ["src/runtime.ts"],
       ...sharedConfig,
     },
     {
-      entry: ["src/environment.ts"],
+      entry: ["src/terminal.ts"],
       ...sharedConfig,
     },
     {
-      entry: ["src/terminal.ts"],
+      entry: ["src/validation.ts"],
       ...sharedConfig,
     },
   ];

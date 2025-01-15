@@ -1,5 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatScriptLocalCommand() {
   return new Command("local")

@@ -7,8 +7,9 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { cancel, executeCommand } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function hardhatDeployRemoteCommand() {

@@ -1,6 +1,6 @@
 import { workspacePrompt } from "@/commands/connect/workspace.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getCreateCommand } from "../common/create-command";
 
 /**

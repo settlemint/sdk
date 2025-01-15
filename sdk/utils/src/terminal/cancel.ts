@@ -9,7 +9,7 @@ import { inverse, redBright } from "yoctocolors";
  * @param msg - The error message to display
  * @returns never - Function does not return as it exits the process
  * @example
- * import { cancel } from "@settlemint/sdk-utils";
+ * import { cancel } from "@settlemint/sdk-utils/terminal";
  *
  * // Exits process with error message
  * cancel("An error occurred");

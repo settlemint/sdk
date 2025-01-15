@@ -16,7 +16,7 @@ export const templates: Template[] = [
  * @param targetDir - The directory path to format
  * @returns The formatted directory path
  * @example
- * import { formatTargetDir } from "@settlemint/sdk-utils";
+ * import { formatTargetDir } from "@settlemint/sdk-utils/package-manager";
  *
  * const formatted = formatTargetDir("/path/to/dir/ "); // "/path/to/dir"
  */
@@ -30,7 +30,7 @@ export function formatTargetDir(targetDir: string): string {
  * @param path - The directory path to check
  * @returns True if directory is empty or contains only .git, false otherwise
  * @example
- * import { isEmpty } from "@settlemint/sdk-utils";
+ * import { isEmpty } from "@settlemint/sdk-utils/package-manager";
  *
  * if (await isEmpty("/path/to/dir")) {
  *   // Directory is empty
@@ -46,7 +46,7 @@ export async function isEmpty(path: string): Promise<boolean> {
  *
  * @param dir - The directory path to empty
  * @example
- * import { emptyDir } from "@settlemint/sdk-utils";
+ * import { emptyDir } from "@settlemint/sdk-utils/package-manager";
  *
  * await emptyDir("/path/to/dir"); // Removes all contents except .git
  */

@@ -1,7 +1,7 @@
 import { createExamples } from "@/commands/platform/utils/create-examples";
 import { mapPassthroughOptions } from "@/utils/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 
 export function foundryBuildCommand() {
   return new Command("build")

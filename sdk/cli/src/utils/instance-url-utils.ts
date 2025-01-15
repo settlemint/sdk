@@ -1,4 +1,4 @@
-import { UrlSchema, validate } from "@settlemint/sdk-utils";
+import { UrlSchema, validate } from "@settlemint/sdk-utils/validation";
 
 export function sanitizeInstanceUrl(url: string) {
   const instanceUrl = new URL(url);

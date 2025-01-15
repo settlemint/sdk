@@ -2,7 +2,7 @@ import { getDefaultInstance, getInstances } from "@/utils/config";
 import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
-import { cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 

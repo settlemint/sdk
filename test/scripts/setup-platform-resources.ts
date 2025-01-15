@@ -1,6 +1,7 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { type DotEnv, loadEnv } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import {
   AAT_NAME,
   APPLICATION_NAME,

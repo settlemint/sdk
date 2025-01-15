@@ -9,7 +9,7 @@ import { yellowBright } from "yoctocolors";
  * @param message - The message to display as a note
  * @param level - The note level: "info" (default) or "warn" for warning styling
  * @example
- * import { note } from "@settlemint/sdk-utils";
+ * import { note } from "@settlemint/sdk-utils/terminal";
  *
  * // Display info note
  * note("Operation completed successfully");

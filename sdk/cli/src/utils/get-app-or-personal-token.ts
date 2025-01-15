@@ -1,6 +1,6 @@
 import { missingAccessTokenError, missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getInstanceCredentials } from "@/utils/config";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export const getApplicationOrPersonalAccessToken = async ({
   env,

@@ -7,7 +7,7 @@ import { stat } from "node:fs/promises";
  * @param path - The file system path to check for existence
  * @returns Promise that resolves to true if the path exists, false otherwise
  * @example
- * import { exists } from "@settlemint/sdk-utils";
+ * import { exists } from "@settlemint/sdk-utils/filesystem";
  *
  * // Check if file exists before reading
  * if (await exists('/path/to/file.txt')) {

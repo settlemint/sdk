@@ -15,7 +15,7 @@ import { findMonoRepoPackages } from "../filesystem/mono-repo.js";
  * @returns Promise that resolves when writing is complete
  * @throws Will throw an error if writing fails
  * @example
- * import { writeEnv } from '@settlemint/sdk-utils';
+ * import { writeEnv } from '@settlemint/sdk-utils/environment';
  *
  * // Write development environment variables
  * await writeEnv(false, {

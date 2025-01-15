@@ -11,7 +11,7 @@ import { retryWhenFailed } from "../retry.js";
  * @returns The fetch Response
  * @throws Error if all retries fail
  * @example
- * import { fetchWithRetry } from "@settlemint/sdk-utils";
+ * import { fetchWithRetry } from "@settlemint/sdk-utils/http";
  *
  * const response = await fetchWithRetry("https://api.example.com/data");
  */

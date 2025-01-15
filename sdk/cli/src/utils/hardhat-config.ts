@@ -1,5 +1,6 @@
-import { executeCommand, getPackageManagerExecutable, tryParseJson } from "@settlemint/sdk-utils";
-import { note } from "@settlemint/sdk-utils/terminal";
+import { tryParseJson } from "@settlemint/sdk-utils";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand, note } from "@settlemint/sdk-utils/terminal";
 import type { HardhatUserConfig } from "hardhat/config";
 
 export type HardhatConfig = HardhatUserConfig & { etherscan?: { apiKey?: string } };

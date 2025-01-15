@@ -13,7 +13,9 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 import { subgraphNamePrompt } from "../prompts/subgraph-name.prompt";

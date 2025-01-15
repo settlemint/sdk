@@ -4,9 +4,9 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { type DotEnv, note } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'config' command for the SettleMint SDK.
