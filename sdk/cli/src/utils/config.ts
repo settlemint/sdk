@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { type DotEnv, tryParseJson } from "@settlemint/sdk-utils";
+import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 
@@ -79,12 +79,16 @@ export async function storeCredentials(token: string, instance: string): Promise
  */
 export async function getInstanceCredentials(
   instance: string,
-  env?: Partial<DotEnv>,
+  throwOnMissingInstance = true,
 ): Promise<{ personalAccessToken: string } | undefined> {
   const config = await readConfig();
   const instanceConfig = config.instances[instance];
 
   if (!instanceConfig) {
+    if (!throwOnMissingInstance) {
+      return undefined;
+    }
+
     cancel(
       `No configuration found for instance '${instance}'${
         Object.keys(config.instances).length > 0
