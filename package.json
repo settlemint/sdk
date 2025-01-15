@@ -47,7 +47,7 @@
     "@types/bun": "1.1.16",
     "@types/mustache": "4.2.5",
     "knip": "5.42.0",
-    "lefthook": "1.10.4",
+    "lefthook": "1.10.5",
     "mustache": "4.2.0",
     "publint": "0.3.2",
     "tsup": "8.3.5",
