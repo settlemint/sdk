@@ -208,7 +208,19 @@ export function createSettleMintClient(options: ClientOptions): SettlemintClient
     headers: {
       "x-auth-token": validatedOptions.accessToken,
     },
-    fetch: fetchWithRetry,
+    fetch: async (input, init) => {
+      const response = await fetchWithRetry(input, init);
+      // Parse and handle GraphQL errors from response
+      const contentType = response.headers.get("content-type");
+      if (contentType?.includes("application/json") || contentType?.includes("application/graphql-response+json")) {
+        const data: { errors: { message: string }[] } = await response.clone().json();
+        if (data.errors?.length > 0) {
+          const errorMessages = data.errors.map((e) => e.message).join(", ");
+          throw new Error(errorMessages);
+        }
+      }
+      return response;
+    },
   });
 
   return {
