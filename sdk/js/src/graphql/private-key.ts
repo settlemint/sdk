@@ -2,6 +2,7 @@ import { applicationRead } from "@/graphql/application.js";
 import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
 import { blockchainNodeRead } from "./blockchain-node.js";
+import { getPlatformConfig } from "./platform.js";
 
 /**
  * GraphQL fragment containing core private key fields.
@@ -154,10 +155,19 @@ export const privateKeyCreate = (gqlClient: GraphQLClient): ((args: CreatePrivat
     const blockchainNodes = blockchainNodeUniqueNames
       ? await Promise.all(blockchainNodeUniqueNames.map((uniqueName) => blockchainNodeRead(gqlClient)(uniqueName)))
       : [];
+    const platformConfig = await getPlatformConfig(gqlClient)();
+    const defaultProvider = platformConfig.deploymentEngineTargets.find(
+      (target) => !target.disabled && target.clusters.some((cluster) => !cluster.disabled),
+    );
+    const defaultRegion = defaultProvider?.clusters.find((cluster) => !cluster.disabled);
     const { createPrivateKey: privateKey } = await gqlClient.request(createPrivateKey, {
       ...otherArgs,
       applicationId: application.id,
       blockchainNodes: blockchainNodes.map((node) => node?.id),
+      provider: defaultProvider?.id ?? "gke",
+      region: defaultRegion?.id ?? "europe",
+      size: "SMALL",
+      type: "SHARED",
     });
     return privateKey;
   };

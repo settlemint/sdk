@@ -49,10 +49,6 @@ export function privateKeyHdCreateCommand() {
                 applicationUniqueName,
                 privateKeyType: "HD_ECDSA_P256",
                 blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
-                provider: "GKE",
-                region: "EUROPE",
-                size: "SMALL",
-                type: "SHARED",
               });
               return {
                 result,
