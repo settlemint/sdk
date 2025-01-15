@@ -1,45 +1,40 @@
-import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { Insights, IntegrationTool, Middleware, SettlemintClient, Storage } from "@settlemint/sdk-js";
 import { type DotEnv, retryWhenFailed } from "@settlemint/sdk-utils";
 
 export async function getGraphEndpoint(
   settlemint: SettlemintClient,
   service: Middleware | undefined,
-  env: Partial<DotEnv>,
   graphName?: string,
 ): Promise<Partial<DotEnv>> {
   if (!service || service.__typename !== "HAGraphMiddleware") {
     return {};
   }
 
-  const middleware = await retryWhenFailed(() => settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName));
-  if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
-    return {};
-  }
+  const theGraphMiddleware = await retryWhenFailed(async () => {
+    const middleware = await settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName);
+    if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
+      throw new Error(`Middleware '${service.uniqueName}' is not a graph middleware`);
+    }
+    if (
+      graphName &&
+      !middleware.subgraphs.find(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.id.endsWith(graphName))
+    ) {
+      throw new Error(`Subgraph '${graphName}' not found in middleware '${service.uniqueName}'`);
+    }
+    return middleware;
+  });
 
-  const isStarterKit = (id: string) => id.endsWith("-starterkits");
-
-  const testEndpoint = middleware.subgraphs.find(({ graphqlQueryEndpoint }) =>
-    graphName ? graphqlQueryEndpoint?.id.endsWith(graphName) : !isStarterKit(graphqlQueryEndpoint?.id),
-  )?.graphqlQueryEndpoint?.displayValue;
-  const starterKitEndpoint = middleware.subgraphs.find(({ graphqlQueryEndpoint }) =>
-    isStarterKit(graphqlQueryEndpoint?.id),
-  )?.graphqlQueryEndpoint?.displayValue;
-
-  const hasEndpoint =
-    testEndpoint && env.SETTLEMINT_ACCESS_TOKEN
-      ? await testGqlEndpoint({ accessToken: env.SETTLEMINT_ACCESS_TOKEN, gqlEndpoint: testEndpoint })
-      : false;
-
-  const endpoints = hasEndpoint
-    ? middleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue)
-    : starterKitEndpoint
-      ? [starterKitEndpoint]
-      : [];
-
-  if (endpoints.length === 0) {
-    return {};
-  }
+  const isStarterKit = (id: string) => id?.toLowerCase().endsWith("-starterkits");
+  const endpoints = theGraphMiddleware.subgraphs
+    .filter((subgraph) => {
+      // If there's only one subgraph, keep it regardless if it's a starterkit
+      if (theGraphMiddleware.subgraphs.length === 1) {
+        return true;
+      }
+      // Otherwise filter out starterkits
+      return !isStarterKit(subgraph.graphqlQueryEndpoint?.id);
+    })
+    .map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
 
   return {
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: endpoints,
