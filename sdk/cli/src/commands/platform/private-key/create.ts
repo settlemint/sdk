@@ -1,4 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
+import { privateKeyAccessibleCreateCommand } from "./accessible-ecdsa-p256/create";
 import { privateKeyHdCreateCommand } from "./hd-ecdsa-p256/create";
 import { privateKeyHsmCreateCommand } from "./hsm-ecdsa-p256/create";
 
@@ -13,5 +14,6 @@ export function privateKeyCreateCommand(): Command {
     .alias("pk")
     .description("Create a private key in the SettleMint platform")
     .addCommand(privateKeyHdCreateCommand())
-    .addCommand(privateKeyHsmCreateCommand());
+    .addCommand(privateKeyHsmCreateCommand())
+    .addCommand(privateKeyAccessibleCreateCommand());
 }
