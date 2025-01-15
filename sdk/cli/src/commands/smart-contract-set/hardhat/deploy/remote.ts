@@ -7,7 +7,7 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { getHardhatConfigData } from "@/utils/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { executeCommand, getPackageManagerExecutable, loadEnv } from "@settlemint/sdk-utils";
+import { executeCommand, getPackageManagerExecutable, loadEnv, note } from "@settlemint/sdk-utils";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
@@ -76,6 +76,7 @@ export function hardhatDeployRemoteCommand() {
       const env = await loadEnv(false, !!prod);
 
       const instance = await instancePrompt(env, true);
+      note(`instance is ${instance}`, "info");
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

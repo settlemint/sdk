@@ -3,6 +3,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
+import { note } from "@settlemint/sdk-utils/terminal";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
 const CONFIG_FILE = join(CONFIG_DIR, "config.json");
@@ -78,12 +79,13 @@ export async function storeCredentials(token: string, instance: string): Promise
  */
 export async function getInstanceCredentials(instance: string): Promise<{ personalAccessToken: string } | undefined> {
   const config = await readConfig();
+  note(`config is ${JSON.stringify(config, null, 2)}`, "info");
   const instanceConfig = config.instances[instance];
-
+  note(`instanceConfig is ${instanceConfig ? JSON.stringify(instanceConfig, null, 2) : instanceConfig}`, "info");
   if (!instanceConfig) {
     return undefined;
   }
-
+  note(`returning ${JSON.stringify({ personalAccessToken: instanceConfig.personalAccessToken })}`, "info");
   return { personalAccessToken: instanceConfig.personalAccessToken };
 }
 

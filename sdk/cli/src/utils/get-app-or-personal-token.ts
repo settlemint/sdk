@@ -1,6 +1,7 @@
 import { missingAccessTokenError, missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getInstanceCredentials } from "@/utils/config";
 import type { DotEnv } from "@settlemint/sdk-utils";
+import { note } from "@settlemint/sdk-utils/terminal";
 
 export const getApplicationOrPersonalAccessToken = async ({
   env,
@@ -16,7 +17,9 @@ export const getApplicationOrPersonalAccessToken = async ({
   const preferredToken = prefer === "application" ? applicationAccessToken : personalAccessToken;
   const fallbackToken = prefer === "application" ? personalAccessToken : applicationAccessToken;
   const allowFallback = prefer === "application";
-
+  note(`preferredToken is ${preferredToken}`, "info");
+  note(`fallbackToken is ${fallbackToken}`, "info");
+  note(`allowFallback is ${allowFallback}`, "info");
   if (preferredToken) {
     return preferredToken;
   }
