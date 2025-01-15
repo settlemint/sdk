@@ -49,7 +49,7 @@ export function codegenCommand(): Command {
         const env: DotEnv = await loadEnv(true, !!prod);
 
         if (!Array.isArray(thegraphSubgraphNames)) {
-          thegraphSubgraphNames = await subgraphNamePrompt(env);
+          thegraphSubgraphNames = await subgraphNamePrompt(env, true);
         }
 
         const { hasura, portal, thegraph, blockscout } = await spinner({

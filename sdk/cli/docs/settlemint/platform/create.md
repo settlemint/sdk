@@ -114,33 +114,33 @@ Examples:
 Create a new Besu blockchain network in the SettleMint platform.
 
 Arguments:
-  name                             The Besu blockchain network name
+  name                               The Besu blockchain network name
 
 Options:
-  -a, --accept-defaults            Accept the default values
-  -d, --default                    Save as default blockchain network
-  --prod                           Connect to production environment
-  -w, --wait                       Wait until deployed
-  -r, --restart-if-timeout         Restart if wait time is exceeded
-  --provider &lt;provider&gt;            Network provider (run `settlemint platform
-                                   config` to see available providers)
-  --region &lt;region&gt;                Deployment region (run `settlemint platform
-                                   config` to see available regions)
-  --size &lt;size&gt;                    Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                                   &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
-  --type &lt;type&gt;                    Network type (choices: &quot;DEDICATED&quot;,
-                                   &quot;SHARED&quot;, default: &quot;SHARED&quot;)
-  -a, --application &lt;application&gt;  The unique name of the application to create
-                                   the network in (defaults to application from
-                                   env)
-  --node-name &lt;name&gt;               Name of the node
-  --chain-id &lt;chainId&gt;             The chain ID for the network
-  --contract-size-limit &lt;limit&gt;    Maximum contract size limit
-  --evm-stack-size &lt;size&gt;          EVM stack size
-  --gas-limit &lt;limit&gt;              Block gas limit
-  --gas-price &lt;price&gt;              Gas price in wei
-  --seconds-per-block &lt;seconds&gt;    Block time in seconds
-  -h, --help                       display help for command
+  -a, --accept-defaults              Accept the default values
+  -d, --default                      Save as default blockchain network
+  --prod                             Connect to production environment
+  -w, --wait                         Wait until deployed
+  -r, --restart-if-timeout           Restart if wait time is exceeded
+  --provider &lt;provider&gt;              Network provider (run `settlemint platform
+                                     config` to see available providers)
+  --region &lt;region&gt;                  Deployment region (run `settlemint
+                                     platform config` to see available regions)
+  --size &lt;size&gt;                      Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                     &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                      Network type (choices: &quot;DEDICATED&quot;,
+                                     &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  -app, --application &lt;application&gt;  The unique name of the application to
+                                     create the network in (defaults to
+                                     application from env)
+  --node-name &lt;name&gt;                 Name of the node
+  --chain-id &lt;chainId&gt;               The chain ID for the network
+  --contract-size-limit &lt;limit&gt;      Maximum contract size limit
+  --evm-stack-size &lt;size&gt;            EVM stack size
+  --gas-limit &lt;limit&gt;                Block gas limit
+  --gas-price &lt;price&gt;                Gas price in wei
+  --seconds-per-block &lt;seconds&gt;      Block time in seconds
+  -h, --help                         display help for command
 </pre>
 
 <h2 id="create-blockchain-node"><a href="#home">Create</a> > Blockchain node</h2>
@@ -187,7 +187,7 @@ Options:
   --region &lt;region&gt;                         Deployment region (run `settlemint platform config` to see available regions)
   --size &lt;size&gt;                             Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                             Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
-  -a, --application &lt;application&gt;           The application unique name to create the node in (defaults to application from env)
+  -app, --application &lt;application&gt;         The application unique name to create the node in (defaults to application from env)
   --blockchain-network &lt;blockchainNetwork&gt;  Blockchain network unique name to add this node to
   --node-identity &lt;nodeIdentity&gt;            EC DSA P256 private key to use as the node identity
   --node-type &lt;nodeType&gt;                    Type of the node (choices: &quot;VALIDATOR&quot;, &quot;NON_VALIDATOR&quot;)
@@ -593,18 +593,18 @@ Examples:
 Create a new application access token in the SettleMint platform.
 
 Arguments:
-  name                             The application access token name
+  name                               The application access token name
 
 Options:
-  -a, --accept-defaults            Accept the default values
-  -d, --default                    Save as default application access token
-  --prod                           Connect to production environment
-  -a, --application &lt;application&gt;  The application unique name to create the
-                                   application access token for (defaults to
-                                   application from env)
-  -v, --validity-period &lt;period&gt;   The validity period for the token (choices:
-                                   &quot;DAYS_7&quot;, &quot;DAYS_30&quot;, &quot;DAYS_60&quot;, &quot;DAYS_90&quot;,
-                                   &quot;NONE&quot;, default: &quot;DAYS_7&quot;)
-  -h, --help                       display help for command
+  -a, --accept-defaults              Accept the default values
+  -d, --default                      Save as default application access token
+  --prod                             Connect to production environment
+  -app, --application &lt;application&gt;  The application unique name to create the
+                                     application access token for (defaults to
+                                     application from env)
+  -v, --validity-period &lt;period&gt;     The validity period for the token
+                                     (choices: &quot;DAYS_7&quot;, &quot;DAYS_30&quot;, &quot;DAYS_60&quot;,
+                                     &quot;DAYS_90&quot;, &quot;NONE&quot;, default: &quot;DAYS_7&quot;)
+  -h, --help                         display help for command
 </pre>
 

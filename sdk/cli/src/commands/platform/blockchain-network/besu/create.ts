@@ -19,7 +19,7 @@ export function blockchainNetworkBesuCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option(
-          "-a, --application <application>",
+          "-app, --application <application>",
           "The unique name of the application to create the network in (defaults to application from env)",
         )
         .requiredOption("--node-name <name>", "Name of the node")

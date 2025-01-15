@@ -47,7 +47,7 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
     return result;
   } catch (error) {
     spinner.error(redBright(`${options.startMessage} --> Error!`));
-    note(redBright(`${(error as Error).message}\n${(error as Error).stack}`));
+    note(redBright(`${(error as Error).message}\n\n${(error as Error).stack}`));
     process.exit(1);
   }
 };
