@@ -1,5 +1,4 @@
 import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
-import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getCreateCommand } from "../../common/create-command";
@@ -16,57 +15,50 @@ export function privateKeyAccessibleCreateCommand() {
     subType: "ACCESSIBLE-ECDSA-P256",
     alias: "acc",
     execute: (cmd, baseAction) => {
-      addClusterServiceArgs(cmd)
+      cmd
         .option("--application <application>", "Application unique name")
         .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
-        .action(
-          async (
-            name,
-            { application, blockchainNode, provider, region, size, type, acceptDefaults, ...defaultArgs },
-          ) => {
-            return baseAction(
-              {
-                ...defaultArgs,
-                acceptDefaults,
-                provider,
-                region,
-              },
-              async (settlemint, env) => {
-                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
-                if (!applicationUniqueName) {
-                  return missingApplication();
-                }
-                let blockchainNodeUniqueName = blockchainNode;
-                if (!blockchainNodeUniqueName) {
-                  const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
-                  const node = await blockchainNodePrompt({
-                    env,
-                    nodes: blockchainNodes,
-                    accept: acceptDefaults,
-                    isRequired: true,
-                  });
-                  if (!node) {
-                    return nothingSelectedError("blockchain node");
-                  }
-                  blockchainNodeUniqueName = node.uniqueName;
-                }
-                const result = await settlemint.privateKey.create({
-                  name,
-                  applicationUniqueName,
-                  privateKeyType: "ACCESSIBLE_ECDSA_P256",
-                  blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
-                  provider,
-                  region,
-                  size,
-                  type,
+        .action(async (name, { application, blockchainNode, acceptDefaults, ...defaultArgs }) => {
+          return baseAction(
+            {
+              ...defaultArgs,
+              acceptDefaults,
+            },
+            async (settlemint, env) => {
+              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+              if (!applicationUniqueName) {
+                return missingApplication();
+              }
+              let blockchainNodeUniqueName = blockchainNode;
+              if (!blockchainNodeUniqueName) {
+                const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                const node = await blockchainNodePrompt({
+                  env,
+                  nodes: blockchainNodes,
+                  accept: acceptDefaults,
+                  isRequired: true,
                 });
-                return {
-                  result,
-                };
-              },
-            );
-          },
-        );
+                if (!node) {
+                  return nothingSelectedError("blockchain node");
+                }
+                blockchainNodeUniqueName = node.uniqueName;
+              }
+              const result = await settlemint.privateKey.create({
+                name,
+                applicationUniqueName,
+                privateKeyType: "ACCESSIBLE_ECDSA_P256",
+                blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
+                provider: "GKE",
+                region: "EUROPE",
+                size: "SMALL",
+                type: "SHARED",
+              });
+              return {
+                result,
+              };
+            },
+          );
+        });
     },
     examples: [
       {
