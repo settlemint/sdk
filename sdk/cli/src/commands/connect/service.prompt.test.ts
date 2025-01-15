@@ -77,7 +77,7 @@ describe("servicePrompt", () => {
           value: undefined,
           name: "None",
         },
-        ...singleService.map((service) => ({ name: service.name, value: service })),
+        ...singleService.map((service) => ({ name: `${service.name} (${service.uniqueName})`, value: service })),
       ]),
     });
     expect(result).toBeUndefined();
@@ -129,7 +129,7 @@ describe("servicePrompt", () => {
           value: undefined,
           name: "None",
         },
-        ...MOCK_SERVICES.map((service) => ({ name: service.name, value: service })),
+        ...MOCK_SERVICES.map((service) => ({ name: `${service.name} (${service.uniqueName})`, value: service })),
       ]),
     });
     expect(result).toEqual(selectedService);
@@ -156,7 +156,7 @@ describe("servicePrompt", () => {
           value: undefined,
           name: "None",
         },
-        ...MOCK_SERVICES.map((service) => ({ name: service.name, value: service })),
+        ...MOCK_SERVICES.map((service) => ({ name: `${service.name} (${service.uniqueName})`, value: service })),
       ]),
     });
     expect(result).toEqual(defaultService!);
