@@ -88,7 +88,7 @@ export async function getInstanceCredentials(
     cancel(
       `No configuration found for instance '${instance}'${
         Object.keys(config.instances).length > 0
-          ? `. Configured instances: ${Object.keys(config.instances)
+          ? `. Configured instances:\n${Object.keys(config.instances)
               .map((i) => `- '${i}'`)
               .join("\n")}`
           : ""
