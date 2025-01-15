@@ -4,7 +4,6 @@ import { customDeploymentRestartCommand } from "./custom-deployments/restart";
 import { insightsRestartCommand } from "./insights/restart";
 import { integrationToolRestartCommand } from "./integration-tools/restart";
 import { middlewareRestartCommand } from "./middleware/restart";
-import { privateKeyRestartCommand } from "./private-key/restart";
 import { storageRestartCommand } from "./storage/restart";
 
 /**
@@ -19,7 +18,6 @@ export function restartCommand() {
     .addCommand(insightsRestartCommand())
     .addCommand(integrationToolRestartCommand())
     .addCommand(middlewareRestartCommand())
-    .addCommand(privateKeyRestartCommand())
     .addCommand(storageRestartCommand());
 
   return cmd;
