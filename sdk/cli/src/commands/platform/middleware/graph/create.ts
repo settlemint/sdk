@@ -69,7 +69,7 @@ export function graphMiddlewareCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_THEGRAPH: result.uniqueName,
-                      ...(await getGraphEndpoint(settlemint, graphMiddleware, env)),
+                      ...(await getGraphEndpoint(settlemint, graphMiddleware)),
                     };
                   },
                 };
