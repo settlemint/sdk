@@ -3,6 +3,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
 const CONFIG_FILE = join(CONFIG_DIR, "config.json");
