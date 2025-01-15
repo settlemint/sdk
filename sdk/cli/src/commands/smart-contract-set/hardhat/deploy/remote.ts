@@ -76,7 +76,8 @@ export function hardhatDeployRemoteCommand() {
       const env = await loadEnv(false, !!prod);
 
       const instance = await instancePrompt(env, true);
-      note(`instance is ${instance}`, "info");
+      note(`Instance is ${instance}`, "debug", env.SETTLEMINT_DEBUG);
+
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

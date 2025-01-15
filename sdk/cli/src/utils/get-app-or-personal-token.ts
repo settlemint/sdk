@@ -17,9 +17,12 @@ export const getApplicationOrPersonalAccessToken = async ({
   const preferredToken = prefer === "application" ? applicationAccessToken : personalAccessToken;
   const fallbackToken = prefer === "application" ? personalAccessToken : applicationAccessToken;
   const allowFallback = prefer === "application";
-  note(`preferredToken is ${preferredToken}`, "info");
-  note(`fallbackToken is ${fallbackToken}`, "info");
-  note(`allowFallback is ${allowFallback}`, "info");
+
+  note(`prefer is ${prefer}`, "debug", env.SETTLEMINT_DEBUG);
+  note(`preferredToken is ${preferredToken}`, "debug", env.SETTLEMINT_DEBUG);
+  note(`fallbackToken is ${fallbackToken}`, "debug", env.SETTLEMINT_DEBUG);
+  note(`allowFallback is ${allowFallback}`, "debug", env.SETTLEMINT_DEBUG);
+
   if (preferredToken) {
     return preferredToken;
   }

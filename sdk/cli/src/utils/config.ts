@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { tryParseJson } from "@settlemint/sdk-utils";
+import { type DotEnv, tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { note } from "@settlemint/sdk-utils/terminal";
 
@@ -77,15 +77,29 @@ export async function storeCredentials(token: string, instance: string): Promise
 /**
  * Gets credentials for a specific instance
  */
-export async function getInstanceCredentials(instance: string): Promise<{ personalAccessToken: string } | undefined> {
+export async function getInstanceCredentials(
+  instance: string,
+  env?: Partial<DotEnv>,
+): Promise<{ personalAccessToken: string } | undefined> {
   const config = await readConfig();
-  note(`config is ${JSON.stringify(config, null, 2)}`, "info");
+  note(`Config from readConfig is ${JSON.stringify(config, null, 2)}`, "debug", env?.SETTLEMINT_DEBUG);
+
   const instanceConfig = config.instances[instance];
-  note(`instanceConfig is ${instanceConfig ? JSON.stringify(instanceConfig, null, 2) : instanceConfig}`, "info");
+  note(
+    `Instance config is ${instanceConfig ? JSON.stringify(instanceConfig, null, 2) : instanceConfig}`,
+    "debug",
+    env?.SETTLEMINT_DEBUG,
+  );
+
   if (!instanceConfig) {
     return undefined;
   }
-  note(`returning ${JSON.stringify({ personalAccessToken: instanceConfig.personalAccessToken })}`, "info");
+
+  note(
+    `Returning ${JSON.stringify({ personalAccessToken: instanceConfig.personalAccessToken })}`,
+    "debug",
+    env?.SETTLEMINT_DEBUG,
+  );
   return { personalAccessToken: instanceConfig.personalAccessToken };
 }
 
