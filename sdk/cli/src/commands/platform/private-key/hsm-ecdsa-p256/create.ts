@@ -48,10 +48,6 @@ export function privateKeyHsmCreateCommand() {
                 applicationUniqueName,
                 privateKeyType: "HSM_ECDSA_P256",
                 blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
-                provider: "GKE",
-                region: "EUROPE",
-                size: "SMALL",
-                type: "SHARED",
               });
               return {
                 result,

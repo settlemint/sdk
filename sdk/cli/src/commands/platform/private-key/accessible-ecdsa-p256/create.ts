@@ -48,10 +48,6 @@ export function privateKeyAccessibleCreateCommand() {
                 applicationUniqueName,
                 privateKeyType: "ACCESSIBLE_ECDSA_P256",
                 blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
-                provider: "GKE",
-                region: "EUROPE",
-                size: "SMALL",
-                type: "SHARED",
               });
               return {
                 result,
