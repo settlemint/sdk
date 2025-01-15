@@ -37,13 +37,13 @@ export async function personalAccessTokenPrompt(
   }
 
   return password({
-    message: "What is your personal access token in SettleMint?",
+    message: "What is your personal access token in SettleMint? (format: sm_pat_...)",
     validate(value) {
       try {
         validate(PersonalAccessTokenSchema, value);
         return true;
       } catch (error) {
-        return "Invalid personal access token";
+        return "Invalid personal access token, it should start with sm_pat_...";
       }
     },
   });

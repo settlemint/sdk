@@ -121,13 +121,13 @@ export async function applicationAccessTokenPrompt(
   }
 
   return password({
-    message: "What is the application access token for your application in SettleMint?",
+    message: "What is the application access token for your application in SettleMint? (format: sm_aat_...)",
     validate(value) {
       try {
         validate(ApplicationAccessTokenSchema, value);
         return true;
       } catch (error) {
-        return "Invalid application access token";
+        return "Invalid application access token, it should start with sm_aat_...";
       }
     },
   });
