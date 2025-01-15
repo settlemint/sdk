@@ -29,7 +29,7 @@ export async function workspacePrompt(
   const workspace = await select({
     message: "Which workspace do you want to connect to?",
     choices: workspaces.map((workspace) => ({
-      name: workspace.name,
+      name: `${workspace.name} (${workspace.uniqueName})`,
       value: workspace,
     })),
     default: defaultWorkspace,
