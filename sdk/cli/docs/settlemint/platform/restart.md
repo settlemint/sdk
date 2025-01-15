@@ -13,7 +13,6 @@ Commands:
   <a href="#restart-insights">insights|in</a>                                    Restart an insights service in the SettleMint platform
   <a href="#restart-integration-tool">integration-tool|it</a>                            Restart an integration tool service in the SettleMint platform
   <a href="#restart-middleware">middleware|mw</a>                                  Restart a middleware service in the SettleMint platform
-  <a href="#restart-private-key">private-key|pk</a>                                 Restart a private key in the SettleMint platform
   <a href="#restart-storage">storage|st</a>                                     Restart a storage service in the SettleMint platform
   help [command]                                 display help for command
 </pre>
@@ -211,45 +210,6 @@ use &#039;default&#039; to restart the default middleware from your .env file.
 
 Arguments:
   unique-name            The unique name of the middleware, use &#039;default&#039; to
-                         restart the default one from your .env file
-
-Options:
-  -a, --accept-defaults  Accept the default and previously set values
-  --prod                 Connect to your production environment
-  -w, --wait             Wait until restarted
-  -h, --help             display help for command
-</pre>
-
-<h2 id="restart-private-key"><a href="#home">Restart</a> > Private key</h2>
-
-<pre>Usage: settlemint platform restart private-key|pk [options] [command]
-
-Restart a private key in the SettleMint platform
-
-Options:
-  -h, --help                                display help for command
-
-Commands:
-  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;unique-name&gt;  Restart a private key in the SettleMint platform. Provide the private key ID or use &#039;default&#039; to restart the default private key from your .env file.
-  help [command]                            display help for command
-</pre>
-
-<h3 id="private-key-hd-ecdsa-p256"><a href="#home">Restart</a> > <a href="#restart-private-key">Private key</a> > Hd ecdsa p256</h3>
-
-<pre>Usage: settlemint platform restart private-key hd-ecdsa-p256|hd 
-Examples:
-
-  # Restarts the specified private key by id
-  $ settlemint platform restart hd-ecdsa-p256 hd-ecdsa-p256 &lt;private key-id&gt;
-
-  # Restarts the default private key in the production environment
-  $ settlemint platform restart hd-ecdsa-p256 hd-ecdsa-p256 default --prod
-
-Restart a private key in the SettleMint platform. Provide the private key ID or
-use &#039;default&#039; to restart the default private key from your .env file.
-
-Arguments:
-  unique-name            The unique name of the private key, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:

@@ -201,14 +201,13 @@ Options:
 Create a private key in the SettleMint platform
 
 Options:
-  -h, --help                           display help for command
+  -h, --help                                  display help for command
 
 Commands:
-  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;name&gt;    Create a new HD-ECDSA-P256 private key
-                                       in the SettleMint platform.
-  <a href="#private-key-hsm-ecdsa-p256">hsm-ecdsa-p256|hsm</a> [options] &lt;name&gt;  Create a new HSM-ECDSA-P256 private key
-                                       in the SettleMint platform.
-  help [command]                       display help for command
+  <a href="#private-key-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;name&gt;           Create a new HD-ECDSA-P256 private key in the SettleMint platform.
+  <a href="#private-key-hsm-ecdsa-p256">hsm-ecdsa-p256|hsm</a> [options] &lt;name&gt;         Create a new HSM-ECDSA-P256 private key in the SettleMint platform.
+  <a href="#private-key-accessible-ecdsa-p256">accessible-ecdsa-p256|acc</a> [options] &lt;name&gt;  Create a new ACCESSIBLE-ECDSA-P256 private key in the SettleMint platform.
+  help [command]                              display help for command
 </pre>
 
 <h3 id="private-key-hd-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Hd ecdsa p256</h3>
@@ -269,6 +268,47 @@ Create a new HSM-ECDSA-P256 private key in the SettleMint platform.
 
 Arguments:
   name                                The HSM-ECDSA-P256 private key name
+
+Options:
+  -a, --accept-defaults               Accept the default values
+  -d, --default                       Save as default private key
+  --prod                              Connect to production environment
+  -w, --wait                          Wait until deployed
+  -r, --restart-if-timeout            Restart if wait time is exceeded
+  --provider &lt;provider&gt;               Network provider (run `settlemint
+                                      platform config` to see available
+                                      providers)
+  --region &lt;region&gt;                   Deployment region (run `settlemint
+                                      platform config` to see available
+                                      regions)
+  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
+                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
+                                      &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --application &lt;application&gt;         Application unique name
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name
+  -h, --help                          display help for command
+</pre>
+
+<h3 id="private-key-accessible-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Accessible ecdsa p256</h3>
+
+<pre>Usage: settlemint platform create private-key accessible-ecdsa-p256|acc 
+Examples:
+
+  # Create a private key and save as default
+  $ settlemint platform create private-key accessible-ecdsa-p256 my-key --accept-defaults -d
+
+  # Create a private key in a different application
+  $ settlemint platform create private-key accessible-ecdsa-p256 my-key --application my-app
+
+  # Create a private key linked to a blockchain node
+  $ settlemint platform create private-key accessible-ecdsa-p256 my-key --blockchain-node node-123
+
+Create a new ACCESSIBLE-ECDSA-P256 private key in the SettleMint platform.
+
+Arguments:
+  name                                The ACCESSIBLE-ECDSA-P256 private key
+                                      name
 
 Options:
   -a, --accept-defaults               Accept the default values
