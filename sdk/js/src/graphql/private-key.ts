@@ -165,7 +165,7 @@ export const privateKeyCreate = (gqlClient: GraphQLClient): ((args: CreatePrivat
       applicationId: application.id,
       blockchainNodes: blockchainNodes.map((node) => node?.id),
       provider: defaultProvider?.id ?? "gke",
-      region: defaultRegion?.id ?? "europe",
+      region: defaultRegion?.id?.split("-")[1] ?? "europe",
       size: "SMALL",
       type: "SHARED",
     });
