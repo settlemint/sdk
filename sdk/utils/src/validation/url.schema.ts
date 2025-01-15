@@ -4,7 +4,7 @@ import { z } from "zod";
  * Schema for validating URLs.
  *
  * @example
- * import { UrlSchema } from "@settlemint/sdk-utils";
+ * import { UrlSchema } from "@settlemint/sdk-utils/validation";
  *
  * // Validate a URL
  * const isValidUrl = UrlSchema.safeParse("https://console.settlemint.com").success;
@@ -21,7 +21,7 @@ export type Url = z.infer<typeof UrlSchema>;
  * Schema for validating URL paths.
  *
  * @example
- * import { UrlPathSchema } from "@settlemint/sdk-utils";
+ * import { UrlPathSchema } from "@settlemint/sdk-utils/validation";
  *
  * // Validate a URL path
  * const isValidPath = UrlPathSchema.safeParse("/api/v1/users").success;
@@ -41,7 +41,7 @@ export type UrlPath = z.infer<typeof UrlPathSchema>;
  * Schema that accepts either a full URL or a URL path.
  *
  * @example
- * import { UrlOrPathSchema } from "@settlemint/sdk-utils";
+ * import { UrlOrPathSchema } from "@settlemint/sdk-utils/validation";
  *
  * // Validate a URL
  * const isValidUrl = UrlOrPathSchema.safeParse("https://console.settlemint.com").success;

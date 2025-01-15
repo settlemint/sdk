@@ -4,7 +4,7 @@ import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'blockscout' insights command for the SettleMint SDK.

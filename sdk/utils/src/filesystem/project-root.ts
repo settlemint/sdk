@@ -7,7 +7,7 @@ import { findUp } from "find-up";
  * @returns Promise that resolves to the absolute path of the project root directory
  * @throws Will throw an error if no package.json is found in the directory tree
  * @example
- * import { projectRoot } from "@settlemint/sdk-utils";
+ * import { projectRoot } from "@settlemint/sdk-utils/filesystem";
  *
  * // Get project root path
  * const rootDir = await projectRoot();

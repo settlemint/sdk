@@ -1,7 +1,8 @@
 import { createExamples } from "@/commands/platform/utils/create-examples";
 import { mapPassthroughOptions } from "@/utils/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand, getPackageManagerExecutable } from "@settlemint/sdk-utils";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatBuildCommand() {
   return new Command("build")

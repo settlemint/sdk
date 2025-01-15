@@ -1,7 +1,7 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { missingApplication } from "@/error/missing-config-error";
 import { getMinioEndpoints } from "@/utils/get-cluster-service-endpoint";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getCreateCommand } from "../../common/create-command";
 
 /**

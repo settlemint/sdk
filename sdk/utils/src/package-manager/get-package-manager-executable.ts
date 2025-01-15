@@ -6,7 +6,7 @@ import { getPackageManager } from "./get-package-manager.js";
  * @param targetDir - The directory to check for package manager (optional, defaults to process.cwd())
  * @returns An object containing the command and arguments for the package manager
  * @example
- * import { getPackageManagerExecutable } from "@settlemint/sdk-utils";
+ * import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
  *
  * const { command, args } = await getPackageManagerExecutable();
  * console.log(`Using ${command} with args: ${args.join(" ")}`);

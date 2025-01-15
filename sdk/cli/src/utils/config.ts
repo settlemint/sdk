@@ -1,9 +1,10 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { type DotEnv, tryParseJson } from "@settlemint/sdk-utils";
+import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { note } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
 const CONFIG_FILE = join(CONFIG_DIR, "config.json");

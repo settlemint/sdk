@@ -6,10 +6,11 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import { createSettleMintClient } from "@settlemint/sdk-js";
-import { type DotEnv, executeCommand, exists } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { exists } from "@settlemint/sdk-utils/filesystem";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
-import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { namePrompt } from "../create/name.prompt";
 import { useCasePrompt } from "./prompts/use-case.prompt";
 

@@ -7,9 +7,10 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { type DotEnv, capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { providerPrompt } from "../prompts/provider.prompt";
 import { regionPrompt } from "../prompts/region.prompt";
 import type { ResourceType } from "./resource-type";

@@ -8,6 +8,11 @@ import pkgjs from "@npmcli/package-json";
  * @param path - The path to the project root directory. If not provided, will be automatically determined
  * @returns Whether the package is installed
  * @throws If unable to read or parse the package.json file
+ * @example
+ * import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+ *
+ * const isInstalled = await isPackageInstalled("@settlemint/sdk-utils");
+ * console.log(`@settlemint/sdk-utils is installed: ${isInstalled}`);
  */
 export async function isPackageInstalled(name: string, path?: string) {
   // Read the package.json file

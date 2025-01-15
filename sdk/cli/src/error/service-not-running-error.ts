@@ -1,5 +1,5 @@
 import type { BlockchainNode } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 
 export function serviceNotRunningError(service: string, status: BlockchainNode["status"]) {
   return cancel(`The ${service} service is not in a Running state (status: ${status}). ${getStatusAction(status)}`);

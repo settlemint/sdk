@@ -1,4 +1,4 @@
-import { fetchWithRetry } from "@settlemint/sdk-utils";
+import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";

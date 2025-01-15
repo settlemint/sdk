@@ -1,7 +1,9 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import { capitalizeFirstLetter, installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 

@@ -1,5 +1,7 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
-import { type DotEnv, installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
+import { projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-minio";
 

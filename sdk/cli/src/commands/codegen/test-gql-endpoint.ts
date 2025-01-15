@@ -1,4 +1,4 @@
-import { graphqlFetchWithRetry } from "@settlemint/sdk-utils";
+import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
 import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 
 /**

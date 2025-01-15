@@ -1,5 +1,5 @@
 import { describe, expect, it, mock } from "bun:test";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { servicePrompt } from "./service.prompt";
 
 const MOCK_SERVICES = [

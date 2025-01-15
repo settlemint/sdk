@@ -1,7 +1,7 @@
 import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getCreateCommand } from "../../common/create-command";
 
 /**

@@ -2,7 +2,7 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { getHasuraEndpoints } from "@/utils/get-cluster-service-endpoint";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'hasura' integration tool command for the SettleMint SDK.

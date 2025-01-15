@@ -20,7 +20,7 @@ export interface ExecuteCommandOptions extends SpawnOptionsWithoutStdio {
  * @returns Array of output strings from stdout and stderr
  * @throws {Error} If the process fails to start or exits with non-zero code
  * @example
- * import { executeCommand } from "@settlemint/sdk-utils";
+ * import { executeCommand } from "@settlemint/sdk-utils/terminal";
  *
  * // Execute git clone
  * await executeCommand("git", ["clone", "repo-url"]);

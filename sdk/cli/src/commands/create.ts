@@ -5,11 +5,11 @@ import { templatePrompt } from "@/commands/create/template.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { Command, Option } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
-import type { DotEnv } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { emptyDir, formatTargetDir, isEmpty, setName, templates } from "@settlemint/sdk-utils/package-manager";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { downloadAndExtractNpmPackage } from "./create/download-extract";
 
 /**

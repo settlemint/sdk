@@ -1,7 +1,8 @@
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import { installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
+import { projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-portal";

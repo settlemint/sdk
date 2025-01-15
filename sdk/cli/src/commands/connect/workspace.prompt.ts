@@ -1,7 +1,7 @@
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import select from "@inquirer/select";
 import type { Workspace } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 

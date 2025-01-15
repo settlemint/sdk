@@ -1,6 +1,6 @@
 import select from "@inquirer/select";
-import { cancel } from "@settlemint/sdk-utils";
 import type { Template } from "@settlemint/sdk-utils/package-manager";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 
 export async function templatePrompt(templates: Template[], argument?: string): Promise<Template> {
   if (templates.length === 0) {

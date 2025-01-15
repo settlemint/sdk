@@ -5,7 +5,7 @@ import { magentaBright } from "yoctocolors";
  * Used for CLI branding and visual identification.
  *
  * @example
- * import { ascii } from "@settlemint/sdk-utils";
+ * import { ascii } from "@settlemint/sdk-utils/terminal";
  *
  * // Prints the SettleMint logo
  * ascii();

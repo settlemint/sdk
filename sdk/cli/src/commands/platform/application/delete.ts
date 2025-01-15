@@ -1,4 +1,4 @@
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getDeleteCommand } from "../common/delete-command";
 
 /**

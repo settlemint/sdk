@@ -13,7 +13,7 @@ import { config } from "@dotenvx/dotenvx";
  * @returns A promise that resolves to the validated environment variables
  * @throws Will throw an error if validation fails and validateEnv is true
  * @example
- * import { loadEnv } from '@settlemint/sdk-utils';
+ * import { loadEnv } from '@settlemint/sdk-utils/environment';
  *
  * // Load and validate environment variables
  * const env = await loadEnv(true, false);

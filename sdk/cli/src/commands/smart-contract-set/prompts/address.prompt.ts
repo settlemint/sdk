@@ -1,7 +1,8 @@
 import type { HardhatConfig } from "@/utils/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
-import { type DotEnv, cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { writeEnvSpinner } from "../../connect/write-env.spinner";
 
 /**

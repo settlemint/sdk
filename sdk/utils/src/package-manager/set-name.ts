@@ -9,7 +9,7 @@ import pkgjs from "@npmcli/package-json";
  * @returns A promise that resolves when the package.json has been updated
  * @throws If unable to read, update or save the package.json file
  * @example
- * import { setName } from "@settlemint/sdk-utils";
+ * import { setName } from "@settlemint/sdk-utils/package-manager";
  *
  * await setName("my-new-project-name");
  */

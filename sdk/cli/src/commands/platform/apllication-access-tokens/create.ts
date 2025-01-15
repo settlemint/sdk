@@ -1,6 +1,6 @@
 import { missingApplication } from "@/error/missing-config-error";
 import { Option } from "@commander-js/extra-typings";
-import type { DotEnv } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getCreateCommand } from "../common/create-command";
 
 /**

@@ -1,6 +1,7 @@
 import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
 import type { Insights, IntegrationTool, Middleware, SettlemintClient, Storage } from "@settlemint/sdk-js";
-import { type DotEnv, retryWhenFailed } from "@settlemint/sdk-utils";
+import { retryWhenFailed } from "@settlemint/sdk-utils";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function getGraphEndpoint(
   settlemint: SettlemintClient,

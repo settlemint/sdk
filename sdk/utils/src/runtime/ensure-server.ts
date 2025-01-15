@@ -5,7 +5,7 @@ import { isBrowser } from "environment";
  *
  * @throws {Error} If called from a browser environment
  * @example
- * import { ensureServer } from "@settlemint/sdk-utils";
+ * import { ensureServer } from "@settlemint/sdk-utils/runtime";
  *
  * // Will throw if running in browser
  * ensureServer();
@@ -23,7 +23,7 @@ export function ensureServer(): void {
  *
  * @throws {Error} If called from a server environment
  * @example
- * import { ensureBrowser } from "@settlemint/sdk-utils";
+ * import { ensureBrowser } from "@settlemint/sdk-utils/runtime";
  *
  * // Will throw if running on server
  * ensureBrowser();

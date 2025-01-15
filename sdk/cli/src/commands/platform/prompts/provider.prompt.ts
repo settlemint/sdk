@@ -1,6 +1,6 @@
 import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 
 /**
  * Prompts the user to select a deployment provider or validates a provided one

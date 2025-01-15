@@ -1,7 +1,8 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
-import { type DotEnv, exists, loadEnv } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
 import {
   getSubgraphConfig,

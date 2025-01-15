@@ -3,8 +3,10 @@ import { basename, resolve } from "node:path";
 import { writeTemplate } from "@/commands/codegen/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
-import type { DotEnv } from "@settlemint/sdk-utils";
-import { graphqlFetchWithRetry, installDependencies, isPackageInstalled, projectRoot } from "@settlemint/sdk-utils";
+import { projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
+import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-blockscout";
 
