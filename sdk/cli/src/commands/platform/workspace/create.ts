@@ -128,20 +128,22 @@ export function workspaceCreateCommand() {
               ...defaultArgs
             },
           ) => {
-            return baseAction(defaultArgs, async (settlemint) => {
-              const result = await settlemint.workspace.create({
-                name,
-                taxIdValue,
-                taxIdType,
-                postalCode,
-                paymentMethodId,
-                parentId,
-                country,
-                companyName,
-                city,
-                addressLine2,
-                addressLine1,
-              });
+            return baseAction(defaultArgs, async (settlemint, _env, showSpinner) => {
+              const result = await showSpinner(() =>
+                settlemint.workspace.create({
+                  name,
+                  taxIdValue,
+                  taxIdType,
+                  postalCode,
+                  paymentMethodId,
+                  parentId,
+                  country,
+                  companyName,
+                  city,
+                  addressLine2,
+                  addressLine1,
+                }),
+              );
               return {
                 result,
                 mapDefaultEnv: (): Partial<DotEnv> => {

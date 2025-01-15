@@ -62,6 +62,7 @@ export function getCreateCommand({
       createFunction: (
         settlemintClient: SettlemintClient,
         env: Partial<DotEnv>,
+        showSpinner: <T>(task: () => Promise<T>) => Promise<T>,
       ) => Promise<{
         result: { id: string; name: string; uniqueName: string };
         waitFor?: { resourceType: ResourceType; id: string; name: string; uniqueName: string };
@@ -119,13 +120,13 @@ export function getCreateCommand({
         }
       }
 
-      const { result, waitFor, mapDefaultEnv } = await spinner({
-        startMessage: `Creating ${type}`,
-        task: async () => {
-          return createFunction(settlemint, env);
-        },
-        stopMessage: `${capitalizeFirstLetter(type)} created`,
-      });
+      const showSpinner = <T>(task: () => Promise<T>) =>
+        spinner({
+          startMessage: `Creating ${type}`,
+          task: task,
+          stopMessage: `${capitalizeFirstLetter(type)} created`,
+        });
+      const { result, waitFor, mapDefaultEnv } = await createFunction(settlemint, env, showSpinner);
 
       if (wait) {
         await waitForCompletion({

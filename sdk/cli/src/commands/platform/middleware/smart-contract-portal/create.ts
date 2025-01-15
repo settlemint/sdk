@@ -55,7 +55,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env) => {
+              async (settlemint, env, showSpinner) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -111,19 +111,21 @@ export function smartContractPortalMiddlewareCreateCommand() {
                   }
                 }
 
-                const result = await settlemint.middleware.create({
-                  name,
-                  applicationUniqueName,
-                  interface: "SMART_CONTRACT_PORTAL",
-                  blockchainNodeUniqueName,
-                  loadBalancerUniqueName,
-                  abis: parsedAbis,
-                  includePredeployedAbis,
-                  provider,
-                  region,
-                  size,
-                  type,
-                });
+                const result = await showSpinner(() =>
+                  settlemint.middleware.create({
+                    name,
+                    applicationUniqueName,
+                    interface: "SMART_CONTRACT_PORTAL",
+                    blockchainNodeUniqueName,
+                    loadBalancerUniqueName,
+                    abis: parsedAbis,
+                    includePredeployedAbis,
+                    provider,
+                    region,
+                    size,
+                    type,
+                  }),
+                );
                 return {
                   result,
                   mapDefaultEnv: async (): Promise<Partial<DotEnv>> => {

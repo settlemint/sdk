@@ -25,56 +25,58 @@ export function applicationAccessTokenCreateCommand() {
             .default("DAYS_7"),
         )
         .action(async (name, { application, validityPeriod, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env) => {
+          return baseAction(defaultArgs, async (settlemint, env, showSpinner) => {
             const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
             if (!applicationUniqueName) {
               return missingApplication();
             }
-            const aatToken = await settlemint.applicationAccessToken.create({
-              applicationUniqueName,
-              name,
-              blockchainNetworkScope: {
-                type: "ALL",
-                values: [],
-              },
-              blockchainNodeScope: {
-                type: "ALL",
-                values: [],
-              },
-              customDeploymentScope: {
-                type: "ALL",
-                values: [],
-              },
-              insightsScope: {
-                type: "ALL",
-                values: [],
-              },
-              integrationScope: {
-                type: "ALL",
-                values: [],
-              },
-              loadBalancerScope: {
-                type: "ALL",
-                values: [],
-              },
-              middlewareScope: {
-                type: "ALL",
-                values: [],
-              },
-              privateKeyScope: {
-                type: "ALL",
-                values: [],
-              },
-              smartContractSetScope: {
-                type: "ALL",
-                values: [],
-              },
-              storageScope: {
-                type: "ALL",
-                values: [],
-              },
-              validityPeriod: validityPeriod as "DAYS_7" | "DAYS_30" | "DAYS_60" | "DAYS_90" | "NONE",
-            });
+            const aatToken = await showSpinner(() =>
+              settlemint.applicationAccessToken.create({
+                applicationUniqueName,
+                name,
+                blockchainNetworkScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                blockchainNodeScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                customDeploymentScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                insightsScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                integrationScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                loadBalancerScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                middlewareScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                privateKeyScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                smartContractSetScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                storageScope: {
+                  type: "ALL",
+                  values: [],
+                },
+                validityPeriod: validityPeriod as "DAYS_7" | "DAYS_30" | "DAYS_60" | "DAYS_90" | "NONE",
+              }),
+            );
             return {
               result: {
                 id: "",

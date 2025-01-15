@@ -25,20 +25,22 @@ export function minioStorageCreateCommand() {
               provider,
               region,
             },
-            async (settlemint, env) => {
+            async (settlemint, env, showSpinner) => {
               const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
               if (!applicationUniqueName) {
                 return missingApplication();
               }
-              const result = await settlemint.storage.create({
-                name,
-                applicationUniqueName,
-                storageProtocol: "MINIO",
-                provider,
-                region,
-                size,
-                type,
-              });
+              const result = await showSpinner(() =>
+                settlemint.storage.create({
+                  name,
+                  applicationUniqueName,
+                  storageProtocol: "MINIO",
+                  provider,
+                  region,
+                  size,
+                  type,
+                }),
+              );
               return {
                 result,
                 mapDefaultEnv: (): Partial<DotEnv> => {
