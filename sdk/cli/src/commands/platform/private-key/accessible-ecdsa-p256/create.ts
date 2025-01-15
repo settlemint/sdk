@@ -2,7 +2,6 @@ import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt"
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import type { DotEnv } from "@settlemint/sdk-utils";
 import { getCreateCommand } from "../../common/create-command";
 
 /**
@@ -63,12 +62,6 @@ export function privateKeyAccessibleCreateCommand() {
                 });
                 return {
                   result,
-                  mapDefaultEnv: (): Partial<DotEnv> => {
-                    return {
-                      SETTLEMINT_APPLICATION: applicationUniqueName,
-                      SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
-                    };
-                  },
                 };
               },
             );

@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { privateKeyAccessibleCreateCommand } from "./accessable-ecdsa-p256/create";
+import { privateKeyAccessibleCreateCommand } from "./accessible-ecdsa-p256/create";
 import { privateKeyHdCreateCommand } from "./hd-ecdsa-p256/create";
 import { privateKeyHsmCreateCommand } from "./hsm-ecdsa-p256/create";
 
