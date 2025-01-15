@@ -146,6 +146,7 @@ jobs:
         with:
           commit_message: "chore: update docs"
           branch: main
+          push_options: --push-option=ci.skip
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
       - name: Run tests and checks
