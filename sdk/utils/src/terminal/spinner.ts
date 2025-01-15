@@ -1,5 +1,5 @@
 import isInCi from "is-in-ci";
-import yoctoSpinner from "yocto-spinner";
+import yoctoSpinner, { type Spinner } from "yocto-spinner";
 import { redBright } from "yoctocolors";
 import { note } from "./note.js";
 
@@ -10,7 +10,7 @@ export interface SpinnerOptions<R> {
   /** Message to display when spinner starts */
   startMessage: string;
   /** Async task to execute while spinner is active */
-  task: () => Promise<R>;
+  task: (spinner?: Spinner) => Promise<R>;
   /** Message to display when spinner completes successfully */
   stopMessage: string;
 }
@@ -42,7 +42,7 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
   }
   const spinner = yoctoSpinner().start(options.startMessage);
   try {
-    const result = await options.task();
+    const result = await options.task(spinner);
     spinner.success(options.stopMessage);
     return result;
   } catch (error) {

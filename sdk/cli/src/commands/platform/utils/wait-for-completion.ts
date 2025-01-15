@@ -54,7 +54,7 @@ export async function waitForCompletion({
     return spinner({
       startMessage: `Waiting for ${type} to be ${getActionLabel(action)}`,
       stopMessage: `Waiting for ${type} to be ${getActionLabel(action)}`,
-      task: async () => {
+      task: async (spinner) => {
         const startTime = Date.now();
 
         while (true) {
@@ -62,18 +62,34 @@ export async function waitForCompletion({
             const resource = await service.read(uniqueName);
 
             if (resource.status === "COMPLETED") {
-              note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
+              if (spinner) {
+                spinner.text = `${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`;
+              } else {
+                note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
+              }
               return true;
             }
 
             if (resource.status === "FAILED") {
-              note(`${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
+              if (spinner) {
+                spinner.text = `${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`;
+              } else {
+                note(`${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
+              }
               return true;
             }
 
-            note(`${capitalizeFirstLetter(type)} is not ready yet (status: ${resource.status})`);
+            if (spinner) {
+              spinner.text = `${capitalizeFirstLetter(type)} is not ready yet (status: ${resource.status})`;
+            } else {
+              note(`${capitalizeFirstLetter(type)} is not ready yet (status: ${resource.status})`);
+            }
           } catch (error) {
-            note(`${capitalizeFirstLetter(type)} is not ready yet (status: UNKNOWN)`);
+            if (spinner) {
+              spinner.text = `${capitalizeFirstLetter(type)} is not ready yet (status: UNKNOWN)`;
+            } else {
+              note(`${capitalizeFirstLetter(type)} is not ready yet (status: UNKNOWN)`);
+            }
           }
 
           if (Date.now() - startTime > maxTimeout) {
