@@ -917,17 +917,18 @@ outro("Deployment completed successfully!");
 
 #### projectRoot()
 
-> **projectRoot**(`fallbackToCwd`): `Promise`\<`string`\>
+> **projectRoot**(`fallbackToCwd`, `cwd`?): `Promise`\<`string`\>
 
-Defined in: [sdk/utils/src/filesystem/project-root.ts:16](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/filesystem/project-root.ts#L16)
+Defined in: [sdk/utils/src/filesystem/project-root.ts:18](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/filesystem/project-root.ts#L18)
 
 Finds the root directory of the current project by locating the nearest package.json file
 
 ##### Parameters
 
-| Parameter | Type | Default value |
-| ------ | ------ | ------ |
-| `fallbackToCwd` | `boolean` | `false` |
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `fallbackToCwd` | `boolean` | `false` | If true, will return the current working directory if no package.json is found |
+| `cwd`? | `string` | `undefined` | The directory to start searching for the package.json file from (defaults to process.cwd()) |
 
 ##### Returns
 
@@ -971,7 +972,7 @@ Retry a function when it fails.
 | ------ | ------ | ------ | ------ |
 | `fn` | () => `Promise`\<`T`\> | `undefined` | The function to retry. |
 | `maxRetries` | `number` | `5` | The maximum number of retries. |
-| `initialSleepTime` | `number` | `3_000` | The initial time to sleep between exponential backoff retries. |
+| `initialSleepTime` | `number` | `1_000` | The initial time to sleep between exponential backoff retries. |
 | `stopOnError`? | (`error`) => `boolean` | `undefined` | The function to stop on error. |
 
 ##### Returns
@@ -1166,9 +1167,9 @@ const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 
 #### writeEnv()
 
-> **writeEnv**(`prod`, `env`, `secrets`): `Promise`\<`void`\>
+> **writeEnv**(`options`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/environment/write-env.ts:30](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/environment/write-env.ts#L30)
+Defined in: [sdk/utils/src/environment/write-env.ts:33](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/environment/write-env.ts#L33)
 
 Writes environment variables to .env files across a project or monorepo
 
@@ -1176,9 +1177,11 @@ Writes environment variables to .env files across a project or monorepo
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `prod` | `boolean` | Whether to write production environment variables |
-| `env` | `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PERSONAL_ACCESS_TOKEN`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\> | The environment variables to write |
-| `secrets` | `boolean` | Whether to write to .env.local files for secrets |
+| `options` | \{ `cwd`: `string`; `env`: `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\>; `prod`: `boolean`; `secrets`: `boolean`; \} | The options for writing the environment variables |
+| `options.cwd`? | `string` | The directory to start searching for the package.json file from (defaults to process.cwd()) |
+| `options.env` | `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_SMART_CONTRACT_ADDRESS`: `string`; `SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPH_NAME`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\> | The environment variables to write |
+| `options.prod` | `boolean` | Whether to write production environment variables |
+| `options.secrets` | `boolean` | Whether to write to .env.local files for secrets |
 
 ##### Returns
 
@@ -1308,7 +1311,6 @@ Type definition for the environment variables schema.
 | <a id="settlemint_minio_endpoint"></a> `SETTLEMINT_MINIO_ENDPOINT`? | `string` | Endpoint URL for MinIO | [sdk/utils/src/validation/dot-env.schema.ts:59](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L59) |
 | <a id="settlemint_minio_secret_key"></a> `SETTLEMINT_MINIO_SECRET_KEY`? | `string` | Secret key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:63](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L63) |
 | <a id="settlemint_new_project_name"></a> `SETTLEMINT_NEW_PROJECT_NAME`? | `string` | Name of the new project being created | [sdk/utils/src/validation/dot-env.schema.ts:83](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L83) |
-| <a id="settlemint_personal_access_token"></a> `SETTLEMINT_PERSONAL_ACCESS_TOKEN`? | `string` | Personal access token for authenticating with SettleMint services | [sdk/utils/src/validation/dot-env.schema.ts:18](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L18) |
 | <a id="settlemint_portal"></a> `SETTLEMINT_PORTAL`? | `string` | Unique name of the Smart Contract Portal instance | [sdk/utils/src/validation/dot-env.schema.ts:47](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L47) |
 | <a id="settlemint_portal_graphql_endpoint"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`? | `string` | GraphQL endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:49](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L49) |
 | <a id="settlemint_portal_rest_endpoint"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT`? | `string` | REST endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:51](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L51) |
@@ -1359,7 +1361,6 @@ Type definition for the partial environment variables schema.
 | <a id="settlemint_minio_endpoint-1"></a> `SETTLEMINT_MINIO_ENDPOINT`? | `string` | Endpoint URL for MinIO | [sdk/utils/src/validation/dot-env.schema.ts:59](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L59) |
 | <a id="settlemint_minio_secret_key-1"></a> `SETTLEMINT_MINIO_SECRET_KEY`? | `string` | Secret key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:63](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L63) |
 | <a id="settlemint_new_project_name-1"></a> `SETTLEMINT_NEW_PROJECT_NAME`? | `string` | Name of the new project being created | [sdk/utils/src/validation/dot-env.schema.ts:83](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L83) |
-| <a id="settlemint_personal_access_token-1"></a> `SETTLEMINT_PERSONAL_ACCESS_TOKEN`? | `string` | Personal access token for authenticating with SettleMint services | [sdk/utils/src/validation/dot-env.schema.ts:18](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L18) |
 | <a id="settlemint_portal-1"></a> `SETTLEMINT_PORTAL`? | `string` | Unique name of the Smart Contract Portal instance | [sdk/utils/src/validation/dot-env.schema.ts:47](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L47) |
 | <a id="settlemint_portal_graphql_endpoint-1"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`? | `string` | GraphQL endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:49](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L49) |
 | <a id="settlemint_portal_rest_endpoint-1"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT`? | `string` | REST endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:51](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/validation/dot-env.schema.ts#L51) |
