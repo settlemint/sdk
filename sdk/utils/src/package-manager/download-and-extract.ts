@@ -3,14 +3,6 @@ import { resolve } from "node:path";
 import { exists } from "../filesystem.js";
 
 /**
- * Available templates for project creation
- */
-export type Template = { value: string; label: string };
-export const templates: Template[] = [
-  { value: "@settlemint/starterkit-asset-tokenization", label: "Asset Tokenization" },
-] as const;
-
-/**
  * Formats a directory path by removing trailing slashes and whitespace
  *
  * @param targetDir - The directory path to format

@@ -1,5 +1,4 @@
 import { mkdir } from "node:fs/promises";
-import type { Template } from "@settlemint/sdk-utils/package-manager";
 import { downloadTemplate } from "giget";
 
 /**
@@ -10,7 +9,7 @@ import { downloadTemplate } from "giget";
  * @returns A Promise that resolves when the download and extraction are complete
  * @throws Will throw an error if the download or extraction fails
  */
-export async function downloadAndExtractNpmPackage(template: Template["value"], targetDir: string): Promise<void> {
+export async function downloadAndExtractNpmPackage(template: string, targetDir: string): Promise<void> {
   // Create target directory if it doesn't exist
   await mkdir(targetDir, { recursive: true });
 

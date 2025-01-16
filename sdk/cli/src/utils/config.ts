@@ -3,7 +3,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { cancel, list } from "@settlemint/sdk-utils/terminal";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
 const CONFIG_FILE = join(CONFIG_DIR, "config.json");
@@ -89,15 +89,10 @@ export async function getInstanceCredentials(
       return undefined;
     }
 
-    cancel(
-      `No configuration found for instance '${instance}'${
-        Object.keys(config.instances).length > 0
-          ? `\nConfigured instances:\n${Object.keys(config.instances)
-              .map((i) => `- '${i}'`)
-              .join("\n")}`
-          : ""
-      }`,
-    );
+    if (Object.keys(config.instances).length > 0) {
+      list("Configured instances", Object.keys(config.instances));
+    }
+    cancel(`No configuration found for instance '${instance}'`);
   }
 
   return { personalAccessToken: instanceConfig.personalAccessToken };

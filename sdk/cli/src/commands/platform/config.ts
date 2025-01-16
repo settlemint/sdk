@@ -1,11 +1,11 @@
 import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { getRegionId } from "@/commands/platform/utils/cluster-region";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getStarterkits, getUseCases } from "@/commands/platform/utils/platform-utils";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, list, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -23,42 +23,38 @@ export function configCommand() {
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
       const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
-      const accessToken = await getApplicationOrPersonalAccessToken({
-        env,
-        instance: selectedInstance,
-        prefer: "personal",
-      });
       const settlemint = createSettleMintClient({
-        accessToken,
+        accessToken: "",
         instance: selectedInstance,
+        anonymous: true,
       });
 
       const platformConfig = await settlemint.platform.config();
+      const useCases = getUseCases(platformConfig);
+      const starterkits = getStarterkits(platformConfig);
 
-      note(
-        `Providers and regions:\n${platformConfig.deploymentEngineTargets
+      list("Templates (Starterkits)", starterkits.map((starterkit) => starterkit.id).sort());
+
+      list("Use cases (Smart Contract Sets)", useCases.map((useCase) => useCase.id).sort());
+
+      list(
+        "Providers and regions",
+        platformConfig.deploymentEngineTargets
           .filter((provider) => !provider.disabled)
-          .map(
-            (provider) =>
-              `• ${provider.id}\n  ${provider.clusters
+          .sort((a, b) => a.id.localeCompare(b.id))
+          .reduce<Array<string | string[]>>((acc, provider) => {
+            acc.push(provider.id);
+            acc.push(
+              provider.clusters
                 .filter((cluster) => !cluster.disabled)
-                .map((region) => `• ${getRegionId(region.id)}`)
-                .sort()
-                .join("\n  ")}`,
-          )
-          .sort()
-          .join("\n")}`,
+                .map((region) => getRegionId(region.id))
+                .sort(),
+            );
+            return acc;
+          }, []),
       );
 
-      note(
-        `Use cases (Smart Contract Sets):\n• ${platformConfig.smartContractSets.sets
-          .filter((useCase) => !useCase.featureflagged)
-          .map((useCase) => useCase.id)
-          .sort()
-          .join("\n• ")}`,
-      );
-
-      note(`Pre-deployed abis (Smart Contract Portal):\n• ${platformConfig.preDeployedContracts.sort().join("\n• ")}`);
+      list("Pre-deployed abis (Smart Contract Portal)", platformConfig.preDeployedContracts.sort());
 
       outro("Platform configuration retrieved");
     });
