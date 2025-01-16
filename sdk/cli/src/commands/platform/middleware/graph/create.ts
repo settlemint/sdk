@@ -9,7 +9,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 /**
  * Creates and returns the 'graph' middleware command for the SettleMint SDK.
  * This command creates a new graph middleware in the SettleMint platform.
- * It requires an application ID and smart contract set ID.
  */
 export function graphMiddlewareCreateCommand() {
   return getCreateCommand({

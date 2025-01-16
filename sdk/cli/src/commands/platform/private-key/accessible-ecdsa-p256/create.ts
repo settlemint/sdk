@@ -6,7 +6,6 @@ import { getCreateCommand } from "../../common/create-command";
 /**
  * Creates and returns the 'private-key' command for the SettleMint SDK.
  * This command creates a new HD_ECDSA_P256 private key in the SettleMint platform.
- * It requires an application ID.
  */
 export function privateKeyAccessibleCreateCommand() {
   return getCreateCommand({

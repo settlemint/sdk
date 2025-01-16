@@ -26,7 +26,7 @@ describe("hasuraIntegrationCreateCommand", () => {
     });
   });
 
-  test("executes command with application ID", () => {
+  test("executes command with application unique name", () => {
     let commandOptions: Record<string, unknown> = {};
     let commandArgs = "";
     const program = new Command();

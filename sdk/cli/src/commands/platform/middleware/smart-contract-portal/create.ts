@@ -11,7 +11,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 /**
  * Creates and returns the 'smart-contract-portal' middleware command for the SettleMint SDK.
  * This command creates a new smart contract portal middleware in the SettleMint platform.
- * It requires an application ID and smart contract set ID.
  */
 export function smartContractPortalMiddlewareCreateCommand() {
   return getCreateCommand({
