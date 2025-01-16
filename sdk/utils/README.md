@@ -48,6 +48,7 @@
     - [intro()](#intro)
     - [isEmpty()](#isempty)
     - [isPackageInstalled()](#ispackageinstalled)
+    - [list()](#list)
     - [loadEnv()](#loadenv)
     - [maskTokens()](#masktokens)
     - [note()](#note)
@@ -69,7 +70,6 @@
     - [DotEnvPartial](#dotenvpartial)
     - [Id](#id)
     - [PersonalAccessToken](#personalaccesstoken)
-    - [Template](#template)
     - [Url](#url)
     - [UrlOrPath](#urlorpath)
     - [UrlPath](#urlpath)
@@ -189,7 +189,7 @@ const capitalized = capitalizeFirstLetter("hello");
 
 > **emptyDir**(`dir`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:53](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L53)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:45](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L45)
 
 Removes all contents of a directory except the .git folder
 
@@ -446,7 +446,7 @@ console.log(root); // Output: /path/to/your/project/packages/core
 
 > **formatTargetDir**(`targetDir`): `string`
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:23](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L23)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:15](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L15)
 
 Formats a directory path by removing trailing slashes and whitespace
 
@@ -666,7 +666,7 @@ intro("Starting deployment...");
 
 > **isEmpty**(`path`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:39](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L39)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:31](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L31)
 
 Checks if a directory is empty or contains only a .git folder
 
@@ -726,6 +726,46 @@ import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 
 const isInstalled = await isPackageInstalled("@settlemint/sdk-utils");
 console.log(`@settlemint/sdk-utils is installed: ${isInstalled}`);
+```
+
+***
+
+#### list()
+
+> **list**(`title`, `items`): `void`
+
+Defined in: [sdk/utils/src/terminal/list.ts:23](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/terminal/list.ts#L23)
+
+Displays a list of items in a formatted manner, supporting nested items.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `title` | `string` | The title of the list |
+| `items` | (`string` \| `string`[])[] | The items to display, can be strings or arrays for nested items |
+
+##### Returns
+
+`void`
+
+The formatted list
+
+##### Example
+
+```ts
+import { list } from "@settlemint/sdk-utils/terminal";
+
+// Simple list
+list("Use cases", ["use case 1", "use case 2", "use case 3"]);
+
+// Nested list
+list("Providers", [
+  "AWS",
+  ["us-east-1", "eu-west-1"],
+  "Azure",
+  ["eastus", "westeurope"]
+]);
 ```
 
 ***
@@ -1351,23 +1391,6 @@ Defined in: [sdk/utils/src/validation/access-token.schema.ts:15](https://github.
 
 Schema for validating personal access tokens.
 Personal access tokens start with 'sm_pat_' prefix.
-
-***
-
-#### Template
-
-> **Template**: `object`
-
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:8](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L8)
-
-Available templates for project creation
-
-##### Type declaration
-
-| Name | Type | Defined in |
-| ------ | ------ | ------ |
-| <a id="label"></a> `label` | `string` | [sdk/utils/src/package-manager/download-and-extract.ts:8](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L8) |
-| <a id="value"></a> `value` | `string` | [sdk/utils/src/package-manager/download-and-extract.ts:8](https://github.com/settlemint/sdk/blob/v1.0.5/sdk/utils/src/package-manager/download-and-extract.ts#L8) |
 
 ***
 

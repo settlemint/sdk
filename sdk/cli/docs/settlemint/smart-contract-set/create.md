@@ -9,7 +9,7 @@ Options:
   --use-case &lt;useCase&gt;       Use case for the smart contract set (run
                              `settlemint platform config` to see available use
                              cases)
-  --prod                     Connect to your production environment
+  -i, --instance &lt;instance&gt;  The instance to connect to
   -h, --help                 display help for command
 </pre>
 
