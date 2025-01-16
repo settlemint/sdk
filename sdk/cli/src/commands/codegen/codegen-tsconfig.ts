@@ -1,5 +1,5 @@
 import { writeFile } from "node:fs/promises";
-import { testGqlEndpoint } from "@/commands/codegen/test-gql-endpoint";
+import { testGqlEndpoint } from "@/commands/codegen/utils/test-gql-endpoint";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
