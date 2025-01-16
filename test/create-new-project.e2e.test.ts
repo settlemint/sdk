@@ -17,7 +17,7 @@ import {
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
-const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
+const TEMPLATE_NAME = "starterkit-asset-tokenization";
 const SUBGRAPH_NAMES = ["starterkits", "starterkit-asset-tokenization"];
 
 const COMMAND_TEST_SCOPE = __filename;
