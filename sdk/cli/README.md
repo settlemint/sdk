@@ -30,6 +30,7 @@
 - [Usage](#usage)
   - [As a dependency in your package.json](#as-a-dependency-in-your-package.json)
   - [Globally install the CLI](#globally-install-the-cli)
+- [GitHub Action](#github-action)
 - [Examples](#examples)
   - [Get the version of the CLI](#get-the-version-of-the-cli)
   - [Get help for a command](#get-help-for-a-command)
@@ -87,6 +88,25 @@ pnpm install -g @settlemint/sdk-cli
 
 # yarn
 yarn install -g @settlemint/sdk-cli
+```
+
+You can access the CLI globally by running `settlemint` in your terminal.
+
+## GitHub Action
+
+Execute SettleMint CLI commands directly in your GitHub Actions workflows using our official GitHub Action.
+
+For detailed setup and usage instructions, check out our [documentation](https://github.com/settlemint/settlemint-action/blob/main/README.md).
+
+Basic example:
+
+```yaml
+steps:
+  - name: Get SettleMint CLI version
+    uses: settlemint/settlemint-action@main
+    with:
+      access-token: $
+      command: "--version"
 ```
 
 ## Examples
