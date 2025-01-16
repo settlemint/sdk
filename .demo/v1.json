@@ -93,12 +93,6 @@
       "steps": [
         {
           "action": "insert",
-          "path": "./demo-token/contracts/GenericERC20.sol",
-          "position": 20,
-          "content": "_mint(msg.sender, 1_000_000 * 10 ** decimals());"
-        },
-        {
-          "action": "insert",
           "path": "./demo-token/test/GenericERC20.t.sol",
           "position": 20,
           "content": "assertEq(ownerBalance, 1_000_000 * 10 ** token.decimals());"
@@ -114,6 +108,24 @@
           "path": "./demo-token/test/GenericERC20.t.sol",
           "position": 48,
           "content": "assertEq(newOwnerBalance, 999_000 * 10 ** token.decimals());"
+        },
+        {
+          "action": "insert",
+          "path": "./demo-token/contracts/GenericERC20.sol",
+          "position": 20,
+          "content": "_mint(msg.sender, 1_000_000 * 10 ** decimals());"
+        },
+        {
+          "action": "open",
+          "path": "./demo-token/contracts/GenericERC20.sol"
+        },
+        {
+          "action": "waitForInput"
+        },
+        {
+          "action": "highlight",
+          "path": "./demo-token/contracts/GenericERC20.sol",
+          "position": 20
         }
       ]
     },
