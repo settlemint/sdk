@@ -124,18 +124,19 @@ export function connectCommand(): Command {
 
         if (acceptDefaults) {
           const selectedServices = [
-            `Workspace: ${workspace.name}`,
-            `Application: ${application.name}`,
-            blockchainNode && `Blockchain Network: ${blockchainNode?.blockchainNetwork?.name}`,
-            blockchainNode && `Blockchain Node: ${blockchainNode?.name}`,
-            hasura && `Hasura: ${hasura?.name}`,
-            thegraph && `TheGraph: ${thegraph?.name}`,
-            portal && `Portal: ${portal?.name}`,
-            ipfs && `IPFS: ${ipfs?.name}`,
-            minio && `MinIO: ${minio?.name}`,
-            hdPrivateKey && `HD Private Key: ${hdPrivateKey?.name}`,
-            cDeployment && `Custom Deployment: ${cDeployment?.name}`,
-            blockscout && `Blockscout: ${blockscout?.name}`,
+            `Workspace: ${workspace.name} (${workspace.uniqueName})`,
+            `Application: ${application.name} (${application.uniqueName})`,
+            blockchainNode &&
+              `Blockchain Network: ${blockchainNode?.blockchainNetwork?.name} (${blockchainNode?.blockchainNetwork?.uniqueName})`,
+            blockchainNode && `Blockchain Node: ${blockchainNode?.name} (${blockchainNode?.uniqueName})`,
+            hasura && `Hasura: ${hasura?.name} (${hasura?.uniqueName})`,
+            thegraph && `TheGraph: ${thegraph?.name} (${thegraph?.uniqueName})`,
+            portal && `Portal: ${portal?.name} (${portal?.uniqueName})`,
+            ipfs && `IPFS: ${ipfs?.name} (${ipfs?.uniqueName})`,
+            minio && `MinIO: ${minio?.name} (${minio?.uniqueName})`,
+            hdPrivateKey && `HD Private Key: ${hdPrivateKey?.name} (${hdPrivateKey?.uniqueName})`,
+            cDeployment && `Custom Deployment: ${cDeployment?.name} (${cDeployment?.uniqueName})`,
+            blockscout && `Blockscout: ${blockscout?.name} (${blockscout?.uniqueName})`,
           ].filter(Boolean) as string[];
           list("Selected services", selectedServices);
         }
