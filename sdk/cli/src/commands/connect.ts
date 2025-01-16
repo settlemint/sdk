@@ -14,7 +14,7 @@ import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { note } from "@settlemint/sdk-utils/terminal";
+import { list } from "@settlemint/sdk-utils/terminal";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
@@ -136,8 +136,8 @@ export function connectCommand(): Command {
             hdPrivateKey && `HD Private Key: ${hdPrivateKey?.name}`,
             cDeployment && `Custom Deployment: ${cDeployment?.name}`,
             blockscout && `Blockscout: ${blockscout?.name}`,
-          ];
-          note(`Selected services:\n  • ${selectedServices.filter(Boolean).join("\n  • ")}\n`);
+          ].filter(Boolean) as string[];
+          list("Selected services", selectedServices);
         }
 
         await writeEnvSpinner(!!prod, {

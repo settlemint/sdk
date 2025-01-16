@@ -2,6 +2,7 @@ import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
+import { z } from "zod";
 import {
   type CreateApplicationAccessTokenArgs,
   applicationAccessTokenCreate,
@@ -94,6 +95,14 @@ import {
   workspaceRead,
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
+
+/**
+ * Options for the Settlemint client.
+ */
+export interface SettlemintClientOptions extends ClientOptions {
+  /** Whether to allow anonymous access (no access token required) */
+  anonymous?: boolean;
+}
 
 /**
  * Client interface for interacting with the SettleMint platform.
@@ -198,15 +207,23 @@ export interface SettlemintClient {
  * // Read a specific workspace
  * const workspace = await client.workspace.read('workspace-unique-name');
  */
-export function createSettleMintClient(options: ClientOptions): SettlemintClient {
+export function createSettleMintClient(options: SettlemintClientOptions): SettlemintClient {
   ensureServer();
 
-  const validatedOptions = validate(ClientOptionsSchema, options);
+  const validatedOptions = options.anonymous
+    ? validate(
+        z.object({
+          ...ClientOptionsSchema.shape,
+          accessToken: z.literal(""),
+        }),
+        options,
+      )
+    : validate(ClientOptionsSchema, options);
 
   const baseUrl = new URL(validatedOptions.instance).toString().replace(/\/$/, "");
   const gqlClient = new GraphQLClient(`${baseUrl}/api/graphql`, {
     headers: {
-      "x-auth-token": validatedOptions.accessToken,
+      "x-auth-token": validatedOptions.accessToken ?? "",
     },
     fetch: async (input, init) => {
       const response = await fetchWithRetry(input, init);
