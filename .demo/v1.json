@@ -1,0 +1,205 @@
+{
+  "$schema": "https://demotime.elio.dev/demo-time.schema.json",
+  "title": "SDK v1",
+  "description": "Using the SettleMint SDK v1 to kickstart your dAPP",
+  "demos": [
+    {
+      "title": "Install",
+      "description": "Install the CLI",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "bun add --global @settlemint/sdk-cli@latest"
+        }
+      ]
+    },
+    {
+      "title": "Log in",
+      "description": "Log in to your SettleMint account",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint login"
+        }
+      ]
+    },
+    {
+      "title": "Create a new application",
+      "description": "Create a new application",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint platform create application --workspace {workspace} \"Demo dAPP\""
+        }
+      ]
+    },
+    {
+      "title": "New Network",
+      "description": "Log in to your SettleMint account",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint platform create bnw besu --wait --provider GKE --region EUROPE --application {application} --node-name=\"Validator 1\" \"Demo Network\""
+        }
+      ]
+    },
+    {
+      "title": "Deployment private key",
+      "description": "Create the deployment private key",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint platform create pk hsm-ecdsa-p256 --wait --application {application} --blockchain-node {blockchain_node} --provider GKE --region EUROPE Deployer"
+        }
+      ]
+    },
+    {
+      "title": "Create SCS",
+      "description": "Create a Smart Contract Set",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint scs create"
+        }
+      ]
+    },
+    {
+      "title": "Dependencies",
+      "description": "Enter the SCS and install dependencies",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "cd token && bun i"
+        }
+      ]
+    },
+    {
+      "title": "Connect",
+      "description": "Connect the SCS to the application",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint connect"
+        }
+      ]
+    },
+    {
+      "title": "Update Smart Contract",
+      "description": "Update the smart contract",
+      "steps": [
+        {
+          "action": "insert",
+          "path": "./token/contracts/GenericERC20.sol",
+          "position": 20,
+          "content": "_mint(msg.sender, 1_000_000 * 10 ** decimals());"
+        },
+        {
+          "action": "insert",
+          "path": "./token/test/GenericERC20.t.sol",
+          "position": 20,
+          "content": "assertEq(ownerBalance, 1_000_000 * 10 ** token.decimals());"
+        },
+        {
+          "action": "insert",
+          "path": "./token/test/GenericERC20.t.sol",
+          "position": 27,
+          "content": "assertEq(newOwnerBalance, 1_001_000 * 10 ** token.decimals());"
+        },
+        {
+          "action": "insert",
+          "path": "./token/test/GenericERC20.t.sol",
+          "position": 48,
+          "content": "assertEq(newOwnerBalance, 999_000 * 10 ** token.decimals());"
+        }
+      ]
+    },
+    {
+      "title": "Test",
+      "description": "Test the SCS",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint scs foundry test"
+        }
+      ]
+    },
+    {
+      "title": "Deploy",
+      "description": "Deploy the SCS",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint scs hardhat deploy remote"
+        }
+      ]
+    },
+    {
+      "title": "Deploy The Graph",
+      "description": "Deploy The Graph",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint platform create middleware graph --wait --application {application} --blockchain-node {blockchain_node} --provider GKE --region EUROPE Graph Middleware"
+        }
+      ]
+    },
+    {
+      "title": "Update the subgraph",
+      "description": "Update the subgraph",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "set CHAIN_ID $(ls -1 ignition/deployments | head -n1) && jq --arg addr $(jq -r '.\"GenericERC20Module#GenericERC20\"' ignition/deployments/$CHAIN_ID/deployed_addresses.json) '.datasources[0].address = $addr' subgraph/subgraph.config.json > subgraph.config.json && mv subgraph.config.json subgraph/subgraph.config.json"
+        }
+      ]
+    },
+    {
+      "title": "Deploy subgraph",
+      "description": "Deploy the subgraph",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint scs subgraph deploy erc20demo"
+        }
+      ]
+    },
+    {
+      "title": "Create our dAPP",
+      "description": "Create our dAPP",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "cd .."
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "bunx create-next-app@latest"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "cd dapp"
+        }
+      ]
+    },
+    {
+      "title": "Connect",
+      "description": "Connect the dapp to the application",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint connect"
+        }
+      ]
+    },
+    {
+      "title": "Codegen",
+      "description": "Codegen the dapp",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint codegen"
+        }
+      ]
+    }
+  ]
+}
