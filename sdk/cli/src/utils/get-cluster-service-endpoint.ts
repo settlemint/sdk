@@ -1,5 +1,6 @@
 import type { Insights, IntegrationTool, Middleware, SettlemintClient, Storage } from "@settlemint/sdk-js";
 import { retryWhenFailed } from "@settlemint/sdk-utils";
+import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function getGraphEndpoint(
@@ -11,18 +12,23 @@ export async function getGraphEndpoint(
     return {};
   }
 
-  const theGraphMiddleware = await retryWhenFailed(async () => {
-    const middleware = await settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName);
-    if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
-      throw new Error(`Middleware '${service.uniqueName}' is not a graph middleware`);
-    }
-    if (
-      graphName &&
-      !middleware.subgraphs.find(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.id.endsWith(graphName))
-    ) {
-      throw new Error(`Subgraph '${graphName}' not found in middleware '${service.uniqueName}'`);
-    }
-    return middleware;
+  const theGraphMiddleware = await spinner({
+    startMessage: "Fetching TheGraph subgraph endpoints",
+    stopMessage: "Fetched TheGraph subgraph endpoints",
+    task: () =>
+      retryWhenFailed(async () => {
+        const middleware = await settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName);
+        if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
+          throw new Error(`Middleware '${service.uniqueName}' is not a graph middleware`);
+        }
+        if (
+          graphName &&
+          !middleware.subgraphs.find(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.id.endsWith(graphName))
+        ) {
+          throw new Error(`Subgraph '${graphName}' not found in middleware '${service.uniqueName}'`);
+        }
+        return middleware;
+      }),
   });
 
   const endpoints = theGraphMiddleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);

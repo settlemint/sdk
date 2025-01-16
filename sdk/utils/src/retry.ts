@@ -14,7 +14,7 @@
 export async function retryWhenFailed<T>(
   fn: () => Promise<T>,
   maxRetries = 5,
-  initialSleepTime = 3_000,
+  initialSleepTime = 1_000,
   stopOnError?: (error: Error) => boolean,
 ): Promise<T> {
   let attempt = 0;

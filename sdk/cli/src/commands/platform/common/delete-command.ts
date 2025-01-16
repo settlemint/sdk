@@ -99,7 +99,7 @@ export function getDeleteCommand({
 
       if (!serviceUniqueName) {
         throw new Error(
-          `No default ${type} found in your .env file. Please provide a valid ${type} ID or set a default ${type} first.`,
+          `No default ${type} found in your .env file. Please provide a valid ${type} unique name or set a default ${type} first.`,
         );
       }
 
