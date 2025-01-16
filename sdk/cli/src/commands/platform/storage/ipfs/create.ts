@@ -7,7 +7,6 @@ import { getCreateCommand } from "../../common/create-command";
 /**
  * Creates and returns the 'ipfs' storage command for the SettleMint SDK.
  * This command creates a new IPFS storage in the SettleMint platform.
- * It requires an application ID.
  */
 export function ipfsStorageCreateCommand() {
   return getCreateCommand({

@@ -9,7 +9,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 /**
  * Creates and returns the 'blockscout' insights command for the SettleMint SDK.
  * This command creates a new Blockscout insights service in the SettleMint platform.
- * It requires an application ID.
  */
 export function blockscoutInsightsCreateCommand() {
   return getCreateCommand({

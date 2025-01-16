@@ -6,7 +6,6 @@ import { getCreateCommand } from "../common/create-command";
 /**
  * Creates and returns the 'application-access-token' command for the SettleMint SDK.
  * This command creates a new application access token for an application.
- * It takes a token name and optional flags.
  */
 export function applicationAccessTokenCreateCommand() {
   return getCreateCommand({

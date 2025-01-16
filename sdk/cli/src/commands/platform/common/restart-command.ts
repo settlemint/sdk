@@ -18,7 +18,7 @@ import type { ResourceType } from "./resource-type";
  * @param options.name - The name of the command
  * @param options.type - The type of resource to restart
  * @param options.alias - Command alias (shorthand)
- * @param options.envKey - Environment variable key for the resource ID
+ * @param options.envKey - Environment variable key for the resource unique name
  * @param options.restartFunction - Function that performs the actual restart operation on the platform
  * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
  * @returns A configured Commander command for restarting the specified resource type
@@ -44,7 +44,7 @@ export function getRestartCommand({
   return new Command(commandName)
     .alias(alias)
     .description(
-      `Restart a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to restart the default ${type} from your .env file.`,
+      `Restart a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to restart the default ${type} from your .env file.`,
     )
     .usage(
       createExamples([

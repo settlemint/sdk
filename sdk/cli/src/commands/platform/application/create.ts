@@ -6,7 +6,6 @@ import { getCreateCommand } from "../common/create-command";
 /**
  * Creates and returns the 'application' command for the SettleMint SDK.
  * This command creates a new application in a specified workspace.
- * It takes a workspace name and optional flags.
  */
 export function applicationCreateCommand() {
   return getCreateCommand({
