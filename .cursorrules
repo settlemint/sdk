@@ -261,6 +261,7 @@ Implement proper test coverage
 Consider edge cases and error scenarios
 - Validate accessibility compliance
 - Use React Testing Library
+- Use Bun for testing
 
 ## Documenting
 
@@ -271,6 +272,7 @@ Consider edge cases and error scenarios
 5. Prefer `@inheritDoc` over repeating yourself.
 6. Do not use any tags that are not listed in the TSDoc specification.
 7. For zod schemas, only describe what the schema is for. Do not describe the individual properties.
+8. Add an `@example` tag to the function if it is exported. Every example should start with an import statement.
 
 Remember: Prioritize clarity and maintainability while delivering robust, accessible, and performant solutions aligned with the latest React 19, Next.js 15, and Vercel AI SDK features and best practices.
 

@@ -1,4 +1,4 @@
-import { writeTemplate } from "@/commands/codegen/write-template";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";

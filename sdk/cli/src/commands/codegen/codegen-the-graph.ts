@@ -1,4 +1,5 @@
-import { writeTemplate } from "@/commands/codegen/write-template";
+import { getVariableName } from "@/commands/codegen/utils/get-variable-name";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -8,6 +9,7 @@ import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-thegraph";
+
 export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
   const gqlEndpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS;
   if (!Array.isArray(gqlEndpoints) || gqlEndpoints.length === 0) {
@@ -34,12 +36,14 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
       note(`[SKIPPED] Generating TheGraph subgraph ${name}`);
       return false;
     }
-    template.push(`import type { introspection as ${name}Introspection } from "@schemas/the-graph-env-${name}"`);
+    const introspectionVariable = getVariableName(`${name}Introspection`);
+    template.push(`import type { introspection as ${introspectionVariable} } from "@schemas/the-graph-env-${name}"`);
     return true;
   });
 
   for (const gqlEndpoint of toGenerate) {
     const name = gqlEndpoint.split("/").pop()!;
+    const introspectionVariable = getVariableName(`${name}Introspection`);
     note(`Generating TheGraph subgraph ${name}`);
     await generateSchema({
       input: gqlEndpoint,
@@ -50,11 +54,13 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
       },
     });
     const nameSuffix = capitalizeFirstLetter(name);
+    const graphqlClientVariable = getVariableName(`theGraphClient${nameSuffix}`);
+    const graphqlVariable = getVariableName(`theGraphGraphql${nameSuffix}`);
     template.push(
       ...[
         `
-export const { client: theGraphClient${nameSuffix}, graphql: theGraphGraphql${nameSuffix} } = createTheGraphClient<{
-  introspection: ${name}Introspection;
+export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } = createTheGraphClient<{
+  introspection: ${introspectionVariable};
   disableMasking: true;
   scalars: {
     DateTime: Date;
