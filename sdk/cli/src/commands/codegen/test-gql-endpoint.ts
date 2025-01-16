@@ -1,4 +1,5 @@
 import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -25,15 +26,16 @@ export async function testGqlEndpoint({
     return false;
   }
 
-  await graphqlFetchWithRetry(gqlEndpoint, {
-    method: "POST",
-    headers: {
-      "x-auth-token": accessToken,
-      ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: `
+  try {
+    await graphqlFetchWithRetry(gqlEndpoint, {
+      method: "POST",
+      headers: {
+        "x-auth-token": accessToken,
+        ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: `
           query {
             __schema {
               types {
@@ -42,8 +44,12 @@ export async function testGqlEndpoint({
             }
           }
         `,
-    }),
-  });
-
-  return true;
+      }),
+    });
+    return true;
+  } catch (err) {
+    const error = err as Error;
+    note(`GraphQL endpoint '${gqlEndpoint}' is not reachable: ${error.message}`, "warn");
+    return false;
+  }
 }

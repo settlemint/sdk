@@ -13,6 +13,7 @@ const DEFAULT_ENV: Record<string, string> = {
   SETTLEMINT_INSTANCE: process.env.SETTLEMINT_INSTANCE!,
   CI: isInCi ? "true" : "false",
   NODE_ENV: "development",
+  CLI_WIDTH: "130",
 };
 
 const CLI_DEV_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.mjs");

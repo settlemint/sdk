@@ -25,17 +25,7 @@ export async function getGraphEndpoint(
     return middleware;
   });
 
-  const isStarterKit = (id: string) => id?.toLowerCase().endsWith("-starterkits");
-  const endpoints = theGraphMiddleware.subgraphs
-    .filter((subgraph) => {
-      // If there's only one subgraph, keep it regardless if it's a starterkit
-      if (theGraphMiddleware.subgraphs.length === 1) {
-        return true;
-      }
-      // Otherwise filter out starterkits
-      return !isStarterKit(subgraph.graphqlQueryEndpoint?.id);
-    })
-    .map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
+  const endpoints = theGraphMiddleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
 
   return {
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: endpoints,
