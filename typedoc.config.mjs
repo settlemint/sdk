@@ -14,6 +14,7 @@ export default {
   // Content organization
   groupOrder: ["Functions", "*"],
   excludeNotDocumented: true,
+  excludeInternal: true,
 
   // Formatting options
   parametersFormat: "table",
