@@ -35,7 +35,7 @@
     },
     {
       "title": "New Network",
-      "description": "Log in to your SettleMint account",
+      "description": "Create a new network",
       "steps": [
         {
           "action": "executeTerminalCommand",
@@ -49,7 +49,7 @@
       "steps": [
         {
           "action": "executeTerminalCommand",
-          "command": "settlemint platform create pk hsm-ecdsa-p256 --wait --application {application} --blockchain-node {blockchain_node} --provider GKE --region EUROPE Deployer"
+          "command": "settlemint platform create pk hsm-ecdsa-p256 --wait --application {application} --blockchain-node {blockchain_node} Deployer"
         }
       ]
     },
@@ -59,7 +59,7 @@
       "steps": [
         {
           "action": "executeTerminalCommand",
-          "command": "settlemint scs create"
+          "command": "settlemint scs create -n demo-token"
         }
       ]
     },
@@ -69,7 +69,11 @@
       "steps": [
         {
           "action": "executeTerminalCommand",
-          "command": "cd token && bun i"
+          "command": "cd demo-token"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "bun i"
         }
       ]
     },
@@ -89,25 +93,25 @@
       "steps": [
         {
           "action": "insert",
-          "path": "./token/contracts/GenericERC20.sol",
+          "path": "./demo-token/contracts/GenericERC20.sol",
           "position": 20,
           "content": "_mint(msg.sender, 1_000_000 * 10 ** decimals());"
         },
         {
           "action": "insert",
-          "path": "./token/test/GenericERC20.t.sol",
+          "path": "./demo-token/test/GenericERC20.t.sol",
           "position": 20,
           "content": "assertEq(ownerBalance, 1_000_000 * 10 ** token.decimals());"
         },
         {
           "action": "insert",
-          "path": "./token/test/GenericERC20.t.sol",
+          "path": "./demo-token/test/GenericERC20.t.sol",
           "position": 27,
           "content": "assertEq(newOwnerBalance, 1_001_000 * 10 ** token.decimals());"
         },
         {
           "action": "insert",
-          "path": "./token/test/GenericERC20.t.sol",
+          "path": "./demo-token/test/GenericERC20.t.sol",
           "position": 48,
           "content": "assertEq(newOwnerBalance, 999_000 * 10 ** token.decimals());"
         }
@@ -173,11 +177,11 @@
         },
         {
           "action": "executeTerminalCommand",
-          "command": "bunx create-next-app@latest"
+          "command": "bunx create-next-app@latest demo-dapp --yes"
         },
         {
           "action": "executeTerminalCommand",
-          "command": "cd dapp"
+          "command": "cd demo-dapp"
         }
       ]
     },
