@@ -105,7 +105,7 @@ steps:
   - name: Get SettleMint CLI version
     uses: settlemint/settlemint-action@main
     with:
-      access-token: $
+      access-token: ${{ secrets.SETTLEMINT_ACCESS_TOKEN }}
       command: "--version"
 ```
 
