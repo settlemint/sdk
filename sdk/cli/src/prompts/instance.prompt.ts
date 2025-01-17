@@ -33,7 +33,8 @@ export async function instancePrompt(
     return sanitizeInstanceUrl(defaultInstance);
   }
 
-  const defaultPromptInstance = defaultInstance ?? "https://console.settlemint.com";
+  const defaultPromptInstance =
+    defaultInstance ?? (knownInstances.length > 0 ? knownInstances[0] : "https://console.settlemint.com");
 
   if (isCi) {
     return sanitizeInstanceUrl(defaultPromptInstance);
