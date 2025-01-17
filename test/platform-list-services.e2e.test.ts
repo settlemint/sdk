@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test";
 import { mkdir, rm } from "node:fs/promises";
 import { join } from "node:path";
+import { $ } from "bun";
 import { parseDocument } from "yaml";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
@@ -11,7 +12,7 @@ afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
 });
 
-describe("Test platform application services command", () => {
+describe("Test platform list services command", () => {
   beforeAll(async () => {
     await mkdir(TEST_DIR, { recursive: true });
   });
@@ -20,8 +21,8 @@ describe("Test platform application services command", () => {
     await rm(TEST_DIR, { recursive: true, force: true });
   });
 
-  test("List application services", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "application", "services"]).result;
+  test("List services", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services"]).result;
     expect(output).toInclude("Blockchain networks");
     expect(output).toInclude("Blockchain nodes");
     expect(output).toInclude("Insights");
@@ -33,10 +34,10 @@ describe("Test platform application services command", () => {
     expect(output).not.toInclude("https://");
   });
 
-  test("List application services with specific type", async () => {
+  test("List services with specific type", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
-      "application",
+      "list",
       "services",
       "--type",
       "middleware",
@@ -53,9 +54,8 @@ describe("Test platform application services command", () => {
     expect(output).not.toInclude("https://");
   });
 
-  test("List application services in wide format", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "application", "services", "-o", "wide"])
-      .result;
+  test("List services in wide format", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services", "-o", "wide"]).result;
     expect(output).toInclude("Blockchain networks");
     expect(output).toInclude("Blockchain nodes");
     expect(output).toInclude("Insights");
@@ -67,10 +67,10 @@ describe("Test platform application services command", () => {
     expect(output).toInclude("https://");
   });
 
-  test("List application services in JSON format", async () => {
+  test("List services in JSON format", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
-      "application",
+      "list",
       "services",
       "--output",
       "json",
@@ -96,10 +96,16 @@ describe("Test platform application services command", () => {
     });
   });
 
-  test("List application services in YAML format", async () => {
+  test("List services in JSON format and filter with jq", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services", "-o", "json"]).result;
+    const jqOutput = await $`echo "${output}" | jq 'first.label'`;
+    expect(jqOutput.text()).toBe('"Blockchain networks"\n');
+  });
+
+  test("List services in YAML format", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
-      "application",
+      "list",
       "services",
       "--output",
       "yaml",

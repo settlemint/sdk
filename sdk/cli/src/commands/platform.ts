@@ -3,8 +3,8 @@ import { deleteCommand } from "@/commands/platform/delete";
 import { restartCommand } from "@/commands/platform/restart";
 import { updateCommand } from "@/commands/platform/update";
 import { Command } from "@commander-js/extra-typings";
-import { applicationCommand } from "./platform/application";
 import { configCommand } from "./platform/config";
+import { listCommand } from "./platform/list";
 
 /**
  * Creates and returns the 'platform' command for the SettleMint SDK.
@@ -21,5 +21,5 @@ export function platformCommand(): Command {
     .addCommand(updateCommand())
     .addCommand(deleteCommand())
     .addCommand(restartCommand())
-    .addCommand(applicationCommand());
+    .addCommand(listCommand());
 }
