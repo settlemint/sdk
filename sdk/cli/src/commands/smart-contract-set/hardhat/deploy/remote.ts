@@ -1,10 +1,10 @@
-import { instancePrompt } from "@/commands/connect/instance.prompt";
-import { createExamples } from "@/commands/platform/utils/create-examples";
 import { selectTargetNode } from "@/commands/smart-contract-set/hardhat/utils/select-target-node";
-import { addressPrompt } from "@/commands/smart-contract-set/prompts/address.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { addressPrompt } from "@/prompts/smart-contract-set/address.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getHardhatConfigData } from "@/utils/hardhat-config";
+import { getHardhatConfigData } from "@/utils/smart-contract-set/hardhat-config";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";

@@ -13,7 +13,7 @@ const ALL = "All";
  * @returns Array of selected subgraph names
  * @throws If no subgraph names are available to select from
  */
-export async function subgraphNamePrompt(env: Partial<DotEnv>, accept: boolean | undefined): Promise<string[]> {
+export async function subgraphPrompt(env: Partial<DotEnv>, accept: boolean | undefined): Promise<string[]> {
   const autoAccept = isInCi || !!accept;
   const subgraphNames =
     (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.map((endpoint) => endpoint.split("/").pop()).filter(

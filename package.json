@@ -44,7 +44,7 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.17.3",
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.1.16",
+    "@types/bun": "1.1.17",
     "@types/mustache": "4.2.5",
     "knip": "5.42.1",
     "lefthook": "1.10.7",
@@ -77,8 +77,8 @@
   "overrides": {
     "elliptic": "6.6.1",
     "ws": "8.18.0",
-    "adm-zip": "0.5.2",
+    "adm-zip": "0.5.16",
     "react-is": "19.0.0",
-    "undici": "6.15.0"
+    "undici": "7.2.3"
   }
 }

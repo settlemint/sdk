@@ -1,9 +1,9 @@
-import type { HardhatConfig } from "@/utils/hardhat-config";
+import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { writeEnvSpinner } from "../../connect/write-env.spinner";
 
 /**
  * Prompts the user to select a blockchain address to deploy the smart contract set to.

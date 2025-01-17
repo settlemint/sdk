@@ -1,7 +1,9 @@
 import { rmdir } from "node:fs/promises";
 import { join } from "node:path";
-import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { projectNamePrompt } from "@/prompts/project-name.prompt";
+import { useCasePrompt } from "@/prompts/smart-contract-set/use-case.prompt";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
@@ -11,8 +13,6 @@ import { exists } from "@settlemint/sdk-utils/filesystem";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
 import { cancel, executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { namePrompt } from "../create/name.prompt";
-import { useCasePrompt } from "./prompts/use-case.prompt";
 
 /**
  * Creates and returns the 'create' command for the SettleMint SDK CLI.
@@ -33,7 +33,7 @@ export function createCommand(): Command {
       intro("Creating a new smart contract set");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
-      const name = await namePrompt(env, projectName);
+      const name = await projectNamePrompt(env, projectName);
 
       const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
       const settlemint = createSettleMintClient({

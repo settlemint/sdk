@@ -1,8 +1,8 @@
-import { SETTLEMINT_CLIENT_MAP } from "@/commands/platform/common/resource-type";
+import { SETTLEMINT_CLIENT_MAP } from "@/constants/resource-type";
+import type { ResourceType } from "@/constants/resource-type";
 import type { SettlemintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { note, spinner } from "@settlemint/sdk-utils/terminal";
-import type { ResourceType } from "../common/resource-type";
 
 type Action = "deploy" | "destroy" | "restart";
 

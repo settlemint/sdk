@@ -9,7 +9,7 @@ import {
   getSubgraphConfig,
   getSubgraphYamlConfig,
   updateSubgraphConfig,
-} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
+} from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";

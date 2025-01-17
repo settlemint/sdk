@@ -1,4 +1,4 @@
-import { createExamples } from "@/commands/platform/utils/create-examples";
+import { createExamples } from "@/utils/commands/create-examples";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";

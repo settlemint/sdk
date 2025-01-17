@@ -1,10 +1,10 @@
 import { dirname } from "node:path";
+import { subgraphSetup } from "@/utils/subgraph/setup";
+import { SETTLEMINT_NETWORK } from "@/utils/subgraph/setup";
+import { getSubgraphYamlFile } from "@/utils/subgraph/subgraph-config";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
-import { SETTLEMINT_NETWORK } from "./utils/setup";
-import { subgraphSetup } from "./utils/setup";
-import { getSubgraphYamlFile } from "./utils/subgraph-config";
 
 export function subgraphBuildCommand() {
   return new Command("build").description("Build the subgraph").action(async () => {

@@ -1,7 +1,7 @@
 import { rm } from "node:fs/promises";
-import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
-import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { missingApplication } from "@/error/missing-config-error";
+import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
@@ -9,7 +9,7 @@ import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
 import { sanitizeName } from "./sanitize-name";
-import { getSubgraphYamlConfig } from "./subgraph-config";
+import { getSubgraphYamlConfig, isGenerated, updateSubgraphYamlConfig } from "./subgraph-config";
 
 export const SETTLEMINT_NETWORK = "settlemint";
 
@@ -95,7 +95,9 @@ export async function getTheGraphMiddleware({
   if (!env.SETTLEMINT_APPLICATION) {
     return missingApplication();
   }
-  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION);
+  const middlewares = await serviceSpinner("middleware", () =>
+    settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!),
+  );
   return theGraphPrompt({
     env,
     middlewares,

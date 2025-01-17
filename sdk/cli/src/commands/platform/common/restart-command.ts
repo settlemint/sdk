@@ -1,15 +1,15 @@
-import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import type { ResourceType } from "@/constants/resource-type";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
+import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { createExamples } from "../utils/create-examples";
-import type { ResourceType } from "./resource-type";
 
 /**
  * Creates a command for restarting resources in the SettleMint platform.

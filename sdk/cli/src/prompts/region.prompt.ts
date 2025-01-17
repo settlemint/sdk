@@ -1,7 +1,7 @@
+import { getRegionId } from "@/utils/cluster-region";
 import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";
-import { getRegionId } from "../utils/cluster-region";
 
 /**
  * Prompts the user to select a deployment region or validates a provided one
