@@ -4,7 +4,7 @@ import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { cancel, note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function selectTargetNode({
@@ -65,5 +65,6 @@ export async function selectTargetNode({
     serviceNotRunningError("blockchain node", node.status);
   }
 
+  note(`Using blockchain node ${node.uniqueName}`);
   return node;
 }

@@ -2,7 +2,7 @@ import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { cancel, note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -58,6 +58,6 @@ export async function addressPrompt({
       SETTLEMINT_SMART_CONTRACT_ADDRESS: address,
     });
   }
-
+  note(`Deploying from ${address}`);
   return address;
 }
