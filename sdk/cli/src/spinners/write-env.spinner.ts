@@ -26,7 +26,6 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Prom
         SETTLEMINT_HASURA_ADMIN_SECRET: env.SETTLEMINT_HASURA_ADMIN_SECRET,
         SETTLEMINT_MINIO_SECRET_KEY: env.SETTLEMINT_MINIO_SECRET_KEY,
         SETTLEMINT_HASURA_DATABASE_URL: env.SETTLEMINT_HASURA_DATABASE_URL,
-        ...(isLocalOrbstack(env.SETTLEMINT_INSTANCE) ? { NODE_TLS_REJECT_UNAUTHORIZED: "0" } : {}),
       };
       await writeEnv({
         prod,

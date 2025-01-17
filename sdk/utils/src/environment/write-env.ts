@@ -68,7 +68,15 @@ export async function writeEnv({
         currentEnv = {};
       }
 
-      const mergedEnv = deepmerge(pruneCurrentEnv(currentEnv, env), env);
+      let mergedEnv = deepmerge(pruneCurrentEnv(currentEnv, env), env);
+
+      if (isLocalOrbstackInstance(env.SETTLEMINT_INSTANCE)) {
+        mergedEnv = {
+          ...mergedEnv,
+          NODE_TLS_REJECT_UNAUTHORIZED: "0",
+        };
+      }
+
       await writeFile(envFile, stringify(mergedEnv));
     }),
   );
@@ -123,4 +131,17 @@ function pruneCurrentEnv(currentEnv: Record<string, unknown>, env: Partial<DotEn
       return true;
     }),
   );
+}
+
+function isLocalOrbstackInstance(instance?: string): boolean {
+  if (!instance) {
+    return false;
+  }
+
+  try {
+    const url = new URL(instance);
+    return url.hostname === "console.k8s.orb.local";
+  } catch (error) {
+    return false;
+  }
 }
