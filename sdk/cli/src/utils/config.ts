@@ -15,7 +15,6 @@ interface InstanceConfig {
 
 interface Config {
   instances: Record<string, InstanceConfig>;
-  defaultInstance?: string;
 }
 
 /**
@@ -66,11 +65,6 @@ export async function storeCredentials(token: string, instance: string): Promise
     lastUsed: new Date().toISOString(),
   };
 
-  // If this is the first instance or there's no default, set it as default
-  if (!config.defaultInstance || Object.keys(config.instances).length === 1) {
-    config.defaultInstance = instance;
-  }
-
   await writeConfig(config);
 }
 
@@ -107,26 +101,6 @@ export async function getInstances(): Promise<string[]> {
 }
 
 /**
- * Gets the default instance if one is set
- */
-export async function getDefaultInstance(): Promise<string | undefined> {
-  const config = await readConfig();
-  return config.defaultInstance;
-}
-
-/**
- * Sets the default instance
- */
-export async function setDefaultInstance(instance: string): Promise<void> {
-  const config = await readConfig();
-  if (!config.instances[instance]) {
-    throw new Error(`Instance ${instance} is not configured`);
-  }
-  config.defaultInstance = instance;
-  await writeConfig(config);
-}
-
-/**
  * Removes credentials for a specific instance
  */
 export async function removeCredentials(instance: string): Promise<void> {
@@ -134,11 +108,6 @@ export async function removeCredentials(instance: string): Promise<void> {
 
   // Remove from config file
   delete config.instances[instance];
-
-  // If this was the default instance, clear it
-  if (config.defaultInstance === instance) {
-    config.defaultInstance = undefined;
-  }
 
   await writeConfig(config);
 }

@@ -1,7 +1,9 @@
-import { getDefaultInstance, getInstances, removeCredentials } from "@/utils/config";
+import { getInstances, removeCredentials } from "@/utils/config";
 import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'logout' command for the SettleMint SDK CLI.
@@ -38,13 +40,14 @@ export function logoutCommand(): Command {
       }
 
       // Let user select which instance to logout from
-      const defaultInstance = await getDefaultInstance();
+      const env: Partial<DotEnv> = await loadEnv(false, false);
+      const defaultInstance = env.SETTLEMINT_INSTANCE;
       const instance = await select({
         message: "Select the instance to logout from:",
         choices: instances.map((instance) => ({
           value: instance,
           label: instance,
-          description: instance === defaultInstance ? "(default)" : undefined,
+          description: defaultInstance && instance === defaultInstance ? "(default)" : undefined,
         })),
       });
 
