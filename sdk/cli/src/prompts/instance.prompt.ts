@@ -1,4 +1,4 @@
-import { getDefaultInstance, getInstances } from "@/utils/config";
+import { getInstances } from "@/utils/config";
 import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
@@ -33,8 +33,7 @@ export async function instancePrompt(
     return sanitizeInstanceUrl(defaultInstance);
   }
 
-  const defaultLoginInstance = await getDefaultInstance();
-  const defaultPromptInstance = defaultInstance ?? defaultLoginInstance ?? "https://console.settlemint.com";
+  const defaultPromptInstance = defaultInstance ?? "https://console.settlemint.com";
 
   if (isCi) {
     return sanitizeInstanceUrl(defaultPromptInstance);

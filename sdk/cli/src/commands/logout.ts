@@ -1,4 +1,4 @@
-import { getDefaultInstance, getInstances, removeCredentials } from "@/utils/config";
+import { getInstances, removeCredentials } from "@/utils/config";
 import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
@@ -38,13 +38,11 @@ export function logoutCommand(): Command {
       }
 
       // Let user select which instance to logout from
-      const defaultInstance = await getDefaultInstance();
       const instance = await select({
         message: "Select the instance to logout from:",
         choices: instances.map((instance) => ({
           value: instance,
           label: instance,
-          description: instance === defaultInstance ? "(default)" : undefined,
         })),
       });
 

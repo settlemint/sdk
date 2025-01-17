@@ -2,7 +2,7 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { personalAccessTokenPrompt } from "@/prompts/pat.prompt";
 import { loginSpinner } from "@/spinners/login.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
-import { setDefaultInstance, storeCredentials } from "@/utils/config";
+import { storeCredentials } from "@/utils/config";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -33,10 +33,9 @@ export function loginCommand(): Command {
       ]),
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
-    .option("-d, --default", "Set this instance as the default")
     .option("--token-stdin", "Provide a token using STDIN")
     .option("-i, --instance <instance>", "The instance to login to (defaults to the instance in the .env file)")
-    .action(async ({ acceptDefaults, default: isDefault, tokenStdin, instance }, cmd) => {
+    .action(async ({ acceptDefaults, tokenStdin, instance }, cmd) => {
       intro("Login to your SettleMint account");
       const autoAccept = !!acceptDefaults || !!tokenStdin;
       const env = await loadEnv(false, false);
@@ -83,10 +82,6 @@ export function loginCommand(): Command {
 
       // If we get here, the connection was successful
       await storeCredentials(personalAccessToken, selectedInstance);
-
-      if (isDefault) {
-        await setDefaultInstance(selectedInstance);
-      }
 
       outro("Successfully logged in to SettleMint!");
     });
