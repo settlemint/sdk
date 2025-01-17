@@ -77,16 +77,3 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Prom
     },
   });
 }
-
-const isLocalOrbstack = (instance?: string) => {
-  if (!instance) {
-    return false;
-  }
-
-  try {
-    const url = new URL(instance);
-    return url.hostname === "console.k8s.orb.local";
-  } catch (error) {
-    return false;
-  }
-};
