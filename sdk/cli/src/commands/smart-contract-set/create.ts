@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { projectNamePrompt } from "@/prompts/project-name.prompt";
-import { useCasePrompt } from "@/prompts/use-case.prompt";
+import { useCasePrompt } from "@/prompts/smart-contract-set/use-case.prompt";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";

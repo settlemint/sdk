@@ -1,17 +1,20 @@
 import { dirname } from "node:path";
-import { subgraphNamePrompt } from "@/commands/smart-contract-set/prompts/subgraph-name.prompt";
-import {
-  getSubgraphConfig,
-  getSubgraphYamlConfig,
-  updateSubgraphYamlConfig,
-} from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { subgraphNamePrompt } from "@/prompts/smart-contract-set/subgraph-name.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
+import { getTheGraphMiddleware, getTheGraphNetwork, subgraphSetup } from "@/utils/subgraph/setup";
+import {
+  getSubgraphConfig,
+  getSubgraphYamlConfig,
+  getSubgraphYamlFile,
+  isGenerated,
+  updateSubgraphYamlConfig,
+} from "@/utils/subgraph/subgraph-config";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -19,8 +22,6 @@ import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manag
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
-import { getTheGraphMiddleware, getTheGraphNetwork, subgraphSetup } from "./utils/setup";
-import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
 
 export function subgraphDeployCommand() {
   return new Command("deploy")

@@ -1,49 +1,56 @@
-import select from "@inquirer/select";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { sanitizeName } from "@/utils/subgraph/sanitize-name";
+import input from "@inquirer/input";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import isInCi from "is-in-ci";
-
-const ALL = "All";
 
 /**
- * Prompts the user to select a subgraph name from a list of available subgraphs.
- * If running in CI, returns all available subgraphs without prompting.
+ * Prompts the user for the name of their subgraph.
+ * If a subgraph name is already present in the environment variables,
+ * it will be used. Otherwise, the user will be prompted to enter it.
  *
- * @param env - Environment variables containing subgraph endpoint URLs
- * @returns Array of selected subgraph names
- * @throws If no subgraph names are available to select from
+ * @param defaultName - The name of the subgraph to deploy, if not provided, it will be prompted
+ * @param env - Partial environment variables, potentially containing a pre-configured subgraph name.
+ * @param accept - Whether to automatically accept the existing subgraph name.
+ * @param prod - Whether to write to production environment.
+ * @returns A promise that resolves to the subgraph name.
+ *
+ * @example
+ * const env: Partial<DotEnv> = { SETTLEMINT_SUBGRAPH_NAME: "my-subgraph" };
+ * const subgraphName = await subgraphNamePrompt(env, false, false);
  */
-export async function subgraphNamePrompt(env: Partial<DotEnv>, accept: boolean | undefined): Promise<string[]> {
-  const autoAccept = isInCi || !!accept;
-  const subgraphNames =
-    (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.map((endpoint) => endpoint.split("/").pop()).filter(
-      Boolean,
-    ) as string[]) ?? [];
+export async function subgraphNamePrompt(
+  defaultName: string | undefined,
+  env: Partial<DotEnv>,
+  accept: boolean,
+  prod: boolean | undefined,
+): Promise<string | undefined> {
+  const defaultSubgraphName = defaultName ? sanitizeName(defaultName) : env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME;
 
-  if (autoAccept) {
-    return subgraphNames;
+  if (accept) {
+    if (defaultSubgraphName && env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME !== defaultSubgraphName) {
+      await saveSubgraphName(defaultSubgraphName, env, prod);
+    }
+    return defaultSubgraphName;
   }
 
-  if (subgraphNames.length === 0) {
-    cancel("No subgraphs found");
-  }
-
-  if (subgraphNames.length === 1) {
-    return subgraphNames;
-  }
-
-  const subgraphName = await select({
-    message: "Which The Graph subgraph do you want to generate types for?",
-    choices: [ALL, ...subgraphNames].map((name) => ({
-      name,
-      value: name,
-    })),
-    default: ALL,
+  const subgraphName = await input({
+    message: "What is the name of your subgraph?",
+    default: defaultSubgraphName,
+    required: true,
   });
 
-  if (!subgraphName) {
-    cancel("No subgraph selected");
+  const sanitizedSubgraphName = sanitizeName(subgraphName);
+
+  if (sanitizedSubgraphName !== defaultSubgraphName) {
+    await saveSubgraphName(sanitizedSubgraphName, env, prod);
   }
 
-  return subgraphName === ALL ? subgraphNames : [subgraphName];
+  return sanitizedSubgraphName;
+}
+
+async function saveSubgraphName(sanitizedSubgraphName: string, env: Partial<DotEnv>, prod: boolean | undefined) {
+  await writeEnvSpinner(!!prod, {
+    ...env,
+    SETTLEMINT_THEGRAPH_SUBGRAPH_NAME: sanitizedSubgraphName,
+  });
 }

@@ -1,5 +1,4 @@
 import { rm } from "node:fs/promises";
-import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { missingApplication } from "@/error/missing-config-error";
 import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
@@ -10,7 +9,7 @@ import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
 import { sanitizeName } from "./sanitize-name";
-import { getSubgraphYamlConfig } from "./subgraph-config";
+import { getSubgraphYamlConfig, isGenerated, updateSubgraphYamlConfig } from "./subgraph-config";
 
 export const SETTLEMINT_NETWORK = "settlemint";
 

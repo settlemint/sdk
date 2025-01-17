@@ -2,7 +2,7 @@ import { codegenHasura } from "@/commands/codegen/codegen-hasura";
 import { codegenPortal } from "@/commands/codegen/codegen-portal";
 import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
 import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
-import { subgraphNamePrompt } from "@/prompts/smart-contract-set/subgraph-name.prompt";
+import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { createExamples } from "@/utils/commands/create-examples";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
@@ -49,7 +49,7 @@ export function codegenCommand(): Command {
         const env: DotEnv = await loadEnv(true, !!prod);
 
         if (!Array.isArray(thegraphSubgraphNames)) {
-          thegraphSubgraphNames = await subgraphNamePrompt(env, true);
+          thegraphSubgraphNames = await subgraphPrompt(env, true);
         }
 
         const { hasura, portal, thegraph, blockscout } = await spinner({
