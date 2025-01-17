@@ -1,26 +1,16 @@
-import { afterAll, afterEach, beforeAll, describe, expect, test } from "bun:test";
-import { mkdir, rm } from "node:fs/promises";
-import { join } from "node:path";
+import { afterEach, describe, expect, test } from "bun:test";
+import {} from "node:fs/promises";
 import { $ } from "bun";
 import { parseDocument } from "yaml";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const COMMAND_TEST_SCOPE = __filename;
-const TEST_DIR = join(__dirname, ".test-platform-list");
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
 });
 
 describe("Test platform list services command", () => {
-  beforeAll(async () => {
-    await mkdir(TEST_DIR, { recursive: true });
-  });
-
-  afterAll(async () => {
-    await rm(TEST_DIR, { recursive: true, force: true });
-  });
-
   test("List services", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services"]).result;
     expect(output).toInclude("Blockchain networks");
@@ -75,7 +65,7 @@ describe("Test platform list services command", () => {
       "--output",
       "json",
       ">",
-      `${TEST_DIR}/output.json`,
+      "output.json",
     ]).result;
     const json = JSON.parse(output);
     expect(json).toBeArrayOfSize(7);
@@ -110,7 +100,7 @@ describe("Test platform list services command", () => {
       "--output",
       "yaml",
       ">",
-      `${TEST_DIR}/output.yaml`,
+      "output.yaml",
     ]).result;
     const yaml = parseDocument(output);
     expect(yaml).toBeObject();
