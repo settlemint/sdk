@@ -74,7 +74,7 @@ export function connectCommand(): Command {
         const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, acceptDefaults);
 
         const { middlewares, integrationTools, storages, privateKeys, insights, customDeployments, blockchainNodes } =
-          await servicesSpinner(settlemint, application);
+          await servicesSpinner(settlemint, application.uniqueName);
 
         const blockchainNode = await blockchainNodePrompt({
           env,

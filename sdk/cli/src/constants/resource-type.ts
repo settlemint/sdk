@@ -26,16 +26,24 @@ export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient>
   "application access token": "applicationAccessToken",
 };
 
-export const LABELS_MAP: Record<ResourceType, { singular: string; plural: string }> = {
-  application: { singular: "application", plural: "applications" },
-  workspace: { singular: "workspace", plural: "workspaces" },
-  "blockchain network": { singular: "blockchain network", plural: "blockchain networks" },
-  "blockchain node": { singular: "blockchain node", plural: "blockchain nodes" },
-  "custom deployment": { singular: "custom deployment", plural: "custom deployments" },
-  "private key": { singular: "private key", plural: "private keys" },
-  middleware: { singular: "middleware", plural: "middlewares" },
-  "integration tool": { singular: "integration tool", plural: "integration tools" },
-  storage: { singular: "storage", plural: "storage" },
-  insights: { singular: "insight", plural: "insights" },
-  "application access token": { singular: "application access token", plural: "application access tokens" },
+export const LABELS_MAP: Record<ResourceType, { singular: string; plural: string; command: string }> = {
+  application: { singular: "application", plural: "applications", command: "app" },
+  workspace: { singular: "workspace", plural: "workspaces", command: "workspace" },
+  "blockchain network": {
+    singular: "blockchain network",
+    plural: "blockchain networks",
+    command: "blockchain-network",
+  },
+  "blockchain node": { singular: "blockchain node", plural: "blockchain nodes", command: "blockchain-node" },
+  "custom deployment": { singular: "custom deployment", plural: "custom deployments", command: "custom-deployment" },
+  "private key": { singular: "private key", plural: "private keys", command: "private-key" },
+  middleware: { singular: "middleware", plural: "middlewares", command: "middleware" },
+  "integration tool": { singular: "integration tool", plural: "integration tools", command: "integration-tool" },
+  storage: { singular: "storage", plural: "storage", command: "storage" },
+  insights: { singular: "insight", plural: "insights", command: "insight" },
+  "application access token": {
+    singular: "application access token",
+    plural: "application access tokens",
+    command: "application-access-token",
+  },
 };

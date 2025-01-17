@@ -3,6 +3,7 @@ import { deleteCommand } from "@/commands/platform/delete";
 import { restartCommand } from "@/commands/platform/restart";
 import { updateCommand } from "@/commands/platform/update";
 import { Command } from "@commander-js/extra-typings";
+import { applicationCommand } from "./platform/application";
 import { configCommand } from "./platform/config";
 
 /**
@@ -19,5 +20,6 @@ export function platformCommand(): Command {
     .addCommand(createCommand())
     .addCommand(updateCommand())
     .addCommand(deleteCommand())
-    .addCommand(restartCommand());
+    .addCommand(restartCommand())
+    .addCommand(applicationCommand());
 }
