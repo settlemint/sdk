@@ -508,7 +508,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
 async function login() {
   const { output: loginOutput } = await runCommand(
     COMMAND_TEST_SCOPE,
-    ["login", "--token-stdin", "--accept-defaults", "--default"],
+    ["login", "--token-stdin", "--accept-defaults"],
     {
       stdin: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS,
     },
