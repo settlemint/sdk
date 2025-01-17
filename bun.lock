@@ -35,6 +35,7 @@
       "name": "@settlemint/sdk-cli",
       "version": "0.9.0",
       "dependencies": {
+        "console-table-printer": "2.12.1",
         "hardhat": "2.22.18",
         "tinyexec": "0.3.2",
       },
@@ -553,7 +554,7 @@
 
     "@settlemint/sdk-blockscout": ["@settlemint/sdk-blockscout@workspace:sdk/blockscout", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
 
-    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "dependencies": { "hardhat": "2.22.18", "tinyexec": "0.3.2" }, "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.8.1", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yoctocolors": "2.1.1" }, "bin": { "settlemint": "dist/cli.js" } }],
+    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "dependencies": { "console-table-printer": "2.12.1", "hardhat": "2.22.18", "tinyexec": "0.3.2" }, "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.8.1", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yoctocolors": "2.1.1" }, "bin": { "settlemint": "dist/cli.js" } }],
 
     "@settlemint/sdk-hasura": ["@settlemint/sdk-hasura@workspace:sdk/hasura", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "drizzle-kit": "^0.30", "drizzle-orm": "^0.38", "gql.tada": "^1", "graphql-request": "^7", "pg": "^8", "zod": "^3" }, "devDependencies": { "@types/pg": "^8" } }],
 
@@ -764,6 +765,8 @@
     "confbox": ["confbox@0.1.8", "", {}, "sha512-RMtmw0iFkeR4YV+fUOSucriAQNb9g8zFR52MWCtl+cCZOFRNL6zeB395vPzFhEjjn4fMxXudmELnl/KF/WrK6w=="],
 
     "consola": ["consola@3.4.0", "", {}, "sha512-EiPU8G6dQG0GFHNR8ljnZFki/8a+cQwEQ+7wpxdChl02Q8HXlwEZWD5lqAF8vC2sEC3Tehr8hy7vErz88LHyUA=="],
+
+    "console-table-printer": ["console-table-printer@2.12.1", "", { "dependencies": { "simple-wcswidth": "^1.0.1" } }, "sha512-wKGOQRRvdnd89pCeH96e2Fn4wkbenSP6LMHfjfyNLMbGuHEFbMqQNuxXqd0oXG9caIOQ1FTvc5Uijp9/4jujnQ=="],
 
     "cookie": ["cookie@0.4.2", "", {}, "sha512-aSWTXFzaKWkvHO1Ny/s+ePFpvKsPnjc551iI41v3ny/ow6tBG5Vd+FuqGNhh1LxOmVzOlGUriIlOaokOvhaStA=="],
 
@@ -1400,6 +1403,8 @@
     "signal-exit": ["signal-exit@4.1.0", "", {}, "sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw=="],
 
     "simple-swizzle": ["simple-swizzle@0.2.2", "", { "dependencies": { "is-arrayish": "^0.3.1" } }, "sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg=="],
+
+    "simple-wcswidth": ["simple-wcswidth@1.0.1", "", {}, "sha512-xMO/8eNREtaROt7tJvWJqHBDTMFN4eiQ5I4JRMuilwfnFcV5W9u7RUkueNkdw0jPqGMX36iCywelS5yilTuOxg=="],
 
     "skin-tone": ["skin-tone@2.0.0", "", { "dependencies": { "unicode-emoji-modifier-base": "^1.0.0" } }, "sha512-kUMbT1oBJCpgrnKoSr0o6wPtvRWT9W9UKvGLwfJYO2WuahZRHOpEyL1ckyMGgMWh0UdpmaoFqKKD29WTomNEGA=="],
 

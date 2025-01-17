@@ -13,3 +13,20 @@
 export function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
+
+/**
+ * Converts a camelCase string to a human-readable string.
+ *
+ * @param s - The camelCase string to convert
+ * @returns The human-readable string
+ *
+ * @example
+ * import { camelCaseToWords } from "@settlemint/sdk-utils";
+ *
+ * const words = camelCaseToWords("camelCaseString");
+ * // Returns: "Camel Case String"
+ */
+export function camelCaseToWords(s: string) {
+  const result = s.replace(/([A-Z])/g, " $1");
+  return result.charAt(0).toUpperCase() + result.slice(1);
+}

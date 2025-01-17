@@ -9,11 +9,12 @@ import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import { Command, Option } from "@commander-js/extra-typings";
-import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { type BlockchainNode, type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, list, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { gray, greenBright, redBright, yellowBright } from "yoctocolors";
 
 interface ServiceItem {
   name: string;
@@ -81,10 +82,8 @@ export function servicesCommand() {
 
       const itemsToShow = await getServicesAndMapResults(settlemint, applicationUniqueName, type);
       for (const item of itemsToShow) {
-        list(
-          item.label,
-          item.items.map((m) => `${m.name} (${m.uniqueName})`),
-        );
+        note(item.label);
+        table(item.items);
       }
 
       outro("Application services listed");
@@ -121,7 +120,8 @@ async function getServicesAndMapResults(
         items: serviceItems.map((m) => ({
           name: m.name,
           uniqueName: m.uniqueName,
-          status: m.status,
+          status: colorizeStatus(m.status),
+          url: "TODO",
         })),
       });
     }
@@ -150,4 +150,26 @@ function getItemsForServiceType(services: Awaited<ReturnType<typeof servicesSpin
     default:
       return [];
   }
+}
+
+function colorizeStatus(status: BlockchainNode["status"]) {
+  if (status === "FAILED") {
+    return redBright(status);
+  }
+  if (status === "PAUSED" || status === "AUTO_PAUSED" || status === "PAUSING" || status === "AUTO_PAUSING") {
+    return gray(status);
+  }
+  if (
+    status === "DEPLOYING" ||
+    status === "RESTARTING" ||
+    status === "SCALING" ||
+    status === "WAITING" ||
+    status === "RETRYING" ||
+    status === "RESUMING" ||
+    status === "CONNECTING" ||
+    status === "DESTROYING"
+  ) {
+    return yellowBright(status);
+  }
+  return greenBright(status);
 }
