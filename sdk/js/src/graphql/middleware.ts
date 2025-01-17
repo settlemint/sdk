@@ -16,6 +16,8 @@ const MiddlewareFragment = graphql(`
     name
     status
     healthStatus
+    provider
+    region
     interface
     entityVersion
     serviceUrl

@@ -47,7 +47,6 @@
   "devDependencies": {
     "@types/semver": "7.5.8",
     "@types/node": "22.10.7",
-    "console-table-printer": "2.12.1",
     "is-in-ci": "1.0.0",
     "semver": "7.6.3",
     "slugify": "1.6.6",
@@ -60,7 +59,8 @@
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "get-tsconfig": "4.8.1",
-    "giget": "1.2.3"
+    "giget": "1.2.3",
+    "tty-table": "4.2.3"
   },
   "peerDependencies": {},
   "engines": {

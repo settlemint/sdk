@@ -125,6 +125,8 @@ async function getServicesAndMapResults(
           status: formatStatus(m.status),
           healthSatus: formatHealthStatus(m.healthStatus),
           type: getServiceSubType(m),
+          provider: m.provider,
+          region: m.region,
         })),
       });
     }

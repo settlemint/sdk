@@ -13,6 +13,8 @@ const IntegrationFragment = graphql(`
     name
     status
     healthStatus
+    provider
+    region
     integrationType
     endpoints {
       id

@@ -1,5 +1,6 @@
 import { camelCaseToWords } from "@/string.js";
-import { Table } from "console-table-printer";
+import TTYTable from "tty-table";
+import { whiteBright } from "yoctocolors";
 import { note } from "./note.js";
 
 /**
@@ -25,12 +26,16 @@ export function table(title: string, data: unknown[]): void {
   }
 
   const columnKeys = Object.keys(data[0] as Record<string, unknown>);
-  const table = new Table({
-    columns: columnKeys.map((key) => ({ name: key, title: camelCaseToWords(key), alignment: "left" })),
-  });
-  for (const row of data) {
-    table.addRow(row as Record<string, unknown>);
-  }
-
-  table.printTable();
+  const headers: TTYTable.Header[] = columnKeys.map((key) => ({
+    value: key,
+    alias: whiteBright(camelCaseToWords(key)),
+    headerAlign: "left",
+    headerColor: "",
+    align: "left",
+  }));
+  const config: TTYTable.Options = {
+    compact: true,
+  };
+  const ttyTable = TTYTable(headers, data, config);
+  console.log(ttyTable.render());
 }

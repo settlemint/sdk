@@ -5,7 +5,7 @@ import { getStarterkits, getUseCases } from "@/utils/platform-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, list, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, list, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -33,25 +33,41 @@ export function configCommand() {
       const useCases = getUseCases(platformConfig);
       const starterkits = getStarterkits(platformConfig);
 
-      list("Templates (Starterkits)", starterkits.map((starterkit) => starterkit.id).sort());
+      table(
+        "Templates (Starterkits)",
+        starterkits
+          .map((starterkit) => ({
+            id: starterkit.id,
+            name: starterkit.name,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name)),
+      );
 
-      list("Use cases (Smart Contract Sets)", useCases.map((useCase) => useCase.id).sort());
+      table(
+        "Use cases (Smart Contract Sets)",
+        useCases
+          .map((useCase) => ({
+            id: useCase.id,
+            name: useCase.name,
+          }))
+          .sort((a, b) => a.name.localeCompare(b.name)),
+      );
 
-      list(
+      table(
         "Providers and regions",
         platformConfig.deploymentEngineTargets
           .filter((provider) => !provider.disabled)
-          .sort((a, b) => a.id.localeCompare(b.id))
-          .reduce<Array<string | string[]>>((acc, provider) => {
-            acc.push(provider.id);
-            acc.push(
-              provider.clusters
-                .filter((cluster) => !cluster.disabled)
-                .map((region) => getRegionId(region.id))
-                .sort(),
-            );
-            return acc;
-          }, []),
+          .flatMap((provider) =>
+            provider.clusters
+              .filter((cluster) => !cluster.disabled)
+              .map((region) => ({
+                providerId: provider.id,
+                regionId: getRegionId(region.id),
+                providerName: provider.name,
+                regionName: region.name,
+              })),
+          )
+          .sort((a, b) => a.providerId.localeCompare(b.providerId) || a.regionId.localeCompare(b.regionId)),
       );
 
       list("Pre-deployed abis (Smart Contract Portal)", platformConfig.preDeployedContracts.sort());
