@@ -35,13 +35,15 @@ export async function addressPrompt({
     env.SETTLEMINT_SMART_CONTRACT_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
-  note(`env.SETTLEMINT_SMART_CONTRACT_ADDRESS: '${env.SETTLEMINT_SMART_CONTRACT_ADDRESS}'`);
-  note(`hardhatConfig.networks?.btp?.from: '${hardhatConfig.networks?.btp?.from}'`);
-  note(`possiblePrivateKeys[0]?.address: '${possiblePrivateKeys[0]?.address}'`);
-
   if (defaultPossible) {
-    note(`Deploying from '${defaultAddress}'`);
-    return defaultAddress;
+    if (node.privateKeys?.some((privateKey) => privateKey.address === defaultAddress)) {
+      return defaultAddress;
+    }
+
+    note(
+      `Private key with address '${defaultAddress}' not activated on the node '${node.uniqueName}'.\nPlease select another key or activate this key on the node and try again.`,
+      "warn",
+    );
   }
 
   if (possiblePrivateKeys.length === 0) {
@@ -63,6 +65,6 @@ export async function addressPrompt({
       SETTLEMINT_SMART_CONTRACT_ADDRESS: address,
     });
   }
-  note(`Deploying from '${address}'`);
+
   return address;
 }
