@@ -22,3 +22,18 @@ SETTLEMINT_ACCESS_TOKEN_E2E_TESTS="sm_pat_xxx"
 SETTLEMINT_INSTANCE="https://me.settlemint.be"
 DISABLE_WORKSPACE_DELETE=true
 ```
+
+### Local Orbstack Instance
+
+For local Orbstack instances with self-signed certificates, set `NODE_TLS_REJECT_UNAUTHORIZED=0` during `login` and `connect` commands to disable certificate validation.
+
+The `connect` command adds this to your .env.local file for future use.
+
+Example:
+
+```bash
+NODE_TLS_REJECT_UNAUTHORIZED=0 bun settlemint login
+NODE_TLS_REJECT_UNAUTHORIZED=0 bun settlemint connect
+
+bun settlemint platform create workspace my-workspace # Now NODE_TLS_REJECT_UNAUTHORIZED is used from .env.local
+```
