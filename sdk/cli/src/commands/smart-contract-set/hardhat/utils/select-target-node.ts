@@ -65,11 +65,5 @@ export async function selectTargetNode({
     serviceNotRunningError("blockchain node", node.status);
   }
 
-  if (node.privateKeys?.length === 0) {
-    cancel(
-      `No ECDSA P256 or HSM ECDSA P256 private key is activated on the node '${nodeUniqueName}'. Please activate a private key on this node or specify a different node.`,
-    );
-  }
-
   return node;
 }
