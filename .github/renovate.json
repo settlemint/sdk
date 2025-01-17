@@ -34,7 +34,7 @@
       "datasourceTemplate": "github-releases",
       "depNameTemplate": "bun",
       "packageNameTemplate": "oven-sh/bun",
-      "versioningTemplate": "regex:^bun-v(?<major>\\d+)\\.(?<minor>\\d+)\\.(?<patch>\\d+)$"
+      "versioningTemplate": "semver"
     }
   ],
   "packageRules": [
