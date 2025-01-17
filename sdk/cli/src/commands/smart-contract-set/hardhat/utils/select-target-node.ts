@@ -65,6 +65,6 @@ export async function selectTargetNode({
     serviceNotRunningError("blockchain node", node.status);
   }
 
-  note(`Using blockchain node ${node.uniqueName}`);
+  note(`Using blockchain node '${node.uniqueName}'`);
   return node;
 }

@@ -35,7 +35,12 @@ export async function addressPrompt({
     env.SETTLEMINT_SMART_CONTRACT_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
+  note(`env.SETTLEMINT_SMART_CONTRACT_ADDRESS: '${env.SETTLEMINT_SMART_CONTRACT_ADDRESS}'`);
+  note(`hardhatConfig.networks?.btp?.from: '${hardhatConfig.networks?.btp?.from}'`);
+  note(`possiblePrivateKeys[0]?.address: '${possiblePrivateKeys[0]?.address}'`);
+
   if (defaultPossible) {
+    note(`Deploying from '${defaultAddress}'`);
     return defaultAddress;
   }
 
@@ -58,6 +63,6 @@ export async function addressPrompt({
       SETTLEMINT_SMART_CONTRACT_ADDRESS: address,
     });
   }
-  note(`Deploying from ${address}`);
+  note(`Deploying from '${address}'`);
   return address;
 }
