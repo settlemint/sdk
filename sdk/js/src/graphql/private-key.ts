@@ -15,6 +15,9 @@ const PrivateKeyFragment = graphql(`
     name
     privateKeyType
     status
+    healthStatus
+    provider
+    region
   }
 `);
 

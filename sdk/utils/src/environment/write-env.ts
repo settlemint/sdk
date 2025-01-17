@@ -21,14 +21,22 @@ import { findMonoRepoPackages } from "../filesystem/mono-repo.js";
  * import { writeEnv } from '@settlemint/sdk-utils/environment';
  *
  * // Write development environment variables
- * await writeEnv(false, {
- *   SETTLEMINT_INSTANCE: 'https://dev.example.com'
- * }, false);
+ * await writeEnv({
+ *   prod: false,
+ *   env: {
+ *     SETTLEMINT_INSTANCE: 'https://dev.example.com'
+ *   },
+ *   secrets: false
+ * });
  *
  * // Write production secrets
- * await writeEnv(true, {
- *   SETTLEMINT_ACCESS_TOKEN: 'secret-token'
- * }, true);
+ * await writeEnv({
+ *   prod: true,
+ *   env: {
+ *     SETTLEMINT_ACCESS_TOKEN: 'secret-token'
+ *   },
+ *   secrets: true
+ * });
  */
 export async function writeEnv({
   prod,

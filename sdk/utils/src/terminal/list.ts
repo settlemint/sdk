@@ -25,12 +25,12 @@ export function list(title: string, items: Array<string | string[]>) {
     return items
       .map((item) => {
         if (Array.isArray(item)) {
-          return item.map((subItem) => `  • ${subItem}`).join("\n");
+          return item.map((subItem) => `    • ${subItem}`).join("\n");
         }
-        return `• ${item}`;
+        return `  • ${item}`;
       })
       .join("\n");
   };
 
-  return note(`${title}:\n${formatItems(items)}`);
+  return note(`${title}:\n\n${formatItems(items)}`);
 }

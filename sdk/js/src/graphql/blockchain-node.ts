@@ -13,6 +13,9 @@ const BlockchainNodeFragment = graphql(`
     uniqueName
     name
     status
+    healthStatus
+    provider
+    region
     isEvm
     endpoints {
       id

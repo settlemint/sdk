@@ -28,8 +28,7 @@ import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { list } from "@settlemint/sdk-utils/terminal";
-import { intro, outro } from "@settlemint/sdk-utils/terminal";
+import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -74,7 +73,7 @@ export function connectCommand(): Command {
         const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, acceptDefaults);
 
         const { middlewares, integrationTools, storages, privateKeys, insights, customDeployments, blockchainNodes } =
-          await servicesSpinner(settlemint, application);
+          await servicesSpinner(settlemint, application.uniqueName);
 
         const blockchainNode = await blockchainNodePrompt({
           env,
@@ -124,21 +123,68 @@ export function connectCommand(): Command {
 
         if (acceptDefaults) {
           const selectedServices = [
-            `Workspace: ${workspace.name} (${workspace.uniqueName})`,
-            `Application: ${application.name} (${application.uniqueName})`,
-            blockchainNode &&
-              `Blockchain Network: ${blockchainNode?.blockchainNetwork?.name} (${blockchainNode?.blockchainNetwork?.uniqueName})`,
-            blockchainNode && `Blockchain Node: ${blockchainNode?.name} (${blockchainNode?.uniqueName})`,
-            hasura && `Hasura: ${hasura?.name} (${hasura?.uniqueName})`,
-            thegraph && `TheGraph: ${thegraph?.name} (${thegraph?.uniqueName})`,
-            portal && `Portal: ${portal?.name} (${portal?.uniqueName})`,
-            ipfs && `IPFS: ${ipfs?.name} (${ipfs?.uniqueName})`,
-            minio && `MinIO: ${minio?.name} (${minio?.uniqueName})`,
-            hdPrivateKey && `HD Private Key: ${hdPrivateKey?.name} (${hdPrivateKey?.uniqueName})`,
-            cDeployment && `Custom Deployment: ${cDeployment?.name} (${cDeployment?.uniqueName})`,
-            blockscout && `Blockscout: ${blockscout?.name} (${blockscout?.uniqueName})`,
-          ].filter(Boolean) as string[];
-          list("Selected services", selectedServices);
+            {
+              type: "Workspace",
+              name: workspace.name,
+              uniqueName: workspace.uniqueName,
+            },
+            {
+              type: "Application",
+              name: application.name,
+              uniqueName: application.uniqueName,
+            },
+            blockchainNode && {
+              type: "Blockchain Network",
+              name: blockchainNode.blockchainNetwork?.name,
+              uniqueName: blockchainNode.blockchainNetwork?.uniqueName,
+            },
+            blockchainNode && {
+              type: "Blockchain Node",
+              name: blockchainNode.name,
+              uniqueName: blockchainNode.uniqueName,
+            },
+            hasura && {
+              type: "Hasura",
+              name: hasura.name,
+              uniqueName: hasura.uniqueName,
+            },
+            thegraph && {
+              type: "TheGraph",
+              name: thegraph.name,
+              uniqueName: thegraph.uniqueName,
+            },
+            portal && {
+              type: "Portal",
+              name: portal.name,
+              uniqueName: portal.uniqueName,
+            },
+            ipfs && {
+              type: "IPFS",
+              name: ipfs.name,
+              uniqueName: ipfs.uniqueName,
+            },
+            minio && {
+              type: "MinIO",
+              name: minio.name,
+              uniqueName: minio.uniqueName,
+            },
+            hdPrivateKey && {
+              type: "HD Private Key",
+              name: hdPrivateKey.name,
+              uniqueName: hdPrivateKey.uniqueName,
+            },
+            cDeployment && {
+              type: "Custom Deployment",
+              name: cDeployment.name,
+              uniqueName: cDeployment.uniqueName,
+            },
+            blockscout && {
+              type: "Blockscout",
+              name: blockscout.name,
+              uniqueName: blockscout.uniqueName,
+            },
+          ].filter(Boolean);
+          table("Selected services", selectedServices);
         }
 
         await writeEnvSpinner(!!prod, {

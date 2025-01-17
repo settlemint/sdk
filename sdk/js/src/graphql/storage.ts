@@ -12,6 +12,9 @@ const StorageFragment = graphql(`
     uniqueName
     name
     status
+    healthStatus
+    provider
+    region
     storageProtocol
     endpoints {
       id

@@ -13,3 +13,38 @@
 export function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
 }
+
+/**
+ * Converts a camelCase string to a human-readable string.
+ *
+ * @param s - The camelCase string to convert
+ * @returns The human-readable string
+ *
+ * @example
+ * import { camelCaseToWords } from "@settlemint/sdk-utils";
+ *
+ * const words = camelCaseToWords("camelCaseString");
+ * // Returns: "Camel Case String"
+ */
+export function camelCaseToWords(s: string) {
+  const result = s.replace(/([a-z])([A-Z])/g, "$1 $2");
+  const withSpaces = result.replace(/([A-Z])([a-z])/g, " $1$2");
+  const capitalized = capitalizeFirstLetter(withSpaces);
+  return capitalized.replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Replaces underscores and hyphens with spaces.
+ *
+ * @param s - The string to replace underscores and hyphens with spaces
+ * @returns The input string with underscores and hyphens replaced with spaces
+ *
+ * @example
+ * import { replaceUnderscoresAndHyphensWithSpaces } from "@settlemint/sdk-utils";
+ *
+ * const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
+ * // Returns: "Already Spaced Second"
+ */
+export function replaceUnderscoresAndHyphensWithSpaces(s: string) {
+  return s.replace(/[-_]/g, " ");
+}

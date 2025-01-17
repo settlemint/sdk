@@ -8,6 +8,11 @@ const LoadBalancerFragment = graphql(`
   fragment LoadBalancer on LoadBalancer {
     id
     uniqueName
+    name
+    status
+    healthStatus
+    provider
+    region
   }
 `);
 

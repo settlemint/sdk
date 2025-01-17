@@ -59,7 +59,9 @@
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "get-tsconfig": "4.8.1",
-    "giget": "1.2.3"
+    "giget": "1.2.3",
+    "tty-table": "4.2.3",
+    "yaml": "2.7.0"
   },
   "peerDependencies": {},
   "engines": {

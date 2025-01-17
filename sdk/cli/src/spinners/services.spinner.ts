@@ -1,5 +1,4 @@
 import type {
-  Application,
   BlockchainNetwork,
   BlockchainNode,
   CustomDeployment,
@@ -12,23 +11,28 @@ import type {
 } from "@settlemint/sdk-js";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 
+export type ServiceType =
+  | "blockchain-network"
+  | "blockchain-node"
+  | "custom-deployment"
+  | "insights"
+  | "integration-tool"
+  | "middleware"
+  | "private-key"
+  | "storage";
+
 /**
- * Writes environment variables to .env files with a spinner for visual feedback.
+ * Fetches all services associated with an application from the SettleMint platform.
  *
- * @param env - Partial environment variables to be written.
- * @param environment - The name of the environment (e.g., "development", "production").
- * @returns A promise that resolves when the environment variables are written.
- * @throws If there's an error writing the environment files.
- *
- * @example
- * await writeEnvSpinner(
- *   { SETTLEMINT_INSTANCE: "https://example.com", SETTLEMINT_ACCESS_TOKEN: "token123" },
- *   "development"
- * );
+ * @param settlemint - The SettleMint client instance to use for API calls.
+ * @param applicationUniqueName - The unique name identifier of the application.
+ * @returns A promise that resolves to an object containing arrays of all service types.
+ * @throws If there's an error fetching any of the services.
  */
 export async function servicesSpinner(
   settlemint: SettlemintClient,
-  application: Omit<Application, "workspace">,
+  applicationUniqueName: string,
+  types?: ServiceType[],
 ): Promise<{
   blockchainNetworks: BlockchainNetwork[];
   blockchainNodes: BlockchainNode[];
@@ -43,6 +47,7 @@ export async function servicesSpinner(
     startMessage: "Loading your services",
     stopMessage: "Loaded your services",
     task: async () => {
+      const shouldFetch = (type: ServiceType) => !types || types?.includes(type);
       const [
         blockchainNetworks,
         blockchainNodes,
@@ -53,14 +58,18 @@ export async function servicesSpinner(
         insights,
         customDeployments,
       ] = await Promise.all([
-        settlemint.blockchainNetwork.list(application.uniqueName),
-        settlemint.blockchainNode.list(application.uniqueName),
-        settlemint.middleware.list(application.uniqueName),
-        settlemint.integrationTool.list(application.uniqueName),
-        settlemint.storage.list(application.uniqueName),
-        settlemint.privateKey.list(application.uniqueName),
-        settlemint.insights.list(application.uniqueName),
-        settlemint.customDeployment.list(application.uniqueName),
+        shouldFetch("blockchain-network")
+          ? settlemint.blockchainNetwork.list(applicationUniqueName)
+          : Promise.resolve([]),
+        shouldFetch("blockchain-node") ? settlemint.blockchainNode.list(applicationUniqueName) : Promise.resolve([]),
+        shouldFetch("middleware") ? settlemint.middleware.list(applicationUniqueName) : Promise.resolve([]),
+        shouldFetch("integration-tool") ? settlemint.integrationTool.list(applicationUniqueName) : Promise.resolve([]),
+        shouldFetch("storage") ? settlemint.storage.list(applicationUniqueName) : Promise.resolve([]),
+        shouldFetch("private-key") ? settlemint.privateKey.list(applicationUniqueName) : Promise.resolve([]),
+        shouldFetch("insights") ? settlemint.insights.list(applicationUniqueName) : Promise.resolve([]),
+        shouldFetch("custom-deployment")
+          ? settlemint.customDeployment.list(applicationUniqueName)
+          : Promise.resolve([]),
       ]);
       return {
         blockchainNetworks,
