@@ -27,6 +27,24 @@ export function capitalizeFirstLetter(val: string) {
  * // Returns: "Camel Case String"
  */
 export function camelCaseToWords(s: string) {
-  const result = s.replace(/([A-Z])/g, " $1");
-  return result.charAt(0).toUpperCase() + result.slice(1);
+  const result = s.replace(/([a-z])([A-Z])/g, "$1 $2");
+  const withSpaces = result.replace(/([A-Z])([a-z])/g, " $1$2");
+  const capitalized = capitalizeFirstLetter(withSpaces);
+  return capitalized.replace(/\s+/g, " ").trim();
+}
+
+/**
+ * Replaces underscores and hyphens with spaces.
+ *
+ * @param s - The string to replace underscores and hyphens with spaces
+ * @returns The input string with underscores and hyphens replaced with spaces
+ *
+ * @example
+ * import { replaceUnderscoresAndHyphensWithSpaces } from "@settlemint/sdk-utils";
+ *
+ * const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
+ * // Returns: "Already Spaced Second"
+ */
+export function replaceUnderscoresAndHyphensWithSpaces(s: string) {
+  return s.replace(/[-_]/g, " ");
 }

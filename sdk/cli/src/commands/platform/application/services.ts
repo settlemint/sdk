@@ -10,9 +10,9 @@ import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import { Command, Option } from "@commander-js/extra-typings";
 import { type BlockchainNode, type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { camelCaseToWords, capitalizeFirstLetter, replaceUnderscoresAndHyphensWithSpaces } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, table } from "@settlemint/sdk-utils/terminal";
+import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { gray, greenBright, redBright, yellowBright } from "yoctocolors";
 
@@ -80,10 +80,9 @@ export function servicesCommand() {
       const applicationUniqueName =
         application ?? env.SETTLEMINT_APPLICATION ?? (await selectApplication(settlemint, env));
 
-      const itemsToShow = await getServicesAndMapResults(settlemint, applicationUniqueName, type);
-      for (const item of itemsToShow) {
-        note(item.label);
-        table(item.items);
+      const servicesToShow = await getServicesAndMapResults(settlemint, applicationUniqueName, type);
+      for (const service of servicesToShow) {
+        table(service.label, service.items);
       }
 
       outro("Application services listed");
@@ -115,13 +114,17 @@ async function getServicesAndMapResults(
         { plural: serviceType },
       ];
       const serviceItems = getItemsForServiceType(services, serviceType);
+      if (serviceItems.length === 0 && !types) {
+        continue;
+      }
       results.push({
         label: capitalizeFirstLetter(labels.plural),
         items: serviceItems.map((m) => ({
           name: m.name,
           uniqueName: m.uniqueName,
-          status: colorizeStatus(m.status),
-          url: "TODO",
+          status: formatStatus(m.status),
+          healthSatus: formatHealthStatus(m.healthStatus),
+          type: getServiceSubType(m),
         })),
       });
     }
@@ -152,24 +155,30 @@ function getItemsForServiceType(services: Awaited<ReturnType<typeof servicesSpin
   }
 }
 
-function colorizeStatus(status: BlockchainNode["status"]) {
+function formatStatus(status: BlockchainNode["status"]) {
+  const label = camelCaseToWords(status.toLowerCase());
   if (status === "FAILED") {
-    return redBright(status);
+    return redBright(label);
   }
   if (status === "PAUSED" || status === "AUTO_PAUSED" || status === "PAUSING" || status === "AUTO_PAUSING") {
-    return gray(status);
+    return gray(label);
   }
-  if (
-    status === "DEPLOYING" ||
-    status === "RESTARTING" ||
-    status === "SCALING" ||
-    status === "WAITING" ||
-    status === "RETRYING" ||
-    status === "RESUMING" ||
-    status === "CONNECTING" ||
-    status === "DESTROYING"
-  ) {
-    return yellowBright(status);
+  if (status === "COMPLETED") {
+    return greenBright(label);
   }
-  return greenBright(status);
+  return yellowBright(label);
+}
+
+function formatHealthStatus(healthStatus: BlockchainNode["healthStatus"]) {
+  if (healthStatus === "HEALTHY") {
+    return greenBright("Healthy");
+  }
+  return yellowBright(`Unhealthy (${camelCaseToWords(replaceUnderscoresAndHyphensWithSpaces(healthStatus))})`);
+}
+
+function getServiceSubType(service: object) {
+  if ("__typename" in service && typeof service.__typename === "string") {
+    return camelCaseToWords(service.__typename);
+  }
+  return "Unknown";
 }

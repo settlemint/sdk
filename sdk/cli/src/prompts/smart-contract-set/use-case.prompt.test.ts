@@ -1,5 +1,4 @@
 import { describe, expect, mock, test } from "bun:test";
-import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { list } from "@settlemint/sdk-utils/terminal";
 import { useCasePrompt } from "./use-case.prompt";
@@ -134,9 +133,6 @@ describe("useCasePrompt", () => {
   });
 
   test("excludes feature flagged and starterkit use cases from choices", async () => {
-    const mockSelect = select as unknown as ReturnType<typeof mock>;
-    mockSelect.mockImplementation(() => Promise.resolve("test-1"));
-
     await useCasePrompt(mockPlatformConfig);
 
     expect(mockSelect).toHaveBeenCalledWith({

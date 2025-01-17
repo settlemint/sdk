@@ -1,5 +1,6 @@
 import { camelCaseToWords } from "@/string.js";
 import { Table } from "console-table-printer";
+import { note } from "./note.js";
 
 /**
  * Displays data in a formatted table in the terminal.
@@ -15,10 +16,14 @@ import { Table } from "console-table-printer";
  *
  * table(data);
  */
-export function table(data: unknown[]): void {
+export function table(title: string, data: unknown[]): void {
+  note(title);
+
   if (!data || data.length === 0) {
+    note("No data to display");
     return;
   }
+
   const columnKeys = Object.keys(data[0] as Record<string, unknown>);
   const table = new Table({
     columns: columnKeys.map((key) => ({ name: key, title: camelCaseToWords(key), alignment: "left" })),

@@ -11,6 +11,7 @@ const CustomDeploymentFragment = graphql(`
     uniqueName
     name
     status
+    healthStatus
     endpoints {
       id
       label

@@ -13,6 +13,7 @@ const BlockchainNetworkFragment = graphql(`
     uniqueName
     name
     status
+    healthStatus
     blockchainNodes {
       ... on BlockchainNode {
         id

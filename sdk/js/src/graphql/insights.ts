@@ -14,6 +14,7 @@ const InsightsFragment = graphql(`
     uniqueName
     name
     status
+    healthStatus
     insightsCategory
     endpoints {
       id
