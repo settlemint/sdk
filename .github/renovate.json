@@ -26,6 +26,12 @@
       "depNameTemplate": "@biomejs/biome",
       "fileMatch": ["(^|/)biome.jsonc?$"],
       "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
+    }
+  ],
+  "packageRules": [
+    {
+      "matchFileNames": ["apps/**"],
+      "rangeStrategy": "pin"
     },
     {
       "description": "Enable Bun package manager updates",
@@ -36,12 +42,6 @@
       "extractVersion": "^bun-v(?<version>.*)$",
       "rangeStrategy": "pin",
       "automerge": true
-    }
-  ],
-  "packageRules": [
-    {
-      "matchFileNames": ["apps/**"],
-      "rangeStrategy": "pin"
     }
   ],
   "hostRules": [
