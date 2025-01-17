@@ -1,4 +1,4 @@
-import { isLocalEnv } from "@/utils/is-local-env";
+import { isLocalEnv } from "../utils/is-local-env";
 
 export const WORKSPACE_NAME = "Starter Kit Demo Workspace";
 export const APPLICATION_NAME = "Starter Kit App";
