@@ -42,7 +42,8 @@
   },
   "dependencies": {
     "hardhat": "2.22.18",
-    "tinyexec": "0.3.2"
+    "tinyexec": "0.3.2",
+    "tty-table": "4.2.3"
   },
   "devDependencies": {
     "@types/semver": "7.5.8",
@@ -60,7 +61,6 @@
     "@settlemint/sdk-utils": "workspace:*",
     "get-tsconfig": "4.8.1",
     "giget": "1.2.3",
-    "tty-table": "4.2.3",
     "yaml": "2.7.0"
   },
   "peerDependencies": {},
