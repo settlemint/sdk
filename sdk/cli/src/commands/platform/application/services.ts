@@ -1,6 +1,7 @@
 import { formatServiceSubType } from "@/commands/platform/utils/formatting/format-service-sub-type";
 import { LABELS_MAP } from "@/constants/resource-type";
 import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
+import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { applicationPrompt } from "@/prompts/application.prompt";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { workspacePrompt } from "@/prompts/workspace.prompt";
@@ -9,12 +10,14 @@ import { type ServiceType, servicesSpinner } from "@/spinners/services.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
+import { getClusterServicePlatformUrl } from "@/utils/get-cluster-service-platform-url";
 import { Command, Option } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { stringify } from "yaml";
 import { formatHealthStatus } from "../utils/formatting/format-health-status";
 import { formatStatus } from "../utils/formatting/format-status";
 
@@ -95,20 +98,31 @@ export function servicesCommand() {
       });
 
       const applicationUniqueName =
-        application ?? env.SETTLEMINT_APPLICATION ?? (await selectApplication(settlemint, env));
+        application ??
+        env.SETTLEMINT_APPLICATION ??
+        (printToTerminal ? await selectApplication(settlemint, env) : null);
 
+      if (!applicationUniqueName) {
+        return nothingSelectedError("application");
+      }
+
+      const wide = !printToTerminal || output === "wide";
       const servicesToShow = await getServicesAndMapResults({
+        instance: selectedInstance,
         settlemint,
         applicationUniqueName,
         types: type,
         printToTerminal,
+        wide,
       });
       if (printToTerminal) {
         for (const service of servicesToShow) {
           table(service.label, service.items);
         }
-      } else {
+      } else if (output === "json") {
         console.log(JSON.stringify(servicesToShow, null, 2));
+      } else if (output === "yaml") {
+        console.log(stringify(servicesToShow));
       }
       if (printToTerminal) {
         outro("Application services listed");
@@ -125,16 +139,21 @@ async function selectApplication(settlemint: SettlemintClient, env: Partial<DotE
 }
 
 async function getServicesAndMapResults({
+  instance,
   settlemint,
   applicationUniqueName,
   types,
   printToTerminal,
+  wide,
 }: {
+  instance: string;
   settlemint: SettlemintClient;
   applicationUniqueName: string;
   types?: ServiceType[];
   printToTerminal: boolean;
+  wide: boolean;
 }) {
+  const application = await settlemint.application.read(applicationUniqueName);
   const services = await servicesSpinner(settlemint, applicationUniqueName, types);
   const results: {
     label: string;
@@ -152,15 +171,21 @@ async function getServicesAndMapResults({
       }
       results.push({
         label: capitalizeFirstLetter(labels.plural),
-        items: serviceItems.map((m) => ({
-          name: m.name,
-          uniqueName: m.uniqueName,
-          status: formatStatus(m.status, printToTerminal),
-          healthSatus: formatHealthStatus(m.healthStatus, printToTerminal),
-          type: formatServiceSubType(m, printToTerminal),
-          provider: m.provider,
-          region: m.region,
-        })),
+        items: serviceItems.map((s) => {
+          const basicFields = {
+            name: s.name,
+            uniqueName: s.uniqueName,
+            status: formatStatus(s.status, printToTerminal),
+            healthSatus: formatHealthStatus(s.healthStatus, printToTerminal),
+            type: formatServiceSubType(s, printToTerminal),
+            provider: s.provider,
+            region: s.region,
+          };
+          const additionalFields = {
+            url: getClusterServicePlatformUrl(instance, application, s, serviceType),
+          };
+          return wide ? { ...basicFields, ...additionalFields } : basicFields;
+        }),
       });
     }
   }
