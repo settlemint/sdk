@@ -1,4 +1,6 @@
 import { afterAll, beforeAll, expect } from "bun:test";
+import { isLocalEnv } from "@/utils/is-local-env";
+import { type CommandResult, runCommand } from "@/utils/run-command";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -22,8 +24,6 @@ import {
   PRIVATE_KEY_SMART_CONTRACTS_NAME,
   WORKSPACE_NAME,
 } from "../constants/test-resources";
-import { isLocalEnv } from "../utils/is-local-env";
-import { type CommandResult, runCommand } from "../utils/run-command";
 
 // Needed so it loads the correct environment variables
 // @ts-ignore

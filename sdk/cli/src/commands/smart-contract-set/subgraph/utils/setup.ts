@@ -1,7 +1,8 @@
 import { rm } from "node:fs/promises";
-import { theGraphPrompt } from "@/commands/connect/thegraph.prompt";
 import { isGenerated, updateSubgraphYamlConfig } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { missingApplication } from "@/error/missing-config-error";
+import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
@@ -95,7 +96,9 @@ export async function getTheGraphMiddleware({
   if (!env.SETTLEMINT_APPLICATION) {
     return missingApplication();
   }
-  const middlewares = await settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION);
+  const middlewares = await serviceSpinner("middleware", () =>
+    settlemintClient.middleware.list(env.SETTLEMINT_APPLICATION!),
+  );
   return theGraphPrompt({
     env,
     middlewares,

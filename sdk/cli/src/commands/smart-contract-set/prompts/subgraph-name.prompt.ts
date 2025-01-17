@@ -1,6 +1,6 @@
+import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import input from "@inquirer/input";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { writeEnvSpinner } from "../../connect/write-env.spinner";
 import { sanitizeName } from "../subgraph/utils/sanitize-name";
 
 /**

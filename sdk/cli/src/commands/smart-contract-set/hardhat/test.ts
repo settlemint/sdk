@@ -1,5 +1,5 @@
-import { createExamples } from "@/commands/platform/utils/create-examples";
-import { mapPassthroughOptions } from "@/utils/passthrough-options";
+import { createExamples } from "@/utils/commands/create-examples";
+import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";

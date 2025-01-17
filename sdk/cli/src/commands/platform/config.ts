@@ -1,7 +1,7 @@
-import { instancePrompt } from "@/commands/connect/instance.prompt";
-import { getRegionId } from "@/commands/platform/utils/cluster-region";
-import { getStarterkits, getUseCases } from "@/commands/platform/utils/platform-utils";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { getRegionId } from "@/utils/cluster-region";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
+import { getStarterkits, getUseCases } from "@/utils/platform-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";

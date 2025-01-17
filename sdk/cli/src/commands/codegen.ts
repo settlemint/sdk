@@ -2,7 +2,8 @@ import { codegenHasura } from "@/commands/codegen/codegen-hasura";
 import { codegenPortal } from "@/commands/codegen/codegen-portal";
 import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
 import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
-import { subgraphNamePrompt } from "@/commands/codegen/subgraph-name.prompt";
+import { subgraphNamePrompt } from "@/prompts/smart-contract-set/subgraph-name.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
 import { Command } from "@commander-js/extra-typings";
 import { generateOutput } from "@gql.tada/cli-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -11,7 +12,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
-import { createExamples } from "./platform/utils/create-examples";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.

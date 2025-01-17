@@ -1,7 +1,5 @@
 import { dirname } from "node:path";
-import { instancePrompt } from "@/commands/connect/instance.prompt";
-import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
-import { createExamples } from "@/commands/platform/utils/create-examples";
+import { subgraphNamePrompt } from "@/commands/smart-contract-set/prompts/subgraph-name.prompt";
 import {
   getSubgraphConfig,
   getSubgraphYamlConfig,
@@ -9,6 +7,9 @@ import {
 } from "@/commands/smart-contract-set/subgraph/utils/subgraph-config";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
@@ -18,7 +19,6 @@ import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manag
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
-import { subgraphNamePrompt } from "../prompts/subgraph-name.prompt";
 import { getTheGraphMiddleware, getTheGraphNetwork, subgraphSetup } from "./utils/setup";
 import { getSubgraphYamlFile, isGenerated } from "./utils/subgraph-config";
 

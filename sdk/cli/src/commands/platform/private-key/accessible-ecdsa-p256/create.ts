@@ -1,7 +1,8 @@
-import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
+import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import { getCreateCommand } from "../../common/create-command";
+import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 
 /**
  * Creates and returns the 'private-key' command for the SettleMint SDK.
@@ -30,7 +31,9 @@ export function privateKeyAccessibleCreateCommand() {
               }
               let blockchainNodeUniqueName = blockchainNode;
               if (!blockchainNodeUniqueName) {
-                const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                const blockchainNodes = await serviceSpinner("blockchain node", () =>
+                  settlemint.blockchainNode.list(applicationUniqueName),
+                );
                 const node = await blockchainNodePrompt({
                   env,
                   nodes: blockchainNodes,
