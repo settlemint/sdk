@@ -26,15 +26,6 @@
       "depNameTemplate": "@biomejs/biome",
       "fileMatch": ["(^|/)biome.jsonc?$"],
       "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
-    },
-    {
-      "customType": "regex",
-      "fileMatch": ["package.json"],
-      "matchStrings": ["\"packageManager\":\\s*\"bun@(?<currentValue>[^\"]+)\""],
-      "datasourceTemplate": "github-releases",
-      "depNameTemplate": "bun",
-      "packageNameTemplate": "oven-sh/bun",
-      "versioningTemplate": "semver"
     }
   ],
   "packageRules": [
