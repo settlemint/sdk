@@ -56,7 +56,7 @@ export async function selectTargetNode({
     node = await settlemint.blockchainNode.read(nodeUniqueName);
     if (!node.isEvm) {
       cancel(
-        "The specified blockchain node is not an EVM blockchain node. Please specify an EVM blockchain node to continue.",
+        `The specified blockchain node '${nodeUniqueName}' is not an EVM blockchain node. Please specify an EVM blockchain node to continue.`,
       );
     }
   }

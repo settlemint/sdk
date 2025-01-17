@@ -2,7 +2,7 @@ import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { cancel, note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -35,12 +35,21 @@ export async function addressPrompt({
     env.SETTLEMINT_SMART_CONTRACT_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
-  if (defaultPossible) {
-    return defaultAddress;
+  if (!node.privateKeys || node.privateKeys.length === 0) {
+    cancel(
+      `No ECDSA P256 or HSM ECDSA P256 private key is activated on the node '${node.uniqueName}'. Please activate a private key on this node or specify a different node.`,
+    );
   }
 
-  if (possiblePrivateKeys.length === 0) {
-    cancel("No ECDSA P256 or HSM ECDSA P256 private key is activated on the node to sign the transaction.");
+  if (defaultPossible) {
+    if (node.privateKeys.some((privateKey) => privateKey.address?.toLowerCase() === defaultAddress?.toLowerCase())) {
+      return defaultAddress;
+    }
+
+    note(
+      `Private key with address '${defaultAddress}' not activated on the node '${node.uniqueName}'.\nPlease select another key or activate this key on the node and try again.`,
+      "warn",
+    );
   }
 
   const address = await select({
