@@ -26,22 +26,21 @@
       "depNameTemplate": "@biomejs/biome",
       "fileMatch": ["(^|/)biome.jsonc?$"],
       "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
+    },
+    {
+      "customType": "regex",
+      "fileMatch": ["package.json"],
+      "matchStrings": ["\"packageManager\":\\s*\"bun@(?<currentValue>[^\"]+)\""],
+      "datasourceTemplate": "github-releases",
+      "depNameTemplate": "bun",
+      "packageNameTemplate": "oven-sh/bun",
+      "extractVersion": "^bun-v(?<version>.*)$"
     }
   ],
   "packageRules": [
     {
       "matchFileNames": ["apps/**"],
       "rangeStrategy": "pin"
-    },
-    {
-      "description": "Enable Bun package manager updates",
-      "matchPackageNames": ["bun"],
-      "matchDepTypes": ["packageManager"],
-      "datasourceTemplate": "github-releases",
-      "packageNameTemplate": "oven-sh/bun",
-      "extractVersion": "^bun-v(?<version>.*)$",
-      "rangeStrategy": "pin",
-      "automerge": true
     }
   ],
   "hostRules": [
