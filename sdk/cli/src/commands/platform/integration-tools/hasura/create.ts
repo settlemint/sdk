@@ -7,7 +7,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 /**
  * Creates and returns the 'hasura' integration tool command for the SettleMint SDK.
  * This command creates a new Hasura integration in the SettleMint platform.
- * It requires an application ID.
  */
 export function hasuraIntegrationCreateCommand() {
   return getCreateCommand({

@@ -1,10 +1,9 @@
+import { getDeleteCommand } from "@/commands/platform/common/delete-command";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { getDeleteCommand } from "../common/delete-command";
 
 /**
  * Creates and returns the 'application' command for the SettleMint SDK.
  * This command deletes an application from the SettleMint platform.
- * It takes an application ID or 'default' to delete the default application.
  */
 export function applicationDeleteCommand() {
   return getDeleteCommand({

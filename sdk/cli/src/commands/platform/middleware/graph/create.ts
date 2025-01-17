@@ -1,15 +1,15 @@
-import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'graph' middleware command for the SettleMint SDK.
  * This command creates a new graph middleware in the SettleMint platform.
- * It requires an application ID and smart contract set ID.
  */
 export function graphMiddlewareCreateCommand() {
   return getCreateCommand({
@@ -40,7 +40,9 @@ export function graphMiddlewareCreateCommand() {
                 }
                 let blockchainNodeUniqueName = blockchainNode;
                 if (!blockchainNodeUniqueName) {
-                  const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                  const blockchainNodes = await serviceSpinner("blockchain node", () =>
+                    settlemint.blockchainNode.list(applicationUniqueName),
+                  );
                   const node = await blockchainNodePrompt({
                     env,
                     nodes: blockchainNodes,

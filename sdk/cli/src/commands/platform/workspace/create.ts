@@ -1,11 +1,10 @@
+import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { getCreateCommand } from "../common/create-command";
 
 /**
  * Creates and returns the 'workspace' command for the SettleMint SDK.
  * This command creates a new workspace in the SettleMint platform.
- * It takes a name and optional description for the workspace.
  */
 export function workspaceCreateCommand() {
   return getCreateCommand({

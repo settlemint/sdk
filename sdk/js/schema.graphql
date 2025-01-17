@@ -21202,6 +21202,7 @@ enum SmartContractLanguage {
   CHAINCODE
   CORDAPP
   SOLIDITY
+  STARTERKIT
   TEZOS
 }
 
@@ -21619,7 +21620,7 @@ input SmartContractSetScopeInputType {
   values: [ID!]!
 }
 
-union SmartContractSetType = CordappSmartContractSet | FabricSmartContractSet | SoliditySmartContractSet | TezosSmartContractSet
+union SmartContractSetType = CordappSmartContractSet | FabricSmartContractSet | SoliditySmartContractSet | StarterKitSmartContractSet | TezosSmartContractSet
 
 """Collection of smart contract sets"""
 type SmartContractSetsDto {
@@ -22074,6 +22075,149 @@ type SoneiumMinatoBlockchainNode implements AbstractClusterService & AbstractEnt
   """Date and time when the entity was last updated"""
   updatedAt: DateTime!
   upgradable: Boolean!
+  user: User!
+
+  """UUID of the service"""
+  uuid: String!
+
+  """Version of the service"""
+  version: String
+}
+
+type StarterKitSmartContractSet implements AbstractClusterService & AbstractEntity & SmartContractSet {
+  """Advanced deployment configuration"""
+  advancedDeploymentConfig: AdvancedDeploymentConfig
+
+  """Associated application"""
+  application: Application!
+  applicationDashBoardDependantsTree: DependantsTree!
+
+  """The blockchain node associated with this smart contract set"""
+  blockchainNode: BlockchainNodeType
+
+  """Date and time when the entity was created"""
+  createdAt: DateTime!
+
+  """Credentials of cluster service"""
+  credentials: [ClusterServiceCredentials!]!
+
+  """Date and time when the entity was deleted, if applicable"""
+  deletedAt: DateTime
+
+  """Dependant services"""
+  dependants: [Dependant!]!
+  dependantsTree: DependantsTree!
+
+  """Dependencies of the service"""
+  dependencies: [Dependency!]!
+
+  """Destroy job identifier"""
+  destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
+  """Disk space in GB"""
+  diskSpace: Int
+
+  """Endpoints of cluster service"""
+  endpoints: [ClusterServiceEndpoints!]!
+
+  """Entity version"""
+  entityVersion: Float
+
+  """Date when the service failed"""
+  failedAt: DateTime!
+
+  """Health status of the service"""
+  healthStatus: ClusterServiceHealthStatus!
+
+  """Unique identifier of the entity"""
+  id: ID!
+
+  """Indicates if the pod is handling traffic"""
+  isPodHandlingTraffic: Boolean!
+
+  """Indicates if the pod is running"""
+  isPodRunning: Boolean!
+  jobLogs: [String!]!
+  jobProgress: Float!
+
+  """The language of the smart contract set"""
+  language: SmartContractLanguage!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
+  latestVersion: String!
+
+  """CPU limit in millicores"""
+  limitCpu: Int
+
+  """Memory limit in MB"""
+  limitMemory: Int
+
+  """Indicates if the service is locked"""
+  locked: Boolean!
+  metrics: Metric!
+
+  """Name of the service"""
+  name: String!
+  namespace: String!
+
+  """Password for the service"""
+  password: String!
+
+  """Date when the service was paused"""
+  pausedAt: DateTime
+
+  """Product name of the service"""
+  productName: String!
+
+  """Provider of the service"""
+  provider: String!
+
+  """Region of the service"""
+  region: String!
+  requestLogs: [RequestLog!]!
+
+  """CPU requests in millicores"""
+  requestsCpu: Int
+
+  """Memory requests in MB"""
+  requestsMemory: Int
+
+  """Resource status of the service"""
+  resourceStatus: ClusterServiceResourceStatus!
+
+  """Date when the service was scaled"""
+  scaledAt: DateTime
+  serviceLogs: [String!]!
+  serviceUrl: String!
+
+  """Size of the service"""
+  size: ClusterServiceSize!
+
+  """Slug of the service"""
+  slug: String!
+
+  """Deployment status of the service"""
+  status: ClusterServiceDeploymentStatus!
+
+  """Type of the service"""
+  type: ClusterServiceType!
+
+  """Unique name of the service"""
+  uniqueName: String!
+
+  """Up job identifier"""
+  upJob: String
+
+  """Date and time when the entity was last updated"""
+  updatedAt: DateTime!
+  upgradable: Boolean!
+
+  """The use case of the smart contract set"""
+  useCase: String!
   user: User!
 
   """UUID of the service"""

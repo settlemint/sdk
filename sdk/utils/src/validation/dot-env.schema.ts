@@ -14,7 +14,7 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_INSTANCE: UrlSchema.default("https://console.settlemint.com"),
   /** Application access token for authenticating with SettleMint services */
   SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema.optional(),
-  /** Personal access token for authenticating with SettleMint services */
+  /** @internal */
   SETTLEMINT_PERSONAL_ACCESS_TOKEN: PersonalAccessTokenSchema.optional(),
   /** Unique name of the workspace */
   SETTLEMINT_WORKSPACE: UniqueNameSchema.optional(),

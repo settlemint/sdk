@@ -1,15 +1,15 @@
-import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'blockscout' insights command for the SettleMint SDK.
  * This command creates a new Blockscout insights service in the SettleMint platform.
- * It requires an application ID.
  */
 export function blockscoutInsightsCreateCommand() {
   return getCreateCommand({
@@ -50,7 +50,9 @@ export function blockscoutInsightsCreateCommand() {
                   : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER);
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
-                  const blockchainNodes = await settlemint.blockchainNode.list(applicationUniqueName);
+                  const blockchainNodes = await serviceSpinner("blockchain node", () =>
+                    settlemint.blockchainNode.list(applicationUniqueName),
+                  );
                   const node = await blockchainNodePrompt({
                     env,
                     nodes: blockchainNodes,

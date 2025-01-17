@@ -3,7 +3,6 @@ import { getDeleteCommand } from "@/commands/platform/common/delete-command";
 /**
  * Creates and returns the 'workspace' command for the SettleMint SDK.
  * This command creates a new workspace in the SettleMint platform.
- * It takes a name and optional description for the workspace.
  */
 export function workspaceDeleteCommand() {
   return getDeleteCommand({

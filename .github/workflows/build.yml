@@ -7,8 +7,8 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
+  release:
+    types: [published]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -60,7 +60,7 @@ jobs:
       - name: Setup Bun
         uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
         with:
-          bun-version-file: package.json
+          bun-version-file: .bun-version
 
       - name: Install Node.js
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4
@@ -144,9 +144,8 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' && env.TAG == 'main' }}
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
         with:
-          commit_message: "chore: update docs"
+          commit_message: "chore: update docs [skip ci]"
           branch: main
-          push_options: --push-option=ci.skip
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
       - name: Run tests and checks

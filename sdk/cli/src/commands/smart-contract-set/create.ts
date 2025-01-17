@@ -1,8 +1,10 @@
 import { rmdir } from "node:fs/promises";
 import { join } from "node:path";
-import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { projectNamePrompt } from "@/prompts/project-name.prompt";
+import { useCasePrompt } from "@/prompts/smart-contract-set/use-case.prompt";
+import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -11,8 +13,6 @@ import { exists } from "@settlemint/sdk-utils/filesystem";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
 import { cancel, executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { namePrompt } from "../create/name.prompt";
-import { useCasePrompt } from "./prompts/use-case.prompt";
 
 /**
  * Creates and returns the 'create' command for the SettleMint SDK CLI.
@@ -28,22 +28,18 @@ export function createCommand(): Command {
       "--use-case <useCase>",
       "Use case for the smart contract set (run `settlemint platform config` to see available use cases)",
     )
-    .option("--prod", "Connect to your production environment")
-    .action(async ({ projectName, useCase, prod }) => {
+    .option("-i, --instance <instance>", "The instance to connect to")
+    .action(async ({ projectName, useCase, instance }) => {
       intro("Creating a new smart contract set");
 
-      const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-      const name = await namePrompt(env, projectName);
+      const env: Partial<DotEnv> = await loadEnv(false, false);
+      const name = await projectNamePrompt(env, projectName);
 
-      const instance = await instancePrompt(env, true);
-      const accessToken = await getApplicationOrPersonalAccessToken({
-        env,
-        instance,
-        prefer: "personal",
-      });
+      const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
       const settlemint = createSettleMintClient({
-        accessToken,
-        instance,
+        instance: selectedInstance,
+        accessToken: "",
+        anonymous: true,
       });
 
       const platformConfig = await settlemint.platform.config();

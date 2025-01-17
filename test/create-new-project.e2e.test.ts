@@ -5,10 +5,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { $ } from "bun";
-import {
-  getSubgraphYamlConfig,
-  updateSubgraphYamlConfig,
-} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
+import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import {
   registerLinkedDependencies,
   unlinkLinkedDependencies,
@@ -17,7 +14,8 @@ import {
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
-const TEMPLATE_NAME = "@settlemint/starterkit-asset-tokenization";
+const TEMPLATE_NAME = "starterkit-asset-tokenization";
+const SUBGRAPH_NAMES = ["starterkits", "starterkit-asset-tokenization"];
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -175,24 +173,25 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("subgraph - Deploy subgraphs", async () => {
-    const config = await getSubgraphYamlConfig(subgraphDir);
-    for (const datasource of config.dataSources) {
+    for (const subgraphName of SUBGRAPH_NAMES) {
       const { output } = await runCommand(
         COMMAND_TEST_SCOPE,
-        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", datasource.name],
+        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", subgraphName],
         {
           cwd: subgraphDir,
         },
       ).result;
       expect(output).toInclude("Build completed");
     }
+
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
-    for (const datasource of config.dataSources) {
+
+    for (const subgraphName of SUBGRAPH_NAMES) {
       const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
-        endpoint.endsWith(`/subgraphs/name/${datasource.name.toLowerCase()}`),
+        endpoint.endsWith(`/subgraphs/name/${subgraphName}`),
       );
       if (!subgraphDeployed) {
-        expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(datasource.name.toLowerCase());
+        expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(subgraphName);
       } else {
         expect(subgraphDeployed).toBeTrue();
       }
@@ -200,9 +199,13 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("dApp - Codegen starter kit", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["codegen", "--thegraph-subgraph-names", "starterkits"], {
-      cwd: dAppDir,
-    }).result;
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["codegen", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
+      {
+        cwd: dAppDir,
+      },
+    ).result;
 
     expect(output).toInclude("Generating Hasura resources");
     expect(output).toInclude("Generating Minio resources");

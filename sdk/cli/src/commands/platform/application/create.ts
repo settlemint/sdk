@@ -1,12 +1,12 @@
-import { workspacePrompt } from "@/commands/connect/workspace.prompt";
+import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { workspacePrompt } from "@/prompts/workspace.prompt";
+import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { getCreateCommand } from "../common/create-command";
 
 /**
  * Creates and returns the 'application' command for the SettleMint SDK.
  * This command creates a new application in a specified workspace.
- * It takes a workspace name and optional flags.
  */
 export function applicationCreateCommand() {
   return getCreateCommand({
@@ -28,7 +28,7 @@ export function applicationCreateCommand() {
             async (settlemint, env, showSpinner) => {
               let workspaceUniqueName = workspace;
               if (!workspaceUniqueName) {
-                const workspaces = await settlemint.workspace.list();
+                const workspaces = await workspaceSpinner(settlemint);
                 const workspace = await workspacePrompt(env, workspaces, acceptDefaults);
                 if (!workspace) {
                   return nothingSelectedError("workspace");

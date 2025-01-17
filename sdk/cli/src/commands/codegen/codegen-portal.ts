@@ -1,4 +1,4 @@
-import { writeTemplate } from "@/commands/codegen/write-template";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";

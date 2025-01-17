@@ -9,12 +9,13 @@ import {
   getSubgraphConfig,
   getSubgraphYamlConfig,
   updateSubgraphConfig,
-} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
+} from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";
 const COMMAND_TEST_SCOPE = __filename;
 const USE_CASE = "solidity-diamond-bond";
+const SUBGRAPH_NAME = "diamond-bond";
 
 const projectDir = join(__dirname, PROJECT_NAME);
 
@@ -123,26 +124,24 @@ describe("Build and deploy a subgraph using the SDK", () => {
       },
       projectDir,
     );
-    for (const datasource of config!.datasources) {
-      const { output } = await runCommand(
-        COMMAND_TEST_SCOPE,
-        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", datasource.name],
-        {
-          cwd: projectDir,
-        },
-      ).result;
-      expect(output).toInclude("Build completed");
-    }
+
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", SUBGRAPH_NAME],
+      {
+        cwd: projectDir,
+      },
+    ).result;
+    expect(output).toInclude("Build completed");
+
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
-    for (const datasource of config!.datasources) {
-      const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
-        endpoint.endsWith(`/subgraphs/name/${datasource.name.toLowerCase()}`),
-      );
-      if (!subgraphDeployed) {
-        expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(datasource.name.toLowerCase());
-      } else {
-        expect(subgraphDeployed).toBeTrue();
-      }
+    const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
+      endpoint.endsWith(`/subgraphs/name/${SUBGRAPH_NAME}`),
+    );
+    if (!subgraphDeployed) {
+      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(SUBGRAPH_NAME);
+    } else {
+      expect(subgraphDeployed).toBeTrue();
     }
   });
 });

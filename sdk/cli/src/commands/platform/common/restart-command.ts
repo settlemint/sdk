@@ -1,15 +1,15 @@
-import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import type { ResourceType } from "@/constants/resource-type";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
+import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { createExamples } from "../utils/create-examples";
-import type { ResourceType } from "./resource-type";
 
 /**
  * Creates a command for restarting resources in the SettleMint platform.
@@ -18,7 +18,7 @@ import type { ResourceType } from "./resource-type";
  * @param options.name - The name of the command
  * @param options.type - The type of resource to restart
  * @param options.alias - Command alias (shorthand)
- * @param options.envKey - Environment variable key for the resource ID
+ * @param options.envKey - Environment variable key for the resource unique name
  * @param options.restartFunction - Function that performs the actual restart operation on the platform
  * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
  * @returns A configured Commander command for restarting the specified resource type
@@ -44,7 +44,7 @@ export function getRestartCommand({
   return new Command(commandName)
     .alias(alias)
     .description(
-      `Restart a ${type} in the SettleMint platform. Provide the ${type} ID or use 'default' to restart the default ${type} from your .env file.`,
+      `Restart a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to restart the default ${type} from your .env file.`,
     )
     .usage(
       createExamples([

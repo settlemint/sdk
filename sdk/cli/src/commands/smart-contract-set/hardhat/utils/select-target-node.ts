@@ -1,7 +1,8 @@
-import { blockchainNodePrompt } from "@/commands/connect/blockchain-node.prompt";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
+import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -23,7 +24,9 @@ export async function selectTargetNode({
     if (!env.SETTLEMINT_APPLICATION) {
       return missingApplication();
     }
-    const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION);
+    const nodes = await serviceSpinner("blockchain node", () =>
+      settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!),
+    );
     const evmNodes = nodes.filter((node) => node.isEvm);
     if (evmNodes.length === 0) {
       cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");

@@ -50,4 +50,28 @@ describe("retryWhenFailed", () => {
     expect(fn).toHaveBeenCalledTimes(3);
     expect(stopOnError).toHaveBeenCalledTimes(2);
   });
+
+  it(
+    "should retry with exponential backoff and not exceed 30 seconds",
+    async () => {
+      const start = Date.now();
+      let attempt = 0;
+      const fn = mock(() => {
+        const elapsed = Date.now() - start;
+        attempt += 1;
+        // With initial sleep of 1000ms, exponential backoff should result in delays of:
+        // 1st retry: ~1000ms * 2^1 * jitter = 0-2000ms
+        // 2nd retry: ~1000ms * 2^2 * jitter = 0-4000ms
+        // 3rd retry: ~1000ms * 2^3 * jitter = 0-8000ms
+        // 4th retry: ~1000ms * 2^4 * jitter = 0-16000ms
+        // 5th retry: ~1000ms * 2^5 * jitter = 0-32000ms
+        expect(elapsed).toBeLessThan(2000 * 2 ** attempt);
+        return Promise.reject(new Error("fail"));
+      });
+      expect(retryWhenFailed(fn)).rejects.toThrow();
+      expect(fn).toHaveBeenCalledTimes(5);
+      expect(Date.now() - start).toBeLessThan(30_000);
+    },
+    { timeout: 30_000 },
+  );
 });

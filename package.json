@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -44,9 +44,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.17.3",
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.1.16",
+    "@types/bun": "1.1.17",
     "@types/mustache": "4.2.5",
-    "knip": "5.42.0",
+    "knip": "5.42.1",
     "lefthook": "1.10.7",
     "mustache": "4.2.0",
     "publint": "0.3.2",
@@ -59,7 +59,7 @@
     "typescript": "5.7.3"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "packageManager": "bun@1.1.43",
   "workspaces": ["sdk/*", "apps/*"],
@@ -77,6 +77,8 @@
   "overrides": {
     "elliptic": "6.6.1",
     "ws": "8.18.0",
-    "react-is": "19.0.0"
+    "adm-zip": "0.5.16",
+    "react-is": "19.0.0",
+    "undici": "7.2.3"
   }
 }

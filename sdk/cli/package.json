@@ -41,10 +41,12 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "hardhat": "2.22.18"
+    "hardhat": "2.22.18",
+    "tinyexec": "0.3.2"
   },
   "devDependencies": {
     "@types/semver": "7.5.8",
+    "@types/node": "22.10.7",
     "is-in-ci": "1.0.0",
     "semver": "7.6.3",
     "slugify": "1.6.6",

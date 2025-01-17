@@ -1,5 +1,5 @@
-import { instancePrompt } from "@/commands/connect/instance.prompt";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import { instancePrompt } from "@/prompts/instance.prompt";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
