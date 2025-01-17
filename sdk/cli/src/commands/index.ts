@@ -1,6 +1,6 @@
 import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { ascii, cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../../package.json";
 import { codegenCommand } from "./codegen";
 import { connectCommand } from "./connect";
@@ -30,17 +30,29 @@ function getCommandPath(command: Command): string {
   return parts.join(" ");
 }
 
+function isLeafCommand(command: Command): boolean {
+  return command.commands.length === 0;
+}
+
+function isJsonOrYamlOutput(command: Command): boolean {
+  const options = command.opts() as { output?: string };
+  return typeof options.output === "string" && (options.output === "json" || options.output === "yaml");
+}
+
 function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand) {
   const extendedCmd = cmd as ExtendedCommand;
   extendedCmd
     .hook("preAction", async (thisCommand) => {
+      if (isLeafCommand(thisCommand) && !isJsonOrYamlOutput(thisCommand)) {
+        ascii();
+      }
       const commandPath = getCommandPath(thisCommand);
       rootCmd._lastCommand = thisCommand as ExtendedCommand;
       rootCmd._lastCommand._commandPath = commandPath;
     })
     .hook("postAction", async (thisCommand) => {
       // Only send telemetry for leaf commands (commands without subcommands)
-      if (thisCommand.commands.length === 0) {
+      if (isLeafCommand(thisCommand)) {
         const commandPath = getCommandPath(thisCommand);
         if (commandPath) {
           await telemetry({

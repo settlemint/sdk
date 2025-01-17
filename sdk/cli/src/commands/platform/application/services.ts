@@ -1,3 +1,4 @@
+import { formatServiceSubType } from "@/commands/platform/utils/formatting/format-service-sub-type";
 import { LABELS_MAP } from "@/constants/resource-type";
 import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { applicationPrompt } from "@/prompts/application.prompt";
@@ -9,12 +10,13 @@ import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import { Command, Option } from "@commander-js/extra-typings";
-import { type BlockchainNode, type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { camelCaseToWords, capitalizeFirstLetter, replaceUnderscoresAndHyphensWithSpaces } from "@settlemint/sdk-utils";
+import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { gray, greenBright, redBright, yellowBright } from "yoctocolors";
+import { formatHealthStatus } from "../utils/formatting/format-health-status";
+import { formatStatus } from "../utils/formatting/format-status";
 
 interface ServiceItem {
   name: string;
@@ -44,6 +46,18 @@ export function servicesCommand() {
           command: "settlemint platform application get",
         },
         {
+          description: "List the application services in wide format with more information (such as console url)",
+          command: "settlemint platform application get -o wide",
+        },
+        {
+          description: "List the application services in JSON format",
+          command: "settlemint platform application get -o json > services.json",
+        },
+        {
+          description: "List the application services in YAML format",
+          command: "settlemint platform application get -o yaml > services.yaml",
+        },
+        {
           description: "List the application services for a specific application",
           command: "settlemint platform application get --application my-app",
         },
@@ -62,9 +76,12 @@ export function servicesCommand() {
       "The application unique name to list the services in (defaults to application from env)",
     )
     .addOption(new Option("-t, --type <type...>", "The type(s) of service to list").choices(SERVICE_TYPES))
-    .action(async ({ application, type }, cmd) => {
-      intro("Listing application services");
-
+    .addOption(new Option("-o, --output <output>", "The output format").choices(["wide", "json", "yaml"]))
+    .action(async ({ application, type, output }) => {
+      const printToTerminal = !output || output === "wide";
+      if (printToTerminal) {
+        intro("Listing application services");
+      }
       const env: Partial<DotEnv> = await loadEnv(false, false);
       const selectedInstance = await instancePrompt(env, true);
       const personalAccessToken = await getInstanceCredentials(selectedInstance);
@@ -80,12 +97,22 @@ export function servicesCommand() {
       const applicationUniqueName =
         application ?? env.SETTLEMINT_APPLICATION ?? (await selectApplication(settlemint, env));
 
-      const servicesToShow = await getServicesAndMapResults(settlemint, applicationUniqueName, type);
-      for (const service of servicesToShow) {
-        table(service.label, service.items);
+      const servicesToShow = await getServicesAndMapResults({
+        settlemint,
+        applicationUniqueName,
+        types: type,
+        printToTerminal,
+      });
+      if (printToTerminal) {
+        for (const service of servicesToShow) {
+          table(service.label, service.items);
+        }
+      } else {
+        console.log(JSON.stringify(servicesToShow, null, 2));
       }
-
-      outro("Application services listed");
+      if (printToTerminal) {
+        outro("Application services listed");
+      }
     });
 }
 
@@ -97,11 +124,17 @@ async function selectApplication(settlemint: SettlemintClient, env: Partial<DotE
   return selectedApplication.uniqueName;
 }
 
-async function getServicesAndMapResults(
-  settlemint: SettlemintClient,
-  applicationUniqueName: string,
-  types?: ServiceType[],
-) {
+async function getServicesAndMapResults({
+  settlemint,
+  applicationUniqueName,
+  types,
+  printToTerminal,
+}: {
+  settlemint: SettlemintClient;
+  applicationUniqueName: string;
+  types?: ServiceType[];
+  printToTerminal: boolean;
+}) {
   const services = await servicesSpinner(settlemint, applicationUniqueName, types);
   const results: {
     label: string;
@@ -122,9 +155,9 @@ async function getServicesAndMapResults(
         items: serviceItems.map((m) => ({
           name: m.name,
           uniqueName: m.uniqueName,
-          status: formatStatus(m.status),
-          healthSatus: formatHealthStatus(m.healthStatus),
-          type: getServiceSubType(m),
+          status: formatStatus(m.status, printToTerminal),
+          healthSatus: formatHealthStatus(m.healthStatus, printToTerminal),
+          type: formatServiceSubType(m, printToTerminal),
           provider: m.provider,
           region: m.region,
         })),
@@ -155,32 +188,4 @@ function getItemsForServiceType(services: Awaited<ReturnType<typeof servicesSpin
     default:
       return [];
   }
-}
-
-function formatStatus(status: BlockchainNode["status"]) {
-  const label = camelCaseToWords(status.toLowerCase());
-  if (status === "FAILED") {
-    return redBright(label);
-  }
-  if (status === "PAUSED" || status === "AUTO_PAUSED" || status === "PAUSING" || status === "AUTO_PAUSING") {
-    return gray(label);
-  }
-  if (status === "COMPLETED") {
-    return greenBright(label);
-  }
-  return yellowBright(label);
-}
-
-function formatHealthStatus(healthStatus: BlockchainNode["healthStatus"]) {
-  if (healthStatus === "HEALTHY") {
-    return greenBright("Healthy");
-  }
-  return yellowBright(`Unhealthy (${camelCaseToWords(replaceUnderscoresAndHyphensWithSpaces(healthStatus))})`);
-}
-
-function getServiceSubType(service: object) {
-  if ("__typename" in service && typeof service.__typename === "string") {
-    return camelCaseToWords(service.__typename);
-  }
-  return "Unknown";
 }
