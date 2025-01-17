@@ -21,12 +21,6 @@ import { stringify } from "yaml";
 import { formatHealthStatus } from "../utils/formatting/format-health-status";
 import { formatStatus } from "../utils/formatting/format-status";
 
-interface ServiceItem {
-  name: string;
-  uniqueName: string;
-  status: string;
-}
-
 const SERVICE_TYPES: ServiceType[] = [
   "blockchain-network",
   "blockchain-node",
@@ -106,7 +100,7 @@ export function servicesCommand() {
         return nothingSelectedError("application");
       }
 
-      const wide = !printToTerminal || output === "wide";
+      const wide = output === "wide";
       const servicesToShow = await getServicesAndMapResults({
         instance: selectedInstance,
         settlemint,
@@ -117,7 +111,7 @@ export function servicesCommand() {
       });
       if (printToTerminal) {
         for (const service of servicesToShow) {
-          table(service.label, service.items);
+          table(service.label, service.items, !wide);
         }
       } else if (output === "json") {
         console.log(JSON.stringify(servicesToShow, null, 2));
@@ -155,40 +149,54 @@ async function getServicesAndMapResults({
 }) {
   const application = await settlemint.application.read(applicationUniqueName);
   const services = await servicesSpinner(settlemint, applicationUniqueName, types);
-  const results: {
-    label: string;
-    items: ServiceItem[];
-  }[] = [];
-  for (const serviceType of types ?? SERVICE_TYPES) {
-    if (!types || types?.includes(serviceType)) {
+  const results = (types ?? SERVICE_TYPES)
+    .filter((serviceType) => !types || types.includes(serviceType))
+    .map((serviceType) => {
       const [_, labels] = Object.entries(LABELS_MAP).find(([key, value]) => value.command === serviceType) ?? [
         null,
         { plural: serviceType },
       ];
       const serviceItems = getItemsForServiceType(services, serviceType);
+
       if (serviceItems.length === 0 && !types) {
-        continue;
+        return null;
       }
-      results.push({
+
+      return {
         label: capitalizeFirstLetter(labels.plural),
         items: serviceItems.map((s) => {
           const basicFields = {
-            name: s.name,
-            uniqueName: s.uniqueName,
             status: formatStatus(s.status, printToTerminal),
             healthSatus: formatHealthStatus(s.healthStatus, printToTerminal),
             type: formatServiceSubType(s, printToTerminal),
             provider: s.provider,
             region: s.region,
           };
-          const additionalFields = {
-            url: getClusterServicePlatformUrl(instance, application, s, serviceType),
+          if (wide) {
+            return {
+              nameAndUniqueName: `${s.name}\n${s.uniqueName}`,
+              url: getClusterServicePlatformUrl(instance, application, s, serviceType),
+              ...basicFields,
+            };
+          }
+          if (!printToTerminal) {
+            return {
+              name: s.name,
+              uniqueName: s.uniqueName,
+              ...basicFields,
+              url: getClusterServicePlatformUrl(instance, application, s, serviceType),
+            };
+          }
+          return {
+            name: s.name,
+            uniqueName: s.uniqueName,
+            ...basicFields,
           };
-          return wide ? { ...basicFields, ...additionalFields } : basicFields;
         }),
-      });
-    }
-  }
+      };
+    })
+    .filter((result): result is NonNullable<typeof result> => result !== null);
+
   return results;
 }
 
