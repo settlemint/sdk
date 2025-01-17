@@ -25,7 +25,7 @@ DISABLE_WORKSPACE_DELETE=true
 
 ### Local Orbstack Instance
 
-For local Orbstack instances with self-signed certificates, set `NODE_TLS_REJECT_UNAUTHORIZED=0` during `login` and `connect` commands to disable certificate validation.
+When connecting to local Orbstack instances (<https://console.k8s.orb.local>) with self-signed certificates, set `NODE_TLS_REJECT_UNAUTHORIZED=0` during `login` and `connect` commands to disable certificate validation.
 
 The `connect` command adds this to your .env.local file for future use.
 
