@@ -13,6 +13,7 @@ Commands:
   <a href="./platform/update.md">update|u</a>            Update a resource in the SettleMint platform
   <a href="./platform/delete.md">delete|d</a>            Delete a resource in the SettleMint platform
   <a href="./platform/restart.md">restart</a>             Restart a resource in the SettleMint platform
+  <a href="./platform/list.md">list|ls</a>             List resources in the SettleMint platform
   help [command]      display help for command
 </pre>
 

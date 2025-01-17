@@ -30,6 +30,7 @@
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [ascii()](#ascii)
+    - [camelCaseToWords()](#camelcasetowords)
     - [cancel()](#cancel)
     - [capitalizeFirstLetter()](#capitalizefirstletter)
     - [emptyDir()](#emptydir)
@@ -54,9 +55,11 @@
     - [note()](#note)
     - [outro()](#outro)
     - [projectRoot()](#projectroot)
+    - [replaceUnderscoresAndHyphensWithSpaces()](#replaceunderscoresandhyphenswithspaces)
     - [retryWhenFailed()](#retrywhenfailed)
     - [setName()](#setname)
     - [spinner()](#spinner)
+    - [table()](#table)
     - [tryParseJson()](#tryparsejson)
     - [validate()](#validate)
     - [writeEnv()](#writeenv)
@@ -117,6 +120,37 @@ import { ascii } from "@settlemint/sdk-utils/terminal";
 
 // Prints the SettleMint logo
 ascii();
+```
+
+***
+
+#### camelCaseToWords()
+
+> **camelCaseToWords**(`s`): `string`
+
+Defined in: [sdk/utils/src/string.ts:29](https://github.com/settlemint/sdk/blob/v1.0.6/sdk/utils/src/string.ts#L29)
+
+Converts a camelCase string to a human-readable string.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `s` | `string` | The camelCase string to convert |
+
+##### Returns
+
+`string`
+
+The human-readable string
+
+##### Example
+
+```ts
+import { camelCaseToWords } from "@settlemint/sdk-utils";
+
+const words = camelCaseToWords("camelCaseString");
+// Returns: "Camel Case String"
 ```
 
 ***
@@ -952,6 +986,37 @@ console.log(`Project root is at: ${rootDir}`);
 
 ***
 
+#### replaceUnderscoresAndHyphensWithSpaces()
+
+> **replaceUnderscoresAndHyphensWithSpaces**(`s`): `string`
+
+Defined in: [sdk/utils/src/string.ts:48](https://github.com/settlemint/sdk/blob/v1.0.6/sdk/utils/src/string.ts#L48)
+
+Replaces underscores and hyphens with spaces.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `s` | `string` | The string to replace underscores and hyphens with spaces |
+
+##### Returns
+
+`string`
+
+The input string with underscores and hyphens replaced with spaces
+
+##### Example
+
+```ts
+import { replaceUnderscoresAndHyphensWithSpaces } from "@settlemint/sdk-utils";
+
+const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
+// Returns: "Already Spaced Second"
+```
+
+***
+
 #### retryWhenFailed()
 
 > **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError`?): `Promise`\<`T`\>
@@ -1077,6 +1142,41 @@ const result = await spinner({
 
 ***
 
+#### table()
+
+> **table**(`title`, `data`, `compact`): `void`
+
+Defined in: [sdk/utils/src/terminal/table.ts:22](https://github.com/settlemint/sdk/blob/v1.0.6/sdk/utils/src/terminal/table.ts#L22)
+
+Displays data in a formatted table in the terminal.
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `title` | `string` | `undefined` | Title to display above the table |
+| `data` | `unknown`[] | `undefined` | Array of objects to display in table format |
+| `compact` | `boolean` | `true` | Whether to display the table in compact mode |
+
+##### Returns
+
+`void`
+
+##### Example
+
+```ts
+import { table } from "@settlemint/sdk-utils/terminal";
+
+const data = [
+  { name: "Item 1", value: 100 },
+  { name: "Item 2", value: 200 }
+];
+
+table("My Table", data);
+```
+
+***
+
 #### tryParseJson()
 
 > **tryParseJson**\<`T`\>(`value`, `defaultValue`): `T` \| `null`
@@ -1169,7 +1269,7 @@ const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 
 > **writeEnv**(`options`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/environment/write-env.ts:33](https://github.com/settlemint/sdk/blob/v1.0.6/sdk/utils/src/environment/write-env.ts#L33)
+Defined in: [sdk/utils/src/environment/write-env.ts:41](https://github.com/settlemint/sdk/blob/v1.0.6/sdk/utils/src/environment/write-env.ts#L41)
 
 Writes environment variables to .env files across a project or monorepo
 
@@ -1199,14 +1299,22 @@ Will throw an error if writing fails
 import { writeEnv } from '@settlemint/sdk-utils/environment';
 
 // Write development environment variables
-await writeEnv(false, {
-  SETTLEMINT_INSTANCE: 'https://dev.example.com'
-}, false);
+await writeEnv({
+  prod: false,
+  env: {
+    SETTLEMINT_INSTANCE: 'https://dev.example.com'
+  },
+  secrets: false
+});
 
 // Write production secrets
-await writeEnv(true, {
-  SETTLEMINT_ACCESS_TOKEN: 'secret-token'
-}, true);
+await writeEnv({
+  prod: true,
+  env: {
+    SETTLEMINT_ACCESS_TOKEN: 'secret-token'
+  },
+  secrets: true
+});
 ```
 
 ### Interfaces
