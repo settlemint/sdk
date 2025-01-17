@@ -18,25 +18,25 @@ Commands:
 Examples:
 
   # List the application services
-  $ settlemint settlemint platform application get
+  $ settlemint platform list services
 
   # List the application services in wide format with more information (such as console url)
-  $ settlemint settlemint platform application get -o wide
+  $ settlemint platform list services -o wide
 
   # List the application services in JSON format
-  $ settlemint settlemint platform application get -o json &gt; services.json
+  $ settlemint platform list services -o json &gt; services.json
 
   # List the application services in YAML format
-  $ settlemint settlemint platform application get -o yaml &gt; services.yaml
+  $ settlemint platform list services -o yaml &gt; services.yaml
 
   # List the application services for a specific application
-  $ settlemint settlemint platform application get --application my-app
+  $ settlemint platform list services --application my-app
 
   # List the application services for a specific application and type
-  $ settlemint settlemint platform application get --application my-app --type middleware
+  $ settlemint platform list services --application my-app --type middleware
 
   # List the application services for multiple types
-  $ settlemint settlemint platform application get --type blockchain-network blockchain-node middleware
+  $ settlemint platform list services --type blockchain-network blockchain-node middleware
 
 List the application services
 

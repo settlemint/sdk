@@ -40,31 +40,31 @@ export function servicesCommand() {
       createExamples([
         {
           description: "List the application services",
-          command: "settlemint platform application get",
+          command: "platform list services",
         },
         {
           description: "List the application services in wide format with more information (such as console url)",
-          command: "settlemint platform application get -o wide",
+          command: "platform list services -o wide",
         },
         {
           description: "List the application services in JSON format",
-          command: "settlemint platform application get -o json > services.json",
+          command: "platform list services -o json > services.json",
         },
         {
           description: "List the application services in YAML format",
-          command: "settlemint platform application get -o yaml > services.yaml",
+          command: "platform list services -o yaml > services.yaml",
         },
         {
           description: "List the application services for a specific application",
-          command: "settlemint platform application get --application my-app",
+          command: "platform list services --application my-app",
         },
         {
           description: "List the application services for a specific application and type",
-          command: "settlemint platform application get --application my-app --type middleware",
+          command: "platform list services --application my-app --type middleware",
         },
         {
           description: "List the application services for multiple types",
-          command: "settlemint platform application get --type blockchain-network blockchain-node middleware",
+          command: "platform list services --type blockchain-network blockchain-node middleware",
         },
       ]),
     )
