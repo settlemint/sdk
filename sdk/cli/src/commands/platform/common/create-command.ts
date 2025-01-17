@@ -1,19 +1,19 @@
-import { instancePrompt } from "@/commands/connect/instance.prompt";
-import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
-import { type CommandExample, createExamples } from "@/commands/platform/utils/create-examples";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
+import type { ResourceType } from "@/constants/resource-type";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { providerPrompt } from "@/prompts/provider.prompt";
+import { regionPrompt } from "@/prompts/region.prompt";
+import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { type CommandExample, createExamples } from "@/utils/commands/create-examples";
+import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { sanitizeCommandName } from "@/utils/sanitize-command-name";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { providerPrompt } from "../prompts/provider.prompt";
-import { regionPrompt } from "../prompts/region.prompt";
-import type { ResourceType } from "./resource-type";
 
 type DefaultArgs = {
   acceptDefaults?: true | undefined;

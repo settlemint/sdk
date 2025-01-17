@@ -1,10 +1,11 @@
-import { blockchainNetworkPrompt } from "@/commands/connect/blockchain-network.prompt";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
+import { blockchainNetworkPrompt } from "@/prompts/cluster-service/blockchain-network.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import { Option } from "@commander-js/extra-typings";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { getCreateCommand } from "../../common/create-command";
 
 /**
  * Creates and returns the 'blockchain-node besu' command for the SettleMint SDK.
@@ -62,7 +63,9 @@ export function blockchainNodeBesuCreateCommand() {
 
                 let networkUniqueName = blockchainNetwork;
                 if (!networkUniqueName) {
-                  const networks = await settlemint.blockchainNetwork.list(applicationUniqueName);
+                  const networks = await serviceSpinner("blockchain network", () =>
+                    settlemint.blockchainNetwork.list(applicationUniqueName),
+                  );
                   const network = await blockchainNetworkPrompt({
                     env,
                     networks,

@@ -1,6 +1,20 @@
-import { workspaceSpinner } from "@/commands/connect/workspaces.spinner";
-import { writeEnvSpinner } from "@/commands/connect/write-env.spinner";
 import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
+import { applicationAccessTokenPrompt } from "@/prompts/aat.prompt";
+import { applicationPrompt } from "@/prompts/application.prompt";
+import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { blockscoutPrompt } from "@/prompts/cluster-service/blockscout.prompt";
+import { customDeploymentPrompt } from "@/prompts/cluster-service/custom-deployment.prompt";
+import { hasuraPrompt } from "@/prompts/cluster-service/hasura.prompt";
+import { hdPrivateKeyPrompt } from "@/prompts/cluster-service/hd-private-keys.prompt";
+import { ipfsPrompt } from "@/prompts/cluster-service/ipfs.prompt";
+import { minioPrompt } from "@/prompts/cluster-service/minio.prompt";
+import { portalPrompt } from "@/prompts/cluster-service/portal.prompt";
+import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
+import { instancePrompt } from "@/prompts/instance.prompt";
+import { workspacePrompt } from "@/prompts/workspace.prompt";
+import { servicesSpinner } from "@/spinners/services.spinner";
+import { workspaceSpinner } from "@/spinners/workspaces.spinner";
+import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { getInstanceCredentials } from "@/utils/config";
 import {
   getBlockscoutEndpoints,
@@ -17,20 +31,6 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { list } from "@settlemint/sdk-utils/terminal";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { applicationAccessTokenPrompt } from "./connect/aat.prompt";
-import { applicationPrompt } from "./connect/application.prompt";
-import { blockchainNodePrompt } from "./connect/blockchain-node.prompt";
-import { blockscoutPrompt } from "./connect/blockscout.prompt";
-import { customDeploymentPrompt } from "./connect/custom-deployment.prompt";
-import { hasuraPrompt } from "./connect/hasura.prompt";
-import { hdPrivateKeyPrompt } from "./connect/hd-private-keys.prompt";
-import { instancePrompt } from "./connect/instance.prompt";
-import { ipfsPrompt } from "./connect/ipfs.prompt";
-import { minioPrompt } from "./connect/minio.prompt";
-import { portalPrompt } from "./connect/portal.prompt";
-import { servicesSpinner } from "./connect/services.spinner";
-import { theGraphPrompt } from "./connect/thegraph.prompt";
-import { workspacePrompt } from "./connect/workspace.prompt";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.

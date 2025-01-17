@@ -1,8 +1,8 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
+import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { getMinioEndpoints } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { getCreateCommand } from "../../common/create-command";
 
 /**
  * Creates and returns the 'minio' storage command for the SettleMint SDK.

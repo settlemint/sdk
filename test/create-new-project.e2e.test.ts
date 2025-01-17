@@ -5,10 +5,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { $ } from "bun";
-import {
-  getSubgraphYamlConfig,
-  updateSubgraphYamlConfig,
-} from "../sdk/cli/src/commands/smart-contract-set/subgraph/utils/subgraph-config";
+import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import {
   registerLinkedDependencies,
   unlinkLinkedDependencies,

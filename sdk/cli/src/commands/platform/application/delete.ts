@@ -1,5 +1,5 @@
+import { getDeleteCommand } from "@/commands/platform/common/delete-command";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { getDeleteCommand } from "../common/delete-command";
 
 /**
  * Creates and returns the 'application' command for the SettleMint SDK.

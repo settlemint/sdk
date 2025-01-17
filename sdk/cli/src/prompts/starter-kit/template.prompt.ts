@@ -1,4 +1,4 @@
-import { getStarterkits } from "@/commands/platform/utils/platform-utils";
+import { getStarterkits } from "@/utils/platform-utils";
 import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";

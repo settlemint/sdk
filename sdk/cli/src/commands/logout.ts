@@ -1,7 +1,7 @@
+import { getDefaultInstance, getInstances, removeCredentials } from "@/utils/config";
 import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
 import { intro, outro } from "@settlemint/sdk-utils/terminal";
-import { getDefaultInstance, getInstances, removeCredentials } from "../utils/config";
 
 /**
  * Creates and returns the 'logout' command for the SettleMint SDK CLI.
