@@ -30,7 +30,7 @@ jobs:
       - name: Harden Runner
         uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
         with:
-          egress-policy: audit
+          egress-policy: block
 
       - name: Setup 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
@@ -190,19 +190,24 @@ jobs:
       actions: read
       contents: read
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Harden Runner
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+        with:
+          egress-policy: block
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3
-      with:
-        languages: javascript-typescript
-        build-mode: none
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3
-      with:
-        category: "/language:javascript-typescript"
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3
+        with:
+          languages: javascript-typescript
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@b6a472f63d85b9c78a3ac5e89422239fc15e9b3c # v3
+        with:
+          category: "/language:javascript-typescript"
 
   scorecard:
     name: Scorecard analysis
@@ -213,6 +218,11 @@ jobs:
       id-token: write
 
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+        with:
+          egress-policy: block
+
       - name: Checkout repository
         uses: namespacelabs/nscloud-checkout-action@b8c45d632ce8118a5a0a51eb75a57cfccc74b8fa # v5
         with:
