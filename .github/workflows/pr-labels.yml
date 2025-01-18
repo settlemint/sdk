@@ -7,22 +7,15 @@ on:
       - main
 
 permissions:
-  actions: write
-  checks: write
-  contents: write
-  deployments: write
-  id-token: write
-  issues: write
-  discussions: write
-  packages: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
+  contents: read
 
 jobs:
   labels:
-    runs-on: namespace-profile-sony-bank-app
+    runs-on: namespace-profile-sdk
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+        with:
+          egress-policy: audit
+
       - uses: fuxingloh/multi-labeler@b15a54460c38f54043fa75f7b08a0e2aa5b94b5b # v4

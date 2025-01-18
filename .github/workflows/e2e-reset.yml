@@ -10,25 +10,18 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  actions: write
-  checks: write
-  contents: write
-  deployments: write
-  id-token: write
-  issues: write
-  discussions: write
-  packages: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
+  contents: read
 
 jobs:
   e2e:
     name: E2E reset
     runs-on: namespace-profile-sdk
     steps:
+      - name: Harden Runner
+        uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
+        with:
+          egress-policy: audit
+
       - name: Setup 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
         with:

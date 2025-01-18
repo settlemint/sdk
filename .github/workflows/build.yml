@@ -14,7 +14,8 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   packages:
@@ -177,6 +178,7 @@ jobs:
 
   codeql:
     name: CodeQL (javascript-typescript)
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: namespace-profile-sdk
     permissions:
       security-events: write
@@ -200,6 +202,7 @@ jobs:
 
   scorecard:
     name: Scorecard analysis
+    if: ${{ github.event_name != 'pull_request' }}
     runs-on: namespace-profile-sdk
     permissions:
       security-events: write
