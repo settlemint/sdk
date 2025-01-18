@@ -1,7 +1,4 @@
 export function isLocalEnv(): boolean {
-  return (
-    process.env.SETTLEMINT_INSTANCE?.startsWith("https://console.k8s.orb.local") ||
-    /^https:\/\/[a-z]+?\.settlemint\.be/i.test(process.env.SETTLEMINT_INSTANCE ?? "") ||
-    false
-  );
+  const url = new URL(process.env.SETTLEMINT_INSTANCE ?? "");
+  return url.hostname.endsWith(".settlemint.be") || url.hostname.endsWith(".k8s.orb.local") || false;
 }
