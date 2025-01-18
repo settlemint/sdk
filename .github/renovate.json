@@ -32,6 +32,13 @@
     {
       "matchFileNames": ["apps/**"],
       "rangeStrategy": "pin"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action"],
+      "automerge": true,
+      "automergeType": "pr",
+      "platformAutomerge": true
     }
   ],
   "hostRules": [
