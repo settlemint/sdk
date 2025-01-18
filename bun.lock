@@ -9,7 +9,7 @@
         "@types/bun": "1.1.17",
         "@types/mustache": "4.2.5",
         "knip": "5.42.2",
-        "lefthook": "1.10.7",
+        "lefthook": "1.10.8",
         "mustache": "4.2.0",
         "publint": "0.3.2",
         "tsup": "8.3.5",
@@ -1153,27 +1153,27 @@
 
     "kubo-rpc-client": ["kubo-rpc-client@5.0.2", "", { "dependencies": { "@ipld/dag-cbor": "^9.0.0", "@ipld/dag-json": "^10.0.0", "@ipld/dag-pb": "^4.0.0", "@libp2p/crypto": "^5.0.0", "@libp2p/interface": "^2.0.0", "@libp2p/logger": "^5.0.0", "@libp2p/peer-id": "^5.0.0", "@multiformats/multiaddr": "^12.2.1", "@multiformats/multiaddr-to-uri": "^10.0.1", "any-signal": "^4.1.1", "blob-to-it": "^2.0.5", "browser-readablestream-to-it": "^2.0.5", "dag-jose": "^5.0.0", "electron-fetch": "^1.9.1", "err-code": "^3.0.1", "ipfs-unixfs": "^11.1.4", "iso-url": "^1.2.1", "it-all": "^3.0.4", "it-first": "^3.0.4", "it-glob": "^3.0.1", "it-last": "^3.0.4", "it-map": "^3.0.5", "it-peekable": "^3.0.3", "it-to-stream": "^1.0.0", "merge-options": "^3.0.4", "multiformats": "^13.1.0", "nanoid": "^5.0.7", "native-fetch": "^4.0.2", "parse-duration": "^1.0.2", "react-native-fetch-api": "^3.0.0", "stream-to-it": "^1.0.1", "uint8arrays": "^5.0.3", "wherearewe": "^2.0.1" } }, "sha512-0w8VUwpxtkynLlJsAnM+es3qR6Nvv0/oqg0I+sCgI65rh8OPoBYpsk58/miD+u/OkIhJKBwslfeJ9y7Ujb40+g=="],
 
-    "lefthook": ["lefthook@1.10.7", "", { "optionalDependencies": { "lefthook-darwin-arm64": "1.10.7", "lefthook-darwin-x64": "1.10.7", "lefthook-freebsd-arm64": "1.10.7", "lefthook-freebsd-x64": "1.10.7", "lefthook-linux-arm64": "1.10.7", "lefthook-linux-x64": "1.10.7", "lefthook-openbsd-arm64": "1.10.7", "lefthook-openbsd-x64": "1.10.7", "lefthook-windows-arm64": "1.10.7", "lefthook-windows-x64": "1.10.7" }, "bin": { "lefthook": "bin/index.js" } }, "sha512-8QIcKSsqd2WUFD+Ab7hb7h0FvEsG9ffbw+n26VW9uqpQQbzyw2l/7ut7c2h6/Hpn5kln4E57+yuRTLIaHWdrrg=="],
+    "lefthook": ["lefthook@1.10.8", "", { "optionalDependencies": { "lefthook-darwin-arm64": "1.10.8", "lefthook-darwin-x64": "1.10.8", "lefthook-freebsd-arm64": "1.10.8", "lefthook-freebsd-x64": "1.10.8", "lefthook-linux-arm64": "1.10.8", "lefthook-linux-x64": "1.10.8", "lefthook-openbsd-arm64": "1.10.8", "lefthook-openbsd-x64": "1.10.8", "lefthook-windows-arm64": "1.10.8", "lefthook-windows-x64": "1.10.8" }, "bin": { "lefthook": "bin/index.js" } }, "sha512-yJM97cNPH7zYbLUJ8G2LGhJbSRd66mv5BVeryLiEsmXER3vz4wGtiLJEYRwveSEZetOMBgAlVBIZEfuxJGsjIA=="],
 
-    "lefthook-darwin-arm64": ["lefthook-darwin-arm64@1.10.7", "", { "os": "darwin", "cpu": "arm64" }, "sha512-Fk1Fag6VYupCptHturuXueYNccVoOoM+N/oDCSdM3FLqH05E9p6q2Ag7UgygBV3aAWe6Qfx0jOJhAGwsyUuflQ=="],
+    "lefthook-darwin-arm64": ["lefthook-darwin-arm64@1.10.8", "", { "os": "darwin", "cpu": "arm64" }, "sha512-uE5oLjWuANaAyv6KQoWWGacZgKq5zGd3UmkWLE2OSSrZbgSdTz1R6Uios2yMXrGDptBX9PDWp9SNcHPhEoQlNw=="],
 
-    "lefthook-darwin-x64": ["lefthook-darwin-x64@1.10.7", "", { "os": "darwin", "cpu": "x64" }, "sha512-EYvtIVbI6wl9Wk06VuhSEwyrSeKrnCbpeon40l38Zf3mR07hjsGEypZZEWNBylEqV2K20Dt81u45CW5kdptUXA=="],
+    "lefthook-darwin-x64": ["lefthook-darwin-x64@1.10.8", "", { "os": "darwin", "cpu": "x64" }, "sha512-502vfNdfJIDxLQKtlS3TbnM54PrV5wcssVvbDEnkLLjyrEImOZ3lVz3cqrT42KvFYFqgarrhII9jigqUxnLuSQ=="],
 
-    "lefthook-freebsd-arm64": ["lefthook-freebsd-arm64@1.10.7", "", { "os": "freebsd", "cpu": "arm64" }, "sha512-6/E3hDxUaImV+udLLt6cAjPcNP58GM3LB7ltqaVggi4o0riy15EQs9Tsaf2lIJegodxefKtH8sdfpd0D2w1D4w=="],
+    "lefthook-freebsd-arm64": ["lefthook-freebsd-arm64@1.10.8", "", { "os": "freebsd", "cpu": "arm64" }, "sha512-xkqxIxEnFK9zyN3F3Lc11/byuYAR5z7FJBH5UTb2Wnxob7BwYfB0gXBcw3gKEYZiwHFNlyJQimndc7QWZ7y4kw=="],
 
-    "lefthook-freebsd-x64": ["lefthook-freebsd-x64@1.10.7", "", { "os": "freebsd", "cpu": "x64" }, "sha512-foqOwranYMtrKfmirS53XUpvNVyQ/3+BogsYLdr06AcqI+KQlP7ZtUPsL666hD1PIjxdroNpyPiK60857o63xA=="],
+    "lefthook-freebsd-x64": ["lefthook-freebsd-x64@1.10.8", "", { "os": "freebsd", "cpu": "x64" }, "sha512-hCErafcyykVCIMb/6hzredNQ1ogDcz07lphf0k0eGUbr94XK7IUOkQwD++XOAijOHknkzS1V9WvjV1lrhGYtUA=="],
 
-    "lefthook-linux-arm64": ["lefthook-linux-arm64@1.10.7", "", { "os": "linux", "cpu": "arm64" }, "sha512-lOU6Bv9mHK57mSmCj4TPY0gZbZI7iqhowY5cxiZHYhHV2bX9yJDpS0FWQVA1zeRWucN7/BBuEVg2ZoSzujv07A=="],
+    "lefthook-linux-arm64": ["lefthook-linux-arm64@1.10.8", "", { "os": "linux", "cpu": "arm64" }, "sha512-YFqT/hj+nzTTwzaDSdmYGKvpZI6/Wt3Id6+6gEU8VMAojXOe9rWAXitfoiDXW1TNPzpHqwyGnjOCcjquF1umkw=="],
 
-    "lefthook-linux-x64": ["lefthook-linux-x64@1.10.7", "", { "os": "linux", "cpu": "x64" }, "sha512-8skszutfKqmomH/2KpirEPLWeA5CM885abkFK9EZjY7bylopW6zrGimjamSBx/gbpIzA94+9WCk8oVJYx5AFaQ=="],
+    "lefthook-linux-x64": ["lefthook-linux-x64@1.10.8", "", { "os": "linux", "cpu": "x64" }, "sha512-nOARm1gE0EeMSEHaulpFDPnIqlQFPsFnaSkmCK2gWXG5jBbRtMr4BcJLDPzsekDKxskr5mZwlPQ2fFW3B/jiCA=="],
 
-    "lefthook-openbsd-arm64": ["lefthook-openbsd-arm64@1.10.7", "", { "os": "openbsd", "cpu": "arm64" }, "sha512-pj9C+PPYnUrhYUmChev8e5G5RzidwEILKF+rt6sUNXUM+sZGl/+LR3G0jXzyhYOjRBXcWLbkp1lzMlO/dXLiww=="],
+    "lefthook-openbsd-arm64": ["lefthook-openbsd-arm64@1.10.8", "", { "os": "openbsd", "cpu": "arm64" }, "sha512-6cUokm4Dd5OMNewVWIV9bM+nebBOrImCAOjbdfCEW4hhtIRvr6XZirHu0BVJM/I5Ed0MjiAme+L6yV7LW68HAA=="],
 
-    "lefthook-openbsd-x64": ["lefthook-openbsd-x64@1.10.7", "", { "os": "openbsd", "cpu": "x64" }, "sha512-CgHJIc780ypWRWv+JAWnQNHclPsaaWi8Bw6CHz8ILgO5q8Q0sijRvcwUXR2uathxS2AVui8o54djQ0YkPVkpQA=="],
+    "lefthook-openbsd-x64": ["lefthook-openbsd-x64@1.10.8", "", { "os": "openbsd", "cpu": "x64" }, "sha512-659TblZOM7pV9ImSRjpMQSynA5L1DTcoS37TJN7Y/84O3pXhKYAN1Lm5EJFZQ1dBMEJDeAD/L1V98RWqnFx/gw=="],
 
-    "lefthook-windows-arm64": ["lefthook-windows-arm64@1.10.7", "", { "os": "win32", "cpu": "arm64" }, "sha512-3wRTStTPVC+ZlhjTl5Zu17VClMEtV9O5KcqbstF9QsK87UiaMYKCg4y+FG28UMvtI2IEph/kzKjZsGymID3cEg=="],
+    "lefthook-windows-arm64": ["lefthook-windows-arm64@1.10.8", "", { "os": "win32", "cpu": "arm64" }, "sha512-g5O44F+Mo0n2RzXL7A9g0TM5VA60OWWw7CPNLi42qOniv1t6/43glxB7bmKalrLAznFR5UbyiLMmO6ospDXctg=="],
 
-    "lefthook-windows-x64": ["lefthook-windows-x64@1.10.7", "", { "os": "win32", "cpu": "x64" }, "sha512-pMaY5xGyRB6uOQFkJBquQHq9p+um3dGxC0ZvA6Un2JXWcdntlcitFPGkRsCr/Kptd2N+dbYa3IquYRAVu8x2Ig=="],
+    "lefthook-windows-x64": ["lefthook-windows-x64@1.10.8", "", { "os": "win32", "cpu": "x64" }, "sha512-PZ72IXi29MdOCNZZvqRrBONMfe4DZU3GVowotLfHo4U/1oTTd2LImJitm0qbFjf9kCtRHLkD4K/l7ZgV4gsxtA=="],
 
     "lilconfig": ["lilconfig@3.1.3", "", {}, "sha512-/vlFKAoH5Cgt3Ie+JLhRbwOsCQePABiU3tJ1egGvyQ+33R/vcwM2Zl2QR/LzjsBeItPt3oSVXapn+m4nQDvpzw=="],
 
