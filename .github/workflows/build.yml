@@ -22,9 +22,10 @@ jobs:
     name: Turbo Flow
     runs-on: namespace-profile-sdk
     permissions:
-      contents: read
+      contents: write
       packages: write
       id-token: write
+      pull-requests: write
     steps:
       - name: Harden Runner
         uses: step-security/harden-runner@c95a14d0e5bab51a9f56296a4eb0e416910cd350 # v2.10.3
