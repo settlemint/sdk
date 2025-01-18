@@ -7,23 +7,11 @@ on:
       - main
 
 permissions:
-  actions: write
-  checks: write
-  contents: write
-  deployments: write
-  id-token: write
-  issues: write
-  discussions: write
-  packages: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
+  contents: read
 
 jobs:
   labels:
-    runs-on: namespace-profile-btp-lite
+    runs-on: namespace-profile-sdk
     steps:
       - name: Configure 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2

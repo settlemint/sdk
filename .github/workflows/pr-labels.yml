@@ -7,22 +7,10 @@ on:
       - main
 
 permissions:
-  actions: write
-  checks: write
-  contents: write
-  deployments: write
-  id-token: write
-  issues: write
-  discussions: write
-  packages: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
+  contents: read
 
 jobs:
   labels:
-    runs-on: namespace-profile-sony-bank-app
+    runs-on: namespace-profile-sdk
     steps:
       - uses: fuxingloh/multi-labeler@b15a54460c38f54043fa75f7b08a0e2aa5b94b5b # v4
