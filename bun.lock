@@ -144,16 +144,17 @@
       "name": "@settlemint/sdk-utils",
       "version": "0.9.0",
       "dependencies": {
-        "@antfu/install-pkg": "^1.0.0",
+        "@antfu/install-pkg": "^1",
         "@dotenvx/dotenvx": "^1",
-        "@manypkg/find-root": "^2.2.3",
+        "@manypkg/find-root": "^2",
         "@npmcli/package-json": "^6",
         "deepmerge-ts": "^7",
         "environment": "^1",
         "find-up": "^7",
-        "is-in-ci": "1.0.0",
-        "nano-spawn": "^0.2.0",
+        "is-in-ci": "^1",
+        "nano-spawn": "^0.2",
         "package-manager-detector": "^0.2",
+        "tty-table": "^4",
         "yocto-spinner": "^0.1",
         "yoctocolors": "^2",
       },
@@ -571,7 +572,7 @@
 
     "@settlemint/sdk-thegraph": ["@settlemint/sdk-thegraph@workspace:sdk/thegraph", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
 
-    "@settlemint/sdk-utils": ["@settlemint/sdk-utils@workspace:sdk/utils", { "dependencies": { "@antfu/install-pkg": "^1.0.0", "@dotenvx/dotenvx": "^1", "@manypkg/find-root": "^2.2.3", "@npmcli/package-json": "^6", "deepmerge-ts": "^7", "environment": "^1", "find-up": "^7", "is-in-ci": "1.0.0", "nano-spawn": "^0.2.0", "package-manager-detector": "^0.2", "yocto-spinner": "^0.1", "yoctocolors": "^2" }, "devDependencies": { "@types/npmcli__package-json": "^4" } }],
+    "@settlemint/sdk-utils": ["@settlemint/sdk-utils@workspace:sdk/utils", { "dependencies": { "@antfu/install-pkg": "^1", "@dotenvx/dotenvx": "^1", "@manypkg/find-root": "^2", "@npmcli/package-json": "^6", "deepmerge-ts": "^7", "environment": "^1", "find-up": "^7", "is-in-ci": "^1", "nano-spawn": "^0.2", "package-manager-detector": "^0.2", "tty-table": "^4", "yocto-spinner": "^0.1", "yoctocolors": "^2" }, "devDependencies": { "@types/npmcli__package-json": "^4" } }],
 
     "@shikijs/engine-oniguruma": ["@shikijs/engine-oniguruma@1.27.2", "", { "dependencies": { "@shikijs/types": "1.27.2", "@shikijs/vscode-textmate": "^10.0.1" } }, "sha512-FZYKD1KN7srvpkz4lbGLOYWlyDU4Rd+2RtuKfABTkafAPOFr+J6umfIwY/TzOQqfNtWjL7SAwPAO0dcOraRLaQ=="],
 

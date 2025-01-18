@@ -63,18 +63,19 @@
     "@types/npmcli__package-json": "^4"
   },
   "dependencies": {
-    "is-in-ci": "1.0.0",
-    "@antfu/install-pkg": "^1.0.0",
+    "is-in-ci": "^1",
+    "@antfu/install-pkg": "^1",
     "@dotenvx/dotenvx": "^1",
-    "@manypkg/find-root": "^2.2.3",
+    "@manypkg/find-root": "^2",
     "@npmcli/package-json": "^6",
     "deepmerge-ts": "^7",
     "environment": "^1",
     "find-up": "^7",
-    "nano-spawn": "^0.2.0",
+    "nano-spawn": "^0.2",
     "package-manager-detector": "^0.2",
     "yocto-spinner": "^0.1",
-    "yoctocolors": "^2"
+    "yoctocolors": "^2",
+    "tty-table": "^4"
   },
   "peerDependencies": {},
   "engines": {
