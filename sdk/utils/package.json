@@ -73,7 +73,7 @@
     "find-up": "^7",
     "nano-spawn": "^0.2",
     "package-manager-detector": "^0.2",
-    "yocto-spinner": "^0.1",
+    "yocto-spinner": "^0.2.0",
     "yoctocolors": "^2",
     "tty-table": "^4"
   },
