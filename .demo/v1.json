@@ -279,7 +279,7 @@
           "contentPath": "./snippets/replace-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/next.config.ts",
-            "CONTENT_PATH": "./nextjs/next.config.ts",
+            "CONTENT_PATH": "./nextjs/next.config.txt",
             "CONTENT_POSITION": "1:8",
             "HIGHLIGHT_POSITION": "17"
           }
@@ -295,7 +295,7 @@
           "contentPath": "./snippets/create-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/src/middleware.ts",
-            "CONTENT_PATH": "./nextjs/middleware.ts",
+            "CONTENT_PATH": "./nextjs/middleware.txt",
             "HIGHLIGHT_POSITION": "5:8"
           }
         }
@@ -310,7 +310,7 @@
           "contentPath": "./snippets/replace-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/src/app/page.tsx",
-            "CONTENT_PATH": "./nextjs/server.ts",
+            "CONTENT_PATH": "./nextjs/server.txt",
             "CONTENT_POSITION": "1:102",
             "HIGHLIGHT_POSITION": "6:18"
           }
@@ -334,7 +334,7 @@
           "contentPath": "./snippets/create-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/src/providers/provider.tsx",
-            "CONTENT_PATH": "./nextjs/provider.tsx",
+            "CONTENT_PATH": "./nextjs/provider.txt",
             "HIGHLIGHT_POSITION": "62:65"
           }
         },
@@ -353,7 +353,7 @@
           "contentPath": "./snippets/replace-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/src/app/layout.tsx",
-            "CONTENT_PATH": "./nextjs/layout.tsx",
+            "CONTENT_PATH": "./nextjs/layout.txt",
             "CONTENT_POSITION": "1:102",
             "HIGHLIGHT_POSITION": "31"
           }
@@ -373,7 +373,7 @@
           "contentPath": "./snippets/create-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/src/components/token-list.tsx",
-            "CONTENT_PATH": "./nextjs/token-list.tsx",
+            "CONTENT_PATH": "./nextjs/token-list.txt",
             "HIGHLIGHT_POSITION": "17:22"
           }
         }
@@ -388,7 +388,7 @@
           "contentPath": "./snippets/replace-highlight.json",
           "args": {
             "TARGET_PATH": "./demo-dapp/src/app/page.tsx",
-            "CONTENT_PATH": "./nextjs/client.ts",
+            "CONTENT_PATH": "./nextjs/client.txt",
             "CONTENT_POSITION": "1:102",
             "HIGHLIGHT_POSITION": "51"
           }
