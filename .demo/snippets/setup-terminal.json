@@ -1,0 +1,14 @@
+[
+  {
+    "action": "executeVSCodeCommand",
+    "command": "workbench.action.closePanel"
+  },
+  {
+    "action": "executeVSCodeCommand",
+    "command": "workbench.action.toggleMaximizedPanel"
+  },
+  {
+    "action": "executeTerminalCommand",
+    "command": "clear"
+  }
+]
