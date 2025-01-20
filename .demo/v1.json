@@ -8,6 +8,10 @@
       "description": "Install the CLI",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
           "command": "bun add --global @settlemint/sdk-cli@latest"
         }
@@ -18,18 +22,12 @@
       "description": "Log in to your SettleMint account",
       "steps": [
         {
-          "action": "executeTerminalCommand",
-          "command": "settlemint login"
-        }
-      ]
-    },
-    {
-      "title": "Create a new application",
-      "description": "Create a new application",
-      "steps": [
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
         {
           "action": "executeTerminalCommand",
-          "command": "settlemint platform create application --workspace {workspace} \"Demo dAPP\""
+          "command": "settlemint login"
         }
       ]
     },
@@ -38,18 +36,26 @@
       "description": "Create a new network",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
           "command": "settlemint platform create bnw besu --wait --provider GKE --region EUROPE --application {application} --node-name=\"Validator 1\" \"Demo Network\""
         }
       ]
     },
     {
-      "title": "Deployment private key",
-      "description": "Create the deployment private key",
+      "title": "List services",
+      "description": "List services",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
-          "command": "settlemint platform create pk hsm-ecdsa-p256 --wait --application {application} --blockchain-node {blockchain_node} Deployer"
+          "command": "settlemint platform list services --application {application}"
         }
       ]
     },
@@ -58,15 +64,23 @@
       "description": "Create a Smart Contract Set",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
           "command": "settlemint scs create -n demo-token"
         }
       ]
     },
     {
-      "title": "Dependencies",
-      "description": "Enter the SCS and install dependencies",
+      "title": "Install dependencies",
+      "description": "Install dependencies",
       "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
         {
           "action": "executeTerminalCommand",
           "command": "cd demo-token"
@@ -78,19 +92,27 @@
       ]
     },
     {
-      "title": "Connect",
-      "description": "Connect the SCS to the application",
-      "steps": [
-        {
-          "action": "executeTerminalCommand",
-          "command": "settlemint connect"
-        }
-      ]
-    },
-    {
       "title": "Update Smart Contract",
       "description": "Update the smart contract",
       "steps": [
+        {
+          "action": "open",
+          "path": "./demo-token/contracts/GenericERC20.sol"
+        },
+        {
+          "action": "insert",
+          "path": "./demo-token/contracts/GenericERC20.sol",
+          "position": 20,
+          "content": "_mint(msg.sender, 1_000_000 * 10 ** decimals());"
+        },
+        {
+          "action": "highlight",
+          "path": "./demo-token/contracts/GenericERC20.sol",
+          "position": 20
+        },
+        {
+          "action": "waitForInput"
+        },
         {
           "action": "insert",
           "path": "./demo-token/test/GenericERC20.t.sol",
@@ -110,22 +132,13 @@
           "content": "assertEq(newOwnerBalance, 999_000 * 10 ** token.decimals());"
         },
         {
-          "action": "insert",
-          "path": "./demo-token/contracts/GenericERC20.sol",
-          "position": 20,
-          "content": "_mint(msg.sender, 1_000_000 * 10 ** decimals());"
-        },
-        {
           "action": "open",
-          "path": "./demo-token/contracts/GenericERC20.sol"
-        },
-        {
-          "action": "waitForInput"
+          "path": "./demo-token/test/GenericERC20.t.sol"
         },
         {
           "action": "highlight",
-          "path": "./demo-token/contracts/GenericERC20.sol",
-          "position": 20
+          "path": "./demo-token/test/GenericERC20.t.sol",
+          "position": 48
         }
       ]
     },
@@ -134,15 +147,37 @@
       "description": "Test the SCS",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
           "command": "settlemint scs foundry test"
         }
       ]
     },
     {
-      "title": "Deploy",
+      "title": "Connect",
+      "description": "Connect the SCS to the application",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "settlemint connect"
+        }
+      ]
+    },
+    {
+      "title": "Deploy contract",
       "description": "Deploy the SCS",
       "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
         {
           "action": "executeTerminalCommand",
           "command": "settlemint scs hardhat deploy remote"
@@ -150,29 +185,17 @@
       ]
     },
     {
-      "title": "Deploy The Graph",
-      "description": "Deploy The Graph",
-      "steps": [
-        {
-          "action": "executeTerminalCommand",
-          "command": "settlemint platform create middleware graph --wait --application {application} --blockchain-node {blockchain_node} --provider GKE --region EUROPE Graph Middleware"
-        }
-      ]
-    },
-    {
-      "title": "Update the subgraph",
-      "description": "Update the subgraph",
-      "steps": [
-        {
-          "action": "executeTerminalCommand",
-          "command": "set CHAIN_ID $(ls -1 ignition/deployments | head -n1) && jq --arg addr $(jq -r '.\"GenericERC20Module#GenericERC20\"' ignition/deployments/$CHAIN_ID/deployed_addresses.json) '.datasources[0].address = $addr' subgraph/subgraph.config.json > subgraph.config.json && mv subgraph.config.json subgraph/subgraph.config.json"
-        }
-      ]
-    },
-    {
       "title": "Deploy subgraph",
       "description": "Deploy the subgraph",
       "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "set CHAIN_ID $(ls -1 ignition/deployments | head -n1) && jq --arg addr $(jq -r '.\"GenericERC20Module#GenericERC20\"' ignition/deployments/$CHAIN_ID/deployed_addresses.json) '.datasources[0].address = $addr' subgraph/subgraph.config.json > subgraph.config.json && mv subgraph.config.json subgraph/subgraph.config.json"
+        },
         {
           "action": "executeTerminalCommand",
           "command": "settlemint scs subgraph deploy erc20demo"
@@ -184,16 +207,16 @@
       "description": "Create our dAPP",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
           "command": "cd .."
         },
         {
           "action": "executeTerminalCommand",
-          "command": "bunx create-next-app@latest demo-dapp --yes"
-        },
-        {
-          "action": "executeTerminalCommand",
-          "command": "cd demo-dapp"
+          "command": "bunx create-next-app@latest demo-dapp --typescript"
         }
       ]
     },
@@ -201,6 +224,14 @@
       "title": "Connect",
       "description": "Connect the dapp to the application",
       "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "cd demo-dapp"
+        },
         {
           "action": "executeTerminalCommand",
           "command": "settlemint connect"
@@ -212,8 +243,155 @@
       "description": "Codegen the dapp",
       "steps": [
         {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
           "action": "executeTerminalCommand",
           "command": "settlemint codegen"
+        }
+      ]
+    },
+    {
+      "title": "Install the Next.js SDK",
+      "description": "Install the Next.js SDK",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/setup-terminal.json"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "bun add @settlemint/sdk-next"
+        },
+        {
+          "action": "executeVSCodeCommand",
+          "command": "typescript.restartTsServer"
+        }
+      ]
+    },
+    {
+      "title": "Setup the Next.js SDK",
+      "description": "Setup the Next.js SDK",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/replace-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/next.config.ts",
+            "CONTENT_PATH": "./nextjs/next.config.ts",
+            "CONTENT_POSITION": "1:8",
+            "HIGHLIGHT_POSITION": "17"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Configure the Next.js middleware",
+      "description": "Configure the Next.js middleware",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/create-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/src/middleware.ts",
+            "CONTENT_PATH": "./nextjs/middleware.ts",
+            "HIGHLIGHT_POSITION": "5:8"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Get the list of tokens on the server",
+      "description": "Get the list of tokens on the server",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/replace-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/src/app/page.tsx",
+            "CONTENT_PATH": "./nextjs/server.ts",
+            "CONTENT_POSITION": "1:102",
+            "HIGHLIGHT_POSITION": "6:18"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Setup React Query",
+      "description": "Setup React Query",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "mkdir -p src/providers"
+        },
+        {
+          "action": "executeTerminalCommand",
+          "command": "bun add @tanstack/query-sync-storage-persister @tanstack/react-query-devtools @tanstack/react-query @tanstack/react-query-next-experimental @tanstack/react-query-persist-client"
+        },
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/create-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/src/providers/provider.tsx",
+            "CONTENT_PATH": "./nextjs/provider.tsx",
+            "HIGHLIGHT_POSITION": "62:65"
+          }
+        },
+        {
+          "action": "executeVSCodeCommand",
+          "command": "typescript.restartTsServer"
+        }
+      ]
+    },
+    {
+      "title": "Enable React Query",
+      "description": "Enable React Query",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/replace-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/src/app/layout.tsx",
+            "CONTENT_PATH": "./nextjs/layout.tsx",
+            "CONTENT_POSITION": "1:102",
+            "HIGHLIGHT_POSITION": "31"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Create the clientside component",
+      "description": "Create the clientside component",
+      "steps": [
+        {
+          "action": "executeTerminalCommand",
+          "command": "mkdir -p src/components"
+        },
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/create-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/src/components/token-list.tsx",
+            "CONTENT_PATH": "./nextjs/token-list.tsx",
+            "HIGHLIGHT_POSITION": "17:22"
+          }
+        }
+      ]
+    },
+    {
+      "title": "Get the list of tokens on the client",
+      "description": "Get the list of tokens on the client",
+      "steps": [
+        {
+          "action": "snippet",
+          "contentPath": "./snippets/replace-highlight.json",
+          "args": {
+            "TARGET_PATH": "./demo-dapp/src/app/page.tsx",
+            "CONTENT_PATH": "./nextjs/client.ts",
+            "CONTENT_POSITION": "1:102",
+            "HIGHLIGHT_POSITION": "51"
+          }
         }
       ]
     }
