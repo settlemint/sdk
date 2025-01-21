@@ -132,7 +132,6 @@ export function servicesCommand() {
         table(
           `Services for ${selectedApplication.name} (${applicationUniqueName}) - ${getApplicationUrl(selectedInstance, selectedApplication)}`,
           servicesToShow,
-          !wide,
         );
       } else if (output === "json") {
         console.log(JSON.stringify(data, null, 2));
