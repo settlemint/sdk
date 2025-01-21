@@ -1,6 +1,6 @@
 import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
-import { ascii, cancel } from "@settlemint/sdk-utils/terminal";
+import { CancelError, ascii, cancel } from "@settlemint/sdk-utils/terminal";
 import pkg from "../../package.json";
 import { codegenCommand } from "./codegen";
 import { connectCommand } from "./connect";
@@ -16,7 +16,9 @@ type ExtendedCommand = Command & {
   _lastCommand?: ExtendedCommand;
 };
 
-function getCommandPath(command: Command): string {
+let lastCommandPath: string | null = null;
+
+function setLastCommandPath(command: Command): void {
   const parts: string[] = [];
   let currentCommand: Command | null = command;
 
@@ -27,7 +29,16 @@ function getCommandPath(command: Command): string {
     currentCommand = currentCommand.parent as Command | null;
   }
 
-  return parts.join(" ");
+  lastCommandPath = parts.join(" ");
+}
+
+function getCommandPathFromArgv(argv: string[]): string | null {
+  // Get the command path from argv, skipping the first two arguments (node/bun and script name)
+  const args = argv.slice(argv.indexOf("settlemint") + 1);
+  if (!args.length) {
+    return null;
+  }
+  return args.join(" ");
 }
 
 function isLeafCommand(command: Command): boolean {
@@ -39,21 +50,21 @@ function isJsonOrYamlOutput(command: Command): boolean {
   return typeof options.output === "string" && (options.output === "json" || options.output === "yaml");
 }
 
-function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand) {
+function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[]) {
   const extendedCmd = cmd as ExtendedCommand;
   extendedCmd
     .hook("preAction", async (thisCommand) => {
+      if (isLeafCommand(thisCommand)) {
+        setLastCommandPath(thisCommand);
+      }
       if (isLeafCommand(thisCommand) && !isJsonOrYamlOutput(thisCommand)) {
         ascii();
       }
-      const commandPath = getCommandPath(thisCommand);
-      rootCmd._lastCommand = thisCommand as ExtendedCommand;
-      rootCmd._lastCommand._commandPath = commandPath;
     })
     .hook("postAction", async (thisCommand) => {
       // Only send telemetry for leaf commands (commands without subcommands)
       if (isLeafCommand(thisCommand)) {
-        const commandPath = getCommandPath(thisCommand);
+        const commandPath = lastCommandPath ?? getCommandPathFromArgv(argv);
         if (commandPath) {
           await telemetry({
             command: commandPath,
@@ -65,19 +76,17 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand) {
 
   // Recursively add hooks to subcommands
   for (const subcmd of cmd.commands) {
-    addHooksToCommand(subcmd as Command, rootCmd);
+    addHooksToCommand(subcmd as Command, rootCmd, argv);
   }
 }
 
-export function sdkCliCommand(exitOverride: (() => void) | undefined = undefined) {
+export function sdkCliCommand(argv: string[] = process.argv) {
   /**
    * The main Command instance for the SettleMint CLI.
    */
   const sdkcli = new Command() as ExtendedCommand;
 
-  if (exitOverride) {
-    sdkcli.exitOverride(exitOverride);
-  }
+  sdkcli.exitOverride(onError);
 
   // Configure the CLI command
   sdkcli
@@ -99,31 +108,40 @@ export function sdkCliCommand(exitOverride: (() => void) | undefined = undefined
   sdkcli.addCommand(loginCommand());
   sdkcli.addCommand(logoutCommand());
 
+  async function onError(error: Error) {
+    // Get the command path from the command that threw the error
+    const commandPath = lastCommandPath ?? getCommandPathFromArgv(argv);
+    if (commandPath) {
+      await telemetry({
+        command: commandPath,
+        status: "error",
+        message: error.message,
+      });
+    }
+    if (!(error instanceof CancelError)) {
+      cancel(error.message);
+    }
+  }
+
   // Add hooks to all commands including subcommands recursively
   for (const cmd of sdkcli.commands) {
-    addHooksToCommand(cmd as Command, sdkcli);
+    addHooksToCommand(cmd as Command, sdkcli, argv);
   }
 
-  if (!exitOverride) {
-    /**
-     * Parses command line arguments and executes the appropriate command.
-     * Handles any errors that occur during execution.
-     *
-     * @throws {Error} If an unexpected error occurs during command execution.
-     */
-    sdkcli.parseAsync(process.argv).catch(async (error: Error) => {
-      // Get the command path from the command that threw the error
-      const commandPath = sdkcli._lastCommand?._commandPath;
-      if (commandPath) {
-        await telemetry({
-          command: commandPath,
-          status: "error",
-          message: error.message,
-        });
-      }
-      cancel(error.message);
-    });
-  }
-
-  return sdkcli;
+  /**
+   * Parses command line arguments and executes the appropriate command.
+   * Handles any errors that occur during execution.
+   *
+   * @throws {Error} If an unexpected error occurs during command execution.
+   */
+  lastCommandPath = null;
+  return new Promise((resolve, reject) => {
+    sdkcli
+      .parseAsync(argv)
+      .then(resolve)
+      .catch((err: Error) => {
+        onError(err);
+        reject(err);
+      });
+  });
 }

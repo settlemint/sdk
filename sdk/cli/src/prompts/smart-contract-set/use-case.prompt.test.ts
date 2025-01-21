@@ -1,19 +1,11 @@
 import { describe, expect, mock, test } from "bun:test";
 import type { PlatformConfig } from "@settlemint/sdk-js";
-import { list } from "@settlemint/sdk-utils/terminal";
 import { useCasePrompt } from "./use-case.prompt";
 
 const mockSelect = mock(({ choices }: { choices: { value: string }[] }) => Promise.resolve(choices[0]?.value ?? ""));
 
 mock.module("@inquirer/select", () => ({
   default: mockSelect,
-}));
-
-mock.module("@settlemint/sdk-utils/terminal", () => ({
-  cancel: mock((message: string) => {
-    throw new Error(message);
-  }),
-  list,
 }));
 
 describe("useCasePrompt", () => {

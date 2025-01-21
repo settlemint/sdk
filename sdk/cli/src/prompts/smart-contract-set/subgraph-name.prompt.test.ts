@@ -1,7 +1,6 @@
 import { describe, expect, it, mock } from "bun:test";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import input from "@inquirer/input";
-import { list } from "@settlemint/sdk-utils/terminal";
 import { subgraphNamePrompt } from "./subgraph-name.prompt";
 
 const mockInput = mock(({ default: defaultInput }: { default: string | undefined }) =>
@@ -10,13 +9,6 @@ const mockInput = mock(({ default: defaultInput }: { default: string | undefined
 
 mock.module("@inquirer/input", () => ({
   default: mockInput,
-}));
-
-mock.module("@settlemint/sdk-utils/terminal", () => ({
-  cancel: mock((message: string) => {
-    throw new Error(message);
-  }),
-  list,
 }));
 
 mock.module("@/spinners/write-env.spinner", () => ({
