@@ -1,5 +1,7 @@
 import { Command } from "@commander-js/extra-typings";
+import { applicationsListCommand } from "./application/list";
 import { servicesCommand } from "./application/services";
+import { workspacesListCommand } from "./workspace/list";
 
 /**
  * Creates and returns the 'list' command group for the SettleMint SDK.
@@ -11,5 +13,7 @@ export function listCommand(): Command {
   return new Command("list")
     .alias("ls")
     .description("List resources in the SettleMint platform")
-    .addCommand(servicesCommand());
+    .addCommand(servicesCommand())
+    .addCommand(workspacesListCommand())
+    .addCommand(applicationsListCommand());
 }
