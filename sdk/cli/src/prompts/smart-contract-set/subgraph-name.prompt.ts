@@ -7,30 +7,33 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  * Prompts the user for the name of their subgraph.
  * If a subgraph name is already present in the environment variables,
  * it will be used. Otherwise, the user will be prompted to enter it.
+ * The name will be sanitized to ensure it is valid for The Graph protocol.
  *
- * @param defaultName - The name of the subgraph to deploy, if not provided, it will be prompted
- * @param env - Partial environment variables, potentially containing a pre-configured subgraph name.
- * @param accept - Whether to automatically accept the existing subgraph name.
- * @param prod - Whether to write to production environment.
- * @returns A promise that resolves to the subgraph name.
- *
- * @example
- * const env: Partial<DotEnv> = { SETTLEMINT_SUBGRAPH_NAME: "my-subgraph" };
- * const subgraphName = await subgraphNamePrompt(env, false, false);
+ * @param options - The options for the subgraph name prompt
+ * @param options.defaultName - The name of the subgraph to deploy (optional)
+ * @param options.env - Environment variables containing potential pre-configured subgraph name
+ * @param options.accept - Whether to automatically accept existing subgraph name without prompting
+ * @param options.prod - Whether to write to production environment variables
+ * @returns Promise resolving to the sanitized subgraph name, or undefined if no name provided
  */
-export async function subgraphNamePrompt(
-  defaultName: string | undefined,
-  env: Partial<DotEnv>,
-  accept: boolean,
-  prod: boolean | undefined,
-): Promise<string | undefined> {
-  const defaultSubgraphName = defaultName ? sanitizeName(defaultName) : env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME;
+export async function subgraphNamePrompt({
+  defaultName,
+  env,
+  accept,
+  prod,
+}: {
+  defaultName?: string;
+  env: Partial<DotEnv>;
+  accept: boolean;
+  prod?: boolean;
+}): Promise<string | undefined> {
+  const defaultSubgraphName = defaultName ? sanitizeName(defaultName) : undefined;
 
   if (accept) {
     if (defaultSubgraphName && env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME !== defaultSubgraphName) {
       await saveSubgraphName(defaultSubgraphName, env, prod);
     }
-    return defaultSubgraphName;
+    return defaultSubgraphName ?? env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME;
   }
 
   const subgraphName = await input({
@@ -41,7 +44,7 @@ export async function subgraphNamePrompt(
 
   const sanitizedSubgraphName = sanitizeName(subgraphName);
 
-  if (sanitizedSubgraphName !== defaultSubgraphName) {
+  if (env.SETTLEMINT_THEGRAPH_SUBGRAPH_NAME !== sanitizedSubgraphName) {
     await saveSubgraphName(sanitizedSubgraphName, env, prod);
   }
 
