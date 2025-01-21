@@ -58,7 +58,7 @@
     "@inquirer/select": "4.0.6",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "get-tsconfig": "4.9.0",
+    "get-tsconfig": "4.10.0",
     "giget": "1.2.3",
     "yaml": "2.7.0"
   },
