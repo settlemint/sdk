@@ -6,6 +6,6 @@ export function formatHealthStatus(healthStatus: BlockchainNode["healthStatus"],
   if (healthStatus === "HEALTHY") {
     return printToTerminal ? greenBright("Healthy") : "Healthy";
   }
-  const label = `Unhealthy (${camelCaseToWords(replaceUnderscoresAndHyphensWithSpaces(healthStatus))})`;
+  const label = camelCaseToWords(replaceUnderscoresAndHyphensWithSpaces(healthStatus));
   return printToTerminal ? yellowBright(label) : label;
 }

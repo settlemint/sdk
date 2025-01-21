@@ -1,5 +1,5 @@
 import type { ServiceType } from "@/spinners/services.spinner";
-import type { Application } from "@settlemint/sdk-js";
+import type { Application, Workspace } from "@settlemint/sdk-js";
 
 export function getClusterServicePlatformUrl<Service extends { id: string }>(
   instance: string,
@@ -7,8 +7,20 @@ export function getClusterServicePlatformUrl<Service extends { id: string }>(
   service: Service,
   serviceType: ServiceType,
 ) {
+  const applicationUrl = getApplicationUrl(instance, application);
   return new URL(
-    `workspaces/${encodeURIComponent(application.workspace.id)}/applications/${encodeURIComponent(application.id)}/${getUrlPathForService(service, serviceType)}`,
+    `${getWorkspaceUrlPath(application.workspace)}${getApplicationUrlPath(application)}/${getUrlPathForService(service, serviceType)}`,
+    applicationUrl,
+  ).toString();
+}
+
+export function getWorkspaceUrl(instance: string, workspace: Pick<Workspace, "id">) {
+  return new URL(getWorkspaceUrlPath(workspace), instance).toString();
+}
+
+export function getApplicationUrl(instance: string, application: Application) {
+  return new URL(
+    `${getWorkspaceUrlPath(application.workspace)}${getApplicationUrlPath(application)}/dashboard`,
     instance,
   ).toString();
 }
@@ -36,4 +48,12 @@ function getUrlPathForService<Service extends { id: string }>(service: Service, 
     return `insights/${encodeURIComponent(service.id)}/details`;
   }
   return "";
+}
+
+function getWorkspaceUrlPath(workspace: Pick<Workspace, "id">) {
+  return `/workspaces/${encodeURIComponent(workspace.id)}`;
+}
+
+function getApplicationUrlPath(application: Pick<Application, "id">) {
+  return `/applications/${encodeURIComponent(application.id)}`;
 }

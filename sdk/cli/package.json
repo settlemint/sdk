@@ -42,8 +42,7 @@
   },
   "dependencies": {
     "hardhat": "2.22.18",
-    "tinyexec": "0.3.2",
-    "tty-table": "4.2.3"
+    "tinyexec": "0.3.2"
   },
   "devDependencies": {
     "@types/semver": "7.5.8",
