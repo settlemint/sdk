@@ -1,5 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import {} from "node:fs/promises";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { $ } from "bun";
 import { parseDocument } from "yaml";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
@@ -69,18 +71,25 @@ describe("Test platform list services command", () => {
     ]).result;
     const json = JSON.parse(output);
     expect(json).toBeArrayOfSize(7);
+    const env = await loadEnv(false, false);
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
+    const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
     expect(json[0]).toMatchObject({
       label: "Blockchain networks",
       items: [
         {
           name: "Starter Kit Network",
-          uniqueName: "starter-kit-network-33b2e",
+          uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
           status: "Completed",
           healthSatus: "Unhealthy (NOT BFT)",
           type: "BesuQBFTBlockchainNetwork",
           provider: "gke",
           region: "europe",
-          url: "https://console-release.settlemint.com/workspaces/6787f8bc22d7484e8478680b/applications/6787f8bd22d7484e8478680d/networks/6787f8bf22d7484e84786810/details",
+          url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
         },
       ],
     });
@@ -106,18 +115,25 @@ describe("Test platform list services command", () => {
     expect(yaml).toBeObject();
     const parsedYaml = yaml.toJSON();
     expect(parsedYaml).toBeArrayOfSize(7);
+    const env = await loadEnv(false, false);
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
+    const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
     expect(parsedYaml[0]).toMatchObject({
       label: "Blockchain networks",
       items: [
         {
           name: "Starter Kit Network",
-          uniqueName: "starter-kit-network-33b2e",
+          uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
           status: "Completed",
           healthSatus: "Unhealthy (NOT BFT)",
           type: "BesuQBFTBlockchainNetwork",
           provider: "gke",
           region: "europe",
-          url: "https://console-release.settlemint.com/workspaces/6787f8bc22d7484e8478680b/applications/6787f8bd22d7484e8478680d/networks/6787f8bf22d7484e84786810/details",
+          url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
         },
       ],
     });
