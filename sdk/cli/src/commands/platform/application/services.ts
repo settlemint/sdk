@@ -188,7 +188,7 @@ async function getServicesAndMapResults({
           name: s.name,
           uniqueName: s.uniqueName,
           status: formatStatus(s.status, printToTerminal),
-          healthSatus: formatHealthStatus(s.healthStatus, printToTerminal),
+          healthStatus: formatHealthStatus(s.healthStatus, printToTerminal),
           type: formatServiceSubType(s, printToTerminal),
           provider: s.provider,
           region: s.region,
