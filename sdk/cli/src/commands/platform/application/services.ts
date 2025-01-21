@@ -73,12 +73,7 @@ export function servicesCommand() {
       "The application unique name to list the services in (defaults to application from env)",
     )
     .addOption(new Option("-t, --type <type...>", "The type(s) of service to list").choices(SERVICE_TYPES))
-    .addOption(
-      new Option(
-        "-o, --output <output>",
-        "The output format. For 'wide' format, disable terminal line wrapping for best results (use 'tput rmam' command on Unix systems)",
-      ).choices(["wide", "json", "yaml"]),
-    )
+    .addOption(new Option("-o, --output <output>", "The output format").choices(["wide", "json", "yaml"]))
     .action(async ({ application, type, output }) => {
       const printToTerminal = !output || output === "wide";
       if (printToTerminal) {
