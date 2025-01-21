@@ -80,13 +80,11 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
   }
 }
 
-export function sdkCliCommand(argv: string[] = process.argv) {
+export function registerCommands() {
   /**
    * The main Command instance for the SettleMint CLI.
    */
   const sdkcli = new Command() as ExtendedCommand;
-
-  sdkcli.exitOverride(onError);
 
   // Configure the CLI command
   sdkcli
@@ -107,6 +105,17 @@ export function sdkCliCommand(argv: string[] = process.argv) {
   sdkcli.addCommand(createCommand());
   sdkcli.addCommand(loginCommand());
   sdkcli.addCommand(logoutCommand());
+
+  return sdkcli;
+}
+
+export function sdkCliCommand(argv: string[] = process.argv) {
+  /**
+   * The main Command instance for the SettleMint CLI.
+   */
+  const sdkcli = registerCommands();
+
+  sdkcli.exitOverride(onError);
 
   async function onError(error: Error) {
     // Get the command path from the command that threw the error
