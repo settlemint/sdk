@@ -1,6 +1,6 @@
 import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
-import { CancelError, ascii, cancel } from "@settlemint/sdk-utils/terminal";
+import { ascii } from "@settlemint/sdk-utils/terminal";
 import pkg from "../../package.json";
 import { codegenCommand } from "./codegen";
 import { connectCommand } from "./connect";
@@ -16,9 +16,7 @@ type ExtendedCommand = Command & {
   _lastCommand?: ExtendedCommand;
 };
 
-let lastCommandPath: string | null = null;
-
-function setLastCommandPath(command: Command): void {
+function getCommandPath(command: Command): string {
   const parts: string[] = [];
   let currentCommand: Command | null = command;
 
@@ -29,12 +27,13 @@ function setLastCommandPath(command: Command): void {
     currentCommand = currentCommand.parent as Command | null;
   }
 
-  lastCommandPath = parts.join(" ");
+  return parts.join(" ");
 }
 
 function getCommandPathFromArgv(argv: string[]): string | null {
   // Get the command path from argv, skipping the first two arguments (node/bun and script name)
-  const args = argv.slice(argv.indexOf("settlemint") + 1);
+  const settlemintIndex = argv.indexOf("settlemint");
+  const args = argv.slice(settlemintIndex !== -1 ? settlemintIndex + 1 : 0);
   if (!args.length) {
     return null;
   }
@@ -55,7 +54,9 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
   extendedCmd
     .hook("preAction", async (thisCommand) => {
       if (isLeafCommand(thisCommand)) {
-        setLastCommandPath(thisCommand);
+        const commandPath = getCommandPath(thisCommand);
+        rootCmd._lastCommand = thisCommand as ExtendedCommand;
+        rootCmd._lastCommand._commandPath = commandPath;
       }
       if (isLeafCommand(thisCommand) && !isJsonOrYamlOutput(thisCommand)) {
         ascii();
@@ -64,7 +65,7 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
     .hook("postAction", async (thisCommand) => {
       // Only send telemetry for leaf commands (commands without subcommands)
       if (isLeafCommand(thisCommand)) {
-        const commandPath = lastCommandPath ?? getCommandPathFromArgv(argv);
+        const commandPath = thisCommand._commandPath ?? getCommandPathFromArgv(argv);
         if (commandPath) {
           await telemetry({
             command: commandPath,
@@ -109,7 +110,13 @@ export function registerCommands() {
   return sdkcli;
 }
 
-export function sdkCliCommand(argv: string[] = process.argv) {
+/**
+ * Parses command line arguments and executes the appropriate command.
+ * Handles any errors that occur during execution.
+ * @param argv - The command line arguments to parse. Defaults to process.argv.
+ * @throws {Error} If an unexpected error occurs during command execution.
+ */
+export async function sdkCliCommand(argv: string[] = process.argv) {
   /**
    * The main Command instance for the SettleMint CLI.
    */
@@ -119,16 +126,13 @@ export function sdkCliCommand(argv: string[] = process.argv) {
 
   async function onError(error: Error) {
     // Get the command path from the command that threw the error
-    const commandPath = lastCommandPath ?? getCommandPathFromArgv(argv);
+    const commandPath = sdkcli._lastCommand?._commandPath ?? getCommandPathFromArgv(argv);
     if (commandPath) {
       await telemetry({
         command: commandPath,
         status: "error",
         message: error.message,
       });
-    }
-    if (!(error instanceof CancelError)) {
-      cancel(error.message);
     }
   }
 
@@ -137,20 +141,11 @@ export function sdkCliCommand(argv: string[] = process.argv) {
     addHooksToCommand(cmd as Command, sdkcli, argv);
   }
 
-  /**
-   * Parses command line arguments and executes the appropriate command.
-   * Handles any errors that occur during execution.
-   *
-   * @throws {Error} If an unexpected error occurs during command execution.
-   */
-  lastCommandPath = null;
-  return new Promise((resolve, reject) => {
-    sdkcli
-      .parseAsync(argv)
-      .then(resolve)
-      .catch((err: Error) => {
-        onError(err);
-        reject(err);
-      });
-  });
+  try {
+    await sdkcli.parseAsync(argv);
+  } catch (err) {
+    const error = err as Error;
+    onError(error);
+    process.exit(1);
+  }
 }
