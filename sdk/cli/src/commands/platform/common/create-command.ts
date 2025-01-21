@@ -146,7 +146,7 @@ export function getCreateCommand({
       if (isDefault && typeof mapDefaultEnv === "function") {
         const defaultEnv = mapDefaultEnv();
         const updatedEnv = defaultEnv instanceof Promise ? await defaultEnv : defaultEnv;
-        const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION === env.SETTLEMINT_APPLICATION;
+        const isApplicationChanged = updatedEnv.SETTLEMINT_APPLICATION !== env.SETTLEMINT_APPLICATION;
         const newEnv: Partial<DotEnv> = isApplicationChanged
           ? {
               SETTLEMINT_ACCESS_TOKEN: usePersonalAccessToken ? env.SETTLEMINT_ACCESS_TOKEN : accessToken,
