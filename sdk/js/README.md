@@ -138,7 +138,7 @@ Options for the Settlemint client.
 
 > **Application**: `ResultOf`\<*typeof* `ApplicationFragment`\>
 
-Defined in: [graphql/application.ts:23](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/js/src/graphql/application.ts#L23)
+Defined in: [graphql/application.ts:24](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/js/src/graphql/application.ts#L24)
 
 Type representing an application entity.
 

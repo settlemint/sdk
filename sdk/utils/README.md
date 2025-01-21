@@ -63,6 +63,8 @@
     - [tryParseJson()](#tryparsejson)
     - [validate()](#validate)
     - [writeEnv()](#writeenv)
+  - [Classes](#classes)
+    - [CancelError](#cancelerror)
   - [Interfaces](#interfaces)
     - [ExecuteCommandOptions](#executecommandoptions)
     - [SpinnerOptions\<R\>](#spinneroptionsr)
@@ -159,7 +161,7 @@ const words = camelCaseToWords("camelCaseString");
 
 > **cancel**(`msg`): `never`
 
-Defined in: [sdk/utils/src/terminal/cancel.ts:17](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/cancel.ts#L17)
+Defined in: [sdk/utils/src/terminal/cancel.ts:23](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/cancel.ts#L23)
 
 Displays an error message in red inverse text and exits the process.
 Used to terminate execution with a visible error message.
@@ -175,7 +177,7 @@ Any sensitive tokens in the message are masked before display.
 
 `never`
 
-never - Function does not return as it exits the process
+never - Function does not return as it throws an error
 
 ##### Example
 
@@ -1096,7 +1098,7 @@ await setName("my-new-project-name");
 
 > **spinner**\<`R`\>(`options`): `Promise`\<`R`\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:39](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L39)
+Defined in: [sdk/utils/src/terminal/spinner.ts:40](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L40)
 
 Displays a loading spinner while executing an async task.
 Shows progress with start/stop messages and handles errors.
@@ -1144,19 +1146,18 @@ const result = await spinner({
 
 #### table()
 
-> **table**(`title`, `data`, `compact`): `void`
+> **table**(`title`, `data`): `void`
 
-Defined in: [sdk/utils/src/terminal/table.ts:22](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/table.ts#L22)
+Defined in: [sdk/utils/src/terminal/table.ts:20](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/table.ts#L20)
 
 Displays data in a formatted table in the terminal.
 
 ##### Parameters
 
-| Parameter | Type | Default value | Description |
-| ------ | ------ | ------ | ------ |
-| `title` | `string` | `undefined` | Title to display above the table |
-| `data` | `unknown`[] | `undefined` | Array of objects to display in table format |
-| `compact` | `boolean` | `true` | Whether to display the table in compact mode |
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `title` | `string` | Title to display above the table |
+| `data` | `unknown`[] | Array of objects to display in table format |
 
 ##### Returns
 
@@ -1317,6 +1318,19 @@ await writeEnv({
 });
 ```
 
+### Classes
+
+#### CancelError
+
+Defined in: [sdk/utils/src/terminal/cancel.ts:8](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/cancel.ts#L8)
+
+Error class used to indicate that the operation was cancelled.
+This error is used to signal that the operation should be aborted.
+
+##### Extends
+
+- `Error`
+
 ### Interfaces
 
 #### ExecuteCommandOptions
@@ -1339,7 +1353,7 @@ Options for executing a command, extending SpawnOptionsWithoutStdio
 
 #### SpinnerOptions\<R\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:9](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L9)
+Defined in: [sdk/utils/src/terminal/spinner.ts:10](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L10)
 
 Options for configuring the spinner behavior
 
@@ -1353,9 +1367,9 @@ Options for configuring the spinner behavior
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:11](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L11) |
-| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:15](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L15) |
-| <a id="task"></a> `task` | (`spinner`?: `Spinner`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:13](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L13) |
+| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L12) |
+| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:16](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L16) |
+| <a id="task"></a> `task` | (`spinner`?: `Spinner`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:14](https://github.com/settlemint/sdk/blob/v1.0.8/sdk/utils/src/terminal/spinner.ts#L14) |
 
 ### Type Aliases
 
