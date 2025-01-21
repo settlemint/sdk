@@ -81,6 +81,23 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
   }
 }
 
+async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
+  // Get the command path from the command that threw the error
+  const commandPath = sdkcli._lastCommand?._commandPath ?? getCommandPathFromArgv(argv);
+  if (commandPath) {
+    await telemetry({
+      command: commandPath,
+      status: "error",
+      message: error.message,
+    });
+  }
+  process.exit(1);
+}
+
+/**
+ * Registers the commands for the SettleMint CLI.
+ * @returns The main Command instance for the SettleMint CLI.
+ */
 export function registerCommands() {
   /**
    * The main Command instance for the SettleMint CLI.
@@ -122,19 +139,7 @@ export async function sdkCliCommand(argv: string[] = process.argv) {
    */
   const sdkcli = registerCommands();
 
-  sdkcli.exitOverride(onError);
-
-  async function onError(error: Error) {
-    // Get the command path from the command that threw the error
-    const commandPath = sdkcli._lastCommand?._commandPath ?? getCommandPathFromArgv(argv);
-    if (commandPath) {
-      await telemetry({
-        command: commandPath,
-        status: "error",
-        message: error.message,
-      });
-    }
-  }
+  sdkcli.exitOverride((error) => onError(sdkcli, argv, error));
 
   // Add hooks to all commands including subcommands recursively
   for (const cmd of sdkcli.commands) {
@@ -145,7 +150,6 @@ export async function sdkCliCommand(argv: string[] = process.argv) {
     await sdkcli.parseAsync(argv);
   } catch (err) {
     const error = err as Error;
-    onError(error);
-    process.exit(1);
+    onError(sdkcli, argv, error);
   }
 }
