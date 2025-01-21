@@ -86,7 +86,12 @@ export function subgraphDeployCommand() {
         }
       }
 
-      const graphName = await subgraphNamePrompt(subgraphName, env, autoAccept, !!prod);
+      const graphName = await subgraphNamePrompt({
+        defaultName: subgraphName,
+        env,
+        accept: autoAccept,
+        prod: !!prod,
+      });
       if (!graphName) {
         cancel("No graph name provided. Please provide a graph name to continue.");
       }
