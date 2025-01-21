@@ -8,7 +8,7 @@
         "@biomejs/biome": "1.9.4",
         "@types/bun": "1.1.18",
         "@types/mustache": "4.2.5",
-        "knip": "5.42.2",
+        "knip": "5.42.3",
         "lefthook": "1.10.9",
         "mustache": "4.2.0",
         "publint": "0.3.2",
@@ -48,7 +48,7 @@
         "@settlemint/sdk-utils": "sdk/utils",
         "@types/node": "22.10.7",
         "@types/semver": "7.5.8",
-        "get-tsconfig": "4.9.0",
+        "get-tsconfig": "4.10.0",
         "giget": "1.2.3",
         "is-in-ci": "1.0.0",
         "semver": "7.6.3",
@@ -555,7 +555,7 @@
 
     "@settlemint/sdk-blockscout": ["@settlemint/sdk-blockscout@workspace:sdk/blockscout", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
 
-    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "dependencies": { "hardhat": "2.22.18", "tinyexec": "0.3.2" }, "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.9.0", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yaml": "2.7.0", "yoctocolors": "2.1.1" }, "bin": { "settlemint": "dist/cli.js" } }],
+    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "dependencies": { "hardhat": "2.22.18", "tinyexec": "0.3.2" }, "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.10.0", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yaml": "2.7.0", "yoctocolors": "2.1.1" }, "bin": { "settlemint": "dist/cli.js" } }],
 
     "@settlemint/sdk-hasura": ["@settlemint/sdk-hasura@workspace:sdk/hasura", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "drizzle-kit": "^0.30", "drizzle-orm": "^0.38", "gql.tada": "^1", "graphql-request": "^7", "pg": "^8", "zod": "^3" }, "devDependencies": { "@types/pg": "^8" } }],
 
@@ -915,7 +915,7 @@
 
     "get-stream": ["get-stream@6.0.1", "", {}, "sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg=="],
 
-    "get-tsconfig": ["get-tsconfig@4.9.0", "", { "dependencies": { "resolve-pkg-maps": "^1.0.0" } }, "sha512-52n24W52sIueosRe0XZ8Ex5Yle+WbhfCKnV/gWXpbVR8FXNTfqdKEKUSypKso66VRHTvvcQxL44UTZbJRlCTnw=="],
+    "get-tsconfig": ["get-tsconfig@4.10.0", "", { "dependencies": { "resolve-pkg-maps": "^1.0.0" } }, "sha512-kGzZ3LWWQcGIAmg6iWvXn0ei6WDtV26wzHRMwDSzmAbcXrTEXxHy6IehI6/4eT6VRKyMP1eF1VqwrVUmE/LR7A=="],
 
     "giget": ["giget@1.2.3", "", { "dependencies": { "citty": "^0.1.6", "consola": "^3.2.3", "defu": "^6.1.4", "node-fetch-native": "^1.6.3", "nypm": "^0.3.8", "ohash": "^1.1.3", "pathe": "^1.1.2", "tar": "^6.2.0" }, "bin": { "giget": "dist/cli.mjs" } }, "sha512-8EHPljDvs7qKykr6uw8b+lqLiUc/vUg+KVTI0uND4s63TdsZM2Xus3mflvF0DDG9SiM4RlCkFGL+7aAjRmV7KA=="],
 
@@ -1067,7 +1067,7 @@
 
     "keccak": ["keccak@3.0.4", "", { "dependencies": { "node-addon-api": "^2.0.0", "node-gyp-build": "^4.2.0", "readable-stream": "^3.6.0" } }, "sha512-3vKuW0jV8J3XNTzvfyicFR5qvxrSAGl7KIhvgOu5cmWwM7tZRj3fMbj/pfIf4be7aznbc+prBWGjywox/g2Y6Q=="],
 
-    "knip": ["knip@5.42.2", "", { "dependencies": { "@nodelib/fs.walk": "3.0.1", "@snyk/github-codeowners": "1.1.0", "easy-table": "1.2.0", "enhanced-resolve": "^5.18.0", "fast-glob": "^3.3.3", "jiti": "^2.4.2", "js-yaml": "^4.1.0", "minimist": "^1.2.8", "picocolors": "^1.1.0", "picomatch": "^4.0.1", "pretty-ms": "^9.0.0", "smol-toml": "^1.3.1", "strip-json-comments": "5.0.1", "summary": "2.1.0", "zod": "^3.22.4", "zod-validation-error": "^3.0.3" }, "peerDependencies": { "@types/node": ">=18", "typescript": ">=5.0.4" }, "bin": { "knip": "bin/knip.js", "knip-bun": "bin/knip-bun.js" } }, "sha512-hVtZ6V59COFz3Y0/BHrWMlPAx82EdX/xFHXbutIRSNfJFPMGmIpxLBWTg35F4XQJGwlu5uWiJf8rBYYkmlYWWQ=="],
+    "knip": ["knip@5.42.3", "", { "dependencies": { "@nodelib/fs.walk": "3.0.1", "@snyk/github-codeowners": "1.1.0", "easy-table": "1.2.0", "enhanced-resolve": "^5.18.0", "fast-glob": "^3.3.3", "jiti": "^2.4.2", "js-yaml": "^4.1.0", "minimist": "^1.2.8", "picocolors": "^1.1.0", "picomatch": "^4.0.1", "pretty-ms": "^9.0.0", "smol-toml": "^1.3.1", "strip-json-comments": "5.0.1", "summary": "2.1.0", "zod": "^3.22.4", "zod-validation-error": "^3.0.3" }, "peerDependencies": { "@types/node": ">=18", "typescript": ">=5.0.4" }, "bin": { "knip": "bin/knip.js", "knip-bun": "bin/knip-bun.js" } }, "sha512-Bytayxld9Ksd7ObL4zNwRjSq11n+NtsN3SemTfEbqW8WEQnfeW4i0wx6QtY+WeVdmWeWNJGNjrmsC87FdaEAHw=="],
 
     "kubo-rpc-client": ["kubo-rpc-client@5.0.2", "", { "dependencies": { "@ipld/dag-cbor": "^9.0.0", "@ipld/dag-json": "^10.0.0", "@ipld/dag-pb": "^4.0.0", "@libp2p/crypto": "^5.0.0", "@libp2p/interface": "^2.0.0", "@libp2p/logger": "^5.0.0", "@libp2p/peer-id": "^5.0.0", "@multiformats/multiaddr": "^12.2.1", "@multiformats/multiaddr-to-uri": "^10.0.1", "any-signal": "^4.1.1", "blob-to-it": "^2.0.5", "browser-readablestream-to-it": "^2.0.5", "dag-jose": "^5.0.0", "electron-fetch": "^1.9.1", "err-code": "^3.0.1", "ipfs-unixfs": "^11.1.4", "iso-url": "^1.2.1", "it-all": "^3.0.4", "it-first": "^3.0.4", "it-glob": "^3.0.1", "it-last": "^3.0.4", "it-map": "^3.0.5", "it-peekable": "^3.0.3", "it-to-stream": "^1.0.0", "merge-options": "^3.0.4", "multiformats": "^13.1.0", "nanoid": "^5.0.7", "native-fetch": "^4.0.2", "parse-duration": "^1.0.2", "react-native-fetch-api": "^3.0.0", "stream-to-it": "^1.0.1", "uint8arrays": "^5.0.3", "wherearewe": "^2.0.1" } }, "sha512-0w8VUwpxtkynLlJsAnM+es3qR6Nvv0/oqg0I+sCgI65rh8OPoBYpsk58/miD+u/OkIhJKBwslfeJ9y7Ujb40+g=="],
 
