@@ -288,6 +288,7 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
   """Unique identifier of the entity"""
   id: ID!
   identityOf: [BlockchainNode!]
+  identityOfIntegration: [Integration!]
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -5296,6 +5297,9 @@ type Chainlink implements AbstractClusterService & AbstractEntity & Integration 
   jobLogs: [String!]!
   jobProgress: Float!
 
+  """Key material for the chainlink node"""
+  keyMaterial: AccessibleEcdsaP256PrivateKey
+
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
   latestVersion: String!
@@ -5449,6 +5453,7 @@ enum ClusterServiceHealthStatus {
   HAS_INDEXING_BACKLOG
   HEALTHY
   MISSING_DEPLOYMENT_HEAD
+  NODES_SAME_REGION
   NODE_TYPE_CONFLICT
   NOT_BFT
   NOT_HA
@@ -6287,6 +6292,9 @@ input CreateMultiServiceIntegrationArgs {
 
   """The type of integration to create"""
   integrationType: IntegrationType!
+
+  """The key material for a chainlink node"""
+  keyMaterial: ID
 
   """CPU limit in cores"""
   limitCpu: Int
@@ -10706,6 +10714,7 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
   """Unique identifier of the entity"""
   id: ID!
   identityOf: [BlockchainNode!]
+  identityOfIntegration: [Integration!]
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -11784,6 +11793,7 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
   """Unique identifier of the entity"""
   id: ID!
   identityOf: [BlockchainNode!]
+  identityOfIntegration: [Integration!]
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -13643,6 +13653,9 @@ type Mutation {
 
     """The type of integration to create"""
     integrationType: IntegrationType!
+
+    """The key material for a chainlink node"""
+    keyMaterial: ID
 
     """CPU limit in cores"""
     limitCpu: Int
@@ -19136,6 +19149,7 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
   """Unique identifier of the entity"""
   id: ID!
   identityOf: [BlockchainNode!]
+  identityOfIntegration: [Integration!]
 
   """Indicates if the pod is handling traffic"""
   isPodHandlingTraffic: Boolean!
@@ -20849,6 +20863,29 @@ enum Scope {
   PRIVATE_KEY
   SMART_CONTRACT_SET
   STORAGE
+}
+
+type SecretCodesWalletKeyVerification implements WalletKeyVerification {
+  """Date and time when the entity was created"""
+  createdAt: DateTime!
+
+  """Date and time when the entity was deleted, if applicable"""
+  deletedAt: DateTime
+
+  """Unique identifier of the entity"""
+  id: ID!
+
+  """The name of the wallet key verification"""
+  name: String!
+
+  """The parameters of the wallet key verification"""
+  parameters: JSONObject!
+
+  """Date and time when the entity was last updated"""
+  updatedAt: DateTime!
+
+  """The type of wallet key verification"""
+  verificationType: WalletKeyVerificationType!
 }
 
 type SepoliaBlockchainNetwork implements AbstractClusterService & AbstractEntity & BlockchainNetwork {
@@ -23545,9 +23582,10 @@ interface WalletKeyVerification {
 enum WalletKeyVerificationType {
   OTP
   PINCODE
+  SECRET_CODES
 }
 
-union WalletKeyVerificationUnionType = OTPWalletKeyVerification | PincodeWalletKeyVerification
+union WalletKeyVerificationUnionType = OTPWalletKeyVerification | PincodeWalletKeyVerification | SecretCodesWalletKeyVerification
 
 """A workspace"""
 type Workspace {
