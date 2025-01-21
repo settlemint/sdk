@@ -8,6 +8,12 @@ mock.module("@inquirer/select", () => ({
   default: mockSelect,
 }));
 
+mock.module("@settlemint/sdk-utils/terminal", () => ({
+  cancel: mock((message: string) => {
+    throw new Error(message);
+  }),
+}));
+
 describe("useCasePrompt", () => {
   const mockPlatformConfig: PlatformConfig = {
     smartContractSets: {

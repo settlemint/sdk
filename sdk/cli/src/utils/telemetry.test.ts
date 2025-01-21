@@ -25,10 +25,10 @@ afterAll(() => {
 
 describe("CLI Telemetry", () => {
   test("successful command execution logs telemetry", async () => {
-    await sdkCliCommand(["bun", "settlemint", "login", "-a"]);
+    await sdkCliCommand(["bun", "settlemint", "platform", "config", "-i", "https://console.settlemint.com"]);
 
     expect(mockTelemetry).toHaveBeenCalledWith({
-      command: "login",
+      command: "platform config",
       status: "success",
     });
   });
@@ -46,12 +46,12 @@ describe("CLI Telemetry", () => {
 
   test("failed command execution logs error telemetry", async () => {
     try {
-      await sdkCliCommand(["bun", "settlemint", "platform", "create", "application", "-w", "invalid", "-a"]);
+      await sdkCliCommand(["bun", "settlemint", "connect", "-i", "https://onprem.settlemint.com"]);
     } catch (error) {}
     expect(mockTelemetry).toHaveBeenCalledWith({
-      command: "platform create application",
+      command: "connect",
       status: "error",
-      message: "Could not find entity by unique name: invalid",
+      message: "No configuration found for instance 'https://onprem.settlemint.com'",
     });
   });
 });
