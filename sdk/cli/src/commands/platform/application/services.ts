@@ -10,7 +10,7 @@ import { type ServiceType, servicesSpinner } from "@/spinners/services.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
-import { getClusterServicePlatformUrl } from "@/utils/get-cluster-service-platform-url";
+import { getApplicationUrl, getClusterServicePlatformUrl, getWorkspaceUrl } from "@/utils/get-platform-url";
 import { Command, Option } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -109,14 +109,29 @@ export function servicesCommand() {
         printToTerminal,
         wide,
       });
+      const selectedApplication = await settlemint.application.read(applicationUniqueName);
+      const data = {
+        workspace: {
+          uniqueName: selectedApplication.workspace.uniqueName,
+          name: selectedApplication.workspace.name,
+          url: getWorkspaceUrl(selectedInstance, selectedApplication.workspace),
+        },
+        application: {
+          uniqueName: selectedApplication.uniqueName,
+          name: selectedApplication.name,
+          url: getApplicationUrl(selectedInstance, selectedApplication),
+        },
+        services: servicesToShow,
+      };
       if (printToTerminal) {
-        for (const service of servicesToShow) {
-          table(service.label, service.items, !wide);
-        }
+        table(
+          `Services for ${selectedApplication.name} (${applicationUniqueName}) - ${getApplicationUrl(selectedInstance, selectedApplication)}`,
+          servicesToShow,
+        );
       } else if (output === "json") {
-        console.log(JSON.stringify(servicesToShow, null, 2));
+        console.log(JSON.stringify(data, null, 2));
       } else if (output === "yaml") {
-        console.log(stringify(servicesToShow));
+        console.log(stringify(data));
       }
       if (printToTerminal) {
         outro("Application services listed");
@@ -162,42 +177,29 @@ async function getServicesAndMapResults({
         return null;
       }
 
-      return {
-        label: capitalizeFirstLetter(labels.plural),
-        items: serviceItems.map((s) => {
-          const basicFields = {
-            status: formatStatus(s.status, printToTerminal),
-            healthSatus: formatHealthStatus(s.healthStatus, printToTerminal),
-            type: formatServiceSubType(s, printToTerminal),
-            provider: s.provider,
-            region: s.region,
-          };
-          if (wide) {
-            return {
-              nameAndUniqueName: `${s.name}\n${s.uniqueName}`,
-              url: getClusterServicePlatformUrl(instance, application, s, serviceType),
-              ...basicFields,
-            };
-          }
-          if (!printToTerminal) {
-            return {
-              name: s.name,
-              uniqueName: s.uniqueName,
-              ...basicFields,
-              url: getClusterServicePlatformUrl(instance, application, s, serviceType),
-            };
-          }
+      return serviceItems.map((s) => {
+        const basicFields = {
+          group: capitalizeFirstLetter(labels.plural),
+          name: s.name,
+          uniqueName: s.uniqueName,
+          status: formatStatus(s.status, printToTerminal),
+          healthStatus: formatHealthStatus(s.healthStatus, printToTerminal),
+          type: formatServiceSubType(s, printToTerminal),
+          provider: s.provider,
+          region: s.region,
+        };
+        if (wide || !printToTerminal) {
           return {
-            name: s.name,
-            uniqueName: s.uniqueName,
             ...basicFields,
+            url: getClusterServicePlatformUrl(instance, application, s, serviceType),
           };
-        }),
-      };
+        }
+        return basicFields;
+      });
     })
     .filter((result): result is NonNullable<typeof result> => result !== null);
 
-  return results;
+  return results.flat();
 }
 
 function getItemsForServiceType(services: Awaited<ReturnType<typeof servicesSpinner>>, serviceType: ServiceType) {

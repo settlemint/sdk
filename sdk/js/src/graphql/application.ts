@@ -13,6 +13,7 @@ const ApplicationFragment = graphql(`
     workspace {
       id
       uniqueName
+      name
     }
   }
 `);
