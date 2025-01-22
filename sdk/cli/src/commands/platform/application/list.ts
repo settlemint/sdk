@@ -5,7 +5,7 @@ import { applicationsSpinner } from "@/spinners/applications.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
-import { getApplicationUrl } from "@/utils/get-platform-url";
+import { getApplicationUrl, getWorkspaceUrl } from "@/utils/get-platform-url";
 import { Command, Option } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -83,7 +83,7 @@ export function applicationsListCommand() {
       if (printToTerminal) {
         const selectedWorkspace = await settlemint.workspace.read(workspaceUniqueName);
         table(
-          `Applications for workspace ${selectedWorkspace.name} (${selectedWorkspace}) - ${"TODO: url"}`,
+          `Applications for workspace ${selectedWorkspace.name} (${selectedWorkspace}) - ${getWorkspaceUrl(selectedInstance, selectedWorkspace)}`,
           applicationsData,
         );
       } else if (output === "json") {
