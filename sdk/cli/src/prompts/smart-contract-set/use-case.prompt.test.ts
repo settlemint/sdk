@@ -1,4 +1,4 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterAll, describe, expect, mock, test } from "bun:test";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { useCasePrompt } from "./use-case.prompt";
 
@@ -13,6 +13,10 @@ mock.module("@settlemint/sdk-utils/terminal", () => ({
     throw new Error(message);
   }),
 }));
+
+afterAll(() => {
+  mock.restore();
+});
 
 describe("useCasePrompt", () => {
   const mockPlatformConfig: PlatformConfig = {
