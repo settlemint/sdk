@@ -3,6 +3,7 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
+import { getWorkspaceUrl } from "@/utils/get-platform-url";
 import { Command, Option } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -65,7 +66,7 @@ export function workspacesListCommand() {
         if (wide || !printToTerminal) {
           return {
             ...basicFields,
-            url: `https://console-release.settlemint.com/workspaces/${workspace.id}/overview`, // TODO: get url from utils
+            url: getWorkspaceUrl(selectedInstance, workspace),
           };
         }
 
