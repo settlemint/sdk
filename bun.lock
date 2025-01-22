@@ -1,12 +1,12 @@
 {
-  "lockfileVersion": 0,
+  "lockfileVersion": 1,
   "workspaces": {
     "": {
       "name": "sdk",
       "devDependencies": {
         "@arethetypeswrong/cli": "0.17.3",
         "@biomejs/biome": "1.9.4",
-        "@types/bun": "1.1.18",
+        "@types/bun": "1.2.0",
         "@types/mustache": "4.2.5",
         "knip": "5.42.3",
         "lefthook": "1.10.10",
@@ -25,7 +25,7 @@
       "name": "@settlemint/sdk-blockscout",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "gql.tada": "^1",
         "graphql-request": "^7",
         "zod": "^3",
@@ -34,6 +34,9 @@
     "sdk/cli": {
       "name": "@settlemint/sdk-cli",
       "version": "0.9.0",
+      "bin": {
+        "settlemint": "dist/cli.js"
+      },
       "dependencies": {
         "hardhat": "2.22.18",
         "tinyexec": "0.3.2",
@@ -44,8 +47,8 @@
         "@inquirer/input": "4.1.3",
         "@inquirer/password": "4.0.6",
         "@inquirer/select": "4.0.6",
-        "@settlemint/sdk-js": "sdk/js",
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-js": "workspace:*",
+        "@settlemint/sdk-utils": "workspace:*",
         "@types/node": "22.10.7",
         "@types/semver": "7.5.8",
         "get-tsconfig": "4.10.0",
@@ -61,7 +64,7 @@
       "name": "@settlemint/sdk-hasura",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "drizzle-kit": "^0.30",
         "drizzle-orm": "^0.38",
         "gql.tada": "^1",
@@ -77,7 +80,7 @@
       "name": "@settlemint/sdk-ipfs",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "kubo-rpc-client": "^5",
         "zod": "^3",
       },
@@ -86,7 +89,7 @@
       "name": "@settlemint/sdk-js",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "gql.tada": "^1",
         "graphql-request": "^7",
         "zod": "^3",
@@ -99,7 +102,7 @@
       "name": "@settlemint/sdk-minio",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "minio": "^8",
         "zod": "^3",
       },
@@ -108,7 +111,7 @@
       "name": "@settlemint/sdk-next",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "path-to-regexp": "^8",
       },
       "devDependencies": {
@@ -123,7 +126,7 @@
       "name": "@settlemint/sdk-portal",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "gql.tada": "^1",
         "graphql-request": "^7",
         "zod": "^3",
@@ -133,7 +136,7 @@
       "name": "@settlemint/sdk-thegraph",
       "version": "0.9.0",
       "dependencies": {
-        "@settlemint/sdk-utils": "sdk/utils",
+        "@settlemint/sdk-utils": "workspace:*",
         "gql.tada": "^1",
         "graphql-request": "^7",
         "zod": "^3",
@@ -553,25 +556,25 @@
 
     "@sentry/utils": ["@sentry/utils@5.30.0", "", { "dependencies": { "@sentry/types": "5.30.0", "tslib": "^1.9.3" } }, "sha512-zaYmoH0NWWtvnJjC9/CBseXMtKHm/tm40sz3YfJRxeQjyzRqNQPgivpd9R/oDJCYj999mzdW382p/qi2ypjLww=="],
 
-    "@settlemint/sdk-blockscout": ["@settlemint/sdk-blockscout@workspace:sdk/blockscout", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
+    "@settlemint/sdk-blockscout": ["@settlemint/sdk-blockscout@workspace:sdk/blockscout"],
 
-    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "dependencies": { "hardhat": "2.22.18", "tinyexec": "0.3.2" }, "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.10.0", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yaml": "2.7.0", "yoctocolors": "2.1.1" }, "bin": { "settlemint": "dist/cli.js" } }],
+    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli"],
 
-    "@settlemint/sdk-hasura": ["@settlemint/sdk-hasura@workspace:sdk/hasura", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "drizzle-kit": "^0.30", "drizzle-orm": "^0.38", "gql.tada": "^1", "graphql-request": "^7", "pg": "^8", "zod": "^3" }, "devDependencies": { "@types/pg": "^8" } }],
+    "@settlemint/sdk-hasura": ["@settlemint/sdk-hasura@workspace:sdk/hasura"],
 
-    "@settlemint/sdk-ipfs": ["@settlemint/sdk-ipfs@workspace:sdk/ipfs", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "kubo-rpc-client": "^5", "zod": "^3" } }],
+    "@settlemint/sdk-ipfs": ["@settlemint/sdk-ipfs@workspace:sdk/ipfs"],
 
-    "@settlemint/sdk-js": ["@settlemint/sdk-js@workspace:sdk/js", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" }, "devDependencies": { "@0no-co/graphqlsp": "^1" } }],
+    "@settlemint/sdk-js": ["@settlemint/sdk-js@workspace:sdk/js"],
 
-    "@settlemint/sdk-minio": ["@settlemint/sdk-minio@workspace:sdk/minio", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "minio": "^8", "zod": "^3" } }],
+    "@settlemint/sdk-minio": ["@settlemint/sdk-minio@workspace:sdk/minio"],
 
-    "@settlemint/sdk-next": ["@settlemint/sdk-next@workspace:sdk/next", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "path-to-regexp": "^8" }, "devDependencies": { "@types/react": ">=18" }, "peerDependencies": { "next": ">=15", "react": ">=18" } }],
+    "@settlemint/sdk-next": ["@settlemint/sdk-next@workspace:sdk/next"],
 
-    "@settlemint/sdk-portal": ["@settlemint/sdk-portal@workspace:sdk/portal", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
+    "@settlemint/sdk-portal": ["@settlemint/sdk-portal@workspace:sdk/portal"],
 
-    "@settlemint/sdk-thegraph": ["@settlemint/sdk-thegraph@workspace:sdk/thegraph", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
+    "@settlemint/sdk-thegraph": ["@settlemint/sdk-thegraph@workspace:sdk/thegraph"],
 
-    "@settlemint/sdk-utils": ["@settlemint/sdk-utils@workspace:sdk/utils", { "dependencies": { "@antfu/install-pkg": "^1", "@dotenvx/dotenvx": "^1", "@manypkg/find-root": "^2", "@npmcli/package-json": "^6", "console-table-printer": "^2", "deepmerge-ts": "^7", "environment": "^1", "find-up": "^7", "is-in-ci": "^1", "nano-spawn": "^0.2", "package-manager-detector": "^0.2", "yocto-spinner": "^0.2.0", "yoctocolors": "^2" }, "devDependencies": { "@types/npmcli__package-json": "^4" } }],
+    "@settlemint/sdk-utils": ["@settlemint/sdk-utils@workspace:sdk/utils"],
 
     "@shikijs/engine-oniguruma": ["@shikijs/engine-oniguruma@1.27.2", "", { "dependencies": { "@shikijs/types": "1.27.2", "@shikijs/vscode-textmate": "^10.0.1" } }, "sha512-FZYKD1KN7srvpkz4lbGLOYWlyDU4Rd+2RtuKfABTkafAPOFr+J6umfIwY/TzOQqfNtWjL7SAwPAO0dcOraRLaQ=="],
 
@@ -589,7 +592,7 @@
 
     "@types/bn.js": ["@types/bn.js@5.1.6", "", { "dependencies": { "@types/node": "*" } }, "sha512-Xh8vSwUeMKeYYrj3cX4lGQgFSF/N03r+tv4AiLl1SucqV+uTQpxRcnM8AkXKHwYP9ZPXOYXRr2KPXpVlIvqh9w=="],
 
-    "@types/bun": ["@types/bun@1.1.18", "", { "dependencies": { "bun-types": "1.1.44" } }, "sha512-gtw6cIv/8Q530D0BmoYnjEzR65SjVq2SaUE0NeU6tbm7QBMsTZ61/NBNERtK/FUJaoi7PiteUohK7JcrXBCkvw=="],
+    "@types/bun": ["@types/bun@1.2.0", "", { "dependencies": { "bun-types": "1.2.0" } }, "sha512-5N1JqdahfpBlAv4wy6svEYcd/YfO2GNrbL95JOmFx8nkE6dbK4R0oSE5SpBA4vBRqgrOUAXF8Dpiz+gi7r80SA=="],
 
     "@types/dns-packet": ["@types/dns-packet@5.6.5", "", { "dependencies": { "@types/node": "*" } }, "sha512-qXOC7XLOEe43ehtWJCMnQXvgcIpv6rPmQ1jXT98Ad8A3TB1Ue50jsCbSSSyuazScEuZ/Q026vHbrOTVkmwA+7Q=="],
 
@@ -697,7 +700,7 @@
 
     "buffer-xor": ["buffer-xor@1.0.3", "", {}, "sha512-571s0T7nZWK6vB67HI5dyUF7wXiNcfaPPPTl6zYCNApANjIvYJTg7hlud/+cJpdAhS7dVzqMLmfhfHR3rAcOjQ=="],
 
-    "bun-types": ["bun-types@1.1.44", "", { "dependencies": { "@types/node": "~20.12.8", "@types/ws": "~8.5.10" } }, "sha512-jtcekoZeSINgEcHSISzhR13w/cyE+Fankw2Cpl4c0fN3lRmKVAX0i9ay4FyK4lOxUK1HG4HkuIlrPvXKz4Y7sw=="],
+    "bun-types": ["bun-types@1.2.0", "", { "dependencies": { "@types/node": "*", "@types/ws": "~8.5.10" } }, "sha512-KEaJxyZfbV/c4eyG0vyehDpYmBGreNiQbZIqvVHJwZ4BmeuWlNZ7EAzMN2Zcd7ailmS/tGVW0BgYbGf+lGEpWw=="],
 
     "bundle-require": ["bundle-require@5.1.0", "", { "dependencies": { "load-tsconfig": "^0.2.3" }, "peerDependencies": { "esbuild": ">=0.18" } }, "sha512-3WrrOuZiyaaZPWiEt4G3+IffISVC9HYlWueJEBWED4ZH4aIAC2PnkdnuRrR94M+w6yGWn4AglWtJtBI8YqvgoA=="],
 
@@ -1687,8 +1690,6 @@
 
     "boxen/wrap-ansi": ["wrap-ansi@7.0.0", "", { "dependencies": { "ansi-styles": "^4.0.0", "string-width": "^4.1.0", "strip-ansi": "^6.0.0" } }, "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="],
 
-    "bun-types/@types/node": ["@types/node@20.12.14", "", { "dependencies": { "undici-types": "~5.26.4" } }, "sha512-scnD59RpYD91xngrQQLGkE+6UrHUPzeKZWhhjBSa3HSkwjbQc38+q3RoIVEwxQGRw3M+j5hpNAM+lgV3cVormg=="],
-
     "cliui/wrap-ansi": ["wrap-ansi@7.0.0", "", { "dependencies": { "ansi-styles": "^4.0.0", "string-width": "^4.1.0", "strip-ansi": "^6.0.0" } }, "sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q=="],
 
     "cross-spawn/which": ["which@2.0.2", "", { "dependencies": { "isexe": "^2.0.0" }, "bin": { "node-which": "./bin/node-which" } }, "sha512-BLI3Tl1TW3Pvl70l3yq3Y64i+awpwXqsGBYWkkqMtnbXgrMD+yj7rhW0kuEDxzJaYXGjEW5ogapKNMEKNMjibA=="],
@@ -1830,8 +1831,6 @@
     "@isaacs/cliui/string-width/emoji-regex": ["emoji-regex@9.2.2", "", {}, "sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg=="],
 
     "@isaacs/cliui/wrap-ansi/ansi-styles": ["ansi-styles@6.2.1", "", {}, "sha512-bN798gFfQX+viw3R7yrGWRqnrN2oRkEkUjjl4JNn4E8GxxbjtG3FbrEIIY3l8/hrwUwIeCZvi4QuOTP4MErVug=="],
-
-    "bun-types/@types/node/undici-types": ["undici-types@5.26.5", "", {}, "sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA=="],
 
     "cross-spawn/which/isexe": ["isexe@2.0.0", "", {}, "sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw=="],
 
