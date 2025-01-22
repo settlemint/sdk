@@ -21,6 +21,8 @@ export interface BaseServicePromptArgs<Service> {
   isRequired?: boolean;
   isCi?: boolean;
   singleOptionMessage?: (selectedService: string) => string;
+  promptMessage?: string;
+  filterRunningOnly?: boolean;
 }
 
 /**

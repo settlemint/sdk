@@ -16,7 +16,6 @@ export function isHAGraphMiddleware(middleware: Middleware): middleware is HAGra
 
 export interface TheGraphPromptArgs extends BaseServicePromptArgs<HAGraphMiddleware> {
   middlewares: Middleware[];
-  filterRunningOnly?: boolean;
 }
 
 /**

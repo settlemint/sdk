@@ -7,7 +7,6 @@ import type { BlockchainNode } from "@settlemint/sdk-js";
  */
 export interface BlockchainNodePromptArgs extends BaseServicePromptArgs<BlockchainNode> {
   nodes: BlockchainNode[];
-  filterRunningOnly?: boolean;
 }
 
 /**
@@ -26,6 +25,7 @@ export async function blockchainNodePrompt({
   nodes,
   accept,
   singleOptionMessage,
+  promptMessage,
   filterRunningOnly = false,
   isRequired = false,
 }: BlockchainNodePromptArgs): Promise<BlockchainNode | undefined> {
@@ -40,7 +40,7 @@ export async function blockchainNodePrompt({
         ? choices.filter(({ value: node }) => node === undefined || node?.status === "COMPLETED")
         : choices;
       return select({
-        message: "Which blockchain node do you want to connect to?",
+        message: promptMessage ?? "Which blockchain node do you want to connect to?",
         choices: filteredChoices,
         default: defaultNode,
       });

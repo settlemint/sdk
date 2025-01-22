@@ -47,8 +47,10 @@ export async function selectTargetNode({
       nodes: nodesWithActivePrivateKey,
       accept: autoAccept,
       isRequired: true,
+      promptMessage:
+        "Which blockchain node do you want to connect to? (Only nodes with private keys activated are shown)",
       singleOptionMessage: (node) =>
-        `Using '${node}' - the only node with active private keys. To use a different node, ensure it has activated private keys.`,
+        `Using '${node}' - the only node with active private keys. To use a different node, ensure it has a private key activated.`,
     });
     if (!blockchainNode) {
       return nothingSelectedError("EVM blockchain node");
