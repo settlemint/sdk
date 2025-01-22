@@ -2,7 +2,19 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
 
-export interface TheGraphPromptArgs extends BaseServicePromptArgs<Middleware> {
+/**
+ * Extract HAGraphMiddleware type from the Middleware union type
+ */
+export type HAGraphMiddleware = Extract<Middleware, { __typename: "HAGraphMiddleware" }>;
+
+/**
+ * Type guard to check if a middleware is HAGraphMiddleware
+ */
+export function isHAGraphMiddleware(middleware: Middleware): middleware is HAGraphMiddleware {
+  return middleware.__typename === "HAGraphMiddleware";
+}
+
+export interface TheGraphPromptArgs extends BaseServicePromptArgs<HAGraphMiddleware> {
   middlewares: Middleware[];
   filterRunningOnly?: boolean;
 }
@@ -24,8 +36,8 @@ export async function theGraphPrompt({
   accept,
   filterRunningOnly = false,
   isRequired = false,
-}: TheGraphPromptArgs): Promise<Middleware | undefined> {
-  const graphMiddlewares = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
+}: TheGraphPromptArgs): Promise<HAGraphMiddleware | undefined> {
+  const graphMiddlewares = middlewares.filter(isHAGraphMiddleware);
   return servicePrompt({
     env,
     services: graphMiddlewares,
