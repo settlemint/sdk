@@ -23,6 +23,7 @@ beforeAll(() => {
 
 afterAll(() => {
   process.exit = originalProcessExit;
+  mock.restore();
 });
 
 describe("CLI Telemetry", () => {
