@@ -1,7 +1,10 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { IntegrationTool } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+export interface HasuraPromptArgs extends BaseServicePromptArgs<IntegrationTool> {
+  integrations: IntegrationTool[];
+}
 
 /**
  * Prompts the user to select a Hasura instance to connect to.
@@ -18,12 +21,7 @@ export async function hasuraPrompt({
   integrations,
   accept,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  integrations: IntegrationTool[];
-  accept: boolean | undefined;
-  isRequired?: boolean;
-}): Promise<IntegrationTool | undefined> {
+}: HasuraPromptArgs): Promise<IntegrationTool | undefined> {
   const possible = integrations.filter((integration) => integration.integrationType === "HASURA");
   return servicePrompt({
     env,

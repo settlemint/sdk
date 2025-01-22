@@ -1,7 +1,10 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { Insights } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+export interface BlockscoutPromptArgs extends BaseServicePromptArgs<Insights> {
+  insights: Insights[];
+}
 
 /**
  * Prompts the user to select a blockscout service to connect to.
@@ -18,12 +21,7 @@ export async function blockscoutPrompt({
   insights,
   accept,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  insights: Insights[];
-  accept: boolean | undefined;
-  isRequired?: boolean;
-}): Promise<Insights | undefined> {
+}: BlockscoutPromptArgs): Promise<Insights | undefined> {
   const possible = insights.filter((insight) => insight.insightsCategory === "BLOCKCHAIN_EXPLORER");
   return servicePrompt({
     env,

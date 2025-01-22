@@ -1,7 +1,11 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+export interface TheGraphPromptArgs extends BaseServicePromptArgs<Middleware> {
+  middlewares: Middleware[];
+  filterRunningOnly?: boolean;
+}
 
 /**
  * Prompts the user to select a The Graph instance to connect to.
@@ -20,13 +24,7 @@ export async function theGraphPrompt({
   accept,
   filterRunningOnly = false,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  middlewares: Middleware[];
-  accept?: boolean;
-  filterRunningOnly?: boolean;
-  isRequired?: boolean;
-}) {
+}: TheGraphPromptArgs): Promise<Middleware | undefined> {
   const graphMiddlewares = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
   return servicePrompt({
     env,

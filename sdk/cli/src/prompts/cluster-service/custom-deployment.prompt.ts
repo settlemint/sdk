@@ -1,7 +1,10 @@
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { CustomDeployment } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { servicePrompt } from "./service.prompt";
+
+export interface CustomDeploymentPromptArgs extends BaseServicePromptArgs<CustomDeployment> {
+  customDeployments: CustomDeployment[];
+}
 
 /**
  * Prompts the user to select a custom deployment to connect to.
@@ -18,12 +21,7 @@ export async function customDeploymentPrompt({
   customDeployments,
   accept,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  customDeployments: CustomDeployment[];
-  accept: boolean | undefined;
-  isRequired?: boolean;
-}): Promise<CustomDeployment | undefined> {
+}: CustomDeploymentPromptArgs): Promise<CustomDeployment | undefined> {
   return servicePrompt({
     env,
     services: customDeployments,
