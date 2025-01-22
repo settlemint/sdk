@@ -1,5 +1,4 @@
 import { afterEach, describe, expect, test } from "bun:test";
-import {} from "node:fs/promises";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { $ } from "bun";
@@ -76,12 +75,12 @@ describe("Test platform list services command", () => {
     expect(json.application).toEqual({
       uniqueName: env.SETTLEMINT_APPLICATION!,
       name: application.name,
-      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
     });
     expect(json.workspace).toEqual({
       uniqueName: env.SETTLEMINT_WORKSPACE!,
       name: application.workspace.name,
-      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
+      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}`,
     });
     expect(json.services.length).toBeGreaterThanOrEqual(16);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
@@ -94,7 +93,7 @@ describe("Test platform list services command", () => {
       type: "BesuQBFTBlockchainNetwork",
       provider: "gke",
       region: "europe",
-      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
+      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
     });
   });
 
@@ -126,12 +125,12 @@ describe("Test platform list services command", () => {
     expect(parsedYaml.application).toEqual({
       uniqueName: env.SETTLEMINT_APPLICATION!,
       name: application.name,
-      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
     });
     expect(parsedYaml.workspace).toEqual({
       uniqueName: env.SETTLEMINT_WORKSPACE!,
       name: application.workspace.name,
-      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
+      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}`,
     });
     expect(parsedYaml.services.length).toBeGreaterThanOrEqual(16);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
@@ -144,7 +143,135 @@ describe("Test platform list services command", () => {
       type: "BesuQBFTBlockchainNetwork",
       provider: "gke",
       region: "europe",
-      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
+      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
     });
+  });
+
+  test("List workspaces", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "workspaces"]).result;
+    expect(output).toContain("Workspaces");
+    expect(output).toContain("Name");
+    expect(output).toContain("Unique Name");
+    expect(output).toContain(env.SETTLEMINT_WORKSPACE);
+    expect(output).not.toContain("Url");
+  });
+
+  test("List workspaces in wide format", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "workspaces", "-o", "wide"]).result;
+    expect(output).toContain("Workspaces");
+    expect(output).toContain("Name");
+    expect(output).toContain("Unique Name");
+    expect(output).toContain(env.SETTLEMINT_WORKSPACE);
+    expect(output).toContain("Url");
+  });
+
+  test("List workspaces in JSON format", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "workspaces", "-o", "json"]).result;
+    const parsed = JSON.parse(output);
+    expect(parsed).toBeArray();
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    const workspace = await settlemint.workspace.read(env.SETTLEMINT_WORKSPACE!);
+    expect(parsed).toEqual(
+      expect.arrayContaining([
+        {
+          name: workspace.name,
+          uniqueName: workspace.uniqueName,
+          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${workspace.id}`,
+        },
+      ]),
+    );
+  });
+
+  test("List workspaces in YAML format", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "workspaces", "-o", "yaml"]).result;
+    const yaml = parseDocument(output);
+    expect(yaml).toBeObject();
+    const parsed = yaml.toJSON();
+    expect(parsed).toBeArray();
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    const workspace = await settlemint.workspace.read(env.SETTLEMINT_WORKSPACE!);
+    expect(parsed).toEqual(
+      expect.arrayContaining([
+        {
+          name: workspace.name,
+          uniqueName: workspace.uniqueName,
+          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${workspace.id}`,
+        },
+      ]),
+    );
+  });
+
+  test("List applications", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "applications"]).result;
+    expect(output).toContain("Applications");
+    expect(output).toContain("Name");
+    expect(output).toContain("Unique Name");
+    expect(output).toContain(env.SETTLEMINT_APPLICATION);
+    expect(output).not.toContain("Url");
+  });
+
+  test("List applications in wide format", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "applications", "-o", "wide"]).result;
+    expect(output).toContain("Applications");
+    expect(output).toContain("Name");
+    expect(output).toContain("Unique Name");
+    expect(output).toContain(env.SETTLEMINT_APPLICATION);
+    expect(output).toContain("Url");
+  });
+
+  test("List applications in JSON format", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "applications", "-o", "json"]).result;
+    const parsed = JSON.parse(output);
+    expect(parsed).toBeArray();
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
+    expect(parsed).toEqual(
+      expect.arrayContaining([
+        {
+          name: application.name,
+          uniqueName: application.uniqueName,
+          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+        },
+      ]),
+    );
+  });
+
+  test("List applications in YAML format", async () => {
+    const env = await loadEnv(false, false);
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "applications", "-o", "yaml"]).result;
+    const yaml = parseDocument(output);
+    expect(yaml).toBeObject();
+    const parsed = yaml.toJSON();
+    expect(parsed).toBeArray();
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
+    const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
+    expect(parsed).toEqual(
+      expect.arrayContaining([
+        {
+          name: application.name,
+          uniqueName: application.uniqueName,
+          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+        },
+      ]),
+    );
   });
 });
