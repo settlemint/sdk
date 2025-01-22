@@ -2,6 +2,7 @@ import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { sdkCliCommand } from "../commands";
 
 const mockTelemetry = mock((data: unknown) => {
+  console.log("telemetry", data);
   return Promise.resolve();
 });
 
@@ -12,6 +13,7 @@ mock.module("@/utils/telemetry", () => ({
 
 const originalProcessExit = process.exit;
 const exitMock = mock((exitCode: number) => {
+  console.log("exit", exitCode);
   return Promise.resolve() as never;
 });
 
@@ -36,7 +38,7 @@ describe("CLI Telemetry", () => {
   test("unknown command execution logs error telemetry", async () => {
     try {
       await sdkCliCommand(["bun", "settlemint", "invalid"]);
-    } catch (error) {}
+    } catch {}
     expect(mockTelemetry).toHaveBeenCalledWith({
       command: "invalid",
       status: "error",
@@ -47,7 +49,7 @@ describe("CLI Telemetry", () => {
   test("failed command execution logs error telemetry", async () => {
     try {
       await sdkCliCommand(["bun", "settlemint", "connect", "-i", "https://onprem.settlemint.com"]);
-    } catch (error) {}
+    } catch {}
     expect(mockTelemetry).toHaveBeenCalledWith({
       command: "connect",
       status: "error",
