@@ -1,7 +1,10 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { Storage } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+export interface MinioPromptArgs extends BaseServicePromptArgs<Storage> {
+  storages: Storage[];
+}
 
 /**
  * Prompts the user to select a MinIO storage instance to connect to.
@@ -18,12 +21,7 @@ export async function minioPrompt({
   storages,
   accept,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  storages: Storage[];
-  accept: boolean | undefined;
-  isRequired?: boolean;
-}): Promise<Storage | undefined> {
+}: MinioPromptArgs): Promise<Storage | undefined> {
   const possible = storages.filter((storage) => storage.storageProtocol === "MINIO");
   return servicePrompt({
     env,

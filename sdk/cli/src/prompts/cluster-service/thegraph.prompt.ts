@@ -1,7 +1,22 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+/**
+ * Extract HAGraphMiddleware type from the Middleware union type
+ */
+export type HAGraphMiddleware = Extract<Middleware, { __typename: "HAGraphMiddleware" }>;
+
+/**
+ * Type guard to check if a middleware is HAGraphMiddleware
+ */
+export function isHAGraphMiddleware(middleware: Middleware): middleware is HAGraphMiddleware {
+  return middleware.__typename === "HAGraphMiddleware";
+}
+
+export interface TheGraphPromptArgs extends BaseServicePromptArgs<HAGraphMiddleware> {
+  middlewares: Middleware[];
+}
 
 /**
  * Prompts the user to select a The Graph instance to connect to.
@@ -20,14 +35,8 @@ export async function theGraphPrompt({
   accept,
   filterRunningOnly = false,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  middlewares: Middleware[];
-  accept?: boolean;
-  filterRunningOnly?: boolean;
-  isRequired?: boolean;
-}) {
-  const graphMiddlewares = middlewares.filter((middleware) => middleware.__typename === "HAGraphMiddleware");
+}: TheGraphPromptArgs): Promise<HAGraphMiddleware | undefined> {
+  const graphMiddlewares = middlewares.filter(isHAGraphMiddleware);
   return servicePrompt({
     env,
     services: graphMiddlewares,

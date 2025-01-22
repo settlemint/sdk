@@ -1,7 +1,10 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { PrivateKey } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+export interface HdPrivateKeyPromptArgs extends BaseServicePromptArgs<PrivateKey> {
+  privateKeys: PrivateKey[];
+}
 
 /**
  * Prompts the user to select an HD private key to use.
@@ -18,12 +21,7 @@ export async function hdPrivateKeyPrompt({
   privateKeys,
   accept,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  privateKeys: PrivateKey[];
-  accept: boolean | undefined;
-  isRequired?: boolean;
-}): Promise<PrivateKey | undefined> {
+}: HdPrivateKeyPromptArgs): Promise<PrivateKey | undefined> {
   const possible = privateKeys.filter((privateKey) => privateKey.privateKeyType === "HD_ECDSA_P256");
   return servicePrompt({
     env,

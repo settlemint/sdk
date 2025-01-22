@@ -4,7 +4,7 @@ import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { cancel, note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function selectTargetNode({
@@ -47,6 +47,10 @@ export async function selectTargetNode({
       nodes: nodesWithActivePrivateKey,
       accept: autoAccept,
       isRequired: true,
+      promptMessage:
+        "Which blockchain node do you want to connect to? (Only nodes with private keys activated are shown)",
+      singleOptionMessage: (node) =>
+        `Using '${node}' - the only node with active private keys. To use a different node, ensure it has a private key activated.`,
     });
     if (!blockchainNode) {
       return nothingSelectedError("EVM blockchain node");
@@ -65,5 +69,6 @@ export async function selectTargetNode({
     serviceNotRunningError("blockchain node", node.status);
   }
 
+  note(`🔗 Connected to blockchain node '${node.uniqueName}'`);
   return node;
 }

@@ -1,3 +1,4 @@
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
@@ -9,6 +10,32 @@ export interface Choice<Service> {
   value: Service | undefined;
 }
 
+/**
+ * Base arguments for the service prompt.
+ */
+export interface BaseServicePromptArgs<Service> {
+  env: Partial<DotEnv>;
+
+  accept: boolean | undefined;
+
+  isRequired?: boolean;
+  isCi?: boolean;
+  singleOptionMessage?: (selectedService: string) => string;
+  promptMessage?: string;
+  filterRunningOnly?: boolean;
+}
+
+/**
+ * Arguments for the service prompt.
+ */
+export interface ServicePromptArgs<Service> extends BaseServicePromptArgs<Service> {
+  services: Service[];
+  defaultHandler: (config: {
+    defaultService: Service | undefined;
+    choices: Choice<Service>[];
+  }) => Promise<Service | undefined>;
+  envKey: keyof DotEnv;
+}
 /**
  * Prompts the user to select a service from a list of available services.
  *
@@ -30,18 +57,8 @@ export async function servicePrompt<Service extends { uniqueName: string; name: 
   defaultHandler,
   isRequired = false,
   isCi = isInCi,
-}: {
-  env: Partial<DotEnv>;
-  services: Service[];
-  accept: boolean | undefined;
-  envKey: keyof DotEnv;
-  defaultHandler: (config: {
-    defaultService: Service | undefined;
-    choices: Choice<Service>[];
-  }) => Promise<Service | undefined>;
-  isRequired?: boolean;
-  isCi?: boolean;
-}): Promise<Service | undefined> {
+  singleOptionMessage,
+}: ServicePromptArgs<Service>) {
   // Return early if no services available
   if (services.length === 0) {
     return undefined;
@@ -63,6 +80,9 @@ export async function servicePrompt<Service extends { uniqueName: string; name: 
 
   // Auto-select if only one service available and a service is required
   if (isRequired && services.length === 1) {
+    if (singleOptionMessage) {
+      note(singleOptionMessage(services[0].uniqueName));
+    }
     return services[0];
   }
 
