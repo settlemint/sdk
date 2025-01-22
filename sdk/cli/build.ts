@@ -19,7 +19,7 @@ async function build() {
       splitting: false,
       sourcemap: "external",
       minify: process.env.NODE_ENV === "production",
-      external: [],
+      external: ["tinyexec"],
     });
 
     if (!build.success) {

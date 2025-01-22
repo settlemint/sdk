@@ -40,7 +40,9 @@
     "docs": "bun scripts/create-docs.ts",
     "prepack": "cp ../../LICENSE ."
   },
-  "dependencies": {},
+  "dependencies": {
+    "tinyexec": "0.3.2"
+  },
   "devDependencies": {
     "@types/semver": "7.5.8",
     "@types/node": "22.10.7",

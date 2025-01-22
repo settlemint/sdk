@@ -34,6 +34,9 @@
     "sdk/cli": {
       "name": "@settlemint/sdk-cli",
       "version": "0.9.0",
+      "dependencies": {
+        "tinyexec": "0.3.2",
+      },
       "devDependencies": {
         "@commander-js/extra-typings": "13.0.0",
         "@inquirer/confirm": "5.1.3",
@@ -554,7 +557,7 @@
 
     "@settlemint/sdk-blockscout": ["@settlemint/sdk-blockscout@workspace:sdk/blockscout", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "gql.tada": "^1", "graphql-request": "^7", "zod": "^3" } }],
 
-    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.10.0", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yaml": "2.7.0", "yoctocolors": "2.1.1" }, "peerDependencies": { "hardhat": "2.22.18" }, "bin": { "settlemint": "dist/cli.js" } }],
+    "@settlemint/sdk-cli": ["@settlemint/sdk-cli@workspace:sdk/cli", { "dependencies": { "tinyexec": "0.3.2" }, "devDependencies": { "@commander-js/extra-typings": "13.0.0", "@inquirer/confirm": "5.1.3", "@inquirer/input": "4.1.3", "@inquirer/password": "4.0.6", "@inquirer/select": "4.0.6", "@settlemint/sdk-js": "sdk/js", "@settlemint/sdk-utils": "sdk/utils", "@types/node": "22.10.7", "@types/semver": "7.5.8", "get-tsconfig": "4.10.0", "giget": "1.2.3", "is-in-ci": "1.0.0", "semver": "7.6.3", "slugify": "1.6.6", "yaml": "2.7.0", "yoctocolors": "2.1.1" }, "peerDependencies": { "hardhat": "2.22.18" }, "bin": { "settlemint": "dist/cli.js" } }],
 
     "@settlemint/sdk-hasura": ["@settlemint/sdk-hasura@workspace:sdk/hasura", { "dependencies": { "@settlemint/sdk-utils": "sdk/utils", "drizzle-kit": "^0.30", "drizzle-orm": "^0.38", "gql.tada": "^1", "graphql-request": "^7", "pg": "^8", "zod": "^3" }, "devDependencies": { "@types/pg": "^8" } }],
 
