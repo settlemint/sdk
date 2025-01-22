@@ -11,13 +11,14 @@ import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import { getApplicationUrl, getClusterServicePlatformUrl, getWorkspaceUrl } from "@/utils/get-platform-url";
+import { jsonOutput } from "@/utils/output/json-output";
+import { yamlOutput } from "@/utils/output/yaml-output";
 import { Command, Option } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { stringify } from "yaml";
 import { formatHealthStatus } from "../utils/formatting/format-health-status";
 import { formatStatus } from "../utils/formatting/format-status";
 
@@ -129,9 +130,9 @@ export function servicesCommand() {
           servicesToShow,
         );
       } else if (output === "json") {
-        console.log(JSON.stringify(data, null, 2));
+        jsonOutput(data);
       } else if (output === "yaml") {
-        console.log(stringify(data));
+        yamlOutput(data);
       }
       if (printToTerminal) {
         outro("Application services listed");

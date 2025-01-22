@@ -6,12 +6,13 @@ import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import { getApplicationUrl, getWorkspaceUrl } from "@/utils/get-platform-url";
+import { jsonOutput } from "@/utils/output/json-output";
+import { yamlOutput } from "@/utils/output/yaml-output";
 import { Command, Option } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { stringify } from "yaml";
 
 export function applicationsListCommand() {
   return new Command("applications")
@@ -87,9 +88,9 @@ export function applicationsListCommand() {
           applicationsData,
         );
       } else if (output === "json") {
-        console.log(JSON.stringify(applicationsData, null, 2));
+        jsonOutput(applicationsData);
       } else if (output === "yaml") {
-        console.log(stringify(applicationsData));
+        yamlOutput(applicationsData);
       }
 
       if (printToTerminal) {
