@@ -3,7 +3,7 @@ import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { getApplicationOrPersonalAccessToken } from "./get-app-or-personal-token";
 
 const mockConfig = (mockReturn: unknown) => {
-  return mock.module("@/utils/config", () => {});
+  return mock.module("@/utils/config", () => mockReturn);
 };
 mock.module("@settlemint/sdk-utils/terminal", () => ({
   cancel: (message: string) => message,
