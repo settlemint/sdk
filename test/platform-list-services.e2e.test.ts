@@ -23,7 +23,6 @@ describe("Test platform list services command", () => {
     expect(output).toInclude("Private keys");
     expect(output).toInclude("Storage");
     expect(output).not.toInclude("Url");
-    expect(output).not.toInclude("https://");
   });
 
   test("List services with specific type", async () => {
@@ -43,7 +42,6 @@ describe("Test platform list services command", () => {
     expect(output).not.toInclude("Integration tools");
     expect(output).not.toInclude("Private keys");
     expect(output).not.toInclude("Url");
-    expect(output).not.toInclude("https://");
   });
 
   test("List services in wide format", async () => {
@@ -56,10 +54,14 @@ describe("Test platform list services command", () => {
     expect(output).toInclude("Private keys");
     expect(output).toInclude("Storage");
     expect(output).toInclude("Url");
-    expect(output).toInclude("https://");
   });
 
   test("List services in JSON format", async () => {
+    const env = await loadEnv(false, false);
+    const settlemint = createSettleMintClient({
+      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
+      instance: env.SETTLEMINT_INSTANCE!,
+    });
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
       "list",
@@ -70,34 +72,35 @@ describe("Test platform list services command", () => {
       "output.json",
     ]).result;
     const json = JSON.parse(output);
-    expect(json).toBeArrayOfSize(7);
-    const env = await loadEnv(false, false);
-    const settlemint = createSettleMintClient({
-      accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
-      instance: env.SETTLEMINT_INSTANCE!,
-    });
     const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
+    expect(json.application).toEqual({
+      uniqueName: env.SETTLEMINT_APPLICATION!,
+      name: application.name,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+    });
+    expect(json.workspace).toEqual({
+      uniqueName: env.SETTLEMINT_WORKSPACE!,
+      name: application.workspace.name,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
+    });
+    expect(json.services.length).toBeGreaterThanOrEqual(16);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
-    expect(json[0]).toMatchObject({
-      label: "Blockchain networks",
-      items: [
-        {
-          name: "Starter Kit Network",
-          uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
-          status: "Completed",
-          healthSatus: "Unhealthy (NOT BFT)",
-          type: "BesuQBFTBlockchainNetwork",
-          provider: "gke",
-          region: "europe",
-          url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
-        },
-      ],
+    expect(json.services[0]).toMatchObject({
+      group: "Blockchain networks",
+      name: "Starter Kit Network",
+      uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
+      status: "Completed",
+      healthStatus: "NOT BFT",
+      type: "BesuQBFTBlockchainNetwork",
+      provider: "gke",
+      region: "europe",
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
     });
   });
 
   test("List services in JSON format and filter with jq", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services", "-o", "json"]).result;
-    const jqOutput = await $`echo "${output}" | jq 'first.label'`;
+    const jqOutput = await $`echo "${output}" | jq '.services[0].group'`;
     expect(jqOutput.text()).toBe('"Blockchain networks"\n');
   });
 
@@ -114,28 +117,34 @@ describe("Test platform list services command", () => {
     const yaml = parseDocument(output);
     expect(yaml).toBeObject();
     const parsedYaml = yaml.toJSON();
-    expect(parsedYaml).toBeArrayOfSize(7);
     const env = await loadEnv(false, false);
     const settlemint = createSettleMintClient({
       accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
       instance: env.SETTLEMINT_INSTANCE!,
     });
     const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
+    expect(parsedYaml.application).toEqual({
+      uniqueName: env.SETTLEMINT_APPLICATION!,
+      name: application.name,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+    });
+    expect(parsedYaml.workspace).toEqual({
+      uniqueName: env.SETTLEMINT_WORKSPACE!,
+      name: application.workspace.name,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
+    });
+    expect(parsedYaml.services.length).toBeGreaterThanOrEqual(16);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
-    expect(parsedYaml[0]).toMatchObject({
-      label: "Blockchain networks",
-      items: [
-        {
-          name: "Starter Kit Network",
-          uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
-          status: "Completed",
-          healthSatus: "Unhealthy (NOT BFT)",
-          type: "BesuQBFTBlockchainNetwork",
-          provider: "gke",
-          region: "europe",
-          url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
-        },
-      ],
+    expect(parsedYaml.services[0]).toMatchObject({
+      group: "Blockchain networks",
+      name: "Starter Kit Network",
+      uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
+      status: "Completed",
+      healthStatus: "NOT BFT",
+      type: "BesuQBFTBlockchainNetwork",
+      provider: "gke",
+      region: "europe",
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
     });
   });
 

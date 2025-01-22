@@ -42,8 +42,7 @@
   },
   "dependencies": {
     "hardhat": "2.22.18",
-    "tinyexec": "0.3.2",
-    "tty-table": "4.2.3"
+    "tinyexec": "0.3.2"
   },
   "devDependencies": {
     "@types/semver": "7.5.8",
@@ -59,7 +58,7 @@
     "@inquirer/select": "4.0.6",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "get-tsconfig": "4.9.0",
+    "get-tsconfig": "4.10.0",
     "giget": "1.2.3",
     "yaml": "2.7.0"
   },

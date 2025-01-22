@@ -1,13 +1,13 @@
 import { exists, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { registerCommands } from "@/commands/index";
 import { type Command, type CommandUnknownOpts, Help } from "@commander-js/extra-typings";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { sdkCliCommand } from "../src/commands";
 
 const exitOverride = () => {
   console.log("finished");
 };
-const sdkCli = sdkCliCommand(exitOverride);
+const sdkCli = registerCommands();
 
 const MAX_DEPTH = 2;
 

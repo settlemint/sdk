@@ -1,6 +1,7 @@
 import isInCi from "is-in-ci";
 import yoctoSpinner, { type Spinner } from "yocto-spinner";
 import { redBright } from "yoctocolors";
+import { maskTokens } from "./mask-tokens.js";
 import { note } from "./note.js";
 
 /**
@@ -47,7 +48,8 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
     return result;
   } catch (error) {
     spinner.error(redBright(`${options.startMessage} --> Error!`));
-    note(redBright(`${(error as Error).message}\n\n${(error as Error).stack}`));
-    process.exit(1);
+    const errorMessage = maskTokens((error as Error).message);
+    note(redBright(`${errorMessage}\n\n${(error as Error).stack}`));
+    throw new Error(errorMessage);
   }
 };
