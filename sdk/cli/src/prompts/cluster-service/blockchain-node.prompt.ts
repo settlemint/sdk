@@ -1,7 +1,14 @@
-import { servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+
+/**
+ * Arguments for the blockchain node prompt.
+ */
+export interface BlockchainNodePromptArgs extends BaseServicePromptArgs<BlockchainNode> {
+  nodes: BlockchainNode[];
+  filterRunningOnly?: boolean;
+}
 
 /**
  * Prompts the user to select a blockchain node to connect to.
@@ -18,15 +25,10 @@ export async function blockchainNodePrompt({
   env,
   nodes,
   accept,
+  singleOptionMessage,
   filterRunningOnly = false,
   isRequired = false,
-}: {
-  env: Partial<DotEnv>;
-  nodes: BlockchainNode[];
-  accept: boolean | undefined;
-  filterRunningOnly?: boolean;
-  isRequired?: boolean;
-}): Promise<BlockchainNode | undefined> {
+}: BlockchainNodePromptArgs): Promise<BlockchainNode | undefined> {
   return servicePrompt({
     env,
     services: nodes,
@@ -43,5 +45,6 @@ export async function blockchainNodePrompt({
         default: defaultNode,
       });
     },
+    singleOptionMessage,
   });
 }
