@@ -1,4 +1,4 @@
-import { describe, expect, it, mock } from "bun:test";
+import { afterAll, describe, expect, it, mock } from "bun:test";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import input from "@inquirer/input";
 import { subgraphNamePrompt } from "./subgraph-name.prompt";
@@ -16,6 +16,10 @@ mock.module("@/spinners/write-env.spinner", () => ({
     return Promise.resolve();
   }),
 }));
+
+afterAll(() => {
+  mock.restore();
+});
 
 describe("subgraphNamePrompt", () => {
   it("should return existing subgraph name when accept is true", async () => {
