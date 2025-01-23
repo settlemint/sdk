@@ -64,6 +64,11 @@
   "peerDependencies": {
     "hardhat": "2.22.18"
   },
+  "peerDependenciesMeta": {
+    "hardhat": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=20"
   },

@@ -1,10 +1,10 @@
-import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { $ } from "bun";
+import { $, type ShellError } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import {
   registerLinkedDependencies,
@@ -36,7 +36,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-afterAll(cleanup);
+//afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -106,6 +106,7 @@ describe("Setup a project using the SDK", () => {
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
     await $`bun install`.cwd(projectDir).env(env);
+    await $`rm -rf node_modules/next`.cwd(projectDir).env(env);
   });
 
   test("Connect starter kit", async () => {
@@ -218,8 +219,15 @@ describe("Setup a project using the SDK", () => {
 
   test("Build starter kit", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
-    await $`bun lint`.cwd(projectDir).env(env);
-    await $`bun check-types`.cwd(projectDir).env(env);
-    await $`bun run build`.cwd(projectDir).env(env);
+    try {
+      await $`bun lint`.cwd(projectDir).env(env);
+      await $`bun check-types`.cwd(projectDir).env(env);
+      await $`bun run build`.cwd(projectDir).env(env);
+    } catch (err) {
+      const shellError = err as ShellError;
+      console.log(shellError.stdout.toString());
+      console.log(shellError.stderr.toString());
+      throw new Error("Build failed");
+    }
   });
 });
