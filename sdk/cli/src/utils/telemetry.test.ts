@@ -1,5 +1,8 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { ModuleMocker } from "@/utils/test/module-mocker";
 import { sdkCliCommand } from "../commands";
+
+const moduleMocker = new ModuleMocker();
 
 const mockTelemetry = mock((data: unknown) => {
   console.log("telemetry", data);
@@ -7,7 +10,7 @@ const mockTelemetry = mock((data: unknown) => {
 });
 
 // Mock telemetry module
-mock.module("@/utils/telemetry", () => ({
+moduleMocker.mock("@/utils/telemetry", () => ({
   telemetry: mockTelemetry,
 }));
 
@@ -24,6 +27,7 @@ beforeAll(() => {
 afterAll(() => {
   process.exit = originalProcessExit;
   mock.restore();
+  moduleMocker.clear();
 });
 
 describe("CLI Telemetry", () => {
