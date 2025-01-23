@@ -16710,6 +16710,7 @@ type PlatformConfigDto {
   id: ID!
   observability: ObservabilityDto!
   preDeployedContracts: [String!]!
+  sdkVersion: String!
   smartContractSets: SmartContractSetsDto!
 }
 
