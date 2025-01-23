@@ -44,9 +44,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.17.3",
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.1.18",
+    "@types/bun": "1.2.0",
     "@types/mustache": "4.2.5",
-    "knip": "5.42.3",
+    "knip": "5.43.1",
     "lefthook": "1.10.10",
     "mustache": "4.2.0",
     "publint": "0.3.2",
@@ -79,6 +79,6 @@
     "ws": "8.18.0",
     "adm-zip": "0.5.16",
     "react-is": "19.0.0",
-    "undici": "7.2.3"
+    "undici": "7.3.0"
   }
 }
