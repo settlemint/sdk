@@ -1,4 +1,4 @@
-import { afterEach, describe, expect, test } from "bun:test";
+import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { $ } from "bun";
@@ -6,6 +6,8 @@ import { parseDocument } from "yaml";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const COMMAND_TEST_SCOPE = __filename;
+
+setDefaultTimeout(60_000);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -75,12 +77,12 @@ describe("Test platform list services command", () => {
     expect(json.application).toEqual({
       uniqueName: env.SETTLEMINT_APPLICATION!,
       name: application.name,
-      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
     });
     expect(json.workspace).toEqual({
       uniqueName: env.SETTLEMINT_WORKSPACE!,
       name: application.workspace.name,
-      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}`,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
     });
     expect(json.services.length).toBeGreaterThanOrEqual(16);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
@@ -93,7 +95,7 @@ describe("Test platform list services command", () => {
       type: "BesuQBFTBlockchainNetwork",
       provider: "gke",
       region: "europe",
-      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
     });
   });
 
@@ -125,12 +127,12 @@ describe("Test platform list services command", () => {
     expect(parsedYaml.application).toEqual({
       uniqueName: env.SETTLEMINT_APPLICATION!,
       name: application.name,
-      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
     });
     expect(parsedYaml.workspace).toEqual({
       uniqueName: env.SETTLEMINT_WORKSPACE!,
       name: application.workspace.name,
-      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}`,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
     });
     expect(parsedYaml.services.length).toBeGreaterThanOrEqual(16);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
@@ -143,7 +145,7 @@ describe("Test platform list services command", () => {
       type: "BesuQBFTBlockchainNetwork",
       provider: "gke",
       region: "europe",
-      url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
+      url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/networks/${blockchainNetwork.id}/details`,
     });
   });
 
@@ -182,7 +184,7 @@ describe("Test platform list services command", () => {
         {
           name: workspace.name,
           uniqueName: workspace.uniqueName,
-          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${workspace.id}`,
+          url: `https://console-release.settlemint.com/workspaces/${workspace.id}`,
         },
       ]),
     );
@@ -205,7 +207,7 @@ describe("Test platform list services command", () => {
         {
           name: workspace.name,
           uniqueName: workspace.uniqueName,
-          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${workspace.id}`,
+          url: `https://console-release.settlemint.com/workspaces/${workspace.id}`,
         },
       ]),
     );
@@ -246,7 +248,7 @@ describe("Test platform list services command", () => {
         {
           name: application.name,
           uniqueName: application.uniqueName,
-          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+          url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
         },
       ]),
     );
@@ -269,7 +271,7 @@ describe("Test platform list services command", () => {
         {
           name: application.name,
           uniqueName: application.uniqueName,
-          url: `${env.SETTLEMINT_INSTANCE}/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
+          url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}/applications/${application.id}/dashboard`,
         },
       ]),
     );
