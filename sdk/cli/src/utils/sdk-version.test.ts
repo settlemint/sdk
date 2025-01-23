@@ -39,7 +39,7 @@ describe("SDK Version Validation", () => {
     await validateSdkVersion("https://test.instance");
 
     expect(noteMock).toHaveBeenCalledWith(
-      "A new version of the SDK CLI is available (2.0.0). Please update your SDK CLI to the latest version.",
+      "A newer version of the SDK CLI is available (2.0.0). Please update your SDK CLI to ensure compatibility with the platform.",
       "warn",
     );
   });

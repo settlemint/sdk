@@ -15,6 +15,7 @@ interface InstanceConfig {
 
 interface Config {
   instances: Record<string, InstanceConfig>;
+  lastSdkVersionCheck?: string; // JSON date
 }
 
 /**
@@ -109,5 +110,14 @@ export async function removeCredentials(instance: string): Promise<void> {
   // Remove from config file
   delete config.instances[instance];
 
+  await writeConfig(config);
+}
+
+/**
+ * Sets the last SDK version check date
+ */
+export async function setLastSdkVersionCheck(date: string): Promise<void> {
+  const config = await readConfig();
+  config.lastSdkVersionCheck = date;
   await writeConfig(config);
 }

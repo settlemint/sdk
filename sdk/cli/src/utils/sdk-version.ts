@@ -4,8 +4,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { note } from "@settlemint/sdk-utils/terminal";
 import * as semver from "semver";
 import pkg from "../../package.json";
-
-let lastSdkValidation = 0;
+import { readConfig, setLastSdkVersionCheck } from "./config";
 
 /**
  * Validates the SDK version against the platform's supported version
@@ -20,11 +19,13 @@ export async function validateSdkVersionFromCommand(
   // Check if we've validated since the last interval
   const now = Date.now();
 
+  const config = await readConfig();
+  const lastSdkValidation = config.lastSdkVersionCheck ? new Date(config.lastSdkVersionCheck).getTime() : 0;
   if (now - lastSdkValidation <= interval) {
     return;
   }
 
-  lastSdkValidation = now;
+  await setLastSdkVersionCheck(new Date(now).toJSON());
   const instance = await getInstanceFromCommand(command);
   await validateSdkVersion(instance);
 }
@@ -53,7 +54,7 @@ export async function validateSdkVersion(instance: string) {
   }
   if (semver.lt(currentVersion, platformConfig.sdkVersion)) {
     note(
-      `A new version of the SDK CLI is available (${platformConfig.sdkVersion}). Please update your SDK CLI to the latest version.`,
+      `A newer version of the SDK CLI is available (${platformConfig.sdkVersion}). Please update your SDK CLI to ensure compatibility with the platform.`,
       "warn",
     );
   }
