@@ -9,18 +9,16 @@ const mockTelemetry = mock((data: unknown) => {
   return Promise.resolve();
 });
 
-// Mock telemetry module
-moduleMocker.mock("@/utils/telemetry", () => ({
-  telemetry: mockTelemetry,
-}));
-
 const originalProcessExit = process.exit;
 const exitMock = mock((exitCode: number) => {
   console.log("exit", exitCode);
   return Promise.resolve() as never;
 });
 
-beforeAll(() => {
+beforeAll(async () => {
+  await moduleMocker.mock("@/utils/telemetry", () => ({
+    telemetry: mockTelemetry,
+  }));
   process.exit = exitMock;
 });
 
