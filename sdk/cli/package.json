@@ -41,7 +41,6 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "hardhat": "2.22.18",
     "tinyexec": "0.3.2"
   },
   "devDependencies": {
@@ -62,7 +61,14 @@
     "giget": "1.2.3",
     "yaml": "2.7.0"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+    "hardhat": "2.22.18"
+  },
+  "peerDependenciesMeta": {
+    "hardhat": {
+      "optional": true
+    }
+  },
   "engines": {
     "node": ">=20"
   },

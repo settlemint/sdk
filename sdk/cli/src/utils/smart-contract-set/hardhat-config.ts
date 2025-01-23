@@ -1,9 +1,13 @@
 import { tryParseJson } from "@settlemint/sdk-utils";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand, note } from "@settlemint/sdk-utils/terminal";
-import type { HardhatUserConfig } from "hardhat/config";
 
-export type HardhatConfig = HardhatUserConfig & { etherscan?: { apiKey?: string } };
+export type HardhatConfig = {
+  networks?: {
+    btp?: { from?: string };
+  };
+  etherscan?: { apiKey?: string };
+};
 
 export async function getHardhatConfigData(envConfig: Record<string, string>): Promise<HardhatConfig> {
   try {

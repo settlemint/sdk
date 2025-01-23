@@ -7,10 +7,9 @@ export function getClusterServicePlatformUrl<Service extends { id: string }>(
   service: Service,
   serviceType: ServiceType,
 ) {
-  const applicationUrl = getApplicationUrl(instance, application);
   return new URL(
     `${getWorkspaceUrlPath(application.workspace)}${getApplicationUrlPath(application)}/${getUrlPathForService(service, serviceType)}`,
-    applicationUrl,
+    instance,
   ).toString();
 }
 

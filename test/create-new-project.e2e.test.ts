@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { $ } from "bun";
+import { $, type ShellError } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import {
   registerLinkedDependencies,
@@ -30,6 +30,8 @@ async function cleanup() {
   try {
     await unlinkLinkedDependencies();
     await rmdir(projectDir, { recursive: true });
+    // Restore dependencies in the SDK (eg next dependency)
+    await $`bun install`;
   } catch (err) {
     console.log("Failed to delete project dir", err);
   }
@@ -106,6 +108,8 @@ describe("Setup a project using the SDK", () => {
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
     await $`bun install`.cwd(projectDir).env(env);
+    // Delete the next dependency in the SDK project (due to linking dependencies there might be a mismatch in the version)
+    await $`rm -rf node_modules/next`.env(env);
   });
 
   test("Connect starter kit", async () => {
@@ -218,8 +222,15 @@ describe("Setup a project using the SDK", () => {
 
   test("Build starter kit", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
-    await $`bun lint`.cwd(projectDir).env(env);
-    await $`bun check-types`.cwd(projectDir).env(env);
-    await $`bun run build`.cwd(projectDir).env(env);
+    try {
+      await $`bun lint`.cwd(projectDir).env(env);
+      await $`bun check-types`.cwd(projectDir).env(env);
+      await $`bun run build`.cwd(projectDir).env(env);
+    } catch (err) {
+      const shellError = err as ShellError;
+      console.log(shellError.stdout.toString());
+      console.log(shellError.stderr.toString());
+      throw new Error("Build failed");
+    }
   });
 });
