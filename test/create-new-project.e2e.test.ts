@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -30,13 +30,15 @@ async function cleanup() {
   try {
     await unlinkLinkedDependencies();
     await rmdir(projectDir, { recursive: true });
+    // Restore dependencies in the SDK (eg next dependency)
+    await $`bun install`;
   } catch (err) {
     console.log("Failed to delete project dir", err);
   }
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -106,7 +108,8 @@ describe("Setup a project using the SDK", () => {
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
     await $`bun install`.cwd(projectDir).env(env);
-    await $`rm -rf node_modules/next`.cwd(projectDir).env(env);
+    // Delete the next dependency in the SDK project (due to linking dependencies there might be a mismatch in the version)
+    await $`rm -rf node_modules/next`.env(env);
   });
 
   test("Connect starter kit", async () => {
