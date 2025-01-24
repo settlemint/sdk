@@ -1,30 +1,31 @@
-import { afterAll, beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterAll, beforeAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { sdkCliCommand } from "@/commands";
 import { jsonOutput } from "@/utils/output/json-output";
 import { yamlOutput } from "@/utils/output/yaml-output";
+import { ModuleMocker } from "@/utils/test/module-mocker";
 import { table } from "@settlemint/sdk-utils/terminal";
 
+const moduleMocker = new ModuleMocker();
+
 const mockTable = mock(table);
-
-// Mock terminal module
-mock.module("@settlemint/sdk-utils/terminal", () => ({
-  table: mockTable,
-}));
-
 const mockJsonOutput = mock(jsonOutput);
-
-mock.module("@/utils/output/json-output", () => ({
-  jsonOutput: mockJsonOutput,
-}));
-
 const mockYamlOutput = mock(yamlOutput);
 
-mock.module("@/utils/output/yaml-output", () => ({
-  yamlOutput: mockYamlOutput,
-}));
+beforeAll(async () => {
+  await moduleMocker.mock("@settlemint/sdk-utils/terminal", () => ({
+    table: mockTable,
+  }));
+  await moduleMocker.mock("@/utils/output/yaml-output", () => ({
+    yamlOutput: mockYamlOutput,
+  }));
+  await moduleMocker.mock("@/utils/output/json-output", () => ({
+    jsonOutput: mockJsonOutput,
+  }));
+});
 
 afterAll(() => {
   mock.restore();
+  moduleMocker.clear();
 });
 
 describe("platform config command", () => {

@@ -1,24 +1,29 @@
-import { afterAll, describe, expect, it, mock } from "bun:test";
+import { afterAll, beforeAll, describe, expect, it, mock } from "bun:test";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { ModuleMocker } from "@/utils/test/module-mocker";
 import input from "@inquirer/input";
 import { subgraphNamePrompt } from "./subgraph-name.prompt";
+
+const moduleMocker = new ModuleMocker();
 
 const mockInput = mock(({ default: defaultInput }: { default: string | undefined }) =>
   Promise.resolve(defaultInput ?? ""),
 );
 
-mock.module("@inquirer/input", () => ({
-  default: mockInput,
-}));
-
-mock.module("@/spinners/write-env.spinner", () => ({
-  writeEnvSpinner: mock(() => {
-    return Promise.resolve();
-  }),
-}));
+beforeAll(async () => {
+  await moduleMocker.mock("@inquirer/input", () => ({
+    default: mockInput,
+  }));
+  await moduleMocker.mock("@/spinners/write-env.spinner", () => ({
+    writeEnvSpinner: mock(() => {
+      return Promise.resolve();
+    }),
+  }));
+});
 
 afterAll(() => {
   mock.restore();
+  moduleMocker.clear();
 });
 
 describe("subgraphNamePrompt", () => {

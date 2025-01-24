@@ -1,15 +1,13 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { ModuleMocker } from "@/utils/test/module-mocker";
 import { sdkCliCommand } from "../commands";
+
+const moduleMocker = new ModuleMocker();
 
 const mockTelemetry = mock((data: unknown) => {
   console.log("telemetry", data);
   return Promise.resolve();
 });
-
-// Mock telemetry module
-mock.module("@/utils/telemetry", () => ({
-  telemetry: mockTelemetry,
-}));
 
 const originalProcessExit = process.exit;
 const exitMock = mock((exitCode: number) => {
@@ -17,13 +15,17 @@ const exitMock = mock((exitCode: number) => {
   return Promise.resolve() as never;
 });
 
-beforeAll(() => {
+beforeAll(async () => {
+  await moduleMocker.mock("@/utils/telemetry", () => ({
+    telemetry: mockTelemetry,
+  }));
   process.exit = exitMock;
 });
 
 afterAll(() => {
   process.exit = originalProcessExit;
   mock.restore();
+  moduleMocker.clear();
 });
 
 describe("CLI Telemetry", () => {
