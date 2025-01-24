@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/semver": "7.5.8",
-    "@types/node": "22.10.8",
+    "@types/node": "22.10.10",
     "is-in-ci": "1.0.0",
     "semver": "7.6.3",
     "slugify": "1.6.6",
