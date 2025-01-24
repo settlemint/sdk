@@ -41,7 +41,6 @@ export async function telemetry(data: {
 
     clearTimeout(timeout);
   } catch (error) {
-    console.error("Failed to send telemetry data", error);
     // Swallow any other errors
   }
 }
