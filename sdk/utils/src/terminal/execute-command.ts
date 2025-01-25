@@ -33,6 +33,9 @@ export async function executeCommand(
   args: string[],
   options?: ExecuteCommandOptions,
 ): Promise<string[]> {
+  console.log("command", command);
+  console.log("args", args);
+  console.log("options", options);
   const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
   process.stdin.pipe(child.stdin);
   const output: string[] = [];

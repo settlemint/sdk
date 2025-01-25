@@ -98,7 +98,10 @@ export function hardhatDeployRemoteCommand() {
         );
       }
 
-      const address = await addressPrompt({ env, accept: autoAccept, prod, node, hardhatConfig });
+      let address: string | null = defaultSender ?? null;
+      if (!defaultSender) {
+        address = await addressPrompt({ env, accept: autoAccept, prod, node, hardhatConfig });
+      }
       if (!address) {
         return nothingSelectedError("private key");
       }
@@ -114,11 +117,12 @@ export function hardhatDeployRemoteCommand() {
           ...(reset ? ["--reset"] : []),
           ...(verify ? ["--verify"] : []),
           ...(deploymentId ? ["--deployment-id", deploymentId] : []),
-          ...(defaultSender ? ["--default-sender", defaultSender] : []),
           ...(parameters ? ["--parameters", parameters] : []),
           ...(strategy ? ["--strategy", strategy] : []),
           "--network",
           "btp",
+          "--default-sender",
+          address,
           module ?? "ignition/modules/main.ts",
         ].filter(Boolean),
         { env: envConfig },
