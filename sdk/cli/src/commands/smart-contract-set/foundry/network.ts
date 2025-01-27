@@ -1,7 +1,7 @@
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
+import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
 
 export function foundryNetworkCommand() {
   return new Command("network")
@@ -28,6 +28,6 @@ export function foundryNetworkCommand() {
     .allowUnknownOption(true)
     .action(async (passThroughOptions, cmd) => {
       const anvilOptions = mapPassthroughOptions(passThroughOptions, cmd);
-      await executeCommand("anvil", anvilOptions);
+      await executeFoundryCommand("anvil", anvilOptions);
     });
 }

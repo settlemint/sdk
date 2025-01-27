@@ -15,6 +15,7 @@ import {
   isGenerated,
   updateSubgraphYamlConfig,
 } from "@/utils/subgraph/subgraph-config";
+import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -42,6 +43,8 @@ export function subgraphDeployCommand() {
     .option("--prod", "Connect to your production environment")
     .argument("[subgraph-name]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
     .action(async (subgraphName, { prod, acceptDefaults }) => {
+      await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
+
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 

@@ -1,6 +1,7 @@
 import { selectTargetNode } from "@/commands/smart-contract-set/hardhat/utils/select-target-node";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -21,6 +22,8 @@ export function hardhatScriptRemoteCommand() {
     .option("--no-compile", "Don't compile before running this task");
 
   cmd.action(async ({ script, prod, blockchainNode: blockchainNodeUniqueName, acceptDefaults, compile }) => {
+    await validateIfRequiredPackagesAreInstalled(["hardhat"]);
+
     const autoAccept = !!acceptDefaults || isInCi;
     const env = await loadEnv(false, !!prod);
 

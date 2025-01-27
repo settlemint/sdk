@@ -5,6 +5,7 @@ import { addressPrompt } from "@/prompts/smart-contract-set/address.prompt";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/smart-contract-set/hardhat-config";
+import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -73,6 +74,8 @@ export function hardhatDeployRemoteCommand() {
       acceptDefaults,
       blockchainNode: blockchainNodeUniqueName,
     }) => {
+      await validateIfRequiredPackagesAreInstalled(["hardhat"]);
+
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 

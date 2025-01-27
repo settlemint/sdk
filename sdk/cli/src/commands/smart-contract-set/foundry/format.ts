@@ -1,7 +1,7 @@
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
+import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
 import { Command } from "@commander-js/extra-typings";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { note } from "@settlemint/sdk-utils/terminal";
 
 export function foundryFormatCommand() {
@@ -29,7 +29,7 @@ export function foundryFormatCommand() {
     .allowUnknownOption(true)
     .action(async (passThroughOptions, cmd) => {
       const forgeOptions = mapPassthroughOptions(passThroughOptions, cmd);
-      await executeCommand("forge", ["fmt", ...forgeOptions]);
+      await executeFoundryCommand("forge", ["fmt", ...forgeOptions]);
       note("Smart contract set formatted successfully!");
     });
 }

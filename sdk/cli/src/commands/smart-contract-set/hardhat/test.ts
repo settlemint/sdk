@@ -1,5 +1,6 @@
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
+import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
@@ -32,6 +33,7 @@ export function hardhatTestCommand() {
     .passThroughOptions()
     .allowUnknownOption()
     .action(async (options, cmd) => {
+      await validateIfRequiredPackagesAreInstalled(["hardhat"]);
       const hardhatOptions = mapPassthroughOptions(options, cmd);
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [...args, "hardhat", "test", ...hardhatOptions]);
