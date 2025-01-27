@@ -1,3 +1,4 @@
+import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
@@ -8,6 +9,8 @@ export function hardhatScriptLocalCommand() {
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"')
     .option("--no-compile", "Don't compile before running this task")
     .action(async ({ script, compile }) => {
+      await validateIfRequiredPackagesAreInstalled(["hardhat"]);
+
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [
         ...args,

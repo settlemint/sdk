@@ -1,4 +1,5 @@
 import { createExamples } from "@/utils/commands/create-examples";
+import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
@@ -33,6 +34,8 @@ export function hardhatDeployLocalCommand() {
     .option("-r, --reset", "Wipes the existing deployment state before deploying")
     .option("-v, --verify", "Verify the deployment on Etherscan")
     .action(async ({ module, reset, verify }) => {
+      await validateIfRequiredPackagesAreInstalled(["hardhat"]);
+
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(
         command,
