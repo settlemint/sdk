@@ -18,14 +18,20 @@ afterAll(() => {
 
 describe("executeForgeCommand", () => {
   test("executes forge command with provided arguments", async () => {
-    const args = ["build"];
-    await executeForgeCommand(args);
+    moduleMocker.clear("which");
+    await moduleMocker.mock("which", () => {
+      return {
+        default: mock(() => Promise.resolve()),
+      };
+    });
+    await executeForgeCommand(["build"]);
 
     expect(executeCommand).toHaveBeenCalledTimes(1);
-    expect(executeCommand).toHaveBeenCalledWith("forge", args);
+    expect(executeCommand).toHaveBeenCalledWith("forge", ["build"]);
   });
 
   test("throws error if forge is not installed", async () => {
+    moduleMocker.clear("which");
     await moduleMocker.mock("which", () => {
       return {
         default: mock(() => Promise.reject(new Error("Forge is not installed"))),
