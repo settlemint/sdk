@@ -38,7 +38,7 @@
     "test:typecheck": "cd test && bunx tsc",
     "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setup-platform-resources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done",
-    "docs": "turbo docs && bun turbo generate-readme",
+    "docs": "turbo docs && turbo generate-readme",
     "generate-readme": "bun scripts/generate-readme.ts"
   },
   "devDependencies": {
