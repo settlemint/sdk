@@ -6,7 +6,7 @@ import { getApplicationOrPersonalAccessToken } from "./get-app-or-personal-token
 const moduleMocker = new ModuleMocker();
 
 const mockConfig = (mockReturn: Record<string, unknown>) => {
-  moduleMocker.clear();
+  moduleMocker.clear("@/utils/config");
   return moduleMocker.mock("@/utils/config", () => mockReturn);
 };
 

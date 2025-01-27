@@ -32,10 +32,10 @@ npm install -g @settlemint/sdk-cli
 bun install -g @settlemint/sdk-cli
 
 # pnpm
-pnpm install -g @settlemint/sdk-cli
+pnpm add -g @settlemint/sdk-cli
 
 # yarn
-yarn install -g @settlemint/sdk-cli
+yarn global add @settlemint/sdk-cli
 ```
 
 You can access the CLI globally by running `settlemint` in your terminal.

@@ -10389,6 +10389,9 @@ type HAGraphMiddleware implements AbstractClusterService & AbstractEntity & Midd
   """Credentials of cluster service"""
   credentials: [ClusterServiceCredentials!]!
 
+  """Default subgraph for the HA Graph middleware"""
+  defaultSubgraph: String
+
   """Date and time when the entity was deleted, if applicable"""
   deletedAt: DateTime
 
