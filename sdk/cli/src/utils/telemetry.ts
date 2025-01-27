@@ -36,7 +36,7 @@ export async function telemetry(data: {
         message,
         workspace: env.SETTLEMINT_WORKSPACE,
         application: env.SETTLEMINT_APPLICATION,
-        sdkVersion: pkg.version,
+        cliVersion: pkg.version,
       }),
       signal: controller.signal,
     });
