@@ -57,6 +57,7 @@ describe("useCasePrompt", () => {
     },
     deploymentEngineTargets: [],
     preDeployedContracts: [],
+    sdkVersion: "0.0.1",
   };
 
   test("throws error when no use cases are available", async () => {
@@ -67,6 +68,7 @@ describe("useCasePrompt", () => {
       },
       deploymentEngineTargets: [],
       preDeployedContracts: [],
+      sdkVersion: "0.0.1",
     };
 
     expect(() => useCasePrompt(emptyConfig)).toThrow("No use cases found");
@@ -87,6 +89,7 @@ describe("useCasePrompt", () => {
       },
       deploymentEngineTargets: [],
       preDeployedContracts: [],
+      sdkVersion: "0.0.1",
     };
 
     const result = await useCasePrompt(singleConfig);

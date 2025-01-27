@@ -1,6 +1,7 @@
 import { mock } from "bun:test";
 
 type MockResult = {
+  modulePath: string;
   clear: () => void;
 };
 
@@ -40,6 +41,7 @@ export class ModuleMocker {
       mock.module(modulePath, () => result);
 
       this.mocks.push({
+        modulePath,
         clear: () => {
           mock.module(modulePath, () => original);
         },
@@ -49,10 +51,13 @@ export class ModuleMocker {
     }
   }
 
-  public clear() {
+  public clear(modulePath?: string) {
     for (const mockResult of this.mocks) {
+      if (modulePath && mockResult.modulePath !== modulePath) {
+        continue;
+      }
       mockResult.clear();
     }
-    this.mocks = [];
+    this.mocks = modulePath ? this.mocks.filter((mock) => mock.modulePath !== modulePath) : [];
   }
 }

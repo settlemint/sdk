@@ -32,6 +32,7 @@ const getPlatformConfigQuery = graphql(
           }
         }
         preDeployedContracts
+        sdkVersion
       }
     }
   `,

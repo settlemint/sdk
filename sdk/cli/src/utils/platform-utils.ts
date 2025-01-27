@@ -7,5 +7,7 @@ export function getUseCases(platformConfig: PlatformConfig) {
 }
 
 export function getStarterkits(platformConfig: PlatformConfig) {
-  return platformConfig.smartContractSets.sets.filter((useCase) => useCase.id.startsWith("starterkit-"));
+  return platformConfig.smartContractSets.sets.filter(
+    (useCase) => !useCase.featureflagged && useCase.id.startsWith("starterkit-"),
+  );
 }

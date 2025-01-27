@@ -2,6 +2,7 @@ import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
 import { ascii } from "@settlemint/sdk-utils/terminal";
 import pkg from "../../package.json";
+import { validateSdkVersionFromCommand } from "../utils/sdk-version";
 import { codegenCommand } from "./codegen";
 import { connectCommand } from "./connect";
 import { createCommand } from "./create";
@@ -60,6 +61,7 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
       }
       if (isLeafCommand(thisCommand) && !isJsonOrYamlOutput(thisCommand)) {
         ascii();
+        await validateSdkVersionFromCommand(thisCommand);
       }
     })
     .hook("postAction", async (thisCommand) => {
