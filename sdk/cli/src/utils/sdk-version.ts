@@ -1,11 +1,13 @@
 import type { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { isPackageInstalledGlobally } from "@settlemint/sdk-utils/package-manager";
+import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import * as semver from "semver";
 import pkg from "../../package.json";
 import { readConfig, setLastSdkVersionCheck } from "./config";
+
+const SDK_PACKAGE_NAME = "@settlemint/sdk-cli";
 
 /**
  * Validates the SDK version against the platform's supported version
@@ -72,17 +74,25 @@ async function getInstanceFromCommand(command: Command): Promise<string> {
 }
 
 async function getUpgradeInstructions() {
-  const packageName = "@settlemint/sdk-cli";
-  const globallyInstalled = await isPackageInstalledGlobally(packageName);
+  const globallyInstalled = await isSdkInstalledGlobally();
   if (globallyInstalled) {
     const executablePath = process.execPath;
     if (executablePath.endsWith("bun")) {
-      return `To update, run:\nbun install -g ${packageName}`;
+      return `To update, run:\nbun install -g ${SDK_PACKAGE_NAME}`;
     }
     return `To update:
-- For npm, run: npm update -g ${packageName}
-- For yarn, run: yarn global add ${packageName}
-- For pnpm, run: pnpm update -g ${packageName}`;
+- For npm, run: npm update -g ${SDK_PACKAGE_NAME}
+- For yarn, run: yarn global add ${SDK_PACKAGE_NAME}
+- For pnpm, run: pnpm update -g ${SDK_PACKAGE_NAME}`;
   }
-  return `Update your ${packageName} version in the package.json file.`;
+  return `Update your ${SDK_PACKAGE_NAME} version in the package.json file.`;
+}
+
+async function isSdkInstalledGlobally() {
+  try {
+    const installedLocally = await isPackageInstalled(SDK_PACKAGE_NAME);
+    return !installedLocally;
+  } catch {
+    return true;
+  }
 }
