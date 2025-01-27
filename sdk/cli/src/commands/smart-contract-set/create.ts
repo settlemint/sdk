@@ -5,13 +5,14 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { projectNamePrompt } from "@/prompts/project-name.prompt";
 import { useCasePrompt } from "@/prompts/smart-contract-set/use-case.prompt";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
+import { executeForgeCommand } from "@/utils/smart-contract-set/execute-forge-command";
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { formatTargetDir, isEmpty, setName } from "@settlemint/sdk-utils/package-manager";
-import { cancel, executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -65,7 +66,7 @@ export function createCommand(): Command {
       await spinner({
         startMessage: "Scaffolding the smart contract set",
         task: async () => {
-          await executeCommand("forge", [
+          await executeForgeCommand([
             "init",
             name,
             "--template",

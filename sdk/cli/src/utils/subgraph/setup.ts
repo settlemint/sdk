@@ -8,6 +8,7 @@ import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manag
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
+import { executeForgeCommand } from "../smart-contract-set/execute-forge-command";
 import { sanitizeName } from "./sanitize-name";
 import { getSubgraphYamlConfig, isGenerated, updateSubgraphYamlConfig } from "./subgraph-config";
 
@@ -20,7 +21,7 @@ export interface SubgraphSetupParams {
 export async function subgraphSetup({ network }: SubgraphSetupParams) {
   const generated = await isGenerated();
   if (generated) {
-    await executeCommand("forge", ["build"]);
+    await executeForgeCommand(["build"]);
   }
 
   if (await exists("./generated")) {

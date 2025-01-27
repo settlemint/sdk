@@ -8,7 +8,7 @@ import { inverse, redBright } from "yoctocolors";
 export class CancelError extends Error {}
 
 /**
- * Displays an error message in red inverse text and exits the process.
+ * Displays an error message in red inverse text and throws a CancelError.
  * Used to terminate execution with a visible error message.
  * Any sensitive tokens in the message are masked before display.
  *
