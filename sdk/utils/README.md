@@ -163,7 +163,7 @@ const words = camelCaseToWords("camelCaseString");
 
 Defined in: [sdk/utils/src/terminal/cancel.ts:23](https://github.com/settlemint/sdk/blob/v1.0.9/sdk/utils/src/terminal/cancel.ts#L23)
 
-Displays an error message in red inverse text and exits the process.
+Displays an error message in red inverse text and throws a CancelError.
 Used to terminate execution with a visible error message.
 Any sensitive tokens in the message are masked before display.
 
