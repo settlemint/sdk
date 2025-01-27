@@ -29,8 +29,9 @@ export async function applicationAccessTokenPrompt(
   accept: boolean | undefined,
 ): Promise<string | undefined> {
   const autoAccept = !!accept || isInCi;
-  const defaultAccessToken = env.SETTLEMINT_ACCESS_TOKEN;
-  const defaultPossible = autoAccept && defaultAccessToken;
+  const hasApplicationChanged = env.SETTLEMINT_APPLICATION !== application.uniqueName;
+  const defaultAccessToken = hasApplicationChanged ? undefined : env.SETTLEMINT_ACCESS_TOKEN;
+  const defaultPossible = autoAccept && !!defaultAccessToken;
 
   if (defaultPossible || isInCi) {
     return defaultAccessToken;
