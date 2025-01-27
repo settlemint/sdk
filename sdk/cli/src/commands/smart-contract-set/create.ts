@@ -5,7 +5,7 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { projectNamePrompt } from "@/prompts/project-name.prompt";
 import { useCasePrompt } from "@/prompts/smart-contract-set/use-case.prompt";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
-import { executeForgeCommand } from "@/utils/smart-contract-set/execute-forge-command";
+import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
 import { Command } from "@commander-js/extra-typings";
 import confirm from "@inquirer/confirm";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -66,7 +66,7 @@ export function createCommand(): Command {
       await spinner({
         startMessage: "Scaffolding the smart contract set",
         task: async () => {
-          await executeForgeCommand([
+          await executeFoundryCommand("forge", [
             "init",
             name,
             "--template",

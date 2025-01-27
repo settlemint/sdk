@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
 import { ModuleMocker } from "@/utils/test/module-mocker";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
-import { executeForgeCommand } from "./execute-forge-command";
 
 const moduleMocker = new ModuleMocker();
 
@@ -16,27 +16,27 @@ afterAll(() => {
   moduleMocker.clear();
 });
 
-describe("executeForgeCommand", () => {
-  test("executes forge command with provided arguments", async () => {
+describe("executeFoundryCommand", () => {
+  test("executes foundry forge command with provided arguments", async () => {
     moduleMocker.clear("which");
     await moduleMocker.mock("which", () => {
       return {
         default: mock(() => Promise.resolve()),
       };
     });
-    await executeForgeCommand(["build"]);
+    await executeFoundryCommand("forge", ["build"]);
 
     expect(executeCommand).toHaveBeenCalledTimes(1);
     expect(executeCommand).toHaveBeenCalledWith("forge", ["build"]);
   });
 
-  test("throws error if forge is not installed", async () => {
+  test("throws error if foundry forge command is not installed", async () => {
     moduleMocker.clear("which");
     await moduleMocker.mock("which", () => {
       return {
         default: mock(() => Promise.reject(new Error("Forge is not installed"))),
       };
     });
-    expect(executeForgeCommand([])).rejects.toThrow("Foundry is not installed");
+    expect(executeFoundryCommand("forge", [])).rejects.toThrow("Foundry is not installed");
   });
 });

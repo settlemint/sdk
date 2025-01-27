@@ -1,6 +1,6 @@
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
-import { executeForgeCommand } from "@/utils/smart-contract-set/execute-forge-command";
+import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
 import { Command } from "@commander-js/extra-typings";
 
 export function foundryBuildCommand() {
@@ -28,6 +28,6 @@ export function foundryBuildCommand() {
     .allowUnknownOption(true)
     .action(async (passThroughOptions, cmd) => {
       const forgeOptions = mapPassthroughOptions(passThroughOptions, cmd);
-      await executeForgeCommand(["build", ...forgeOptions]);
+      await executeFoundryCommand("forge", ["build", ...forgeOptions]);
     });
 }
