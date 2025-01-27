@@ -84,10 +84,10 @@ npm install -g @settlemint/sdk-cli
 bun install -g @settlemint/sdk-cli
 
 # pnpm
-pnpm install -g @settlemint/sdk-cli
+pnpm add -g @settlemint/sdk-cli
 
 # yarn
-yarn install -g @settlemint/sdk-cli
+yarn global add @settlemint/sdk-cli
 ```
 
 You can access the CLI globally by running `settlemint` in your terminal.
@@ -249,7 +249,7 @@ settlemint scs subgraph deploy --accept-defaults <subgraph-name>
 
 ## API Reference
 
-See the [documentation](https://github.com/settlemint/sdk/tree/v1.0.8/sdk/cli/docs/settlemint.md) for available commands.
+See the [documentation](https://github.com/settlemint/sdk/tree/v1.0.9/sdk/cli/docs/settlemint.md) for available commands.
 
 ## Contributing
 
