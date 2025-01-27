@@ -1,5 +1,6 @@
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import pkg from "../../package.json";
 
 export async function telemetry(data: {
   command?: string;
@@ -35,6 +36,7 @@ export async function telemetry(data: {
         message,
         workspace: env.SETTLEMINT_WORKSPACE,
         application: env.SETTLEMINT_APPLICATION,
+        sdkVersion: pkg.version,
       }),
       signal: controller.signal,
     });
