@@ -1,21 +1,21 @@
-import { afterAll, describe, expect, mock, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { ModuleMocker } from "@/utils/test/module-mocker";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { useCasePrompt } from "./use-case.prompt";
 
+const moduleMocker = new ModuleMocker();
+
 const mockSelect = mock(({ choices }: { choices: { value: string }[] }) => Promise.resolve(choices[0]?.value ?? ""));
 
-mock.module("@inquirer/select", () => ({
-  default: mockSelect,
-}));
-
-mock.module("@settlemint/sdk-utils/terminal", () => ({
-  cancel: mock((message: string) => {
-    throw new Error(message);
-  }),
-}));
+beforeAll(async () => {
+  await moduleMocker.mock("@inquirer/select", () => ({
+    default: mockSelect,
+  }));
+});
 
 afterAll(() => {
   mock.restore();
+  moduleMocker.clear();
 });
 
 describe("useCasePrompt", () => {

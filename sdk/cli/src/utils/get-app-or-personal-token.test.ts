@@ -1,16 +1,18 @@
 import { afterAll, describe, expect, it, mock } from "bun:test";
-import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
+import { ModuleMocker } from "@/utils/test/module-mocker";
+import { CancelError } from "@settlemint/sdk-utils/terminal";
 import { getApplicationOrPersonalAccessToken } from "./get-app-or-personal-token";
 
-const mockConfig = (mockReturn: unknown) => {
-  return mock.module("@/utils/config", () => mockReturn);
+const moduleMocker = new ModuleMocker();
+
+const mockConfig = (mockReturn: Record<string, unknown>) => {
+  moduleMocker.clear();
+  return moduleMocker.mock("@/utils/config", () => mockReturn);
 };
-mock.module("@settlemint/sdk-utils/terminal", () => ({
-  cancel: (message: string) => message,
-}));
 
 afterAll(() => {
   mock.restore();
+  moduleMocker.clear();
 });
 
 const appToken = "sm_aat_123";
@@ -18,7 +20,7 @@ const personalToken = "sm_pat_456";
 
 describe("getApplicationOrPersonalAccessToken", () => {
   it("Preference - Application access token - Returns application access token when set", async () => {
-    mockConfig({
+    await mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
       })),
@@ -36,7 +38,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Application access token - Fallback to personal access token if no application access token", async () => {
-    mockConfig({
+    await mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
       })),
@@ -52,7 +54,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Personal access token - Returns personal access token when set", async () => {
-    mockConfig({
+    await mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: personalToken,
       })),
@@ -70,20 +72,26 @@ describe("getApplicationOrPersonalAccessToken", () => {
   });
 
   it("Preference - Personal access token -  Error if no personal access token", async () => {
-    mockConfig({
+    await mockConfig({
       getInstanceCredentials: mock(() => ({
         personalAccessToken: undefined,
       })),
     });
 
-    const result = await getApplicationOrPersonalAccessToken({
-      env: {
-        SETTLEMINT_ACCESS_TOKEN: appToken,
-      },
-      instance: "test-instance",
-      prefer: "personal",
-    });
-
-    expect(result).toBe(missingPersonalAccessTokenError());
+    try {
+      await getApplicationOrPersonalAccessToken({
+        env: {
+          SETTLEMINT_ACCESS_TOKEN: appToken,
+        },
+        instance: "test-instance",
+        prefer: "personal",
+      });
+    } catch (err) {
+      expect(err).toBeInstanceOf(CancelError);
+      const error = err as CancelError;
+      expect(error.message).toBe(
+        "No personal access token found for instance, please run `settlemint login` to login to your instance",
+      );
+    }
   });
 });

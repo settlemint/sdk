@@ -1,4 +1,3 @@
-import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
@@ -31,8 +30,7 @@ export async function addressPrompt({
 }): Promise<string | null> {
   const possiblePrivateKeys =
     node.privateKeys?.filter((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256") ?? [];
-  const defaultAddress =
-    env.SETTLEMINT_SMART_CONTRACT_ADDRESS ?? hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
+  const defaultAddress = hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
   if (!node.privateKeys || node.privateKeys.length === 0) {
@@ -42,7 +40,7 @@ export async function addressPrompt({
   }
 
   if (defaultPossible) {
-    if (node.privateKeys.some((privateKey) => privateKey.address?.toLowerCase() === defaultAddress?.toLowerCase())) {
+    if (possiblePrivateKeys.some((privateKey) => privateKey.address?.toLowerCase() === defaultAddress?.toLowerCase())) {
       return defaultAddress;
     }
 
@@ -60,13 +58,6 @@ export async function addressPrompt({
     })),
     default: defaultAddress ?? possiblePrivateKeys[0]?.address,
   });
-
-  if (address && address !== env.SETTLEMINT_SMART_CONTRACT_ADDRESS) {
-    await writeEnvSpinner(!!prod, {
-      ...env,
-      SETTLEMINT_SMART_CONTRACT_ADDRESS: address,
-    });
-  }
 
   return address;
 }

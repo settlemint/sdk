@@ -81,10 +81,6 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: UrlSchema.optional(),
   /** Name of the new project being created */
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
-  /** Address of the deployed smart contract */
-  SETTLEMINT_SMART_CONTRACT_ADDRESS: z.string().optional(),
-  /** Deployment ID of the smart contract */
-  SETTLEMINT_SMART_CONTRACT_DEPLOYMENT_ID: z.string().optional(),
 });
 
 /**
