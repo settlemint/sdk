@@ -10,6 +10,7 @@ import {
   PRIVATE_KEY_2_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAME,
 } from "./constants/test-resources";
+import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
@@ -141,90 +142,100 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote)", async () => {
-    const deployCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--accept-defaults"], {
-      cwd: projectDir,
+    await retryCommand(async () => {
+      const deployCommand = runCommand(
+        COMMAND_TEST_SCOPE,
+        ["scs", "hardhat", "deploy", "remote", "--accept-defaults"],
+        {
+          cwd: projectDir,
+        },
+      );
+      // Confirm deployment
+      const onDeployOutput = (message: string) => {
+        if (message.includes("Confirm deploy")) {
+          deployCommand.stdin.cork();
+          deployCommand.stdin.write("y");
+          deployCommand.stdin.uncork();
+        }
+      };
+      deployCommand.stdout.on("data", onDeployOutput);
+      const { output: deployOutput } = await deployCommand.result;
+      deployCommand.stdout.off("data", onDeployOutput);
+      expect(deployOutput).toInclude("successfully deployed 🚀");
+      expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
     });
-    // Confirm deployment
-    const onDeployOutput = (message: string) => {
-      if (message.includes("Confirm deploy")) {
-        deployCommand.stdin.cork();
-        deployCommand.stdin.write("y");
-        deployCommand.stdin.uncork();
-      }
-    };
-    deployCommand.stdout.on("data", onDeployOutput);
-    const { output: deployOutput } = await deployCommand.result;
-    deployCommand.stdout.off("data", onDeployOutput);
-    expect(deployOutput).toInclude("successfully deployed 🚀");
-    expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
 
-    const resetCommand = runCommand(
-      COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
-      {
-        cwd: projectDir,
-      },
-    );
-    // Confirm deployment and reset
-    const onResetOutput = (message: string) => {
-      if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
-        resetCommand.stdin.cork();
-        resetCommand.stdin.write("y");
-        resetCommand.stdin.uncork();
-      }
-    };
-    resetCommand.stdout.on("data", onResetOutput);
-    const { output: outputReset } = await resetCommand.result;
-    resetCommand.stdout.off("data", onResetOutput);
-    expect(outputReset).toInclude("successfully deployed 🚀");
-    expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
+    await retryCommand(async () => {
+      const resetCommand = runCommand(
+        COMMAND_TEST_SCOPE,
+        ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
+        {
+          cwd: projectDir,
+        },
+      );
+      // Confirm deployment and reset
+      const onResetOutput = (message: string) => {
+        if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
+          resetCommand.stdin.cork();
+          resetCommand.stdin.write("y");
+          resetCommand.stdin.uncork();
+        }
+      };
+      resetCommand.stdout.on("data", onResetOutput);
+      const { output: outputReset } = await resetCommand.result;
+      resetCommand.stdout.off("data", onResetOutput);
+      expect(outputReset).toInclude("successfully deployed 🚀");
+      expect(outputReset).not.toInclude("Error reading hardhat.config.ts");
+    });
   });
 
   test("Hardhat - Select node and private key for deploying smart contract set (remote)", async () => {
-    const resetCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--reset"], {
-      cwd: projectDir,
-      env: {
-        CI: "false", // To disable auto accept in CI
-      },
+    await retryCommand(async () => {
+      const resetCommand = runCommand(COMMAND_TEST_SCOPE, ["scs", "hardhat", "deploy", "remote", "--reset"], {
+        cwd: projectDir,
+        env: {
+          CI: "false", // To disable auto accept in CI
+        },
+      });
+
+      const nodeListCapture: string[] = [];
+      const privateKeyCapture: string[] = [];
+      const onResetOutput = (message: string) => {
+        if (message.includes("Which blockchain node do you want to connect to?")) {
+          nodeListCapture.push(message);
+
+          resetCommand.stdin.cork();
+          resetCommand.stdin.write("\n"); // Selects the default option - env.SETTLEMINT_BLOCKCHAIN_NODE
+          resetCommand.stdin.uncork();
+        }
+
+        if (message.includes("Which private key do you want to deploy from?")) {
+          privateKeyCapture.push(message);
+
+          resetCommand.stdin.cork();
+          resetCommand.stdin.write("\n"); // Selects the one and only private key activated on env.SETTLEMINT_BLOCKCHAIN_NODE - PRIVATE_KEY_SMART_CONTRACTS_NAME
+          resetCommand.stdin.uncork();
+        }
+
+        if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
+          resetCommand.stdin.cork();
+          resetCommand.stdin.write("n"); // No need to deploy again
+          resetCommand.stdin.uncork();
+        }
+      };
+
+      resetCommand.stdout.on("data", onResetOutput);
+      await resetCommand.result;
+      resetCommand.stdout.off("data", onResetOutput);
+
+      const nodeListString = nodeListCapture.join("\n");
+      expect(nodeListString).toContain(NODE_NAME);
+      expect(nodeListString).toContain(NODE_NAME_2_WITH_PK);
+      expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
+
+      const privateKeyString = privateKeyCapture.join("\n");
+      expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
+      expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME);
     });
-
-    const nodeListCapture: string[] = [];
-    const privateKeyCapture: string[] = [];
-    const onResetOutput = (message: string) => {
-      if (message.includes("Which blockchain node do you want to connect to?")) {
-        nodeListCapture.push(message);
-
-        resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // Selects the default option - env.SETTLEMINT_BLOCKCHAIN_NODE
-        resetCommand.stdin.uncork();
-      }
-
-      if (message.includes("Which private key do you want to deploy from?")) {
-        privateKeyCapture.push(message);
-
-        resetCommand.stdin.cork();
-        resetCommand.stdin.write("\n"); // Selects the one and only private key activated on env.SETTLEMINT_BLOCKCHAIN_NODE - PRIVATE_KEY_SMART_CONTRACTS_NAME
-        resetCommand.stdin.uncork();
-      }
-
-      if (message.includes("Confirm deploy") || message.includes("Confirm reset")) {
-        resetCommand.stdin.cork();
-        resetCommand.stdin.write("n"); // No need to deploy again
-        resetCommand.stdin.uncork();
-      }
-    };
-
-    resetCommand.stdout.on("data", onResetOutput);
-    await resetCommand.result;
-    resetCommand.stdout.off("data", onResetOutput);
-
-    const nodeListString = nodeListCapture.join("\n");
-    expect(nodeListString).toContain(NODE_NAME);
-    expect(nodeListString).toContain(NODE_NAME_2_WITH_PK);
-    expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
-
-    const privateKeyString = privateKeyCapture.join("\n");
-    expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
-    expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME);
   });
 });

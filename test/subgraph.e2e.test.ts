@@ -10,6 +10,7 @@ import {
   getSubgraphYamlConfig,
   updateSubgraphConfig,
 } from "../sdk/cli/src/utils/subgraph/subgraph-config";
+import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";
@@ -58,16 +59,19 @@ describe("Build and deploy a subgraph using the SDK", () => {
 
   test("Deploy smart contract and get address info", async () => {
     const deploymentId = "diamond-bond";
-    const { output: deployOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
-      {
-        cwd: projectDir,
-        env: {
-          HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
-        },
-      },
-    ).result;
+    const { output: deployOutput } = await retryCommand(
+      () =>
+        runCommand(
+          COMMAND_TEST_SCOPE,
+          ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
+          {
+            cwd: projectDir,
+            env: {
+              HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
+            },
+          },
+        ).result,
+    );
     const deploymentInfoData = await readFile(
       join(projectDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );
@@ -125,13 +129,16 @@ describe("Build and deploy a subgraph using the SDK", () => {
       projectDir,
     );
 
-    const { output } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", SUBGRAPH_NAME],
-      {
-        cwd: projectDir,
-      },
-    ).result;
+    const { output } = await retryCommand(
+      () =>
+        runCommand(
+          COMMAND_TEST_SCOPE,
+          ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", SUBGRAPH_NAME],
+          {
+            cwd: projectDir,
+          },
+        ).result,
+    );
     expect(output).toInclude("Build completed");
 
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
