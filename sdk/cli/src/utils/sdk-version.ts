@@ -1,5 +1,4 @@
 import type { Command } from "@commander-js/extra-typings";
-import { URL } from "url";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
