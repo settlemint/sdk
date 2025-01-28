@@ -1,4 +1,5 @@
 import type { Command } from "@commander-js/extra-typings";
+import { URL } from "url";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
@@ -50,7 +51,8 @@ export async function validateSdkVersion(instance: string) {
   const currentVersion = pkg.version;
 
   if (semver.gt(currentVersion, platformConfig.sdkVersion)) {
-    const isManagedInstance = instance.toLowerCase().includes(".settlemint.com");
+    const url = new URL(instance);
+    const isManagedInstance = url.host === "settlemint.com" || url.host.endsWith(".settlemint.com");
     if (isManagedInstance) {
       // Newer versions are considered compatible with managed instances
       return;
