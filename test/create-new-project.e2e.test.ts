@@ -11,6 +11,7 @@ import {
   unlinkLinkedDependencies,
   updatePackageJsonToUseLinkedDependencies,
 } from "./utils/link-dependencies";
+import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "starter-kit-demo";
@@ -125,16 +126,19 @@ describe("Setup a project using the SDK", () => {
 
   test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "starterkit-asset-tokenization";
-    const { output: deployOutput } = await runCommand(
-      COMMAND_TEST_SCOPE,
-      ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
-      {
-        cwd: contractsDir,
-        env: {
-          HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
-        },
-      },
-    ).result;
+    const { output: deployOutput } = await retryCommand(
+      () =>
+        runCommand(
+          COMMAND_TEST_SCOPE,
+          ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
+          {
+            cwd: contractsDir,
+            env: {
+              HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
+            },
+          },
+        ).result,
+    );
     const deploymentInfoData = await readFile(
       join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );
@@ -178,13 +182,16 @@ describe("Setup a project using the SDK", () => {
 
   test("subgraph - Deploy subgraphs", async () => {
     for (const subgraphName of SUBGRAPH_NAMES) {
-      const { output } = await runCommand(
-        COMMAND_TEST_SCOPE,
-        ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", subgraphName],
-        {
-          cwd: subgraphDir,
-        },
-      ).result;
+      const { output } = await retryCommand(
+        () =>
+          runCommand(
+            COMMAND_TEST_SCOPE,
+            ["smart-contract-set", "subgraph", "deploy", "--accept-defaults", subgraphName],
+            {
+              cwd: subgraphDir,
+            },
+          ).result,
+      );
       expect(output).toInclude("Build completed");
     }
 
