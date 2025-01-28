@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
+import { afterAll, beforeAll, beforeEach, describe, expect, mock, test } from "bun:test";
 import { ModuleMocker } from "@/utils/test/module-mocker";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { note } from "@settlemint/sdk-utils/terminal";
@@ -32,6 +32,10 @@ afterAll(() => {
 });
 
 describe("SDK Version Validation", () => {
+  beforeEach(() => {
+    noteMock.mockClear();
+  });
+
   test("should not warn when versions match", async () => {
     await mockVersion(pkg.version);
     await validateSdkVersion("https://test.instance");
@@ -43,7 +47,7 @@ describe("SDK Version Validation", () => {
     expect(noteMock).not.toHaveBeenCalled();
   });
 
-  test("should warn when SDK version is newer than platform", async () => {
+  test("should warn when SDK version is older than platform", async () => {
     await mockVersion("50.0.0");
 
     await validateSdkVersion("https://test.instance");
@@ -54,7 +58,7 @@ describe("SDK Version Validation", () => {
     );
   });
 
-  test("should warn when SDK version is older than platform", async () => {
+  test("should warn when SDK version is newer than platform", async () => {
     await mockVersion("0.0.1");
 
     await validateSdkVersion("https://test.instance");
@@ -63,5 +67,13 @@ describe("SDK Version Validation", () => {
       `SDK CLI version mismatch. The platform requires version '0.0.1' but you are using a newer version '${pkg.version}'. This might lead to compatibility issues with the platform.\n\nTo update, run:\nbun install -g @settlemint/sdk-cli`,
       "warn",
     );
+  });
+
+  test("should not warn when SDK version is newer than platform on managed instance", async () => {
+    await mockVersion("0.0.1");
+
+    await validateSdkVersion("https://console.settlemint.com/");
+
+    expect(noteMock).not.toHaveBeenCalled();
   });
 });

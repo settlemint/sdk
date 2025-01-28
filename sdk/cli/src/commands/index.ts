@@ -1,6 +1,7 @@
 import { telemetry } from "@/utils/telemetry";
 import { Command } from "@commander-js/extra-typings";
-import { ascii } from "@settlemint/sdk-utils/terminal";
+import { CancelError, SpinnerError, ascii, maskTokens, note } from "@settlemint/sdk-utils/terminal";
+import { redBright } from "yoctocolors";
 import pkg from "../../package.json";
 import { validateSdkVersionFromCommand } from "../utils/sdk-version";
 import { codegenCommand } from "./codegen";
@@ -90,7 +91,7 @@ async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
     await telemetry({
       command: commandPath,
       status: "error",
-      message: error.message,
+      message: maskTokens(error.message),
     });
   }
   process.exit(1);
@@ -153,5 +154,9 @@ export async function sdkCliCommand(argv: string[] = process.argv) {
   } catch (err) {
     const error = err as Error;
     onError(sdkcli, argv, error);
+    if (!(error instanceof CancelError || error instanceof SpinnerError)) {
+      const errorMessage = maskTokens(error.message);
+      note(redBright(`Unknown error: ${errorMessage}\n\n${error.stack}`));
+    }
   }
 }

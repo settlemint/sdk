@@ -50,6 +50,11 @@ export async function validateSdkVersion(instance: string) {
   const currentVersion = pkg.version;
 
   if (semver.gt(currentVersion, platformConfig.sdkVersion)) {
+    const isManagedInstance = instance.toLowerCase().includes(".settlemint.com");
+    if (isManagedInstance) {
+      // Newer versions are considered compatible with managed instances
+      return;
+    }
     const instructions = await getUpgradeInstructions();
     note(
       `SDK CLI version mismatch. The platform requires version '${platformConfig.sdkVersion}' but you are using a newer version '${currentVersion}'. This might lead to compatibility issues with the platform.\n\n${instructions}`,

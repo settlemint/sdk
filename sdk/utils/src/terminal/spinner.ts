@@ -5,6 +5,12 @@ import { maskTokens } from "./mask-tokens.js";
 import { note } from "./note.js";
 
 /**
+ * Error class used to indicate that the spinner operation failed.
+ * This error is used to signal that the operation should be aborted.
+ */
+export class SpinnerError extends Error {}
+
+/**
  * Options for configuring the spinner behavior
  */
 export interface SpinnerOptions<R> {
@@ -38,18 +44,25 @@ export interface SpinnerOptions<R> {
  * });
  */
 export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
+  const handleError = (error: Error) => {
+    const errorMessage = maskTokens(error.message);
+    note(redBright(`${errorMessage}\n\n${error.stack}`));
+    throw new SpinnerError(errorMessage);
+  };
   if (isInCi) {
-    return options.task();
+    try {
+      return await options.task();
+    } catch (err) {
+      return handleError(err as Error);
+    }
   }
   const spinner = yoctoSpinner().start(options.startMessage);
   try {
     const result = await options.task(spinner);
     spinner.success(options.stopMessage);
     return result;
-  } catch (error) {
+  } catch (err) {
     spinner.error(redBright(`${options.startMessage} --> Error!`));
-    const errorMessage = maskTokens((error as Error).message);
-    note(redBright(`${errorMessage}\n\n${(error as Error).stack}`));
-    throw new Error(errorMessage);
+    return handleError(err as Error);
   }
 };
