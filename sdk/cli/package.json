@@ -47,7 +47,7 @@
     "@commander-js/extra-typings": "13.1.0",
     "@inquirer/confirm": "5.1.4",
     "@inquirer/input": "4.1.4",
-    "@inquirer/password": "4.0.6",
+    "@inquirer/password": "4.0.7",
     "@inquirer/select": "4.0.7",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
