@@ -1,5 +1,5 @@
 import { telemetry } from "@/utils/telemetry";
-import { Command } from "@commander-js/extra-typings";
+import { Command, CommanderError } from "@commander-js/extra-typings";
 import { AbortPromptError, CancelPromptError, ExitPromptError, ValidationError } from "@inquirer/core";
 import { CancelError, SpinnerError, ascii, maskTokens, note } from "@settlemint/sdk-utils/terminal";
 import { redBright } from "yoctocolors";
@@ -88,6 +88,10 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
 async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
   const errorsToIgnore = [ExitPromptError, AbortPromptError, ValidationError, CancelPromptError];
   if (errorsToIgnore.some((errorToIgnore) => error instanceof errorToIgnore)) {
+    return;
+  }
+
+  if (error instanceof CommanderError && (error.exitCode === 0 || error.code === "commander.help")) {
     return;
   }
 
