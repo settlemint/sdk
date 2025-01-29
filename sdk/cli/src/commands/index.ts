@@ -88,11 +88,11 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
 async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
   const errorsToIgnore = [ExitPromptError, AbortPromptError, ValidationError, CancelPromptError];
   if (errorsToIgnore.some((errorToIgnore) => error instanceof errorToIgnore)) {
-    return;
+    process.exit(0);
   }
 
   if (error instanceof CommanderError && (error.exitCode === 0 || error.code === "commander.help")) {
-    return;
+    process.exit(error.exitCode);
   }
 
   if (!(error instanceof CancelError || error instanceof SpinnerError)) {
