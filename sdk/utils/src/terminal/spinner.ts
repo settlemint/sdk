@@ -60,6 +60,9 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
   try {
     const result = await options.task(spinner);
     spinner.success(options.stopMessage);
+    // Ensure spinner success message renders before proceeding to avoid
+    // terminal output overlap issues with subsequent messages
+    await new Promise((resolve) => process.nextTick(resolve));
     return result;
   } catch (err) {
     spinner.error(redBright(`${options.startMessage} --> Error!`));

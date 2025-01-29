@@ -1,5 +1,6 @@
 import { telemetry } from "@/utils/telemetry";
-import { Command } from "@commander-js/extra-typings";
+import { Command, CommanderError } from "@commander-js/extra-typings";
+import { AbortPromptError, CancelPromptError, ExitPromptError, ValidationError } from "@inquirer/core";
 import { CancelError, SpinnerError, ascii, maskTokens, note } from "@settlemint/sdk-utils/terminal";
 import { redBright } from "yoctocolors";
 import pkg from "../../package.json";
@@ -85,6 +86,20 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
 }
 
 async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
+  const errorsToIgnore = [ExitPromptError, AbortPromptError, ValidationError, CancelPromptError];
+  if (errorsToIgnore.some((errorToIgnore) => error instanceof errorToIgnore)) {
+    process.exit(0);
+  }
+
+  if (error instanceof CommanderError && (error.exitCode === 0 || error.code === "commander.help")) {
+    process.exit(error.exitCode);
+  }
+
+  if (!(error instanceof CancelError || error instanceof SpinnerError)) {
+    const errorMessage = maskTokens(error.message);
+    note(redBright(`Unknown error: ${errorMessage}\n\n${error.stack}`));
+  }
+
   // Get the command path from the command that threw the error
   const commandPath = sdkcli._lastCommand?._commandPath ?? getCommandPathFromArgv(argv);
   if (commandPath) {
@@ -154,9 +169,5 @@ export async function sdkCliCommand(argv: string[] = process.argv) {
   } catch (err) {
     const error = err as Error;
     onError(sdkcli, argv, error);
-    if (!(error instanceof CancelError || error instanceof SpinnerError)) {
-      const errorMessage = maskTokens(error.message);
-      note(redBright(`Unknown error: ${errorMessage}\n\n${error.stack}`));
-    }
   }
 }
