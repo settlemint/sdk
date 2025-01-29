@@ -54,7 +54,7 @@ For detailed information about using TheGraph with the SettleMint platform, chec
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v1.1.1/sdk/thegraph/src/thegraph.ts#L121)
+Defined in: [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/thegraph/src/thegraph.ts#L121)
 
 Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
@@ -81,8 +81,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:125](https://github.com/settlemint/sdk/blob/v1.1.1/sdk/thegraph/src/thegraph.ts#L125) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:126](https://github.com/settlemint/sdk/blob/v1.1.1/sdk/thegraph/src/thegraph.ts#L126) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:125](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/thegraph/src/thegraph.ts#L125) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:126](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/thegraph/src/thegraph.ts#L126) |
 
 ##### Throws
 
@@ -150,7 +150,7 @@ const result = await client.request(query);
 
 > **ClientOptions**: \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}
 
-Defined in: [sdk/thegraph/src/thegraph.ts:34](https://github.com/settlemint/sdk/blob/v1.1.1/sdk/thegraph/src/thegraph.ts#L34)
+Defined in: [sdk/thegraph/src/thegraph.ts:34](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/thegraph/src/thegraph.ts#L34)
 
 Type definition for client options derived from the ClientOptionsSchema
 
@@ -160,7 +160,7 @@ Type definition for client options derived from the ClientOptionsSchema
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v1.1.1/sdk/thegraph/src/thegraph.ts#L10)
+Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/thegraph/src/thegraph.ts#L10)
 
 Type definition for GraphQL client configuration options
 
@@ -170,7 +170,7 @@ Type definition for GraphQL client configuration options
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<[`ClientOptions`](README.md#clientoptions)\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v1.1.1/sdk/thegraph/src/thegraph.ts#L18)
+Defined in: [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/thegraph/src/thegraph.ts#L18)
 
 Schema for validating client options for the TheGraph client.
 Defines two possible runtime configurations:
