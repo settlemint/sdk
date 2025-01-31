@@ -42,6 +42,23 @@ function getFullUrl(options: ClientOptions): string {
 }
 
 /**
+ * Gets the headers configuration based on runtime options
+ *
+ * @param options - The validated client options
+ * @returns Headers configuration object or empty object
+ */
+function getHeaders(options: ClientOptions): Record<string, unknown> {
+  if (options.runtime === "server") {
+    return {
+      headers: {
+        "x-auth-token": options.accessToken,
+      },
+    };
+  }
+  return {};
+}
+
+/**
  * Creates a Portal GraphQL client with the provided configuration.
  *
  * @param options - Configuration options for the Portal client
@@ -115,11 +132,7 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
   return {
     client: new GraphQLClient(fullUrl, {
       ...clientOptions,
-      ...(validatedOptions.runtime === "server" && {
-        headers: {
-          "x-auth-token": validatedOptions.accessToken,
-        },
-      }),
+      ...getHeaders(validatedOptions),
     }),
     graphql,
   };
