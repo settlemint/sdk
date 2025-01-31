@@ -54,7 +54,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:101](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/portal/src/portal.ts#L101)
+Defined in: [sdk/portal/src/portal.ts:118](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/portal/src/portal.ts#L118)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -79,8 +79,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:105](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/portal/src/portal.ts#L105) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:106](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/portal/src/portal.ts#L106) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:122](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/portal/src/portal.ts#L122) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:123](https://github.com/settlemint/sdk/blob/v1.1.2/sdk/portal/src/portal.ts#L123) |
 
 ##### Throws
 
