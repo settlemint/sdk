@@ -17,5 +17,9 @@ export default defineConfig(({ watch }) => {
       entry: ["src/settlemint.ts"],
       ...sharedConfig,
     },
+    {
+      entry: ["src/challenge.ts"],
+      ...sharedConfig,
+    },
   ];
 });

@@ -1,8 +1,10 @@
+import type { HandleChallengeArgs } from "@/challenge.js";
 import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
+import { handleChallenge } from "./challenge.js";
 import {
   type CreateApplicationAccessTokenArgs,
   applicationAccessTokenCreate,
@@ -181,6 +183,9 @@ export interface SettlemintClient {
   platform: {
     config: () => Promise<PlatformConfig>;
   };
+  wallet: {
+    handleChallenge: (args: Omit<HandleChallengeArgs, "instance" | "accessToken">) => Promise<string>;
+  };
 }
 
 /**
@@ -313,6 +318,14 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
     },
     platform: {
       config: getPlatformConfig(gqlClient),
+    },
+    wallet: {
+      handleChallenge: (args) =>
+        handleChallenge({
+          ...args,
+          instance: validatedOptions.instance,
+          accessToken: validatedOptions.accessToken,
+        }),
     },
   };
 }
