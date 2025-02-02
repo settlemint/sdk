@@ -48,7 +48,7 @@
     "@inquirer/confirm": "5.1.5",
     "@inquirer/input": "4.1.4",
     "@inquirer/password": "4.0.7",
-    "@inquirer/select": "4.0.7",
+    "@inquirer/select": "4.0.8",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "@types/node": "22.13.0",
