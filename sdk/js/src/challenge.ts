@@ -1,5 +1,4 @@
 import { createHash } from "node:crypto";
-import type { Address } from "viem";
 
 function hashPincode(pincode: string, salt: string): string {
   return createHash("sha256").update(`${salt}${pincode}`).digest("hex");
@@ -11,7 +10,7 @@ function generateChallengeResponse(pincode: string, salt: string, challenge: str
 }
 
 export interface HandleChallengeArgs {
-  userWalletAddress: Address;
+  userWalletAddress: string;
   pincode: string;
   accessToken: string;
   instance: string;

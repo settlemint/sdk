@@ -11,7 +11,6 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import type { Address } from "viem";
 
 /**
  * Creates and returns the 'challenge' command for the SettleMint SDK.
@@ -73,7 +72,7 @@ export function verificationChallengeCommand() {
         },
       });
       const challengeResponse = await settlemint.wallet.handleChallenge({
-        userWalletAddress: walletAddress as Address,
+        userWalletAddress: walletAddress,
         pincode,
         nodeId: selectedBlockchainNode.id,
       });
