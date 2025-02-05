@@ -64,8 +64,8 @@ export function pincodeVerificationResponseCommand() {
       const pincode = await password({
         message: "Enter your pincode",
         validate(value) {
-          if (value.length !== 6) {
-            return "Pincode must be 6 digits";
+          if (!value.trim()) {
+            return "Pincode is required";
           }
           return true;
         },
