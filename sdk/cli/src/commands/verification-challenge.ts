@@ -54,7 +54,7 @@ export function verificationChallengeCommand() {
         selectedBlockchainNode = await blockchainNodePrompt({
           env,
           nodes: blockchainNodes,
-          accept: true,
+          accept: false,
           isRequired: true,
         });
         if (!selectedBlockchainNode) {

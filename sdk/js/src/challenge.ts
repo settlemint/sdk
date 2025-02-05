@@ -33,20 +33,26 @@ export async function handleChallenge({
   instance,
   nodeId,
 }: HandleChallengeArgs) {
-  const response = await fetch(`${instance}/cm/nodes/${nodeId}/${userWalletAddress}/verifications`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth-token": accessToken,
+  const response = await fetch(
+    `${instance}/cm/nodes/${encodeURIComponent(nodeId)}/user-wallets/${encodeURIComponent(userWalletAddress)}/verifications/challenges`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": accessToken,
+      },
+      body: JSON.stringify({
+        pincode,
+        verificationType: "PINCODE",
+        name: "pincode",
+      }),
     },
-    body: JSON.stringify({
-      pincode,
-      verificationType: "PINCODE",
-      name: "pincode",
-    }),
-  });
+  );
 
   if (!response.ok) {
+    if (response.status === 404) {
+      throw new Error(`No user wallet found with address '${userWalletAddress}' for node '${nodeId}'`);
+    }
     throw new Error("Failed to handle challenge");
   }
 
