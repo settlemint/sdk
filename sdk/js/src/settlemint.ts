@@ -95,6 +95,7 @@ import {
   workspaceRead,
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
+import { type PincodeVerificationResponseArgs, getPincodeVerificationResponse } from "./pincode-verification.js";
 
 /**
  * Options for the Settlemint client.
@@ -180,6 +181,11 @@ export interface SettlemintClient {
   };
   platform: {
     config: () => Promise<PlatformConfig>;
+  };
+  wallet: {
+    pincodeVerificationResponse: (
+      args: Omit<PincodeVerificationResponseArgs, "instance" | "accessToken">,
+    ) => Promise<string>;
   };
 }
 
@@ -313,6 +319,14 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
     },
     platform: {
       config: getPlatformConfig(gqlClient),
+    },
+    wallet: {
+      pincodeVerificationResponse: (args) =>
+        getPincodeVerificationResponse({
+          ...args,
+          instance: validatedOptions.instance,
+          accessToken: validatedOptions.accessToken,
+        }),
     },
   };
 }

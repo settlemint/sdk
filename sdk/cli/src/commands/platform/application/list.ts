@@ -84,7 +84,7 @@ export function applicationsListCommand() {
       if (printToTerminal) {
         const selectedWorkspace = await settlemint.workspace.read(workspaceUniqueName);
         table(
-          `Applications for workspace ${selectedWorkspace.name} (${selectedWorkspace}) - ${getWorkspaceUrl(selectedInstance, selectedWorkspace)}`,
+          `Applications for workspace ${selectedWorkspace.name} (${selectedWorkspace.uniqueName}) - ${getWorkspaceUrl(selectedInstance, selectedWorkspace)}`,
           applicationsData,
         );
       } else if (output === "json") {

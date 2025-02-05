@@ -40,7 +40,8 @@ export async function waitForCompletion({
     serviceType === "application" ||
     serviceType === "foundry" ||
     serviceType === "applicationAccessToken" ||
-    serviceType === "platform"
+    serviceType === "platform" ||
+    serviceType === "wallet"
   ) {
     return true;
   }
