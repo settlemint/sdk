@@ -10,9 +10,9 @@ import { connectCommand } from "./connect";
 import { createCommand } from "./create";
 import { loginCommand } from "./login";
 import { logoutCommand } from "./logout";
+import { pincodeVerificationResponseCommand } from "./pincode-verification-response";
 import { platformCommand } from "./platform";
 import { smartContractSetCommand } from "./smart-contract.set";
-import { verificationChallengeCommand } from "./verification-challenge";
 
 // Extend Command type to include our custom properties
 type ExtendedCommand = Command & {
@@ -142,7 +142,7 @@ export function registerCommands() {
   sdkcli.addCommand(createCommand());
   sdkcli.addCommand(loginCommand());
   sdkcli.addCommand(logoutCommand());
-  sdkcli.addCommand(verificationChallengeCommand());
+  sdkcli.addCommand(pincodeVerificationResponseCommand());
 
   return sdkcli;
 }

@@ -12,19 +12,18 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
-/**
- * Creates and returns the 'challenge' command for the SettleMint SDK.
- * This command outputs the current platform configuration.
- */
-export function verificationChallengeCommand() {
-  return new Command("verification-challenge")
-    .alias("vch")
-    .description("Get verification challenges for a blockchain node")
-    .requiredOption("--wallet-address <walletAddress>", "The wallet address to get verification challenges for")
+export function pincodeVerificationResponseCommand() {
+  return new Command("pincode-verification-response")
+    .alias("pvr")
+    .description("Get pincode verification response for a blockchain node")
+    .requiredOption("--wallet-address <walletAddress>", "The wallet address to get pincode verification response for")
     .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
-    .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name to get verification challenges for")
+    .option(
+      "--blockchain-node <blockchainNode>",
+      "Blockchain Node unique name to get pincode verification response for",
+    )
     .action(async ({ instance, blockchainNode, walletAddress }) => {
-      intro("Generating verification challenge for wallet address");
+      intro("Generating pincode verification response for wallet address");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
       const applicationUniqueName = env.SETTLEMINT_APPLICATION;
@@ -71,13 +70,13 @@ export function verificationChallengeCommand() {
           return true;
         },
       });
-      const challengeResponse = await settlemint.wallet.handleChallenge({
+      const pincodeVerificationResponse = await settlemint.wallet.pincodeVerificationResponse({
         userWalletAddress: walletAddress,
         pincode,
         nodeId: selectedBlockchainNode.id,
       });
-      note(`Challenge response: ${challengeResponse}`);
+      note(`Pincode verification response: ${pincodeVerificationResponse}`);
 
-      outro("Verification challenge generated");
+      outro("Pincode verification response generated");
     });
 }

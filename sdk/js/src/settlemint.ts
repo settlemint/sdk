@@ -1,10 +1,8 @@
-import type { HandleChallengeArgs } from "@/challenge.js";
 import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod";
-import { handleChallenge } from "./challenge.js";
 import {
   type CreateApplicationAccessTokenArgs,
   applicationAccessTokenCreate,
@@ -97,6 +95,7 @@ import {
   workspaceRead,
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
+import { type PincodeVerificationResponseArgs, getPincodeVerificationResponse } from "./pincode-verification.js";
 
 /**
  * Options for the Settlemint client.
@@ -184,7 +183,9 @@ export interface SettlemintClient {
     config: () => Promise<PlatformConfig>;
   };
   wallet: {
-    handleChallenge: (args: Omit<HandleChallengeArgs, "instance" | "accessToken">) => Promise<string>;
+    pincodeVerificationResponse: (
+      args: Omit<PincodeVerificationResponseArgs, "instance" | "accessToken">,
+    ) => Promise<string>;
   };
 }
 
@@ -320,8 +321,8 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       config: getPlatformConfig(gqlClient),
     },
     wallet: {
-      handleChallenge: (args) =>
-        handleChallenge({
+      pincodeVerificationResponse: (args) =>
+        getPincodeVerificationResponse({
           ...args,
           instance: validatedOptions.instance,
           accessToken: validatedOptions.accessToken,
