@@ -354,6 +354,8 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "EquityFactory",
             "StableCoin",
             "StableCoinFactory",
+            "FundFactory",
+            "Fund",
           ]).result,
     () =>
       hasBlockscoutInsights
