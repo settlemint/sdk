@@ -23,7 +23,9 @@ setDefaultTimeout(15 * 60_000);
 
 async function cleanup() {
   try {
-    await rmdir(projectDir, { recursive: true });
+    if (await exists(projectDir)) {
+      await rmdir(projectDir, { recursive: true });
+    }
   } catch (err) {
     console.log("Failed to delete project dir", err);
   }
