@@ -148,7 +148,7 @@ describe("Setup a project using the SDK", () => {
       expect(deployOutput).toInclude("successfully deployed 🚀");
       expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
     },
-    { timeout: 5 * 60_0000 },
+    { timeout: 25 * 60_000 }, // Give it 25 minutes to deploy the contracts (typically takes around 17-18 minutes)
   );
 
   test("subgraph - Update contract addresses", async () => {
