@@ -120,8 +120,8 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
   type Plugin = (typeof tsconfig.config.compilerOptions.plugins)[number];
   const isGraphqlTadaPlugin = (plugin: Plugin) =>
     plugin.name === "gql.tada/ts-plugin" || plugin.name === "@0no-co/graphqlsp";
-  const hasGraphqlspPlugin = tsconfig.config.compilerOptions.plugins.some(isGraphqlTadaPlugin);
-  if (hasGraphqlspPlugin) {
+  const hasGraphqlTadaPlugin = tsconfig.config.compilerOptions.plugins.some(isGraphqlTadaPlugin);
+  if (hasGraphqlTadaPlugin) {
     tsconfig.config.compilerOptions.plugins = tsconfig.config.compilerOptions.plugins.filter(
       (plugin) => !isGraphqlTadaPlugin(plugin),
     );
