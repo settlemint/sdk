@@ -124,32 +124,39 @@ describe("Setup a project using the SDK", () => {
     expect(result.exitCode).toBe(0);
   });
 
-  test(
-    "contracts - Build and Deploy smart contracts",
-    async () => {
-      const deploymentId = "starterkit-asset-tokenization";
-      const { output: deployOutput } = await retryCommand(
-        () =>
-          runCommand(
-            COMMAND_TEST_SCOPE,
-            ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
-            {
-              cwd: contractsDir,
-              env: {
-                HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
-              },
+  test("contracts - Build and Deploy smart contracts", async () => {
+    const deploymentId = "starterkit-asset-tokenization";
+    // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
+    const { output: deployOutput } = await retryCommand(
+      () =>
+        runCommand(
+          COMMAND_TEST_SCOPE,
+          [
+            "scs",
+            "hardhat",
+            "deploy",
+            "remote",
+            "--deployment-id",
+            deploymentId,
+            "--module",
+            "ignition/modules/stable-coin-factory.ts",
+            "--accept-defaults",
+          ],
+          {
+            cwd: contractsDir,
+            env: {
+              HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
             },
-          ).result,
-      );
-      const deploymentInfoData = await readFile(
-        join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
-      );
-      contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
-      expect(deployOutput).toInclude("successfully deployed 🚀");
-      expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
-    },
-    { timeout: 25 * 60_000 }, // Give it 25 minutes to deploy the contracts (typically takes around 17-18 minutes)
-  );
+          },
+        ).result,
+    );
+    const deploymentInfoData = await readFile(
+      join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
+    );
+    contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).toInclude("successfully deployed 🚀");
+    expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
+  });
 
   test("subgraph - Update contract addresses", async () => {
     const config = await getSubgraphYamlConfig(subgraphDir);
