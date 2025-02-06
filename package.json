@@ -49,7 +49,7 @@
     "knip": "5.43.6",
     "lefthook": "1.10.10",
     "mustache": "4.2.0",
-    "publint": "0.3.2",
+    "publint": "0.3.3",
     "tsup": "8.3.6",
     "turbo": "2.4.0",
     "typedoc": "0.27.6",
