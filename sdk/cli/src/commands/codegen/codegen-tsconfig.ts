@@ -70,7 +70,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
   }
 
   const tadaConfig = {
-    name: "@0no-co/graphqlsp",
+    name: "gql.tada/ts-plugin",
     trackFieldUsage: false,
     schemas: [
       ...(hasura
@@ -117,10 +117,12 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
     ],
   };
 
-  const graphqlspPlugin = tsconfig.config.compilerOptions.plugins.find((plugin) => plugin.name === "@0no-co/graphqlsp");
-  if (graphqlspPlugin) {
+  const hasGraphqlspPlugin = tsconfig.config.compilerOptions.plugins.some(
+    (plugin) => plugin.name === "gql.tada/ts-plugin",
+  );
+  if (hasGraphqlspPlugin) {
     tsconfig.config.compilerOptions.plugins = tsconfig.config.compilerOptions.plugins.filter(
-      (plugin) => plugin.name !== "@0no-co/graphqlsp",
+      (plugin) => plugin.name !== "gql.tada/ts-plugin",
     );
   }
   tsconfig.config.compilerOptions.plugins.push(tadaConfig);
