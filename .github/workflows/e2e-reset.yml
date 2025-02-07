@@ -1,6 +1,6 @@
 on:
   schedule:
-    - cron: '0 6 * * 0' # runs every Sunday morning at 6AM UTC
+    - cron: '0 18 * * *' # runs every day at 6PM UTC
   workflow_dispatch:
 
 name: E2E reset
@@ -34,6 +34,9 @@ jobs:
 
       - name: Login to SettleMint and delete workspace
         uses: settlemint/settlemint-action@main
+        if: ${{ env.SETTLEMINT_WORKSPACE != '' }}
+        env:
+          SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
         with:
           instance: ${{ env.SETTLEMINT_INSTANCE }}
           access-token: ${{ env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS }}
