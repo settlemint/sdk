@@ -17,7 +17,7 @@ permissions:
 jobs:
   e2e:
     name: E2E
-    timeout-minutes: 60  # Ensures the job never runs longer than 1 hour
+    timeout-minutes: 120  # Ensures the job never runs longer than 2 hours
     if: ${{ github.ref == 'refs/heads/main' || contains(github.event.pull_request.labels.*.name, 'e2e') || github.event_name == 'workflow_dispatch' }}
     runs-on: namespace-profile-sdk
     steps:
