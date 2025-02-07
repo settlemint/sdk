@@ -50,9 +50,7 @@
     "prepack": "cp ../../LICENSE .",
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/settlemint.ts --out ./docs"
   },
-  "devDependencies": {
-    "@0no-co/graphqlsp": "^1"
-  },
+  "devDependencies": {},
   "dependencies": {
     "gql.tada": "^1",
     "graphql-request": "^7",

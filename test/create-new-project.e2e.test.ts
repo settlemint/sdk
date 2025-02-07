@@ -30,7 +30,9 @@ setDefaultTimeout(15 * 60_000);
 async function cleanup() {
   try {
     await unlinkLinkedDependencies();
-    await rmdir(projectDir, { recursive: true });
+    if (await exists(projectDir)) {
+      await rmdir(projectDir, { recursive: true });
+    }
     // Restore dependencies in the SDK (eg next dependency)
     await $`bun install`;
   } catch (err) {
