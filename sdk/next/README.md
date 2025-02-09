@@ -70,7 +70,7 @@ A React element that displays a greeting to the user.
 
 #### proxyMiddleware()
 
-> **proxyMiddleware**(`request`): `NextResponse` \| `undefined`
+> **proxyMiddleware**(`request`): `undefined` \| `NextResponse`\<`unknown`\>
 
 Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/next/src/middlewares/proxy.ts#L22)
 
@@ -84,7 +84,7 @@ Middleware function to handle proxy requests by adding appropriate authenticatio
 
 ##### Returns
 
-`NextResponse` \| `undefined`
+`undefined` \| `NextResponse`\<`unknown`\>
 
 A modified NextResponse with authentication headers for proxy routes, or undefined for non-proxy routes
 

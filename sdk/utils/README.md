@@ -450,7 +450,7 @@ console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path
 
 #### findMonoRepoRoot()
 
-> **findMonoRepoRoot**(`startDir`): `Promise`\<`string` \| `null`\>
+> **findMonoRepoRoot**(`startDir`): `Promise`\<`null` \| `string`\>
 
 Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/filesystem/mono-repo.ts#L19)
 
@@ -464,7 +464,7 @@ Finds the root directory of a monorepo
 
 ##### Returns
 
-`Promise`\<`string` \| `null`\>
+`Promise`\<`null` \| `string`\>
 
 The root directory of the monorepo or null if not found
 
@@ -809,7 +809,7 @@ list("Providers", [
 
 #### loadEnv()
 
-> **loadEnv**\<`T`\>(`validateEnv`, `prod`, `path`): `Promise`\<`T` *extends* `true` ? [`DotEnv`](README.md#dotenv) : [`DotEnvPartial`](README.md#dotenvpartial)\>
+> **loadEnv**\<`T`\>(`validateEnv`, `prod`, `path`): `Promise`\<`T` *extends* `true` ? `object` : `object`\>
 
 Defined in: [sdk/utils/src/environment/load-env.ts:25](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/environment/load-env.ts#L25)
 
@@ -832,7 +832,7 @@ To enable encryption with dotenvx (https://www.dotenvx.com/docs) run `bunx doten
 
 ##### Returns
 
-`Promise`\<`T` *extends* `true` ? [`DotEnv`](README.md#dotenv) : [`DotEnvPartial`](README.md#dotenvpartial)\>
+`Promise`\<`T` *extends* `true` ? `object` : `object`\>
 
 A promise that resolves to the validated environment variables
 
@@ -1181,7 +1181,7 @@ table("My Table", data);
 
 #### tryParseJson()
 
-> **tryParseJson**\<`T`\>(`value`, `defaultValue`): `T` \| `null`
+> **tryParseJson**\<`T`\>(`value`, `defaultValue`): `null` \| `T`
 
 Defined in: [sdk/utils/src/json.ts:23](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/json.ts#L23)
 
@@ -1202,7 +1202,7 @@ Attempts to parse a JSON string into a typed value, returning a default value if
 
 ##### Returns
 
-`T` \| `null`
+`null` \| `T`
 
 The parsed JSON value as type T, or the default value if parsing fails
 
@@ -1238,7 +1238,7 @@ Validates a value against a given Zod schema.
 
 | Type Parameter |
 | ------ |
-| `T` *extends* `ZodType` |
+| `T` *extends* `ZodType`\<`any`, `ZodTypeDef`, `any`\> |
 
 ##### Parameters
 
