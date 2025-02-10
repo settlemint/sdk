@@ -132,7 +132,8 @@ export function registerCommands() {
     .helpOption("-h, --help", "Display help for command")
     .allowUnknownOption()
     .showSuggestionAfterError(true)
-    .showHelpAfterError();
+    .showHelpAfterError()
+    .passThroughOptions();
 
   // Add commands to the CLI
   sdkcli.addCommand(connectCommand());
