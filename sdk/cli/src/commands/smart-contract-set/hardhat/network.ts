@@ -3,7 +3,7 @@ import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
+import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatNetworkCommand() {
   return new Command("network")
@@ -29,9 +29,11 @@ export function hardhatNetworkCommand() {
     .passThroughOptions()
     .allowUnknownOption(true)
     .action(async (passThroughOptions, cmd) => {
+      intro("Starting development network using Hardhat");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
       const hardhatOptions = mapPassthroughOptions(passThroughOptions, cmd);
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [...args, "hardhat", "node", ...hardhatOptions]);
+      outro("Development network started successfully");
     });
 }

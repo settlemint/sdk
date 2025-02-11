@@ -20,7 +20,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
+import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
@@ -43,6 +43,7 @@ export function subgraphDeployCommand() {
     .option("--prod", "Connect to your production environment")
     .argument("[subgraph-name]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
     .action(async (subgraphName, { prod, acceptDefaults }) => {
+      intro("Deploying subgraph");
       await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
 
       const autoAccept = !!acceptDefaults || isInCi;
@@ -130,6 +131,7 @@ export function subgraphDeployCommand() {
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
         ...graphEndpoints,
       });
+      outro(`Subgraph ${graphName} deployed successfully`);
     });
 }
 

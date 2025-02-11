@@ -2,7 +2,7 @@ import { createExamples } from "@/utils/commands/create-examples";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
+import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatDeployLocalCommand() {
   return new Command("local")
@@ -34,6 +34,7 @@ export function hardhatDeployLocalCommand() {
     .option("-r, --reset", "Wipes the existing deployment state before deploying")
     .option("-v, --verify", "Verify the deployment on Etherscan")
     .action(async ({ module, reset, verify }) => {
+      intro("Deploying smart contracts to local network using Hardhat/Ignition");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
 
       const { command, args } = await getPackageManagerExecutable();
@@ -51,5 +52,6 @@ export function hardhatDeployLocalCommand() {
           module ?? "ignition/modules/main.ts",
         ].filter(Boolean),
       );
+      outro("Smart contracts deployed successfully to local network");
     });
 }

@@ -10,7 +10,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { cancel, executeCommand } from "@settlemint/sdk-utils/terminal";
+import { cancel, executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function hardhatDeployRemoteCommand() {
@@ -74,6 +74,7 @@ export function hardhatDeployRemoteCommand() {
       acceptDefaults,
       blockchainNode: blockchainNodeUniqueName,
     }) => {
+      intro("Deploying smart contracts to remote network using Hardhat/Ignition");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
 
       const autoAccept = !!acceptDefaults || isInCi;
@@ -130,6 +131,7 @@ export function hardhatDeployRemoteCommand() {
         ].filter(Boolean),
         { env: envConfig },
       );
+      outro("Smart contracts deployed successfully to remote network");
     },
   );
 
