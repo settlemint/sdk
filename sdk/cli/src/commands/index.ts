@@ -86,13 +86,24 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
   }
 }
 
+const ERRORS_TO_IGNORE = [ExitPromptError, AbortPromptError, ValidationError, CancelPromptError];
+const ERROR_CODES_TO_IGNORE = [
+  "commander.help",
+  "commander.missingArgument",
+  "commander.optionMissingArgument",
+  "commander.missingMandatoryOptionValue",
+  "commander.conflictingOption",
+  "commander.unknownOption",
+  "commander.excessArguments",
+  "commander.unknownCommand",
+];
+
 async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
-  const errorsToIgnore = [ExitPromptError, AbortPromptError, ValidationError, CancelPromptError];
-  if (errorsToIgnore.some((errorToIgnore) => error instanceof errorToIgnore)) {
+  if (ERRORS_TO_IGNORE.some((errorToIgnore) => error instanceof errorToIgnore)) {
     process.exit(0);
   }
 
-  if (error instanceof CommanderError && (error.exitCode === 0 || error.code === "commander.help")) {
+  if (error instanceof CommanderError && (error.exitCode === 0 || ERROR_CODES_TO_IGNORE.includes(error.code))) {
     process.exit(error.exitCode);
   }
 
