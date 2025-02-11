@@ -11,6 +11,7 @@ Commands:
   <a href="#subgraph-build">build</a>                             Build the subgraph
   <a href="#subgraph-codegen">codegen</a>                           Codegen the subgraph types
   <a href="#subgraph-deploy">deploy</a> [options] [subgraph-name]  Deploy the subgraph
+  <a href="#subgraph-remove">remove</a> [options] &lt;subgraph-name&gt;  Remove a subgraph
   help [command]                    display help for command
 </pre>
 
@@ -54,6 +55,26 @@ Arguments:
 Options:
   -a, --accept-defaults  Accept the default and previously set values
   --prod                 Connect to your production environment
+  -h, --help             display help for command
+</pre>
+
+<h2 id="subgraph-remove"><a href="#home">Subgraph</a> > Remove</h2>
+
+<pre>Usage: settlemint smart-contract-set subgraph remove 
+Examples:
+
+  # Remove a subgraph
+  $ settlemint scs subgraph remove  my-subgraph
+
+Remove a subgraph
+
+Arguments:
+  subgraph-name          The name of the subgraph to remove
+
+Options:
+  -a, --accept-defaults  Accept the default and previously set values
+  --prod                 Connect to your production environment
+  -f, --force            Force remove the subgraph without confirmation
   -h, --help             display help for command
 </pre>
 

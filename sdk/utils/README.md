@@ -1099,7 +1099,7 @@ await setName("my-new-project-name");
 
 > **spinner**\<`R`\>(`options`): `Promise`\<`R`\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:46](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L46)
+Defined in: [sdk/utils/src/terminal/spinner.ts:54](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L54)
 
 Displays a loading spinner while executing an async task.
 Shows progress with start/stop messages and handles errors.
@@ -1367,7 +1367,7 @@ Options for executing a command, extending SpawnOptionsWithoutStdio
 
 #### SpinnerOptions\<R\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:16](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L16)
+Defined in: [sdk/utils/src/terminal/spinner.ts:24](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L24)
 
 Options for configuring the spinner behavior
 
@@ -1381,9 +1381,9 @@ Options for configuring the spinner behavior
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:18](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L18) |
-| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:22](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L22) |
-| <a id="task"></a> `task` | (`spinner`?: `Spinner`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:20](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L20) |
+| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:26](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L26) |
+| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:30](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L30) |
+| <a id="task"></a> `task` | (`spinner`?: `Spinner`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v1.1.5/sdk/utils/src/terminal/spinner.ts#L28) |
 
 ### Type Aliases
 
