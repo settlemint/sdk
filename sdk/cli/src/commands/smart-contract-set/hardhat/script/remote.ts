@@ -6,7 +6,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
+import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function hardhatScriptRemoteCommand() {
@@ -22,6 +22,7 @@ export function hardhatScriptRemoteCommand() {
     .option("--no-compile", "Don't compile before running this task");
 
   cmd.action(async ({ script, prod, blockchainNode: blockchainNodeUniqueName, acceptDefaults, compile }) => {
+    intro("Running Hardhat script on remote network");
     await validateIfRequiredPackagesAreInstalled(["hardhat"]);
 
     const autoAccept = !!acceptDefaults || isInCi;
@@ -48,6 +49,7 @@ export function hardhatScriptRemoteCommand() {
       [...args, "hardhat", "run", script, "--network", "btp", ...(compile ? ["--no-compile"] : [])],
       { env: envConfig },
     );
+    outro("Script execution completed successfully");
   });
 
   return cmd;

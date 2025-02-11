@@ -3,7 +3,7 @@ import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
+import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatBuildCommand() {
   return new Command("build")
@@ -29,9 +29,11 @@ export function hardhatBuildCommand() {
     .passThroughOptions()
     .allowUnknownOption(true)
     .action(async (passThroughOptions, cmd) => {
+      intro("Building smart contracts using Hardhat");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
       const hardhatOptions = mapPassthroughOptions(passThroughOptions, cmd);
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [...args, "hardhat", "compile", ...hardhatOptions]);
+      outro("Smart contracts built successfully");
     });
 }
