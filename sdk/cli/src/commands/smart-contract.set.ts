@@ -12,6 +12,7 @@ import { hardhatTestCommand } from "./smart-contract-set/hardhat/test";
 import { subgraphBuildCommand } from "./smart-contract-set/subgraph/build";
 import { subgraphCodegenCommand } from "./smart-contract-set/subgraph/codegen";
 import { subgraphDeployCommand } from "./smart-contract-set/subgraph/deploy";
+import { subgraphRemoveCommand } from "./smart-contract-set/subgraph/remove";
 
 /**
  * Creates and returns the 'smart-contract-set' command for the SettleMint SDK.
@@ -44,6 +45,7 @@ export function smartContractSetCommand(): Command {
   subgraph.addCommand(subgraphBuildCommand());
   subgraph.addCommand(subgraphCodegenCommand());
   subgraph.addCommand(subgraphDeployCommand());
+  subgraph.addCommand(subgraphRemoveCommand());
 
   return new Command("smart-contract-set")
     .alias("scs")

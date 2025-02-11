@@ -153,4 +153,28 @@ describe("Build and deploy a subgraph using the SDK", () => {
       expect(subgraphDeployed).toBeTrue();
     }
   });
+
+  test("Remove subgraph", async () => {
+    const { output } = await retryCommand(
+      () =>
+        runCommand(
+          COMMAND_TEST_SCOPE,
+          ["smart-contract-set", "subgraph", "remove", "--accept-defaults", SUBGRAPH_NAME],
+          {
+            cwd: projectDir,
+          },
+        ).result,
+    );
+    expect(output).toInclude(`Subgraph ${SUBGRAPH_NAME} removed successfully`);
+
+    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
+      endpoint.endsWith(`/subgraphs/name/${SUBGRAPH_NAME}`),
+    );
+    if (subgraphDeployed) {
+      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).not.toInclude(SUBGRAPH_NAME);
+    } else {
+      expect(subgraphDeployed).toBeFalse();
+    }
+  });
 });
