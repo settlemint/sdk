@@ -8,7 +8,15 @@ import { note } from "./note.js";
  * Error class used to indicate that the spinner operation failed.
  * This error is used to signal that the operation should be aborted.
  */
-export class SpinnerError extends Error {}
+export class SpinnerError extends Error {
+  constructor(
+    message: string,
+    public readonly originalError: Error,
+  ) {
+    super(message);
+    this.name = "SpinnerError";
+  }
+}
 
 /**
  * Options for configuring the spinner behavior
@@ -47,7 +55,7 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
   const handleError = (error: Error) => {
     const errorMessage = maskTokens(error.message);
     note(redBright(`${errorMessage}\n\n${error.stack}`));
-    throw new SpinnerError(errorMessage);
+    throw new SpinnerError(errorMessage, error);
   };
   if (isInCi) {
     try {
