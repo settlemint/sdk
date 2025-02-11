@@ -159,7 +159,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
       () =>
         runCommand(
           COMMAND_TEST_SCOPE,
-          ["smart-contract-set", "subgraph", "remove", "--accept-defaults", SUBGRAPH_NAME],
+          ["smart-contract-set", "subgraph", "remove", "--accept-defaults", "--force", SUBGRAPH_NAME],
           {
             cwd: projectDir,
           },
