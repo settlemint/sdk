@@ -131,7 +131,7 @@ export function subgraphDeployCommand() {
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
         ...graphEndpoints,
       });
-      outro("Subgraph deployed successfully");
+      outro(`Subgraph ${graphName} deployed successfully`);
     });
 }
 
