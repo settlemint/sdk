@@ -72,6 +72,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
   const tadaConfig = {
     name: "gql.tada/ts-plugin",
     trackFieldUsage: false,
+    shouldCheckForColocatedFragments: false,
     schemas: [
       ...(hasura
         ? [
