@@ -67,7 +67,7 @@ describe("Setup a smart contract set using the SDK", () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["scs", "foundry", "format", "--check"], {
       cwd: projectDir,
     }).result;
-    expect(output).toInclude("Smart contract set formatted successfully!");
+    expect(output).toInclude("Smart contracts formatted successfully");
   });
 
   test("Foundry - Start local anvil network", (done) => {
