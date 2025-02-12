@@ -128,7 +128,7 @@ describe("Setup a project using the SDK", () => {
 
   test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "starterkit-asset-tokenization";
-    // Only deploy the stablecoin contract, otherwise it will take very long to deploy all the contracts
+    // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
     const { output: deployOutput } = await retryCommand(
       () =>
         runCommand(
@@ -141,7 +141,7 @@ describe("Setup a project using the SDK", () => {
             "--deployment-id",
             deploymentId,
             "--module",
-            "ignition/modules/stable-coins.ts",
+            "ignition/modules/stable-coin-factory.ts",
             "--accept-defaults",
           ],
           {
