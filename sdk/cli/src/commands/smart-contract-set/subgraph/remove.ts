@@ -24,7 +24,7 @@ export function subgraphRemoveCommand() {
       createExamples([
         {
           description: "Remove a subgraph",
-          command: "scs subgraph remove  my-subgraph",
+          command: "scs subgraph remove my-subgraph",
         },
       ]),
     )
