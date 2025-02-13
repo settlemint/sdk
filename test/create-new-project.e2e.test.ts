@@ -100,6 +100,7 @@ describe("Setup a project using the SDK", () => {
 
     expect(env.SETTLEMINT_BLOCKSCOUT).toBeString();
     expect(env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT).toBeString();
+    expect(env.NEXT_PUBLIC_SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 

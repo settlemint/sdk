@@ -79,6 +79,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: UrlSchema.optional(),
   /** UI endpoint URL for Blockscout */
   SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: UrlSchema.optional(),
+  /** UI endpoint URL for Blockscout */
+  NEXT_PUBLIC_SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: UrlSchema.optional(),
   /** Name of the new project being created */
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
 });
