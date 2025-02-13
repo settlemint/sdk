@@ -64,7 +64,7 @@ Options:
 Examples:
 
   # Remove a subgraph
-  $ settlemint scs subgraph remove  my-subgraph
+  $ settlemint scs subgraph remove my-subgraph
 
 Remove a subgraph
 

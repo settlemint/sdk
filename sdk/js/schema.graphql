@@ -2686,9 +2686,6 @@ interface BaseBesuGenesisConfig {
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
 
-  """The timestamp for the Cancun hard fork (EIP-4844)"""
-  cancunTime: Float
-
   """The chain ID of the network"""
   chainId: Float!
 
@@ -2730,9 +2727,6 @@ interface BaseBesuGenesisConfig {
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
-
-  """The timestamp for the Shanghai hard fork (EIP-4895)"""
-  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -2830,9 +2824,6 @@ input BesuIbft2GenesisConfigInput {
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
 
-  """The timestamp for the Cancun hard fork (EIP-4844)"""
-  cancunTime: Float
-
   """The chain ID of the network"""
   chainId: Float!
 
@@ -2878,9 +2869,6 @@ input BesuIbft2GenesisConfigInput {
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
 
-  """The timestamp for the Shanghai hard fork (EIP-4895)"""
-  shanghaiTime: Float
-
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
 }
@@ -2891,9 +2879,6 @@ type BesuIbft2GenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
-
-  """The timestamp for the Cancun hard fork (EIP-4844)"""
-  cancunTime: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -2939,9 +2924,6 @@ type BesuIbft2GenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
-
-  """The timestamp for the Shanghai hard fork (EIP-4895)"""
-  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -3786,9 +3768,6 @@ input BesuQbftGenesisConfigInput {
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
 
-  """The timestamp for the Cancun hard fork (EIP-4844)"""
-  cancunTime: Float
-
   """The chain ID of the network"""
   chainId: Float!
 
@@ -3834,9 +3813,6 @@ input BesuQbftGenesisConfigInput {
   """The QBFT genesis configuration data"""
   qbft: BesuBftGenesisConfigDataInput!
 
-  """The timestamp for the Shanghai hard fork (EIP-4895)"""
-  shanghaiTime: Float
-
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
 }
@@ -3847,9 +3823,6 @@ type BesuQbftGenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
-
-  """The timestamp for the Cancun hard fork (EIP-4844)"""
-  cancunTime: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -3896,9 +3869,6 @@ type BesuQbftGenesisConfigType implements BaseBesuGenesisConfig {
   """The QBFT genesis configuration data"""
   qbft: BesuBftGenesisConfigDataType!
 
-  """The timestamp for the Shanghai hard fork (EIP-4895)"""
-  shanghaiTime: Float
-
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
 }
@@ -3938,9 +3908,6 @@ type BesusCliqueGenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
-
-  """The timestamp for the Cancun hard fork (EIP-4844)"""
-  cancunTime: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -3986,9 +3953,6 @@ type BesusCliqueGenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
-
-  """The timestamp for the Shanghai hard fork (EIP-4895)"""
-  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -20069,9 +20033,6 @@ input QuorumGenesisConfigInput {
   """Block number for Byzantium hard fork"""
   byzantiumBlock: Float
 
-  """Block number for Cancun hard fork"""
-  cancunBlock: Float
-
   """The chain ID of the network"""
   chainId: Float!
 
@@ -20120,9 +20081,6 @@ input QuorumGenesisConfigInput {
   """QBFT consensus configuration"""
   qbft: QuorumGenesisQBFTInput
 
-  """Block number for Shanghai hard fork"""
-  shanghaiBlock: Float
-
   """Transaction size limit"""
   txnSizeLimit: Float!
 }
@@ -20133,9 +20091,6 @@ type QuorumGenesisConfigType {
 
   """Block number for Byzantium hard fork"""
   byzantiumBlock: Float
-
-  """Block number for Cancun hard fork"""
-  cancunBlock: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -20184,9 +20139,6 @@ type QuorumGenesisConfigType {
 
   """QBFT consensus configuration"""
   qbft: QuorumGenesisQBFTType
-
-  """Block number for Shanghai hard fork"""
-  shanghaiBlock: Float
 
   """Transaction size limit"""
   txnSizeLimit: Float!
