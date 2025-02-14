@@ -31,9 +31,10 @@ export function hardhatDeployLocalCommand() {
       "-m, --module <ignitionmodule>",
       'The module to deploy with Ignition, defaults to "ignition/modules/main.ts"',
     )
+    .option("--deployment-id <deploymentId>", "Set the id of the deployment")
     .option("-r, --reset", "Wipes the existing deployment state before deploying")
     .option("-v, --verify", "Verify the deployment on Etherscan")
-    .action(async ({ module, reset, verify }) => {
+    .action(async ({ module, reset, verify, deploymentId }) => {
       intro("Deploying smart contracts to local network using Hardhat/Ignition");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
 
@@ -47,6 +48,7 @@ export function hardhatDeployLocalCommand() {
           "deploy",
           ...(reset ? ["--reset"] : []),
           ...(verify ? ["--verify"] : []),
+          ...(deploymentId ? ["--deployment-id", deploymentId] : []),
           "--network",
           "localhost",
           module ?? "ignition/modules/main.ts",
