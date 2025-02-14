@@ -74,12 +74,13 @@ Deploy the smart contracts using Hardhat/ignition to the local development
 network
 
 Options:
-  -m, --module &lt;ignitionmodule&gt;  The module to deploy with Ignition, defaults
-                                 to &quot;ignition/modules/main.ts&quot;
-  -r, --reset                    Wipes the existing deployment state before
-                                 deploying
-  -v, --verify                   Verify the deployment on Etherscan
-  -h, --help                     display help for command
+  -m, --module &lt;ignitionmodule&gt;   The module to deploy with Ignition, defaults
+                                  to &quot;ignition/modules/main.ts&quot;
+  --deployment-id &lt;deploymentId&gt;  Set the id of the deployment
+  -r, --reset                     Wipes the existing deployment state before
+                                  deploying
+  -v, --verify                    Verify the deployment on Etherscan
+  -h, --help                      display help for command
 </pre>
 
 <h3 id="deploy-remote"><a href="#home">Hardhat</a> > <a href="#hardhat-deploy">Deploy</a> > Remote</h3>

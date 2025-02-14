@@ -337,6 +337,7 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
 
   """Region of the service"""
   region: String!
+  relayerKey: PrivateKeyUnionType
   requestLogs: [RequestLog!]!
 
   """CPU requests in millicores"""
@@ -361,6 +362,14 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
 
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
+
+  """The trusted forwarder address for ERC-2771 meta-transactions"""
+  trustedForwarderAddress: String
+
+  """
+  The name of the trusted forwarder contract for ERC-2771 meta-transactions
+  """
+  trustedForwarderName: String
 
   """Type of the service"""
   type: ClusterServiceType!
@@ -6464,6 +6473,9 @@ input CreateMultiServicePrivateKeyArgs {
   """Region of the cluster service"""
   region: String!
 
+  """The private key used for relaying meta-transactions"""
+  relayerKey: ID
+
   """CPU requests in millicores (m)"""
   requestsCpu: Int
 
@@ -6472,6 +6484,12 @@ input CreateMultiServicePrivateKeyArgs {
 
   """Size of the cluster service"""
   size: ClusterServiceSize = SMALL
+
+  """The trusted forwarder address for ERC-2771 meta-transactions"""
+  trustedForwarderAddress: String
+
+  """The name of the trusted forwarder contract"""
+  trustedForwarderName: String
 
   """Type of the cluster service"""
   type: ClusterServiceType
@@ -8372,6 +8390,7 @@ enum FeatureFlag {
   JOIN_PARTNER
   LEGACYTEMPLATES
   LOADBALANCERS
+  METATX_PRIVATE_KEY
   MIDDLEWARES
   NEWCHAINS
   NEW_APP_DASHBOARD
@@ -10766,6 +10785,7 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
 
   """Region of the service"""
   region: String!
+  relayerKey: PrivateKeyUnionType
   requestLogs: [RequestLog!]!
 
   """CPU requests in millicores"""
@@ -10790,6 +10810,14 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
 
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
+
+  """The trusted forwarder address for ERC-2771 meta-transactions"""
+  trustedForwarderAddress: String
+
+  """
+  The name of the trusted forwarder contract for ERC-2771 meta-transactions
+  """
+  trustedForwarderName: String
 
   """Type of the service"""
   type: ClusterServiceType!
@@ -11843,6 +11871,7 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
 
   """Region of the service"""
   region: String!
+  relayerKey: PrivateKeyUnionType
   requestLogs: [RequestLog!]!
 
   """CPU requests in millicores"""
@@ -11867,6 +11896,14 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
 
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
+
+  """The trusted forwarder address for ERC-2771 meta-transactions"""
+  trustedForwarderAddress: String
+
+  """
+  The name of the trusted forwarder contract for ERC-2771 meta-transactions
+  """
+  trustedForwarderName: String
 
   """Type of the service"""
   type: ClusterServiceType!
@@ -13862,6 +13899,9 @@ type Mutation {
     """Region of the cluster service"""
     region: String!
 
+    """The private key used for relaying meta-transactions"""
+    relayerKey: ID
+
     """CPU requests in millicores (m)"""
     requestsCpu: Int
 
@@ -13870,6 +13910,12 @@ type Mutation {
 
     """Size of the cluster service"""
     size: ClusterServiceSize = SMALL
+
+    """The trusted forwarder address for ERC-2771 meta-transactions"""
+    trustedForwarderAddress: String
+
+    """The name of the trusted forwarder contract"""
+    trustedForwarderName: String
 
     """Type of the cluster service"""
     type: ClusterServiceType
@@ -19200,6 +19246,7 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
 
   """Region of the service"""
   region: String!
+  relayerKey: PrivateKeyUnionType
   requestLogs: [RequestLog!]!
 
   """CPU requests in millicores"""
@@ -19224,6 +19271,14 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
 
   """Deployment status of the service"""
   status: ClusterServiceDeploymentStatus!
+
+  """The trusted forwarder address for ERC-2771 meta-transactions"""
+  trustedForwarderAddress: String
+
+  """
+  The name of the trusted forwarder contract for ERC-2771 meta-transactions
+  """
+  trustedForwarderName: String
 
   """Type of the service"""
   type: ClusterServiceType!
