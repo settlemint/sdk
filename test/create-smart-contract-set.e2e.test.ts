@@ -132,7 +132,7 @@ describe("Setup a smart contract set using the SDK", () => {
 
       const { output: outputReset } = await runCommand(
         COMMAND_TEST_SCOPE,
-        ["scs", "hardhat", "deploy", "local", "--reset"],
+        ["scs", "hardhat", "deploy", "local", "--reset", "--deployment-id", "test-local"],
         {
           cwd: projectDir,
         },
