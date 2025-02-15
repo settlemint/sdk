@@ -115,7 +115,7 @@ export function subgraphDeployCommand() {
         "--node",
         middlewareAdminUrl,
         "--ipfs",
-        "https://ipfs.network.thegraph.com",
+        "https://ipfs.console.settlemint.com",
         graphName,
         subgraphYamlFile,
       ]);
