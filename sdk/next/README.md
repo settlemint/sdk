@@ -72,7 +72,7 @@ A React element that displays a greeting to the user.
 
 > **proxyMiddleware**(`request`): `undefined` \| `NextResponse`\<`unknown`\>
 
-Defined in: [middlewares/proxy.ts:22](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/middlewares/proxy.ts#L22)
+Defined in: [middlewares/proxy.ts:27](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/middlewares/proxy.ts#L27)
 
 Middleware function to handle proxy requests by adding appropriate authentication headers.
 
@@ -108,7 +108,7 @@ export default function middleware(request: NextRequest) {
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
-Defined in: [config/with-settlemint.ts:24](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/config/with-settlemint.ts#L24)
+Defined in: [config/with-settlemint.ts:22](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/config/with-settlemint.ts#L22)
 
 Modifies the passed in Next.js configuration with SettleMint-specific settings.
 
@@ -147,7 +147,7 @@ The props for the HelloWorld component.
 
 #### WithSettleMintOptions
 
-Defined in: [config/with-settlemint.ts:9](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/config/with-settlemint.ts#L9)
+Defined in: [config/with-settlemint.ts:7](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/config/with-settlemint.ts#L7)
 
 Options for configuring the SettleMint configuration.
 
@@ -155,7 +155,7 @@ Options for configuring the SettleMint configuration.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:13](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/config/with-settlemint.ts#L13) |
+| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:11](https://github.com/settlemint/sdk/blob/v1.1.8/sdk/next/src/config/with-settlemint.ts#L11) |
 
 ## Contributing
 
