@@ -39,11 +39,11 @@ export function proxyMiddleware(request: NextRequest): NextResponse | undefined 
     // biome-ignore lint/performance/noDelete: header should be removed
     delete originalHeaders.authorization;
   }
-  if (process.env.SETTLEMINT_ACCESS_TOKEN) {
-    extraHeaders["x-auth-token"] = process.env.SETTLEMINT_ACCESS_TOKEN;
+  if (env.SETTLEMINT_ACCESS_TOKEN) {
+    extraHeaders["x-auth-token"] = env.SETTLEMINT_ACCESS_TOKEN;
   }
-  if (isHasuraProxyRoute(request.nextUrl.pathname) && process.env.SETTLEMINT_HASURA_ADMIN_SECRET) {
-    extraHeaders["x-hasura-admin-secret"] = process.env.SETTLEMINT_HASURA_ADMIN_SECRET;
+  if (isHasuraProxyRoute(request.nextUrl.pathname) && env.SETTLEMINT_HASURA_ADMIN_SECRET) {
+    extraHeaders["x-hasura-admin-secret"] = env.SETTLEMINT_HASURA_ADMIN_SECRET;
   }
   return NextResponse.rewrite(rewriteUrl, {
     headers: {
