@@ -6472,9 +6472,7 @@ input CreateMultiServicePrivateKeyArgs {
 
   """Region of the cluster service"""
   region: String!
-
-  """The private key used for relaying meta-transactions"""
-  relayerKey: ID
+  relayerKeyRef: String!
 
   """CPU requests in millicores (m)"""
   requestsCpu: Int
