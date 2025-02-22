@@ -55,7 +55,7 @@
     "@types/semver": "7.5.8",
     "@types/which": "3.0.4",
     "get-tsconfig": "4.10.0",
-    "giget": "1.2.4",
+    "giget": "1.2.5",
     "is-in-ci": "1.0.0",
     "semver": "7.7.1",
     "slugify": "1.6.6",
