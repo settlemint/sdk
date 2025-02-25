@@ -63,13 +63,22 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
   introspection: ${introspectionVariable};
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
+    DateTime: string;
+    JSON: string;
     Bytes: string;
     Int8: string;
     BigInt: string;
     BigDecimal: string;
     Timestamp: string;
+    timestampz: string;
+    uuid: string;
+    date: string;
+    time: string;
+    jsonb: string;
+    numeric: string;
+    interval: string;
+    geometry: string;
+    geography: string;
   };
   }>({
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
