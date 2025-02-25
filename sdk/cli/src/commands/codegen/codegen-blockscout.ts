@@ -165,13 +165,22 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
+    DateTime: string;
+    JSON: string;
     Bytes: string;
     Int8: string;
     BigInt: string;
     BigDecimal: string;
     Timestamp: string;
+    timestampz: string;
+    uuid: string;
+    date: string;
+    time: string;
+    jsonb: string;
+    numeric: string;
+    interval: string;
+    geometry: string;
+    geography: string;
   };
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT!,
