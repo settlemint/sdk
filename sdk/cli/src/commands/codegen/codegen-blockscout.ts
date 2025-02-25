@@ -165,22 +165,22 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
   introspection: introspection;
   disableMasking: true;
   scalars: {
+    /** 40 hex characters (160 bits/20 bytes) derived from the public key, prefixed with 0x */
+    AddressHash: string;
+    /** Unpadded big-endian hexadecimal number where each byte pair maps to underlying binary */
+    Data: string;
+    /** ISO8601 formatted UTC datetime string */
     DateTime: string;
-    JSON: string;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
-    timestampz: string;
-    uuid: string;
-    date: string;
-    time: string;
-    jsonb: string;
-    numeric: string;
-    interval: string;
-    geometry: string;
-    geography: string;
+    /** String representation of a signed double-precision decimal value */
+    Decimal: string;
+    /** 32-byte KECCAK-256 hash */
+    FullHash: string;
+    /** Arbitrary JSON string data as UTF-8 */
+    Json: string;
+    /** 16 hex character (128 bits/8 bytes) nonce from Proof-of-Work */
+    NonceHash: string;
+    /** Smallest fractional unit of Ether, represented as a string for integer math */
+    Wei: string;
   };
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT!,

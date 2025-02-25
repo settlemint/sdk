@@ -37,22 +37,8 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: string;
-    JSON: string;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
-    timestampz: string;
-    uuid: string;
-    date: string;
-    time: string;
-    jsonb: string;
-    numeric: string;
-    interval: string;
-    geometry: string;
-    geography: string;
+    /** Used for metadata field */
+    JSON: unknown;
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,

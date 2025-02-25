@@ -62,23 +62,13 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
 export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } = createTheGraphClient<{
   introspection: ${introspectionVariable};
   disableMasking: true;
+  // https://thegraph.com/docs/en/subgraphs/developing/creating/ql-schema/#built-in-scalar-types
   scalars: {
-    DateTime: string;
-    JSON: string;
     Bytes: string;
     Int8: string;
     BigInt: string;
     BigDecimal: string;
     Timestamp: string;
-    timestampz: string;
-    uuid: string;
-    date: string;
-    time: string;
-    jsonb: string;
-    numeric: string;
-    interval: string;
-    geometry: string;
-    geography: string;
   };
   }>({
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),

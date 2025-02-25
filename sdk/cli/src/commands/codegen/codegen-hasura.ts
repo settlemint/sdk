@@ -45,13 +45,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: string;
-    JSON: string;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    timestamp: string;
     timestampz: string;
     uuid: string;
     date: string;
