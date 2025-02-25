@@ -52,7 +52,7 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 > **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:106](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/blockscout/src/blockscout.ts#L106)
+Defined in: [sdk/blockscout/src/blockscout.ts:108](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/blockscout/src/blockscout.ts#L108)
 
 Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
@@ -77,8 +77,8 @@ An object containing the GraphQL client and initialized gql.tada function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:110](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/blockscout/src/blockscout.ts#L110) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:111](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/blockscout/src/blockscout.ts#L111) |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:112](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/blockscout/src/blockscout.ts#L112) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:113](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/blockscout/src/blockscout.ts#L113) |
 
 ##### Throws
 
@@ -95,13 +95,14 @@ const { client, graphql } = createBlockscoutClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    AddressHash: string;
+    Data: string;
+    DateTime: string;
+    Decimal: string;
+    FullHash: string;
+    Json: string;
+    NonceHash: string;
+    Wei: string;
   };
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
@@ -113,13 +114,14 @@ const { client, graphql } = createBlockscoutClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    AddressHash: string;
+    Data: string;
+    DateTime: string;
+    Decimal: string;
+    FullHash: string;
+    Json: string;
+    NonceHash: string;
+    Wei: string;
   };
 }>({});
 

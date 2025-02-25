@@ -54,7 +54,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:118](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/portal/src/portal.ts#L118)
+Defined in: [sdk/portal/src/portal.ts:108](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/portal/src/portal.ts#L108)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -79,8 +79,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:122](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/portal/src/portal.ts#L122) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:123](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/portal/src/portal.ts#L123) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:112](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/portal/src/portal.ts#L112) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:113](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/portal/src/portal.ts#L113) |
 
 ##### Throws
 
@@ -97,13 +97,8 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    // Change unknown to the type you are using to store metadata
+    JSON: unknown;
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
@@ -116,13 +111,8 @@ export const { client: portalBrowserClient, graphql: portalBrowserGraphql } = cr
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    // Change unknown to the type you are using to store metadata
+    JSON: unknown;
   };
 }>({});
 

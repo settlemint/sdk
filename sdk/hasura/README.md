@@ -53,7 +53,7 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:111](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/hasura/src/hasura.ts#L111)
+Defined in: [sdk/hasura/src/hasura.ts:117](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/hasura/src/hasura.ts#L117)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -80,8 +80,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:115](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/hasura/src/hasura.ts#L115) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:116](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/hasura/src/hasura.ts#L116) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:121](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/hasura/src/hasura.ts#L121) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:122](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/hasura/src/hasura.ts#L122) |
 
 ##### Throws
 
@@ -98,13 +98,16 @@ const { client, graphql } = createHasuraClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    timestamp: string;
+    timestampz: string;
+    uuid: string;
+    date: string;
+    time: string;
+    jsonb: string;
+    numeric: string;
+    interval: string;
+    geometry: string;
+    geography: string;
   };
 }>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
@@ -117,13 +120,16 @@ const { client, graphql } = createHasuraClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
-    Bytes: string;
-    Int8: string;
-    BigInt: string;
-    BigDecimal: string;
-    Timestamp: string;
+    timestamp: string;
+    timestampz: string;
+    uuid: string;
+    date: string;
+    time: string;
+    jsonb: string;
+    numeric: string;
+    interval: string;
+    geometry: string;
+    geography: string;
   };
 }>({});
 

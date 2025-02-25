@@ -54,7 +54,7 @@ For detailed information about using TheGraph with the SettleMint platform, chec
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/thegraph/src/thegraph.ts#L121)
+Defined in: [sdk/thegraph/src/thegraph.ts:117](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/thegraph/src/thegraph.ts#L117)
 
 Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
@@ -81,8 +81,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:125](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/thegraph/src/thegraph.ts#L125) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:126](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/thegraph/src/thegraph.ts#L126) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/thegraph/src/thegraph.ts#L121) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:122](https://github.com/settlemint/sdk/blob/v1.1.9/sdk/thegraph/src/thegraph.ts#L122) |
 
 ##### Throws
 
@@ -99,8 +99,6 @@ const { client, graphql } = createTheGraphClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
     Bytes: string;
     Int8: string;
     BigInt: string;
@@ -118,8 +116,6 @@ const { client, graphql } = createTheGraphClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
-    DateTime: Date;
-    JSON: Record<string, unknown>;
     Bytes: string;
     Int8: string;
     BigInt: string;
