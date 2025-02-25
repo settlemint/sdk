@@ -59,13 +59,14 @@ function getFullUrl(options: ClientOptions): string {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *     Bytes: string;
- *     Int8: string;
- *     BigInt: string;
- *     BigDecimal: string;
- *     Timestamp: string;
+ *     AddressHash: string;
+ *     Data: string;
+ *     DateTime: string;
+ *     Decimal: string;
+ *     FullHash: string;
+ *     Json: string;
+ *     NonceHash: string;
+ *     Wei: string;
  *   };
  * }>({
  *   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
@@ -77,13 +78,14 @@ function getFullUrl(options: ClientOptions): string {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *     Bytes: string;
- *     Int8: string;
- *     BigInt: string;
- *     BigDecimal: string;
- *     Timestamp: string;
+ *     AddressHash: string;
+ *     Data: string;
+ *     DateTime: string;
+ *     Decimal: string;
+ *     FullHash: string;
+ *     Json: string;
+ *     NonceHash: string;
+ *     Wei: string;
  *   };
  * }>({});
  *

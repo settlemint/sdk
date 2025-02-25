@@ -75,13 +75,8 @@ function getHeaders(options: ClientOptions): Record<string, unknown> {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *     Bytes: string;
- *     Int8: string;
- *     BigInt: string;
- *     BigDecimal: string;
- *     Timestamp: string;
+ *     // Change unknown to the type you are using to store metadata
+ *     JSON: unknown;
  *   };
  * }>({
  *   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
@@ -94,13 +89,8 @@ function getHeaders(options: ClientOptions): Record<string, unknown> {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *     Bytes: string;
- *     Int8: string;
- *     BigInt: string;
- *     BigDecimal: string;
- *     Timestamp: string;
+ *     // Change unknown to the type you are using to store metadata
+ *     JSON: unknown;
  *   };
  * }>({});
  *

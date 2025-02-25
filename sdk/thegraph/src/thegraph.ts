@@ -74,8 +74,6 @@ function getFullUrl(options: ClientOptions): string {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
  *     Bytes: string;
  *     Int8: string;
  *     BigInt: string;
@@ -93,8 +91,6 @@ function getFullUrl(options: ClientOptions): string {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
  *     Bytes: string;
  *     Int8: string;
  *     BigInt: string;

@@ -66,13 +66,16 @@ function getFullUrl(options: ClientOptions): string {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *     Bytes: string;
- *     Int8: string;
- *     BigInt: string;
- *     BigDecimal: string;
- *     Timestamp: string;
+ *     timestamp: string;
+ *     timestampz: string;
+ *     uuid: string;
+ *     date: string;
+ *     time: string;
+ *     jsonb: string;
+ *     numeric: string;
+ *     interval: string;
+ *     geometry: string;
+ *     geography: string;
  *   };
  * }>({
  *   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
@@ -85,13 +88,16 @@ function getFullUrl(options: ClientOptions): string {
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
- *     DateTime: Date;
- *     JSON: Record<string, unknown>;
- *     Bytes: string;
- *     Int8: string;
- *     BigInt: string;
- *     BigDecimal: string;
- *     Timestamp: string;
+ *     timestamp: string;
+ *     timestampz: string;
+ *     uuid: string;
+ *     date: string;
+ *     time: string;
+ *     jsonb: string;
+ *     numeric: string;
+ *     interval: string;
+ *     geometry: string;
+ *     geography: string;
  *   };
  * }>({});
  *
