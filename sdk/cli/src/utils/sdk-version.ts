@@ -1,7 +1,9 @@
+import { join } from "node:path";
 import type { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import { exists, projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { getPackageManager, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import * as semver from "semver";
 import pkg from "../../package.json";
@@ -82,8 +84,7 @@ async function getInstanceFromCommand(command: Command): Promise<string> {
 async function getUpgradeInstructions() {
   const globallyInstalled = await isSdkInstalledGlobally();
   if (globallyInstalled) {
-    const executablePath = process.execPath;
-    if (executablePath.endsWith("bun")) {
+    if (await isBun()) {
       return `To update, run:\nbun install -g ${SDK_PACKAGE_NAME}`;
     }
     return `To update:
@@ -91,7 +92,7 @@ async function getUpgradeInstructions() {
 - For yarn, run: yarn global add ${SDK_PACKAGE_NAME}
 - For pnpm, run: pnpm update -g ${SDK_PACKAGE_NAME}`;
   }
-  return `Update your ${SDK_PACKAGE_NAME} version in the package.json file.`;
+  return `Update the ${SDK_PACKAGE_NAME} version in the package.json file.`;
 }
 
 async function isSdkInstalledGlobally() {
@@ -101,4 +102,18 @@ async function isSdkInstalledGlobally() {
   } catch {
     return true;
   }
+}
+
+async function isBun() {
+  const executablePath = process.execPath;
+  if (executablePath.endsWith("bun")) {
+    return true;
+  }
+  const root = await projectRoot();
+  const isInNodeModules = await exists(join(root, "node_modules", SDK_PACKAGE_NAME));
+  if (!isInNodeModules) {
+    return false;
+  }
+  const packageManager = await getPackageManager(root);
+  return packageManager === "bun";
 }
