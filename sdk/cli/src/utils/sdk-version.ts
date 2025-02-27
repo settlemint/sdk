@@ -82,16 +82,13 @@ async function getInstanceFromCommand(command: Command): Promise<string> {
 async function getUpgradeInstructions() {
   const globallyInstalled = await isSdkInstalledGlobally();
   if (globallyInstalled) {
-    const executablePath = process.execPath;
-    if (executablePath.endsWith("bun")) {
-      return `To update, run:\nbun install -g ${SDK_PACKAGE_NAME}`;
-    }
     return `To update:
+- For bun, run: bun install -g ${SDK_PACKAGE_NAME}
 - For npm, run: npm update -g ${SDK_PACKAGE_NAME}
 - For yarn, run: yarn global add ${SDK_PACKAGE_NAME}
 - For pnpm, run: pnpm update -g ${SDK_PACKAGE_NAME}`;
   }
-  return `Update your ${SDK_PACKAGE_NAME} version in the package.json file.`;
+  return `Update the ${SDK_PACKAGE_NAME} version in the package.json file.`;
 }
 
 async function isSdkInstalledGlobally() {
