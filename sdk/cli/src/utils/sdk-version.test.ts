@@ -53,7 +53,13 @@ describe("SDK Version Validation", () => {
     await validateSdkVersion("https://test.instance");
 
     expect(noteMock).toHaveBeenCalledWith(
-      "A newer version of the SDK CLI is available (50.0.0). Please update your SDK CLI to ensure compatibility with the platform.\n\nTo update, run:\nbun install -g @settlemint/sdk-cli",
+      `A newer version of the SDK CLI is available (50.0.0). Please update your SDK CLI to ensure compatibility with the platform.
+
+To update:
+- For bun, run: bun install -g @settlemint/sdk-cli
+- For npm, run: npm update -g @settlemint/sdk-cli
+- For yarn, run: yarn global add @settlemint/sdk-cli
+- For pnpm, run: pnpm update -g @settlemint/sdk-cli`,
       "warn",
     );
   });
@@ -64,7 +70,13 @@ describe("SDK Version Validation", () => {
     await validateSdkVersion("https://test.instance");
 
     expect(noteMock).toHaveBeenCalledWith(
-      `SDK CLI version mismatch. The platform requires version '0.0.1' but you are using a newer version '${pkg.version}'. This might lead to compatibility issues with the platform.\n\nTo update, run:\nbun install -g @settlemint/sdk-cli`,
+      `SDK CLI version mismatch. The platform requires version '0.0.1' but you are using a newer version '${pkg.version}'. This might lead to compatibility issues with the platform.
+
+To update:
+- For bun, run: bun install -g @settlemint/sdk-cli
+- For npm, run: npm update -g @settlemint/sdk-cli
+- For yarn, run: yarn global add @settlemint/sdk-cli
+- For pnpm, run: pnpm update -g @settlemint/sdk-cli`,
       "warn",
     );
   });
