@@ -41,7 +41,7 @@ export async function selectTargetNode({
     );
     if (nodesWithActivePrivateKey.length === 0) {
       cancel(
-        "No blockchain nodes with ECDSA P256 or HSM ECDSA P256 private keys found. Please activate a ECDSA P256 or HSM ECDSA P256 private key on your node and try again.",
+        "No blockchain nodes with ECDSA P256 or HSM ECDSA P256 private keys were found. Please activate an ECDSA P256 or HSM ECDSA P256 private key on your node and try again.",
       );
     }
 
