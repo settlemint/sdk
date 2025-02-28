@@ -34,11 +34,14 @@ export async function selectTargetNode({
 
     const nodesWithPrivateKey = await Promise.all(nodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)));
     const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
-      (node) => node.privateKeys && node.privateKeys.length > 0,
+      (node) =>
+        node.privateKeys &&
+        node.privateKeys.length > 0 &&
+        node.privateKeys.some((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256"),
     );
     if (nodesWithActivePrivateKey.length === 0) {
       cancel(
-        "No EVM blockchain nodes with private keys found. Please activate a private key on your EVM blockchain node and try again.",
+        "No blockchain nodes with ECDSA P256 or HSM ECDSA P256 private keys found. Please activate a ECDSA P256 or HSM ECDSA P256 private key on your node and try again.",
       );
     }
 

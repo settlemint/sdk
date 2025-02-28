@@ -10,7 +10,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { cancel, executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { cancel, executeCommand, intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function hardhatDeployRemoteCommand() {
@@ -111,27 +111,41 @@ export function hardhatDeployRemoteCommand() {
       }
 
       const { command, args } = await getPackageManagerExecutable();
-      await executeCommand(
-        command,
-        [
-          ...args,
-          "hardhat",
-          "ignition",
-          "deploy",
-          ...(reset ? ["--reset"] : []),
-          ...(verify ? ["--verify"] : []),
-          ...(deploymentId ? ["--deployment-id", deploymentId] : []),
-          ...(parameters ? ["--parameters", parameters] : []),
-          ...(strategy ? ["--strategy", strategy] : []),
-          "--network",
-          "btp",
-          "--default-sender",
-          address,
-          module ?? "ignition/modules/main.ts",
-        ].filter(Boolean),
-        { env: envConfig },
-      );
-      outro("Smart contracts deployed successfully to remote network");
+      try {
+        const output = await executeCommand(
+          command,
+          [
+            ...args,
+            "hardhat",
+            "ignition",
+            "deploy",
+            ...(reset ? ["--reset"] : []),
+            ...(verify ? ["--verify"] : []),
+            ...(deploymentId ? ["--deployment-id", deploymentId] : []),
+            ...(parameters ? ["--parameters", parameters] : []),
+            ...(strategy ? ["--strategy", strategy] : []),
+            "--network",
+            "btp",
+            "--default-sender",
+            address,
+            module ?? "ignition/modules/main.ts",
+          ].filter(Boolean),
+          { env: envConfig },
+        );
+
+        // Only show success message if deployment wasn't cancelled
+        const outputStr = output.join("\n");
+        if (!outputStr.includes("Deploy cancelled")) {
+          outro("Smart contracts deployed successfully to remote network");
+        } else {
+          note("Smart contract deployment was cancelled");
+        }
+      } catch (error) {
+        // Handle any execution errors
+        cancel(
+          "The smart contract deployment was unsuccessful. Please check the error details above and try again. You may need to review your contract code or deployment configuration.",
+        );
+      }
     },
   );
 
