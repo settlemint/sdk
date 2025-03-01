@@ -2,6 +2,7 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { validPrivateKey } from "@/prompts/smart-contract-set/address.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
 import { cancel, note } from "@settlemint/sdk-utils/terminal";
@@ -27,27 +28,11 @@ export async function selectTargetNode({
     const nodes = await serviceSpinner("blockchain node", () =>
       settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!),
     );
-    const evmNodes = nodes.filter((node) => node.isEvm);
-    if (evmNodes.length === 0) {
-      cancel("No EVM blockchain nodes found. Please create an EVM blockchain node and try again.");
-    }
-
-    const nodesWithPrivateKey = await Promise.all(nodes.map((node) => settlemint.blockchainNode.read(node.uniqueName)));
-    const nodesWithActivePrivateKey = nodesWithPrivateKey.filter(
-      (node) =>
-        node.privateKeys &&
-        node.privateKeys.length > 0 &&
-        node.privateKeys.some((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256"),
-    );
-    if (nodesWithActivePrivateKey.length === 0) {
-      cancel(
-        "No blockchain nodes with ECDSA P256 or HSM ECDSA P256 private keys were found. Please activate an ECDSA P256 or HSM ECDSA P256 private key on your node and try again.",
-      );
-    }
+    const validNodes = nodes.filter((node) => validateNode(node, false));
 
     const blockchainNode = await blockchainNodePrompt({
       env,
-      nodes: nodesWithActivePrivateKey,
+      nodes: validNodes,
       accept: autoAccept,
       isRequired: true,
       promptMessage:
@@ -61,17 +46,36 @@ export async function selectTargetNode({
     node = blockchainNode;
   } else {
     node = await settlemint.blockchainNode.read(nodeUniqueName);
-    if (!node.isEvm) {
-      cancel(
-        `The specified blockchain node '${nodeUniqueName}' is not an EVM blockchain node. Please specify an EVM blockchain node to continue.`,
-      );
-    }
   }
 
-  if (node.status !== "COMPLETED") {
-    serviceNotRunningError("blockchain node", node.status);
-  }
+  validateNode(node);
 
   note(`🔗 Connected to blockchain node '${node.uniqueName}'`);
   return node;
+}
+
+function validateNode(node: BlockchainNode, cancelOnError = true) {
+  if (!node.isEvm) {
+    if (cancelOnError) {
+      cancel(
+        `The specified blockchain node '${node.uniqueName}' is not an EVM blockchain node. Please specify an EVM blockchain node to continue.`,
+      );
+    }
+    return false;
+  }
+  if (node.privateKeys?.filter((privateKey) => validPrivateKey(privateKey)).length === 0) {
+    if (cancelOnError) {
+      cancel(
+        `The specified blockchain node '${node.uniqueName}' does not have an ECDSA P256 or HSM ECDSA P256 private key activated. Please activate an ECDSA P256 or HSM ECDSA P256 private key on your node and try again.`,
+      );
+    }
+    return false;
+  }
+  if (node.status !== "COMPLETED") {
+    if (cancelOnError) {
+      serviceNotRunningError("blockchain node", node.status);
+    }
+    return false;
+  }
+  return true;
 }
