@@ -18,7 +18,7 @@
         "typedoc-plugin-markdown": "4.4.2",
         "typedoc-plugin-merge-modules": "6.1.0",
         "typedoc-plugin-zod": "1.3.1",
-        "typescript": "5.7.3",
+        "typescript": "5.8.2",
       },
     },
     "sdk/blockscout": {
@@ -1227,7 +1227,7 @@
 
     "typedoc-plugin-zod": ["typedoc-plugin-zod@1.3.1", "", { "peerDependencies": { "typedoc": "0.23.x || 0.24.x || 0.25.x || 0.26.x || 0.27.x" } }, "sha512-u4NH1Ez168gRNnhUd0x4pZhp85maJ9y050IxSok9XwdzTpUA9NN0ee3ho8ssrzmxsvO2UDbDEiks7xtI0p6UXA=="],
 
-    "typescript": ["typescript@5.7.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-84MVSjMEHP+FQRPy3pX9sTVV/INIex71s9TL2Gm5FG/WG1SqXeKyZ0k7/blY/4FdOzI12CBy1vGc4og/eus0fw=="],
+    "typescript": ["typescript@5.8.2", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-aJn6wq13/afZp/jT9QZmwEjDqqvSGp1VT5GVg+f/t6/oVyrgXM6BY1h9BRh/O5p3PlUPAe+WuiEZOmb/49RqoQ=="],
 
     "uc.micro": ["uc.micro@2.1.0", "", {}, "sha512-ARDJmphmdvUk6Glw7y9DQ2bFkKBHwQHLi2lsaH6PPmz/Ka9sFOBsBluozhDltWmnv9u/cF6Rt87znRTPV+yp/A=="],
 
