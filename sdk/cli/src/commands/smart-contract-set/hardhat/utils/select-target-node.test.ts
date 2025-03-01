@@ -1,10 +1,8 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import { type BlockchainNodePromptArgs, blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
-import { validPrivateKey } from "@/prompts/smart-contract-set/address.prompt";
-import { serviceSpinner } from "@/spinners/service.spinner";
 import { ModuleMocker } from "@/utils/test/module-mocker";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
-import { cancel, note } from "@settlemint/sdk-utils/terminal";
+import { cancel } from "@settlemint/sdk-utils/terminal";
 import { selectTargetNode } from "./select-target-node";
 
 // Create mocks for all the dependencies
@@ -12,9 +10,6 @@ const moduleMocker = new ModuleMocker();
 
 // Mock functions
 const mockBlockchainNodePrompt = mock(blockchainNodePrompt);
-const mockValidPrivateKey = mock(validPrivateKey);
-const mockServiceSpinner = mock(serviceSpinner);
-const mockNote = mock(note);
 const mockCancel = mock(cancel).mockImplementation((msg) => {
   throw new Error(msg);
 });
@@ -24,14 +19,7 @@ beforeAll(async () => {
   await moduleMocker.mock("@/prompts/cluster-service/blockchain-node.prompt", () => ({
     blockchainNodePrompt: mockBlockchainNodePrompt,
   }));
-  await moduleMocker.mock("@/prompts/smart-contract-set/address.prompt", () => ({
-    validPrivateKey: mockValidPrivateKey,
-  }));
-  await moduleMocker.mock("@/spinners/service.spinner", () => ({
-    serviceSpinner: mockServiceSpinner,
-  }));
   await moduleMocker.mock("@settlemint/sdk-utils/terminal", () => ({
-    note: mockNote,
     cancel: mockCancel,
   }));
 });
@@ -109,20 +97,6 @@ describe("selectTargetNode", () => {
       }),
     },
   } as unknown as SettlemintClient;
-
-  // Reset mocks before each test
-  beforeEach(() => {
-    mockBlockchainNodePrompt.mockReset();
-    mockValidPrivateKey.mockReset();
-    mockServiceSpinner.mockReset();
-    mockNote.mockReset();
-
-    // Default implementation for validPrivateKey
-    mockValidPrivateKey.mockImplementation((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256");
-
-    // Default implementation for serviceSpinner
-    mockServiceSpinner.mockImplementation(async (_, task) => task());
-  });
 
   test("should validate node in env when autoAccept is true", async () => {
     expect(
