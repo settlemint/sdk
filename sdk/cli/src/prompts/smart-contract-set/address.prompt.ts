@@ -1,7 +1,7 @@
 import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
-import type { BlockchainNode } from "@settlemint/sdk-js";
-import { cancel, note } from "@settlemint/sdk-utils/terminal";
+import type { BlockchainNode, PrivateKey } from "@settlemint/sdk-js";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -28,16 +28,9 @@ export async function addressPrompt({
   node: BlockchainNode;
   hardhatConfig: HardhatConfig;
 }): Promise<string | null> {
-  const possiblePrivateKeys =
-    node.privateKeys?.filter((privateKey) => privateKey.privateKeyType !== "HD_ECDSA_P256") ?? [];
+  const possiblePrivateKeys = node.privateKeys?.filter((privateKey) => validPrivateKey(privateKey)) ?? [];
   const defaultAddress = hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
-
-  if (!node.privateKeys || node.privateKeys.length === 0) {
-    cancel(
-      `No ECDSA P256 or HSM ECDSA P256 private key is activated on the node '${node.uniqueName}'. Please activate a private key on this node or specify a different node.`,
-    );
-  }
 
   if (defaultPossible) {
     if (possiblePrivateKeys.some((privateKey) => privateKey.address?.toLowerCase() === defaultAddress?.toLowerCase())) {
@@ -45,7 +38,7 @@ export async function addressPrompt({
     }
 
     note(
-      `Private key with address '${defaultAddress}' not activated on the node '${node.uniqueName}'.\nPlease select another key or activate this key on the node and try again.`,
+      `Private key with address '${defaultAddress}' is not activated on the node '${node.uniqueName}'.\nPlease select another key or activate this key on the node and try again.`,
       "warn",
     );
   }
@@ -60,4 +53,8 @@ export async function addressPrompt({
   });
 
   return address;
+}
+
+export function validPrivateKey(privateKey: { privateKeyType: PrivateKey["privateKeyType"] }) {
+  return privateKey.privateKeyType !== "HD_ECDSA_P256";
 }
