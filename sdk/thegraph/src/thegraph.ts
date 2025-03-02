@@ -21,10 +21,12 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
     runtime: z.literal("server"),
     accessToken: ApplicationAccessTokenSchema,
     subgraphName: z.string(),
+    cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
   }),
   z.object({
     runtime: z.literal("browser"),
     subgraphName: z.string(),
+    cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
   }),
 ]);
 
