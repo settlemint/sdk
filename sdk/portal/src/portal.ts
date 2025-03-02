@@ -18,9 +18,11 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
     instance: UrlOrPathSchema,
     runtime: z.literal("server"),
     accessToken: ApplicationAccessTokenSchema,
+    cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
   }),
   z.object({
     runtime: z.literal("browser"),
+    cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
   }),
 ]);
 
