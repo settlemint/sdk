@@ -54,7 +54,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:108](https://github.com/settlemint/sdk/blob/v1.1.11/sdk/portal/src/portal.ts#L108)
+Defined in: [sdk/portal/src/portal.ts:108](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L108)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -79,8 +79,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:112](https://github.com/settlemint/sdk/blob/v1.1.11/sdk/portal/src/portal.ts#L112) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:113](https://github.com/settlemint/sdk/blob/v1.1.11/sdk/portal/src/portal.ts#L113) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:112](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L112) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:113](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L113) |
 
 ##### Throws
 
@@ -134,7 +134,7 @@ const result = await client.request(query);
 
 > **ClientOptions**: \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}
 
-Defined in: [sdk/portal/src/portal.ts:30](https://github.com/settlemint/sdk/blob/v1.1.11/sdk/portal/src/portal.ts#L30)
+Defined in: [sdk/portal/src/portal.ts:30](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L30)
 
 Type representing the validated client options.
 
@@ -144,7 +144,7 @@ Type representing the validated client options.
 
 > **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/v1.1.11/sdk/portal/src/portal.ts#L10)
+Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L10)
 
 Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
@@ -154,7 +154,7 @@ Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
 > `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<[`ClientOptions`](README.md#clientoptions)\>
 
-Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v1.1.11/sdk/portal/src/portal.ts#L16)
+Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L16)
 
 Schema for validating Portal client configuration options.
 Discriminates between server and browser runtime environments.
