@@ -54,7 +54,7 @@ For detailed information about using TheGraph with the SettleMint platform, chec
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:117](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L117)
+Defined in: [sdk/thegraph/src/thegraph.ts:119](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L119)
 
 Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
@@ -68,7 +68,7 @@ Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URLs, access token and subgraph name - For browser-side: just subgraph name |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; `subgraphName`: `string`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URLs, access token and subgraph name - For browser-side: just subgraph name |
 | `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
@@ -81,8 +81,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:121](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L121) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:122](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L122) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:123](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L123) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:124](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L124) |
 
 ##### Throws
 
@@ -144,9 +144,9 @@ const result = await client.request(query);
 
 #### ClientOptions
 
-> **ClientOptions**: \{ `accessToken`: `string`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `runtime`: `"browser"`; `subgraphName`: `string`; \}
+> **ClientOptions**: \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instances`: `string`[]; `runtime`: `"server"`; `subgraphName`: `string`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; `subgraphName`: `string`; \}
 
-Defined in: [sdk/thegraph/src/thegraph.ts:34](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L34)
+Defined in: [sdk/thegraph/src/thegraph.ts:36](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/thegraph/src/thegraph.ts#L36)
 
 Type definition for client options derived from the ClientOptionsSchema
 

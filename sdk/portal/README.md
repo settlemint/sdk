@@ -54,7 +54,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:108](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L108)
+Defined in: [sdk/portal/src/portal.ts:110](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L110)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -68,7 +68,7 @@ Creates a Portal GraphQL client with the provided configuration.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the Portal client |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the Portal client |
 | `clientOptions`? | `RequestConfig` | Additional GraphQL client configuration options |
 
 ##### Returns
@@ -79,8 +79,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:112](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L112) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:113](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L113) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:114](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L114) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:115](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L115) |
 
 ##### Throws
 
@@ -132,9 +132,9 @@ const result = await client.request(query);
 
 #### ClientOptions
 
-> **ClientOptions**: \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}
+> **ClientOptions**: \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}
 
-Defined in: [sdk/portal/src/portal.ts:30](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L30)
+Defined in: [sdk/portal/src/portal.ts:32](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/portal/src/portal.ts#L32)
 
 Type representing the validated client options.
 

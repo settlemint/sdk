@@ -53,7 +53,7 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:117](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L117)
+Defined in: [sdk/hasura/src/hasura.ts:119](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L119)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -67,7 +67,7 @@ Creates a Hasura GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL, access token and admin secret - For browser-side: no additional configuration needed |
+| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL, access token and admin secret - For browser-side: no additional configuration needed |
 | `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
@@ -80,8 +80,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:121](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L121) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:122](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L122) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:123](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L123) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:124](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L124) |
 
 ##### Throws
 
@@ -194,9 +194,9 @@ try {
 
 #### ClientOptions
 
-> **ClientOptions**: \{ `accessToken`: `string`; `adminSecret`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}
+> **ClientOptions**: \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}
 
-Defined in: [sdk/hasura/src/hasura.ts:33](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L33)
+Defined in: [sdk/hasura/src/hasura.ts:35](https://github.com/settlemint/sdk/blob/v1.1.12/sdk/hasura/src/hasura.ts#L35)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
