@@ -8,6 +8,10 @@ const getPlatformConfigQuery = graphql(
   `
     query platformConfig {
       config {
+        kits {
+          id
+          name
+        }
         smartContractSets {
           id
           sets {

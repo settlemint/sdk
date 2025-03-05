@@ -1,19 +1,19 @@
-import { getStarterkits } from "@/utils/platform-utils";
+import { getKits } from "@/utils/platform-utils";
 import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 
 export async function templatePrompt(platformConfig: PlatformConfig, argument?: string): Promise<string> {
-  const starterkits = getStarterkits(platformConfig);
+  const kits = getKits(platformConfig);
 
-  if (starterkits.length === 0) {
+  if (kits.length === 0) {
     cancel("No templates found");
   }
 
   const defaultInstance = argument;
 
   if (defaultInstance) {
-    const template = starterkits.find((starterKit) => starterKit.id === argument);
+    const template = kits.find((kit) => kit.id === argument);
     if (!template) {
       cancel(`No template found with name '${argument}'`);
     }
@@ -23,7 +23,7 @@ export async function templatePrompt(platformConfig: PlatformConfig, argument?: 
   const template = await select({
     message: "Which template do you want to use?",
     choices: [
-      ...starterkits
+      ...kits
         .map((template) => ({
           name: template.name,
           value: template.id,

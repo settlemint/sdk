@@ -42,8 +42,8 @@ describe("useCasePrompt", () => {
           image: { repository: "test", tag: "latest", registry: "test" },
         },
         {
-          id: "starterkit-1",
-          name: "starterkit",
+          id: "kit-1",
+          name: "kit",
           featureflagged: false,
           image: { repository: "test", tag: "latest", registry: "test" },
         },
@@ -137,7 +137,7 @@ describe("useCasePrompt", () => {
     });
   });
 
-  test("excludes feature flagged and starterkit use cases from choices", async () => {
+  test("excludes feature flagged and kit use cases from choices", async () => {
     await useCasePrompt(mockPlatformConfig);
 
     expect(mockSelect).toHaveBeenCalledWith({

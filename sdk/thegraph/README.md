@@ -92,7 +92,7 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 
 ```ts
 import { createTheGraphClient } from '@settlemint/sdk-thegraph';
-import type { introspection } from '@schemas/the-graph-env-starterkits';
+import type { introspection } from '@schemas/the-graph-env-kits';
 
 // Server-side usage
 const { client, graphql } = createTheGraphClient<{
@@ -108,7 +108,7 @@ const { client, graphql } = createTheGraphClient<{
 }>({
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
-  subgraphName: 'starterkits'
+  subgraphName: 'kits'
 });
 
 // Browser-side usage
@@ -123,7 +123,7 @@ const { client, graphql } = createTheGraphClient<{
     Timestamp: string;
   };
 }>({
-  subgraphName: 'starterkits'
+  subgraphName: 'kits'
 });
 
 // Making GraphQL queries

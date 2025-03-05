@@ -1,13 +1,9 @@
 import type { PlatformConfig } from "@settlemint/sdk-js";
 
 export function getUseCases(platformConfig: PlatformConfig) {
-  return platformConfig.smartContractSets.sets.filter(
-    (useCase) => !useCase.featureflagged && !useCase.id.startsWith("starterkit-"),
-  );
+  return platformConfig.smartContractSets.sets.filter((useCase) => !useCase.featureflagged);
 }
 
-export function getStarterkits(platformConfig: PlatformConfig) {
-  return platformConfig.smartContractSets.sets.filter(
-    (useCase) => !useCase.featureflagged && useCase.id.startsWith("starterkit-"),
-  );
+export function getKits(platformConfig: PlatformConfig) {
+  return platformConfig.kits as Array<{ id: string; name: string }>;
 }
