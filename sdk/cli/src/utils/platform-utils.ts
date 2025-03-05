@@ -5,5 +5,5 @@ export function getUseCases(platformConfig: PlatformConfig) {
 }
 
 export function getKits(platformConfig: PlatformConfig) {
-  return platformConfig.kits as Array<{ id: string; name: string }>;
+  return platformConfig.kits ?? [];
 }
