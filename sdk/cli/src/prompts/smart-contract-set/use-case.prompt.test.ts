@@ -60,6 +60,16 @@ describe("useCasePrompt", () => {
             registry: "test-registry",
           },
         },
+        {
+          id: "test-4",
+          name: "test-4",
+          featureflagged: true,
+          image: {
+            repository: "test-repo",
+            tag: "test-tag",
+            registry: "test-registry",
+          },
+        },
       ],
     },
     kits: [],
@@ -160,6 +170,19 @@ describe("useCasePrompt", () => {
         tag: "test-tag",
         registry: "test-registry",
       },
+    });
+  });
+
+  test("excludes feature flagged use cases from choices", async () => {
+    await useCasePrompt(mockPlatformConfig);
+
+    expect(mockSelect).toHaveBeenCalledWith({
+      message: "Which use case do you want to use?",
+      choices: expect.arrayContaining([
+        { name: "test-1", value: "test-1" },
+        { name: "test-2", value: "test-2" },
+        { name: "test-3", value: "test-3" },
+      ]),
     });
   });
 });
