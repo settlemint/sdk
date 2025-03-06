@@ -14,9 +14,9 @@ import {
 import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
-const PROJECT_NAME = "starter-kit-demo";
-const TEMPLATE_NAME = "starterkit-asset-tokenization";
-const SUBGRAPH_NAMES = ["starterkits", "starterkit-asset-tokenization"];
+const PROJECT_NAME = "kit-demo";
+const TEMPLATE_NAME = "kit-asset-tokenization";
+const SUBGRAPH_NAMES = ["kits", "kit-asset-tokenization"];
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -127,7 +127,7 @@ describe("Setup a project using the SDK", () => {
   });
 
   test("contracts - Build and Deploy smart contracts", async () => {
-    const deploymentId = "starterkit-asset-tokenization";
+    const deploymentId = "kit-asset-tokenization";
     // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
     const { output: deployOutput } = await retryCommand(
       () =>

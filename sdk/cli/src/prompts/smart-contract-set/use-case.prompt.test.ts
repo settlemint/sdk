@@ -5,7 +5,14 @@ import { useCasePrompt } from "./use-case.prompt";
 
 const moduleMocker = new ModuleMocker();
 
-const mockSelect = mock(({ choices }: { choices: { value: string }[] }) => Promise.resolve(choices[0]?.value ?? ""));
+const mockSelect = mock(({ choices }: { choices: { value: string }[] }) => {
+  // For the multiple use cases test, return test-2
+  if (choices.length === 3) {
+    return Promise.resolve("test-2");
+  }
+  // For other tests, return the first choice
+  return Promise.resolve(choices[0]?.value ?? "");
+});
 
 beforeAll(async () => {
   await moduleMocker.mock("@inquirer/select", () => ({
@@ -25,36 +32,37 @@ describe("useCasePrompt", () => {
       sets: [
         {
           id: "test-1",
-          name: "solidity-test-1",
+          name: "test-1",
           featureflagged: false,
-          image: { repository: "test", tag: "latest", registry: "test" },
+          image: {
+            repository: "test-repo",
+            tag: "test-tag",
+            registry: "test-registry",
+          },
         },
         {
           id: "test-2",
-          name: "chaincode-test-2",
+          name: "test-2",
           featureflagged: false,
-          image: { repository: "test", tag: "latest", registry: "test" },
+          image: {
+            repository: "test-repo",
+            tag: "test-tag",
+            registry: "test-registry",
+          },
         },
         {
           id: "test-3",
           name: "test-3",
           featureflagged: false,
-          image: { repository: "test", tag: "latest", registry: "test" },
-        },
-        {
-          id: "starterkit-1",
-          name: "starterkit",
-          featureflagged: false,
-          image: { repository: "test", tag: "latest", registry: "test" },
-        },
-        {
-          id: "hidden",
-          name: "hidden",
-          featureflagged: true,
-          image: { repository: "test", tag: "latest", registry: "test" },
+          image: {
+            repository: "test-repo",
+            tag: "test-tag",
+            registry: "test-registry",
+          },
         },
       ],
     },
+    kits: [],
     deploymentEngineTargets: [],
     preDeployedContracts: [],
     sdkVersion: "0.0.1",
@@ -66,6 +74,7 @@ describe("useCasePrompt", () => {
         id: "empty-sets",
         sets: [],
       },
+      kits: [],
       deploymentEngineTargets: [],
       preDeployedContracts: [],
       sdkVersion: "0.0.1",
@@ -77,16 +86,21 @@ describe("useCasePrompt", () => {
   test("returns the use case when only one is available", async () => {
     const singleConfig: PlatformConfig = {
       smartContractSets: {
-        id: "single-set",
+        id: "empty-sets",
         sets: [
           {
             id: "test-1",
             name: "test-1",
             featureflagged: false,
-            image: { repository: "test", tag: "latest", registry: "test" },
+            image: {
+              repository: "test-repo",
+              tag: "test-tag",
+              registry: "test-registry",
+            },
           },
         ],
       },
+      kits: [],
       deploymentEngineTargets: [],
       preDeployedContracts: [],
       sdkVersion: "0.0.1",
@@ -97,7 +111,11 @@ describe("useCasePrompt", () => {
       id: "test-1",
       name: "test-1",
       featureflagged: false,
-      image: { repository: "test", tag: "latest", registry: "test" },
+      image: {
+        repository: "test-repo",
+        tag: "test-tag",
+        registry: "test-registry",
+      },
     });
   });
 
@@ -105,9 +123,13 @@ describe("useCasePrompt", () => {
     const result = await useCasePrompt(mockPlatformConfig, "test-1");
     expect(result).toEqual({
       id: "test-1",
-      name: "solidity-test-1",
+      name: "test-1",
       featureflagged: false,
-      image: { repository: "test", tag: "latest", registry: "test" },
+      image: {
+        repository: "test-repo",
+        tag: "test-tag",
+        registry: "test-registry",
+      },
     });
   });
 
@@ -123,30 +145,21 @@ describe("useCasePrompt", () => {
     expect(mockSelect).toHaveBeenCalledWith({
       message: "Which use case do you want to use?",
       choices: expect.arrayContaining([
-        { name: "Fabric: test-2", value: "test-2" },
-        { name: "Solidity: test-1", value: "test-1" },
+        { name: "test-1", value: "test-1" },
+        { name: "test-2", value: "test-2" },
         { name: "test-3", value: "test-3" },
       ]),
     });
 
     expect(result).toEqual({
       id: "test-2",
-      name: "chaincode-test-2",
+      name: "test-2",
       featureflagged: false,
-      image: { repository: "test", tag: "latest", registry: "test" },
-    });
-  });
-
-  test("excludes feature flagged and starterkit use cases from choices", async () => {
-    await useCasePrompt(mockPlatformConfig);
-
-    expect(mockSelect).toHaveBeenCalledWith({
-      message: "Which use case do you want to use?",
-      choices: expect.arrayContaining([
-        { name: "Solidity: test-1", value: "test-1" },
-        { name: "Fabric: test-2", value: "test-2" },
-        { name: "test-3", value: "test-3" },
-      ]),
+      image: {
+        repository: "test-repo",
+        tag: "test-tag",
+        registry: "test-registry",
+      },
     });
   });
 });

@@ -33,6 +33,10 @@ const getPlatformConfigQuery = graphql(
         }
         preDeployedContracts
         sdkVersion
+        kits {
+          id
+          name
+        }
       }
     }
   `,

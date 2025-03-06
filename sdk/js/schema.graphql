@@ -12767,6 +12767,103 @@ The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](
 """
 scalar JSONObject @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
+type Kit {
+  """Kit description"""
+  description: String!
+
+  """Kit ID"""
+  id: String!
+
+  """Kit name"""
+  name: String!
+
+  """Kit services"""
+  services: KitServices!
+}
+
+type KitPricing {
+  addOns: [String!]!
+  currency: String!
+  environment: Environment!
+  estimatedTotalPrice: Float!
+  kitId: String!
+  services: ServicePricing!
+}
+
+type KitServices {
+  development: KitServicesEnvironment
+  production: KitServicesEnvironment
+}
+
+type KitServicesBlockchainNetwork {
+  """Blockchain Network Name"""
+  name: String!
+
+  """Blockchain Network Node Name"""
+  nodeName: String!
+}
+
+type KitServicesBlockchainNode {
+  """Blockchain Node Name"""
+  name: String!
+  nodeType: NodeType!
+}
+
+type KitServicesEnvironment {
+  blockchainNetworks: [KitServicesBlockchainNetwork!]
+  blockchainNodes: [KitServicesBlockchainNode!]
+  insights: [KitServicesInsight!]
+  integrations: [KitServicesIntegration!]
+  loadBalancers: [KitServicesLoadBalancer!]
+  middlewares: [KitServicesMiddleware!]
+  privateKeys: [KitServicesPrivateKey!]
+  smartContractSets: [KitServicesSmartContractSet!]
+  storages: [KitServicesStorage!]
+}
+
+type KitServicesInsight {
+  insightsCategory: InsightsCategory!
+
+  """Insight Name"""
+  name: String!
+}
+
+type KitServicesIntegration {
+  integrationType: IntegrationType!
+
+  """Integration Name"""
+  name: String!
+}
+
+type KitServicesLoadBalancer {
+  """LoadBalancer Name"""
+  name: String!
+}
+
+type KitServicesMiddleware {
+  interface: MiddlewareType!
+
+  """Middleware Name"""
+  name: String!
+}
+
+type KitServicesPrivateKey {
+  """Private Key Name"""
+  name: String!
+  privateKeyType: PrivateKeyType!
+}
+
+type KitServicesSmartContractSet {
+  """Smart Contract Set Name"""
+  name: String!
+}
+
+type KitServicesStorage {
+  """Storage Name"""
+  name: String!
+  storageProtocol: StorageProtocol!
+}
+
 """The language preference of the user."""
 enum Language {
   BROWSER
@@ -13258,6 +13355,93 @@ type MinioStorage implements AbstractClusterService & AbstractEntity & Storage {
 }
 
 type Mutation {
+  """Creates an application based on a kit."""
+  CreateApplicationKit(
+    """The absolute maximum bytes for Fabric Raft consensus"""
+    absoluteMaxBytes: Int = 10
+
+    """Add-ons to enable"""
+    addOns: [AddOn!]
+
+    """The batch timeout for Fabric Raft consensus"""
+    batchTimeout: Float = 2
+
+    """The genesis configuration for Besu IBFTv2 networks"""
+    besuIbft2Genesis: BesuIbft2GenesisInput
+
+    """The genesis configuration for Besu QBFT networks"""
+    besuQbftGenesis: BesuQbftGenesisInput
+
+    """The chain ID for permissioned EVM networks"""
+    chainId: Int
+
+    """The consensus algorithm for the blockchain network"""
+    consensusAlgorithm: ConsensusAlgorithm
+
+    """The contract size limit for Besu networks"""
+    contractSizeLimit: Int
+
+    """The endorsement policy for Fabric Raft consensus"""
+    endorsementPolicy: FabricEndorsementPolicy
+
+    """Production or development environment"""
+    environment: Environment
+
+    """The EVM stack size for Besu networks"""
+    evmStackSize: Int
+
+    """List of external nodes for permissioned EVM networks"""
+    externalNodes: [BlockchainNetworkExternalNodeInput!]
+
+    """The gas limit for permissioned EVM networks"""
+    gasLimit: String
+
+    """The gas price for permissioned EVM networks"""
+    gasPrice: Int
+
+    """The genesis configuration for Geth networks"""
+    gethGenesis: GethGenesisInput
+
+    """The key material for permissioned EVM networks"""
+    keyMaterial: ID
+
+    """Kit ID"""
+    kitId: String
+
+    """The maximum code size for Quorum networks"""
+    maxCodeSize: Int
+
+    """The maximum message count for Fabric Raft consensus"""
+    maxMessageCount: Int = 500
+
+    """Name of the application"""
+    name: String!
+
+    """The genesis configuration for Polygon Edge networks"""
+    polygonEdgeGenesis: PolygonEdgeGenesisInput
+
+    """The preferred maximum bytes for Fabric Raft consensus"""
+    preferredMaxBytes: Int = 2
+
+    """Provider of the cluster service"""
+    provider: String
+
+    """The genesis configuration for Quorum networks"""
+    quorumGenesis: QuorumGenesisInput
+
+    """Region of the cluster service"""
+    region: String
+
+    """The number of seconds per block for permissioned EVM networks"""
+    secondsPerBlock: Int
+
+    """The transaction size limit for Quorum networks"""
+    txnSizeLimit: Int
+
+    """Workspace ID"""
+    workspaceId: String!
+  ): Application!
+
   """Accepts an invitation to a blockchain network"""
   acceptBlockchainNetworkInvite(
     """The ID of the application accepting the invite"""
@@ -14006,93 +14190,6 @@ type Mutation {
     """Type of the cluster service"""
     type: ClusterServiceType
   ): StorageType!
-
-  """Creates an application based on a use-case template."""
-  createUseCaseApplication(
-    """The absolute maximum bytes for Fabric Raft consensus"""
-    absoluteMaxBytes: Int = 10
-
-    """Add-ons to enable"""
-    addOns: [AddOn!]
-
-    """The batch timeout for Fabric Raft consensus"""
-    batchTimeout: Float = 2
-
-    """The genesis configuration for Besu IBFTv2 networks"""
-    besuIbft2Genesis: BesuIbft2GenesisInput
-
-    """The genesis configuration for Besu QBFT networks"""
-    besuQbftGenesis: BesuQbftGenesisInput
-
-    """The chain ID for permissioned EVM networks"""
-    chainId: Int
-
-    """The consensus algorithm for the blockchain network"""
-    consensusAlgorithm: ConsensusAlgorithm
-
-    """The contract size limit for Besu networks"""
-    contractSizeLimit: Int
-
-    """The endorsement policy for Fabric Raft consensus"""
-    endorsementPolicy: FabricEndorsementPolicy
-
-    """Production or development environment"""
-    environment: Environment
-
-    """The EVM stack size for Besu networks"""
-    evmStackSize: Int
-
-    """List of external nodes for permissioned EVM networks"""
-    externalNodes: [BlockchainNetworkExternalNodeInput!]
-
-    """The gas limit for permissioned EVM networks"""
-    gasLimit: String
-
-    """The gas price for permissioned EVM networks"""
-    gasPrice: Int
-
-    """The genesis configuration for Geth networks"""
-    gethGenesis: GethGenesisInput
-
-    """The key material for permissioned EVM networks"""
-    keyMaterial: ID
-
-    """The maximum code size for Quorum networks"""
-    maxCodeSize: Int
-
-    """The maximum message count for Fabric Raft consensus"""
-    maxMessageCount: Int = 500
-
-    """Name of the application"""
-    name: String!
-
-    """The genesis configuration for Polygon Edge networks"""
-    polygonEdgeGenesis: PolygonEdgeGenesisInput
-
-    """The preferred maximum bytes for Fabric Raft consensus"""
-    preferredMaxBytes: Int = 2
-
-    """Provider of the cluster service"""
-    provider: String
-
-    """The genesis configuration for Quorum networks"""
-    quorumGenesis: QuorumGenesisInput
-
-    """Region of the cluster service"""
-    region: String
-
-    """The number of seconds per block for permissioned EVM networks"""
-    secondsPerBlock: Int
-
-    """The transaction size limit for Quorum networks"""
-    txnSizeLimit: Int
-
-    """Use Case ID"""
-    useCaseId: String
-
-    """Workspace ID"""
-    workspaceId: String!
-  ): Application!
   createUserWallet(
     """HD ECDSA P256 Private Key"""
     hdEcdsaP256PrivateKey: ID!
@@ -16755,6 +16852,7 @@ type PlatformConfigDto {
   hasAdvancedDeploymentConfigEnabled: Boolean!
   hsmAwsKmsKeysEnabled: Boolean!
   id: ID!
+  kits: [Kit!]!
   observability: ObservabilityDto!
   preDeployedContracts: [String!]!
   sdkVersion: String!
@@ -19639,8 +19737,8 @@ type Query {
   foundryEnvConfigByUniqueName(blockchainNodeUniqueName: String!): JSON!
 
   """Get pricing estimation based on use case and configuration"""
-  getUseCasePricing(addOns: [AddOn!]!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, useCaseId: String!): UseCasePricing!
-  getUseCases: [UseCase!]!
+  getKitPricing(addOns: [AddOn!]!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, kitId: String!): KitPricing!
+  getKits: [Kit!]!
   getUser(userId: ID): User!
 
   """Get a Insights service"""
@@ -21673,6 +21771,9 @@ interface SmartContractSet implements AbstractClusterService & AbstractEntity {
 
 """Smart contract set with metadata"""
 type SmartContractSetDto {
+  """Description of the smart contract set"""
+  description: String!
+
   """Whether this set is behind a feature flag"""
   featureflagged: Boolean!
 
@@ -23405,103 +23506,6 @@ enum TolerationOperator {
 
 enum Tooltip {
   WORKSPACE_DROPDOWN_TOOLTIP
-}
-
-type UseCase {
-  """Use Case Description"""
-  description: String!
-
-  """Use Case ID"""
-  id: String!
-
-  """Use Case Name"""
-  name: String!
-
-  """Use Case Services Configuration"""
-  services: UseCaseService!
-}
-
-type UseCasePricing {
-  addOns: [String!]!
-  currency: String!
-  environment: Environment!
-  estimatedTotalPrice: Float!
-  services: ServicePricing!
-  useCase: String!
-}
-
-type UseCaseService {
-  development: UseCaseServiceEnvironment
-  production: UseCaseServiceEnvironment
-}
-
-type UseCaseServiceBlockchainNetwork {
-  """Blockchain Network Name"""
-  name: String!
-
-  """Blockchain Network Node Name"""
-  nodeName: String!
-}
-
-type UseCaseServiceBlockchainNode {
-  """Blockchain Node Name"""
-  name: String!
-  nodeType: NodeType!
-}
-
-type UseCaseServiceEnvironment {
-  blockchainNetworks: [UseCaseServiceBlockchainNetwork!]
-  blockchainNodes: [UseCaseServiceBlockchainNode!]
-  insights: [UseCaseServiceInsight!]
-  integrations: [UseCaseServiceIntegration!]
-  loadBalancers: [UseCaseServiceLoadBalancer!]
-  middlewares: [UseCaseServiceMiddleware!]
-  privateKeys: [UseCaseServicePrivateKey!]
-  smartContractSets: [UseCaseServiceSmartContractSet!]
-  storages: [UseCaseServiceStorage!]
-}
-
-type UseCaseServiceInsight {
-  insightsCategory: InsightsCategory!
-
-  """Insight Name"""
-  name: String!
-}
-
-type UseCaseServiceIntegration {
-  integrationType: IntegrationType!
-
-  """Integration Name"""
-  name: String!
-}
-
-type UseCaseServiceLoadBalancer {
-  """LoadBalancer Name"""
-  name: String!
-}
-
-type UseCaseServiceMiddleware {
-  interface: MiddlewareType!
-
-  """Middleware Name"""
-  name: String!
-}
-
-type UseCaseServicePrivateKey {
-  """Private Key Name"""
-  name: String!
-  privateKeyType: PrivateKeyType!
-}
-
-type UseCaseServiceSmartContractSet {
-  """Smart Contract Set Name"""
-  name: String!
-}
-
-type UseCaseServiceStorage {
-  """Storage Name"""
-  name: String!
-  storageProtocol: StorageProtocol!
 }
 
 """A user"""

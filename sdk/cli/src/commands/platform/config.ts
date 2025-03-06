@@ -3,7 +3,7 @@ import { getRegionId } from "@/utils/cluster-region";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { jsonOutput } from "@/utils/output/json-output";
 import { yamlOutput } from "@/utils/output/yaml-output";
-import { getStarterkits, getUseCases } from "@/utils/platform-utils";
+import { getKits, getUseCases } from "@/utils/platform-utils";
 import { Command, Option } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -37,7 +37,7 @@ export function configCommand() {
 
       const platformConfig = await settlemint.platform.config();
       const useCases = getUseCases(platformConfig);
-      const starterkits = getStarterkits(platformConfig);
+      const kits = getKits(platformConfig);
 
       const platformConfigData = {
         useCases: useCases
@@ -46,10 +46,10 @@ export function configCommand() {
             name: useCase.name,
           }))
           .sort((a, b) => a.name.localeCompare(b.name)),
-        starterkits: starterkits
-          .map((starterkit) => ({
-            id: starterkit.id,
-            name: starterkit.name,
+        kits: kits
+          .map((kit) => ({
+            id: kit.id,
+            name: kit.name,
           }))
           .sort((a, b) => a.name.localeCompare(b.name)),
         deploymentEngineTargets: platformConfig.deploymentEngineTargets
@@ -69,7 +69,7 @@ export function configCommand() {
       };
 
       if (printToTerminal) {
-        table("Templates (Starterkits)", platformConfigData.starterkits);
+        table("Templates (Kits)", platformConfigData.kits);
 
         table("Use cases (Smart Contract Sets)", platformConfigData.useCases);
 

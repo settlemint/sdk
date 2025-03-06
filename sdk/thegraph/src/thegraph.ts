@@ -69,7 +69,7 @@ function getFullUrl(options: ClientOptions): string {
  * @throws Will throw an error if the options fail validation against ClientOptionsSchema
  * @example
  * import { createTheGraphClient } from '@settlemint/sdk-thegraph';
- * import type { introspection } from '@schemas/the-graph-env-starterkits';
+ * import type { introspection } from '@schemas/the-graph-env-kits';
  *
  * // Server-side usage
  * const { client, graphql } = createTheGraphClient<{
@@ -85,7 +85,7 @@ function getFullUrl(options: ClientOptions): string {
  * }>({
  *   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
- *   subgraphName: 'starterkits'
+ *   subgraphName: 'kits'
  * });
  *
  * // Browser-side usage
@@ -100,7 +100,7 @@ function getFullUrl(options: ClientOptions): string {
  *     Timestamp: string;
  *   };
  * }>({
- *   subgraphName: 'starterkits'
+ *   subgraphName: 'kits'
  * });
  *
  * // Making GraphQL queries
