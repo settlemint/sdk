@@ -13,7 +13,7 @@
 
 <pre>Usage: settlemint [command]
 
-CLI for SettleMint (v1.1.12-mainbca5cb96)
+CLI for SettleMint (v1.1.12-main579f46f0)
 
 Options:
   -v, --version                                Output the current version
