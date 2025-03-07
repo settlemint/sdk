@@ -3,11 +3,6 @@ import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 
-type Choice = {
-  name: string;
-  value: PlatformConfig["kits"][number];
-};
-
 export async function templatePrompt(
   platformConfig: PlatformConfig,
   argument?: string,
@@ -28,19 +23,17 @@ export async function templatePrompt(
     return template;
   }
 
-  const selectedValue = (await select({
+  const selectedValue = await select<PlatformConfig["kits"][number]>({
     message: "Which template do you want to use?",
     choices: [
       ...kits
-        .map(
-          (template): Choice => ({
-            name: template.name,
-            value: template,
-          }),
-        )
-        .sort((a: Choice, b: Choice) => a.name.localeCompare(b.name)),
+        .map((template) => ({
+          name: template.name,
+          value: template,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
     ],
-  })) as PlatformConfig["kits"][number];
+  });
 
   return selectedValue;
 }

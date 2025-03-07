@@ -71,7 +71,7 @@ export function createCommand(): Command {
         await spinner({
           startMessage: "Scaffolding the project",
           task: async () => {
-            await downloadAndExtractNpmPackage(selectedTemplate.npmPackageName as string, projectDir);
+            await downloadAndExtractNpmPackage(selectedTemplate.npmPackageName, projectDir);
             await setName(name, projectDir);
           },
           stopMessage: "Project fully scaffolded",
