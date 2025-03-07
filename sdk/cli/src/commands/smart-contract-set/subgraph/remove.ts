@@ -89,14 +89,20 @@ export function subgraphRemoveCommand() {
       const graphEndpoints = await spinner({
         startMessage: "Waiting for subgraph to be removed",
         task: () =>
-          retryWhenFailed(async () => {
-            const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
-            const endpoints = await getGraphEndpoint(settlemintClient, middleware);
-            if (endpoints.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) => endpoint.endsWith(graphName))) {
-              throw new Error(`Subgraph '${graphName}' not removed from middleware '${theGraphMiddleware.uniqueName}'`);
-            }
-            return endpoints;
-          }),
+          retryWhenFailed(
+            async () => {
+              const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
+              const endpoints = await getGraphEndpoint(settlemintClient, middleware);
+              if (endpoints.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) => endpoint.endsWith(graphName))) {
+                throw new Error(
+                  `Subgraph '${graphName}' not removed from middleware '${theGraphMiddleware.uniqueName}'`,
+                );
+              }
+              return endpoints;
+            },
+            5,
+            5_000,
+          ),
         stopMessage: "Waiting finished",
       });
 
