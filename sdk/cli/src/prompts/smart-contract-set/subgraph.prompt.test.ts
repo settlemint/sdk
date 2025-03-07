@@ -40,6 +40,7 @@ describe("subgraphPrompt", () => {
       accept: true,
       message: "Select a subgraph",
       allowAll: true,
+      isCi: false,
     });
 
     expect(result).toEqual(["subgraph1", "subgraph2"]);
@@ -56,6 +57,7 @@ describe("subgraphPrompt", () => {
       env,
       accept: true,
       message: "Select a subgraph",
+      isCi: false,
     });
 
     expect(result).toEqual(["subgraph2"]);
@@ -72,6 +74,7 @@ describe("subgraphPrompt", () => {
       env,
       accept: true,
       message: "Select a subgraph",
+      isCi: false,
     });
 
     expect(result).toEqual([]);
@@ -87,6 +90,7 @@ describe("subgraphPrompt", () => {
       subgraphPrompt({
         env,
         message: "Select a subgraph",
+        isCi: false,
       }),
     ).toThrow();
 
@@ -101,6 +105,7 @@ describe("subgraphPrompt", () => {
     const result = await subgraphPrompt({
       env,
       message: "Select a subgraph",
+      isCi: false,
     });
 
     expect(result).toEqual(["single-subgraph"]);
@@ -125,6 +130,7 @@ describe("subgraphPrompt", () => {
     const result = await subgraphPrompt({
       env,
       message: "Select a subgraph",
+      isCi: false,
     });
 
     expect(result).toEqual(["subgraph2"]);
@@ -142,6 +148,7 @@ describe("subgraphPrompt", () => {
       env,
       message: "Select a subgraph",
       allowAll: true,
+      isCi: false,
     });
 
     expect(result).toEqual(["subgraph1", "subgraph2"]);
@@ -158,6 +165,7 @@ describe("subgraphPrompt", () => {
       env,
       message: "Select a subgraph",
       allowNew: true,
+      isCi: false,
     });
 
     expect(result).toEqual(["new-subgraph"]);
@@ -175,9 +183,35 @@ describe("subgraphPrompt", () => {
       subgraphPrompt({
         env,
         message: "Select a subgraph",
+        isCi: false,
       }),
     ).toThrow();
 
     expect(mockCancel).toHaveBeenCalledWith("No subgraph selected");
+  });
+
+  it("should auto accept when in CI", async () => {
+    const env = {
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph1",
+    };
+
+    const resultNoAllowAll = await subgraphPrompt({
+      env,
+      message: "Select a subgraph",
+      isCi: true,
+      allowAll: false,
+    });
+    expect(resultNoAllowAll).toEqual(["subgraph1"]);
+
+    const resultAllowAll = await subgraphPrompt({
+      env,
+      message: "Select a subgraph",
+      isCi: true,
+      allowAll: true,
+    });
+    expect(resultAllowAll).toEqual(["subgraph1", "subgraph2"]);
+
+    expect(mockSelect).not.toHaveBeenCalled();
   });
 });

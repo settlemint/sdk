@@ -9,11 +9,18 @@ const NEW = "New subgraph";
 
 /**
  * Prompts the user to select a subgraph name from a list of available subgraphs.
- * If running in CI, returns all available subgraphs without prompting.
+ * If running in CI or accept is true, returns the default
+ * subgraph or all available subgraphs (if allowAll is true) without prompting.
  *
- * @param env - Environment variables containing subgraph endpoint URLs
+ * @param options - Configuration options for the subgraph prompt
+ * @param options.env - Environment variables containing subgraph endpoint URLs and default subgraph
+ * @param options.accept - Whether to automatically accept default values without prompting
+ * @param options.message - Message to display in the prompt
+ * @param options.allowAll - Whether to allow selecting all subgraphs at once
+ * @param options.allowNew - Whether to allow creating a new subgraph
+ * @param options.isCi - Whether running in CI environment (defaults to isInCi)
  * @returns Array of selected subgraph names
- * @throws If no subgraph names are available to select from
+ * @throws {Error} If no subgraphs are found or if no subgraph is selected
  */
 export async function subgraphPrompt({
   env,
@@ -21,14 +28,16 @@ export async function subgraphPrompt({
   message,
   allowAll = false,
   allowNew = false,
+  isCi = isInCi,
 }: {
   env: Partial<DotEnv>;
   accept?: boolean;
   message: string;
   allowAll?: boolean;
   allowNew?: boolean;
+  isCi?: boolean;
 }): Promise<string[]> {
-  const autoAccept = isInCi || !!accept;
+  const autoAccept = isCi || !!accept;
   const subgraphNames =
     (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.map((endpoint) => endpoint.split("/").pop()).filter(
       Boolean,
