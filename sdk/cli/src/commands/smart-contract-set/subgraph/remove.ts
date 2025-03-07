@@ -33,7 +33,7 @@ export function subgraphRemoveCommand() {
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
     .option("-f, --force", "Force remove the subgraph without confirmation")
-    .argument("[subgraph-name]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
+    .argument("[subgraph-name]", "The name of the subgraph to remove (defaults to value in .env if not provided)")
     .action(async (subgraphName, { prod, acceptDefaults, force }) => {
       intro("Removing subgraph");
 
