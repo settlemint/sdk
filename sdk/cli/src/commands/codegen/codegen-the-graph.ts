@@ -78,6 +78,23 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
       ],
     );
   }
+
+  if (env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH) {
+    const isDefaulSubgraphGenerated = toGenerate.some((gqlEndpoint) => {
+      const name = gqlEndpoint.split("/").pop()!;
+      return name === env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH;
+    });
+    if (isDefaulSubgraphGenerated) {
+      const nameSuffix = capitalizeFirstLetter(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH);
+      const graphqlClientVariable = getVariableName(`theGraphClient${nameSuffix}`);
+      const graphqlVariable = getVariableName(`theGraphGraphql${nameSuffix}`);
+      template.push(`
+export const theGraphClient = ${graphqlClientVariable};
+export const theGraphGraphql = ${graphqlVariable};
+`);
+    }
+  }
+
   await writeTemplate(template.join("\n"), "/lib/settlemint", "the-graph.ts");
 
   const projectDir = await projectRoot();

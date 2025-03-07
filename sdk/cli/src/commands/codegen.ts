@@ -49,7 +49,12 @@ export function codegenCommand(): Command {
         const env: DotEnv = await loadEnv(true, !!prod);
 
         if (!Array.isArray(thegraphSubgraphNames)) {
-          thegraphSubgraphNames = await subgraphPrompt(env, true);
+          thegraphSubgraphNames = await subgraphPrompt({
+            env,
+            accept: true,
+            message: "Which The Graph subgraph do you want to generate types for?",
+            allowAll: true,
+          });
         }
 
         const { hasura, portal, thegraph, blockscout } = await spinner({
