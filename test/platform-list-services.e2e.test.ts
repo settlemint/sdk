@@ -88,7 +88,7 @@ describe("Test platform list services command", () => {
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
     expect(json.services[0]).toMatchObject({
       group: "Blockchain networks",
-      name: "Starter Kit Network",
+      name: "SDK Demo Network",
       uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
       status: "Completed",
       healthStatus: "NOT BFT",
@@ -138,7 +138,7 @@ describe("Test platform list services command", () => {
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
     expect(parsedYaml.services[0]).toMatchObject({
       group: "Blockchain networks",
-      name: "Starter Kit Network",
+      name: "SDK Demo Network",
       uniqueName: env.SETTLEMINT_BLOCKCHAIN_NETWORK,
       status: "Completed",
       healthStatus: "NOT BFT",
