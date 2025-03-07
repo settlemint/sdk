@@ -12781,6 +12781,20 @@ type Kit {
   services: KitServices!
 }
 
+type KitConfig {
+  """Kit description"""
+  description: String!
+
+  """Kit ID"""
+  id: String!
+
+  """Kit name"""
+  name: String!
+
+  """Kit npm package name"""
+  npmPackageName: String!
+}
+
 type KitPricing {
   addOns: [String!]!
   currency: String!
@@ -16852,7 +16866,7 @@ type PlatformConfigDto {
   hasAdvancedDeploymentConfigEnabled: Boolean!
   hsmAwsKmsKeysEnabled: Boolean!
   id: ID!
-  kits: [Kit!]!
+  kits: [KitConfig!]!
   observability: ObservabilityDto!
   preDeployedContracts: [String!]!
   sdkVersion: String!
