@@ -59,7 +59,7 @@ export async function subgraphPrompt({
     return subgraphNames;
   }
 
-  const choices = subgraphNames.slice();
+  const choices = subgraphNames.slice().sort();
   if (allowAll) {
     choices.unshift(ALL);
   }
