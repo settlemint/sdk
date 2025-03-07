@@ -50,6 +50,8 @@ export function configCommand() {
           .map((kit) => ({
             id: kit.id,
             name: kit.name,
+            description: kit.description,
+            npmPackage: kit.npmPackageName,
           }))
           .sort((a, b) => a.name.localeCompare(b.name)),
         deploymentEngineTargets: platformConfig.deploymentEngineTargets

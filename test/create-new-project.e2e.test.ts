@@ -16,6 +16,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
+const TEMPLATE_VERSION = "0.1.15-main";
 const SUBGRAPH_NAMES = ["kit", "asset-tokenization"];
 
 const COMMAND_TEST_SCOPE = __filename;
@@ -53,7 +54,7 @@ describe("Setup a project using the SDK", () => {
   test("Create a starter kit project", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME],
+      ["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME, "--version", TEMPLATE_VERSION],
       {
         cwd: __dirname,
       },
