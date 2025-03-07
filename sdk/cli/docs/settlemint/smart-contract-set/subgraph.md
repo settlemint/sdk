@@ -11,7 +11,7 @@ Commands:
   <a href="#subgraph-build">build</a>                             Build the subgraph
   <a href="#subgraph-codegen">codegen</a>                           Codegen the subgraph types
   <a href="#subgraph-deploy">deploy</a> [options] [subgraph-name]  Deploy the subgraph
-  <a href="#subgraph-remove">remove</a> [options] &lt;subgraph-name&gt;  Remove a subgraph
+  <a href="#subgraph-remove">remove</a> [options] [subgraph-name]  Remove a subgraph
   help [command]                    display help for command
 </pre>
 
@@ -69,7 +69,8 @@ Examples:
 Remove a subgraph
 
 Arguments:
-  subgraph-name          The name of the subgraph to remove
+  subgraph-name          The name of the subgraph to remove (defaults to value
+                         in .env if not provided)
 
 Options:
   -a, --accept-defaults  Accept the default and previously set values

@@ -90,6 +90,7 @@ describe("Setup a project using the SDK", () => {
 
     expect(env.SETTLEMINT_THEGRAPH).toBeString();
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
+    expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
 
     expect(env.SETTLEMINT_PORTAL).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
@@ -211,6 +212,7 @@ describe("Setup a project using the SDK", () => {
 
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
 
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
     for (const subgraphName of SUBGRAPH_NAMES) {
       const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
         endpoint.endsWith(`/subgraphs/name/${subgraphName}`),

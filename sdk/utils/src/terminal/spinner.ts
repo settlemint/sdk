@@ -64,7 +64,7 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
       return handleError(err as Error);
     }
   }
-  const spinner = yoctoSpinner().start(options.startMessage);
+  const spinner = yoctoSpinner({ stream: process.stdout }).start(options.startMessage);
   try {
     const result = await options.task(spinner);
     spinner.success(options.stopMessage);
