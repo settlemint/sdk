@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -17,7 +17,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
 const TEMPLATE_VERSION = "0.1.15-main";
-const SUBGRAPH_NAMES = ["kit", "asset-tokenization"];
+const SUBGRAPH_NAMES = ["kit", "starterkits"];
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -42,7 +42,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-afterAll(cleanup);
+//afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
