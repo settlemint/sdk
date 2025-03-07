@@ -59,10 +59,7 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
   };
   if (isInCi) {
     try {
-      note(options.startMessage);
-      const result = await options.task();
-      note(options.stopMessage);
-      return result;
+      return await options.task();
     } catch (err) {
       return handleError(err as Error);
     }
