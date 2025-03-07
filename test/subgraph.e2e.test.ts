@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -33,7 +33,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
