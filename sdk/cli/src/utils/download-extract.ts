@@ -4,12 +4,21 @@ import { downloadTemplate } from "giget";
 /**
  * Downloads and extracts an npm package template to the specified target directory.
  *
- * @param template - The template to download
+ * @param npmPackageName - The npm package name to download
+ * @param version - Optional specific version of the package to download (defaults to latest)
  * @param targetDir - The directory to extract the template to
  * @returns A Promise that resolves when the download and extraction are complete
  * @throws Will throw an error if the download or extraction fails
  */
-export async function downloadAndExtractNpmPackage(template: string, targetDir: string): Promise<void> {
+export async function downloadAndExtractNpmPackage({
+  template,
+  version,
+  targetDir,
+}: {
+  template: string;
+  version?: string;
+  targetDir: string;
+}): Promise<void> {
   // Create target directory if it doesn't exist
   await mkdir(targetDir, { recursive: true });
 
@@ -20,7 +29,7 @@ export async function downloadAndExtractNpmPackage(template: string, targetDir: 
   }
   const data = await response.json();
   const latestVersion = data["dist-tags"].latest as string;
-  const tarball = data.versions[latestVersion].dist.tarball as string;
+  const tarball = data.versions[version ?? latestVersion].dist.tarball as string;
 
   // Download and extract the package using giget
   await downloadTemplate(tarball, {

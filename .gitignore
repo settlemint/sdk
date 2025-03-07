@@ -42,7 +42,7 @@ settlemint.config.mjs
 .idea
 
 # Testing
-test/starter-kit-demo
+test/kit-demo
 test/unknown
 test/contracts
 test/contracts-subgraphs

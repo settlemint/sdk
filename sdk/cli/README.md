@@ -35,7 +35,7 @@
   - [Get the version of the CLI](#get-the-version-of-the-cli)
   - [Get help for a command](#get-help-for-a-command)
   - [Login to the platform](#login-to-the-platform)
-  - [Creating a new project from a starter kit template](#creating-a-new-project-from-a-starter-kit-template)
+  - [Creating a new project from a template](#creating-a-new-project-from-a-template)
     - [Installing dependencies](#installing-dependencies)
     - [Connecting to your SettleMint infrastructure](#connecting-to-your-settlemint-infrastructure)
     - [Deploying your smart contracts and subgraphs](#deploying-your-smart-contracts-and-subgraphs)
@@ -139,9 +139,9 @@ Then run the login command and paste your token when prompted:
 settlemint login
 ```
 
-### Creating a new project from a starter kit template
+### Creating a new project from a template
 
-To create a new project from a starter kit template, use the `create` command with the `--template` flag:
+To create a new project from a template, use the `create` command with the `--template` flag:
 
 ```bash
 settlemint create --project-name <project-name> --template <template-name>

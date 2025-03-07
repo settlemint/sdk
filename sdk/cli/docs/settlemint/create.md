@@ -9,6 +9,8 @@ Options:
   -t, --template &lt;template&gt;  The template for your SettleMint project (run
                              `settlemint platform config` to see available
                              templates)
+  -v, --version &lt;version&gt;    Specify the template version to use (defaults to
+                             latest stable version)
   -i, --instance &lt;instance&gt;  The instance to connect to
   -h, --help                 display help for command
 </pre>

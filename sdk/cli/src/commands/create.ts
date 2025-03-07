@@ -2,8 +2,8 @@ import { mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { templatePrompt } from "@/prompts/kit/template.prompt";
 import { projectNamePrompt } from "@/prompts/project-name.prompt";
-import { templatePrompt } from "@/prompts/starter-kit/template.prompt";
 import { downloadAndExtractNpmPackage } from "@/utils/download-extract";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
@@ -31,10 +31,15 @@ export function createCommand(): Command {
         "-t, --template <template>",
         "The template for your SettleMint project (run `settlemint platform config` to see available templates)",
       )
+      .option("-v, --version <version>", "Specify the template version to use (defaults to latest stable version)")
       .option("-i, --instance <instance>", "The instance to connect to")
-      .action(async ({ projectName, template, instance }) => {
+      .action(async ({ projectName, template, version, instance }) => {
         intro("Creating a new SettleMint project");
         const env: Partial<DotEnv> = await loadEnv(false, false);
+
+        if (version && !template) {
+          cancel("The --version option requires the --template option to be set");
+        }
 
         const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
         const settlemint = createSettleMintClient({
@@ -71,7 +76,11 @@ export function createCommand(): Command {
         await spinner({
           startMessage: "Scaffolding the project",
           task: async () => {
-            await downloadAndExtractNpmPackage(selectedTemplate.npmPackageName, projectDir);
+            await downloadAndExtractNpmPackage({
+              template: selectedTemplate.npmPackageName,
+              version,
+              targetDir: projectDir,
+            });
             await setName(name, projectDir);
           },
           stopMessage: "Project fully scaffolded",
