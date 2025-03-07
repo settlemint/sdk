@@ -23,7 +23,7 @@ export async function templatePrompt(
     return template;
   }
 
-  const selectedValue = await select<PlatformConfig["kits"][number]>({
+  const template = await select<PlatformConfig["kits"][number]>({
     message: "Which template do you want to use?",
     choices: [
       ...kits
@@ -35,5 +35,5 @@ export async function templatePrompt(
     ],
   });
 
-  return selectedValue;
+  return template;
 }
