@@ -97,6 +97,7 @@ export function subgraphDeployCommand() {
           env,
           accept: autoAccept,
           message: "Which subgraph do you want to deploy to?",
+          allowNew: true,
         });
         graphName = selectedSubgraphs[0];
       } else {

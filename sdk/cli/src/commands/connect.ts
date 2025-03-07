@@ -91,6 +91,14 @@ export function connectCommand(): Command {
           middlewares,
           accept: acceptDefaults,
         });
+        const graphEndpoints = await getGraphEndpoint(settlemint, thegraph);
+        const [defaultSubgraph] = thegraph
+          ? await subgraphPrompt({
+              env: { ...env, ...graphEndpoints },
+              accept: acceptDefaults,
+              message: "Which TheGraph subgraph do you want to use as the default?",
+            })
+          : [];
         const portal = await portalPrompt({
           env,
           middlewares,
@@ -121,15 +129,6 @@ export function connectCommand(): Command {
           insights,
           accept: acceptDefaults,
         });
-
-        const graphEndpoints = await getGraphEndpoint(settlemint, thegraph);
-        const [defaultSubgraph] = thegraph
-          ? await subgraphPrompt({
-              env: { ...env, ...graphEndpoints },
-              accept: acceptDefaults,
-              message: "Which subgraph do you want to use as the default?",
-            })
-          : [];
 
         if (acceptDefaults) {
           const selectedServices = [

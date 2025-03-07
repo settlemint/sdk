@@ -5,7 +5,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 const ALL = "All";
-const NEW = "New";
+const NEW = "New subgraph";
 
 /**
  * Prompts the user to select a subgraph name from a list of available subgraphs.
@@ -62,7 +62,7 @@ export async function subgraphPrompt({
   if (allowAll) {
     defaultChoice = ALL;
   } else if (allowNew) {
-    defaultChoice = NEW;
+    defaultChoice = env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? NEW;
   } else {
     defaultChoice = env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? subgraphNames[0];
   }
