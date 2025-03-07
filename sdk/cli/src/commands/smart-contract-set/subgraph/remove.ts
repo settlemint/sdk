@@ -3,6 +3,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { deleteConfirmationPrompt } from "@/prompts/delete-confirmation.prompt";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
@@ -31,17 +32,27 @@ export function subgraphRemoveCommand() {
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
     .option("-f, --force", "Force remove the subgraph without confirmation")
-    .argument("<subgraph-name>", "The name of the subgraph to remove")
+    .argument("[subgraph-name]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
     .action(async (subgraphName, { prod, acceptDefaults, force }) => {
       intro("Removing subgraph");
-      await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
 
-      if (!force) {
-        await deleteConfirmationPrompt(`the subgraph ${subgraphName}`);
-      }
+      await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
 
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
+
+      const selectedSubgraphs = subgraphName
+        ? [subgraphName]
+        : await subgraphPrompt({
+            env,
+            accept: autoAccept,
+            message: "Which subgraph do you want to remove?",
+          });
+      const graphName = selectedSubgraphs[0];
+
+      if (!force) {
+        await deleteConfirmationPrompt(`the subgraph ${graphName}`);
+      }
 
       const instance = await instancePrompt(env, true);
       const accessToken = await getApplicationOrPersonalAccessToken({
@@ -67,7 +78,7 @@ export function subgraphRemoveCommand() {
         theGraphMiddleware.serviceUrl,
       ).toString();
 
-      await executeCommand(command, [...args, "graph", "remove", "--node", middlewareAdminUrl, subgraphName]);
+      await executeCommand(command, [...args, "graph", "remove", "--node", middlewareAdminUrl, graphName]);
 
       const settlemintClient = createSettleMintClient({
         accessToken,
@@ -78,8 +89,10 @@ export function subgraphRemoveCommand() {
       await writeEnvSpinner(!!prod, {
         ...env,
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
+        SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH:
+          env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH === graphName ? undefined : env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH,
         ...graphEndpoints,
       });
-      outro(`Subgraph ${subgraphName} removed successfully`);
+      outro(`Subgraph ${graphName} removed successfully`);
     });
 }
