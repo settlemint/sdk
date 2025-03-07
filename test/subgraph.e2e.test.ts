@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -33,7 +33,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-afterAll(cleanup);
+//afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -144,6 +144,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
     expect(output).toInclude("Build completed");
 
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
     const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
       endpoint.endsWith(`/subgraphs/name/${SUBGRAPH_NAME}`),
     );
@@ -168,11 +169,12 @@ describe("Build and deploy a subgraph using the SDK", () => {
     expect(output).toInclude(`Subgraph ${SUBGRAPH_NAME} removed successfully`);
 
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
     const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
       endpoint.endsWith(`/subgraphs/name/${SUBGRAPH_NAME}`),
     );
     if (subgraphDeployed) {
-      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).not.toInclude(SUBGRAPH_NAME);
+      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.join(",")).not.toInclude(SUBGRAPH_NAME);
     } else {
       expect(subgraphDeployed).toBeFalse();
     }

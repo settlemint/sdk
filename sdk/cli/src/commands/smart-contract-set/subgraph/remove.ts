@@ -13,9 +13,10 @@ import { getSubgraphYamlFile } from "@/utils/subgraph/subgraph-config";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
+import { retryWhenFailed } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import isInCi from "is-in-ci";
 
 export function subgraphRemoveCommand() {
@@ -84,8 +85,21 @@ export function subgraphRemoveCommand() {
         accessToken,
         instance,
       });
-      const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
-      const graphEndpoints = await getGraphEndpoint(settlemintClient, middleware);
+
+      const graphEndpoints = await spinner({
+        startMessage: "Waiting for subgraph to be removed",
+        task: () =>
+          retryWhenFailed(async () => {
+            const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
+            const endpoints = await getGraphEndpoint(settlemintClient, middleware);
+            if (endpoints.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) => endpoint.endsWith(graphName))) {
+              throw new Error(`Subgraph '${graphName}' not removed from middleware '${theGraphMiddleware.uniqueName}'`);
+            }
+            return endpoints;
+          }),
+        stopMessage: "Waiting finished",
+      });
+
       await writeEnvSpinner(!!prod, {
         ...env,
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
