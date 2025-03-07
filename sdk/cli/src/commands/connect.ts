@@ -96,7 +96,7 @@ export function connectCommand(): Command {
           ? await subgraphPrompt({
               env: { ...env, ...graphEndpoints },
               accept: acceptDefaults,
-              message: "Which TheGraph subgraph do you want to use as the default?",
+              message: "Which The Graph subgraph do you want to use as the default?",
             })
           : [];
         const portal = await portalPrompt({

@@ -109,7 +109,7 @@ export function subgraphDeployCommand() {
       }
 
       if (!graphName) {
-        cancel("No subgraph name provided. Please provide a graph name to continue.");
+        cancel("No subgraph name provided. Please provide a subgraph name to continue.");
       }
 
       const middlewareAdminUrl = new URL(
