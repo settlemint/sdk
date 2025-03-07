@@ -30,6 +30,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { subgraphPrompt } from "../prompts/smart-contract-set/subgraph.prompt";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -121,6 +122,15 @@ export function connectCommand(): Command {
           accept: acceptDefaults,
         });
 
+        const graphEndpoints = await getGraphEndpoint(settlemint, thegraph);
+        const [defaultSubgraph] = thegraph
+          ? await subgraphPrompt({
+              env: { ...env, ...graphEndpoints },
+              accept: acceptDefaults,
+              message: "Which subgraph do you want to use as the default?",
+            })
+          : [];
+
         if (acceptDefaults) {
           const selectedServices = [
             {
@@ -197,7 +207,8 @@ export function connectCommand(): Command {
           SETTLEMINT_HASURA: hasura?.uniqueName,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,
-          ...(await getGraphEndpoint(settlemint, thegraph)),
+          SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: defaultSubgraph,
+          ...graphEndpoints,
           SETTLEMINT_PORTAL: portal?.uniqueName,
           ...getPortalEndpoints(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,

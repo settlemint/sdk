@@ -3,6 +3,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { subgraphNamePrompt } from "@/prompts/smart-contract-set/subgraph-name.prompt";
+import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
@@ -90,14 +91,24 @@ export function subgraphDeployCommand() {
         }
       }
 
-      const graphName = await subgraphNamePrompt({
-        defaultName: subgraphName,
-        env,
-        accept: autoAccept,
-        prod: !!prod,
-      });
+      let graphName: string | undefined;
+      if (!subgraphName) {
+        const selectedSubgraphs = await subgraphPrompt({
+          env,
+          accept: autoAccept,
+          message: "Which subgraph do you want to deploy to?",
+        });
+        graphName = selectedSubgraphs[0];
+      } else {
+        graphName = await subgraphNamePrompt({
+          defaultName: subgraphName,
+          env,
+          accept: autoAccept,
+        });
+      }
+
       if (!graphName) {
-        cancel("No graph name provided. Please provide a graph name to continue.");
+        cancel("No subgraph name provided. Please provide a graph name to continue.");
       }
 
       const middlewareAdminUrl = new URL(

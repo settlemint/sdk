@@ -41,8 +41,8 @@ export const DotEnvSchema = z.object({
     (value) => tryParseJson(value as string, []),
     z.array(UrlSchema).optional(),
   ),
-  /** Name of The Graph subgraph */
-  SETTLEMINT_THEGRAPH_SUBGRAPH_NAME: z.string().optional(),
+  /** Default The Graph subgraph to use */
+  SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: z.string().optional(),
   /** Unique name of the Smart Contract Portal instance */
   SETTLEMINT_PORTAL: UniqueNameSchema.optional(),
   /** GraphQL endpoint URL for the Portal */
