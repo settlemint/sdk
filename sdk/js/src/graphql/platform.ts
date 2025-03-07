@@ -36,6 +36,8 @@ const getPlatformConfigQuery = graphql(
         kits {
           id
           name
+          description
+          npmPackageName
         }
       }
     }

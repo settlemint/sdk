@@ -3,7 +3,10 @@ import select from "@inquirer/select";
 import type { PlatformConfig } from "@settlemint/sdk-js";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 
-export async function templatePrompt(platformConfig: PlatformConfig, argument?: string): Promise<string> {
+export async function templatePrompt(
+  platformConfig: PlatformConfig,
+  argument?: string,
+): Promise<PlatformConfig["kits"][number]> {
   const kits = getKits(platformConfig);
 
   if (kits.length === 0) {
@@ -17,16 +20,16 @@ export async function templatePrompt(platformConfig: PlatformConfig, argument?: 
     if (!template) {
       cancel(`No template found with name '${argument}'`);
     }
-    return template.id;
+    return template;
   }
 
-  const template = await select({
+  const template = await select<PlatformConfig["kits"][number]>({
     message: "Which template do you want to use?",
     choices: [
       ...kits
         .map((template) => ({
           name: template.name,
-          value: template.id,
+          value: template,
         }))
         .sort((a, b) => a.name.localeCompare(b.name)),
     ],
