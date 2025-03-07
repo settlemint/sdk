@@ -15,8 +15,8 @@ import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "kit-demo";
-const TEMPLATE_NAME = "asset-tokenization-kit";
-const SUBGRAPH_NAMES = ["kits", "asset-tokenization-kit"];
+const TEMPLATE_NAME = "asset-tokenization";
+const SUBGRAPH_NAMES = ["kit", "asset-tokenization"];
 
 const COMMAND_TEST_SCOPE = __filename;
 
