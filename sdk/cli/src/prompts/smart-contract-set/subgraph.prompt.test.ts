@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it, mock } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, it, mock } from "bun:test";
 import { ModuleMocker } from "@/utils/test/module-mocker";
 import { subgraphPrompt } from "./subgraph.prompt";
 
@@ -30,6 +30,12 @@ afterAll(() => {
 });
 
 describe("subgraphPrompt", () => {
+  afterEach(() => {
+    mockSelect.mockClear();
+    mockCancel.mockClear();
+    mockSubgraphNamePrompt.mockClear();
+  });
+
   it("should return all subgraphs when accept is true and allow all is true", async () => {
     const env = {
       SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
@@ -159,7 +165,7 @@ describe("subgraphPrompt", () => {
       SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
     };
 
-    mockSelect.mockImplementationOnce(() => Promise.resolve("New"));
+    mockSelect.mockImplementationOnce(() => Promise.resolve("New subgraph"));
 
     const result = await subgraphPrompt({
       env,
