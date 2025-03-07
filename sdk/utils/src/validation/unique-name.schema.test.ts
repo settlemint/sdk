@@ -4,7 +4,7 @@ import { UniqueNameSchema } from "./unique-name.schema.js";
 
 describe("UniqueNameSchema", () => {
   test("should validate valid unique names", () => {
-    const validNames = ["starter-kit-demo-workspace-dcfea", "starter-kit-dc58a"];
+    const validNames = ["kit-demo-workspace-dcfea", "kit-dc58a"];
 
     for (const validName of validNames) {
       expect(() => UniqueNameSchema.parse(validName)).not.toThrow();

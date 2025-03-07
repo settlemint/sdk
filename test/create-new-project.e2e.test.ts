@@ -51,7 +51,7 @@ afterEach(() => {
 describe("Setup a project using the SDK", () => {
   let contractsDeploymentInfo: Record<string, string>;
 
-  test("Create a starter kit project", async () => {
+  test(`Create a ${TEMPLATE_NAME} project`, async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["create", "--project-name", PROJECT_NAME, "--template", TEMPLATE_NAME, "--version", TEMPLATE_VERSION],
@@ -116,7 +116,7 @@ describe("Setup a project using the SDK", () => {
     await $`rm -rf node_modules/next`.env(env);
   });
 
-  test("Connect starter kit", async () => {
+  test("Connect to platform", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
       .result;
     expect(output).toInclude("Connected to SettleMint");
@@ -223,7 +223,7 @@ describe("Setup a project using the SDK", () => {
     }
   });
 
-  test("dApp - Codegen starter kit", async () => {
+  test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["codegen", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
@@ -241,7 +241,7 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test("Build starter kit", async () => {
+  test("Build app", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
       await $`bun lint`.cwd(projectDir).env(env);

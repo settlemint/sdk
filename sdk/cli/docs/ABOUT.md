@@ -87,9 +87,9 @@ Then run the login command and paste your token when prompted:
 settlemint login
 ```
 
-### Creating a new project from a starter kit template
+### Creating a new project from a template
 
-To create a new project from a starter kit template, use the `create` command with the `--template` flag:
+To create a new project from a template, use the `create` command with the `--template` flag:
 
 ```bash
 settlemint create --project-name <project-name> --template <template-name>
