@@ -165,7 +165,7 @@ const extractTypes = (schema: GraphQLSchema): Map<string, GraphQLNamedType> => {
 
   for (const [name, type] of Object.entries(typeMap)) {
     // Skip internal GraphQL types
-    if (name.startsWith("__")) continue;
+    if (name.startsWith("__")) {
     types.set(name, type);
   }
 
