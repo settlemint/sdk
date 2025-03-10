@@ -15,7 +15,7 @@ export function applicationAccessTokenCreateCommand() {
     execute: (cmd, baseAction) => {
       cmd
         .option(
-          "-app, --application <application>",
+          "--app, --application <application>",
           "The application unique name to create the application access token for (defaults to application from env)",
         )
         .addOption(

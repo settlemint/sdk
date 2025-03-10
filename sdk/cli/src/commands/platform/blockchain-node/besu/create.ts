@@ -22,7 +22,7 @@ export function blockchainNodeBesuCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option(
-          "-app, --application <application>",
+          "--app, --application <application>",
           "The application unique name to create the node in (defaults to application from env)",
         )
         .option("--blockchain-network <blockchainNetwork>", "Blockchain network unique name to add this node to")
