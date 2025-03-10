@@ -11,6 +11,7 @@ import { hasuraMutation } from "./tools/hasura/mutation";
 import { hasuraMutations } from "./tools/hasura/mutations";
 import { hasuraQueries } from "./tools/hasura/queries";
 import { hasuraQuery } from "./tools/hasura/query";
+import { platformWorkspaceList } from "./tools/platform/workspace/list";
 import { portalMutation } from "./tools/portal/mutation";
 import { portalMutations } from "./tools/portal/mutations";
 import { portalQuery } from "./tools/portal/query";
@@ -58,6 +59,9 @@ hasuraQueries(server, env);
 hasuraQuery(server, env);
 hasuraMutations(server, env);
 hasuraMutation(server, env);
+
+// Register Platform tools
+platformWorkspaceList(server, env);
 
 // Start the server with the StdioServerTransport
 const transport = new StdioServerTransport();
