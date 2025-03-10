@@ -3,14 +3,34 @@ import { UrlLoader } from "@graphql-tools/url-loader";
 import type { GraphQLFieldMap, GraphQLNamedType, GraphQLObjectType, GraphQLSchema, GraphQLType } from "graphql";
 
 /**
+ * Creates a promise that rejects after a specified timeout
+ * @param ms - Timeout in milliseconds
+ * @returns A promise that rejects after the specified timeout
+ */
+const createTimeoutPromise = (ms: number): Promise<never> => {
+  return new Promise((_, reject) => {
+    setTimeout(() => {
+      reject(new Error(`Operation timed out after ${ms}ms`));
+    }, ms);
+  });
+};
+
+/**
  * Fetches and processes a GraphQL schema from a given endpoint
  * @param endpoint - The GraphQL endpoint URL
  * @param accessToken - The access token for authentication
+ * @param adminSecret - Optional admin secret for Hasura GraphQL endpoints
+ * @param timeoutMs - Optional timeout in milliseconds (defaults to 30000ms/30s)
  * @returns The raw GraphQL schema
- * @throws Error if the schema cannot be fetched
+ * @throws Error if the schema cannot be fetched or the operation times out
  */
-async function fetchGraphQLSchema(endpoint: string, accessToken: string, adminSecret?: string): Promise<GraphQLSchema> {
-  return loadSchema(endpoint, {
+async function fetchGraphQLSchema(
+  endpoint: string,
+  accessToken: string,
+  adminSecret?: string,
+  timeoutMs = 30000,
+): Promise<GraphQLSchema> {
+  const schemaPromise = loadSchema(endpoint, {
     loaders: [new UrlLoader()],
     headers: {
       "Content-Type": "application/json",
@@ -19,14 +39,19 @@ async function fetchGraphQLSchema(endpoint: string, accessToken: string, adminSe
     },
     method: "POST",
   });
+
+  // Race between the schema loading and a timeout
+  return Promise.race([schemaPromise, createTimeoutPromise(timeoutMs)]);
 }
 
 /**
  * Fetches and processes a GraphQL schema from a given endpoint
  * @param endpoint - The GraphQL endpoint URL
  * @param accessToken - The access token for authentication
+ * @param adminSecret - Optional admin secret for Hasura GraphQL endpoints
+ * @param timeoutMs - Optional timeout in milliseconds (defaults to 30000ms/30s)
  * @returns The processed schema result with human-readable description
- * @throws Error if the schema cannot be fetched or processed
+ * @throws Error if the schema cannot be fetched or processed or the operation times out
  * @example
  * import { fetchProcessedSchema } from '@/utils/fetch/portal';
  *
@@ -38,8 +63,9 @@ export async function fetchProcessedSchema(
   endpoint: string,
   accessToken: string,
   adminSecret?: string,
+  timeoutMs = 30000,
 ): Promise<SchemaResult> {
-  const schema = await fetchGraphQLSchema(endpoint, accessToken, adminSecret);
+  const schema = await fetchGraphQLSchema(endpoint, accessToken, adminSecret, timeoutMs);
   return processSchema(schema);
 }
 
@@ -129,6 +155,8 @@ const processFields = (type: GraphQLObjectType<unknown, unknown>): GraphQLFieldM
 const extractQueries = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
   const queryType = schema.getQueryType();
   if (!queryType) {
+    return {};
+  }
   return processFields(queryType);
 };
 
@@ -140,6 +168,8 @@ const extractQueries = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown
 const extractMutations = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
   const mutationType = schema.getMutationType();
   if (!mutationType) {
+    return {};
+  }
   return processFields(mutationType);
 };
 
@@ -151,6 +181,8 @@ const extractMutations = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unkno
 const extractSubscriptions = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
   const subscriptionType = schema.getSubscriptionType();
   if (!subscriptionType) {
+    return {};
+  }
   return processFields(subscriptionType);
 };
 
@@ -166,6 +198,8 @@ const extractTypes = (schema: GraphQLSchema): Map<string, GraphQLNamedType> => {
   for (const [name, type] of Object.entries(typeMap)) {
     // Skip internal GraphQL types
     if (name.startsWith("__")) {
+      continue;
+    }
     types.set(name, type);
   }
 
@@ -206,7 +240,7 @@ const extractOperationNames = (fields: GraphQLFieldMap<unknown, unknown>): strin
  * console.log(result.schemaDescription); // Human-readable schema description
  * console.log(result.rawSchemaInfo); // Raw schema information
  */
-const processSchema = (schema: GraphQLSchema): SchemaResult => {
+export const processSchema = (schema: GraphQLSchema): SchemaResult => {
   const schemaInfo = extractSchemaInfo(schema);
   const schemaDescription = createSchemaDescription(schema);
   const queryNames = extractOperationNames(schemaInfo.queries);
