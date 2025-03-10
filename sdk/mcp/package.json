@@ -1,0 +1,67 @@
+{
+  "name": "@settlemint/sdk-mcp",
+  "description": "MCP interface for SettleMint SDK, providing development tools and project management capabilities",
+  "version": "0.9.0",
+  "type": "module",
+  "private": false,
+  "license": "FSL-1.1-MIT",
+  "author": {
+    "name": "SettleMint",
+    "email": "support@settlemint.com",
+    "url": "https://settlemint.com"
+  },
+  "homepage": "https://github.com/settlemint/sdk/blob/main/sdk/mpc/README.md",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/settlemint/sdk.git",
+    "directory": "sdk/mpc"
+  },
+  "bugs": {
+    "url": "https://github.com/settlemint/sdk/issues",
+    "email": "support@settlemint.com"
+  },
+  "files": ["dist"],
+  "exports": {
+    "./*": {
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.mjs"
+    }
+  },
+  "bin": {
+    "settlemint": "dist/mcp.js"
+  },
+  "scripts": {
+    "build": "bun run build.ts",
+    "dev": "tsup-node --watch",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
+    "typecheck": "tsc --noEmit",
+    "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
+    "docs": "bun scripts/create-docs.ts",
+    "prepack": "cp ../../LICENSE ."
+  },
+  "dependencies": {
+    "@graphql-tools/load": "8.0.17",
+    "@graphql-tools/url-loader": "8.0.29",
+    "@modelcontextprotocol/sdk": "1.6.1",
+    "zod": "3.24.2"
+  },
+  "devDependencies": {},
+  "peerDependencies": {},
+  "engines": {
+    "node": ">=20"
+  },
+  "keywords": [
+    "settlemint",
+    "blockchain",
+    "blockchain-development",
+    "enterprise-blockchain",
+    "web3",
+    "web3-development",
+    "web3-tools",
+    "sdk",
+    "typescript",
+    "cli",
+    "mpc"
+  ]
+}
