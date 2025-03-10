@@ -150,7 +150,7 @@ const extractMutations = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unkno
  */
 const extractSubscriptions = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
   const subscriptionType = schema.getSubscriptionType();
-  if (!subscriptionType) return {};
+  if (!subscriptionType) {
   return processFields(subscriptionType);
 };
 
