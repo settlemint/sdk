@@ -10,15 +10,15 @@
 
 <p align="center">
 <a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-cli" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-cli" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-cli" alt="npm"></a>
+<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-mcp" alt="License"></a>
+<a href="https://www.npmjs.com/package/@settlemint/sdk-mcp" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-mcp" alt="npm"></a>
 <a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
 </p>
 
 <div align="center">
   <a href="https://console.settlemint.com/documentation/docs/using-platform/dev-tools/SDK/">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-cli">NPM</a>
+  <a href="https://www.npmjs.com/package/@settlemint/sdk-mcp">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
@@ -58,19 +58,19 @@ The SettleMint CLI provides a command-line interface for interacting with the Se
 
 ```bash
 # npm
-npm install @settlemint/sdk-cli
+npm install @settlemint/sdk-mcp
 npx settlemint --version
 
 # bun
-bun add @settlemint/sdk-cli
+bun add @settlemint/sdk-mcp
 bunx settlemint --version
 
 # pnpm
-pnpm add @settlemint/sdk-cli
+pnpm add @settlemint/sdk-mcp
 pnpm dlx settlemint --version
 
 # yarn
-yarn add @settlemint/sdk-cli
+yarn add @settlemint/sdk-mcp
 yarn create settlemint --version
 ```
 
@@ -78,16 +78,16 @@ yarn create settlemint --version
 
 ```bash
 # npm
-npm install -g @settlemint/sdk-cli
+npm install -g @settlemint/sdk-mcp
 
 # bun
-bun install -g @settlemint/sdk-cli
+bun install -g @settlemint/sdk-mcp
 
 # pnpm
-pnpm add -g @settlemint/sdk-cli
+pnpm add -g @settlemint/sdk-mcp
 
 # yarn
-yarn global add @settlemint/sdk-cli
+yarn global add @settlemint/sdk-mcp
 ```
 
 You can access the CLI globally by running `settlemint` in your terminal.
