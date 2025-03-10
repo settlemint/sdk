@@ -2,11 +2,14 @@ import { portalQueries } from "@/tools/portal/queries";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, PersonalAccessTokenSchema } from "@settlemint/sdk-utils/validation";
+import { Command } from "commander";
 import pkg from "../package.json";
 import { hasuraPrompt } from "./prompts/hasura/hasura";
 import { portalPrompt } from "./prompts/portal/portal";
 import { thegraphPrompt } from "./prompts/thegraph/thegraph";
+import { platformToolsUsagePrompt } from "./prompts/tool-usage/platform-tools";
+import { registerBlockchainConcepts } from "./resources/blockchain-concepts";
 import { hasuraMutation } from "./tools/hasura/mutation";
 import { hasuraMutations } from "./tools/hasura/mutations";
 import { hasuraQueries } from "./tools/hasura/queries";
@@ -56,118 +59,162 @@ import { platformWorkspaceCreate } from "./tools/platform/workspace/create.js";
 import { platformWorkspaceDelete } from "./tools/platform/workspace/delete.js";
 import { platformWorkspaceList } from "./tools/platform/workspace/list.js";
 import { platformWorkspaceRead } from "./tools/platform/workspace/read.js";
+import { portalMutation } from "./tools/portal/mutation";
+import { portalMutations } from "./tools/portal/mutations";
+import { portalQuery } from "./tools/portal/query";
 
-const server = new McpServer(
-  {
-    name: "SettleMint",
-    version: pkg.version,
-  },
-  {
-    capabilities: {
-      resources: {
-        portal: {
-          description: "The portal resource",
-        },
-        thegraph: {
-          description: "The Graph resource",
-        },
-      },
-    },
-  },
-);
+/**
+ * Parse command line arguments using Commander
+ *
+ * @returns The parsed command line options
+ * @example
+ * import { parseArguments } from '@settlemint/sdk-mcp';
+ *
+ * const args = parseArguments();
+ * console.log(args.path); // Path to the directory containing .env files
+ * console.log(args.pat); // Personal Access Token
+ */
+function parseArguments() {
+  const program = new Command();
 
-// Get the path from command line arguments (it will be the last argument)
-const path = process.argv[process.argv.length - 1];
-const env: Partial<DotEnv> = await loadEnv(true, false, path);
+  program
+    .name("settlemint")
+    .description("SettleMint SDK MCP Interface")
+    .version(pkg.version)
+    .option("--path <path>", "Path to the directory containing .env files")
+    .option("--pat <token>", "Personal Access Token for authentication")
+    .allowUnknownOption(true) // Allow unknown options to support future extensions
+    .parse(process.argv);
 
-// Register Portal tools
-portalPrompt(server);
-portalQueries(server, env);
+  return program.opts();
+}
 
-// Register The Graph tools
-thegraphPrompt(server);
+/**
+ * Main function to initialize and start the MCP server
+ */
+async function main() {
+  try {
+    const server = new McpServer({
+      name: "SettleMint",
+      version: pkg.version,
+    });
 
-// Register Hasura tools
-hasuraPrompt(server);
-hasuraQueries(server, env);
-hasuraQuery(server, env);
-hasuraMutations(server, env);
-hasuraMutation(server, env);
+    // Parse command line arguments
+    const args = parseArguments();
+    const envPath = args.path || process.cwd();
+    const pat = PersonalAccessTokenSchema.parse(args.pat);
 
-// Register Platform tools
-// Workspace tools
-platformWorkspaceList(server, env);
-platformWorkspaceRead(server, env);
-platformWorkspaceCreate(server, env);
-platformWorkspaceDelete(server, env);
-platformWorkspaceAddCredits(server, env);
+    // Load environment variables
+    const env: Partial<DotEnv> = await loadEnv(true, false, envPath);
 
-// Application tools
-platformApplicationList(server, env);
-platformApplicationRead(server, env);
-platformApplicationCreate(server, env);
-platformApplicationDelete(server, env);
+    // Register Portal tools
+    portalPrompt(server);
+    portalQueries(server, env);
+    portalMutations(server, env);
+    portalQuery(server, env);
+    portalMutation(server, env);
 
-// Blockchain Network tools
-platformBlockchainNetworkList(server, env);
-platformBlockchainNetworkRead(server, env);
-platformBlockchainNetworkCreate(server, env);
-platformBlockchainNetworkDelete(server, env);
-platformBlockchainNetworkRestart(server, env);
+    // Register The Graph tools
+    thegraphPrompt(server);
 
-// Blockchain Node tools
-platformBlockchainNodeList(server, env);
-platformBlockchainNodeRead(server, env);
-platformBlockchainNodeCreate(server, env);
-platformBlockchainNodeRestart(server, env);
+    // Register Hasura tools
+    hasuraPrompt(server);
+    hasuraQueries(server, env);
+    hasuraQuery(server, env);
+    hasuraMutation(server, env);
+    hasuraMutations(server, env);
 
-// Middleware tools
-platformMiddlewareList(server, env);
-platformMiddlewareRead(server, env);
-platformMiddlewareGraphSubgraphs(server, env);
-platformMiddlewareCreate(server, env);
-platformMiddlewareRestart(server, env);
+    // Register resources
+    registerBlockchainConcepts(server);
 
-// Integration Tool tools
-platformIntegrationToolList(server, env);
-platformIntegrationToolRead(server, env);
-platformIntegrationToolCreate(server, env);
-platformIntegrationToolRestart(server, env);
+    // Register usage prompts
+    platformToolsUsagePrompt(server);
 
-// Storage tools
-platformStorageList(server, env);
-platformStorageRead(server, env);
-platformStorageCreate(server, env);
-platformStorageRestart(server, env);
+    // Register Platform tools
+    // Workspace tools
+    platformWorkspaceList(server, env, pat);
+    platformWorkspaceRead(server, env, pat);
+    platformWorkspaceCreate(server, env, pat);
+    platformWorkspaceDelete(server, env, pat);
+    platformWorkspaceAddCredits(server, env, pat);
 
-// Private Key tools
-platformPrivateKeyList(server, env);
-platformPrivateKeyRead(server, env);
-platformPrivateKeyCreate(server, env);
-platformPrivateKeyRestart(server, env);
+    // Application tools
+    platformApplicationList(server, env, pat);
+    platformApplicationRead(server, env, pat);
+    platformApplicationCreate(server, env, pat);
+    platformApplicationDelete(server, env, pat);
 
-// Insights tools
-platformInsightsList(server, env);
-platformInsightsRead(server, env);
-platformInsightsCreate(server, env);
-platformInsightsRestart(server, env);
+    // Blockchain Network tools
+    platformBlockchainNetworkList(server, env, pat);
+    platformBlockchainNetworkRead(server, env, pat);
+    platformBlockchainNetworkCreate(server, env, pat);
+    platformBlockchainNetworkDelete(server, env, pat);
+    platformBlockchainNetworkRestart(server, env, pat);
 
-// Custom Deployment tools
-platformCustomDeploymentList(server, env);
-platformCustomDeploymentRead(server, env);
+    // Blockchain Node tools
+    platformBlockchainNodeList(server, env, pat);
+    platformBlockchainNodeRead(server, env, pat);
+    platformBlockchainNodeCreate(server, env, pat);
+    platformBlockchainNodeRestart(server, env, pat);
 
-// Foundry tools
-platformFoundryEnv(server, env);
+    // Middleware tools
+    platformMiddlewareList(server, env, pat);
+    platformMiddlewareRead(server, env, pat);
+    platformMiddlewareGraphSubgraphs(server, env, pat);
+    platformMiddlewareCreate(server, env, pat);
+    platformMiddlewareRestart(server, env, pat);
 
-// Application Access Token tools
-platformApplicationAccessTokenCreate(server, env);
+    // Integration Tool tools
+    platformIntegrationToolList(server, env, pat);
+    platformIntegrationToolRead(server, env, pat);
+    platformIntegrationToolCreate(server, env, pat);
+    platformIntegrationToolRestart(server, env, pat);
 
-// Platform tools
-platformPlatformConfig(server, env);
+    // Storage tools
+    platformStorageList(server, env, pat);
+    platformStorageRead(server, env, pat);
+    platformStorageCreate(server, env, pat);
+    platformStorageRestart(server, env, pat);
 
-// Wallet tools
-platformWalletPincodeVerificationResponse(server, env);
+    // Private Key tools
+    platformPrivateKeyList(server, env, pat);
+    platformPrivateKeyRead(server, env, pat);
+    platformPrivateKeyCreate(server, env, pat);
+    platformPrivateKeyRestart(server, env, pat);
 
-// Start the server with the StdioServerTransport
-const transport = new StdioServerTransport();
-await server.connect(transport);
+    // Insights tools
+    platformInsightsList(server, env, pat);
+    platformInsightsRead(server, env, pat);
+    platformInsightsCreate(server, env, pat);
+    platformInsightsRestart(server, env, pat);
+
+    // Custom Deployment tools
+    platformCustomDeploymentList(server, env, pat);
+    platformCustomDeploymentRead(server, env, pat);
+
+    // Foundry tools
+    platformFoundryEnv(server, env, pat);
+
+    // Application Access Token tools
+    platformApplicationAccessTokenCreate(server, env, pat);
+
+    // Platform tools
+    platformPlatformConfig(server, env, pat);
+
+    // Wallet tools
+    platformWalletPincodeVerificationResponse(server, env, pat);
+
+    // Start the server
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+  } catch (error) {
+    console.error("Error starting MCP server:", error);
+    process.exit(1);
+  }
+}
+
+// Start the application
+main().catch((error) => {
+  console.error("Unhandled error:", error);
+  process.exit(1);
+});

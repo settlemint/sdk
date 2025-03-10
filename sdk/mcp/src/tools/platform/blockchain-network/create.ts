@@ -8,34 +8,30 @@ import { z } from "zod";
  *
  * @param server - The MCP server instance
  * @param env - Environment variables containing SettleMint credentials
+ * @param pat - Personal Access Token for SettleMint API
  * @throws Error if required environment variables are not set
  *
  * @example
- * import { platformBlockchainNetworkCreate } from "@settlemint/sdk-mcp/tools/platform/blockchainNetwork/create";
+ * import { platformBlockchainNetworkCreate } from "@settlemint/sdk-mcp/tools/platform/blockchain-network/create";
  *
- * platformBlockchainNetworkCreate(server, env);
+ * platformBlockchainNetworkCreate(server, env, pat);
  */
-export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<DotEnv>) => {
+export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
   const instance = env.SETTLEMINT_INSTANCE;
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   if (!instance) {
     throw new Error("SETTLEMINT_INSTANCE is not set");
   }
 
-  if (!accessToken) {
-    throw new Error("SETTLEMINT_ACCESS_TOKEN is not set");
-  }
-
   const client = createSettleMintClient({
-    accessToken: accessToken,
+    accessToken: pat,
     instance: instance,
   });
 
   server.tool(
     "platform-blockchain-network-create",
     {
-      applicationUniqueName: z.string().describe("Unique name of the application to create the network in"),
+      applicationUniqueName: z.string().describe("Unique name of the application to create the network in").optional(),
       name: z.string().describe("Name of the blockchain network"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the blockchain network (DEDICATED or SHARED)"),
       provider: z.string().describe("Provider for the blockchain network"),
@@ -58,8 +54,20 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
         .describe("Consensus algorithm for the blockchain network"),
     },
     async (params) => {
+      // Prioritize environment variable over LLM-provided parameter for application
+      const applicationUniqueName = env.SETTLEMINT_APPLICATION || params.applicationUniqueName;
+
+      if (!applicationUniqueName) {
+        throw new Error(
+          "Application unique name is required. Set SETTLEMINT_APPLICATION environment variable or provide applicationUniqueName parameter.",
+        );
+      }
+
+      // For network name, we could potentially use SETTLEMINT_BLOCKCHAIN_NETWORK if it's set
+      // but this is a creation operation, so we'll use the provided name parameter
+
       const network = await client.blockchainNetwork.create({
-        applicationUniqueName: params.applicationUniqueName,
+        applicationUniqueName,
         name: params.name,
         type: params.type,
         provider: params.provider,
@@ -73,7 +81,7 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
           {
             type: "text",
             name: "Blockchain Network Created",
-            description: `Created blockchain network: ${params.name} in application: ${params.applicationUniqueName}`,
+            description: `Created blockchain network: ${params.name} in application: ${applicationUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(network, null, 2),
           },

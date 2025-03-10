@@ -4,47 +4,52 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
- * Creates a tool for restarting a blockchain network by its unique name
+ * Creates a tool for restarting a blockchain network
  *
  * @param server - The MCP server instance
  * @param env - Environment variables containing SettleMint credentials
+ * @param pat - Personal Access Token for SettleMint API
  * @throws Error if required environment variables are not set
  *
  * @example
- * import { platformBlockchainNetworkRestart } from "@settlemint/sdk-mcp/tools/platform/blockchainNetwork/restart";
+ * import { platformBlockchainNetworkRestart } from "@settlemint/sdk-mcp/tools/platform/blockchain-network/restart";
  *
- * platformBlockchainNetworkRestart(server, env);
+ * platformBlockchainNetworkRestart(server, env, pat);
  */
-export const platformBlockchainNetworkRestart = (server: McpServer, env: Partial<DotEnv>) => {
+export const platformBlockchainNetworkRestart = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
   const instance = env.SETTLEMINT_INSTANCE;
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   if (!instance) {
     throw new Error("SETTLEMINT_INSTANCE is not set");
   }
 
-  if (!accessToken) {
-    throw new Error("SETTLEMINT_ACCESS_TOKEN is not set");
-  }
-
   const client = createSettleMintClient({
-    accessToken: accessToken,
+    accessToken: pat,
     instance: instance,
   });
 
   server.tool(
     "platform-blockchain-network-restart",
     {
-      networkUniqueName: z.string().describe("Unique name of the blockchain network to restart"),
+      networkUniqueName: z.string().describe("Unique name of the blockchain network to restart").optional(),
     },
     async (params) => {
-      const network = await client.blockchainNetwork.restart(params.networkUniqueName);
+      // Prioritize environment variable over LLM-provided parameter
+      const networkUniqueName = env.SETTLEMINT_BLOCKCHAIN_NETWORK || params.networkUniqueName;
+
+      if (!networkUniqueName) {
+        throw new Error(
+          "Blockchain network unique name is required. Set SETTLEMINT_BLOCKCHAIN_NETWORK environment variable or provide networkUniqueName parameter.",
+        );
+      }
+
+      const network = await client.blockchainNetwork.restart(networkUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Blockchain Network Restarted",
-            description: `Restarted blockchain network: ${params.networkUniqueName}`,
+            description: `Restarted blockchain network: ${networkUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(network, null, 2),
           },

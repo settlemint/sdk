@@ -15,20 +15,15 @@ import { z } from "zod";
  *
  * platformApplicationCreate(server, env);
  */
-export const platformApplicationCreate = (server: McpServer, env: Partial<DotEnv>) => {
+export const platformApplicationCreate = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
   const instance = env.SETTLEMINT_INSTANCE;
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   if (!instance) {
     throw new Error("SETTLEMINT_INSTANCE is not set");
   }
 
-  if (!accessToken) {
-    throw new Error("SETTLEMINT_ACCESS_TOKEN is not set");
-  }
-
   const client = createSettleMintClient({
-    accessToken: accessToken,
+    accessToken: pat,
     instance: instance,
   });
 

@@ -8,27 +8,23 @@ import { z } from "zod";
  *
  * @param server - The MCP server instance
  * @param env - Environment variables containing SettleMint credentials
+ * @param pat - Personal Access Token for SettleMint API
  * @throws Error if required environment variables are not set
  *
  * @example
- * import { platformApplicationAccessTokenCreate } from "@settlemint/sdk-mcp/tools/platform/applicationAccessToken/create";
+ * import { platformApplicationAccessTokenCreate } from "@settlemint/sdk-mcp/tools/platform/application-access-token/create";
  *
- * platformApplicationAccessTokenCreate(server, env);
+ * platformApplicationAccessTokenCreate(server, env, pat);
  */
-export const platformApplicationAccessTokenCreate = (server: McpServer, env: Partial<DotEnv>) => {
+export const platformApplicationAccessTokenCreate = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
   const instance = env.SETTLEMINT_INSTANCE;
-  const accessToken = env.SETTLEMINT_ACCESS_TOKEN;
 
   if (!instance) {
     throw new Error("SETTLEMINT_INSTANCE is not set");
   }
 
-  if (!accessToken) {
-    throw new Error("SETTLEMINT_ACCESS_TOKEN is not set");
-  }
-
   const client = createSettleMintClient({
-    accessToken: accessToken,
+    accessToken: pat,
     instance: instance,
   });
 

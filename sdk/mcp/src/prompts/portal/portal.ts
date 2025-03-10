@@ -7,24 +7,83 @@ export const portalPrompt = (server: McpServer) => {
         role: "user",
         content: {
           type: "text",
-          text: `To write a GraphQL query or mutation for the Portal SDK, follow these steps:
+          text: `# Portal SDK GraphQL Query/Mutation Guide
 
-1. First, discover available operations:
-   - Use portal-queries tool to list all available queries
-   - Use portal-mutations tool to list all available mutations
+## Overview
+The Portal SDK provides a GraphQL interface to interact with blockchain data. This guide will help you construct effective queries and mutations.
 
-2. Get operation details:
-   - Use portal-query tool with the query name to get its full schema definition
-   - Use portal-mutation tool with the mutation name to get its full schema definition
-   - Review the returned SDL for:
+## When to Use Portal SDK
+- When retrieving on-chain data like tokens, NFTs, or bonds
+- When you need real-time blockchain state information
+- For operations that read from but don't modify blockchain state
+
+## Step-by-Step Process
+
+### 1. Discovery Phase
+First, discover available operations:
+   - Use \`portal-queries\` tool to list all available queries
+   - Use \`portal-mutations\` tool to list all available mutations
+
+### 2. Schema Exploration
+Get detailed operation information:
+   - Use \`portal-query\` tool with the query name to get its full schema definition
+   - Use \`portal-mutation\` tool with the mutation name to get its full schema definition
+   - Carefully analyze the returned SDL for:
      * Required arguments and their types
-     * Return type structure
-     * Related type definitions
+     * Return type structure and nested fields
+     * Related type definitions and their relationships
+     * Any constraints or limitations
 
-3. Define your GraphQL operation using portalGraphql
-4. Execute the operation using portalClient.request
+### 3. Implementation
+Define and execute your GraphQL operation:
+   - Define using \`portalGraphql\`
+   - Execute using \`portalClient.request\`
+   - Handle responses appropriately
 
-Example Process:
+## Common Patterns and Best Practices
+
+### Pagination
+For queries returning lists, implement proper pagination:
+\`\`\`typescript
+const GetTokens = portalGraphql(\`
+  query GetTokens($first: Int!, $skip: Int!) {
+    tokens(first: $first, skip: $skip) {
+      id
+      name
+      # Other fields...
+    }
+  }
+\`);
+
+// Initial page
+const page1 = await portalClient.request(GetTokens, { first: 10, skip: 0 });
+// Next page
+const page2 = await portalClient.request(GetTokens, { first: 10, skip: 10 });
+\`\`\`
+
+### Error Handling
+Always implement proper error handling:
+\`\`\`typescript
+try {
+  const response = await portalClient.request(GetBondDetail, { address: "0x..." });
+  // Process response
+} catch (error) {
+  // Handle specific error types
+  if (error.message.includes("not found")) {
+    // Handle not found case
+  } else if (error.message.includes("rate limit")) {
+    // Handle rate limiting
+  } else {
+    // Handle other errors
+  }
+}
+\`\`\`
+
+### Caching Considerations
+- Consider implementing caching for frequently accessed data
+- Use appropriate cache invalidation strategies based on data volatility
+
+## Complete Example Workflow
 
 1. List available queries:
 \`\`\`typescript
@@ -47,10 +106,23 @@ type Bond {
   symbol: String!
   decimals: Int!
   totalSupply: String!
+  holders: [BondHolder!]
+  transactions: [BondTransaction!]
+}
+
+type BondHolder {
+  address: String!
+  balance: String!
+}
+
+type BondTransaction {
+  hash: String!
+  timestamp: Int!
+  value: String!
 }
 \`\`\`
 
-3. Implement the operation:
+3. Implement the operation with all relevant fields:
 \`\`\`typescript
 const GetBondDetail = portalGraphql(\`
   query GetBondDetail($address: String!) {
@@ -59,22 +131,34 @@ const GetBondDetail = portalGraphql(\`
       symbol
       decimals
       totalSupply
+      holders {
+        address
+        balance
+      }
+      transactions(first: 5) {
+        hash
+        timestamp
+        value
+      }
     }
   }
 \`);
 
 const response = await portalClient.request(GetBondDetail, {
-  address: "0x..."
+  address: "0x123abc..."
 });
+
+// Process the response
+const { name, symbol, totalSupply, holders } = response.BondDetail;
+console.log(\`Bond \${name} (\${symbol}) has a total supply of \${totalSupply}\`);
+console.log(\`Top holders: \${holders.map(h => h.address).join(', ')}\`);
 \`\`\`
 
-Important Considerations:
-- Always use portal tools to discover and understand operations
-- Review the complete SDL before implementation
-- Include all required fields from the schema
-- Match argument types exactly as specified
-- Handle all possible response fields
-- Follow the schema's type definitions`,
+## Troubleshooting Common Issues
+- **Invalid address format**: Ensure addresses follow the correct format (0x followed by 40 hex characters)
+- **Missing required fields**: Always include all required fields marked with ! in the schema
+- **Rate limiting**: Implement backoff strategies for high-volume requests
+- **Network errors**: Check connectivity and implement retries with exponential backoff`,
         },
       },
     ],
