@@ -9,6 +9,7 @@ import { hasuraPrompt } from "./prompts/hasura/hasura";
 import { portalPrompt } from "./prompts/portal/portal";
 import { thegraphPrompt } from "./prompts/thegraph/thegraph";
 import { platformToolsUsagePrompt } from "./prompts/tool-usage/platform-tools";
+import { promptsResourcesToolsUsagePrompt } from "./prompts/tool-usage/prompts-resources-tools.js";
 import { registerBlockchainConcepts } from "./resources/blockchain-concepts";
 import { hasuraMutation } from "./tools/hasura/mutation";
 import { hasuraMutations } from "./tools/hasura/mutations";
@@ -62,6 +63,8 @@ import { platformWorkspaceRead } from "./tools/platform/workspace/read.js";
 import { portalMutation } from "./tools/portal/mutation";
 import { portalMutations } from "./tools/portal/mutations";
 import { portalQuery } from "./tools/portal/query";
+import { registerPromptsTools } from "./tools/prompts/index.js";
+import { registerResourcesTools } from "./tools/resources/index.js";
 
 /**
  * Parse command line arguments using Commander
@@ -127,8 +130,13 @@ async function main() {
     // Register resources
     registerBlockchainConcepts(server);
 
+    // Register prompts and resources tools
+    registerPromptsTools(server, env);
+    registerResourcesTools(server, env);
+
     // Register usage prompts
     platformToolsUsagePrompt(server);
+    promptsResourcesToolsUsagePrompt(server);
 
     // Register Platform tools
     // Workspace tools
