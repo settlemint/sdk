@@ -35,6 +35,10 @@ export const platformBlockchainNodeCreate = (server: McpServer, env: Partial<Dot
       blockchainNetworkUniqueName: z.string().describe("Unique name of the blockchain network for the node"),
       name: z.string().describe("Name of the blockchain node"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the blockchain node (DEDICATED or SHARED)"),
+      nodeType: z
+        .enum(["NON_VALIDATOR", "NOTARY", "ORDERER", "PEER", "UNSPECIFIED", "VALIDATOR"])
+        .describe("The type of the blockchain node (NON_VALIDATOR, NOTARY, ORDERER, PEER, UNSPECIFIED, or VALIDATOR)")
+        .optional(),
       provider: z.string().describe("Provider for the blockchain node"),
       region: z.string().describe("Region for the blockchain node"),
     },
@@ -44,6 +48,7 @@ export const platformBlockchainNodeCreate = (server: McpServer, env: Partial<Dot
         blockchainNetworkUniqueName: params.blockchainNetworkUniqueName,
         name: params.name,
         type: params.type,
+        nodeType: params.nodeType,
         provider: params.provider,
         region: params.region,
       });
