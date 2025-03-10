@@ -1,7 +1,7 @@
 export {};
 
 function formatSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes}b`;
+  if (bytes < 1024) {
   const kb = bytes / 1024;
   if (kb < 1024) {
   const mb = kb / 1024;
