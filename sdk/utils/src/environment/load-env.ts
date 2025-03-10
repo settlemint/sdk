@@ -43,7 +43,7 @@ async function loadEnvironmentEnv<T extends boolean = true>(
     logLevel: "error",
     overload: true,
     quiet: true,
-    path: join(path, ".env"),
+    path: [join(path, ".env"), join(path, ".env.local")],
   });
 
   if (!parsed) {
