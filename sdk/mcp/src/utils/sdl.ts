@@ -62,7 +62,7 @@ const collectCustomTypes = (
  */
 const generateTypeSDL = (typeName: string, schema: SchemaTypes): string => {
   const type = schema[typeName];
-  if (!type) return "";
+  if (!type) {
 
   if (isInputObjectType(type)) {
     const fields = type.getFields();
