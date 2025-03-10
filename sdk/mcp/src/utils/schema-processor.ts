@@ -128,7 +128,7 @@ const processFields = (type: GraphQLObjectType<unknown, unknown>): GraphQLFieldM
  */
 const extractQueries = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
   const queryType = schema.getQueryType();
-  if (!queryType) return {};
+  if (!queryType) {
   return processFields(queryType);
 };
 
