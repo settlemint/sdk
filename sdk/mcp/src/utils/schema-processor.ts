@@ -139,7 +139,7 @@ const extractQueries = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown
  */
 const extractMutations = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
   const mutationType = schema.getMutationType();
-  if (!mutationType) return {};
+  if (!mutationType) {
   return processFields(mutationType);
 };
 
