@@ -125,7 +125,7 @@ By leveraging MCP, SettleMint enables scenarios where:
 sequenceDiagram
     participant AI as AI Model (Agent)
     participant MCP as MCP Server
-    participant Chain as Blockchain Network
+    participant Chain as The Graph / Portal / Node
     participant API as External API
 
     AI->>MCP: (1) Query request (e.g., get contract state)
