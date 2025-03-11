@@ -1,10 +1,10 @@
 <p align="center">
   <img src="https://github.com/settlemint/sdk/blob/main/logo.svg" width="200px" align="center" alt="SettleMint logo" />
-  <h1 align="center">SettleMint MCP</h1>
+  <h1 align="center">SettleMint SDK</h1>
   <p align="center">
     ✨ <a href="https://settlemint.com">https://settlemint.com</a> ✨
     <br/>
-    Integrate SettleMint into your LLM with ease.
+    Integrate SettleMint into your application with ease.
   </p>
 </p>
 
@@ -23,6 +23,35 @@
   <a href="https://github.com/settlemint/sdk/issues">Issues</a>
   <br />
 </div>
+
+## Table of Contents
+
+- [About](#about)
+- [Introduction to Model Context Protocol (MCP)](#introduction-to-model-context-protocol-mcp)
+  - [Why does MCP matter?](#why-does-mcp-matter?)
+  - [Key Features and Benefits](#key-features-and-benefits)
+- [How MCP Works](#how-mcp-works)
+  - [The Core Concept](#the-core-concept)
+  - [Technical Workflow](#technical-workflow)
+  - [Key Components](#key-components)
+- [SettleMint's Implementation of MCP](#settlemint's-implementation-of-mcp)
+  - [Capabilities and Features](#capabilities-and-features)
+  - [Usage in AI and Blockchain](#usage-in-ai-and-blockchain)
+- [Practical Examples](#practical-examples)
+  - [Implementing MCP in a Development Workflow](#implementing-mcp-in-a-development-workflow)
+    - [Using the SettleMint MPC in Cursor](#using-the-settlemint-mpc-in-cursor)
+    - [Using the SettleMint MPC in Claude Desktop](#using-the-settlemint-mpc-in-claude-desktop)
+    - [Using the SettleMint MPC in Cline](#using-the-settlemint-mpc-in-cline)
+    - [Using the SettleMint MPC in Windsurf](#using-the-settlemint-mpc-in-windsurf)
+  - [AI-Driven Blockchain Application or Agent](#ai-driven-blockchain-application-or-agent)
+- [Contributing](#contributing)
+- [License](#license)
+
+## About
+
+The SettleMint Model Context Provider provides a simple way integrate an LLM, AI IDE, or AI Agent with the SettleMint platform and your deployed usecase.
+
+For detailed information about using MCP with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
 
 ## Introduction to Model Context Protocol (MCP)
 
@@ -88,7 +117,7 @@ MCP consists of a few core components that work together to make the above workf
 
 ```mermaid
 flowchart LR
-    A[AI Agent / LLM] --(1) request--> B{{MCP Server}}
+    A[AI Agent / LLM] --(1) request--> B
     subgraph MCP Server
         B --> C1[Blockchain Connector]
         B --> C2[API Connector]
@@ -100,7 +129,7 @@ flowchart LR
     D -- data --> C1
     E -- data --> C2
     F -- file data --> C3
-    B{{MCP Server}} --(2) formatted data--> A[AI Agent / LLM]
+    B --(2) formatted data--> A[AI Agent / LLM]
 ```
 
 - MCP Server: This is the central service or daemon that runs and listens for requests from AI agents. It can be thought of as the brain of MCP that coordinates everything. The MCP server is configured to know about various data sources and how to connect to them. In practice, you might run an MCP server process locally or on a server, and your AI agent will communicate with it via an API (like HTTP requests, RPC calls, or through an SDK).
@@ -223,7 +252,7 @@ Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can
 
 Open Cursor and navigate to Settings/MCP. You should see a green active status after the server is successfully connected.
 
-#### #### Using the SettleMint MPC in Claude Desktop
+#### Using the SettleMint MPC in Claude Desktop
 
 Open Claude desktop and navigate to Settings. Under the Developer tab, tap Edit Config to open the configuration file and add the following configuration:
 
@@ -245,7 +274,7 @@ Open Claude desktop and navigate to Settings. Under the Developer tab, tap Edit 
 
 Save the configuration file and restart Claude desktop. From the new chat screen, you should see a hammer (MCP) icon appear with the new MCP server available.
 
-#### #### Using the SettleMint MPC in Cline
+#### Using the SettleMint MPC in Cline
 
 Open the Cline extension in VS Code and tap the MCP Servers icon. Tap Configure MCP Servers to open the configuration file and add the following configuration:
 
@@ -267,7 +296,7 @@ Open the Cline extension in VS Code and tap the MCP Servers icon. Tap Configure 
 
 Save the configuration file. Cline should automatically reload the configuration. You should see a green active status after the server is successfully connected.
 
-#### #### Using the SettleMint MPC in Windsurf
+#### Using the SettleMint MPC in Windsurf
 
 Open Windsurf and navigate to the Cascade assistant. Tap on the hammer (MCP) icon, then Configure to open the configuration file and add the following configuration:
 
@@ -309,7 +338,6 @@ Using MCP in this scenario:
 In this use case, MCP enabled the AI to be a real-time guardian of the DeFi contract. Without MCP, the AI would not have access to the live on-chain state or the ability to execute a change. With MCP, the AI becomes a powerful autonomous agent that ensures the blockchain application adapts to current conditions.
 
 This is just one example. AI-driven blockchain applications could range from automatic NFT marketplace management, to AI moderators for DAO proposals, to intelligent supply chain contracts that react to sensor data. MCP provides the pathway for these AI agents to communicate and act where it matters - on the blockchain and connected systems.
-
 ## Contributing
 
 We welcome contributions from the community! Please check out our [Contributing](https://github.com/settlemint/sdk/blob/main/.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
