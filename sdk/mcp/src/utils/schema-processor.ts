@@ -1,6 +1,13 @@
 import { loadSchema } from "@graphql-tools/load";
 import { UrlLoader } from "@graphql-tools/url-loader";
-import type { GraphQLFieldMap, GraphQLNamedType, GraphQLObjectType, GraphQLSchema, GraphQLType } from "graphql";
+import type {
+  GraphQLArgument,
+  GraphQLFieldMap,
+  GraphQLNamedType,
+  GraphQLObjectType,
+  GraphQLSchema,
+  GraphQLType,
+} from "graphql";
 
 /**
  * Creates a promise that rejects after a specified timeout
@@ -94,6 +101,27 @@ interface SchemaResult {
 }
 
 /**
+ * Formats a field for display in the schema description
+ * @param name - The field name
+ * @param field - The GraphQL field
+ * @returns A formatted string representation of the field
+ */
+const formatField = (name: string, field: { args: readonly GraphQLArgument[]; type: GraphQLType }): string => {
+  const args = field.args.length > 0 ? ` (${field.args.map((arg) => `${arg.name}: ${arg.type}`).join(", ")})` : "";
+  const returnType = ` → ${field.type}`;
+  return `• ${name}${args}${returnType}`;
+};
+
+/**
+ * Formats a collection of fields for display in the schema description
+ * @param fields - The GraphQL field map
+ * @returns An array of formatted field strings
+ */
+const formatFields = (fields: GraphQLFieldMap<unknown, unknown>): string[] => {
+  return Object.entries(fields).map(([name, field]) => formatField(name, field));
+};
+
+/**
  * Creates a concise description of a GraphQL schema
  * @param schema - The GraphQL schema to process
  * @returns A bullet-point list of types and their inputs
@@ -104,25 +132,13 @@ const createSchemaDescription = (schema: GraphQLSchema): string => {
   // Process Query type
   const queryType = schema.getQueryType();
   if (queryType) {
-    const fields = queryType.getFields();
-    for (const [name, field] of Object.entries(fields)) {
-      const args = field.args.length > 0 ? ` (${field.args.map((arg) => `${arg.name}: ${arg.type}`).join(", ")})` : "";
-      const returnType = ` → ${field.type}`;
-      parts.push(`• ${name}${args}${returnType}`);
-    }
-    parts.push("");
+    parts.push(...formatFields(queryType.getFields()), "");
   }
 
   // Process Mutation type
   const mutationType = schema.getMutationType();
   if (mutationType) {
-    const fields = mutationType.getFields();
-    for (const [name, field] of Object.entries(fields)) {
-      const args = field.args.length > 0 ? ` (${field.args.map((arg) => `${arg.name}: ${arg.type}`).join(", ")})` : "";
-      const returnType = ` → ${field.type}`;
-      parts.push(`• ${name}${args}${returnType}`);
-    }
-    parts.push("");
+    parts.push(...formatFields(mutationType.getFields()), "");
   }
 
   return parts.join("\n").trim();
@@ -139,12 +155,17 @@ const getTypeName = (type: GraphQLType): string => {
 };
 
 /**
- * Processes fields of a GraphQL type
- * @param type - The GraphQL object type
- * @returns GraphQL field map
+ * Extracts operation fields from a GraphQL schema based on the provided type getter
+ * @param schema - The GraphQL schema
+ * @param getType - Function that returns the operation type from the schema
+ * @returns GraphQL field map of operation fields
  */
-const processFields = (type: GraphQLObjectType<unknown, unknown>): GraphQLFieldMap<unknown, unknown> => {
-  return type.getFields();
+const extractOperationFields = (
+  schema: GraphQLSchema,
+  getType: (schema: GraphQLSchema) => GraphQLObjectType<unknown, unknown> | undefined | null,
+): GraphQLFieldMap<unknown, unknown> => {
+  const type = getType(schema);
+  return type ? type.getFields() : {};
 };
 
 /**
@@ -153,11 +174,7 @@ const processFields = (type: GraphQLObjectType<unknown, unknown>): GraphQLFieldM
  * @returns GraphQL field map of query fields
  */
 const extractQueries = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
-  const queryType = schema.getQueryType();
-  if (!queryType) {
-    return {};
-  }
-  return processFields(queryType);
+  return extractOperationFields(schema, (s) => s.getQueryType());
 };
 
 /**
@@ -166,11 +183,7 @@ const extractQueries = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown
  * @returns GraphQL field map of mutation fields
  */
 const extractMutations = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
-  const mutationType = schema.getMutationType();
-  if (!mutationType) {
-    return {};
-  }
-  return processFields(mutationType);
+  return extractOperationFields(schema, (s) => s.getMutationType());
 };
 
 /**
@@ -179,11 +192,7 @@ const extractMutations = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unkno
  * @returns GraphQL field map of subscription fields
  */
 const extractSubscriptions = (schema: GraphQLSchema): GraphQLFieldMap<unknown, unknown> => {
-  const subscriptionType = schema.getSubscriptionType();
-  if (!subscriptionType) {
-    return {};
-  }
-  return processFields(subscriptionType);
+  return extractOperationFields(schema, (s) => s.getSubscriptionType());
 };
 
 /**

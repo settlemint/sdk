@@ -11,6 +11,25 @@ import {
 type SchemaTypes = Record<string, GraphQLNamedType>;
 
 /**
+ * Helper function to process field types in collectCustomTypes
+ */
+const processFieldTypes = (
+  fields: Record<string, GraphQLInputField | GraphQLField<unknown, unknown>>,
+  schema: SchemaTypes,
+  collectedTypes: Set<string>,
+) => {
+  for (const field of Object.values(fields)) {
+    collectCustomTypes(field.type, schema, collectedTypes);
+    // Process args if available (only for object fields)
+    if ("args" in field && field.args.length > 0) {
+      for (const arg of field.args) {
+        collectCustomTypes(arg.type, schema, collectedTypes);
+      }
+    }
+  }
+};
+
+/**
  * Recursively collects all custom types (input and output) used in a GraphQL type
  */
 const collectCustomTypes = (
@@ -34,24 +53,10 @@ const collectCustomTypes = (
   // Add this type to our collection
   collectedTypes.add(typeName);
 
-  // If it's an input object type, collect types from all its fields
-  if (isInputObjectType(schemaType)) {
+  // Process fields based on the type
+  if (isInputObjectType(schemaType) || isObjectType(schemaType)) {
     const fields = schemaType.getFields();
-    for (const field of Object.values(fields) as GraphQLInputField[]) {
-      collectCustomTypes(field.type, schema, collectedTypes);
-    }
-  }
-
-  // If it's an object type, collect types from all its fields
-  if (isObjectType(schemaType)) {
-    const fields = schemaType.getFields();
-    for (const field of Object.values(fields) as GraphQLField<unknown, unknown>[]) {
-      collectCustomTypes(field.type, schema, collectedTypes);
-      // Also collect types from field arguments
-      for (const arg of field.args) {
-        collectCustomTypes(arg.type, schema, collectedTypes);
-      }
-    }
+    processFieldTypes(fields, schema, collectedTypes);
   }
 
   return collectedTypes;
