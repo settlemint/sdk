@@ -34,6 +34,7 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
       applicationUniqueName: z.string().describe("Unique name of the application to create the middleware in"),
       name: z.string().describe("Name of the middleware"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the middleware (DEDICATED or SHARED)"),
+      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the middleware"),
       provider: z.string().describe("Provider for the middleware"),
       region: z.string().describe("Region for the middleware"),
       interface: z

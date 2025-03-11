@@ -34,6 +34,7 @@ export const platformStorageCreate = (server: McpServer, env: Partial<DotEnv>, p
       applicationUniqueName: z.string().describe("Unique name of the application to create the storage in"),
       name: z.string().describe("Name of the storage"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the storage (DEDICATED or SHARED)"),
+      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the storage"),
       provider: z.string().describe("Provider for the storage"),
       region: z.string().describe("Region for the storage"),
       storageProtocol: z.enum(["IPFS", "MINIO"]).describe("Storage protocol (IPFS or MINIO)"),

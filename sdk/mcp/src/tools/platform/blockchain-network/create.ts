@@ -34,6 +34,7 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
       applicationUniqueName: z.string().describe("Unique name of the application to create the network in").optional(),
       name: z.string().describe("Name of the blockchain network"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the blockchain network (DEDICATED or SHARED)"),
+      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the blockchain network"),
       provider: z.string().describe("Provider for the blockchain network"),
       region: z.string().describe("Region for the blockchain network"),
       nodeName: z.string().describe("Name for the initial node"),

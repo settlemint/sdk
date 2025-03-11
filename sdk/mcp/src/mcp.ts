@@ -17,13 +17,9 @@ import { hasuraMutation } from "./tools/hasura/mutation";
 import { hasuraMutations } from "./tools/hasura/mutations";
 import { hasuraQueries } from "./tools/hasura/queries";
 import { hasuraQuery } from "./tools/hasura/query";
-import { platformApplicationAccessTokenCreate } from "./tools/platform/application-access-token/create.js";
-import { platformApplicationCreate } from "./tools/platform/application/create.js";
-import { platformApplicationDelete } from "./tools/platform/application/delete.js";
 import { platformApplicationList } from "./tools/platform/application/list.js";
 import { platformApplicationRead } from "./tools/platform/application/read.js";
 import { platformBlockchainNetworkCreate } from "./tools/platform/blockchain-network/create.js";
-import { platformBlockchainNetworkDelete } from "./tools/platform/blockchain-network/delete.js";
 import { platformBlockchainNetworkList } from "./tools/platform/blockchain-network/list.js";
 import { platformBlockchainNetworkRead } from "./tools/platform/blockchain-network/read.js";
 import { platformBlockchainNetworkRestart } from "./tools/platform/blockchain-network/restart.js";
@@ -31,9 +27,11 @@ import { platformBlockchainNodeCreate } from "./tools/platform/blockchain-node/c
 import { platformBlockchainNodeList } from "./tools/platform/blockchain-node/list.js";
 import { platformBlockchainNodeRead } from "./tools/platform/blockchain-node/read.js";
 import { platformBlockchainNodeRestart } from "./tools/platform/blockchain-node/restart.js";
+import { platformCustomDeploymentCreate } from "./tools/platform/custom-deployment/create";
+import { platformCustomDeploymentEdit } from "./tools/platform/custom-deployment/edit";
 import { platformCustomDeploymentList } from "./tools/platform/custom-deployment/list.js";
 import { platformCustomDeploymentRead } from "./tools/platform/custom-deployment/read.js";
-import { platformFoundryEnv } from "./tools/platform/foundry/env.js";
+import { platformCustomDeploymentRestart } from "./tools/platform/custom-deployment/restart";
 import { platformInsightsCreate } from "./tools/platform/insights/create.js";
 import { platformInsightsList } from "./tools/platform/insights/list.js";
 import { platformInsightsRead } from "./tools/platform/insights/read.js";
@@ -43,11 +41,9 @@ import { platformIntegrationToolList } from "./tools/platform/integration-tool/l
 import { platformIntegrationToolRead } from "./tools/platform/integration-tool/read.js";
 import { platformIntegrationToolRestart } from "./tools/platform/integration-tool/restart.js";
 import { platformMiddlewareCreate } from "./tools/platform/middleware/create.js";
-import { platformMiddlewareGraphSubgraphs } from "./tools/platform/middleware/graph-subgraphs.js";
 import { platformMiddlewareList } from "./tools/platform/middleware/list.js";
 import { platformMiddlewareRead } from "./tools/platform/middleware/read.js";
 import { platformMiddlewareRestart } from "./tools/platform/middleware/restart.js";
-import { platformPlatformConfig } from "./tools/platform/platform/config.js";
 import { platformPrivateKeyCreate } from "./tools/platform/private-key/create.js";
 import { platformPrivateKeyList } from "./tools/platform/private-key/list.js";
 import { platformPrivateKeyRead } from "./tools/platform/private-key/read.js";
@@ -56,10 +52,6 @@ import { platformStorageCreate } from "./tools/platform/storage/create.js";
 import { platformStorageList } from "./tools/platform/storage/list.js";
 import { platformStorageRead } from "./tools/platform/storage/read.js";
 import { platformStorageRestart } from "./tools/platform/storage/restart.js";
-import { platformWalletPincodeVerificationResponse } from "./tools/platform/wallet/pincode-verification-response.js";
-import { platformWorkspaceAddCredits } from "./tools/platform/workspace/add-credits.js";
-import { platformWorkspaceCreate } from "./tools/platform/workspace/create.js";
-import { platformWorkspaceDelete } from "./tools/platform/workspace/delete.js";
 import { platformWorkspaceList } from "./tools/platform/workspace/list.js";
 import { platformWorkspaceRead } from "./tools/platform/workspace/read.js";
 import { portalMutation } from "./tools/portal/mutation";
@@ -144,21 +136,15 @@ async function main() {
     // Workspace tools
     platformWorkspaceList(server, env, pat);
     platformWorkspaceRead(server, env, pat);
-    platformWorkspaceCreate(server, env, pat);
-    platformWorkspaceDelete(server, env, pat);
-    platformWorkspaceAddCredits(server, env, pat);
 
     // Application tools
     platformApplicationList(server, env, pat);
     platformApplicationRead(server, env, pat);
-    platformApplicationCreate(server, env, pat);
-    platformApplicationDelete(server, env, pat);
 
     // Blockchain Network tools
     platformBlockchainNetworkList(server, env, pat);
     platformBlockchainNetworkRead(server, env, pat);
     platformBlockchainNetworkCreate(server, env, pat);
-    platformBlockchainNetworkDelete(server, env, pat);
     platformBlockchainNetworkRestart(server, env, pat);
 
     // Blockchain Node tools
@@ -170,7 +156,6 @@ async function main() {
     // Middleware tools
     platformMiddlewareList(server, env, pat);
     platformMiddlewareRead(server, env, pat);
-    platformMiddlewareGraphSubgraphs(server, env, pat);
     platformMiddlewareCreate(server, env, pat);
     platformMiddlewareRestart(server, env, pat);
 
@@ -201,18 +186,9 @@ async function main() {
     // Custom Deployment tools
     platformCustomDeploymentList(server, env, pat);
     platformCustomDeploymentRead(server, env, pat);
-
-    // Foundry tools
-    platformFoundryEnv(server, env, pat);
-
-    // Application Access Token tools
-    platformApplicationAccessTokenCreate(server, env, pat);
-
-    // Platform tools
-    platformPlatformConfig(server, env, pat);
-
-    // Wallet tools
-    platformWalletPincodeVerificationResponse(server, env, pat);
+    platformCustomDeploymentCreate(server, env, pat);
+    platformCustomDeploymentRestart(server, env, pat);
+    platformCustomDeploymentEdit(server, env, pat);
 
     // Start the server
     const transport = new StdioServerTransport();
