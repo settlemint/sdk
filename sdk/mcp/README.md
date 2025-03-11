@@ -121,6 +121,32 @@ By leveraging MCP, SettleMint enables scenarios where:
 - Autonomous agents can manage blockchain infrastructure tasks (deploying contracts, adjusting configurations) without human intervention, guided by AI decision-making.
 - Developers using SettleMint can integrate advanced AI functionalities into their blockchain applications with relatively little effort, because MCP handles the heavy lifting of connecting the two worlds.
 
+```mermaid
+sequenceDiagram
+    participant AI as AI Model (Agent)
+    participant MCP as MCP Server
+    participant Chain as Blockchain Network
+    participant API as External API
+
+    AI->>MCP: (1) Query request (e.g., get contract state)
+    Note over AI,MCP: AI asks MCP for on-chain data
+    MCP-->>AI: (2) Acknowledgement & processing
+
+    MCP->>Chain: (3) Fetch data from blockchain
+    Chain-->>MCP: (4) Return contract state
+
+    MCP->>API: (5) [Optional] Fetch related off-chain data
+    API-->>MCP: (6) Return external data
+
+    MCP-->>AI: (7) Send combined response
+    Note over AI,MCP: AI receives on-chain data (and any other context)
+
+    AI->>MCP: (8) Action request (e.g., execute transaction)
+    MCP->>Chain: (9) Submit transaction to blockchain
+    Chain-->>MCP: (10) Return tx result/receipt
+    MCP-->>AI: (11) Confirm action result
+```
+
 In summary, SettleMint's version of MCP extends their platform's capabilities, allowing for AI-driven blockchain operations. This combination brings together the trust and transparency of blockchain with the adaptability and intelligence of AI.
 
 ### Capabilities and Features
