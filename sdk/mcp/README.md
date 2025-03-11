@@ -1,10 +1,10 @@
 <p align="center">
   <img src="https://github.com/settlemint/sdk/blob/main/logo.svg" width="200px" align="center" alt="SettleMint logo" />
-  <h1 align="center">SettleMint SDK</h1>
+  <h1 align="center">SettleMint MCP</h1>
   <p align="center">
     ✨ <a href="https://settlemint.com">https://settlemint.com</a> ✨
     <br/>
-    Integrate SettleMint into your application with ease.
+    Integrate SettleMint into your LLM with ease.
   </p>
 </p>
 
