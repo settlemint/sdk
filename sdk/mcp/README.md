@@ -117,7 +117,7 @@ MCP consists of a few core components that work together to make the above workf
 
 ```mermaid
 flowchart LR
-    A[AI Agent / LLM] --(1) request--> B
+    A[AI Agent / LLM] --(1) request--> B{{MCP Server}}
     subgraph MCP Server
         B --> C1[Blockchain Connector]
         B --> C2[API Connector]
@@ -129,7 +129,7 @@ flowchart LR
     D -- data --> C1
     E -- data --> C2
     F -- file data --> C3
-    B --(2) formatted data--> A[AI Agent / LLM]
+    B{{MCP Server}} --(2) formatted data--> A[AI Agent / LLM]
 ```
 
 - MCP Server: This is the central service or daemon that runs and listens for requests from AI agents. It can be thought of as the brain of MCP that coordinates everything. The MCP server is configured to know about various data sources and how to connect to them. In practice, you might run an MCP server process locally or on a server, and your AI agent will communicate with it via an API (like HTTP requests, RPC calls, or through an SDK).
