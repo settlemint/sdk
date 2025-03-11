@@ -1,4 +1,4 @@
-import { readFile, readdir, writeFile } from "node:fs/promises";
+import { exists, readFile, readdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import * as mustache from "mustache";
@@ -39,8 +39,13 @@ async function generateReadme() {
       const packageJson = await readFile(join(sdkDir, pkg, "package.json"), "utf-8");
       const { name } = tryParseJson<{ name: string }>(packageJson);
       const about = (await readFile(join(sdkDir, pkg, "docs", "ABOUT.md"), "utf-8")).trim();
-      const apiReferenceRaw = (await readFile(join(sdkDir, pkg, "docs", "REFERENCE.md"), "utf-8")).trim();
-      const apiReference = await processApiReference(apiReferenceRaw);
+
+      const apiReferencePath = join(sdkDir, pkg, "docs", "REFERENCE.md");
+      let apiReference = "";
+      if (await exists(apiReferencePath)) {
+        const apiReferenceRaw = (await readFile(apiReferencePath, "utf-8")).trim();
+        apiReference = await processApiReference(apiReferenceRaw);
+      }
 
       const templateWithoutToc = replacePlaceholders(template, {
         "package-name": name,
