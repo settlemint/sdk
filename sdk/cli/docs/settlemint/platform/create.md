@@ -128,8 +128,8 @@ Options:
   --region &lt;region&gt;                   Deployment region (run `settlemint
                                       platform config` to see available
                                       regions)
-  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                       Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
+                                      &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
                                       &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --app, --application &lt;application&gt;  The unique name of the application to
@@ -187,7 +187,7 @@ Options:
   -r, --restart-if-timeout                  Restart if wait time is exceeded
   --provider &lt;provider&gt;                     Network provider (run `settlemint platform config` to see available providers)
   --region &lt;region&gt;                         Deployment region (run `settlemint platform config` to see available regions)
-  --size &lt;size&gt;                             Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                             Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                             Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --app, --application &lt;application&gt;        The application unique name to create the node in (defaults to application from env)
   --blockchain-network &lt;blockchainNetwork&gt;  Blockchain network unique name to add this node to
@@ -346,8 +346,8 @@ Options:
   --region &lt;region&gt;                   Deployment region (run `settlemint
                                       platform config` to see available
                                       regions)
-  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                       Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
+                                      &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
                                       &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --application &lt;application&gt;         Application unique name
@@ -379,7 +379,7 @@ Options:
   -r, --restart-if-timeout                                Restart if wait time is exceeded
   --provider &lt;provider&gt;                                   Network provider (run `settlemint platform config` to see available providers)
   --region &lt;region&gt;                                       Deployment region (run `settlemint platform config` to see available regions)
-  --size &lt;size&gt;                                           Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                                           Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                                           Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --application &lt;application&gt;                             Application unique name
   --load-balancer &lt;loadBalancer&gt;                          Load Balancer unique name (mutually exclusive with blockchain-node)
@@ -432,8 +432,8 @@ Options:
                                config` to see available providers)
   --region &lt;region&gt;            Deployment region (run `settlemint platform
                                config` to see available regions)
-  --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                               &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
+                               &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
                                default: &quot;SHARED&quot;)
   --application &lt;application&gt;  Application unique name
@@ -466,8 +466,8 @@ Options:
                                config` to see available providers)
   --region &lt;region&gt;            Deployment region (run `settlemint platform
                                config` to see available regions)
-  --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                               &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
+                               &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
                                default: &quot;SHARED&quot;)
   --application &lt;application&gt;  Application unique name
@@ -515,8 +515,8 @@ Options:
                                config` to see available providers)
   --region &lt;region&gt;            Deployment region (run `settlemint platform
                                config` to see available regions)
-  --size &lt;size&gt;                Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                               &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
+                               &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;,
                                default: &quot;SHARED&quot;)
   --application &lt;application&gt;  Application unique name
@@ -566,8 +566,8 @@ Options:
   --region &lt;region&gt;                   Deployment region (run `settlemint
                                       platform config` to see available
                                       regions)
-  --size &lt;size&gt;                       Network size (choices: &quot;CUSTOM&quot;, &quot;LARGE&quot;,
-                                      &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --size &lt;size&gt;                       Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
+                                      &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
                                       &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --application &lt;application&gt;         Application unique name
