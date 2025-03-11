@@ -6,8 +6,8 @@ export function addClusterServiceArgs<Args extends OptionValues>(cmd: Command<[s
     .option("--region <region>", "Deployment region (run `settlemint platform config` to see available regions)")
     .addOption(
       new Option("--size <size>", "Network size")
-        .choices(["CUSTOM", "LARGE", "MEDIUM", "SMALL"])
-        .argParser((value) => value as "CUSTOM" | "LARGE" | "MEDIUM" | "SMALL" | null | undefined)
+        .choices(["LARGE", "MEDIUM", "SMALL"])
+        .argParser((value) => value as "LARGE" | "MEDIUM" | "SMALL" | null | undefined)
         .default("SMALL"),
     )
     .addOption(
@@ -20,7 +20,7 @@ export function addClusterServiceArgs<Args extends OptionValues>(cmd: Command<[s
     Args & {
       provider: string;
       region: string;
-      size: "CUSTOM" | "LARGE" | "MEDIUM" | "SMALL" | null | undefined;
+      size: "LARGE" | "MEDIUM" | "SMALL" | null | undefined;
       type: "DEDICATED" | "SHARED" | null | undefined;
     }
   >;
