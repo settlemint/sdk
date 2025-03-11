@@ -16,7 +16,7 @@
 </p>
 
 <div align="center">
-  <a href="https://console.settlemint.com/documentation/docs/using-platform/dev-tools/SDK/">Documentation</a>
+  <a href="https://console.settlemint.com/documentation">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://www.npmjs.com/package/@settlemint/sdk-blockscout">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
@@ -42,7 +42,7 @@
 
 The SettleMint Blockscout SDK provides a seamless way to interact with Blockscout APIs for blockchain data exploration and analysis. It enables you to easily query transaction data, blocks, addresses, smart contracts and more from your SettleMint-powered blockchain networks.
 
-For detailed information about using Blockscout with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/insights/).
+For detailed information about using Blockscout with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
 
 ## API Reference
 

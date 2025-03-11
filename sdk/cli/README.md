@@ -16,7 +16,7 @@
 </p>
 
 <div align="center">
-  <a href="https://console.settlemint.com/documentation/docs/using-platform/dev-tools/SDK/">Documentation</a>
+  <a href="https://console.settlemint.com/documentation">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://www.npmjs.com/package/@settlemint/sdk-cli">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
@@ -131,7 +131,7 @@ settlemint platform create --help
 
 To use the SettleMint CLI, you first need to authenticate with the platform. Create a Personal Access Token (PAT) on the SettleMint platformand paste it when prompted by the login command.
 
-Visit [the documentation](https://console.settlemint.com/documentation/docs/using-platform/personal-access-tokens/) to learn how to create a Personal Access Token.
+Visit [the documentation](https://console.settlemint.com/documentation) to learn how to create a Personal Access Token.
 
 Then run the login command and paste your token when prompted:
 

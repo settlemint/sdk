@@ -16,7 +16,7 @@
 </p>
 
 <div align="center">
-  <a href="https://console.settlemint.com/documentation/docs/using-platform/dev-tools/SDK/">Documentation</a>
+  <a href="https://console.settlemint.com/documentation">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://www.npmjs.com/package/@settlemint/sdk-ipfs">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
@@ -38,7 +38,7 @@
 
 The SettleMint IPFS SDK provides a simple way to interact with IPFS (InterPlanetary File System) through the SettleMint platform. It enables you to easily store and retrieve files using IPFS in a decentralized manner.
 
-For detailed information about using IPFS with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/storage/).
+For detailed information about using IPFS with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
 
 ## API Reference
 
