@@ -53,7 +53,7 @@ export async function subgraphPrompt({
     return subgraphNames.length === 1 ? subgraphNames : [];
   }
 
-  if (subgraphNames.length === 0) {
+  if (subgraphNames.length === 0 && !allowNew) {
     cancel("No subgraphs found");
   }
 
@@ -77,14 +77,17 @@ export async function subgraphPrompt({
   } else {
     defaultChoice = env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? subgraphNames[0];
   }
-  const subgraphName = await select({
-    message: message,
-    choices: choices.map((name) => ({
-      name,
-      value: name,
-    })),
-    default: defaultChoice,
-  });
+  const subgraphName =
+    choices.length === 1 && choices[0] === NEW
+      ? NEW
+      : await select({
+          message: message,
+          choices: choices.map((name) => ({
+            name,
+            value: name,
+          })),
+          default: defaultChoice,
+        });
 
   if (!subgraphName) {
     cancel("No subgraph selected");
