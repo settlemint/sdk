@@ -50,6 +50,7 @@ export function smartContractSetCommand(): Command {
   return new Command("smart-contract-set")
     .alias("scs")
     .description("Manage smart contract sets and subgraphs")
+    .enablePositionalOptions()
     .addCommand(createCommand())
     .addCommand(foundry)
     .addCommand(hardhat)
