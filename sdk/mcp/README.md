@@ -24,30 +24,6 @@
   <br />
 </div>
 
-## Table of Contents
-
-- [About](#about)
-- [Usage](#usage)
-  - [As a dependency in your package.json](#as-a-dependency-in-your-package.json)
-  - [Globally install the CLI](#globally-install-the-cli)
-- [GitHub Action](#github-action)
-- [Examples](#examples)
-  - [Get the version of the CLI](#get-the-version-of-the-cli)
-  - [Get help for a command](#get-help-for-a-command)
-  - [Login to the platform](#login-to-the-platform)
-  - [Creating a new project from a template](#creating-a-new-project-from-a-template)
-    - [Installing dependencies](#installing-dependencies)
-    - [Connecting to your SettleMint infrastructure](#connecting-to-your-settlemint-infrastructure)
-    - [Deploying your smart contracts and subgraphs](#deploying-your-smart-contracts-and-subgraphs)
-    - [Generating code for your dApp](#generating-code-for-your-dapp)
-    - [Start your dApp in development mode](#start-your-dapp-in-development-mode)
-  - [Creating a new project from a smart contract template](#creating-a-new-project-from-a-smart-contract-template)
-    - [Testing your smart contracts](#testing-your-smart-contracts)
-    - [Deploying your smart contracts and subgraphs](#deploying-your-smart-contracts-and-subgraphs)
-- [API Reference](#api-reference)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Introduction to Model Context Protocol (MCP)
 
 The Model Context Protocol (MCP) is a framework designed to enhance the capabilities of AI agents and large language models (LLMs) by providing structured, contextual access to external data. It acts as a bridge between AI models and a variety of data sources such as blockchain networks, external APIs, databases, and developer environments. In essence, MCP allows an AI model to pull in relevant context from the outside world, enabling more informed reasoning and interaction.
@@ -110,6 +86,23 @@ This workflow happens quickly and often behind the scenes. From a high-level per
 
 MCP consists of a few core components that work together to make the above workflow possible:
 
+```mermaid
+flowchart LR
+    A[AI Agent / LLM] --(1) request--> B{{MCP Server}}
+    subgraph MCP Server
+        B --> C1[Blockchain Connector]
+        B --> C2[API Connector]
+        B --> C3[File System Connector]
+    end
+    C1 -- fetch/query --> D[(Blockchain Network)]
+    C2 -- API call --> E[(External API/Data Source)]
+    C3 -- read/write --> F[(Local File System)]
+    D -- data --> C1
+    E -- data --> C2
+    F -- file data --> C3
+    B{{MCP Server}} --(2) formatted data--> A[AI Agent / LLM]
+```
+
 - MCP Server: This is the central service or daemon that runs and listens for requests from AI agents. It can be thought of as the brain of MCP that coordinates everything. The MCP server is configured to know about various data sources and how to connect to them. In practice, you might run an MCP server process locally or on a server, and your AI agent will communicate with it via an API (like HTTP requests, RPC calls, or through an SDK).
 - MCP SDK / Client Library: To simplify usage, MCP provides SDKs in different programming languages. Developers include these in their AI agent code. The SDK handles the communication details with the MCP server, so a developer can simply call functions or methods (like mcp.getData(...)) without manually constructing network calls. The SDK ensures requests are properly formatted and sends them to the MCP server, then receives the response and hands it to the AI program.
 - Connectors / Adapters: These are modules or plugins within the MCP server that know how to talk to specific types of external systems. One connector might handle blockchain interactions (with sub-modules for Ethereum, Hyperledger, etc.), another might handle web APIs (performing HTTP calls), another might manage local OS operations (file system access, running shell commands). Each connector understands a set of actions and data formats for its domain. Connectors make MCP extensible - new connectors can be added to support new systems or protocols.
@@ -162,12 +155,12 @@ Suppose you are a developer working on a blockchain project, and you want to use
 For instance, you might use a command (via a CLI or an npm script) to start an MCP server that is pointed at your project directory and connected to the SettleMint platform. An example command could be:
 
 ```sh
-bunx @settlemint/sdk-mcp@latest --path=/Users/llm/asset-tokenization-kit/ --pat=sm_pat_xxx
+npx -y @settlemint/sdk-mcp@latest --path=/Users/llm/asset-tokenization-kit/ --pat=sm_pat_xxx
 ```
 
 Here's what this command does:
 
-- bunx is used to execute the latest version of the @settlemint/sdk-mcp package without needing a separate install (similar to how npx works for npm packages).
+- npx is used to execute the latest version of the @settlemint/sdk-mcp package without needing a separate install.
 - --path=/Users/llm/asset-tokenization-kit/ specifies the local project directory that the MCP server will have context about. This could allow the AI to query files or code in that directory through MCP and have access to the environment settings from `settlemint connect`
 - --pat=sm_pat_xxx provides a Personal Access Token (PAT) for authenticating with SettleMint's services. This token (masked here as xxx) is required for the MCP server to connect to the SettleMint platform on your behalf.
 
@@ -180,7 +173,7 @@ After running this command, you would have a local MCP server up and running, co
 
 This greatly enhances a development workflow by making the AI an active participant that can fetch and act on real information, rather than just being a passive code suggestion tool.
 
-### Using the SettleMint MPC in Cursor
+#### Using the SettleMint MPC in Cursor
 
 Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can configure the SettleMint MCP server. Point the path to the folder of your program, and set your personal access token.
 
@@ -190,8 +183,9 @@ Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can
 {
   "mcpServers": {
     "settlemint": {
-      "command": "bunx",
+      "command": "npx",
       "args": [
+        "-y",
         "@settlemint/sdk-mcp@latest",
         "--path=/Users/llm/asset-tokenization-kit/",
         "--pat=sm_pat_xxx"
@@ -200,6 +194,77 @@ Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can
   }
 }
 ```
+
+Open Cursor and navigate to Settings/MCP. You should see a green active status after the server is successfully connected.
+
+#### #### Using the SettleMint MPC in Claude Desktop
+
+Open Claude desktop and navigate to Settings. Under the Developer tab, tap Edit Config to open the configuration file and add the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "settlemint": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@settlemint/sdk-mcp@latest",
+        "--path=/Users/llm/asset-tokenization-kit/",
+        "--pat=sm_pat_xxx"
+      ]
+    }
+  }
+}
+```
+
+Save the configuration file and restart Claude desktop. From the new chat screen, you should see a hammer (MCP) icon appear with the new MCP server available.
+
+#### #### Using the SettleMint MPC in Cline
+
+Open the Cline extension in VS Code and tap the MCP Servers icon. Tap Configure MCP Servers to open the configuration file and add the following configuration:
+
+```json
+{
+  "mcpServers": {
+    "settlemint": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@settlemint/sdk-mcp@latest",
+        "--path=/Users/llm/asset-tokenization-kit/",
+        "--pat=sm_pat_xxx"
+      ]
+    }
+  }
+}
+```
+
+Save the configuration file. Cline should automatically reload the configuration. You should see a green active status after the server is successfully connected.
+
+#### #### Using the SettleMint MPC in Windsurf
+
+Open Windsurf and navigate to the Cascade assistant. Tap on the hammer (MCP) icon, then Configure to open the configuration file and add the following configuration:
+
+
+```json
+{
+  "mcpServers": {
+    "settlemint": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@settlemint/sdk-mcp@latest",
+        "--path=/Users/llm/asset-tokenization-kit/",
+        "--pat=sm_pat_xxx"
+      ]
+    }
+  }
+}
+```
+
+Save the configuration file and reload by tapping Refresh in the Cascade assistant. You should see a green active status after the server is successfully connected.
+
+
 
 ## Contributing
 
