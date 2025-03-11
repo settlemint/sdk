@@ -10,11 +10,11 @@
     "email": "support@settlemint.com",
     "url": "https://settlemint.com"
   },
-  "homepage": "https://github.com/settlemint/sdk/blob/main/sdk/mpc/README.md",
+  "homepage": "https://github.com/settlemint/sdk/blob/main/sdk/mcp/README.md",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/settlemint/sdk.git",
-    "directory": "sdk/mpc"
+    "directory": "sdk/mcp"
   },
   "bugs": {
     "url": "https://github.com/settlemint/sdk/issues",
@@ -28,7 +28,7 @@
     }
   },
   "bin": {
-    "settlemint-mpc": "dist/mcp.js"
+    "settlemint-mcp": "dist/mcp.js"
   },
   "scripts": {
     "build": "bun run build.ts",
