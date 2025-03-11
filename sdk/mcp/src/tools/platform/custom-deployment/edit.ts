@@ -4,7 +4,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
- * Creates a tool for deleting an application by its ID
+ * Creates a tool for editing an existing custom deployment
  *
  * @param server - The MCP server instance
  * @param env - Environment variables containing SettleMint credentials
@@ -12,11 +12,11 @@ import { z } from "zod";
  * @throws Error if required environment variables are not set
  *
  * @example
- * import { platformApplicationDelete } from "@settlemint/sdk-mcp/tools/platform/application/delete";
+ * import { platformCustomDeploymentEdit } from "@settlemint/sdk-mcp/tools/platform/custom-deployment/edit";
  *
- * platformApplicationDelete(server, env, pat);
+ * platformCustomDeploymentEdit(server, env, pat);
  */
-export const platformApplicationDelete = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
+export const platformCustomDeploymentEdit = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
   const instance = env.SETTLEMINT_INSTANCE;
 
   if (!instance) {
@@ -29,20 +29,22 @@ export const platformApplicationDelete = (server: McpServer, env: Partial<DotEnv
   });
 
   server.tool(
-    "platform-application-delete",
+    "platform-custom-deployment-edit",
     {
-      applicationId: z.string().describe("ID of the application to delete"),
+      customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to edit"),
+      imageTag: z.string().describe("The new tag of the Docker image"),
     },
     async (params) => {
-      const application = await client.application.delete(params.applicationId);
+      const customDeployment = await client.customDeployment.update(params.customDeploymentUniqueName, params.imageTag);
+
       return {
         content: [
           {
             type: "text",
-            name: "Application Deleted",
-            description: `Deleted application with ID: ${params.applicationId}`,
+            name: "Custom Deployment Updated",
+            description: `Updated custom deployment: ${params.customDeploymentUniqueName} to tag: ${params.imageTag}`,
             mimeType: "application/json",
-            text: JSON.stringify(application, null, 2),
+            text: JSON.stringify(customDeployment, null, 2),
           },
         ],
       };

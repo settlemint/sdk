@@ -4,7 +4,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
- * Creates a tool for retrieving foundry environment variables
+ * Creates a tool for restarting a custom deployment
  *
  * @param server - The MCP server instance
  * @param env - Environment variables containing SettleMint credentials
@@ -12,11 +12,11 @@ import { z } from "zod";
  * @throws Error if required environment variables are not set
  *
  * @example
- * import { platformFoundryEnv } from "@settlemint/sdk-mcp/tools/platform/foundry/env";
+ * import { platformCustomDeploymentRestart } from "@settlemint/sdk-mcp/tools/platform/custom-deployment/restart";
  *
- * platformFoundryEnv(server, env, pat);
+ * platformCustomDeploymentRestart(server, env, pat);
  */
-export const platformFoundryEnv = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
+export const platformCustomDeploymentRestart = (server: McpServer, env: Partial<DotEnv>, pat: string) => {
   const instance = env.SETTLEMINT_INSTANCE;
 
   if (!instance) {
@@ -29,22 +29,20 @@ export const platformFoundryEnv = (server: McpServer, env: Partial<DotEnv>, pat:
   });
 
   server.tool(
-    "platform-foundry-env",
+    "platform-custom-deployment-restart",
     {
-      blockchainNodeUniqueName: z
-        .string()
-        .describe("Unique name of the blockchain node to get foundry environment variables for"),
+      customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to restart"),
     },
     async (params) => {
-      const foundryEnv = await client.foundry.env(params.blockchainNodeUniqueName);
+      const customDeployment = await client.customDeployment.restart(params.customDeploymentUniqueName);
       return {
         content: [
           {
             type: "text",
-            name: "Foundry Environment Variables",
-            description: `Foundry environment variables for blockchain node: ${params.blockchainNodeUniqueName}`,
+            name: "Custom Deployment Restarted",
+            description: `Restarted custom deployment: ${params.customDeploymentUniqueName}`,
             mimeType: "application/json",
-            text: JSON.stringify(foundryEnv, null, 2),
+            text: JSON.stringify(customDeployment, null, 2),
           },
         ],
       };

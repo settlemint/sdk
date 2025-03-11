@@ -34,6 +34,7 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
       applicationUniqueName: z.string().describe("Unique name of the application to create the insights in"),
       name: z.string().describe("Name of the insights"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the insights (DEDICATED or SHARED)"),
+      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the insights"),
       provider: z.string().describe("Provider for the insights"),
       region: z.string().describe("Region for the insights"),
       insightsCategory: z

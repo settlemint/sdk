@@ -34,6 +34,7 @@ export const platformIntegrationToolCreate = (server: McpServer, env: Partial<Do
       applicationUniqueName: z.string().describe("Unique name of the application to create the integration tool in"),
       name: z.string().describe("Name of the integration tool"),
       type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the integration tool (DEDICATED or SHARED)"),
+      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the integration tool"),
       provider: z.string().describe("Provider for the integration tool"),
       region: z.string().describe("Region for the integration tool"),
       integrationType: z.enum(["CHAINLINK", "HASURA", "INTEGRATION_STUDIO"]).describe("Type of integration"),
