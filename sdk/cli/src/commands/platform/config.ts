@@ -16,7 +16,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  */
 export function configCommand() {
   return new Command("config")
-    .alias("c")
+    .alias("cfg")
     .description("Get platform configuration")
     .option("--prod", "Connect to your production environment")
     .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
