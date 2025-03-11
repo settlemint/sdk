@@ -28,7 +28,7 @@
     }
   },
   "bin": {
-    "settlemint": "dist/mcp.js"
+    "settlemint-mpc": "dist/mcp.js"
   },
   "scripts": {
     "build": "bun run build.ts",

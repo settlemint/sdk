@@ -19,7 +19,7 @@ async function build() {
       entrypoints: ["./src/mcp.ts"],
       outdir: "./dist",
       target: "node",
-      format: "esm",
+      format: "cjs",
       splitting: false,
       sourcemap: "external",
       minify: process.env.NODE_ENV === "production",
