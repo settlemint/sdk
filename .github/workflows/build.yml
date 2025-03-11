@@ -17,6 +17,9 @@ concurrency:
 permissions:
   contents: read
 
+env:
+  TURBO_LOG_ORDER: stream
+
 jobs:
   packages:
     name: Turbo Flow
