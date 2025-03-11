@@ -166,6 +166,7 @@ jobs:
                 | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` | |
                 | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` | |
                 | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` | |
+                | SDK MCP | `@settlemint/sdk-mcp@${{ env.VERSION }}` | |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
