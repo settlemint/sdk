@@ -7,7 +7,7 @@ describe("foundryTestCommand", () => {
   test("executes test command with vvv option", () => {
     let commandOptions: string[] = [];
     const program = new Command();
-    program.addCommand(
+    program.enablePositionalOptions().addCommand(
       foundryTestCommand()
         .enablePositionalOptions()
         .action((passThroughOptions, cmd) => {
