@@ -13,7 +13,7 @@ describe("foundryTestCommand", () => {
         commandOptions = forgeOptions;
       }),
     );
-    program.parse(["node", "test", "test", "-vvv"]);
+    program.parse(["node", "test", "-vvv"]);
 
     expect(commandOptions).toEqual(["-vvv"]);
   });
