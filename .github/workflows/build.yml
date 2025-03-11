@@ -65,7 +65,7 @@ jobs:
         run: bun install
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@aba9f8db6ef36e0733227a62673d6592b1f430ea # v5
+        uses: rlespinasse/github-slug-action@955b5ba4560860f8a633bd24190941f16016e42c # v5
 
       - name: Update package versions
         id: package-version

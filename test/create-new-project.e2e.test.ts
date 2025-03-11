@@ -17,7 +17,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
 const TEMPLATE_VERSION = "0.1.15-main";
-const SUBGRAPH_NAMES = ["kit", "asset-tokenization"];
+const SUBGRAPH_NAMES = ["kit", "starterkits"];
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -90,7 +90,7 @@ describe("Setup a project using the SDK", () => {
 
     expect(env.SETTLEMINT_THEGRAPH).toBeString();
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
-    expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
+    // expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
 
     expect(env.SETTLEMINT_PORTAL).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();

@@ -44,11 +44,13 @@ export async function subgraphPrompt({
     ) as string[]) ?? [];
 
   if (autoAccept) {
-    return allowAll
-      ? subgraphNames
-      : env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH
-        ? [env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH]
-        : [];
+    if (allowAll) {
+      return subgraphNames;
+    }
+    if (env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH) {
+      return [env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH];
+    }
+    return subgraphNames.length === 1 ? subgraphNames : [];
   }
 
   if (subgraphNames.length === 0) {
