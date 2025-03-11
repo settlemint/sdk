@@ -7,15 +7,13 @@ describe("foundryTestCommand", () => {
   test("executes test command with vvv option", () => {
     let commandOptions: string[] = [];
     const program = new Command();
-    program.enablePositionalOptions().addCommand(
-      foundryTestCommand()
-        .enablePositionalOptions()
-        .action((passThroughOptions, cmd) => {
-          const forgeOptions = mapPassthroughOptions(passThroughOptions, cmd);
-          commandOptions = forgeOptions;
-        }),
+    program.addCommand(
+      foundryTestCommand().action((passThroughOptions, cmd) => {
+        const forgeOptions = mapPassthroughOptions(passThroughOptions, cmd);
+        commandOptions = forgeOptions;
+      }),
     );
-    program.parse(["node", "test", "-vvv"]);
+    program.parse(["node", "test", "test", "-vvv"]);
 
     expect(commandOptions).toEqual(["-vvv"]);
   });
