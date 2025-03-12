@@ -91,6 +91,8 @@ const createCustomDeployment = graphql(
       $port: Int!
       $provider: String!
       $region: String!
+      $size: ClusterServiceSize
+      $type: ClusterServiceType
     ) {
       createCustomDeployment(
         applicationId: $applicationId
@@ -102,6 +104,8 @@ const createCustomDeployment = graphql(
         environmentVariables: $environmentVariables
         provider: $provider
         region: $region
+        size: $size
+        type: $type
       ) {
         ...CustomDeployment
       }

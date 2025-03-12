@@ -44,6 +44,7 @@ export const platformIntegrationToolCreate = (server: McpServer, env: Partial<Do
         applicationUniqueName: params.applicationUniqueName,
         name: params.name,
         type: params.type,
+        size: params.size,
         provider: params.provider,
         region: params.region,
         integrationType: params.integrationType,

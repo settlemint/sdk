@@ -43,8 +43,8 @@ export const platformCustomDeploymentCreate = (server: McpServer, env: Partial<D
         .describe("Environment variables for the custom deployment"),
       provider: z.string().describe("Provider for the custom deployment"),
       region: z.string().describe("Region for the custom deployment"),
-      type: z.enum(["DEDICATED", "SHARED"]).optional().describe("Type of the custom deployment (DEDICATED or SHARED)"),
-      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).optional().describe("Size of the custom deployment"),
+      type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the custom deployment (DEDICATED or SHARED)"),
+      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the custom deployment"),
     },
     async (params) => {
       const customDeployment = await client.customDeployment.create({
@@ -57,8 +57,8 @@ export const platformCustomDeploymentCreate = (server: McpServer, env: Partial<D
         environmentVariables: params.environmentVariables,
         provider: params.provider,
         region: params.region,
-        ...(params.type && { type: params.type }),
-        ...(params.size && { size: params.size }),
+        type: params.type,
+        size: params.size,
       });
 
       return {

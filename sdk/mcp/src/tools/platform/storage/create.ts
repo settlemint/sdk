@@ -44,6 +44,7 @@ export const platformStorageCreate = (server: McpServer, env: Partial<DotEnv>, p
         applicationUniqueName: params.applicationUniqueName,
         name: params.name,
         type: params.type,
+        size: params.size,
         provider: params.provider,
         region: params.region,
         storageProtocol: params.storageProtocol,

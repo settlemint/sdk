@@ -71,6 +71,7 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
         applicationUniqueName,
         name: params.name,
         type: params.type,
+        size: params.size,
         provider: params.provider,
         region: params.region,
         nodeName: params.nodeName,
