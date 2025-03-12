@@ -53,12 +53,14 @@ export async function subgraphPrompt({
     return subgraphNames.length === 1 ? subgraphNames : [];
   }
 
-  if (subgraphNames.length === 0 && !allowNew) {
-    cancel("No subgraphs found");
-  }
+  if (!allowNew) {
+    if (subgraphNames.length === 0) {
+      cancel("No subgraphs found");
+    }
 
-  if (subgraphNames.length === 1) {
-    return subgraphNames;
+    if (subgraphNames.length === 1) {
+      return subgraphNames;
+    }
   }
 
   const choices = subgraphNames.slice().sort();
