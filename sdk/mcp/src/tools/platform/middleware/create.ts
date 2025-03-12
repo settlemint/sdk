@@ -47,6 +47,7 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
         applicationUniqueName: params.applicationUniqueName,
         name: params.name,
         type: params.type,
+        size: params.size,
         provider: params.provider,
         region: params.region,
         interface: params.interface,
