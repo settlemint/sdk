@@ -15,7 +15,7 @@
         "tsup": "8.4.0",
         "turbo": "2.4.4",
         "typedoc": "0.28.0",
-        "typedoc-plugin-markdown": "4.4.2",
+        "typedoc-plugin-markdown": "4.5.0",
         "typedoc-plugin-merge-modules": "6.1.0",
         "typedoc-plugin-zod": "1.4.0",
         "typescript": "5.8.2",
@@ -42,10 +42,10 @@
       },
       "devDependencies": {
         "@commander-js/extra-typings": "11.1.0",
-        "@inquirer/confirm": "5.1.7",
-        "@inquirer/input": "4.1.7",
-        "@inquirer/password": "4.0.10",
-        "@inquirer/select": "4.0.10",
+        "@inquirer/confirm": "5.1.8",
+        "@inquirer/input": "4.1.8",
+        "@inquirer/password": "4.0.11",
+        "@inquirer/select": "4.1.0",
         "@settlemint/sdk-js": "workspace:*",
         "@settlemint/sdk-utils": "workspace:*",
         "@types/node": "22.13.10",
@@ -378,17 +378,17 @@
 
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.33.5", "", { "os": "win32", "cpu": "x64" }, "sha512-MpY/o8/8kj+EcnxwvrP4aTJSWw/aZ7JIGR4aBeZkZw5B7/Jn+tY9/VNwtcoGmdT7GfggGIU4kygOMSbYnOrAbg=="],
 
-    "@inquirer/confirm": ["@inquirer/confirm@5.1.7", "", { "dependencies": { "@inquirer/core": "^10.1.8", "@inquirer/type": "^3.0.5" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-Xrfbrw9eSiHb+GsesO8TQIeHSMTP0xyvTCeeYevgZ4sKW+iz9w/47bgfG9b0niQm+xaLY2EWPBINUPldLwvYiw=="],
+    "@inquirer/confirm": ["@inquirer/confirm@5.1.8", "", { "dependencies": { "@inquirer/core": "^10.1.9", "@inquirer/type": "^3.0.5" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-dNLWCYZvXDjO3rnQfk2iuJNL4Ivwz/T2+C3+WnNfJKsNGSuOs3wAo2F6e0p946gtSAk31nZMfW+MRmYaplPKsg=="],
 
-    "@inquirer/core": ["@inquirer/core@10.1.8", "", { "dependencies": { "@inquirer/figures": "^1.0.11", "@inquirer/type": "^3.0.5", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-HpAqR8y715zPpM9e/9Q+N88bnGwqqL8ePgZ0SMv/s3673JLMv3bIkoivGmjPqXlEgisUksSXibweQccUwEx4qQ=="],
+    "@inquirer/core": ["@inquirer/core@10.1.9", "", { "dependencies": { "@inquirer/figures": "^1.0.11", "@inquirer/type": "^3.0.5", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-sXhVB8n20NYkUBfDYgizGHlpRVaCRjtuzNZA6xpALIUbkgfd2Hjz+DfEN6+h1BRnuxw0/P4jCIMjMsEOAMwAJw=="],
 
     "@inquirer/figures": ["@inquirer/figures@1.0.11", "", {}, "sha512-eOg92lvrn/aRUqbxRyvpEWnrvRuTYRifixHkYVpJiygTgVSBIHDqLh0SrMQXkafvULg3ck11V7xvR+zcgvpHFw=="],
 
-    "@inquirer/input": ["@inquirer/input@4.1.7", "", { "dependencies": { "@inquirer/core": "^10.1.8", "@inquirer/type": "^3.0.5" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-rCQAipJNA14UTH84df/z4jDJ9LZ54H6zzuCAi7WZ0qVqx3CSqLjfXAMd5cpISIxbiHVJCPRB81gZksq6CZsqDg=="],
+    "@inquirer/input": ["@inquirer/input@4.1.8", "", { "dependencies": { "@inquirer/core": "^10.1.9", "@inquirer/type": "^3.0.5" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-WXJI16oOZ3/LiENCAxe8joniNp8MQxF6Wi5V+EBbVA0ZIOpFcL4I9e7f7cXse0HJeIPCWO8Lcgnk98juItCi7Q=="],
 
-    "@inquirer/password": ["@inquirer/password@4.0.10", "", { "dependencies": { "@inquirer/core": "^10.1.8", "@inquirer/type": "^3.0.5", "ansi-escapes": "^4.3.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-JC538ujqeYKkFqLoWZ0ILBteIUO2yajBMVEUZSxjl9x6fiEQtM+I5Rca7M2D8edMDbyHLnXifGH1hJZdh8V5rA=="],
+    "@inquirer/password": ["@inquirer/password@4.0.11", "", { "dependencies": { "@inquirer/core": "^10.1.9", "@inquirer/type": "^3.0.5", "ansi-escapes": "^4.3.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-dH6zLdv+HEv1nBs96Case6eppkRggMe8LoOTl30+Gq5Wf27AO/vHFgStTVz4aoevLdNXqwE23++IXGw4eiOXTg=="],
 
-    "@inquirer/select": ["@inquirer/select@4.0.10", "", { "dependencies": { "@inquirer/core": "^10.1.8", "@inquirer/figures": "^1.0.11", "@inquirer/type": "^3.0.5", "ansi-escapes": "^4.3.2", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-Tg8S9nESnCfISu5tCZSuXpXq0wHuDVimj7xyHstABgR34zcJnLdq/VbjB2mdZvNAMAehYBnNzSjxB06UE8LLAA=="],
+    "@inquirer/select": ["@inquirer/select@4.1.0", "", { "dependencies": { "@inquirer/core": "^10.1.9", "@inquirer/figures": "^1.0.11", "@inquirer/type": "^3.0.5", "ansi-escapes": "^4.3.2", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-z0a2fmgTSRN+YBuiK1ROfJ2Nvrpij5lVN3gPDkQGhavdvIVGHGW29LwYZfM/j42Ai2hUghTI/uoBuTbrJk42bA=="],
 
     "@inquirer/type": ["@inquirer/type@3.0.5", "", { "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-ZJpeIYYueOz/i/ONzrfof8g89kNdO2hjGuvULROo3O8rlB2CRtSseE5KeirnyE4t/thAn/EwvS/vuQeJCn+NZg=="],
 
@@ -1412,7 +1412,7 @@
 
     "typedoc": ["typedoc@0.28.0", "", { "dependencies": { "@gerrit0/mini-shiki": "^3.2.1", "lunr": "^2.3.9", "markdown-it": "^14.1.0", "minimatch": "^9.0.5", "yaml": "^2.7.0 " }, "peerDependencies": { "typescript": "5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x" }, "bin": { "typedoc": "bin/typedoc" } }, "sha512-UU+xxZXrpnUhEulBYRwY2afoYFC24J2fTFovOs3llj2foGShCoKVQL6cQCfQ+sBAOdiFn2dETpZ9xhah+CL3RQ=="],
 
-    "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.4.2", "", { "peerDependencies": { "typedoc": "0.27.x" } }, "sha512-kJVkU2Wd+AXQpyL6DlYXXRrfNrHrEIUgiABWH8Z+2Lz5Sq6an4dQ/hfvP75bbokjNDUskOdFlEEm/0fSVyC7eg=="],
+    "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.5.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-SZ3Nhkl8WE46W2/9OrjHIkXeSi4ZuceQeGxw2kGHyaaooRHYiiHlOWJx6SM0WKjqRUTfhz9T7wSwm3zwPEZndA=="],
 
     "typedoc-plugin-merge-modules": ["typedoc-plugin-merge-modules@6.1.0", "", { "peerDependencies": { "typedoc": "0.26.x || ^0.27.1" } }, "sha512-AZIyw+H1oG3xpJOq1b2CVnpK7A6OIddi7FsjljsbmQ7vx6dtaorEoz/DQPcGSOzWhWdJPqqdncIzVySuoffS2w=="],
 
