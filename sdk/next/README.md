@@ -58,7 +58,7 @@ A simple Hello World component that greets the user.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `props` | [`HelloWorldProps`](README.md#helloworldprops) | The props for the HelloWorld component. |
+| `props` | [`HelloWorldProps`](#helloworldprops) | The props for the HelloWorld component. |
 
 ##### Returns
 
@@ -123,7 +123,7 @@ Modifies the passed in Next.js configuration with SettleMint-specific settings.
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `nextConfig` | `C` | The original Next.js configuration |
-| `options` | [`WithSettleMintOptions`](README.md#withsettlemintoptions) | Options for customizing the SettleMint configuration |
+| `options` | [`WithSettleMintOptions`](#withsettlemintoptions) | Options for customizing the SettleMint configuration |
 
 ##### Returns
 
