@@ -52,7 +52,7 @@
     "publint": "0.3.9",
     "tsup": "8.4.0",
     "turbo": "2.4.4",
-    "typedoc": "0.28.0",
+    "typedoc": "0.28.1",
     "typedoc-plugin-markdown": "4.5.2",
     "typedoc-plugin-merge-modules": "6.1.0",
     "typedoc-plugin-zod": "1.4.0",
