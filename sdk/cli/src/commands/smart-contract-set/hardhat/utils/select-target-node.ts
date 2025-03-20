@@ -30,6 +30,12 @@ export async function selectTargetNode({
     );
     const validNodes = nodes.filter((node) => validateNode(node, false));
 
+    if (validNodes.length === 0) {
+      cancel(
+        "No valid blockchain nodes found for deployment. A valid node must be an EVM blockchain node with an activated ECDSA P256 or HSM ECDSA P256 private key, and be running.",
+      );
+    }
+
     const blockchainNode = await blockchainNodePrompt({
       env,
       nodes: validNodes,
