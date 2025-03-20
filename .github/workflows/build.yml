@@ -44,7 +44,7 @@ jobs:
           token: ${{ env.PAT_TOKEN }}
 
       - name: Setup caches
-        uses: namespacelabs/nscloud-cache-action@1d016dd6d40428050a16a6271307888386cc0bec # v1
+        uses: namespacelabs/nscloud-cache-action@2f50e7d0f70475e6f59a55ba0f05eec9108e77cc # v1
         with:
           path: |
             ./.turbo
@@ -56,7 +56,7 @@ jobs:
           bun-version-file: .bun-version
 
       - name: Install Node.js
-        uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
           node-version-file: package.json
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -65,7 +65,7 @@ jobs:
         run: bun install
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@aba9f8db6ef36e0733227a62673d6592b1f430ea # v5
+        uses: rlespinasse/github-slug-action@955b5ba4560860f8a633bd24190941f16016e42c # v5
 
       - name: Update package versions
         id: package-version
@@ -166,6 +166,7 @@ jobs:
                 | SDK Minio | `@settlemint/sdk-minio@${{ env.VERSION }}` | |
                 | SDK IPFS | `@settlemint/sdk-ipfs@${{ env.VERSION }}` | |
                 | SDK Blockscout | `@settlemint/sdk-blockscout@${{ env.VERSION }}` | |
+                | SDK MCP | `@settlemint/sdk-mcp@${{ env.VERSION }}` | |
 
       - name: Auto-commit updated package versions
         uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5

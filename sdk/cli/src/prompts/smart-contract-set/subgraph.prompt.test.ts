@@ -70,7 +70,7 @@ describe("subgraphPrompt", () => {
     expect(mockSelect).not.toHaveBeenCalled();
   });
 
-  it("should return the no subgraph when accept is true, allow all is false and no default subgraph is set", async () => {
+  it("should return no subgraph when accept is true, allow all is false and no default subgraph is set", async () => {
     const env = {
       SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
       SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: undefined,
@@ -219,5 +219,49 @@ describe("subgraphPrompt", () => {
     expect(resultAllowAll).toEqual(["subgraph1", "subgraph2"]);
 
     expect(mockSelect).not.toHaveBeenCalled();
+  });
+
+  it("should automatically ask for a new subgraph when no subgraphs are available when allowNew is true", async () => {
+    const env = {
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [],
+    };
+
+    mockSubgraphNamePrompt.mockImplementationOnce(() => Promise.resolve("New one"));
+
+    const result = await subgraphPrompt({
+      env,
+      message: "Select a subgraph",
+      allowNew: true,
+      isCi: false,
+    });
+
+    expect(result).toEqual(["New one"]);
+    expect(mockSubgraphNamePrompt).toHaveBeenCalled();
+    expect(mockSelect).not.toHaveBeenCalled();
+  });
+
+  it("should always prompt for a subgraph when allowNew is true and accept is false", async () => {
+    const env = {
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1"],
+      SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph1",
+    };
+
+    mockSelect.mockImplementationOnce(({ default: defaultValue }: { default: string }) => {
+      expect(defaultValue).toBe("subgraph1");
+      return Promise.resolve("New subgraph");
+    });
+    mockSubgraphNamePrompt.mockImplementationOnce(() => Promise.resolve("My subgraph"));
+
+    const result = await subgraphPrompt({
+      env,
+      message: "Select a subgraph",
+      allowNew: true,
+      accept: false,
+      isCi: false,
+    });
+
+    expect(result).toEqual(["My subgraph"]);
+    expect(mockSelect).toHaveBeenCalled();
+    expect(mockSubgraphNamePrompt).toHaveBeenCalled();
   });
 });

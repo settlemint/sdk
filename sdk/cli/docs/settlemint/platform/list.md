@@ -43,17 +43,17 @@ Examples:
 List the application services
 
 Options:
-  -app, --application &lt;application&gt;  The application unique name to list the
-                                     services in (defaults to application from
-                                     env)
-  -t, --type &lt;type...&gt;               The type(s) of service to list (choices:
-                                     &quot;blockchain-network&quot;, &quot;blockchain-node&quot;,
-                                     &quot;custom-deployment&quot;, &quot;insights&quot;,
-                                     &quot;integration-tool&quot;, &quot;middleware&quot;,
-                                     &quot;private-key&quot;, &quot;storage&quot;)
-  -o, --output &lt;output&gt;              The output format (choices: &quot;wide&quot;,
-                                     &quot;json&quot;, &quot;yaml&quot;)
-  -h, --help                         display help for command
+  --app, --application &lt;application&gt;  The application unique name to list the
+                                      services in (defaults to application from
+                                      env)
+  -t, --type &lt;type...&gt;                The type(s) of service to list (choices:
+                                      &quot;blockchain-network&quot;, &quot;blockchain-node&quot;,
+                                      &quot;custom-deployment&quot;, &quot;insights&quot;,
+                                      &quot;integration-tool&quot;, &quot;middleware&quot;,
+                                      &quot;private-key&quot;, &quot;storage&quot;)
+  -o, --output &lt;output&gt;               The output format (choices: &quot;wide&quot;,
+                                      &quot;json&quot;, &quot;yaml&quot;)
+  -h, --help                          display help for command
 </pre>
 
 <h2 id="list-workspaces"><a href="#home">List</a> > Workspaces</h2>

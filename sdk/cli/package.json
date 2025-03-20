@@ -44,11 +44,12 @@
     "tinyexec": "0.3.2"
   },
   "devDependencies": {
-    "@commander-js/extra-typings": "13.1.0",
-    "@inquirer/confirm": "5.1.6",
-    "@inquirer/input": "4.1.6",
-    "@inquirer/password": "4.0.9",
-    "@inquirer/select": "4.0.9",
+    "@commander-js/extra-typings": "11.1.0",
+    "commander": "11.1.0",
+    "@inquirer/confirm": "5.1.8",
+    "@inquirer/input": "4.1.8",
+    "@inquirer/password": "4.0.11",
+    "@inquirer/select": "4.1.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "@types/node": "22.13.10",

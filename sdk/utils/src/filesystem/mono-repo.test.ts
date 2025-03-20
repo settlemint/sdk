@@ -41,6 +41,7 @@ describe("mono-repo utilities", () => {
       "hasura",
       "ipfs",
       "js",
+      "mcp",
       "minio",
       "next",
       "portal",

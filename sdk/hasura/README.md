@@ -16,7 +16,7 @@
 </p>
 
 <div align="center">
-  <a href="https://console.settlemint.com/documentation/docs/using-platform/dev-tools/SDK/">Documentation</a>
+  <a href="https://console.settlemint.com/documentation">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://www.npmjs.com/package/@settlemint/sdk-hasura">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
@@ -43,7 +43,7 @@
 
 The SettleMint Hasura SDK provides a seamless way to interact with Hasura GraphQL APIs for managing application data. It enables you to easily query and mutate data stored in your SettleMint-powered PostgreSQL databases through a type-safe GraphQL interface.
 
-For detailed information about using Hasura with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/backend-as-a-service/).
+For detailed information about using Hasura with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
 
 ## API Reference
 
@@ -53,7 +53,7 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:119](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/hasura.ts#L119)
+Defined in: [sdk/hasura/src/hasura.ts:119](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/hasura.ts#L119)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -80,8 +80,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:123](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/hasura.ts#L123) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:124](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/hasura.ts#L124) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:123](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/hasura.ts#L123) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:124](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/hasura.ts#L124) |
 
 ##### Throws
 
@@ -153,7 +153,7 @@ const result = await client.request(query);
 
 > **createPostgresPool**(`databaseUrl`): `Pool`
 
-Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/postgres.ts#L83)
+Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/postgres.ts#L83)
 
 Creates a PostgreSQL connection pool with error handling and retry mechanisms
 
@@ -194,9 +194,9 @@ try {
 
 #### ClientOptions
 
-> **ClientOptions**: \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}
+> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/hasura/src/hasura.ts:35](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/hasura.ts#L35)
+Defined in: [sdk/hasura/src/hasura.ts:35](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/hasura.ts#L35)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -204,9 +204,9 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 #### RequestConfig
 
-> **RequestConfig**: `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
+> **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/hasura.ts#L10)
+Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/hasura.ts#L10)
 
 Type definition for GraphQL client configuration options
 
@@ -214,9 +214,9 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<[`ClientOptions`](README.md#clientoptions)\>
+> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}\>\]\>
 
-Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/hasura/src/hasura.ts#L18)
+Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/hasura/src/hasura.ts#L18)
 
 Schema for validating client options for the Hasura client.
 Defines two possible runtime configurations:

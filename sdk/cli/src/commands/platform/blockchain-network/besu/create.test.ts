@@ -111,7 +111,7 @@ describe("besuNetworkCreateCommand", () => {
       "europe",
       "--node-name",
       "validator-1",
-      "-app",
+      "--app",
       "test-app",
       "--size",
       "LARGE",

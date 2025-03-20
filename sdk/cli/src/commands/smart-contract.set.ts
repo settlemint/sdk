@@ -24,6 +24,7 @@ import { subgraphRemoveCommand } from "./smart-contract-set/subgraph/remove";
 export function smartContractSetCommand(): Command {
   const foundry = new Command("foundry")
     .alias("f")
+    .enablePositionalOptions()
     .description("Foundry commands for building and testing smart contracts");
   foundry.addCommand(foundryBuildCommand());
   foundry.addCommand(foundryFormatCommand());
@@ -32,6 +33,7 @@ export function smartContractSetCommand(): Command {
 
   const hardhat = new Command("hardhat")
     .alias("h")
+    .enablePositionalOptions()
     .description("Hardhat commands for building, testing and deploying smart contracts");
   hardhat.addCommand(hardhatBuildCommand());
   hardhat.addCommand(hardhatDeployCommand());
@@ -41,6 +43,7 @@ export function smartContractSetCommand(): Command {
 
   const subgraph = new Command("subgraph")
     .alias("sg")
+    .enablePositionalOptions()
     .description("Commands for managing TheGraph subgraphs for smart contract indexing");
   subgraph.addCommand(subgraphBuildCommand());
   subgraph.addCommand(subgraphCodegenCommand());

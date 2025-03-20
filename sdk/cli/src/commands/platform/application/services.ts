@@ -70,7 +70,7 @@ export function servicesCommand() {
       ]),
     )
     .option(
-      "-app, --application <application>",
+      "--app, --application <application>",
       "The application unique name to list the services in (defaults to application from env)",
     )
     .addOption(new Option("-t, --type <type...>", "The type(s) of service to list").choices(SERVICE_TYPES))

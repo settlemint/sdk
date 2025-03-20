@@ -16,7 +16,7 @@
 </p>
 
 <div align="center">
-  <a href="https://console.settlemint.com/documentation/docs/using-platform/dev-tools/SDK/">Documentation</a>
+  <a href="https://console.settlemint.com/documentation">Documentation</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
   <a href="https://www.npmjs.com/package/@settlemint/sdk-minio">NPM</a>
   <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
@@ -37,7 +37,7 @@
 
 The SettleMint MinIO SDK provides a simple way to interact with MinIO object storage through the SettleMint platform. It enables you to easily store and retrieve files using MinIO's S3-compatible API in a secure and scalable manner.
 
-For detailed information about using MinIO with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation/docs/using-platform/storage/).
+For detailed information about using MinIO with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
 
 ## API Reference
 
@@ -47,7 +47,7 @@ For detailed information about using MinIO with the SettleMint platform, check o
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/minio/src/minio.ts#L24)
+Defined in: [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/minio/src/minio.ts#L24)
 
 Creates a MinIO client for server-side use with authentication.
 
@@ -69,7 +69,7 @@ An object containing the initialized MinIO client
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `Client` | [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v1.1.16/sdk/minio/src/minio.ts#L24) |
+| `client` | `Client` | [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v1.2.3/sdk/minio/src/minio.ts#L24) |
 
 ##### Throws
 
