@@ -19,7 +19,7 @@ export function hasuraTrackCommand() {
     .usage(
       createExamples([
         {
-          description: "Track all tables in all schemas",
+          description: "Track all tables",
           command: "hasura track",
         },
         {
