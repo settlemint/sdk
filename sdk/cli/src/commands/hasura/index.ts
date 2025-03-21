@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { hasuraTrackTableCommand } from "./track-table";
+import { hasuraTrackCommand } from "./track";
 
 /**
  * Creates and returns the 'hasura' command for the SettleMint SDK.
@@ -11,5 +11,5 @@ export function hasuraCommand(): Command {
   return new Command("hasura")
     .alias("ha")
     .description("Manage Hasura service in the SettleMint platform")
-    .addCommand(hasuraTrackTableCommand());
+    .addCommand(hasuraTrackCommand());
 }
