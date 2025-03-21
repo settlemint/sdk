@@ -19,17 +19,18 @@ export function hasuraTrackCommand() {
     .usage(
       createExamples([
         {
-          description: "Track all tables",
+          description: "Track all tables of the default database",
           command: "hasura track",
         },
         {
-          description: "Track all tables and accept default values",
-          command: "hasura track --accept-defaults",
+          description: "Track all tables of a specific database",
+          command: "hasura track --database my-database",
         },
       ]),
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
-    .action(async ({ acceptDefaults }) => {
+    .option("-db, --database <database>", "Database name", "default")
+    .action(async ({ acceptDefaults, database }) => {
       intro("Tracking all tables in Hasura");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
@@ -79,8 +80,8 @@ export function hasuraTrackCommand() {
 
       const messages: string[] = [];
 
-      await spinner({
-        startMessage: "Tracking all tables in Hasura",
+      const { result } = await spinner({
+        startMessage: `Tracking all tables in Hasura from database "${database}"`,
         stopMessage: "Successfully tracked all tables in Hasura",
         task: async () => {
           const executeHasuraQuery = async <T>(query: object): Promise<{ ok: boolean; data: T }> => {
@@ -101,70 +102,49 @@ export function hasuraTrackCommand() {
             return { ok: true, data: (await response.json()) as T };
           };
 
-          const exportMetadata = async () => {
-            return executeHasuraQuery<{
-              resource_version: number;
-              metadata: {
-                version: number;
-                sources: Array<{
-                  name: string;
-                  kind: string;
-                  tables: Array<{
-                    table: {
-                      name: string;
-                      schema: string;
-                    };
-                  }>;
-                }>;
-              };
-            }>({
-              type: "export_metadata",
-              version: 2,
-              args: {},
-            });
-          };
-
-          // Get current metadata to identify all tables
-          const metadataResult = await exportMetadata();
-
-          if (!metadataResult.ok) {
-            throw new Error(`Failed to export metadata: ${JSON.stringify(metadataResult.data)}`);
-          }
-
-          const metadata = metadataResult.data;
-
-          // Extract all tables from all sources
-          const allTables: Array<{ source: string; schema: string; table: string }> = [];
-
-          metadata.metadata.sources.map((source) => {
-            source.tables.map((tableInfo) => {
-              allTables.push({
-                source: source.name,
-                schema: tableInfo.table.schema,
-                table: tableInfo.table.name,
-              });
-            });
+          // Get all tables using pg_get_source_tables
+          const getTablesResult = await executeHasuraQuery<
+            Array<{
+              name: string;
+              schema: string;
+            }>
+          >({
+            type: "pg_get_source_tables",
+            args: {
+              source: database,
+            },
           });
 
-          messages.push(`Found ${allTables.length} tables in the database`);
+          if (!getTablesResult.ok) {
+            throw new Error(`Failed to get tables: ${JSON.stringify(getTablesResult.data)}`);
+          }
 
-          // Use bulk untrack operation instead of going one by one
-          const untrackResult = await executeHasuraQuery<{ code?: string }>({
+          const tables = getTablesResult.data;
+
+          if (tables.length === 0) {
+            return { result: "no-tables" as const };
+          }
+
+          messages.push(`Found ${tables.length} tables in database "${database}"`);
+
+          // Incase a table is already tracked, untrack it first
+          await executeHasuraQuery<{ code?: string }>({
             type: "pg_untrack_tables",
             args: {
-              tables: allTables.map(({ source, table }) => ({ source, table })),
+              tables: tables.map((table) => ({
+                table: table.name,
+              })),
               allow_warnings: true,
             },
           });
 
-          if (!untrackResult.ok) {
-            throw new Error(`Failed to untrack tables: ${JSON.stringify(untrackResult.data)}`);
-          }
-
+          // Track all tables
           const trackResult = await executeHasuraQuery<{ code?: string }>({
             type: "pg_track_tables",
             args: {
-              tables: allTables.map(({ source, table }) => ({ source, table })),
+              tables: tables.map((table) => ({
+                table: table.name,
+              })),
               allow_warnings: true,
             },
           });
@@ -173,15 +153,19 @@ export function hasuraTrackCommand() {
             throw new Error(`Failed to track tables: ${JSON.stringify(trackResult.data)}`);
           }
 
-          messages.push(`Successfully tracked ${allTables.length} tables`);
+          messages.push(`Successfully tracked ${tables.length} tables`);
 
-          return { data: "success" };
+          return { result: "success" as const };
         },
       });
 
       // Display collected messages after spinner completes
       for (const message of messages) {
         note(message);
+      }
+
+      if (result === "no-tables") {
+        outro(`No tables found in database "${database}"`);
       }
 
       outro("Table tracking completed successfully");
