@@ -9,7 +9,7 @@ import { getHasuraEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export function hasuraTrackTableCommand() {
@@ -80,83 +80,79 @@ export function hasuraTrackTableCommand() {
       const baseUrl = new URL(hasuraGraphqlEndpoint);
       const queryEndpoint = new URL("/v1/query", baseUrl.origin).toString();
 
-      try {
-        const messages: string[] = [];
+      const messages: string[] = [];
 
-        await spinner({
-          startMessage: `Tracking table '${schema}.${table}' in Hasura`,
-          stopMessage: `Successfully tracked table '${schema}.${table}' in Hasura`,
-          task: async () => {
-            const executeHasuraQuery = async (query: object) => {
-              const response = await fetch(queryEndpoint, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  "X-Hasura-Admin-Secret": hasuraAdminSecret,
-                  "x-auth-token": accessToken,
-                },
-                body: JSON.stringify(query),
-              });
+      await spinner({
+        startMessage: `Tracking table '${schema}.${table}' in Hasura`,
+        stopMessage: `Successfully tracked table '${schema}.${table}' in Hasura`,
+        task: async () => {
+          const executeHasuraQuery = async (query: object) => {
+            const response = await fetch(queryEndpoint, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Hasura-Admin-Secret": hasuraAdminSecret,
+                "x-auth-token": accessToken,
+              },
+              body: JSON.stringify(query),
+            });
 
-              if (!response.ok) {
-                return { ok: false, data: await response.json() };
-              }
-
-              return { ok: true, data: await response.json() };
-            };
-
-            const trackTable = async () => {
-              return executeHasuraQuery({
-                type: "track_table",
-                args: { schema, table },
-              });
-            };
-
-            const untrackTable = async () => {
-              return executeHasuraQuery({
-                type: "untrack_table",
-                args: { schema, table },
-              });
-            };
-
-            const trackResult = await trackTable();
-
-            if (trackResult.ok) {
-              return { data: trackResult.data };
+            if (!response.ok) {
+              return { ok: false, data: await response.json() };
             }
 
-            if (trackResult.data.code !== "already-tracked") {
-              throw new Error(`Failed to track table: ${JSON.stringify(trackResult.data)}`);
-            }
+            return { ok: true, data: await response.json() };
+          };
 
-            // If tracking failed because table is already tracked, untrack and then retrack
-            messages.push(`Table '${schema}.${table}' is already tracked. Untracking and retracking...`);
+          const trackTable = async () => {
+            return executeHasuraQuery({
+              type: "track_table",
+              args: { schema, table },
+            });
+          };
 
-            const untrackResult = await untrackTable();
-            if (!untrackResult.ok) {
-              throw new Error(`Failed to untrack table: ${JSON.stringify(untrackResult.data)}`);
-            }
-            messages.push(`Successfully untracked table '${schema}.${table}'.`);
+          const untrackTable = async () => {
+            return executeHasuraQuery({
+              type: "untrack_table",
+              args: { schema, table },
+            });
+          };
 
-            // Track the table again
-            const retrackResult = await trackTable();
-            if (!retrackResult.ok) {
-              throw new Error(`Failed to re-track table: ${JSON.stringify(retrackResult.data)}`);
-            }
-            messages.push(`Successfully re-tracked table '${schema}.${table}'.`);
+          const trackResult = await trackTable();
 
-            return { data: retrackResult.data };
-          },
-        });
+          if (trackResult.ok) {
+            return { data: trackResult.data };
+          }
 
-        // Display collected messages after spinner completes
-        for (const message of messages) {
-          note(message);
-        }
+          if (trackResult.data.code !== "already-tracked") {
+            throw new Error(`Failed to track table: ${JSON.stringify(trackResult.data)}`);
+          }
 
-        outro("Table tracking completed");
-      } catch (error) {
-        cancel(`Failed to track table: ${error instanceof Error ? error.message : String(error)}`);
+          // If tracking failed because table is already tracked, untrack and then retrack
+          messages.push(`Table '${schema}.${table}' is already tracked. Untracking and retracking...`);
+
+          const untrackResult = await untrackTable();
+          if (!untrackResult.ok) {
+            throw new Error(`Failed to untrack table: ${JSON.stringify(untrackResult.data)}`);
+          }
+          messages.push(`Successfully untracked table '${schema}.${table}'.`);
+
+          // Track the table again
+          const retrackResult = await trackTable();
+          if (!retrackResult.ok) {
+            throw new Error(`Failed to re-track table: ${JSON.stringify(retrackResult.data)}`);
+          }
+          messages.push(`Successfully re-tracked table '${schema}.${table}'.`);
+
+          return { data: retrackResult.data };
+        },
+      });
+
+      // Display collected messages after spinner completes
+      for (const message of messages) {
+        note(message);
       }
+
+      outro("Table tracking completed");
     });
 }
