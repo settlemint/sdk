@@ -2,7 +2,13 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { IntegrationTool } from "@settlemint/sdk-js";
 
-export interface HasuraPromptArgs extends BaseServicePromptArgs<IntegrationTool> {
+export type Hasura = Extract<IntegrationTool, { __typename: "Hasura" }>;
+
+export function isHasura(integration: IntegrationTool): integration is Hasura {
+  return integration.__typename === "Hasura";
+}
+
+export interface HasuraPromptArgs extends BaseServicePromptArgs<Hasura> {
   integrations: IntegrationTool[];
 }
 
@@ -21,11 +27,11 @@ export async function hasuraPrompt({
   integrations,
   accept,
   isRequired = false,
-}: HasuraPromptArgs): Promise<IntegrationTool | undefined> {
-  const possible = integrations.filter((integration) => integration.integrationType === "HASURA");
+}: HasuraPromptArgs): Promise<Hasura | undefined> {
+  const hasuras = integrations.filter(isHasura);
   return servicePrompt({
     env,
-    services: possible,
+    services: hasuras,
     accept,
     envKey: "SETTLEMINT_HASURA",
     isRequired,
