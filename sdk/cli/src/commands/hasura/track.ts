@@ -148,9 +148,6 @@ export function hasuraTrackCommand() {
 
           messages.push(`Found ${allTables.length} tables in the database`);
 
-          // Untrack all tables first
-          messages.push("Untracking all tables...");
-
           // Use bulk untrack operation instead of going one by one
           const untrackResult = await executeHasuraQuery<{ code?: string }>({
             type: "pg_untrack_tables",
@@ -163,11 +160,6 @@ export function hasuraTrackCommand() {
           if (!untrackResult.ok) {
             throw new Error(`Failed to untrack tables: ${JSON.stringify(untrackResult.data)}`);
           }
-
-          messages.push("Successfully untracked all tables");
-
-          // Track all tables again using bulk operation
-          messages.push("Tracking all tables...");
 
           const trackResult = await executeHasuraQuery<{ code?: string }>({
             type: "pg_track_tables",
