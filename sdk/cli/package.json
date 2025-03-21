@@ -41,7 +41,7 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "tinyexec": "0.3.2"
+    "tinyexec": "1.0.0"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "11.1.0",
