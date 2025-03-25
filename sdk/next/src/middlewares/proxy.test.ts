@@ -29,8 +29,10 @@ describe("proxyMiddleware", () => {
   it("should return next response for non-proxy routes", () => {
     const request = new NextRequest(new URL("https://example.com/api/test"));
     const nextSpy = spyOn(NextResponse, "next");
+    const rewriteSpy = spyOn(NextResponse, "rewrite");
     proxyMiddleware(request);
     expect(nextSpy).toHaveBeenCalled();
+    expect(rewriteSpy).not.toHaveBeenCalled();
   });
 
   it("should add authentication headers for hasura proxy routes", () => {
@@ -103,9 +105,10 @@ describe("proxyMiddleware", () => {
   it("should respect disabled proxy options", () => {
     const request = new NextRequest(new URL("https://example.com/proxy/hasura"));
     const nextSpy = spyOn(NextResponse, "next");
+    const rewriteSpy = spyOn(NextResponse, "rewrite");
     proxyMiddleware(request, { disableHasuraProxy: true });
-    proxyMiddleware(request);
     expect(nextSpy).toHaveBeenCalled();
+    expect(rewriteSpy).not.toHaveBeenCalled();
   });
 
   it("should remove authorization header if present", () => {
