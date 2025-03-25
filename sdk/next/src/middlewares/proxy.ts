@@ -10,6 +10,15 @@ const isIpfsGatewayProxyRoute = match(["/proxy/ipfs/gateway", "/proxy/ipfs/gatew
 const isBlockscoutProxyRoute = match(["/proxy/blockscout", "/proxy/blockscout/*path"]);
 const isTheGraphProxyRoute = match(["/proxy/thegraph", "/proxy/thegraph/*path"]);
 
+interface ProxyMiddlewareOptions {
+  disableHasuraProxy?: boolean;
+  disablePortalProxy?: boolean;
+  disableIpfsApiProxy?: boolean;
+  disableIpfsGatewayProxy?: boolean;
+  disableBlockscoutProxy?: boolean;
+  disableTheGraphProxy?: boolean;
+}
+
 /**
  * Middleware function to handle proxy requests by adding appropriate authentication headers.
  *
@@ -24,12 +33,12 @@ const isTheGraphProxyRoute = match(["/proxy/thegraph", "/proxy/thegraph/*path"])
  *   return proxyMiddleware(request);
  * }
  */
-export function proxyMiddleware(request: NextRequest): NextResponse | undefined {
+export function proxyMiddleware(request: NextRequest, options: ProxyMiddlewareOptions = {}): NextResponse | undefined {
   const env = validate(DotEnvSchema, process.env);
   if (!isProxyRoute(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
-  const rewriteUrl = getRewriteUrl(request, env);
+  const rewriteUrl = getRewriteUrl(request, env, options);
   if (!rewriteUrl) {
     return NextResponse.next();
   }
@@ -53,25 +62,25 @@ export function proxyMiddleware(request: NextRequest): NextResponse | undefined 
   });
 }
 
-function getRewriteUrl(request: NextRequest, env: DotEnv) {
+function getRewriteUrl(request: NextRequest, env: DotEnv, options: ProxyMiddlewareOptions) {
   const path = request.nextUrl.pathname;
-  if (isHasuraProxyRoute(path)) {
+  if (isHasuraProxyRoute(path) && !options.disableHasuraProxy) {
     return env.SETTLEMINT_HASURA_ENDPOINT;
   }
-  if (isPortalProxyRoute(path)) {
+  if (isPortalProxyRoute(path) && !options.disablePortalProxy) {
     return env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT;
   }
-  if (isIpfsApiProxyRoute(path)) {
+  if (isIpfsApiProxyRoute(path) && !options.disableIpfsApiProxy) {
     return env.SETTLEMINT_IPFS_API_ENDPOINT;
   }
-  if (isIpfsGatewayProxyRoute(path)) {
+  if (isIpfsGatewayProxyRoute(path) && !options.disableIpfsGatewayProxy) {
     return env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT;
   }
-  if (isBlockscoutProxyRoute(path)) {
+  if (isBlockscoutProxyRoute(path) && !options.disableBlockscoutProxy) {
     return env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT;
   }
   const theGraphMatch = isTheGraphProxyRoute(path);
-  if (theGraphMatch) {
+  if (theGraphMatch && !options.disableTheGraphProxy) {
     const { path } = theGraphMatch.params;
     const endpoints = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? [];
     if (Array.isArray(path)) {
