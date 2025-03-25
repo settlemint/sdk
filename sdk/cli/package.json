@@ -40,9 +40,6 @@
     "docs": "bun scripts/create-docs.ts",
     "prepack": "cp ../../LICENSE ."
   },
-  "dependencies": {
-    "tinyexec": "1.0.0"
-  },
   "devDependencies": {
     "@commander-js/extra-typings": "11.1.0",
     "commander": "11.1.0",
