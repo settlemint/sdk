@@ -40,9 +40,7 @@
     "docs": "bun scripts/create-docs.ts",
     "prepack": "cp ../../LICENSE ."
   },
-  "dependencies": {
-    "tinyexec": "0.3.2"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@commander-js/extra-typings": "11.1.0",
     "commander": "11.1.0",
@@ -52,7 +50,7 @@
     "@inquirer/select": "4.1.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@types/node": "22.13.13",
+    "@types/node": "22.13.10",
     "@types/semver": "7.5.8",
     "@types/which": "3.0.4",
     "get-tsconfig": "4.10.0",
