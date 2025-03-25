@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "1.2.2",
+  "version": "1.2.5",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -46,14 +46,14 @@
     "@biomejs/biome": "1.9.4",
     "@types/bun": "1.2.5",
     "@types/mustache": "4.2.5",
-    "knip": "5.45.0",
-    "lefthook": "1.11.3",
+    "knip": "5.46.0",
+    "lefthook": "1.11.4",
     "mustache": "4.2.0",
     "publint": "0.3.9",
     "tsup": "8.4.0",
     "turbo": "2.4.4",
-    "typedoc": "0.27.9",
-    "typedoc-plugin-markdown": "4.4.2",
+    "typedoc": "0.28.1",
+    "typedoc-plugin-markdown": "4.6.0",
     "typedoc-plugin-merge-modules": "6.1.0",
     "typedoc-plugin-zod": "1.4.0",
     "typescript": "5.8.2"
@@ -79,6 +79,6 @@
     "ws": "8.18.1",
     "adm-zip": "0.5.16",
     "react-is": "19.0.0",
-    "undici": "7.4.0"
+    "undici": "7.5.0"
   }
 }

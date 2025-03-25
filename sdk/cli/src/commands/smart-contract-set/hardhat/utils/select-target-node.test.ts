@@ -169,4 +169,25 @@ describe("selectTargetNode", () => {
     expect(result.privateKeys?.length).toBe(1);
     expect(result.privateKeys?.[0].privateKeyType).toEqual("ACCESSIBLE_ECDSA_P256");
   });
+
+  test("should cancel when no valid nodes are found", async () => {
+    // Create a mock that returns only invalid nodes
+    const noValidNodesSettlemint = {
+      blockchainNode: {
+        list: mock(async () => [invalidEvmNode, noPrivateKeyNode, notRunningNode, hdPrivateKeyNode]),
+        read: mockSettlemint.blockchainNode.read,
+      },
+    } as unknown as SettlemintClient;
+
+    expect(
+      selectTargetNode({
+        env: { SETTLEMINT_APPLICATION: "test-app" },
+        blockchainNodeUniqueName: undefined,
+        autoAccept: false,
+        settlemint: noValidNodesSettlemint,
+      }),
+    ).rejects.toThrow(
+      "No valid blockchain nodes found for deployment. A valid node must be an EVM blockchain node with an activated ECDSA P256 or HSM ECDSA P256 private key, and be running.",
+    );
+  });
 });

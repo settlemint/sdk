@@ -239,4 +239,29 @@ describe("subgraphPrompt", () => {
     expect(mockSubgraphNamePrompt).toHaveBeenCalled();
     expect(mockSelect).not.toHaveBeenCalled();
   });
+
+  it("should always prompt for a subgraph when allowNew is true and accept is false", async () => {
+    const env = {
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1"],
+      SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph1",
+    };
+
+    mockSelect.mockImplementationOnce(({ default: defaultValue }: { default: string }) => {
+      expect(defaultValue).toBe("subgraph1");
+      return Promise.resolve("New subgraph");
+    });
+    mockSubgraphNamePrompt.mockImplementationOnce(() => Promise.resolve("My subgraph"));
+
+    const result = await subgraphPrompt({
+      env,
+      message: "Select a subgraph",
+      allowNew: true,
+      accept: false,
+      isCi: false,
+    });
+
+    expect(result).toEqual(["My subgraph"]);
+    expect(mockSelect).toHaveBeenCalled();
+    expect(mockSubgraphNamePrompt).toHaveBeenCalled();
+  });
 });

@@ -394,9 +394,20 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
   version: String
 }
 
-"""Add-on to enable for the application"""
-enum AddOn {
-  CodeStudio
+input AdditionalConfigInput {
+  """Whether code studio is enabled"""
+  codeStudio: Boolean! = false
+
+  """Type of wallet to use for the application"""
+  userWalletType: UserWalletType
+}
+
+type AdditionalConfigType {
+  """Whether code studio is enabled"""
+  codeStudio: Boolean!
+
+  """Type of wallet to use for the application"""
+  userWalletType: UserWalletType
 }
 
 type AdvancedDeploymentConfig {
@@ -12776,9 +12787,6 @@ type Kit {
 
   """Kit name"""
   name: String!
-
-  """Kit services"""
-  services: KitServices!
 }
 
 type KitConfig {
@@ -12796,86 +12804,12 @@ type KitConfig {
 }
 
 type KitPricing {
-  addOns: [String!]!
+  additionalConfig: AdditionalConfigType!
   currency: String!
   environment: Environment!
   estimatedTotalPrice: Float!
   kitId: String!
   services: ServicePricing!
-}
-
-type KitServices {
-  development: KitServicesEnvironment
-  production: KitServicesEnvironment
-}
-
-type KitServicesBlockchainNetwork {
-  """Blockchain Network Name"""
-  name: String!
-
-  """Blockchain Network Node Name"""
-  nodeName: String!
-}
-
-type KitServicesBlockchainNode {
-  """Blockchain Node Name"""
-  name: String!
-  nodeType: NodeType!
-}
-
-type KitServicesEnvironment {
-  blockchainNetworks: [KitServicesBlockchainNetwork!]
-  blockchainNodes: [KitServicesBlockchainNode!]
-  insights: [KitServicesInsight!]
-  integrations: [KitServicesIntegration!]
-  loadBalancers: [KitServicesLoadBalancer!]
-  middlewares: [KitServicesMiddleware!]
-  privateKeys: [KitServicesPrivateKey!]
-  smartContractSets: [KitServicesSmartContractSet!]
-  storages: [KitServicesStorage!]
-}
-
-type KitServicesInsight {
-  insightsCategory: InsightsCategory!
-
-  """Insight Name"""
-  name: String!
-}
-
-type KitServicesIntegration {
-  integrationType: IntegrationType!
-
-  """Integration Name"""
-  name: String!
-}
-
-type KitServicesLoadBalancer {
-  """LoadBalancer Name"""
-  name: String!
-}
-
-type KitServicesMiddleware {
-  interface: MiddlewareType!
-
-  """Middleware Name"""
-  name: String!
-}
-
-type KitServicesPrivateKey {
-  """Private Key Name"""
-  name: String!
-  privateKeyType: PrivateKeyType!
-}
-
-type KitServicesSmartContractSet {
-  """Smart Contract Set Name"""
-  name: String!
-}
-
-type KitServicesStorage {
-  """Storage Name"""
-  name: String!
-  storageProtocol: StorageProtocol!
 }
 
 """The language preference of the user."""
@@ -13374,8 +13308,8 @@ type Mutation {
     """The absolute maximum bytes for Fabric Raft consensus"""
     absoluteMaxBytes: Int = 10
 
-    """Add-ons to enable"""
-    addOns: [AddOn!]
+    """Additional configuration options"""
+    additionalConfig: AdditionalConfigInput
 
     """The batch timeout for Fabric Raft consensus"""
     batchTimeout: Float = 2
@@ -19751,7 +19685,7 @@ type Query {
   foundryEnvConfigByUniqueName(blockchainNodeUniqueName: String!): JSON!
 
   """Get pricing estimation based on use case and configuration"""
-  getKitPricing(addOns: [AddOn!]!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, kitId: String!): KitPricing!
+  getKitPricing(additionalConfig: AdditionalConfigInput!, consensusAlgorithm: ConsensusAlgorithm!, environment: Environment!, kitId: String!): KitPricing!
   getKits: [Kit!]!
   getUser(userId: ID): User!
 
@@ -23630,6 +23564,12 @@ type UserWallet {
 
   """The index of the wallet"""
   walletIndex: Float!
+}
+
+"""Type of wallet to use for the application"""
+enum UserWalletType {
+  META_TRANSACTION
+  REGULAR
 }
 
 interface WalletKeyVerification {
