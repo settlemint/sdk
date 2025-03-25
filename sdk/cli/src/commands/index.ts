@@ -8,6 +8,7 @@ import { validateSdkVersionFromCommand } from "../utils/sdk-version";
 import { codegenCommand } from "./codegen";
 import { connectCommand } from "./connect";
 import { createCommand } from "./create";
+import { hasuraCommand } from "./hasura";
 import { loginCommand } from "./login";
 import { logoutCommand } from "./logout";
 import { pincodeVerificationResponseCommand } from "./pincode-verification-response";
@@ -155,7 +156,7 @@ export function registerCommands() {
   sdkcli.addCommand(loginCommand());
   sdkcli.addCommand(logoutCommand());
   sdkcli.addCommand(pincodeVerificationResponseCommand());
-
+  sdkcli.addCommand(hasuraCommand());
   return sdkcli;
 }
 
