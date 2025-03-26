@@ -72,7 +72,7 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
   };
   }>({
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
   subgraphName: "${name}",
 });`,
       ],

@@ -42,7 +42,7 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
 });`;
 
   await writeTemplate(template, "/lib/settlemint", "portal.ts");
