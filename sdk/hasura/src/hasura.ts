@@ -1,4 +1,4 @@
-import { runsOnServer } from "@settlemint/sdk-utils/runtime";
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
@@ -11,23 +11,13 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
  * Schema for validating client options for the Hasura client.
- * Defines two possible runtime configurations:
- * 1. Server-side with instance URL, access token and admin secret
- * 2. Browser-side with no additional configuration needed
  */
-export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
-  z.object({
-    instance: UrlOrPathSchema,
-    runtime: z.literal("server"),
-    accessToken: ApplicationAccessTokenSchema,
-    adminSecret: z.string(),
-    cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
-  }),
-  z.object({
-    runtime: z.literal("browser"),
-    cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
-  }),
-]);
+export const ClientOptionsSchema = z.object({
+  instance: UrlOrPathSchema,
+  accessToken: ApplicationAccessTokenSchema,
+  adminSecret: z.string(),
+  cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
+});
 
 /**
  * Type definition for client options derived from the ClientOptionsSchema.
@@ -35,25 +25,9 @@ export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Constructs the full URL for the Hasura GraphQL API based on the provided options.
- * For server-side runtime, uses the provided instance URL.
- * For browser-side runtime, constructs a proxy URL using window location.
- *
- * @param options - The client options for configuring the Hasura client
- * @returns The complete GraphQL API URL as a string
- */
-function getFullUrl(options: ClientOptions): string {
-  return options.runtime === "server"
-    ? new URL(options.instance).toString()
-    : new URL("/proxy/hasura/graphql", window?.location?.origin ?? "http://localhost:3000").toString();
-}
-
-/**
  * Creates a Hasura GraphQL client with proper type safety using gql.tada
  *
- * @param options - Configuration options for the client:
- *                 - For server-side: instance URL, access token and admin secret
- *                 - For browser-side: no additional configuration needed
+ * @param options - Configuration options for the client
  * @param clientOptions - Optional GraphQL client configuration options
  * @returns An object containing:
  *          - client: The configured GraphQL client instance
@@ -63,7 +37,6 @@ function getFullUrl(options: ClientOptions): string {
  * import { createHasuraClient } from '@settlemint/sdk-hasura';
  * import type { introspection } from "@schemas/hasura-env";
  *
- * // Server-side usage
  * const { client, graphql } = createHasuraClient<{
  *   introspection: introspection;
  *   disableMasking: true;
@@ -85,24 +58,6 @@ function getFullUrl(options: ClientOptions): string {
  *   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
  * });
  *
- * // Browser-side usage
- * const { client, graphql } = createHasuraClient<{
- *   introspection: introspection;
- *   disableMasking: true;
- *   scalars: {
- *     timestamp: string;
- *     timestampz: string;
- *     uuid: string;
- *     date: string;
- *     time: string;
- *     jsonb: string;
- *     numeric: string;
- *     interval: string;
- *     geometry: string;
- *     geography: string;
- *   };
- * }>({});
- *
  * // Making GraphQL queries
  * const query = graphql(`
  *   query GetUsers {
@@ -117,28 +72,25 @@ function getFullUrl(options: ClientOptions): string {
  * const result = await client.request(query);
  */
 export function createHasuraClient<const Setup extends AbstractSetupSchema>(
-  options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,
+  options: ClientOptions,
   clientOptions?: RequestConfig,
 ): {
   client: GraphQLClient;
   graphql: initGraphQLTada<Setup>;
 } {
-  const validatedOptions = validate(ClientOptionsSchema, {
-    ...options,
-    runtime: runsOnServer ? "server" : "browser",
-  });
+  ensureServer();
+  const validatedOptions = validate(ClientOptionsSchema, options);
   const graphql = initGraphQLTada<Setup>();
-  const fullUrl = getFullUrl(validatedOptions);
+  const fullUrl = new URL(validatedOptions.instance).toString();
 
   return {
     client: new GraphQLClient(fullUrl, {
       ...clientOptions,
-      ...(validatedOptions.runtime === "server" && {
-        headers: {
-          "x-auth-token": validatedOptions.accessToken,
-          "x-hasura-admin-secret": validatedOptions.adminSecret,
-        },
-      }),
+      headers: {
+        ...(clientOptions?.headers ?? {}),
+        "x-auth-token": validatedOptions.accessToken,
+        "x-hasura-admin-secret": validatedOptions.adminSecret,
+      },
     }),
     graphql,
   };
