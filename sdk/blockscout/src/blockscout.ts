@@ -1,4 +1,4 @@
-import { runsOnServer } from "@settlemint/sdk-utils/runtime";
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
@@ -11,37 +11,16 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
 
 /**
  * Schema for validating client options for the Blockscout client.
- * Defines two possible runtime configurations:
- * 1. Server-side with instance URL and access token
- * 2. Browser-side with no additional configuration needed
  */
-export const ClientOptionsSchema = z.discriminatedUnion("runtime", [
-  z.object({
-    instance: UrlOrPathSchema,
-    runtime: z.literal("server"),
-    accessToken: ApplicationAccessTokenSchema,
-  }),
-  z.object({
-    runtime: z.literal("browser"),
-  }),
-]);
+export const ClientOptionsSchema = z.object({
+  instance: UrlOrPathSchema,
+  accessToken: ApplicationAccessTokenSchema,
+});
 
 /**
  * Type definition for client options derived from the ClientOptionsSchema
  */
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
-
-/**
- * Constructs the full URL for the Blockscout GraphQL API based on the provided options
- *
- * @param options - The client options for configuring the Blockscout client
- * @returns The complete GraphQL API URL as a string
- */
-function getFullUrl(options: ClientOptions): string {
-  return options.runtime === "server"
-    ? new URL(options.instance).toString()
-    : new URL("/proxy/blockscout/graphql", window?.location?.origin ?? "http://localhost:3000").toString();
-}
 
 /**
  * Creates a Blockscout GraphQL client with proper type safety using gql.tada
@@ -54,7 +33,6 @@ function getFullUrl(options: ClientOptions): string {
  * import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
  * import type { introspection } from "@schemas/blockscout-env";
  *
- * // Server-side usage
  * const { client, graphql } = createBlockscoutClient<{
  *   introspection: introspection;
  *   disableMasking: true;
@@ -73,22 +51,6 @@ function getFullUrl(options: ClientOptions): string {
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
  * });
  *
- * // Browser-side usage
- * const { client, graphql } = createBlockscoutClient<{
- *   introspection: introspection;
- *   disableMasking: true;
- *   scalars: {
- *     AddressHash: string;
- *     Data: string;
- *     DateTime: string;
- *     Decimal: string;
- *     FullHash: string;
- *     Json: string;
- *     NonceHash: string;
- *     Wei: string;
- *   };
- * }>({});
- *
  * // Making GraphQL queries
  * const query = graphql(`
  *   query GetTransaction($hash: String!) {
@@ -106,27 +68,24 @@ function getFullUrl(options: ClientOptions): string {
  * });
  */
 export function createBlockscoutClient<const Setup extends AbstractSetupSchema>(
-  options: Omit<ClientOptions, "runtime"> & Record<string, unknown>,
+  options: ClientOptions,
   clientOptions?: RequestConfig,
 ): {
   client: GraphQLClient;
   graphql: initGraphQLTada<Setup>;
 } {
-  const validatedOptions = validate(ClientOptionsSchema, {
-    ...options,
-    runtime: runsOnServer ? "server" : "browser",
-  });
+  ensureServer();
+  const validatedOptions = validate(ClientOptionsSchema, options);
   const graphql = initGraphQLTada<Setup>();
-  const fullUrl = getFullUrl(validatedOptions);
+  const fullUrl = new URL(validatedOptions.instance).toString();
 
   return {
     client: new GraphQLClient(fullUrl, {
       ...clientOptions,
-      ...(validatedOptions.runtime === "server" && {
-        headers: {
-          "x-auth-token": validatedOptions.accessToken,
-        },
-      }),
+      headers: {
+        ...(clientOptions?.headers ?? {}),
+        "x-auth-token": validatedOptions.accessToken,
+      },
     }),
     graphql,
   };
