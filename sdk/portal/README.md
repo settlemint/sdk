@@ -54,7 +54,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/portal/src/portal.ts:110](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L110)
+Defined in: [sdk/portal/src/portal.ts:61](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L61)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -68,7 +68,10 @@ Creates a Portal GraphQL client with the provided configuration.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the Portal client |
+| `options` | \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the Portal client |
+| `options.accessToken` | `string` | - |
+| `options.cache`? | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
+| `options.instance`? | `string` | - |
 | `clientOptions`? | `RequestConfig` | Additional GraphQL client configuration options |
 
 ##### Returns
@@ -79,8 +82,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:114](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L114) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:115](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L115) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:65](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L65) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:66](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L66) |
 
 ##### Throws
 
@@ -92,7 +95,6 @@ If the provided options fail validation
 import { createPortalClient } from '@settlemint/sdk-portal';
 import type { introspection } from "@schemas/portal-env";
 
-// Server-side usage
 export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
   introspection: introspection;
   disableMasking: true;
@@ -102,19 +104,8 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
-  runtime: "server",
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
 });
-
-// Browser-side usage
-export const { client: portalBrowserClient, graphql: portalBrowserGraphql } = createPortalClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    // Change unknown to the type you are using to store metadata
-    JSON: unknown;
-  };
-}>({});
 
 // Making GraphQL queries
 const query = graphql(`
@@ -134,7 +125,7 @@ const result = await client.request(query);
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/portal/src/portal.ts:32](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L32)
+Defined in: [sdk/portal/src/portal.ts:24](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L24)
 
 Type representing the validated client options.
 
@@ -152,12 +143,11 @@ Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \}, \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \}\>
 
-Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L16)
+Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/portal/src/portal.ts#L15)
 
 Schema for validating Portal client configuration options.
-Discriminates between server and browser runtime environments.
 
 ## Contributing
 

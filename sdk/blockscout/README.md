@@ -52,7 +52,7 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 > **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:108](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L108)
+Defined in: [sdk/blockscout/src/blockscout.ts:70](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L70)
 
 Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
@@ -66,7 +66,9 @@ Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client |
+| `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client |
+| `options.accessToken` | `string` | - |
+| `options.instance`? | `string` | - |
 | `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
@@ -77,8 +79,8 @@ An object containing the GraphQL client and initialized gql.tada function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:112](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L112) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:113](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L113) |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:74](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L74) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:75](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L75) |
 
 ##### Throws
 
@@ -90,7 +92,6 @@ Will throw an error if the options fail validation
 import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
 import type { introspection } from "@schemas/blockscout-env";
 
-// Server-side usage
 const { client, graphql } = createBlockscoutClient<{
   introspection: introspection;
   disableMasking: true;
@@ -108,22 +109,6 @@ const { client, graphql } = createBlockscoutClient<{
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
 });
-
-// Browser-side usage
-const { client, graphql } = createBlockscoutClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    AddressHash: string;
-    Data: string;
-    DateTime: string;
-    Decimal: string;
-    FullHash: string;
-    Json: string;
-    NonceHash: string;
-    Wei: string;
-  };
-}>({});
 
 // Making GraphQL queries
 const query = graphql(`
@@ -148,7 +133,7 @@ const result = await client.request(query, {
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/blockscout/src/blockscout.ts:32](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L32)
+Defined in: [sdk/blockscout/src/blockscout.ts:23](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L23)
 
 Type definition for client options derived from the ClientOptionsSchema
 
@@ -166,14 +151,11 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `runtime`: `"browser"`; \}, \{ `runtime`: `"browser"`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `instance`: `string`; \}, \{ `accessToken`: `string`; `instance`: `string`; \}\>
 
-Defined in: [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L18)
+Defined in: [sdk/blockscout/src/blockscout.ts:15](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/blockscout/src/blockscout.ts#L15)
 
 Schema for validating client options for the Blockscout client.
-Defines two possible runtime configurations:
-1. Server-side with instance URL and access token
-2. Browser-side with no additional configuration needed
 
 ## Contributing
 

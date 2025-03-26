@@ -30,7 +30,6 @@
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [HelloWorld()](#helloworld)
-    - [proxyMiddleware()](#proxymiddleware)
     - [withSettleMint()](#withsettlemint)
   - [Interfaces](#interfaces)
     - [HelloWorldProps](#helloworldprops)
@@ -65,43 +64,6 @@ A simple Hello World component that greets the user.
 `ReactElement`
 
 A React element that displays a greeting to the user.
-
-***
-
-#### proxyMiddleware()
-
-> **proxyMiddleware**(`request`, `options`): `undefined` \| `NextResponse`\<`unknown`\>
-
-Defined in: [middlewares/proxy.ts:36](https://github.com/settlemint/sdk/blob/v1.2.5/sdk/next/src/middlewares/proxy.ts#L36)
-
-Middleware function to handle proxy requests by adding appropriate authentication headers.
-
-##### Parameters
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `request` | `NextRequest` | The incoming Next.js request to process |
-| `options` | `ProxyMiddlewareOptions` | - |
-
-##### Returns
-
-`undefined` \| `NextResponse`\<`unknown`\>
-
-A modified NextResponse with authentication headers for proxy routes, or undefined for non-proxy routes
-
-##### Throws
-
-Will throw an error if environment validation fails
-
-##### Example
-
-```ts
-import { proxyMiddleware } from '@settlemint/sdk-next/middlewares/proxy';
-
-export default function middleware(request: NextRequest) {
-  return proxyMiddleware(request);
-}
-```
 
 ***
 
