@@ -54,7 +54,7 @@
     "turbo": "2.4.4",
     "typedoc": "0.28.1",
     "typedoc-plugin-markdown": "4.6.0",
-    "typedoc-plugin-merge-modules": "6.1.0",
+    "typedoc-plugin-merge-modules": "7.0.0",
     "typedoc-plugin-zod": "1.4.0",
     "typescript": "5.8.2"
   },
