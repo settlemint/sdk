@@ -50,7 +50,7 @@
     "@inquirer/select": "4.1.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@types/node": "22.13.14",
+    "@types/node": "22.13.17",
     "@types/semver": "7.7.0",
     "@types/which": "3.0.4",
     "get-tsconfig": "4.10.0",
