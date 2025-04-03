@@ -1377,7 +1377,7 @@ Options for configuring the spinner behavior
 | ------ | ------ | ------ | ------ |
 | <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:26](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L26) |
 | <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:30](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L30) |
-| <a id="task"></a> `task` | (`spinner`?: `Spinner`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L28) |
+| <a id="task"></a> `task` | (`spinner`?) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L28) |
 
 ### Type Aliases
 
