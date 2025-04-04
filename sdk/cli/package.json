@@ -46,7 +46,7 @@
     "commander": "11.1.0",
     "@inquirer/confirm": "5.1.9",
     "@inquirer/input": "4.1.9",
-    "@inquirer/password": "4.0.11",
+    "@inquirer/password": "4.0.12",
     "@inquirer/select": "4.1.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
