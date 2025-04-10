@@ -19,6 +19,7 @@ async function build() {
       splitting: false,
       sourcemap: "external",
       minify: process.env.NODE_ENV === "production",
+      external: ["node-fetch-native/proxy"],
     });
 
     if (!build.success) {
