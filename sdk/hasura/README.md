@@ -51,9 +51,9 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 #### createHasuraClient()
 
-> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
+> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions?`, `logger?`): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:74](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L74)
+Defined in: [sdk/hasura/src/hasura.ts:81](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L81)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -73,6 +73,7 @@ Creates a Hasura GraphQL client with proper type safety using gql.tada
 | `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
 | `options.instance?` | `string` | - |
 | `clientOptions?` | `RequestConfig` | Optional GraphQL client configuration options |
+| `logger?` | `Logger` | Optional logger to use for logging the requests |
 
 ##### Returns
 
@@ -84,8 +85,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:78](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L78) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:79](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L79) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:86](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L86) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:87](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L87) |
 
 ##### Throws
 
@@ -96,6 +97,9 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 ```ts
 import { createHasuraClient } from '@settlemint/sdk-hasura';
 import type { introspection } from "@schemas/hasura-env";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+
+const logger = createLogger();
 
 const { client, graphql } = createHasuraClient<{
   introspection: introspection;
@@ -116,6 +120,8 @@ const { client, graphql } = createHasuraClient<{
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+}, {
+  fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
 });
 
 // Making GraphQL queries
@@ -181,7 +187,7 @@ try {
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/hasura/src/hasura.ts:25](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L25)
+Defined in: [sdk/hasura/src/hasura.ts:26](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L26)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -191,7 +197,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L10)
+Defined in: [sdk/hasura/src/hasura.ts:11](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L11)
 
 Type definition for GraphQL client configuration options
 
@@ -201,7 +207,7 @@ Type definition for GraphQL client configuration options
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \}\>
 
-Defined in: [sdk/hasura/src/hasura.ts:15](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L15)
+Defined in: [sdk/hasura/src/hasura.ts:16](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L16)
 
 Schema for validating client options for the Hasura client.
 

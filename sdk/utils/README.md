@@ -33,6 +33,7 @@
     - [camelCaseToWords()](#camelcasetowords)
     - [cancel()](#cancel)
     - [capitalizeFirstLetter()](#capitalizefirstletter)
+    - [createLogger()](#createlogger)
     - [emptyDir()](#emptydir)
     - [ensureBrowser()](#ensurebrowser)
     - [ensureServer()](#ensureserver)
@@ -56,6 +57,7 @@
     - [outro()](#outro)
     - [projectRoot()](#projectroot)
     - [replaceUnderscoresAndHyphensWithSpaces()](#replaceunderscoresandhyphenswithspaces)
+    - [requestLogger()](#requestlogger)
     - [retryWhenFailed()](#retrywhenfailed)
     - [setName()](#setname)
     - [spinner()](#spinner)
@@ -68,11 +70,14 @@
     - [SpinnerError](#spinnererror)
   - [Interfaces](#interfaces)
     - [ExecuteCommandOptions](#executecommandoptions)
+    - [Logger](#logger)
+    - [LoggerOptions](#loggeroptions)
     - [SpinnerOptions\<R\>](#spinneroptionsr)
   - [Type Aliases](#type-aliases)
     - [DotEnv](#dotenv)
     - [DotEnvPartial](#dotenvpartial)
     - [Id](#id)
+    - [LogLevel](#loglevel)
   - [Variables](#variables)
     - [AccessTokenSchema](#accesstokenschema)
     - [ApplicationAccessTokenSchema](#applicationaccesstokenschema)
@@ -212,6 +217,39 @@ import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 
 const capitalized = capitalizeFirstLetter("hello");
 // Returns: "Hello"
+```
+
+***
+
+#### createLogger()
+
+> **createLogger**(`options`): [`Logger`](#logger)
+
+Defined in: [sdk/utils/src/logging/logger.ts:48](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L48)
+
+Creates a simple logger with configurable log level
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`LoggerOptions`](#loggeroptions) | Configuration options for the logger |
+
+##### Returns
+
+[`Logger`](#logger)
+
+A logger instance with debug, info, warn, and error methods
+
+##### Example
+
+```ts
+import { createLogger } from "@/utils/logging/logger";
+
+const logger = createLogger({ level: 'info' });
+
+logger.info('User logged in', { userId: '123' });
+logger.error('Operation failed', new Error('Connection timeout'));
 ```
 
 ***
@@ -853,7 +891,7 @@ const rawEnv = await loadEnv(false, false);
 
 > **maskTokens**(`output`): `string`
 
-Defined in: [sdk/utils/src/terminal/mask-tokens.ts:13](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/mask-tokens.ts#L13)
+Defined in: [sdk/utils/src/logging/mask-tokens.ts:13](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/mask-tokens.ts#L13)
 
 Masks sensitive SettleMint tokens in output text by replacing them with asterisks.
 Handles personal access tokens (PAT), application access tokens (AAT), and service account tokens (SAT).
@@ -1011,6 +1049,40 @@ import { replaceUnderscoresAndHyphensWithSpaces } from "@settlemint/sdk-utils";
 const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
 // Returns: "Already Spaced Second"
 ```
+
+***
+
+#### requestLogger()
+
+> **requestLogger**(`logger`, `name`, `fn`): (...`args`) => `Promise`\<`Response`\>
+
+Defined in: [sdk/utils/src/logging/request-logger.ts:10](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/request-logger.ts#L10)
+
+Logs the request and duration of a fetch call (> 3s is logged as warn, otherwise info)
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `logger` | [`Logger`](#logger) | The logger to use |
+| `name` | `string` | The name of the request |
+| `fn` | *typeof* `fetch` | The fetch function to use |
+
+##### Returns
+
+The fetch function
+
+> (...`args`): `Promise`\<`Response`\>
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| ...`args` | \[`string` \| `URL` \| `Request`, `RequestInit`\] |
+
+###### Returns
+
+`Promise`\<`Response`\>
 
 ***
 
@@ -1359,6 +1431,40 @@ Options for executing a command, extending SpawnOptionsWithoutStdio
 
 ***
 
+#### Logger
+
+Defined in: [sdk/utils/src/logging/logger.ts:23](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L23)
+
+Simple logger interface with basic logging methods
+ Logger
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="debug"></a> `debug` | (`message`, ...`args`) => `void` | Log debug information | [sdk/utils/src/logging/logger.ts:25](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L25) |
+| <a id="error"></a> `error` | (`message`, ...`args`) => `void` | Log errors | [sdk/utils/src/logging/logger.ts:31](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L31) |
+| <a id="info"></a> `info` | (`message`, ...`args`) => `void` | Log general information | [sdk/utils/src/logging/logger.ts:27](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L27) |
+| <a id="warn"></a> `warn` | (`message`, ...`args`) => `void` | Log warnings | [sdk/utils/src/logging/logger.ts:29](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L29) |
+
+***
+
+#### LoggerOptions
+
+Defined in: [sdk/utils/src/logging/logger.ts:12](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L12)
+
+Configuration options for the logger
+ LoggerOptions
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="level"></a> `level?` | [`LogLevel`](#loglevel) | The minimum log level to output | [sdk/utils/src/logging/logger.ts:14](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L14) |
+| <a id="prefix"></a> `prefix?` | `string` | The prefix to add to the log message | [sdk/utils/src/logging/logger.ts:16](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L16) |
+
+***
+
 #### SpinnerOptions\<R\>
 
 Defined in: [sdk/utils/src/terminal/spinner.ts:24](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L24)
@@ -1409,6 +1515,16 @@ Defined in: [sdk/utils/src/validation/id.schema.ts:30](https://github.com/settle
 
 Type definition for database IDs, inferred from IdSchema.
 Can be either a PostgreSQL UUID string or MongoDB ObjectID string.
+
+***
+
+#### LogLevel
+
+> **LogLevel** = `"debug"` \| `"info"` \| `"warn"` \| `"error"` \| `"none"`
+
+Defined in: [sdk/utils/src/logging/logger.ts:6](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/logging/logger.ts#L6)
+
+Log levels supported by the logger
 
 ### Variables
 

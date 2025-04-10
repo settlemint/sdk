@@ -52,7 +52,7 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 > **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:70](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L70)
+Defined in: [sdk/blockscout/src/blockscout.ts:75](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L75)
 
 Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
@@ -79,8 +79,8 @@ An object containing the GraphQL client and initialized gql.tada function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:74](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L74) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:75](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L75) |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:79](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L79) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:80](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L80) |
 
 ##### Throws
 
@@ -91,6 +91,9 @@ Will throw an error if the options fail validation
 ```ts
 import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
 import type { introspection } from "@schemas/blockscout-env";
+import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+
+const logger = createLogger();
 
 const { client, graphql } = createBlockscoutClient<{
   introspection: introspection;
@@ -108,6 +111,8 @@ const { client, graphql } = createBlockscoutClient<{
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
+}, {
+  fetch: requestLogger(logger, "blockscout", fetch) as typeof fetch,
 });
 
 // Making GraphQL queries

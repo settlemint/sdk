@@ -54,7 +54,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/portal/src/portal.ts:61](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L61)
+Defined in: [sdk/portal/src/portal.ts:66](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L66)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -82,8 +82,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:65](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L65) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:66](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L66) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:70](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L70) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:71](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L71) |
 
 ##### Throws
 
@@ -94,6 +94,9 @@ If the provided options fail validation
 ```ts
 import { createPortalClient } from '@settlemint/sdk-portal';
 import type { introspection } from "@schemas/portal-env";
+import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+
+const logger = createLogger();
 
 export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
   introspection: introspection;
@@ -105,6 +108,8 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+}, {
+  fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
 });
 
 // Making GraphQL queries

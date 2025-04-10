@@ -54,7 +54,7 @@ For detailed information about using TheGraph with the SettleMint platform, chec
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:85](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/thegraph/src/thegraph.ts#L85)
+Defined in: [sdk/thegraph/src/thegraph.ts:90](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/thegraph/src/thegraph.ts#L90)
 
 Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
@@ -85,8 +85,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:89](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/thegraph/src/thegraph.ts#L89) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:90](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/thegraph/src/thegraph.ts#L90) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:94](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/thegraph/src/thegraph.ts#L94) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:95](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/thegraph/src/thegraph.ts#L95) |
 
 ##### Throws
 
@@ -97,6 +97,9 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 ```ts
 import { createTheGraphClient } from '@settlemint/sdk-thegraph';
 import type { introspection } from '@schemas/the-graph-env-kits';
+import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+
+const logger = createLogger();
 
 const { client, graphql } = createTheGraphClient<{
   introspection: introspection;
@@ -112,6 +115,8 @@ const { client, graphql } = createTheGraphClient<{
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
   subgraphName: 'kits'
+}, {
+  fetch: requestLogger(logger, "the-graph-kits", fetch) as typeof fetch,
 });
 
 // Making GraphQL queries
