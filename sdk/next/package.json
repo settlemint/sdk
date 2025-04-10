@@ -67,7 +67,7 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE .",
-    "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/components/test.tsx src/config/with-settlemint.ts src/middlewares/proxy.ts --out ./docs"
+    "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/components/test.tsx src/config/with-settlemint.ts --out ./docs"
   },
   "devDependencies": {
     "@types/react": ">=18"

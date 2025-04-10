@@ -1,7 +1,7 @@
 import isInCi from "is-in-ci";
 import yoctoSpinner, { type Spinner } from "yocto-spinner";
 import { redBright } from "yoctocolors";
-import { maskTokens } from "./mask-tokens.js";
+import { maskTokens } from "../logging/mask-tokens.js";
 import { note } from "./note.js";
 
 /**

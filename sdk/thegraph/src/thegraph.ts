@@ -52,6 +52,9 @@ function getFullUrl(options: ClientOptions): string {
  * @example
  * import { createTheGraphClient } from '@settlemint/sdk-thegraph';
  * import type { introspection } from '@schemas/the-graph-env-kits';
+ * import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+ *
+ * const logger = createLogger();
  *
  * const { client, graphql } = createTheGraphClient<{
  *   introspection: introspection;
@@ -67,6 +70,8 @@ function getFullUrl(options: ClientOptions): string {
  *   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
  *   subgraphName: 'kits'
+ * }, {
+ *   fetch: requestLogger(logger, "the-graph-kits", fetch) as typeof fetch,
  * });
  *
  * // Making GraphQL queries

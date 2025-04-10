@@ -32,6 +32,9 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @example
  * import { createBlockscoutClient } from '@settlemint/sdk-blockscout';
  * import type { introspection } from "@schemas/blockscout-env";
+ * import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+ *
+ * const logger = createLogger();
  *
  * const { client, graphql } = createBlockscoutClient<{
  *   introspection: introspection;
@@ -49,6 +52,8 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * }>({
  *   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT,
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN
+ * }, {
+ *   fetch: requestLogger(logger, "blockscout", fetch) as typeof fetch,
  * });
  *
  * // Making GraphQL queries

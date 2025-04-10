@@ -30,6 +30,10 @@ export default defineConfig(({ watch }) => {
       ...sharedConfig,
     },
     {
+      entry: ["src/logging.ts"],
+      ...sharedConfig,
+    },
+    {
       entry: ["src/package-manager.ts"],
       ...sharedConfig,
     },

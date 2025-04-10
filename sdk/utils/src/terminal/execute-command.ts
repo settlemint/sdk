@@ -1,5 +1,5 @@
 import { type SpawnOptionsWithoutStdio, spawn } from "node:child_process";
-import { maskTokens } from "./mask-tokens.js";
+import { maskTokens } from "../logging/mask-tokens.js";
 
 /**
  * Options for executing a command, extending SpawnOptionsWithoutStdio

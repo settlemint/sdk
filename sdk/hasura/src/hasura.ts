@@ -1,3 +1,4 @@
+import { type Logger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
@@ -29,6 +30,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  *
  * @param options - Configuration options for the client
  * @param clientOptions - Optional GraphQL client configuration options
+ * @param logger - Optional logger to use for logging the requests
  * @returns An object containing:
  *          - client: The configured GraphQL client instance
  *          - graphql: The initialized gql.tada function for type-safe queries
@@ -36,6 +38,9 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @example
  * import { createHasuraClient } from '@settlemint/sdk-hasura';
  * import type { introspection } from "@schemas/hasura-env";
+ * import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+ *
+ * const logger = createLogger();
  *
  * const { client, graphql } = createHasuraClient<{
  *   introspection: introspection;
@@ -56,6 +61,8 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  *   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
  *   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+ * }, {
+ *   fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
  * });
  *
  * // Making GraphQL queries
@@ -74,6 +81,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 export function createHasuraClient<const Setup extends AbstractSetupSchema>(
   options: ClientOptions,
   clientOptions?: RequestConfig,
+  logger?: Logger,
 ): {
   client: GraphQLClient;
   graphql: initGraphQLTada<Setup>;
@@ -91,6 +99,7 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
         "x-auth-token": validatedOptions.accessToken,
         "x-hasura-admin-secret": validatedOptions.adminSecret,
       },
+      fetch: (logger ? requestLogger(logger, "hasura", fetch) : fetch) as typeof fetch,
     }),
     graphql,
   };

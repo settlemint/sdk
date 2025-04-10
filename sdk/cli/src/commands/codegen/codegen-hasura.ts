@@ -40,6 +40,9 @@ export async function codegenHasura(env: DotEnv) {
   // Generate Hasura client template with build time safety
   const hasuraTemplate = `import { createHasuraClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/hasura-env";
+import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+
+const logger = createLogger({ level: process.env.NODE_ENV === "production" ? "warn" : "info" });
 
 export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClient<{
   introspection: introspection;
@@ -60,6 +63,8 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
+}, {
+  fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
 });`;
 
   await writeTemplate(hasuraTemplate, "/lib/settlemint", "hasura.ts");
