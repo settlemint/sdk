@@ -231,7 +231,7 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
     headers: {
       "x-auth-token": validatedOptions.accessToken ?? "",
     },
-    fetch: async (input: RequestInfo | URL, init?: RequestInit) => {
+    fetch: (async (input: RequestInfo | URL, init?: RequestInit) => {
       const response = await fetchWithRetry(input, init);
       // Parse and handle GraphQL errors from response
       const contentType = response.headers.get("content-type");
@@ -243,7 +243,7 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
         }
       }
       return response;
-    },
+    }) as typeof fetch,
   });
 
   return {
