@@ -32,6 +32,9 @@ export async function codegenPortal(env: DotEnv) {
 
   const template = `import { createPortalClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/portal-env";
+import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+
+const logger = createLogger({ level: process.env.NODE_ENV === 'production' ? 'warn' : 'info' });
 
 export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
   introspection: introspection;
@@ -43,6 +46,8 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+}, {
+  fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
 });`;
 
   await writeTemplate(template, "/lib/settlemint", "portal.ts");

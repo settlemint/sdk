@@ -34,6 +34,9 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @example
  * import { createPortalClient } from '@settlemint/sdk-portal';
  * import type { introspection } from "@schemas/portal-env";
+ * import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+ *
+ * const logger = createLogger();
  *
  * export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
  *   introspection: introspection;
@@ -45,6 +48,8 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * }>({
  *   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
  *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ * }, {
+ *   fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
  * });
  *
  * // Making GraphQL queries
