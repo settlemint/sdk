@@ -236,6 +236,9 @@ enum AccessTokenValidityPeriod {
 }
 
 type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & PrivateKey {
+  """The account factory address for Account Abstraction"""
+  accountFactoryAddress: String
+
   """The address associated with the private key"""
   address: String
 
@@ -279,6 +282,9 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
   """Entity version"""
   entityVersion: Float
 
+  """The entry point address for Account Abstraction"""
+  entryPointAddress: String
+
   """Date when the service failed"""
   failedAt: DateTime!
 
@@ -321,6 +327,9 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
 
   """Date when the service was paused"""
   pausedAt: DateTime
+
+  """The paymaster address for Account Abstraction"""
+  paymasterAddress: String
   privateKey: String!
 
   """The type of private key"""
@@ -384,6 +393,9 @@ type AccessibleEcdsaP256PrivateKey implements AbstractClusterService & AbstractE
   updatedAt: DateTime!
   upgradable: Boolean!
   user: User!
+
+  """What kind of wallet this key represents"""
+  userWalletType: UserWalletType!
   userWallets: [UserWallet!]
 
   """UUID of the service"""
@@ -4431,7 +4443,7 @@ input BlockchainNetworkScopeInputType {
   values: [ID!]!
 }
 
-union BlockchainNetworkType = ArbitrumBlockchainNetwork | ArbitrumGoerliBlockchainNetwork | ArbitrumSepoliaBlockchainNetwork | AvalancheBlockchainNetwork | AvalancheFujiBlockchainNetwork | BesuIbftv2BlockchainNetwork | BesuQBFTBlockchainNetwork | BscPoWBlockchainNetwork | BscPoWTestnetBlockchainNetwork | CordaBlockchainNetwork | FabricRaftBlockchainNetwork | FantomMainnetBlockchainNetwork | FantomTestnetBlockchainNetwork | GethCliqueBlockchainNetwork | GethGoerliBlockchainNetwork | GethPoSRinkebyBlockchainNetwork | GethPoWBlockchainNetwork | GethVenidiumBlockchainNetwork | HederaMainnetBlockchainNetwork | HederaTestnetBlockchainNetwork | HoleskyBlockchainNetwork | OptimismBlockchainNetwork | OptimismGoerliBlockchainNetwork | OptimismSepoliaBlockchainNetwork | PolygonAmoyBlockchainNetwork | PolygonBlockchainNetwork | PolygonEdgePoABlockchainNetwork | PolygonMumbaiBlockchainNetwork | PolygonSupernetBlockchainNetwork | PolygonZkEvmBlockchainNetwork | PolygonZkEvmTestnetBlockchainNetwork | QuorumQBFTBlockchainNetwork | SepoliaBlockchainNetwork | SoneiumMinatoBlockchainNetwork | TezosBlockchainNetwork | TezosTestnetBlockchainNetwork
+union BlockchainNetworkType = ArbitrumBlockchainNetwork | ArbitrumGoerliBlockchainNetwork | ArbitrumSepoliaBlockchainNetwork | AvalancheBlockchainNetwork | AvalancheFujiBlockchainNetwork | BesuIbftv2BlockchainNetwork | BesuQBFTBlockchainNetwork | BscPoWBlockchainNetwork | BscPoWTestnetBlockchainNetwork | CordaBlockchainNetwork | FabricRaftBlockchainNetwork | GethCliqueBlockchainNetwork | GethGoerliBlockchainNetwork | GethPoSRinkebyBlockchainNetwork | GethPoWBlockchainNetwork | GethVenidiumBlockchainNetwork | HederaMainnetBlockchainNetwork | HederaTestnetBlockchainNetwork | HoleskyBlockchainNetwork | OptimismBlockchainNetwork | OptimismGoerliBlockchainNetwork | OptimismSepoliaBlockchainNetwork | PolygonAmoyBlockchainNetwork | PolygonBlockchainNetwork | PolygonEdgePoABlockchainNetwork | PolygonMumbaiBlockchainNetwork | PolygonSupernetBlockchainNetwork | PolygonZkEvmBlockchainNetwork | PolygonZkEvmTestnetBlockchainNetwork | QuorumQBFTBlockchainNetwork | SepoliaBlockchainNetwork | SoneiumMinatoBlockchainNetwork | SonicBlazeBlockchainNetwork | SonicMainnetBlockchainNetwork | TezosBlockchainNetwork | TezosTestnetBlockchainNetwork
 
 interface BlockchainNode implements AbstractClusterService & AbstractEntity {
   """Advanced deployment configuration"""
@@ -4633,7 +4645,7 @@ input BlockchainNodeScopeInputType {
   values: [ID!]!
 }
 
-union BlockchainNodeType = ArbitrumBlockchainNode | ArbitrumGoerliBlockchainNode | ArbitrumSepoliaBlockchainNode | AvalancheBlockchainNode | AvalancheFujiBlockchainNode | BesuIbftv2BlockchainNode | BesuQBFTBlockchainNode | BscBlockchainNode | BscTestnetBlockchainNode | CordaBlockchainNode | FabricBlockchainNode | FantomMainnetBlockchainNode | FantomTestnetBlockchainNode | GethBlockchainNode | GethCliqueBlockchainNode | GethGoerliBlockchainNode | GethRinkebyBlockchainNode | GethVenidiumBlockchainNode | HederaMainnetBlockchainNode | HederaTestnetBlockchainNode | HoleskyBlockchainNode | OptimismBlockchainNode | OptimismGoerliBlockchainNode | OptimismSepoliaBlockchainNode | PolygonAmoyBlockchainNode | PolygonBlockchainNode | PolygonEdgeBlockchainNode | PolygonMumbaiBlockchainNode | PolygonSupernetBlockchainNode | PolygonZkEvmBlockchainNode | PolygonZkEvmTestnetBlockchainNode | QuorumQBFTBlockchainNode | SepoliaBlockchainNode | SoneiumMinatoBlockchainNode | TezosBlockchainNode | TezosTestnetBlockchainNode
+union BlockchainNodeType = ArbitrumBlockchainNode | ArbitrumGoerliBlockchainNode | ArbitrumSepoliaBlockchainNode | AvalancheBlockchainNode | AvalancheFujiBlockchainNode | BesuIbftv2BlockchainNode | BesuQBFTBlockchainNode | BscBlockchainNode | BscTestnetBlockchainNode | CordaBlockchainNode | FabricBlockchainNode | GethBlockchainNode | GethCliqueBlockchainNode | GethGoerliBlockchainNode | GethRinkebyBlockchainNode | GethVenidiumBlockchainNode | HederaMainnetBlockchainNode | HederaTestnetBlockchainNode | HoleskyBlockchainNode | OptimismBlockchainNode | OptimismGoerliBlockchainNode | OptimismSepoliaBlockchainNode | PolygonAmoyBlockchainNode | PolygonBlockchainNode | PolygonEdgeBlockchainNode | PolygonMumbaiBlockchainNode | PolygonSupernetBlockchainNode | PolygonZkEvmBlockchainNode | PolygonZkEvmTestnetBlockchainNode | QuorumQBFTBlockchainNode | SepoliaBlockchainNode | SoneiumMinatoBlockchainNode | SonicBlazeBlockchainNode | SonicMainnetBlockchainNode | TezosBlockchainNode | TezosTestnetBlockchainNode
 
 type BscBlockchainNode implements AbstractClusterService & AbstractEntity & BlockchainNode {
   """Advanced deployment configuration"""
@@ -5552,8 +5564,6 @@ enum ConsensusAlgorithm {
   BSC_POW_TESTNET
   CORDA
   FABRIC_RAFT
-  FANTOM_MAINNET
-  FANTOM_TESTNET
   GETH_CLIQUE
   GETH_GOERLI
   GETH_POS_RINKEBY
@@ -5575,6 +5585,8 @@ enum ConsensusAlgorithm {
   QUORUM_QBFT
   SEPOLIA
   SONEIUM_MINATO
+  SONIC_BLAZE
+  SONIC_MAINNET
   TEZOS
   TEZOS_TESTNET
 }
@@ -6451,6 +6463,9 @@ input CreateMultiServiceMiddlewareArgs {
 }
 
 input CreateMultiServicePrivateKeyArgs {
+  """The Account Factory contract address for Account Abstraction"""
+  accountFactoryAddress: String
+
   """Advanced deployment configuration"""
   advancedDeploymentConfig: AdvancedDeploymentConfigInput
   blockchainNodeRefs: [String!]
@@ -6460,6 +6475,9 @@ input CreateMultiServicePrivateKeyArgs {
 
   """Disk space in MiB"""
   diskSpace: Int
+
+  """The EntryPoint contract address for Account Abstraction"""
+  entryPointAddress: String
 
   """CPU limit in cores"""
   limitCpu: Int
@@ -6472,6 +6490,9 @@ input CreateMultiServicePrivateKeyArgs {
 
   """Name of the cluster service"""
   name: String!
+
+  """The Paymaster contract address for Account Abstraction"""
+  paymasterAddress: String
 
   """Type of the private key"""
   privateKeyType: PrivateKeyType!
@@ -7761,628 +7782,9 @@ enum FabricSmartContractSrcLang {
   TYPESCRIPT
 }
 
-type FantomMainnetBlockchainNetwork implements AbstractClusterService & AbstractEntity & BlockchainNetwork {
-  """Advanced deployment configuration"""
-  advancedDeploymentConfig: AdvancedDeploymentConfig
-
-  """Associated application"""
-  application: Application!
-  applicationDashBoardDependantsTree: DependantsTree!
-
-  """The blockchain nodes associated with this network"""
-  blockchainNodes: [BlockchainNodeType!]!
-  canAddValidatingNodes: [Workspace!]!
-  canInviteWorkspaces: [Workspace!]!
-
-  """Chain ID of the Fantom Mainnet network"""
-  chainId: Int!
-
-  """The consensus algorithm used by this blockchain network"""
-  consensusAlgorithm: ConsensusAlgorithm!
-  contractAddresses: ContractAddresses
-
-  """Date and time when the entity was created"""
-  createdAt: DateTime!
-
-  """Credentials of cluster service"""
-  credentials: [ClusterServiceCredentials!]!
-  decryptedFaucetWallet: JSON
-
-  """Date and time when the entity was deleted, if applicable"""
-  deletedAt: DateTime
-
-  """Dependant services"""
-  dependants: [Dependant!]!
-  dependantsTree: DependantsTree!
-
-  """Dependencies of the service"""
-  dependencies: [Dependency!]!
-
-  """Destroy job identifier"""
-  destroyJob: String
-
-  """Indicates if the service auth is disabled"""
-  disableAuth: Boolean
-
-  """Disk space in GB"""
-  diskSpace: Int
-
-  """Endpoints of cluster service"""
-  endpoints: [ClusterServiceEndpoints!]!
-
-  """Entity version"""
-  entityVersion: Float
-
-  """Date when the service failed"""
-  failedAt: DateTime!
-
-  """Health status of the service"""
-  healthStatus: ClusterServiceHealthStatus!
-
-  """Unique identifier of the entity"""
-  id: ID!
-  invites: [BlockchainNetworkInvite!]!
-
-  """Indicates if the pod is handling traffic"""
-  isPodHandlingTraffic: Boolean!
-
-  """Indicates if the pod is running"""
-  isPodRunning: Boolean!
-
-  """Indicates if this is a public EVM network"""
-  isPublicEvmNetwork: Boolean!
-  jobLogs: [String!]!
-  jobProgress: Float!
-
-  """Date when the service was last completed"""
-  lastCompletedAt: DateTime!
-  latestVersion: String!
-
-  """CPU limit in millicores"""
-  limitCpu: Int
-
-  """Memory limit in MB"""
-  limitMemory: Int
-
-  """The load balancers associated with this network"""
-  loadBalancers: [LoadBalancerType!]!
-
-  """Indicates if the service is locked"""
-  locked: Boolean!
-  metrics: Metric!
-
-  """Name of the service"""
-  name: String!
-  namespace: String!
-
-  """Network ID of the Fantom Mainnet network"""
-  networkId: String!
-  participants: [BlockchainNetworkParticipant!]!
-
-  """Password for the service"""
-  password: String!
-
-  """Date when the service was paused"""
-  pausedAt: DateTime
-  predeployedContracts: [String!]!
-
-  """Product name of the service"""
-  productName: String!
-
-  """Provider of the service"""
-  provider: String!
-
-  """Public EVM node database name"""
-  publicEvmNodeDbName: String
-
-  """Region of the service"""
-  region: String!
-  requestLogs: [RequestLog!]!
-
-  """CPU requests in millicores"""
-  requestsCpu: Int
-
-  """Memory requests in MB"""
-  requestsMemory: Int
-
-  """Resource status of the service"""
-  resourceStatus: ClusterServiceResourceStatus!
-
-  """Date when the service was scaled"""
-  scaledAt: DateTime
-  serviceLogs: [String!]!
-  serviceUrl: String!
-
-  """Size of the service"""
-  size: ClusterServiceSize!
-
-  """Slug of the service"""
-  slug: String!
-
-  """Deployment status of the service"""
-  status: ClusterServiceDeploymentStatus!
-
-  """Type of the service"""
-  type: ClusterServiceType!
-
-  """Unique name of the service"""
-  uniqueName: String!
-
-  """Up job identifier"""
-  upJob: String
-
-  """Date and time when the entity was last updated"""
-  updatedAt: DateTime!
-  upgradable: Boolean!
-  user: User!
-
-  """UUID of the service"""
-  uuid: String!
-
-  """Version of the service"""
-  version: String
-}
-
-type FantomMainnetBlockchainNode implements AbstractClusterService & AbstractEntity & BlockchainNode {
-  """Advanced deployment configuration"""
-  advancedDeploymentConfig: AdvancedDeploymentConfig
-
-  """Associated application"""
-  application: Application!
-  applicationDashBoardDependantsTree: DependantsTree!
-
-  """The consensus algorithm used by this blockchain node"""
-  blockchainClient: ConsensusAlgorithm!
-  blockchainNetwork: BlockchainNetworkType!
-
-  """Get actions that can be performed on the blockchain node"""
-  clusterServiceActionChecks: BlockchainNodeActionChecks!
-
-  """Date and time when the entity was created"""
-  createdAt: DateTime!
-
-  """Credentials of cluster service"""
-  credentials: [ClusterServiceCredentials!]!
-
-  """Date and time when the entity was deleted, if applicable"""
-  deletedAt: DateTime
-
-  """Dependant services"""
-  dependants: [Dependant!]!
-  dependantsTree: DependantsTree!
-
-  """Dependencies of the service"""
-  dependencies: [Dependency!]!
-
-  """Destroy job identifier"""
-  destroyJob: String
-
-  """Indicates if the service auth is disabled"""
-  disableAuth: Boolean
-
-  """Disk space in GB"""
-  diskSpace: Int
-
-  """Endpoints of cluster service"""
-  endpoints: [ClusterServiceEndpoints!]!
-
-  """Entity version"""
-  entityVersion: Float
-
-  """Date when the service failed"""
-  failedAt: DateTime!
-
-  """Health status of the service"""
-  healthStatus: ClusterServiceHealthStatus!
-
-  """Unique identifier of the entity"""
-  id: ID!
-  isEvm: Boolean!
-
-  """Indicates if the pod is handling traffic"""
-  isPodHandlingTraffic: Boolean!
-
-  """Indicates if the pod is running"""
-  isPodRunning: Boolean!
-  jobLogs: [String!]!
-  jobProgress: Float!
-
-  """Date when the service was last completed"""
-  lastCompletedAt: DateTime!
-  latestVersion: String!
-
-  """CPU limit in millicores"""
-  limitCpu: Int
-
-  """Memory limit in MB"""
-  limitMemory: Int
-
-  """Indicates if the service is locked"""
-  locked: Boolean!
-  metrics: Metric!
-
-  """Name of the service"""
-  name: String!
-  namespace: String!
-
-  """The type of the blockchain node"""
-  nodeType: NodeType!
-
-  """Password for the service"""
-  password: String!
-
-  """Date when the service was paused"""
-  pausedAt: DateTime
-
-  """The private keys associated with this blockchain node"""
-  privateKeys: [PrivateKeyUnionType!]
-
-  """Product name of the service"""
-  productName: String!
-
-  """Provider of the service"""
-  provider: String!
-
-  """Region of the service"""
-  region: String!
-  requestLogs: [RequestLog!]!
-
-  """CPU requests in millicores"""
-  requestsCpu: Int
-
-  """Memory requests in MB"""
-  requestsMemory: Int
-
-  """Resource status of the service"""
-  resourceStatus: ClusterServiceResourceStatus!
-
-  """Date when the service was scaled"""
-  scaledAt: DateTime
-  serviceLogs: [String!]!
-  serviceUrl: String!
-
-  """Size of the service"""
-  size: ClusterServiceSize!
-
-  """Slug of the service"""
-  slug: String!
-
-  """Deployment status of the service"""
-  status: ClusterServiceDeploymentStatus!
-
-  """Type of the service"""
-  type: ClusterServiceType!
-
-  """Unique name of the service"""
-  uniqueName: String!
-
-  """Up job identifier"""
-  upJob: String
-
-  """Date and time when the entity was last updated"""
-  updatedAt: DateTime!
-  upgradable: Boolean!
-  user: User!
-
-  """UUID of the service"""
-  uuid: String!
-
-  """Version of the service"""
-  version: String
-}
-
-type FantomTestnetBlockchainNetwork implements AbstractClusterService & AbstractEntity & BlockchainNetwork {
-  """Advanced deployment configuration"""
-  advancedDeploymentConfig: AdvancedDeploymentConfig
-
-  """Associated application"""
-  application: Application!
-  applicationDashBoardDependantsTree: DependantsTree!
-
-  """The blockchain nodes associated with this network"""
-  blockchainNodes: [BlockchainNodeType!]!
-  canAddValidatingNodes: [Workspace!]!
-  canInviteWorkspaces: [Workspace!]!
-
-  """Chain ID of the Fantom Testnet network"""
-  chainId: Int!
-
-  """The consensus algorithm used by this blockchain network"""
-  consensusAlgorithm: ConsensusAlgorithm!
-  contractAddresses: ContractAddresses
-
-  """Date and time when the entity was created"""
-  createdAt: DateTime!
-
-  """Credentials of cluster service"""
-  credentials: [ClusterServiceCredentials!]!
-  decryptedFaucetWallet: JSON
-
-  """Date and time when the entity was deleted, if applicable"""
-  deletedAt: DateTime
-
-  """Dependant services"""
-  dependants: [Dependant!]!
-  dependantsTree: DependantsTree!
-
-  """Dependencies of the service"""
-  dependencies: [Dependency!]!
-
-  """Destroy job identifier"""
-  destroyJob: String
-
-  """Indicates if the service auth is disabled"""
-  disableAuth: Boolean
-
-  """Disk space in GB"""
-  diskSpace: Int
-
-  """Endpoints of cluster service"""
-  endpoints: [ClusterServiceEndpoints!]!
-
-  """Entity version"""
-  entityVersion: Float
-
-  """Date when the service failed"""
-  failedAt: DateTime!
-
-  """Health status of the service"""
-  healthStatus: ClusterServiceHealthStatus!
-
-  """Unique identifier of the entity"""
-  id: ID!
-  invites: [BlockchainNetworkInvite!]!
-
-  """Indicates if the pod is handling traffic"""
-  isPodHandlingTraffic: Boolean!
-
-  """Indicates if the pod is running"""
-  isPodRunning: Boolean!
-
-  """Indicates if this is a public EVM network"""
-  isPublicEvmNetwork: Boolean!
-  jobLogs: [String!]!
-  jobProgress: Float!
-
-  """Date when the service was last completed"""
-  lastCompletedAt: DateTime!
-  latestVersion: String!
-
-  """CPU limit in millicores"""
-  limitCpu: Int
-
-  """Memory limit in MB"""
-  limitMemory: Int
-
-  """The load balancers associated with this network"""
-  loadBalancers: [LoadBalancerType!]!
-
-  """Indicates if the service is locked"""
-  locked: Boolean!
-  metrics: Metric!
-
-  """Name of the service"""
-  name: String!
-  namespace: String!
-
-  """Network ID of the Fantom Testnet network"""
-  networkId: String!
-  participants: [BlockchainNetworkParticipant!]!
-
-  """Password for the service"""
-  password: String!
-
-  """Date when the service was paused"""
-  pausedAt: DateTime
-  predeployedContracts: [String!]!
-
-  """Product name of the service"""
-  productName: String!
-
-  """Provider of the service"""
-  provider: String!
-
-  """Public EVM node database name"""
-  publicEvmNodeDbName: String
-
-  """Region of the service"""
-  region: String!
-  requestLogs: [RequestLog!]!
-
-  """CPU requests in millicores"""
-  requestsCpu: Int
-
-  """Memory requests in MB"""
-  requestsMemory: Int
-
-  """Resource status of the service"""
-  resourceStatus: ClusterServiceResourceStatus!
-
-  """Date when the service was scaled"""
-  scaledAt: DateTime
-  serviceLogs: [String!]!
-  serviceUrl: String!
-
-  """Size of the service"""
-  size: ClusterServiceSize!
-
-  """Slug of the service"""
-  slug: String!
-
-  """Deployment status of the service"""
-  status: ClusterServiceDeploymentStatus!
-
-  """Type of the service"""
-  type: ClusterServiceType!
-
-  """Unique name of the service"""
-  uniqueName: String!
-
-  """Up job identifier"""
-  upJob: String
-
-  """Date and time when the entity was last updated"""
-  updatedAt: DateTime!
-  upgradable: Boolean!
-  user: User!
-
-  """UUID of the service"""
-  uuid: String!
-
-  """Version of the service"""
-  version: String
-}
-
-type FantomTestnetBlockchainNode implements AbstractClusterService & AbstractEntity & BlockchainNode {
-  """Advanced deployment configuration"""
-  advancedDeploymentConfig: AdvancedDeploymentConfig
-
-  """Associated application"""
-  application: Application!
-  applicationDashBoardDependantsTree: DependantsTree!
-
-  """The consensus algorithm used by this blockchain node"""
-  blockchainClient: ConsensusAlgorithm!
-  blockchainNetwork: BlockchainNetworkType!
-
-  """Get actions that can be performed on the blockchain node"""
-  clusterServiceActionChecks: BlockchainNodeActionChecks!
-
-  """Date and time when the entity was created"""
-  createdAt: DateTime!
-
-  """Credentials of cluster service"""
-  credentials: [ClusterServiceCredentials!]!
-
-  """Date and time when the entity was deleted, if applicable"""
-  deletedAt: DateTime
-
-  """Dependant services"""
-  dependants: [Dependant!]!
-  dependantsTree: DependantsTree!
-
-  """Dependencies of the service"""
-  dependencies: [Dependency!]!
-
-  """Destroy job identifier"""
-  destroyJob: String
-
-  """Indicates if the service auth is disabled"""
-  disableAuth: Boolean
-
-  """Disk space in GB"""
-  diskSpace: Int
-
-  """Endpoints of cluster service"""
-  endpoints: [ClusterServiceEndpoints!]!
-
-  """Entity version"""
-  entityVersion: Float
-
-  """Date when the service failed"""
-  failedAt: DateTime!
-
-  """Health status of the service"""
-  healthStatus: ClusterServiceHealthStatus!
-
-  """Unique identifier of the entity"""
-  id: ID!
-  isEvm: Boolean!
-
-  """Indicates if the pod is handling traffic"""
-  isPodHandlingTraffic: Boolean!
-
-  """Indicates if the pod is running"""
-  isPodRunning: Boolean!
-  jobLogs: [String!]!
-  jobProgress: Float!
-
-  """Date when the service was last completed"""
-  lastCompletedAt: DateTime!
-  latestVersion: String!
-
-  """CPU limit in millicores"""
-  limitCpu: Int
-
-  """Memory limit in MB"""
-  limitMemory: Int
-
-  """Indicates if the service is locked"""
-  locked: Boolean!
-  metrics: Metric!
-
-  """Name of the service"""
-  name: String!
-  namespace: String!
-
-  """The type of the blockchain node"""
-  nodeType: NodeType!
-
-  """Password for the service"""
-  password: String!
-
-  """Date when the service was paused"""
-  pausedAt: DateTime
-
-  """The private keys associated with this blockchain node"""
-  privateKeys: [PrivateKeyUnionType!]
-
-  """Product name of the service"""
-  productName: String!
-
-  """Provider of the service"""
-  provider: String!
-
-  """Region of the service"""
-  region: String!
-  requestLogs: [RequestLog!]!
-
-  """CPU requests in millicores"""
-  requestsCpu: Int
-
-  """Memory requests in MB"""
-  requestsMemory: Int
-
-  """Resource status of the service"""
-  resourceStatus: ClusterServiceResourceStatus!
-
-  """Date when the service was scaled"""
-  scaledAt: DateTime
-  serviceLogs: [String!]!
-  serviceUrl: String!
-
-  """Size of the service"""
-  size: ClusterServiceSize!
-
-  """Slug of the service"""
-  slug: String!
-
-  """Deployment status of the service"""
-  status: ClusterServiceDeploymentStatus!
-
-  """Type of the service"""
-  type: ClusterServiceType!
-
-  """Unique name of the service"""
-  uniqueName: String!
-
-  """Up job identifier"""
-  upJob: String
-
-  """Date and time when the entity was last updated"""
-  updatedAt: DateTime!
-  upgradable: Boolean!
-  user: User!
-
-  """UUID of the service"""
-  uuid: String!
-
-  """Version of the service"""
-  version: String
-}
-
 """The feature flags of the user."""
 enum FeatureFlag {
+  ACCOUNT_ABSTRACTION
   ALL
   APPLICATION_ACCESS_TOKENS
   APPLICATION_FIRST_WIZARD
@@ -10693,6 +10095,9 @@ type Hasura implements AbstractClusterService & AbstractEntity & Integration {
 }
 
 type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & PrivateKey {
+  """The account factory address for Account Abstraction"""
+  accountFactoryAddress: String
+
   """The address associated with the private key"""
   address: String
 
@@ -10736,6 +10141,9 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
   """Entity version"""
   entityVersion: Float
 
+  """The entry point address for Account Abstraction"""
+  entryPointAddress: String
+
   """Date when the service failed"""
   failedAt: DateTime!
 
@@ -10778,6 +10186,9 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
 
   """Date when the service was paused"""
   pausedAt: DateTime
+
+  """The paymaster address for Account Abstraction"""
+  paymasterAddress: String
   privateKey: String!
 
   """The type of private key"""
@@ -10841,6 +10252,9 @@ type HdEcdsaP256PrivateKey implements AbstractClusterService & AbstractEntity & 
   updatedAt: DateTime!
   upgradable: Boolean!
   user: User!
+
+  """What kind of wallet this key represents"""
+  userWalletType: UserWalletType!
   userWallets: [UserWallet!]
 
   """UUID of the service"""
@@ -11782,6 +11196,9 @@ type HoleskyBlockchainNode implements AbstractClusterService & AbstractEntity & 
 }
 
 type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity & PrivateKey {
+  """The account factory address for Account Abstraction"""
+  accountFactoryAddress: String
+
   """The address associated with the private key"""
   address: String
 
@@ -11824,6 +11241,9 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
   """Entity version"""
   entityVersion: Float
 
+  """The entry point address for Account Abstraction"""
+  entryPointAddress: String
+
   """Date when the service failed"""
   failedAt: DateTime!
 
@@ -11865,6 +11285,9 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
 
   """Date when the service was paused"""
   pausedAt: DateTime
+
+  """The paymaster address for Account Abstraction"""
+  paymasterAddress: String
 
   """The type of private key"""
   privateKeyType: PrivateKeyType!
@@ -11927,6 +11350,9 @@ type HsmEcDsaP256PrivateKey implements AbstractClusterService & AbstractEntity &
   updatedAt: DateTime!
   upgradable: Boolean!
   user: User!
+
+  """What kind of wallet this key represents"""
+  userWalletType: UserWalletType!
   userWallets: [UserWallet!]
 
   """UUID of the service"""
@@ -13434,6 +12860,9 @@ type Mutation {
     """Number of digits for OTP"""
     digits: Float
 
+    """Issuer for OTP"""
+    issuer: String
+
     """Name of the verification"""
     name: String!
 
@@ -13442,6 +12871,11 @@ type Mutation {
 
     """Pincode for pincode verification"""
     pincode: String
+
+    """
+    Skip OTP verification on enable, if set to true, the OTP will be enabled immediately
+    """
+    skipOtpVerificationOnEnable: Boolean
 
     """Type of the verification"""
     verificationType: WalletKeyVerificationType!
@@ -13453,6 +12887,9 @@ type Mutation {
     """Number of digits for OTP"""
     digits: Float
 
+    """Issuer for OTP"""
+    issuer: String
+
     """Name of the verification"""
     name: String!
 
@@ -13461,6 +12898,11 @@ type Mutation {
 
     """Pincode for pincode verification"""
     pincode: String
+
+    """
+    Skip OTP verification on enable, if set to true, the OTP will be enabled immediately
+    """
+    skipOtpVerificationOnEnable: Boolean
 
     """Type of the verification"""
     verificationType: WalletKeyVerificationType!
@@ -13993,6 +13435,9 @@ type Mutation {
 
   """Creates a new PrivateKey service"""
   createPrivateKey(
+    """The Account Factory contract address for Account Abstraction"""
+    accountFactoryAddress: String
+
     """Advanced deployment configuration"""
     advancedDeploymentConfig: AdvancedDeploymentConfigInput
 
@@ -14008,6 +13453,9 @@ type Mutation {
     """Disk space in MiB"""
     diskSpace: Int
 
+    """The EntryPoint contract address for Account Abstraction"""
+    entryPointAddress: String
+
     """CPU limit in cores"""
     limitCpu: Int
 
@@ -14019,6 +13467,9 @@ type Mutation {
 
     """Name of the cluster service"""
     name: String!
+
+    """The Paymaster contract address for Account Abstraction"""
+    paymasterAddress: String
 
     """Type of the private key"""
     privateKeyType: PrivateKeyType!
@@ -15514,8 +14965,16 @@ type OTPWalletKeyVerification implements WalletKeyVerification {
   """The digits of the OTP wallet key verification"""
   digits: Float!
 
+  """
+  The enabled status of the wallet key verification, used when the verification requires an activation step (e.g. OTP could require an initial verification)
+  """
+  enabled: Boolean!
+
   """Unique identifier of the entity"""
   id: ID!
+
+  """The issuer of the OTP wallet key verification"""
+  issuer: String!
 
   """The name of the wallet key verification"""
   name: String!
@@ -16776,6 +16235,11 @@ type PincodeWalletKeyVerification implements WalletKeyVerification {
 
   """Date and time when the entity was deleted, if applicable"""
   deletedAt: DateTime
+
+  """
+  The enabled status of the wallet key verification, used when the verification requires an activation step (e.g. OTP could require an initial verification)
+  """
+  enabled: Boolean!
 
   """Unique identifier of the entity"""
   id: ID!
@@ -19196,6 +18660,9 @@ type PolygonZkEvmTestnetBlockchainNode implements AbstractClusterService & Abstr
 }
 
 interface PrivateKey implements AbstractClusterService & AbstractEntity {
+  """The account factory address for Account Abstraction"""
+  accountFactoryAddress: String
+
   """The address associated with the private key"""
   address: String
 
@@ -19233,6 +18700,9 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
 
   """Entity version"""
   entityVersion: Float
+
+  """The entry point address for Account Abstraction"""
+  entryPointAddress: String
 
   """Date when the service failed"""
   failedAt: DateTime!
@@ -19275,6 +18745,9 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
 
   """Date when the service was paused"""
   pausedAt: DateTime
+
+  """The paymaster address for Account Abstraction"""
+  paymasterAddress: String
 
   """The type of private key"""
   privateKeyType: PrivateKeyType!
@@ -19337,6 +18810,9 @@ interface PrivateKey implements AbstractClusterService & AbstractEntity {
   updatedAt: DateTime!
   upgradable: Boolean!
   user: User!
+
+  """What kind of wallet this key represents"""
+  userWalletType: UserWalletType!
   userWallets: [UserWallet!]
 
   """UUID of the service"""
@@ -20975,6 +20451,11 @@ type SecretCodesWalletKeyVerification implements WalletKeyVerification {
   """Date and time when the entity was deleted, if applicable"""
   deletedAt: DateTime
 
+  """
+  The enabled status of the wallet key verification, used when the verification requires an activation step (e.g. OTP could require an initial verification)
+  """
+  enabled: Boolean!
+
   """Unique identifier of the entity"""
   id: ID!
 
@@ -22081,6 +21562,626 @@ type SoneiumMinatoBlockchainNetwork implements AbstractClusterService & Abstract
 }
 
 type SoneiumMinatoBlockchainNode implements AbstractClusterService & AbstractEntity & BlockchainNode {
+  """Advanced deployment configuration"""
+  advancedDeploymentConfig: AdvancedDeploymentConfig
+
+  """Associated application"""
+  application: Application!
+  applicationDashBoardDependantsTree: DependantsTree!
+
+  """The consensus algorithm used by this blockchain node"""
+  blockchainClient: ConsensusAlgorithm!
+  blockchainNetwork: BlockchainNetworkType!
+
+  """Get actions that can be performed on the blockchain node"""
+  clusterServiceActionChecks: BlockchainNodeActionChecks!
+
+  """Date and time when the entity was created"""
+  createdAt: DateTime!
+
+  """Credentials of cluster service"""
+  credentials: [ClusterServiceCredentials!]!
+
+  """Date and time when the entity was deleted, if applicable"""
+  deletedAt: DateTime
+
+  """Dependant services"""
+  dependants: [Dependant!]!
+  dependantsTree: DependantsTree!
+
+  """Dependencies of the service"""
+  dependencies: [Dependency!]!
+
+  """Destroy job identifier"""
+  destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
+  """Disk space in GB"""
+  diskSpace: Int
+
+  """Endpoints of cluster service"""
+  endpoints: [ClusterServiceEndpoints!]!
+
+  """Entity version"""
+  entityVersion: Float
+
+  """Date when the service failed"""
+  failedAt: DateTime!
+
+  """Health status of the service"""
+  healthStatus: ClusterServiceHealthStatus!
+
+  """Unique identifier of the entity"""
+  id: ID!
+  isEvm: Boolean!
+
+  """Indicates if the pod is handling traffic"""
+  isPodHandlingTraffic: Boolean!
+
+  """Indicates if the pod is running"""
+  isPodRunning: Boolean!
+  jobLogs: [String!]!
+  jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
+  latestVersion: String!
+
+  """CPU limit in millicores"""
+  limitCpu: Int
+
+  """Memory limit in MB"""
+  limitMemory: Int
+
+  """Indicates if the service is locked"""
+  locked: Boolean!
+  metrics: Metric!
+
+  """Name of the service"""
+  name: String!
+  namespace: String!
+
+  """The type of the blockchain node"""
+  nodeType: NodeType!
+
+  """Password for the service"""
+  password: String!
+
+  """Date when the service was paused"""
+  pausedAt: DateTime
+
+  """The private keys associated with this blockchain node"""
+  privateKeys: [PrivateKeyUnionType!]
+
+  """Product name of the service"""
+  productName: String!
+
+  """Provider of the service"""
+  provider: String!
+
+  """Region of the service"""
+  region: String!
+  requestLogs: [RequestLog!]!
+
+  """CPU requests in millicores"""
+  requestsCpu: Int
+
+  """Memory requests in MB"""
+  requestsMemory: Int
+
+  """Resource status of the service"""
+  resourceStatus: ClusterServiceResourceStatus!
+
+  """Date when the service was scaled"""
+  scaledAt: DateTime
+  serviceLogs: [String!]!
+  serviceUrl: String!
+
+  """Size of the service"""
+  size: ClusterServiceSize!
+
+  """Slug of the service"""
+  slug: String!
+
+  """Deployment status of the service"""
+  status: ClusterServiceDeploymentStatus!
+
+  """Type of the service"""
+  type: ClusterServiceType!
+
+  """Unique name of the service"""
+  uniqueName: String!
+
+  """Up job identifier"""
+  upJob: String
+
+  """Date and time when the entity was last updated"""
+  updatedAt: DateTime!
+  upgradable: Boolean!
+  user: User!
+
+  """UUID of the service"""
+  uuid: String!
+
+  """Version of the service"""
+  version: String
+}
+
+type SonicBlazeBlockchainNetwork implements AbstractClusterService & AbstractEntity & BlockchainNetwork {
+  """Advanced deployment configuration"""
+  advancedDeploymentConfig: AdvancedDeploymentConfig
+
+  """Associated application"""
+  application: Application!
+  applicationDashBoardDependantsTree: DependantsTree!
+
+  """The blockchain nodes associated with this network"""
+  blockchainNodes: [BlockchainNodeType!]!
+  canAddValidatingNodes: [Workspace!]!
+  canInviteWorkspaces: [Workspace!]!
+
+  """Chain ID of the Sonic Blaze network"""
+  chainId: Int!
+
+  """The consensus algorithm used by this blockchain network"""
+  consensusAlgorithm: ConsensusAlgorithm!
+  contractAddresses: ContractAddresses
+
+  """Date and time when the entity was created"""
+  createdAt: DateTime!
+
+  """Credentials of cluster service"""
+  credentials: [ClusterServiceCredentials!]!
+  decryptedFaucetWallet: JSON
+
+  """Date and time when the entity was deleted, if applicable"""
+  deletedAt: DateTime
+
+  """Dependant services"""
+  dependants: [Dependant!]!
+  dependantsTree: DependantsTree!
+
+  """Dependencies of the service"""
+  dependencies: [Dependency!]!
+
+  """Destroy job identifier"""
+  destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
+  """Disk space in GB"""
+  diskSpace: Int
+
+  """Endpoints of cluster service"""
+  endpoints: [ClusterServiceEndpoints!]!
+
+  """Entity version"""
+  entityVersion: Float
+
+  """Date when the service failed"""
+  failedAt: DateTime!
+
+  """Health status of the service"""
+  healthStatus: ClusterServiceHealthStatus!
+
+  """Unique identifier of the entity"""
+  id: ID!
+  invites: [BlockchainNetworkInvite!]!
+
+  """Indicates if the pod is handling traffic"""
+  isPodHandlingTraffic: Boolean!
+
+  """Indicates if the pod is running"""
+  isPodRunning: Boolean!
+
+  """Indicates if this is a public EVM network"""
+  isPublicEvmNetwork: Boolean!
+  jobLogs: [String!]!
+  jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
+  latestVersion: String!
+
+  """CPU limit in millicores"""
+  limitCpu: Int
+
+  """Memory limit in MB"""
+  limitMemory: Int
+
+  """The load balancers associated with this network"""
+  loadBalancers: [LoadBalancerType!]!
+
+  """Indicates if the service is locked"""
+  locked: Boolean!
+  metrics: Metric!
+
+  """Name of the service"""
+  name: String!
+  namespace: String!
+
+  """Network ID of the Sonic Blaze network"""
+  networkId: String!
+  participants: [BlockchainNetworkParticipant!]!
+
+  """Password for the service"""
+  password: String!
+
+  """Date when the service was paused"""
+  pausedAt: DateTime
+  predeployedContracts: [String!]!
+
+  """Product name of the service"""
+  productName: String!
+
+  """Provider of the service"""
+  provider: String!
+
+  """Public EVM node database name"""
+  publicEvmNodeDbName: String
+
+  """Region of the service"""
+  region: String!
+  requestLogs: [RequestLog!]!
+
+  """CPU requests in millicores"""
+  requestsCpu: Int
+
+  """Memory requests in MB"""
+  requestsMemory: Int
+
+  """Resource status of the service"""
+  resourceStatus: ClusterServiceResourceStatus!
+
+  """Date when the service was scaled"""
+  scaledAt: DateTime
+  serviceLogs: [String!]!
+  serviceUrl: String!
+
+  """Size of the service"""
+  size: ClusterServiceSize!
+
+  """Slug of the service"""
+  slug: String!
+
+  """Deployment status of the service"""
+  status: ClusterServiceDeploymentStatus!
+
+  """Type of the service"""
+  type: ClusterServiceType!
+
+  """Unique name of the service"""
+  uniqueName: String!
+
+  """Up job identifier"""
+  upJob: String
+
+  """Date and time when the entity was last updated"""
+  updatedAt: DateTime!
+  upgradable: Boolean!
+  user: User!
+
+  """UUID of the service"""
+  uuid: String!
+
+  """Version of the service"""
+  version: String
+}
+
+type SonicBlazeBlockchainNode implements AbstractClusterService & AbstractEntity & BlockchainNode {
+  """Advanced deployment configuration"""
+  advancedDeploymentConfig: AdvancedDeploymentConfig
+
+  """Associated application"""
+  application: Application!
+  applicationDashBoardDependantsTree: DependantsTree!
+
+  """The consensus algorithm used by this blockchain node"""
+  blockchainClient: ConsensusAlgorithm!
+  blockchainNetwork: BlockchainNetworkType!
+
+  """Get actions that can be performed on the blockchain node"""
+  clusterServiceActionChecks: BlockchainNodeActionChecks!
+
+  """Date and time when the entity was created"""
+  createdAt: DateTime!
+
+  """Credentials of cluster service"""
+  credentials: [ClusterServiceCredentials!]!
+
+  """Date and time when the entity was deleted, if applicable"""
+  deletedAt: DateTime
+
+  """Dependant services"""
+  dependants: [Dependant!]!
+  dependantsTree: DependantsTree!
+
+  """Dependencies of the service"""
+  dependencies: [Dependency!]!
+
+  """Destroy job identifier"""
+  destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
+  """Disk space in GB"""
+  diskSpace: Int
+
+  """Endpoints of cluster service"""
+  endpoints: [ClusterServiceEndpoints!]!
+
+  """Entity version"""
+  entityVersion: Float
+
+  """Date when the service failed"""
+  failedAt: DateTime!
+
+  """Health status of the service"""
+  healthStatus: ClusterServiceHealthStatus!
+
+  """Unique identifier of the entity"""
+  id: ID!
+  isEvm: Boolean!
+
+  """Indicates if the pod is handling traffic"""
+  isPodHandlingTraffic: Boolean!
+
+  """Indicates if the pod is running"""
+  isPodRunning: Boolean!
+  jobLogs: [String!]!
+  jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
+  latestVersion: String!
+
+  """CPU limit in millicores"""
+  limitCpu: Int
+
+  """Memory limit in MB"""
+  limitMemory: Int
+
+  """Indicates if the service is locked"""
+  locked: Boolean!
+  metrics: Metric!
+
+  """Name of the service"""
+  name: String!
+  namespace: String!
+
+  """The type of the blockchain node"""
+  nodeType: NodeType!
+
+  """Password for the service"""
+  password: String!
+
+  """Date when the service was paused"""
+  pausedAt: DateTime
+
+  """The private keys associated with this blockchain node"""
+  privateKeys: [PrivateKeyUnionType!]
+
+  """Product name of the service"""
+  productName: String!
+
+  """Provider of the service"""
+  provider: String!
+
+  """Region of the service"""
+  region: String!
+  requestLogs: [RequestLog!]!
+
+  """CPU requests in millicores"""
+  requestsCpu: Int
+
+  """Memory requests in MB"""
+  requestsMemory: Int
+
+  """Resource status of the service"""
+  resourceStatus: ClusterServiceResourceStatus!
+
+  """Date when the service was scaled"""
+  scaledAt: DateTime
+  serviceLogs: [String!]!
+  serviceUrl: String!
+
+  """Size of the service"""
+  size: ClusterServiceSize!
+
+  """Slug of the service"""
+  slug: String!
+
+  """Deployment status of the service"""
+  status: ClusterServiceDeploymentStatus!
+
+  """Type of the service"""
+  type: ClusterServiceType!
+
+  """Unique name of the service"""
+  uniqueName: String!
+
+  """Up job identifier"""
+  upJob: String
+
+  """Date and time when the entity was last updated"""
+  updatedAt: DateTime!
+  upgradable: Boolean!
+  user: User!
+
+  """UUID of the service"""
+  uuid: String!
+
+  """Version of the service"""
+  version: String
+}
+
+type SonicMainnetBlockchainNetwork implements AbstractClusterService & AbstractEntity & BlockchainNetwork {
+  """Advanced deployment configuration"""
+  advancedDeploymentConfig: AdvancedDeploymentConfig
+
+  """Associated application"""
+  application: Application!
+  applicationDashBoardDependantsTree: DependantsTree!
+
+  """The blockchain nodes associated with this network"""
+  blockchainNodes: [BlockchainNodeType!]!
+  canAddValidatingNodes: [Workspace!]!
+  canInviteWorkspaces: [Workspace!]!
+
+  """Chain ID of the Sonic Mainnet network"""
+  chainId: Int!
+
+  """The consensus algorithm used by this blockchain network"""
+  consensusAlgorithm: ConsensusAlgorithm!
+  contractAddresses: ContractAddresses
+
+  """Date and time when the entity was created"""
+  createdAt: DateTime!
+
+  """Credentials of cluster service"""
+  credentials: [ClusterServiceCredentials!]!
+  decryptedFaucetWallet: JSON
+
+  """Date and time when the entity was deleted, if applicable"""
+  deletedAt: DateTime
+
+  """Dependant services"""
+  dependants: [Dependant!]!
+  dependantsTree: DependantsTree!
+
+  """Dependencies of the service"""
+  dependencies: [Dependency!]!
+
+  """Destroy job identifier"""
+  destroyJob: String
+
+  """Indicates if the service auth is disabled"""
+  disableAuth: Boolean
+
+  """Disk space in GB"""
+  diskSpace: Int
+
+  """Endpoints of cluster service"""
+  endpoints: [ClusterServiceEndpoints!]!
+
+  """Entity version"""
+  entityVersion: Float
+
+  """Date when the service failed"""
+  failedAt: DateTime!
+
+  """Health status of the service"""
+  healthStatus: ClusterServiceHealthStatus!
+
+  """Unique identifier of the entity"""
+  id: ID!
+  invites: [BlockchainNetworkInvite!]!
+
+  """Indicates if the pod is handling traffic"""
+  isPodHandlingTraffic: Boolean!
+
+  """Indicates if the pod is running"""
+  isPodRunning: Boolean!
+
+  """Indicates if this is a public EVM network"""
+  isPublicEvmNetwork: Boolean!
+  jobLogs: [String!]!
+  jobProgress: Float!
+
+  """Date when the service was last completed"""
+  lastCompletedAt: DateTime!
+  latestVersion: String!
+
+  """CPU limit in millicores"""
+  limitCpu: Int
+
+  """Memory limit in MB"""
+  limitMemory: Int
+
+  """The load balancers associated with this network"""
+  loadBalancers: [LoadBalancerType!]!
+
+  """Indicates if the service is locked"""
+  locked: Boolean!
+  metrics: Metric!
+
+  """Name of the service"""
+  name: String!
+  namespace: String!
+
+  """Network ID of the Sonic Mainnet network"""
+  networkId: String!
+  participants: [BlockchainNetworkParticipant!]!
+
+  """Password for the service"""
+  password: String!
+
+  """Date when the service was paused"""
+  pausedAt: DateTime
+  predeployedContracts: [String!]!
+
+  """Product name of the service"""
+  productName: String!
+
+  """Provider of the service"""
+  provider: String!
+
+  """Public EVM node database name"""
+  publicEvmNodeDbName: String
+
+  """Region of the service"""
+  region: String!
+  requestLogs: [RequestLog!]!
+
+  """CPU requests in millicores"""
+  requestsCpu: Int
+
+  """Memory requests in MB"""
+  requestsMemory: Int
+
+  """Resource status of the service"""
+  resourceStatus: ClusterServiceResourceStatus!
+
+  """Date when the service was scaled"""
+  scaledAt: DateTime
+  serviceLogs: [String!]!
+  serviceUrl: String!
+
+  """Size of the service"""
+  size: ClusterServiceSize!
+
+  """Slug of the service"""
+  slug: String!
+
+  """Deployment status of the service"""
+  status: ClusterServiceDeploymentStatus!
+
+  """Type of the service"""
+  type: ClusterServiceType!
+
+  """Unique name of the service"""
+  uniqueName: String!
+
+  """Up job identifier"""
+  upJob: String
+
+  """Date and time when the entity was last updated"""
+  updatedAt: DateTime!
+  upgradable: Boolean!
+  user: User!
+
+  """UUID of the service"""
+  uuid: String!
+
+  """Version of the service"""
+  version: String
+}
+
+type SonicMainnetBlockchainNode implements AbstractClusterService & AbstractEntity & BlockchainNode {
   """Advanced deployment configuration"""
   advancedDeploymentConfig: AdvancedDeploymentConfig
 
@@ -23528,6 +23629,9 @@ type UserState {
 }
 
 type UserWallet {
+  """The account abstraction address of the wallet"""
+  accountAbstractionAddress: String
+
   """The address of the wallet"""
   address: String!
 
@@ -23542,6 +23646,9 @@ type UserWallet {
 
   """Unique identifier of the entity"""
   id: ID!
+
+  """Whether the account abstraction wallet is deployed"""
+  isAccountAbstractionDeployed: Boolean!
 
   """The name of the user wallet"""
   name: String!
@@ -23568,6 +23675,7 @@ type UserWallet {
 
 """Type of wallet to use for the application"""
 enum UserWalletType {
+  ACCOUNT_ABSTRACTION
   META_TRANSACTION
   REGULAR
 }
@@ -23578,6 +23686,11 @@ interface WalletKeyVerification {
 
   """Date and time when the entity was deleted, if applicable"""
   deletedAt: DateTime
+
+  """
+  The enabled status of the wallet key verification, used when the verification requires an activation step (e.g. OTP could require an initial verification)
+  """
+  enabled: Boolean!
 
   """Unique identifier of the entity"""
   id: ID!
