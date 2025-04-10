@@ -40,7 +40,9 @@
     "docs": "bun scripts/create-docs.ts",
     "prepack": "cp ../../LICENSE ."
   },
-  "dependencies": {},
+  "dependencies": {
+    "node-fetch-native": "1.6.6"
+  },
   "devDependencies": {
     "@commander-js/extra-typings": "11.1.0",
     "commander": "11.1.0",

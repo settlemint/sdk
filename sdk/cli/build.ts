@@ -19,6 +19,7 @@ async function build() {
       splitting: false,
       sourcemap: "external",
       minify: process.env.NODE_ENV === "production",
+      external: ["node-fetch-native/proxy"],
     });
 
     if (!build.success) {
@@ -27,6 +28,7 @@ async function build() {
 
     console.log(`📦 Bundle: ${formatSize(build.outputs[0].size)}`);
   } catch (error) {
+    console.error(error);
     throw new Error(`Bundle build failed: ${error.message}`);
   }
 
