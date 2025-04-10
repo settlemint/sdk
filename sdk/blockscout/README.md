@@ -50,7 +50,7 @@ For detailed information about using Blockscout with the SettleMint platform, ch
 
 #### createBlockscoutClient()
 
-> **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+> **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
 Defined in: [sdk/blockscout/src/blockscout.ts:70](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/blockscout/src/blockscout.ts#L70)
 
@@ -68,8 +68,8 @@ Creates a Blockscout GraphQL client with proper type safety using gql.tada
 | ------ | ------ | ------ |
 | `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client |
 | `options.accessToken` | `string` | - |
-| `options.instance`? | `string` | - |
-| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
+| `options.instance?` | `string` | - |
+| `clientOptions?` | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
 

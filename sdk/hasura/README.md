@@ -51,7 +51,7 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 #### createHasuraClient()
 
-> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
 Defined in: [sdk/hasura/src/hasura.ts:74](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/hasura/src/hasura.ts#L74)
 
@@ -69,10 +69,10 @@ Creates a Hasura GraphQL client with proper type safety using gql.tada
 | ------ | ------ | ------ |
 | `options` | \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the client |
 | `options.accessToken` | `string` | - |
-| `options.adminSecret`? | `string` | - |
-| `options.cache`? | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
-| `options.instance`? | `string` | - |
-| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
+| `options.adminSecret?` | `string` | - |
+| `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
+| `options.instance?` | `string` | - |
+| `clientOptions?` | `RequestConfig` | Optional GraphQL client configuration options |
 
 ##### Returns
 

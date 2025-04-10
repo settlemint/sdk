@@ -300,7 +300,7 @@ ensureServer();
 
 #### executeCommand()
 
-> **executeCommand**(`command`, `args`, `options`?): `Promise`\<`string`[]\>
+> **executeCommand**(`command`, `args`, `options?`): `Promise`\<`string`[]\>
 
 Defined in: [sdk/utils/src/terminal/execute-command.ts:31](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/execute-command.ts#L31)
 
@@ -314,7 +314,7 @@ Masks any sensitive tokens in the output before displaying or returning.
 | ------ | ------ | ------ |
 | `command` | `string` | The command to execute |
 | `args` | `string`[] | Array of arguments to pass to the command |
-| `options`? | [`ExecuteCommandOptions`](#executecommandoptions) | Options for customizing command execution |
+| `options?` | [`ExecuteCommandOptions`](#executecommandoptions) | Options for customizing command execution |
 
 ##### Returns
 
@@ -375,7 +375,7 @@ if (await exists('/path/to/file.txt')) {
 
 #### fetchWithRetry()
 
-> **fetchWithRetry**(`input`, `init`?, `maxRetries`?, `initialSleepTime`?): `Promise`\<`Response`\>
+> **fetchWithRetry**(`input`, `init?`, `maxRetries?`, `initialSleepTime?`): `Promise`\<`Response`\>
 
 Defined in: [sdk/utils/src/http/fetch-with-retry.ts:18](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/http/fetch-with-retry.ts#L18)
 
@@ -387,9 +387,9 @@ Only retries on server errors (5xx), rate limits (429), timeouts (408), and netw
 | Parameter | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | `input` | `URL` \| `RequestInfo` | `undefined` | The URL or Request object to fetch |
-| `init`? | `RequestInit` | `undefined` | The fetch init options |
-| `maxRetries`? | `number` | `5` | Maximum number of retry attempts |
-| `initialSleepTime`? | `number` | `3_000` | Initial sleep time between retries in ms |
+| `init?` | `RequestInit` | `undefined` | The fetch init options |
+| `maxRetries?` | `number` | `5` | Maximum number of retry attempts |
+| `initialSleepTime?` | `number` | `3_000` | Initial sleep time between retries in ms |
 
 ##### Returns
 
@@ -505,7 +505,7 @@ const formatted = formatTargetDir("/path/to/dir/ "); // "/path/to/dir"
 
 #### getPackageManager()
 
-> **getPackageManager**(`targetDir`?): `Promise`\<`AgentName`\>
+> **getPackageManager**(`targetDir?`): `Promise`\<`AgentName`\>
 
 Defined in: [sdk/utils/src/package-manager/get-package-manager.ts:15](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/package-manager/get-package-manager.ts#L15)
 
@@ -515,7 +515,7 @@ Detects the package manager used in the current project
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `targetDir`? | `string` | The directory to check for package manager (optional, defaults to process.cwd()) |
+| `targetDir?` | `string` | The directory to check for package manager (optional, defaults to process.cwd()) |
 
 ##### Returns
 
@@ -536,7 +536,7 @@ console.log(`Using ${packageManager}`);
 
 #### getPackageManagerExecutable()
 
-> **getPackageManagerExecutable**(`targetDir`?): `Promise`\<\{ `args`: `string`[]; `command`: `string`; \}\>
+> **getPackageManagerExecutable**(`targetDir?`): `Promise`\<\{ `args`: `string`[]; `command`: `string`; \}\>
 
 Defined in: [sdk/utils/src/package-manager/get-package-manager-executable.ts:14](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/package-manager/get-package-manager-executable.ts#L14)
 
@@ -546,7 +546,7 @@ Retrieves the executable command and arguments for the package manager
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `targetDir`? | `string` | The directory to check for package manager (optional, defaults to process.cwd()) |
+| `targetDir?` | `string` | The directory to check for package manager (optional, defaults to process.cwd()) |
 
 ##### Returns
 
@@ -567,7 +567,7 @@ console.log(`Using ${command} with args: ${args.join(" ")}`);
 
 #### graphqlFetchWithRetry()
 
-> **graphqlFetchWithRetry**\<`Data`\>(`input`, `init`?, `maxRetries`?, `initialSleepTime`?): `Promise`\<`Data`\>
+> **graphqlFetchWithRetry**\<`Data`\>(`input`, `init?`, `maxRetries?`, `initialSleepTime?`): `Promise`\<`Data`\>
 
 Defined in: [sdk/utils/src/http/graphql-fetch-with-retry.ts:34](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/http/graphql-fetch-with-retry.ts#L34)
 
@@ -586,9 +586,9 @@ Will also retry if the GraphQL response contains errors.
 | Parameter | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | `input` | `URL` \| `RequestInfo` | `undefined` | The URL or Request object for the GraphQL endpoint |
-| `init`? | `RequestInit` | `undefined` | Optional fetch configuration options |
-| `maxRetries`? | `number` | `5` | Maximum retry attempts before failing (default: 5) |
-| `initialSleepTime`? | `number` | `3_000` | Initial delay between retries in milliseconds (default: 3000) |
+| `init?` | `RequestInit` | `undefined` | Optional fetch configuration options |
+| `maxRetries?` | `number` | `5` | Maximum retry attempts before failing (default: 5) |
+| `initialSleepTime?` | `number` | `3_000` | Initial delay between retries in milliseconds (default: 3000) |
 
 ##### Returns
 
@@ -626,7 +626,7 @@ const data = await graphqlFetchWithRetry<{ user: { id: string } }>(
 
 #### installDependencies()
 
-> **installDependencies**(`pkgs`, `cwd`?): `Promise`\<`void`\>
+> **installDependencies**(`pkgs`, `cwd?`): `Promise`\<`void`\>
 
 Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:20](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/package-manager/install-dependencies.ts#L20)
 
@@ -637,7 +637,7 @@ Installs one or more packages as dependencies using the detected package manager
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `pkgs` | `string` \| `string`[] | A single package name or array of package names to install |
-| `cwd`? | `string` | The directory to run the installation in |
+| `cwd?` | `string` | The directory to run the installation in |
 
 ##### Returns
 
@@ -727,7 +727,7 @@ if (await isEmpty("/path/to/dir")) {
 
 #### isPackageInstalled()
 
-> **isPackageInstalled**(`name`, `path`?): `Promise`\<`boolean`\>
+> **isPackageInstalled**(`name`, `path?`): `Promise`\<`boolean`\>
 
 Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:17](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/package-manager/is-package-installed.ts#L17)
 
@@ -738,7 +738,7 @@ Checks if a package is installed in the project's dependencies, devDependencies,
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `name` | `string` | The name of the package to check |
-| `path`? | `string` | The path to the project root directory. If not provided, will be automatically determined |
+| `path?` | `string` | The path to the project root directory. If not provided, will be automatically determined |
 
 ##### Returns
 
@@ -948,7 +948,7 @@ outro("Deployment completed successfully!");
 
 #### projectRoot()
 
-> **projectRoot**(`fallbackToCwd`, `cwd`?): `Promise`\<`string`\>
+> **projectRoot**(`fallbackToCwd`, `cwd?`): `Promise`\<`string`\>
 
 Defined in: [sdk/utils/src/filesystem/project-root.ts:18](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/filesystem/project-root.ts#L18)
 
@@ -959,7 +959,7 @@ Finds the root directory of the current project by locating the nearest package.
 | Parameter | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | `fallbackToCwd` | `boolean` | `false` | If true, will return the current working directory if no package.json is found |
-| `cwd`? | `string` | `undefined` | The directory to start searching for the package.json file from (defaults to process.cwd()) |
+| `cwd?` | `string` | `undefined` | The directory to start searching for the package.json file from (defaults to process.cwd()) |
 
 ##### Returns
 
@@ -1016,7 +1016,7 @@ const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
 
 #### retryWhenFailed()
 
-> **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError`?): `Promise`\<`T`\>
+> **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError?`): `Promise`\<`T`\>
 
 Defined in: [sdk/utils/src/retry.ts:14](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/retry.ts#L14)
 
@@ -1035,7 +1035,7 @@ Retry a function when it fails.
 | `fn` | () => `Promise`\<`T`\> | `undefined` | The function to retry. |
 | `maxRetries` | `number` | `5` | The maximum number of retries. |
 | `initialSleepTime` | `number` | `1_000` | The initial time to sleep between exponential backoff retries. |
-| `stopOnError`? | (`error`) => `boolean` | `undefined` | The function to stop on error. |
+| `stopOnError?` | (`error`) => `boolean` | `undefined` | The function to stop on error. |
 
 ##### Returns
 
@@ -1056,7 +1056,7 @@ const result = await retryWhenFailed(() => readFile("/path/to/file.txt"), 3, 1_0
 
 #### setName()
 
-> **setName**(`name`, `path`?): `Promise`\<`void`\>
+> **setName**(`name`, `path?`): `Promise`\<`void`\>
 
 Defined in: [sdk/utils/src/package-manager/set-name.ts:16](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/package-manager/set-name.ts#L16)
 
@@ -1067,7 +1067,7 @@ Sets the name field in the package.json file
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `name` | `string` | The new name to set in the package.json file |
-| `path`? | `string` | The path to the project root directory. If not provided, will be automatically determined |
+| `path?` | `string` | The path to the project root directory. If not provided, will be automatically determined |
 
 ##### Returns
 
@@ -1274,7 +1274,7 @@ Writes environment variables to .env files across a project or monorepo
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `options` | \{ `cwd`: `string`; `env`: `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\>; `prod`: `boolean`; `secrets`: `boolean`; \} | The options for writing the environment variables |
-| `options.cwd`? | `string` | The directory to start searching for the package.json file from (defaults to process.cwd()) |
+| `options.cwd?` | `string` | The directory to start searching for the package.json file from (defaults to process.cwd()) |
 | `options.env` | `Partial`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `string`; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `string`; `SETTLEMINT_APPLICATION`: `string`; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `string`; `SETTLEMINT_BLOCKCHAIN_NODE`: `string`; `SETTLEMINT_BLOCKSCOUT`: `string`; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `string`; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `string`; `SETTLEMINT_HASURA`: `string`; `SETTLEMINT_HASURA_ADMIN_SECRET`: `string`; `SETTLEMINT_HASURA_DATABASE_URL`: `string`; `SETTLEMINT_HASURA_ENDPOINT`: `string`; `SETTLEMINT_HD_PRIVATE_KEY`: `string`; `SETTLEMINT_INSTANCE`: `string`; `SETTLEMINT_IPFS`: `string`; `SETTLEMINT_IPFS_API_ENDPOINT`: `string`; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `string`; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `string`; `SETTLEMINT_LOAD_BALANCER`: `string`; `SETTLEMINT_MINIO`: `string`; `SETTLEMINT_MINIO_ACCESS_KEY`: `string`; `SETTLEMINT_MINIO_ENDPOINT`: `string`; `SETTLEMINT_MINIO_SECRET_KEY`: `string`; `SETTLEMINT_NEW_PROJECT_NAME`: `string`; `SETTLEMINT_PORTAL`: `string`; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `string`; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `string`; `SETTLEMINT_THEGRAPH`: `string`; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `string`; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `string`[]; `SETTLEMINT_WORKSPACE`: `string`; \}\> | The environment variables to write |
 | `options.prod` | `boolean` | Whether to write production environment variables |
 | `options.secrets` | `boolean` | Whether to write to .env.local files for secrets |
@@ -1377,7 +1377,7 @@ Options for configuring the spinner behavior
 | ------ | ------ | ------ | ------ |
 | <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:26](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L26) |
 | <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:30](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L30) |
-| <a id="task"></a> `task` | (`spinner`?) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L28) |
+| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/utils/src/terminal/spinner.ts#L28) |
 
 ### Type Aliases
 

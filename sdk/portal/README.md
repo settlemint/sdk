@@ -52,7 +52,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 #### createPortalClient()
 
-> **createPortalClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+> **createPortalClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
 Defined in: [sdk/portal/src/portal.ts:61](https://github.com/settlemint/sdk/blob/v2.0.0/sdk/portal/src/portal.ts#L61)
 
@@ -70,9 +70,9 @@ Creates a Portal GraphQL client with the provided configuration.
 | ------ | ------ | ------ |
 | `options` | \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the Portal client |
 | `options.accessToken` | `string` | - |
-| `options.cache`? | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
-| `options.instance`? | `string` | - |
-| `clientOptions`? | `RequestConfig` | Additional GraphQL client configuration options |
+| `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
+| `options.instance?` | `string` | - |
+| `clientOptions?` | `RequestConfig` | Additional GraphQL client configuration options |
 
 ##### Returns
 
