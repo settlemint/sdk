@@ -40,7 +40,7 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "@graphql-tools/load": "8.0.19",
+    "@graphql-tools/load": "8.1.0",
     "@graphql-tools/url-loader": "8.0.31",
     "@modelcontextprotocol/sdk": "1.9.0",
     "@settlemint/sdk-js": "workspace:*",
