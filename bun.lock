@@ -62,7 +62,7 @@
         "yoctocolors": "2.1.1",
       },
       "peerDependencies": {
-        "hardhat": "2.22.19",
+        "hardhat": "2.23.0",
       },
       "optionalPeers": [
         "hardhat",
@@ -111,7 +111,7 @@
       },
       "dependencies": {
         "@commander-js/extra-typings": "11.1.0",
-        "@graphql-tools/load": "8.0.19",
+        "@graphql-tools/load": "8.1.0",
         "@graphql-tools/url-loader": "8.0.31",
         "@modelcontextprotocol/sdk": "1.9.0",
         "@settlemint/sdk-js": "workspace:*",
@@ -329,7 +329,7 @@
 
     "@graphql-tools/executor-legacy-ws": ["@graphql-tools/executor-legacy-ws@1.1.17", "", { "dependencies": { "@graphql-tools/utils": "^10.8.6", "@types/ws": "^8.0.0", "isomorphic-ws": "^5.0.0", "tslib": "^2.4.0", "ws": "^8.17.1" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-TvltY6eL4DY1Vt66Z8kt9jVmNcI+WkvVPQZrPbMCM3rv2Jw/sWvSwzUBezRuWX0sIckMifYVh23VPcGBUKX/wg=="],
 
-    "@graphql-tools/load": ["@graphql-tools/load@8.0.19", "", { "dependencies": { "@graphql-tools/schema": "^10.0.23", "@graphql-tools/utils": "^10.8.6", "p-limit": "3.1.0", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-YA3T9xTy2B6dNTnqsCzqSclA23j4v3p3A2Vdn0jEbZPGLMRPzWW8MJu2nlgQ8uua1IpYD/J8xgyrFxxAo3qPmQ=="],
+    "@graphql-tools/load": ["@graphql-tools/load@8.1.0", "", { "dependencies": { "@graphql-tools/schema": "^10.0.23", "@graphql-tools/utils": "^10.8.6", "p-limit": "3.1.0", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-OGfOm09VyXdNGJS/rLqZ6ztCiG2g6AMxhwtET8GZXTbnjptFc17GtKwJ3Jv5w7mjJ8dn0BHydvIuEKEUK4ciYw=="],
 
     "@graphql-tools/merge": ["@graphql-tools/merge@9.0.24", "", { "dependencies": { "@graphql-tools/utils": "^10.8.6", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-NzWx/Afl/1qHT3Nm1bghGG2l4jub28AdvtG11PoUlmjcIjnFBJMv4vqL0qnxWe8A82peWo4/TkVdjJRLXwgGEw=="],
 

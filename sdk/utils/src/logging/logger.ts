@@ -35,6 +35,8 @@ export interface Logger {
  * Creates a simple logger with configurable log level
  *
  * @param options - Configuration options for the logger
+ * @param options.level - The minimum log level to output (default: warn)
+ * @param options.prefix - The prefix to add to the log message (default: "")
  * @returns A logger instance with debug, info, warn, and error methods
  *
  * @example
@@ -46,7 +48,7 @@ export interface Logger {
  * logger.error('Operation failed', new Error('Connection timeout'));
  */
 export function createLogger(options: LoggerOptions = {}): Logger {
-  const { level = "info", prefix = "" } = options;
+  const { level = "warn", prefix = "" } = options;
 
   const logLevels: Record<LogLevel, number> = {
     debug: 0,
@@ -59,9 +61,11 @@ export function createLogger(options: LoggerOptions = {}): Logger {
   const currentLevelValue = logLevels[level];
 
   const formatArgs = (args: unknown[]): string => {
-    if (args.length === 0) return "";
+    if (args.length === 0 || args.every((arg) => arg === undefined || arg === null)) {
+      return "";
+    }
 
-    return args
+    const formatted = args
       .map((arg) => {
         if (arg instanceof Error) {
           return `\n${arg.stack || arg.message}`;
@@ -72,6 +76,8 @@ export function createLogger(options: LoggerOptions = {}): Logger {
         return ` ${String(arg)}`;
       })
       .join("");
+
+    return `, args:${formatted}`;
   };
 
   const shouldLog = (level: LogLevel): boolean => {

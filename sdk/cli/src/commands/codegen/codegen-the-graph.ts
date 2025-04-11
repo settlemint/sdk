@@ -27,7 +27,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
 
   const template = [
     `import { createTheGraphClient } from "${PACKAGE_NAME}";`,
-    "import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';",
+    "import { createLogger, requestLogger, type LogLevel } from '@settlemint/sdk-utils/logging';",
   ];
 
   const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
@@ -44,7 +44,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     return true;
   });
 
-  template.push("", "const logger = createLogger({ level: process.env.NODE_ENV === 'production' ? 'warn' : 'info' });");
+  template.push("", "const logger = createLogger({ level: process.env.SETTLEMINT_LOG_LEVEL as LogLevel });");
 
   for (const gqlEndpoint of toGenerate) {
     const name = gqlEndpoint.split("/").pop()!;
