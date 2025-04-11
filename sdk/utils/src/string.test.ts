@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { camelCaseToWords, replaceUnderscoresAndHyphensWithSpaces } from "./string.js";
+import { camelCaseToWords, replaceUnderscoresAndHyphensWithSpaces, truncate } from "./string.js";
 
 describe("camelCaseToWords", () => {
   test("converts simple camelCase to words", () => {
@@ -34,5 +34,15 @@ describe("camelCaseToWords", () => {
 describe("replaceUnderscoresAndHyphensWithSpaces", () => {
   test("replaces underscoes and hyphens with spaces", () => {
     expect(replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second")).toBe("Already Spaced Second");
+  });
+});
+
+describe("truncate", () => {
+  test("truncates a string to a maximum length", () => {
+    expect(truncate("Hello, world!", 10)).toBe("Hello, wor...");
+  });
+
+  test("does not truncate a string that is shorter than the maximum length", () => {
+    expect(truncate("Hello, world!", 100)).toBe("Hello, world!");
   });
 });

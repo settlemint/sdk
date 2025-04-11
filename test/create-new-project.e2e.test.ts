@@ -246,8 +246,9 @@ describe("Setup a project using the SDK", () => {
   test("Build app", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
-      await $`bun lint`.cwd(projectDir).env(env);
-      await $`bun run build`.cwd(projectDir).env(env);
+      await $`bun lint`.cwd(dAppDir).env(env);
+      await $`bun addresses`.cwd(dAppDir).env(env);
+      await $`bunx tsc`.cwd(dAppDir).env(env);
     } catch (err) {
       const shellError = err as ShellError;
       console.log(shellError.stdout.toString());

@@ -3,6 +3,7 @@ import { createLogger } from "./logger.js";
 import { requestLogger } from "./request-logger.js";
 
 describe("requestLogger", () => {
+  const logger = createLogger({ level: "info" });
   const infoSpy = spyOn(console, "info");
   const warningSpy = spyOn(console, "warn");
 
@@ -12,20 +13,18 @@ describe("requestLogger", () => {
   });
 
   it("should log start and end of function execution", async () => {
-    const logger = createLogger();
-    const testFn = async (url: string) => new Response("test result");
+    const testFn = async (_url: string) => new Response("test result");
     const wrappedFn = requestLogger(logger, "TestFunction", testFn as typeof fetch);
 
     const result = await wrappedFn("https://example.com");
 
     expect(await result.text()).toBe("test result");
     expect(infoSpy).toHaveBeenCalledTimes(1);
-    expect(infoSpy.mock.calls[0]?.[0]).toContain("TestFunction path: https://example.com, body: {}, took");
+    expect(infoSpy.mock.calls[0]?.[0]).toMatch(/TestFunction path: https:\/\/example\.com, took \d+ms/);
   });
 
   it("should log execution time in milliseconds for quick functions", async () => {
-    const logger = createLogger();
-    const quickFn = async (url: string) => new Response("quick");
+    const quickFn = async (_url: string) => new Response("quick");
     const wrappedFn = requestLogger(logger, "QuickFunction", quickFn as typeof fetch);
 
     await wrappedFn("https://example.com");
@@ -35,9 +34,8 @@ describe("requestLogger", () => {
   });
 
   it("should log execution time in seconds and a warning for slow functions", async () => {
-    const logger = createLogger();
-    const slowFn = async (url: string) => {
-      await new Promise((resolve) => setTimeout(resolve, 3001));
+    const slowFn = async (_url: string) => {
+      await new Promise((resolve) => setTimeout(resolve, 1001));
       return new Response("slow");
     };
     const wrappedFn = requestLogger(logger, "SlowFunction", slowFn as typeof fetch);
@@ -50,8 +48,7 @@ describe("requestLogger", () => {
   });
 
   it("should handle errors and still log execution time", async () => {
-    const logger = createLogger();
-    const errorFn = async (url: string) => {
+    const errorFn = async (_url: string) => {
       throw new Error("Test error");
     };
     const wrappedFn = requestLogger(logger, "ErrorFunction", errorFn as unknown as typeof fetch);
@@ -59,12 +56,11 @@ describe("requestLogger", () => {
     expect(wrappedFn("https://example.com")).rejects.toThrow("Test error");
 
     expect(infoSpy).toHaveBeenCalledTimes(1);
-    expect(infoSpy.mock.calls[0]?.[0]).toContain("ErrorFunction path: https://example.com, body: {}, took");
+    expect(infoSpy.mock.calls[0]?.[0]).toContain("ErrorFunction path: https://example.com, took");
   });
 
   it("should pass arguments to the wrapped function", async () => {
-    const logger = createLogger();
-    const argFn = async (url: string, options?: RequestInit) => {
+    const argFn = async (_url: string, options?: RequestInit) => {
       const { a, b } = options?.body ? JSON.parse(options.body as string) : { a: 0, b: "" };
       return new Response(`${a}-${b}`);
     };
@@ -78,8 +74,35 @@ describe("requestLogger", () => {
     expect(await result.text()).toBe("42-test");
 
     expect(infoSpy).toHaveBeenCalledTimes(1);
-    expect(infoSpy.mock.calls[0]?.[0]).toContain(
-      'ArgFunction path: https://example.com, body: {"a":42,"b":"test"}, took',
+    expect(infoSpy.mock.calls[0]?.[0]).toMatch(
+      /ArgFunction path: https:\/\/example\.com, took \d+ms, args: {\"a\":42,\"b\":\"test\"}/,
+    );
+  });
+
+  it("should truncate graphql request data", async () => {
+    const graphqlFn = async (_url: string) => {
+      return new Response("graphql-test");
+    };
+    const wrappedFn = requestLogger(logger, "GraphqlFunction", graphqlFn as typeof fetch);
+
+    const result = await wrappedFn("https://example.com", {
+      method: "POST",
+      body: JSON.stringify({
+        query:
+          "query GetTransactionDetails($hash: String!, $blockNumber: Int) { transaction(hash: $hash, blockNumber: $blockNumber) { id blockNumber timestamp value gasPrice gasUsed status from { address } to { address } logs { topics data } } }",
+        variables: {
+          hash: "0x123abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123a",
+          blockNumber: 1234567890,
+        },
+        operationName: "GetTransactionDetails",
+        notRelevant: "notRelevant",
+      }),
+    });
+
+    expect(await result.text()).toBe("graphql-test");
+    expect(infoSpy).toHaveBeenCalledTimes(1);
+    expect(infoSpy.mock.calls[0]?.[0]).toMatch(
+      /GraphqlFunction path: https:\/\/example\.com, took \d+ms, args: {"query":"query GetTransactionDetails\(\$hash: String!, \$block...","variables":"\{\\\"hash\\\":\\\"0x123abc123abc123abc123abc123abc123abc123...","operationName":"GetTransactionDetails"}/,
     );
   });
 });

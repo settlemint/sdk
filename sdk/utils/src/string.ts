@@ -48,3 +48,23 @@ export function camelCaseToWords(s: string) {
 export function replaceUnderscoresAndHyphensWithSpaces(s: string) {
   return s.replace(/[-_]/g, " ");
 }
+
+/**
+ * Truncates a string to a maximum length and appends "..." if it is longer.
+ *
+ * @param value - The string to truncate
+ * @param maxLength - The maximum length of the string
+ * @returns The truncated string or the original string if it is shorter than the maximum length
+ *
+ * @example
+ * import { truncate } from "@settlemint/sdk-utils";
+ *
+ * const truncated = truncate("Hello, world!", 10);
+ * // Returns: "Hello, wor..."
+ */
+export function truncate(value: string, maxLength: number) {
+  if (value.length <= maxLength) {
+    return value;
+  }
+  return `${value.slice(0, maxLength)}...`;
+}

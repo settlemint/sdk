@@ -32,9 +32,9 @@ export async function codegenPortal(env: DotEnv) {
 
   const template = `import { createPortalClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/portal-env";
-import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
+import { createLogger, requestLogger, type LogLevel } from '@settlemint/sdk-utils/logging';
 
-const logger = createLogger({ level: process.env.NODE_ENV === 'production' ? 'warn' : 'info' });
+const logger = createLogger({ level: process.env.SETTLEMINT_LOG_LEVEL as LogLevel });
 
 export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
   introspection: introspection;
