@@ -123,12 +123,12 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Connected to SettleMint");
   });
 
-  test.skip("contracts - Install dependencies", async () => {
+  test("contracts - Install dependencies", async () => {
     const result = await $`bun run dependencies`.cwd(contractsDir);
     expect(result.exitCode).toBe(0);
   });
 
-  test.skip("contracts - Build and Deploy smart contracts", async () => {
+  test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "asset-tokenization-kit";
     // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
     const { output: deployOutput } = await retryCommand(
@@ -162,7 +162,7 @@ describe("Setup a project using the SDK", () => {
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test.skip("subgraph - Update contract addresses", async () => {
+  test("subgraph - Update contract addresses", async () => {
     const config = await getSubgraphYamlConfig(subgraphDir);
     const updatedConfig: typeof config = {
       ...config,
@@ -181,21 +181,21 @@ describe("Setup a project using the SDK", () => {
     await updateSubgraphYamlConfig(updatedConfig, subgraphDir);
   });
 
-  test.skip("subgraph - Build subgraph", async () => {
+  test("subgraph - Build subgraph", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "build"], {
       cwd: subgraphDir,
     }).result;
     expect(output).toInclude("Build completed");
   });
 
-  test.skip("subgraph - Codegen subgraph", async () => {
+  test("subgraph - Codegen subgraph", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "codegen"], {
       cwd: subgraphDir,
     }).result;
     expect(output).toInclude("Types generated successfully");
   });
 
-  test.skip("subgraph - Deploy subgraphs", async () => {
+  test("subgraph - Deploy subgraphs", async () => {
     for (const subgraphName of SUBGRAPH_NAMES) {
       const { output } = await retryCommand(
         () =>
