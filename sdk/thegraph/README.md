@@ -137,11 +137,20 @@ const result = await client.request(query);
 
 #### ClientOptions
 
-> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
+> **ClientOptions** = `object`
 
 Defined in: [sdk/thegraph/src/thegraph.ts:25](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/thegraph/src/thegraph.ts#L25)
 
 Type definition for client options derived from the ClientOptionsSchema
+
+##### Type declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="accesstoken"></a> `accessToken` | `string` | `ApplicationAccessTokenSchema` | [sdk/thegraph/src/thegraph.ts:17](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/thegraph/src/thegraph.ts#L17) |
+| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/thegraph/src/thegraph.ts:19](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/thegraph/src/thegraph.ts#L19) |
+| <a id="instances"></a> `instances` | `string`[] | - | [sdk/thegraph/src/thegraph.ts:16](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/thegraph/src/thegraph.ts#L16) |
+| <a id="subgraphname"></a> `subgraphName` | `string` | - | [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/thegraph/src/thegraph.ts#L18) |
 
 ***
 
@@ -157,7 +166,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instances`: `ZodArray`\<`ZodUnion`\<\[`ZodString`, `ZodString`\]\>, `"many"`\>; `subgraphName`: `ZodString`; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instances`: `string`[]; `subgraphName`: `string`; \}, \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instances`: `string`[]; `subgraphName`: `string`; \}\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
 Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/thegraph/src/thegraph.ts#L15)
 

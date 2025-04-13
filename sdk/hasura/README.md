@@ -185,11 +185,20 @@ try {
 
 #### ClientOptions
 
-> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
+> **ClientOptions** = `object`
 
 Defined in: [sdk/hasura/src/hasura.ts:26](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/hasura/src/hasura.ts#L26)
 
 Type definition for client options derived from the ClientOptionsSchema.
+
+##### Type declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="accesstoken"></a> `accessToken` | `string` | `ApplicationAccessTokenSchema` | [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/hasura/src/hasura.ts#L18) |
+| <a id="adminsecret"></a> `adminSecret` | `string` | - | [sdk/hasura/src/hasura.ts:19](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/hasura/src/hasura.ts#L19) |
+| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/hasura/src/hasura.ts:20](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/hasura/src/hasura.ts#L20) |
+| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/hasura/src/hasura.ts:17](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/hasura/src/hasura.ts#L17) |
 
 ***
 
@@ -205,7 +214,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \}\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
 Defined in: [sdk/hasura/src/hasura.ts:16](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/hasura/src/hasura.ts#L16)
 
