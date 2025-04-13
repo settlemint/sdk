@@ -69,7 +69,8 @@
     "zod": "^3",
     "drizzle-orm": "^0.41.0",
     "pg": "^8",
-    "drizzle-kit": "^0.30"
+    "drizzle-kit": "^0.30",
+    "pg-native": "^3"
   },
   "peerDependencies": {},
   "engines": {

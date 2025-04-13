@@ -79,6 +79,7 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
   subgraphName: "${name}",
+  cache: "force-cache",
 }, {
   fetch: requestLogger(logger, "the-graph-${name}", fetch) as typeof fetch,
 });`,
