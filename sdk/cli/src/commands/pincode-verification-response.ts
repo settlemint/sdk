@@ -11,6 +11,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { pincodeVerificationPrompt } from "../prompts/pincode-verification.prompt";
 
 export function pincodeVerificationResponseCommand() {
   return new Command("pincode-verification-response")
@@ -61,6 +62,12 @@ export function pincodeVerificationResponseCommand() {
         }
       }
 
+      const pincodeVerificationChallenges = await settlemint.wallet.pincodeVerificationChallenges({
+        userWalletAddress: walletAddress,
+        nodeId: selectedBlockchainNode.id,
+      });
+      const verificationChallenge = await pincodeVerificationPrompt(pincodeVerificationChallenges);
+
       const pincode = await password({
         message: "Enter your pincode",
         validate(value) {
@@ -70,10 +77,10 @@ export function pincodeVerificationResponseCommand() {
           return true;
         },
       });
-      const pincodeVerificationResponse = await settlemint.wallet.pincodeVerificationResponse({
-        userWalletAddress: walletAddress,
+
+      const pincodeVerificationResponse = settlemint.wallet.pincodeVerificationChallengeResponse({
+        verificationChallenge,
         pincode,
-        nodeId: selectedBlockchainNode.id,
       });
       note(`Pincode verification response: ${pincodeVerificationResponse}`);
 
