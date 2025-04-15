@@ -16,7 +16,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
-const TEMPLATE_VERSION = "0.1.15-main";
+const TEMPLATE_VERSION = "1.0.2";
 const SUBGRAPH_NAMES = ["kit", "starterkits"];
 
 const COMMAND_TEST_SCOPE = __filename;
@@ -249,6 +249,7 @@ describe("Setup a project using the SDK", () => {
       await $`bun lint`.cwd(dAppDir).env(env);
       await $`bun addresses`.cwd(dAppDir).env(env);
       await $`bunx tsc`.cwd(dAppDir).env(env);
+      await $`bun run build`.cwd(projectDir).env(env);
     } catch (err) {
       const shellError = err as ShellError;
       console.log(shellError.stdout.toString());
