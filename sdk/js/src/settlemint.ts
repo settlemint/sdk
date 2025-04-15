@@ -95,7 +95,13 @@ import {
   workspaceRead,
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
-import { type PincodeVerificationResponseArgs, getPincodeVerificationResponse } from "./pincode-verification.js";
+import {
+  type PincodeVerificationChallengeResponseArgs,
+  type PincodeVerificationChallengesArgs,
+  type VerificationChallenge,
+  getPincodeVerificationChallengeResponse,
+  getPincodeVerificationChallenges,
+} from "./pincode-verification.js";
 
 /**
  * Options for the Settlemint client.
@@ -183,9 +189,10 @@ export interface SettlemintClient {
     config: () => Promise<PlatformConfig>;
   };
   wallet: {
-    pincodeVerificationResponse: (
-      args: Omit<PincodeVerificationResponseArgs, "instance" | "accessToken">,
-    ) => Promise<string>;
+    pincodeVerificationChallengeResponse: (args: PincodeVerificationChallengeResponseArgs) => string;
+    pincodeVerificationChallenges: (
+      args: Omit<PincodeVerificationChallengesArgs, "instance" | "accessToken">,
+    ) => Promise<VerificationChallenge[]>;
   };
 }
 
@@ -321,8 +328,9 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       config: getPlatformConfig(gqlClient),
     },
     wallet: {
-      pincodeVerificationResponse: (args) =>
-        getPincodeVerificationResponse({
+      pincodeVerificationChallengeResponse: getPincodeVerificationChallengeResponse,
+      pincodeVerificationChallenges: (args) =>
+        getPincodeVerificationChallenges({
           ...args,
           instance: validatedOptions.instance,
           accessToken: validatedOptions.accessToken,
@@ -342,3 +350,4 @@ export type { PrivateKey } from "./graphql/private-key.js";
 export type { Storage } from "./graphql/storage.js";
 export type { Workspace } from "./graphql/workspace.js";
 export type { PlatformConfig } from "./graphql/platform.js";
+export type { VerificationChallenge } from "./pincode-verification.js";
