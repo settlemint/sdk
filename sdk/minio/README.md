@@ -47,7 +47,7 @@ For detailed information about using MinIO with the SettleMint platform, check o
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/minio/src/minio.ts#L24)
+Defined in: [sdk/minio/src/minio.ts:23](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/minio/src/minio.ts#L23)
 
 Creates a MinIO client for server-side use with authentication.
 
@@ -55,9 +55,8 @@ Creates a MinIO client for server-side use with authentication.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessKey`: `string`; `accessToken`: `string`; `instance`: `string`; `secretKey`: `string`; \} | The server client options for configuring the MinIO client |
+| `options` | \{ `accessKey`: `string`; `instance`: `string`; `secretKey`: `string`; \} | The server client options for configuring the MinIO client |
 | `options.accessKey` | `string` | The MinIO access key used to authenticate with the MinIO server |
-| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
 | `options.instance` | `string` | The URL of the MinIO instance to connect to |
 | `options.secretKey` | `string` | The MinIO secret key used to authenticate with the MinIO server |
 
@@ -69,7 +68,7 @@ An object containing the initialized MinIO client
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `Client` | [sdk/minio/src/minio.ts:24](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/minio/src/minio.ts#L24) |
+| `client` | `Client` | [sdk/minio/src/minio.ts:23](https://github.com/settlemint/sdk/blob/v2.1.1/sdk/minio/src/minio.ts#L23) |
 
 ##### Throws
 
@@ -82,7 +81,6 @@ import { createServerMinioClient } from "@settlemint/sdk-minio";
 
 const { client } = createServerMinioClient({
   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
 });
