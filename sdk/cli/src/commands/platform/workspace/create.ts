@@ -127,7 +127,7 @@ export function workspaceCreateCommand() {
               ...defaultArgs
             },
           ) => {
-            return baseAction(defaultArgs, async (settlemint, _env, showSpinner) => {
+            return baseAction(defaultArgs, async ({ settlemint, showSpinner }) => {
               const result = await showSpinner(() =>
                 settlemint.workspace.create({
                   name,

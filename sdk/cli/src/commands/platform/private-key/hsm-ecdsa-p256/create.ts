@@ -24,7 +24,7 @@ export function privateKeyHsmCreateCommand() {
               ...defaultArgs,
               acceptDefaults,
             },
-            async (settlemint, env, showSpinner) => {
+            async ({ settlemint, env, showSpinner, provider, region }) => {
               const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
               if (!applicationUniqueName) {
                 return missingApplication();
