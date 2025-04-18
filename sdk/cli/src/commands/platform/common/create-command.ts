@@ -29,8 +29,8 @@ type CreateFunctionContext = {
   settlemint: SettlemintClient;
   env: Partial<DotEnv>;
   showSpinner: <T>(task: () => Promise<T>) => Promise<T>;
-  provider?: string;
-  region?: string;
+  provider: string;
+  region: string;
 };
 /**
  * Creates a command for creating resources in the SettleMint platform.
@@ -136,8 +136,8 @@ export function getCreateCommand({
         settlemint,
         env,
         showSpinner,
-        provider: selectedProvider?.id,
-        region: selectedRegion?.id,
+        provider: selectedProvider?.id ?? "",
+        region: selectedRegion?.id ?? "",
       });
 
       if (wait) {
