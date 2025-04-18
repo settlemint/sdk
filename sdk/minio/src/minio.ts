@@ -15,7 +15,6 @@ import { type ServerClientOptions, ServerClientOptionsSchema } from "./helpers/c
  *
  * const { client } = createServerMinioClient({
  *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
- *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
  *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
  *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
  * });
@@ -25,11 +24,14 @@ export function createServerMinioClient(options: ServerClientOptions): { client:
   ensureServer();
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 
+  const url = new URL(validatedOptions.instance);
   return {
     client: new Client({
-      endPoint: new URL(validatedOptions.instance).host,
+      endPoint: url.hostname,
       accessKey: validatedOptions.accessKey,
       secretKey: validatedOptions.secretKey,
+      useSSL: url.protocol !== "http:",
+      port: url.port ? Number(url.port) : undefined,
       region: "eu-central-1",
     }),
   };

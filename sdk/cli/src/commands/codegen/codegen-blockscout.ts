@@ -160,6 +160,9 @@ export async function codegenBlockscout(env: DotEnv) {
 
   const template = `import { createBlockscoutClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/blockscout-env";
+import { createLogger, requestLogger, type LogLevel } from '@settlemint/sdk-utils/logging';
+
+const logger = createLogger({ level: process.env.SETTLEMINT_LOG_LEVEL as LogLevel });
 
 export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBlockscoutClient<{
   introspection: introspection;
@@ -184,7 +187,9 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
   };
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+}, {
+  fetch: requestLogger(logger, "blockscout", fetch) as typeof fetch,
 });
 
 export const blockscoutUiEndpoint = process.env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT!;`;

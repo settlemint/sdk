@@ -81,6 +81,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: UrlSchema.optional(),
   /** Name of the new project being created */
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
+  /** The log level to use */
+  SETTLEMINT_LOG_LEVEL: z.enum(["debug", "info", "warn", "error", "none"]).default("warn"),
 });
 
 /**

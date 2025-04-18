@@ -9,43 +9,48 @@ function generateResponse(pincode: string, salt: string, challenge: string): str
   return createHash("sha256").update(`${hashedPincode}_${challenge}`).digest("hex");
 }
 
-export interface PincodeVerificationResponseArgs {
+export interface PincodeVerificationChallengesArgs {
   userWalletAddress: string;
-  pincode: string;
   accessToken: string;
   instance: string;
   nodeId: string;
 }
 
+export interface PincodeVerificationChallengeResponseArgs {
+  verificationChallenge: VerificationChallenge;
+  pincode: string;
+}
+
+export interface VerificationChallenge {
+  name: string;
+  challenge: {
+    secret: string;
+    salt: string;
+  };
+}
+
 /**
- * Get the pincode verification response for a user wallet address.
+ * Get the pincode verification challenges for a user wallet address.
  * @param userWalletAddress - The user's wallet address.
- * @param pincode - The user's pincode.
  * @param accessToken - The user's access token.
  * @param instance - The instance URL.
  * @param nodeId - The node ID.
- * @returns The pincode verification response.
+ * @returns The pincode verification challenges.
  */
-export async function getPincodeVerificationResponse({
+export async function getPincodeVerificationChallenges({
   userWalletAddress,
-  pincode,
   accessToken,
   instance,
   nodeId,
-}: PincodeVerificationResponseArgs) {
+}: PincodeVerificationChallengesArgs) {
   const response = await fetch(
-    `${instance}/cm/nodes/${encodeURIComponent(nodeId)}/user-wallets/${encodeURIComponent(userWalletAddress)}/verifications/challenges`,
+    `${instance}/cm/nodes/${encodeURIComponent(nodeId)}/user-wallets/${encodeURIComponent(userWalletAddress)}/verifications/challenges?type=PINCODE`,
     {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-auth-token": accessToken,
       },
-      body: JSON.stringify({
-        pincode,
-        verificationType: "PINCODE",
-        name: "pincode",
-      }),
     },
   );
 
@@ -56,17 +61,24 @@ export async function getPincodeVerificationResponse({
     throw new Error("Failed to get verification challenge");
   }
 
-  const verificationChallenges: { challenge: { secret: string; salt: string } }[] = await response.json();
-  if (!verificationChallenges.length) {
-    throw new Error("No verification challenges received");
-  }
+  const verificationChallenges: VerificationChallenge[] = await response.json();
+  return verificationChallenges;
+}
 
-  const firstChallenge = verificationChallenges[0];
-  const challenge = firstChallenge?.challenge as { secret: string; salt: string } | null;
-  if (!challenge?.secret || !challenge?.salt) {
+/**
+ * Get the pincode verification challenge response for a user wallet address.
+ * @param verificationChallenge - The verification challenge.
+ * @param pincode - The user's pincode.
+ * @returns The pincode verification challenge response.
+ */
+export function getPincodeVerificationChallengeResponse({
+  verificationChallenge,
+  pincode,
+}: PincodeVerificationChallengeResponseArgs) {
+  if (!verificationChallenge?.challenge?.secret || !verificationChallenge?.challenge?.salt) {
     throw new Error("Could not authenticate pin code, invalid challenge format");
   }
 
-  const { secret, salt } = challenge;
+  const { secret, salt } = verificationChallenge.challenge;
   return generateResponse(pincode, salt, secret);
 }

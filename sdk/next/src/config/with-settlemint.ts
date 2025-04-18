@@ -1,4 +1,3 @@
-import { loadEnv } from "@settlemint/sdk-utils/environment";
 import type { NextConfig } from "next";
 
 /**
@@ -29,8 +28,6 @@ export async function withSettleMint<C extends NextConfig>(
     ...nextConfig,
   };
 
-  const env = await loadEnv(true, false);
-
   return {
     ...baseConfig,
     headers: async () => [
@@ -41,6 +38,5 @@ export async function withSettleMint<C extends NextConfig>(
     ],
     poweredByHeader: false,
     reactStrictMode: true,
-    compress: false,
   } as C;
 }

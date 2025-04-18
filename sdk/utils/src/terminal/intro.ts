@@ -1,4 +1,4 @@
-import { maskTokens } from "@/terminal/mask-tokens.js";
+import { maskTokens } from "@/logging/mask-tokens.js";
 import { magentaBright } from "yoctocolors";
 
 /**

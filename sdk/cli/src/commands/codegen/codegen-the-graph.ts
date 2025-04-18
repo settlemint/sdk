@@ -25,7 +25,10 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     return;
   }
 
-  const template = [`import { createTheGraphClient } from "${PACKAGE_NAME}";`];
+  const template = [
+    `import { createTheGraphClient } from "${PACKAGE_NAME}";`,
+    "import { createLogger, requestLogger, type LogLevel } from '@settlemint/sdk-utils/logging';",
+  ];
 
   const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
     const name = gqlEndpoint.split("/").pop();
@@ -40,6 +43,8 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     template.push(`import type { introspection as ${introspectionVariable} } from "@schemas/the-graph-env-${name}"`);
     return true;
   });
+
+  template.push("", "const logger = createLogger({ level: process.env.SETTLEMINT_LOG_LEVEL as LogLevel });");
 
   for (const gqlEndpoint of toGenerate) {
     const name = gqlEndpoint.split("/").pop()!;
@@ -72,8 +77,11 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
   };
   }>({
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!, // undefined in browser, by design to not leak the secrets
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
   subgraphName: "${name}",
+  cache: "force-cache",
+}, {
+  fetch: requestLogger(logger, "the-graph-${name}", fetch) as typeof fetch,
 });`,
       ],
     );

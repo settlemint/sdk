@@ -77,7 +77,7 @@ export async function waitForCompletion({
               } else {
                 note(`${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
               }
-              return true;
+              return false;
             }
 
             if (spinner) {

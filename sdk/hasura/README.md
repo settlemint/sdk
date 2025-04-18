@@ -51,9 +51,9 @@ For detailed information about using Hasura with the SettleMint platform, check 
 
 #### createHasuraClient()
 
-> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions`?): `object`
+> **createHasuraClient**\<`Setup`\>(`options`, `clientOptions?`, `logger?`): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:119](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/hasura.ts#L119)
+Defined in: [sdk/hasura/src/hasura.ts:81](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L81)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -67,8 +67,13 @@ Creates a Hasura GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | `Omit`\<\{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \} \| \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, `"runtime"`\> & `Record`\<`string`, `unknown`\> | Configuration options for the client: - For server-side: instance URL, access token and admin secret - For browser-side: no additional configuration needed |
-| `clientOptions`? | `RequestConfig` | Optional GraphQL client configuration options |
+| `options` | \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the client |
+| `options.accessToken` | `string` | - |
+| `options.adminSecret?` | `string` | - |
+| `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
+| `options.instance?` | `string` | - |
+| `clientOptions?` | `RequestConfig` | Optional GraphQL client configuration options |
+| `logger?` | `Logger` | Optional logger to use for logging the requests |
 
 ##### Returns
 
@@ -80,8 +85,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:123](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/hasura.ts#L123) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:124](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/hasura.ts#L124) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:86](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L86) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:87](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L87) |
 
 ##### Throws
 
@@ -92,8 +97,10 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 ```ts
 import { createHasuraClient } from '@settlemint/sdk-hasura';
 import type { introspection } from "@schemas/hasura-env";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 
-// Server-side usage
+const logger = createLogger();
+
 const { client, graphql } = createHasuraClient<{
   introspection: introspection;
   disableMasking: true;
@@ -113,25 +120,9 @@ const { client, graphql } = createHasuraClient<{
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+}, {
+  fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
 });
-
-// Browser-side usage
-const { client, graphql } = createHasuraClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    timestamp: string;
-    timestampz: string;
-    uuid: string;
-    date: string;
-    time: string;
-    jsonb: string;
-    numeric: string;
-    interval: string;
-    geometry: string;
-    geography: string;
-  };
-}>({});
 
 // Making GraphQL queries
 const query = graphql(`
@@ -153,7 +144,7 @@ const result = await client.request(query);
 
 > **createPostgresPool**(`databaseUrl`): `Pool`
 
-Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/postgres.ts#L83)
+Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/postgres.ts#L83)
 
 Creates a PostgreSQL connection pool with error handling and retry mechanisms
 
@@ -194,11 +185,20 @@ try {
 
 #### ClientOptions
 
-> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
+> **ClientOptions** = `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:35](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/hasura.ts#L35)
+Defined in: [sdk/hasura/src/hasura.ts:26](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L26)
 
 Type definition for client options derived from the ClientOptionsSchema.
+
+##### Type declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="accesstoken"></a> `accessToken` | `string` | `ApplicationAccessTokenSchema` | [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L18) |
+| <a id="adminsecret"></a> `adminSecret` | `string` | - | [sdk/hasura/src/hasura.ts:19](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L19) |
+| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/hasura/src/hasura.ts:20](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L20) |
+| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/hasura/src/hasura.ts:17](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L17) |
 
 ***
 
@@ -206,7 +206,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/hasura/src/hasura.ts:10](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/hasura.ts#L10)
+Defined in: [sdk/hasura/src/hasura.ts:11](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L11)
 
 Type definition for GraphQL client configuration options
 
@@ -214,14 +214,11 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodDiscriminatedUnion`\<`"runtime"`, \[`ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `instance`: `ZodUnion`\<\[`ZodString`, `ZodString`\]\>; `runtime`: `ZodLiteral`\<`"server"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \}, \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; `runtime`: `"server"`; \}\>, `ZodObject`\<\{ `cache`: `ZodOptional`\<`ZodEnum`\<\[`"default"`, `"force-cache"`, `"no-cache"`, `"no-store"`, `"only-if-cached"`, `"reload"`\]\>\>; `runtime`: `ZodLiteral`\<`"browser"`\>; \}, `"strip"`, `ZodTypeAny`, \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}, \{ `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `runtime`: `"browser"`; \}\>\]\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
-Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v1.2.4/sdk/hasura/src/hasura.ts#L18)
+Defined in: [sdk/hasura/src/hasura.ts:16](https://github.com/settlemint/sdk/blob/v2.1.3/sdk/hasura/src/hasura.ts#L16)
 
 Schema for validating client options for the Hasura client.
-Defines two possible runtime configurations:
-1. Server-side with instance URL, access token and admin secret
-2. Browser-side with no additional configuration needed
 
 ## Contributing
 
