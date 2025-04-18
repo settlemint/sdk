@@ -12,11 +12,6 @@ export type ResourceType =
   | "storage"
   | "insights";
 
-export type ResourceTypeRequiresProviderAndRegion = Exclude<
-  ResourceType,
-  "application" | "workspace" | "application access token"
->;
-
 export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient> = {
   application: "application",
   workspace: "workspace",
