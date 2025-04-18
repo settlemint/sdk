@@ -24,7 +24,7 @@ export function minioStorageCreateCommand() {
               provider,
               region,
             },
-            async (settlemint, env, showSpinner) => {
+            async ({ settlemint, env, showSpinner, provider, region }) => {
               const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
               if (!applicationUniqueName) {
                 return missingApplication();
@@ -34,8 +34,8 @@ export function minioStorageCreateCommand() {
                   name,
                   applicationUniqueName,
                   storageProtocol: "MINIO",
-                  provider,
-                  region,
+                  provider: provider!,
+                  region: region!,
                   size,
                   type,
                 }),

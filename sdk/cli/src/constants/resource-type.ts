@@ -2,6 +2,7 @@ import type { SettlemintClient } from "@settlemint/sdk-js";
 export type ResourceType =
   | "application"
   | "workspace"
+  | "application access token"
   | "blockchain network"
   | "blockchain node"
   | "custom deployment"
@@ -9,8 +10,12 @@ export type ResourceType =
   | "middleware"
   | "integration tool"
   | "storage"
-  | "insights"
-  | "application access token";
+  | "insights";
+
+export type ResourceTypeRequiresProviderAndRegion = Exclude<
+  ResourceType,
+  "application" | "workspace" | "application access token"
+>;
 
 export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient> = {
   application: "application",

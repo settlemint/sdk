@@ -56,7 +56,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env, showSpinner) => {
+              async ({ settlemint, env, showSpinner, provider, region }) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -123,8 +123,8 @@ export function smartContractPortalMiddlewareCreateCommand() {
                     loadBalancerUniqueName,
                     abis: parsedAbis,
                     includePredeployedAbis,
-                    provider,
-                    region,
+                    provider: provider!,
+                    region: region!,
                     size,
                     type,
                   }),

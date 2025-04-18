@@ -33,7 +33,7 @@ export function graphMiddlewareCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env, showSpinner) => {
+              async ({ settlemint, env, showSpinner, provider, region }) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -60,8 +60,8 @@ export function graphMiddlewareCreateCommand() {
                     applicationUniqueName,
                     interface: "HA_GRAPH",
                     blockchainNodeUniqueName,
-                    provider,
-                    region,
+                    provider: provider!,
+                    region: region!,
                     size,
                     type,
                   }),

@@ -37,7 +37,7 @@ export function blockscoutInsightsCreateCommand() {
                 provider,
                 region,
               },
-              async (settlemint, env, showSpinner) => {
+              async ({ settlemint, env, showSpinner, provider, region }) => {
                 const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
                 if (!applicationUniqueName) {
                   return missingApplication();
@@ -70,8 +70,8 @@ export function blockscoutInsightsCreateCommand() {
                     name,
                     applicationUniqueName,
                     insightsCategory: "BLOCKCHAIN_EXPLORER",
-                    provider,
-                    region,
+                    provider: provider!,
+                    region: region!,
                     size,
                     type,
                     blockchainNodeUniqueName,
