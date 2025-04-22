@@ -58,6 +58,7 @@ import {
   integrationToolRead,
   integrationToolRestart,
 } from "./graphql/integration-tool.js";
+import { type LoadBalancer, loadBalancerList, loadBalancerRead } from "./graphql/load-balancer.js";
 import {
   type CreateMiddlewareArgs,
   type Middleware,
@@ -140,6 +141,10 @@ export interface SettlemintClient {
     read: (blockchainNodeUniqueName: string) => Promise<BlockchainNode>;
     create: (args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>;
     restart: (nodeUniqueName: string) => Promise<BlockchainNode>;
+  };
+  loadBalancer: {
+    list: (applicationUniqueName: string) => Promise<LoadBalancer[]>;
+    read: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
   };
   middleware: {
     list: (applicationUniqueName: string) => Promise<Middleware[]>;
@@ -279,6 +284,10 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       read: blockchainNodeRead(gqlClient),
       create: blockchainNodeCreate(gqlClient),
       restart: blockchainNodeRestart(gqlClient),
+    },
+    loadBalancer: {
+      list: loadBalancerList(gqlClient),
+      read: loadBalancerRead(gqlClient),
     },
     middleware: {
       list: middlewareList(gqlClient),

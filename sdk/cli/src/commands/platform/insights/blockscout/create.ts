@@ -47,7 +47,7 @@ export function blockscoutInsightsCreateCommand() {
                   : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
                 const loadBalancerUniqueName = blockchainNodeUniqueName
                   ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER);
+                  : (loadBalancer ?? env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_PUBLIC);
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>

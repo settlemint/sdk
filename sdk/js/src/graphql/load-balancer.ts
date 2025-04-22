@@ -36,6 +36,22 @@ const getLoadBalancer = graphql(
 );
 
 /**
+ * Query to fetch all load balancers for an application.
+ */
+const getLoadBalancers = graphql(
+  `
+    query getLoadBalancers($applicationUniqueName: String!) {
+      loadBalancersByUniqueName(applicationUniqueName: $applicationUniqueName) {
+        items {
+          ...LoadBalancer
+        }
+      }
+    }
+  `,
+  [LoadBalancerFragment],
+);
+
+/**
  * Creates a function to fetch a specific load balancer.
  *
  * @param gqlClient - The GraphQL client instance
@@ -50,5 +66,21 @@ export const loadBalancerRead = (
       uniqueName: loadBalancerUniqueName,
     });
     return loadBalancer;
+  };
+};
+
+/**
+ * Creates a function to list load balancers for an application.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that fetches load balancers for an application
+ * @throws If the application cannot be found or the request fails
+ */
+export const loadBalancerList = (gqlClient: GraphQLClient) => {
+  return async (applicationUniqueName: string): Promise<LoadBalancer[]> => {
+    const {
+      loadBalancersByUniqueName: { items },
+    } = await gqlClient.request(getLoadBalancers, { applicationUniqueName });
+    return items;
   };
 };

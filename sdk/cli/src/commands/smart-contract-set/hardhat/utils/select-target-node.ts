@@ -41,6 +41,7 @@ export async function selectTargetNode({
       nodes: validNodes,
       accept: autoAccept,
       isRequired: true,
+      filterRunningOnly: true,
       promptMessage:
         "Which blockchain node do you want to connect to? (Only nodes with private keys activated are shown)",
       singleOptionMessage: (node) =>
