@@ -19,7 +19,8 @@ export type ServiceType =
   | "integration-tool"
   | "middleware"
   | "private-key"
-  | "storage";
+  | "storage"
+  | "load-balancer";
 
 /**
  * Fetches all services associated with an application from the SettleMint platform.
@@ -42,6 +43,7 @@ export async function servicesSpinner(
   privateKeys: PrivateKey[];
   insights: Insights[];
   customDeployments: CustomDeployment[];
+  loadBalancers: LoadBalancer[];
 }> {
   return spinner({
     startMessage: "Loading your services",
@@ -57,6 +59,7 @@ export async function servicesSpinner(
         privateKeys,
         insights,
         customDeployments,
+        loadBalancers,
       ] = await Promise.all([
         shouldFetch("blockchain-network")
           ? settlemint.blockchainNetwork.list(applicationUniqueName)
@@ -70,6 +73,7 @@ export async function servicesSpinner(
         shouldFetch("custom-deployment")
           ? settlemint.customDeployment.list(applicationUniqueName)
           : Promise.resolve([]),
+        shouldFetch("load-balancer") ? settlemint.loadBalancer.list(applicationUniqueName) : Promise.resolve([]),
       ]);
       return {
         blockchainNetworks,
@@ -80,6 +84,7 @@ export async function servicesSpinner(
         privateKeys,
         insights,
         customDeployments,
+        loadBalancers,
       };
     },
   });

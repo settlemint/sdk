@@ -354,6 +354,7 @@ export type { BlockchainNode } from "./graphql/blockchain-node.js";
 export type { CustomDeployment } from "./graphql/custom-deployment.js";
 export type { Insights } from "./graphql/insights.js";
 export type { IntegrationTool } from "./graphql/integration-tool.js";
+export type { LoadBalancer } from "./graphql/load-balancer.js";
 export type { Middleware, MiddlewareWithSubgraphs } from "./graphql/middleware.js";
 export type { PrivateKey } from "./graphql/private-key.js";
 export type { Storage } from "./graphql/storage.js";

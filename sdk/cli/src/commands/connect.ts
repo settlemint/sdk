@@ -30,6 +30,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { blockchainNodeOrLoadBalancerPrompt } from "../prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { subgraphPrompt } from "../prompts/smart-contract-set/subgraph.prompt";
 
 /**
@@ -73,13 +74,34 @@ export function connectCommand(): Command {
 
         const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, acceptDefaults);
 
-        const { middlewares, integrationTools, storages, privateKeys, insights, customDeployments, blockchainNodes } =
-          await servicesSpinner(settlemint, application.uniqueName);
+        const {
+          middlewares,
+          integrationTools,
+          storages,
+          privateKeys,
+          insights,
+          customDeployments,
+          blockchainNodes,
+          loadBalancers,
+        } = await servicesSpinner(settlemint, application.uniqueName);
 
         const blockchainNode = await blockchainNodePrompt({
           env,
           nodes: blockchainNodes,
           accept: acceptDefaults,
+          promptMessage: "Which blockchain node do you want to SEND unsigned transactions from?",
+        });
+
+        const nodesWithNoSigning = blockchainNodes.filter((node) =>
+          node && "privateKeys" in node ? !Array.isArray(node?.privateKeys) || node?.privateKeys?.length === 0 : true,
+        );
+        const loadBalancerOrBlockchainNode = await blockchainNodeOrLoadBalancerPrompt({
+          env,
+          nodes: nodesWithNoSigning,
+          loadBalancers: loadBalancers,
+          accept: acceptDefaults,
+          promptMessage:
+            "Which blockchain node or load balancer do you want to READ/WRITE from/to? Transactions should be signed before sending to this node or load balancer",
         });
         const hasura = await hasuraPrompt({
           env,
@@ -152,6 +174,11 @@ export function connectCommand(): Command {
               name: blockchainNode.name,
               uniqueName: blockchainNode.uniqueName,
             },
+            loadBalancerOrBlockchainNode && {
+              type: "Blockchain Node or Load Balancer (signed transactions only)",
+              name: loadBalancerOrBlockchainNode.name,
+              uniqueName: loadBalancerOrBlockchainNode.uniqueName,
+            },
             hasura && {
               type: "Hasura",
               name: hasura.name,
@@ -203,6 +230,7 @@ export function connectCommand(): Command {
           SETTLEMINT_APPLICATION: application.uniqueName,
           SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNode?.blockchainNetwork?.uniqueName,
           SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
+          SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: loadBalancerOrBlockchainNode?.uniqueName,
           SETTLEMINT_HASURA: hasura?.uniqueName,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,

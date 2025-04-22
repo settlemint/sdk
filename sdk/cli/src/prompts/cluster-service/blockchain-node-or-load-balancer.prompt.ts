@@ -5,7 +5,7 @@ import type { BlockchainNode, LoadBalancer } from "@settlemint/sdk-js";
 /**
  * Arguments for the blockchain node prompt.
  */
-export interface NodeNoSigningPromptArgs extends BaseServicePromptArgs<BlockchainNode> {
+export interface BlockchainNodeOrLoadBalancerPromptArgs extends BaseServicePromptArgs<BlockchainNode | LoadBalancer> {
   nodes: BlockchainNode[];
   loadBalancers: LoadBalancer[];
 }
@@ -16,37 +16,34 @@ export interface NodeNoSigningPromptArgs extends BaseServicePromptArgs<Blockchai
  * @param config - Configuration object containing environment, nodes, and options
  * @param config.env - The environment variables containing the current configuration
  * @param config.nodes - The available blockchain nodes to choose from
+ * @param config.loadBalancers - The available load balancers to choose from
  * @param config.accept - Whether to automatically accept default values without prompting
  * @param config.filterRunningOnly - Whether to only show nodes with status "COMPLETED"
- * @param config.isRequired - Whether selecting a blockchain node is required
- * @returns The selected blockchain node, or undefined if none is selected
+ * @param config.isRequired - Whether selecting a blockchain node or load balancer is required
+ * @returns The selected blockchain node or load balancer, or undefined if none is selected
  */
-export async function nodeNoSigningPrompt({
+export async function blockchainNodeOrLoadBalancerPrompt({
   env,
   nodes,
+  loadBalancers,
   accept,
   singleOptionMessage,
   promptMessage,
   filterRunningOnly = false,
   isRequired = false,
-}: NodeNoSigningPromptArgs): Promise<BlockchainNode | undefined> {
+}: BlockchainNodeOrLoadBalancerPromptArgs): Promise<BlockchainNode | LoadBalancer | undefined> {
   return servicePrompt({
     env,
-    services: nodes,
+    services: [...nodes, ...loadBalancers],
     accept,
-    envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
+    envKey: "SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER",
     isRequired,
     defaultHandler: async ({ defaultService: defaultNode, choices }) => {
-      const nodesWithNoSigning = choices.filter(
-        ({ value: node }) => !Array.isArray(node?.privateKeys) || node?.privateKeys?.length === 0,
-      );
       const filteredChoices = filterRunningOnly
-        ? nodesWithNoSigning.filter(({ value: node }) => node === undefined || node?.status === "COMPLETED")
-        : nodesWithNoSigning;
+        ? choices.filter(({ value: node }) => node === undefined || node?.status === "COMPLETED")
+        : choices;
       return select({
-        message:
-          promptMessage ??
-          "Which blockchain node do you want to READ/WRITE from/to? Transactions should be signed before sending to this node",
+        message: promptMessage ?? "Which blockchain node or load balancer do you want to connect to?",
         choices: filteredChoices,
         default: defaultNode,
       });

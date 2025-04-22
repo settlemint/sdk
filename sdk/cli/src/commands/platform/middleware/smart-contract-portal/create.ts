@@ -3,11 +3,11 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { blockchainNodeOrLoadBalancerPrompt } from "../../../../prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 
 /**
  * Creates and returns the 'smart-contract-portal' middleware command for the SettleMint SDK.
@@ -64,24 +64,32 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 let blockchainNodeUniqueName = loadBalancer
                   ? undefined
                   : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
-                const loadBalancerUniqueName = blockchainNodeUniqueName
+                let loadBalancerUniqueName = blockchainNodeUniqueName
                   ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_PUBLIC);
+                  : (loadBalancer ?? env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER);
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>
                     settlemint.blockchainNode.list(applicationUniqueName),
                   );
-                  const node = await blockchainNodePrompt({
+                  const loadBalancers = await serviceSpinner("load balancer", () =>
+                    settlemint.loadBalancer.list(applicationUniqueName),
+                  );
+                  const nodeOrLoadbalancer = await blockchainNodeOrLoadBalancerPrompt({
                     env,
                     nodes: blockchainNodes,
+                    loadBalancers,
                     accept: acceptDefaults,
                     isRequired: true,
                   });
-                  if (!node) {
-                    return nothingSelectedError("blockchain node");
+                  if (!nodeOrLoadbalancer) {
+                    return nothingSelectedError("blockchain node or load balancer");
                   }
-                  blockchainNodeUniqueName = node.uniqueName;
+                  if (nodeOrLoadbalancer.__typename?.endsWith("LoadBalancer")) {
+                    loadBalancerUniqueName = nodeOrLoadbalancer.uniqueName;
+                  } else {
+                    blockchainNodeUniqueName = nodeOrLoadbalancer.uniqueName;
+                  }
                 }
 
                 // Read and parse ABI files if provided
