@@ -1,5 +1,9 @@
 /**
- * Type validation utility using Zod
+ * Zod-based schema validation utilities
+ *
+ * This module provides a wrapper around Zod with an API surface that maintains
+ * compatibility with the previous validation system. It provides simple functions
+ * for creating and validating schemas.
  */
 import { z } from "zod";
 
@@ -51,3 +55,26 @@ export const t = {
 export function validate<T extends z.ZodType>(schema: T, value: unknown): Static<T> {
   return schema.parse(value);
 }
+
+// ----- Schema Definitions -----
+
+/**
+ * Schema for file metadata
+ */
+export const FileMetadataSchema = t.Object(
+  {
+    id: t.String(),
+    name: t.String(),
+    contentType: t.String(),
+    size: t.Number(),
+    uploadedAt: t.String({ format: "date-time" }),
+    etag: t.String(),
+    url: t.Optional(t.String({ format: "uri" })),
+  },
+  { $id: "FileMetadata" },
+);
+
+/**
+ * Default bucket to use for file storage
+ */
+export const DEFAULT_BUCKET = "uploads";

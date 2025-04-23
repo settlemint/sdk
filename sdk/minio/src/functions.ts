@@ -12,24 +12,7 @@ import {
   createUploadOperation,
 } from "./helpers/operations.js";
 import { ensureServer } from "./helpers/runtime.js";
-import { type Static, t, validate } from "./helpers/typebox.js";
-
-// FileMetadata schema
-const FileMetadataSchema = t.Object(
-  {
-    id: t.String(),
-    name: t.String(),
-    contentType: t.String(),
-    size: t.Number(),
-    uploadedAt: t.String({ format: "date-time" }),
-    etag: t.String(),
-    url: t.Optional(t.String({ format: "uri" })),
-  },
-  { $id: "FileMetadata" },
-);
-
-// Default bucket name
-export const DEFAULT_BUCKET = "uploads";
+import { DEFAULT_BUCKET, FileMetadataSchema, type Static, validate } from "./helpers/schema.js";
 
 /**
  * Gets a list of files with optional prefix filter
@@ -78,7 +61,7 @@ export async function getFilesList(
       }),
     );
 
-    return validate(t.Array(FileMetadataSchema), fileObjects);
+    return validate(FileMetadataSchema.array(), fileObjects);
   } catch (error) {
     console.error("Failed to list files:", error);
     throw new Error(`Failed to list files: ${error instanceof Error ? error.message : String(error)}`);

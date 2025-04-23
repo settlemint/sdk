@@ -29,7 +29,6 @@ export { executeMinioOperation } from "./helpers/executor.js";
 
 // Export high-level functions
 export {
-  DEFAULT_BUCKET,
   getFilesList,
   getFileById,
   uploadFile,
@@ -38,8 +37,14 @@ export {
   createPresignedUploadUrl,
 } from "./functions.js";
 
-// Export Zod validation utilities
-export { t, validate, type Static } from "./helpers/typebox.js";
+// Export Zod validation utilities and schemas
+export {
+  t,
+  validate,
+  type Static,
+  FileMetadataSchema,
+  DEFAULT_BUCKET,
+} from "./helpers/schema.js";
 export { z } from "zod";
 
 // Re-export required types from minio
