@@ -1,6 +1,7 @@
 import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-viem";
@@ -15,6 +16,14 @@ export async function codegenViem(env: DotEnv) {
   const blockchainNodeRpcEndpoint = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT;
   if (!loadBalancerRpcEndpoint && !blockchainNodeRpcEndpoint) {
     return;
+  }
+
+  note("Generating Viem resources");
+
+  const projectDir = await projectRoot();
+  // Install the package only if it's not already installed
+  if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
+    await installDependencies(PACKAGE_NAME, projectDir);
   }
 
   // Generate Viem client template with build time safety
@@ -64,9 +73,5 @@ export const hdWalletClient = getWalletClient({
 
   await writeTemplate(viemTemplate.join("\n"), "/lib/settlemint", "viem.ts");
 
-  const projectDir = await projectRoot();
-  // Install the package only if it's not already installed
-  if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
-    await installDependencies(PACKAGE_NAME, projectDir);
-  }
+  note("Viem resources generated successfully");
 }
