@@ -25,6 +25,13 @@ type DefaultArgs = {
   region?: string | undefined;
 };
 
+type CreateFunctionContext = {
+  settlemint: SettlemintClient;
+  env: Partial<DotEnv>;
+  showSpinner: <T>(task: () => Promise<T>) => Promise<T>;
+  provider: string;
+  region: string;
+};
 /**
  * Creates a command for creating resources in the SettleMint platform.
  *
@@ -60,11 +67,7 @@ export function getCreateCommand({
     cmd: Command<[string], DefaultArgs>,
     baseAction: (
       defaultArgs: DefaultArgs,
-      createFunction: (
-        settlemintClient: SettlemintClient,
-        env: Partial<DotEnv>,
-        showSpinner: <T>(task: () => Promise<T>) => Promise<T>,
-      ) => Promise<{
+      createFunction: (context: CreateFunctionContext) => Promise<{
         result: { id: string; name: string; uniqueName: string };
         waitFor?: { resourceType: ResourceType; id: string; name: string; uniqueName: string };
         mapDefaultEnv?: () => Partial<DotEnv> | Promise<Partial<DotEnv>>;
@@ -109,13 +112,15 @@ export function getCreateCommand({
       });
       const platformConfig = await settlemint.platform.config();
 
+      let selectedProvider: Awaited<ReturnType<typeof providerPrompt>> | undefined = undefined;
+      let selectedRegion: Awaited<ReturnType<typeof regionPrompt>> | undefined = undefined;
       if (cmd.options.some((option) => option.long === "--provider")) {
-        const selectedProvider = await providerPrompt(platformConfig, provider);
+        selectedProvider = await providerPrompt(platformConfig, provider);
         if (!selectedProvider) {
           return nothingSelectedError("provider");
         }
 
-        const selectedRegion = await regionPrompt(selectedProvider, region);
+        selectedRegion = await regionPrompt(selectedProvider, region);
         if (!selectedRegion) {
           return nothingSelectedError("region");
         }
@@ -127,7 +132,13 @@ export function getCreateCommand({
           task: task,
           stopMessage: `${capitalizeFirstLetter(type)} created`,
         });
-      const { result, waitFor, mapDefaultEnv } = await createFunction(settlemint, env, showSpinner);
+      const { result, waitFor, mapDefaultEnv } = await createFunction({
+        settlemint,
+        env,
+        showSpinner,
+        provider: selectedProvider?.id ?? "",
+        region: selectedRegion?.id ?? "",
+      });
 
       if (wait) {
         await waitForCompletion({

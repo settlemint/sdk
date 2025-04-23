@@ -25,7 +25,7 @@ export function applicationCreateCommand() {
               ...defaultArgs,
               acceptDefaults,
             },
-            async (settlemint, env, showSpinner) => {
+            async ({ settlemint, env, showSpinner }) => {
               let workspaceUniqueName = workspace;
               if (!workspaceUniqueName) {
                 const workspaces = await workspaceSpinner(settlemint);

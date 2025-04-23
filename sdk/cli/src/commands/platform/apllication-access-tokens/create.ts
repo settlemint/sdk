@@ -24,7 +24,7 @@ export function applicationAccessTokenCreateCommand() {
             .default("DAYS_7"),
         )
         .action(async (name, { application, validityPeriod, ...defaultArgs }) => {
-          return baseAction(defaultArgs, async (settlemint, env, showSpinner) => {
+          return baseAction(defaultArgs, async ({ settlemint, env, showSpinner }) => {
             const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
             if (!applicationUniqueName) {
               return missingApplication();

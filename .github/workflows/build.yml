@@ -135,7 +135,7 @@ jobs:
 
       - name: Auto-commit changes to docs and README
         if: ${{ github.ref == 'refs/heads/main' && env.TAG == 'main' }}
-        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         with:
           commit_message: "chore: update docs [skip ci]"
           branch: main
@@ -169,7 +169,7 @@ jobs:
                 | SDK MCP | `@settlemint/sdk-mcp@${{ env.VERSION }}` | |
 
       - name: Auto-commit updated package versions
-        uses: stefanzweifel/git-auto-commit-action@e348103e9026cc0eee72ae06630dbe30c8bf7a79 # v5
+        uses: stefanzweifel/git-auto-commit-action@b863ae1933cb653a53c021fe36dbb774e1fb9403 # v5
         if: ${{ env.TAG == 'latest' }}
         with:
           commit_message: "chore: update package versions [skip ci]"

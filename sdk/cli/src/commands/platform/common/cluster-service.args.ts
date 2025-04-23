@@ -18,8 +18,8 @@ export function addClusterServiceArgs<Args extends OptionValues>(cmd: Command<[s
     ) as Command<
     [string],
     Args & {
-      provider: string;
-      region: string;
+      provider: string | undefined;
+      region: string | undefined;
       size: "LARGE" | "MEDIUM" | "SMALL" | null | undefined;
       type: "DEDICATED" | "SHARED" | null | undefined;
     }
