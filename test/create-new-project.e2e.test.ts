@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { $, type ShellError } from "bun";
+import { $ } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import {
   registerLinkedDependencies,
@@ -253,7 +253,7 @@ describe("Setup a project using the SDK", () => {
       await $`bun lint`.cwd(projectDir).env(env);
       await $`bun run build`.cwd(projectDir).env(env);
     } catch (err) {
-      const shellError = err as ShellError;
+      const shellError = err as $.ShellError;
       console.log(shellError.stdout.toString());
       console.log(shellError.stderr.toString());
       throw new Error("Build failed");

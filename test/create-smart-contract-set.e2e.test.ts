@@ -2,7 +2,7 @@ import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, te
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { exists } from "@settlemint/sdk-utils/filesystem";
-import { $, type ShellError } from "bun";
+import { $ } from "bun";
 import {
   NODE_NAME,
   NODE_NAME_2_WITH_PK,
@@ -79,7 +79,7 @@ describe("Setup a smart contract set using the SDK", () => {
         expect(output).toInclude("Listening on 127.0.0.1:8545");
         done();
       })
-      .catch((err: ShellError) => {
+      .catch((err: $.ShellError) => {
         expect(err).toBeUndefined();
         done();
       });
