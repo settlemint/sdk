@@ -16,6 +16,7 @@ import { servicesSpinner } from "@/spinners/services.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
+import { hasPrivateKey } from "@/utils/cluster-service";
 import { getInstanceCredentials } from "@/utils/config";
 import {
   getBlockchainNodeEndpoints,
@@ -88,9 +89,7 @@ export function connectCommand(): Command {
           loadBalancers,
         } = await servicesSpinner(settlemint, application.uniqueName);
 
-        const nodesWithPrivateKey = blockchainNodes.filter((node) =>
-          node && "privateKeys" in node ? Array.isArray(node?.privateKeys) && node?.privateKeys?.length > 0 : false,
-        );
+        const nodesWithPrivateKey = blockchainNodes.filter(hasPrivateKey);
         const blockchainNode = await blockchainNodePrompt({
           env,
           nodes: nodesWithPrivateKey,
@@ -98,9 +97,7 @@ export function connectCommand(): Command {
           promptMessage: "Which blockchain node do you want to use for sending transactions?",
         });
 
-        const nodesWithoutPrivateKey = blockchainNodes.filter((node) =>
-          node && "privateKeys" in node ? !Array.isArray(node?.privateKeys) || node?.privateKeys?.length === 0 : true,
-        );
+        const nodesWithoutPrivateKey = blockchainNodes.filter((node) => !hasPrivateKey(node));
         const loadBalancerOrBlockchainNode = await blockchainNodeOrLoadBalancerPrompt({
           env,
           nodes: nodesWithoutPrivateKey,
