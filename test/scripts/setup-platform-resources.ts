@@ -11,6 +11,7 @@ import {
   GRAPH_NAME,
   HASURA_NAME,
   IPFS_NAME,
+  LOAD_BALANCER_NAME,
   MINIO_NAME,
   NETWORK_NAME,
   NODE_NAME,
@@ -70,6 +71,7 @@ beforeAll(async () => {
     await createApplicationAccessToken();
     await createBlockchainNodeMinioAndIpfs();
     await createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode();
+    await createLoadBalancer();
     await createGraphMiddlewareAndActivatedPrivateKey();
   } catch (err) {
     console.error("Failed to create resources", err);
@@ -112,6 +114,13 @@ async function findBlockchainNodeByName(blockchainNodeName: string) {
   const settlemint = await setupSettleMintClient();
   const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
   return nodes.find((node) => node.name === blockchainNodeName);
+}
+
+async function findLoadBalancerByName(loadBalancerName: string) {
+  const env: Partial<DotEnv> = await loadEnv(false, false);
+  const settlemint = await setupSettleMintClient();
+  const loadBalancers = await settlemint.loadBalancer.list(env.SETTLEMINT_APPLICATION!);
+  return loadBalancers.find((loadBalancer) => loadBalancer.name === loadBalancerName);
 }
 
 async function addWorkspaceCredits() {
@@ -174,6 +183,7 @@ async function createBlockchainNodeMinioAndIpfs() {
   const hasHasuraIntegration = await defaultResourceAlreadyCreated(["SETTLEMINT_HASURA"]);
   const hasMinioStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_MINIO"]);
   const hasIpfsStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_IPFS"]);
+  const hasLoadBalancer = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER"]);
   const results = await deployResources([
     () =>
       hasBlockchainNetwork && hasBlockchainNode
@@ -249,16 +259,38 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--restart-if-timeout",
             IPFS_NAME,
           ]).result,
+    () =>
+      hasLoadBalancer
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "load-balancer",
+            "evm",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--blockchain-nodes",
+            NODE_NAME_2_WITH_PK,
+            NODE_NAME_3_WITHOUT_PK,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            "--restart-if-timeout",
+            LOAD_BALANCER_NAME,
+          ]).result,
   ]);
 
-  const [networkResult, hasuraResult, minioResult, ipfsResult] = results;
+  const [networkResult, hasuraResult, minioResult, ipfsResult, loadBalancerResult] = results;
 
-  expect([networkResult?.status, hasuraResult?.status, minioResult?.status, ipfsResult?.status]).toEqual([
-    "fulfilled",
-    "fulfilled",
-    "fulfilled",
-    "fulfilled",
-  ]);
+  expect([
+    networkResult?.status,
+    hasuraResult?.status,
+    minioResult?.status,
+    ipfsResult?.status,
+    loadBalancerResult?.status,
+  ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
 
   if (networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
@@ -278,6 +310,11 @@ async function createBlockchainNodeMinioAndIpfs() {
   if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
+  }
+
+  if (loadBalancerResult?.status === "fulfilled" && loadBalancerResult.value) {
+    expect(loadBalancerResult.value.output).toInclude(`Load balancer ${LOAD_BALANCER_NAME} created successfully`);
+    expect(loadBalancerResult.value.output).toInclude("Load balancer is deployed");
   }
 
   const hasPrivateKey = await privateKeyAlreadyCreated(PRIVATE_KEY_SMART_CONTRACTS_NAME);
@@ -461,6 +498,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
   const hasGraphMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_THEGRAPH"]);
   const hasPrivateKey2 = await privateKeyAlreadyCreated(PRIVATE_KEY_2_NAME);
   const blockchainNodeWithPk = await findBlockchainNodeByName(NODE_NAME_2_WITH_PK);
+  const loadBalancer = await findLoadBalancerByName(LOAD_BALANCER_NAME);
 
   const results = await deployResources([
     () =>
@@ -471,6 +509,8 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "create",
             "middleware",
             "graph",
+            "--load-balancer",
+            loadBalancer!.uniqueName,
             "--provider",
             CLUSTER_PROVIDER,
             "--region",
@@ -508,6 +548,30 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
   if (privateKey2Result?.status === "fulfilled" && privateKey2Result.value) {
     expect(privateKey2Result.value.output).toInclude(`Private key ${PRIVATE_KEY_2_NAME} created successfully`);
     expect(privateKey2Result.value.output).toInclude("Private key is deployed");
+  }
+}
+
+async function createLoadBalancer() {
+  const hasLoadBalancer = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER"]);
+  if (!hasLoadBalancer) {
+    const blockchainNodeWithPk = await findBlockchainNodeByName(NODE_NAME_2_WITH_PK);
+    const blockchainNodeWithoutPk = await findBlockchainNodeByName(NODE_NAME_3_WITHOUT_PK);
+    const { output: loadBalancerCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "load-balancer",
+      "evm",
+      "--blockchain-nodes",
+      blockchainNodeWithPk!.uniqueName,
+      blockchainNodeWithoutPk!.uniqueName,
+      "--accept-defaults",
+      "--default",
+      "--wait",
+      "--restart-if-timeout",
+      LOAD_BALANCER_NAME,
+    ]).result;
+    expect(loadBalancerCreateCommandOutput).toInclude(`Load balancer ${LOAD_BALANCER_NAME} created successfully`);
+    expect(loadBalancerCreateCommandOutput).toInclude("Load balancer is deployed");
   }
 }
 
