@@ -40,6 +40,7 @@ It enables seamless interaction with the SettleMint platform's features and serv
 | [`@settlemint/sdk-portal`](sdk/portal) | Portal API client module for SettleMint SDK, providing access to smart contract portal services and APIs | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-portal)](https://www.npmjs.com/package/@settlemint/sdk-portal) |
 | [`@settlemint/sdk-thegraph`](sdk/thegraph) | TheGraph integration module for SettleMint SDK, enabling querying and indexing of blockchain data through subgraphs | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-thegraph)](https://www.npmjs.com/package/@settlemint/sdk-thegraph) |
 | [`@settlemint/sdk-utils`](sdk/utils) | Shared utilities and helper functions for SettleMint SDK modules | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-utils)](https://www.npmjs.com/package/@settlemint/sdk-utils) |
+| [`@settlemint/sdk-viem`](sdk/viem) | Viem (TypeScript Interface for Ethereum) module for SettleMint SDK | [![npm version](https://img.shields.io/npm/v/@settlemint/sdk-viem)](https://www.npmjs.com/package/@settlemint/sdk-viem) |
 
 ## Contributing
 

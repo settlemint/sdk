@@ -67,7 +67,7 @@ Creates a Hasura GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `adminSecret`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the client |
+| `options` | \{ `accessToken`: `string`; `adminSecret`: `string`; `cache?`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the client |
 | `options.accessToken` | `string` | - |
 | `options.adminSecret?` | `string` | - |
 | `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |

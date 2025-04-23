@@ -8,7 +8,7 @@ export function isHasura(integration: IntegrationTool): integration is Hasura {
   return integration.__typename === "Hasura";
 }
 
-export interface HasuraPromptArgs extends BaseServicePromptArgs<Hasura> {
+export interface HasuraPromptArgs extends BaseServicePromptArgs {
   integrations: IntegrationTool[];
 }
 

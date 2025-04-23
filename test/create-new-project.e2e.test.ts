@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { $, type ShellError } from "bun";
+import { $ } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import {
   registerLinkedDependencies,
@@ -79,7 +79,11 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_APPLICATION).toBeString();
 
     expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID).toBeString();
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT).toBeString();
 
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
 
@@ -249,7 +253,7 @@ describe("Setup a project using the SDK", () => {
       await $`bun lint`.cwd(projectDir).env(env);
       await $`bun run build`.cwd(projectDir).env(env);
     } catch (err) {
-      const shellError = err as ShellError;
+      const shellError = err as $.ShellError;
       console.log(shellError.stdout.toString());
       console.log(shellError.stderr.toString());
       throw new Error("Build failed");

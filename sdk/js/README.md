@@ -40,6 +40,7 @@
     - [CustomDeployment](#customdeployment)
     - [Insights](#insights)
     - [IntegrationTool](#integrationtool)
+    - [LoadBalancer](#loadbalancer)
     - [Middleware](#middleware)
     - [MiddlewareWithSubgraphs](#middlewarewithsubgraphs)
     - [PlatformConfig](#platformconfig)
@@ -61,7 +62,7 @@ The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint
 
 > **createSettleMintClient**(`options`): [`SettlemintClient`](#settlemintclient)
 
-Defined in: [settlemint.ts:223](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L223)
+Defined in: [settlemint.ts:237](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L237)
 
 Creates a SettleMint client with the provided options. The client provides methods to interact with
 various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
@@ -108,7 +109,7 @@ const workspace = await client.workspace.read('workspace-unique-name');
 
 #### SettlemintClient
 
-Defined in: [settlemint.ts:117](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L117)
+Defined in: [settlemint.ts:125](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L125)
 
 Client interface for interacting with the SettleMint platform.
 
@@ -116,7 +117,7 @@ Client interface for interacting with the SettleMint platform.
 
 #### SettlemintClientOptions
 
-Defined in: [settlemint.ts:109](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L109)
+Defined in: [settlemint.ts:117](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L117)
 
 Options for the Settlemint client.
 
@@ -129,7 +130,7 @@ Options for the Settlemint client.
 | Property | Type | Default value | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
 | <a id="accesstoken"></a> `accessToken` | `string` | `AccessTokenSchema` | The access token used to authenticate with the SettleMint platform | `ClientOptions.accessToken` | [helpers/client-options.schema.ts:9](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/helpers/client-options.schema.ts#L9) |
-| <a id="anonymous"></a> `anonymous?` | `boolean` | `undefined` | Whether to allow anonymous access (no access token required) | - | [settlemint.ts:111](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L111) |
+| <a id="anonymous"></a> `anonymous?` | `boolean` | `undefined` | Whether to allow anonymous access (no access token required) | - | [settlemint.ts:119](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/settlemint.ts#L119) |
 | <a id="instance"></a> `instance` | `string` | `UrlSchema` | The URL of the SettleMint instance to connect to | `ClientOptions.instance` | [helpers/client-options.schema.ts:11](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/helpers/client-options.schema.ts#L11) |
 
 ### Type Aliases
@@ -148,7 +149,7 @@ Type representing an application entity.
 
 > **BlockchainNetwork** = `ResultOf`\<*typeof* `BlockchainNetworkFragment`\>
 
-Defined in: [graphql/blockchain-network.ts:32](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/graphql/blockchain-network.ts#L32)
+Defined in: [graphql/blockchain-network.ts:82](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/graphql/blockchain-network.ts#L82)
 
 Type representing a blockchain network entity.
 
@@ -158,7 +159,7 @@ Type representing a blockchain network entity.
 
 > **BlockchainNode** = `ResultOf`\<*typeof* `BlockchainNodeFragment`\>
 
-Defined in: [graphql/blockchain-node.ts:51](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/graphql/blockchain-node.ts#L51)
+Defined in: [graphql/blockchain-node.ts:96](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/graphql/blockchain-node.ts#L96)
 
 Type representing a blockchain node entity.
 
@@ -191,6 +192,16 @@ Type representing an insights entity.
 Defined in: [graphql/integration-tool.ts:35](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/graphql/integration-tool.ts#L35)
 
 Type representing an integration tool entity.
+
+***
+
+#### LoadBalancer
+
+> **LoadBalancer** = `ResultOf`\<*typeof* `LoadBalancerFragment`\>
+
+Defined in: [graphql/load-balancer.ts:30](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/js/src/graphql/load-balancer.ts#L30)
+
+Type representing a load balancer entity.
 
 ***
 

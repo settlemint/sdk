@@ -6,6 +6,7 @@ export const NETWORK_NAME = "SDK Demo Network";
 export const NODE_NAME = "SDK Demo Node";
 export const NODE_NAME_2_WITH_PK = "SDK Demo Node 2 (with activated PK)";
 export const NODE_NAME_3_WITHOUT_PK = "SDK Demo Node 3 (without activated PK)";
+export const LOAD_BALANCER_NAME = "SDK Demo Load Balancer";
 
 export const PRIVATE_KEY_NAME = "SDK Demo Private Key";
 export const PRIVATE_KEY_2_NAME = "SDK Demo Private Key 2";

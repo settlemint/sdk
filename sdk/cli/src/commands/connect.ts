@@ -15,8 +15,12 @@ import { workspacePrompt } from "@/prompts/workspace.prompt";
 import { servicesSpinner } from "@/spinners/services.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
+import { hasPrivateKey } from "@/utils/cluster-service";
 import { getInstanceCredentials } from "@/utils/config";
 import {
+  getBlockchainNodeEndpoints,
+  getBlockchainNodeOrLoadBalancerEndpoints,
   getBlockscoutEndpoints,
   getGraphEndpoint,
   getHasuraEndpoints,
@@ -30,6 +34,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { blockchainNodeOrLoadBalancerPrompt } from "../prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { subgraphPrompt } from "../prompts/smart-contract-set/subgraph.prompt";
 
 /**
@@ -73,13 +78,32 @@ export function connectCommand(): Command {
 
         const aatToken = await applicationAccessTokenPrompt(env, application, settlemint, acceptDefaults);
 
-        const { middlewares, integrationTools, storages, privateKeys, insights, customDeployments, blockchainNodes } =
-          await servicesSpinner(settlemint, application.uniqueName);
+        const {
+          middlewares,
+          integrationTools,
+          storages,
+          privateKeys,
+          insights,
+          customDeployments,
+          blockchainNodes,
+          loadBalancers,
+        } = await servicesSpinner(settlemint, application.uniqueName);
 
+        const nodesWithPrivateKey = blockchainNodes.filter(hasPrivateKey);
         const blockchainNode = await blockchainNodePrompt({
           env,
-          nodes: blockchainNodes,
+          nodes: nodesWithPrivateKey,
           accept: acceptDefaults,
+          promptMessage: "Which blockchain node do you want to use for sending transactions?",
+        });
+
+        const nodesWithoutPrivateKey = blockchainNodes.filter((node) => !hasPrivateKey(node));
+        const loadBalancerOrBlockchainNode = await blockchainNodeOrLoadBalancerPrompt({
+          env,
+          nodes: nodesWithoutPrivateKey,
+          loadBalancers: loadBalancers,
+          accept: acceptDefaults,
+          promptMessage: "Which load balancer or blockchain node do you want to use for read operations?",
         });
         const hasura = await hasuraPrompt({
           env,
@@ -148,9 +172,14 @@ export function connectCommand(): Command {
               uniqueName: blockchainNode.blockchainNetwork?.uniqueName,
             },
             blockchainNode && {
-              type: "Blockchain Node",
+              type: "Blockchain Node (use for sending transactions)",
               name: blockchainNode.name,
               uniqueName: blockchainNode.uniqueName,
+            },
+            loadBalancerOrBlockchainNode && {
+              type: "Load Balancer or Blockchain Node (use for read operations)",
+              name: loadBalancerOrBlockchainNode.name,
+              uniqueName: loadBalancerOrBlockchainNode.uniqueName,
             },
             hasura && {
               type: "Hasura",
@@ -202,7 +231,11 @@ export function connectCommand(): Command {
           SETTLEMINT_WORKSPACE: workspace.uniqueName,
           SETTLEMINT_APPLICATION: application.uniqueName,
           SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNode?.blockchainNetwork?.uniqueName,
+          SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID: getBlockchainNetworkChainId(blockchainNode?.blockchainNetwork),
           SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
+          ...getBlockchainNodeEndpoints(blockchainNode),
+          SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: loadBalancerOrBlockchainNode?.uniqueName,
+          ...getBlockchainNodeOrLoadBalancerEndpoints(loadBalancerOrBlockchainNode),
           SETTLEMINT_HASURA: hasura?.uniqueName,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,

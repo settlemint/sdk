@@ -5,9 +5,11 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { providerPrompt } from "@/prompts/provider.prompt";
 import { regionPrompt } from "@/prompts/region.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
 import { type CommandExample, createExamples } from "@/utils/commands/create-examples";
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getBlockchainNodeEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -61,7 +63,7 @@ export function getCreateCommand({
   name: string;
   type: ResourceType;
   subType?: string;
-  alias: string;
+  alias?: string;
   examples: CommandExample[];
   execute: (
     cmd: Command<[string], DefaultArgs>,
@@ -78,13 +80,16 @@ export function getCreateCommand({
   requiresDeployment?: boolean;
 }) {
   const cmd = new Command(sanitizeCommandName(name))
-    .alias(alias)
     .description(`Create a new ${subType ? `${subType} ${type}` : type} in the SettleMint platform.`)
     .usage(createExamples(examples))
     .argument("<name>", `The ${subType ? `${subType} ${type}` : type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
     .option("--prod", "Connect to production environment");
+
+  if (alias) {
+    cmd.alias(alias);
+  }
 
   if (requiresDeployment) {
     cmd
@@ -174,9 +179,11 @@ export function getCreateCommand({
           ).workspace.uniqueName;
         }
         if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
-          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (
-            await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE)
-          ).blockchainNetwork.uniqueName;
+          const newNode = await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE);
+          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = newNode.blockchainNetwork.uniqueName;
+          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID = getBlockchainNetworkChainId(newNode.blockchainNetwork);
+          newEnv.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT =
+            getBlockchainNodeEndpoints(newNode).SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT;
         }
         await writeEnvSpinner(!!prod, newEnv);
         note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);

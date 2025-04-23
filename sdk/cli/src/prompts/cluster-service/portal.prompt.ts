@@ -2,7 +2,7 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
 
-export interface PortalPromptArgs extends BaseServicePromptArgs<Middleware> {
+export interface PortalPromptArgs extends BaseServicePromptArgs {
   middlewares: Middleware[];
 }
 

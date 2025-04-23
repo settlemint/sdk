@@ -2,7 +2,7 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { PrivateKey } from "@settlemint/sdk-js";
 
-export interface HdPrivateKeyPromptArgs extends BaseServicePromptArgs<PrivateKey> {
+export interface HdPrivateKeyPromptArgs extends BaseServicePromptArgs {
   privateKeys: PrivateKey[];
 }
 

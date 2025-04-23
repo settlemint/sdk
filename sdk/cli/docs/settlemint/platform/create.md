@@ -18,6 +18,7 @@ Commands:
   <a href="#create-integration-tool">integration-tool|it</a>                            Create a new integration tool
   <a href="#create-insights">insights|in</a>                                    Create a new insights
   <a href="#create-application">application</a>-access-token|aat [options] &lt;name&gt;  Create a new application access token in the SettleMint platform.
+  <a href="#create-load-balancer">load-balancer|lb</a>                               Create a load balancer in the SettleMint platform
   help [command]                                 display help for command
 </pre>
 
@@ -351,7 +352,10 @@ Options:
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
                                       &quot;SHARED&quot;, default: &quot;SHARED&quot;)
   --application &lt;application&gt;         Application unique name
-  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name (mutually
+                                      exclusive with load-balancer)
+  --load-balancer &lt;loadBalancer&gt;      Load Balancer unique name (mutually
+                                      exclusive with blockchain-node)
   -h, --help                          display help for command
 </pre>
 
@@ -608,5 +612,54 @@ Options:
                                       (choices: &quot;DAYS_7&quot;, &quot;DAYS_30&quot;, &quot;DAYS_60&quot;,
                                       &quot;DAYS_90&quot;, &quot;NONE&quot;, default: &quot;DAYS_7&quot;)
   -h, --help                          display help for command
+</pre>
+
+<h2 id="create-load-balancer"><a href="#home">Create</a> > Load balancer</h2>
+
+<pre>Usage: settlemint platform create load-balancer|lb [options] [command]
+
+Create a load balancer in the SettleMint platform
+
+Options:
+  -h, --help            display help for command
+
+Commands:
+  <a href="#load-balancer-evm">evm</a> [options] &lt;name&gt;  Create a new EVM load balancer in the SettleMint
+                        platform.
+  help [command]        display help for command
+</pre>
+
+<h3 id="load-balancer-evm"><a href="#home">Create</a> > <a href="#create-load-balancer">Load balancer</a> > Evm</h3>
+
+<pre>Usage: settlemint platform create load-balancer evm 
+Examples:
+
+  # Create an EVM load balancer and save as default
+  $ settlemint platform create load-balancer evm my-lb --accept-defaults -d
+
+  # Create an EVM load balancer and connect to specific blockchain nodes
+  $ settlemint platform create load-balancer evm my-lb --blockchain-network my-network --accept-defaults
+
+  # Create an EVM load balancer in a different application
+  $ settlemint platform create load-balancer evm my-lb --application my-app --accept-defaults
+
+Create a new EVM load balancer in the SettleMint platform.
+
+Arguments:
+  name                                     The EVM load balancer name
+
+Options:
+  -a, --accept-defaults                    Accept the default values
+  -d, --default                            Save as default load balancer
+  --prod                                   Connect to production environment
+  -w, --wait                               Wait until deployed
+  -r, --restart-if-timeout                 Restart if wait time is exceeded
+  --provider &lt;provider&gt;                    Network provider (run `settlemint platform config` to see available providers)
+  --region &lt;region&gt;                        Deployment region (run `settlemint platform config` to see available regions)
+  --size &lt;size&gt;                            Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                            Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --app, --application &lt;application&gt;       The application unique name to create the load balancer in (defaults to application from env)
+  --blockchain-nodes &lt;blockchainNodes...&gt;  Blockchain node unique names where the load balancer connects to (must be from the same network)
+  -h, --help                               display help for command
 </pre>
 

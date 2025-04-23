@@ -12,6 +12,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
+import { codegenViem } from "./codegen/codegen-viem";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
@@ -29,6 +30,7 @@ export function codegenCommand(): Command {
         "--thegraph-subgraph-names <subgraph-names...>",
         "The name(s) of the TheGraph subgraph(s) to generate (skip if you want to generate all)",
       )
+      .option("--generate-viem", "Generate Viem resources")
       // Set the command description
       .description("Generate GraphQL and REST types and queries")
       .usage(
@@ -41,10 +43,14 @@ export function codegenCommand(): Command {
             description: "Generate GraphQL types and queries for specific TheGraph subgraphs",
             command: "codegen --thegraph-subgraph-names subgraph1 subgraph2",
           },
+          {
+            description: "Generate Viem resources",
+            command: "codegen --generate-viem",
+          },
         ]),
       )
       // Define the action to be executed when the command is run
-      .action(async ({ prod, thegraphSubgraphNames }) => {
+      .action(async ({ prod, thegraphSubgraphNames, generateViem }) => {
         intro("Generating GraphQL types and queries for your dApp");
         const env: DotEnv = await loadEnv(true, !!prod);
 
@@ -64,6 +70,11 @@ export function codegenCommand(): Command {
           },
           stopMessage: "Tested GraphQL schemas",
         });
+
+        if (generateViem) {
+          note("Generating Viem resources");
+          await codegenViem(env);
+        }
 
         if (hasura) {
           note("Generating Hasura resources");

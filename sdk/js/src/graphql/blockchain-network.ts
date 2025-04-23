@@ -16,11 +16,61 @@ const BlockchainNetworkFragment = graphql(`
     healthStatus
     provider
     region
+    ... on BesuQBFTBlockchainNetwork {
+      chainId
+    }
+    ... on BesuIbftv2BlockchainNetwork {
+      chainId
+    }
+    ... on GethPoWBlockchainNetwork {
+      chainId
+    }
+    ... on GethPoSRinkebyBlockchainNetwork {
+      chainId
+    }
+    ... on GethVenidiumBlockchainNetwork {
+      chainId
+    }
+    ... on GethGoerliBlockchainNetwork {
+      chainId
+    }
+    ... on AvalancheBlockchainNetwork {
+      chainId
+    }
+    ... on AvalancheFujiBlockchainNetwork {
+      chainId
+    }
+    ... on BscPoWBlockchainNetwork {
+      chainId
+    }
+    ... on BscPoWTestnetBlockchainNetwork {
+      chainId
+    }
+    ... on PolygonBlockchainNetwork {
+      chainId
+    }
+    ... on PolygonMumbaiBlockchainNetwork {
+      chainId
+    }
+    ... on PolygonEdgePoABlockchainNetwork {
+      chainId
+    }
+    ... on QuorumQBFTBlockchainNetwork {
+      chainId
+    }
+    ... on GethCliqueBlockchainNetwork {
+      chainId
+    }
     blockchainNodes {
       ... on BlockchainNode {
         id
         name
         uniqueName
+        endpoints {
+          id
+          label
+          displayValue
+        }
       }
     }
   }

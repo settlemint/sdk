@@ -2,7 +2,7 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { blockchainNodeOrLoadBalancerPrompt } from "@/prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -47,15 +47,19 @@ export function blockscoutInsightsCreateCommand() {
                   : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
                 const loadBalancerUniqueName = blockchainNodeUniqueName
                   ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER);
+                  : (loadBalancer ?? env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER);
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>
                     settlemint.blockchainNode.list(applicationUniqueName),
                   );
-                  const node = await blockchainNodePrompt({
+                  const loadBalancers = await serviceSpinner("load balancer", () =>
+                    settlemint.loadBalancer.list(applicationUniqueName),
+                  );
+                  const node = await blockchainNodeOrLoadBalancerPrompt({
                     env,
                     nodes: blockchainNodes,
+                    loadBalancers,
                     accept: acceptDefaults,
                     isRequired: true,
                   });

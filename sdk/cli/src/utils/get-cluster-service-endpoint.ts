@@ -1,4 +1,12 @@
-import type { Insights, IntegrationTool, Middleware, SettlemintClient, Storage } from "@settlemint/sdk-js";
+import type {
+  BlockchainNode,
+  Insights,
+  IntegrationTool,
+  LoadBalancer,
+  Middleware,
+  SettlemintClient,
+  Storage,
+} from "@settlemint/sdk-js";
 import { retryWhenFailed } from "@settlemint/sdk-utils";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -104,5 +112,32 @@ export function getMinioEndpoints(service: Storage | undefined): Partial<DotEnv>
       ?.displayValue,
     SETTLEMINT_MINIO_SECRET_KEY: service?.credentials.find((credential) => credential.id.includes("secret-key"))
       ?.displayValue,
+  };
+}
+
+export function getBlockchainNodeEndpoints(
+  service: Pick<BlockchainNode, "endpoints"> | undefined | null,
+): Partial<DotEnv> {
+  if (!service) {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("json-rpc"))
+      ?.displayValue,
+  };
+}
+
+export function getBlockchainNodeOrLoadBalancerEndpoints(
+  service: Pick<BlockchainNode, "endpoints"> | Pick<LoadBalancer, "endpoints"> | undefined,
+): Partial<DotEnv> {
+  if (!service) {
+    return {};
+  }
+
+  return {
+    SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT: service.endpoints.find((endpoint) =>
+      endpoint.id.includes("json-rpc"),
+    )?.displayValue,
   };
 }

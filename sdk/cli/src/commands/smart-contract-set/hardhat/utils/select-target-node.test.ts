@@ -151,7 +151,7 @@ describe("selectTargetNode", () => {
   });
 
   test("should filter out invalid nodes when prompting for selection", async () => {
-    mockBlockchainNodePrompt.mockImplementation(async (args: BlockchainNodePromptArgs) => {
+    mockBlockchainNodePrompt.mockImplementation(async (args: BlockchainNodePromptArgs<boolean>) => {
       // Verify that only valid nodes are passed to the prompt
       expect(args.nodes.length).toBe(1);
       expect(args.nodes[0].uniqueName).toBe("test-evm-node");

@@ -2,7 +2,7 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { BlockchainNetwork } from "@settlemint/sdk-js";
 
-export interface BlockchainNetworkPromptArgs extends BaseServicePromptArgs<BlockchainNetwork> {
+export interface BlockchainNetworkPromptArgs extends BaseServicePromptArgs {
   networks: BlockchainNetwork[];
 }
 

@@ -5,6 +5,7 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { hasValidPrivateKey } from "@/utils/cluster-service";
 import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -66,7 +67,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                   : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
                 const loadBalancerUniqueName = blockchainNodeUniqueName
                   ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_LOAD_BALANCER);
+                  : (loadBalancer ?? env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER);
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>
@@ -74,7 +75,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                   );
                   const node = await blockchainNodePrompt({
                     env,
-                    nodes: blockchainNodes,
+                    nodes: blockchainNodes.filter(hasValidPrivateKey),
                     accept: acceptDefaults,
                     isRequired: true,
                   });
