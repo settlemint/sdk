@@ -59,7 +59,7 @@ export async function blockchainNodePrompt<AllowAll extends boolean = false>({
       return select({
         message: promptMessage ?? "Which blockchain node do you want to connect to?",
         choices: filteredChoices,
-        default: allowAll ? nodes : defaultNode,
+        default: defaultNode,
       });
     },
     singleOptionMessage,

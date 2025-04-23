@@ -79,6 +79,9 @@ export async function servicePrompt<Service extends BaseService | BaseService[]>
 
   // Auto-accept if in CI or accept flag set and service found
   const autoAccept = isCi || accept;
+  if (autoAccept && allowAll) {
+    return services as Service;
+  }
   if (autoAccept && selectedService) {
     return selectedService as Service;
   }
