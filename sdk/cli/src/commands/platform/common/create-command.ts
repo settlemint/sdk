@@ -5,6 +5,7 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { providerPrompt } from "@/prompts/provider.prompt";
 import { regionPrompt } from "@/prompts/region.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
 import { type CommandExample, createExamples } from "@/utils/commands/create-examples";
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
@@ -177,9 +178,9 @@ export function getCreateCommand({
           ).workspace.uniqueName;
         }
         if (newEnv.SETTLEMINT_BLOCKCHAIN_NODE && newEnv.SETTLEMINT_BLOCKCHAIN_NODE !== env.SETTLEMINT_BLOCKCHAIN_NODE) {
-          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = (
-            await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE)
-          ).blockchainNetwork.uniqueName;
+          const newNode = await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE);
+          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = newNode.blockchainNetwork.uniqueName;
+          newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID = getBlockchainNetworkChainId(newNode.blockchainNetwork);
         }
         await writeEnvSpinner(!!prod, newEnv);
         note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);

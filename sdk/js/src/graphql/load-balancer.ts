@@ -16,6 +16,11 @@ const LoadBalancerFragment = graphql(`
     healthStatus
     provider
     region
+    endpoints {
+      id
+      label
+      displayValue
+    }
   }
 `);
 

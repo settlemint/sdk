@@ -12,6 +12,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
+import { codegenViem } from "./codegen/codegen-viem";
 
 /**
  * Creates and returns the 'codegen' command for the SettleMint SDK.
@@ -64,6 +65,8 @@ export function codegenCommand(): Command {
           },
           stopMessage: "Tested GraphQL schemas",
         });
+
+        await codegenViem(env);
 
         if (hasura) {
           note("Generating Hasura resources");

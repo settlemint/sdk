@@ -15,8 +15,11 @@ import { workspacePrompt } from "@/prompts/workspace.prompt";
 import { servicesSpinner } from "@/spinners/services.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
+import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
 import { getInstanceCredentials } from "@/utils/config";
 import {
+  getBlockchainNodeEndpoints,
+  getBlockchainNodeOrLoadBalancerEndpoints,
   getBlockscoutEndpoints,
   getGraphEndpoint,
   getHasuraEndpoints,
@@ -231,8 +234,11 @@ export function connectCommand(): Command {
           SETTLEMINT_WORKSPACE: workspace.uniqueName,
           SETTLEMINT_APPLICATION: application.uniqueName,
           SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNode?.blockchainNetwork?.uniqueName,
+          SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID: getBlockchainNetworkChainId(blockchainNode?.blockchainNetwork),
           SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
+          ...getBlockchainNodeEndpoints(blockchainNode),
           SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: loadBalancerOrBlockchainNode?.uniqueName,
+          ...getBlockchainNodeOrLoadBalancerEndpoints(loadBalancerOrBlockchainNode),
           SETTLEMINT_HASURA: hasura?.uniqueName,
           ...getHasuraEndpoints(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,

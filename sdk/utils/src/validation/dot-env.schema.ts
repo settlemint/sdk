@@ -22,10 +22,16 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_APPLICATION: UniqueNameSchema.optional(),
   /** Unique name of the blockchain network */
   SETTLEMINT_BLOCKCHAIN_NETWORK: UniqueNameSchema.optional(),
+  /** Chain ID of the blockchain network */
+  SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID: z.string().optional(),
   /** Unique name of the blockchain node (should have a private key for signing transactions) */
   SETTLEMINT_BLOCKCHAIN_NODE: UniqueNameSchema.optional(),
+  /** JSON RPC endpoint for the blockchain node */
+  SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: UrlSchema.optional(),
   /** Unique name of the blockchain node or load balancer */
   SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: UniqueNameSchema.optional(),
+  /** JSON RPC endpoint for the blockchain node or load balancer */
+  SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT: UrlSchema.optional(),
   /** Unique name of the Hasura instance */
   SETTLEMINT_HASURA: UniqueNameSchema.optional(),
   /** Endpoint URL for the Hasura GraphQL API */
