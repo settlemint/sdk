@@ -34,7 +34,7 @@ export async function blockchainNodeOrLoadBalancerPrompt({
 }: BlockchainNodeOrLoadBalancerPromptArgs): Promise<BlockchainNode | LoadBalancer | undefined> {
   return servicePrompt({
     env,
-    services: [...nodes, ...loadBalancers],
+    services: [...loadBalancers, ...nodes],
     accept,
     envKey: "SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER",
     isRequired,

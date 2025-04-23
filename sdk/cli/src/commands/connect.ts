@@ -173,12 +173,12 @@ export function connectCommand(): Command {
               uniqueName: blockchainNode.blockchainNetwork?.uniqueName,
             },
             blockchainNode && {
-              type: "Blockchain Node",
+              type: "Blockchain Node (with private key, use for sending transactions)",
               name: blockchainNode.name,
               uniqueName: blockchainNode.uniqueName,
             },
             loadBalancerOrBlockchainNode && {
-              type: "Blockchain Node or Load Balancer (signed transactions only)",
+              type: "Blockchain Node or Load Balancer (without private key, use for read operations)",
               name: loadBalancerOrBlockchainNode.name,
               uniqueName: loadBalancerOrBlockchainNode.uniqueName,
             },
