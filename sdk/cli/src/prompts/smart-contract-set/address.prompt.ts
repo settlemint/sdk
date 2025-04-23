@@ -1,34 +1,29 @@
+import { isValidPrivateKey } from "@/utils/cluster-service";
 import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
-import type { BlockchainNode, PrivateKey } from "@settlemint/sdk-js";
+import type { BlockchainNode } from "@settlemint/sdk-js";
 import { note } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
- * Prompts the user to select a blockchain address to deploy the smart contract set to.
+ * Prompts the user to select a private key address.
  *
  * @param options - The options for the address prompt
- * @param options.env - The environment variables
- * @param options.accept - Whether to accept the default address from env
- * @param options.prod - Whether this is a production deployment
- * @param options.node - The blockchain node containing available addresses
+ * @param options.accept - Whether to accept the default address from the hardhat config
+ * @param options.node - The blockchain node the private key is connected to
+ * @param options.hardhatConfig - The hardhat config data
  * @returns The selected address or null if none available
  * @throws {Error} If no addresses are available to select from
  */
 export async function addressPrompt({
-  env,
   accept,
-  prod,
   node,
   hardhatConfig,
 }: {
-  env: Partial<DotEnv>;
   accept: boolean;
-  prod: boolean | undefined;
   node: BlockchainNode;
   hardhatConfig: HardhatConfig;
 }): Promise<string | null> {
-  const possiblePrivateKeys = node.privateKeys?.filter((privateKey) => validPrivateKey(privateKey)) ?? [];
+  const possiblePrivateKeys = node.privateKeys?.filter(isValidPrivateKey) ?? [];
   const defaultAddress = hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 
@@ -49,12 +44,8 @@ export async function addressPrompt({
       name: name,
       value: address,
     })),
-    default: defaultAddress ?? possiblePrivateKeys[0]?.address,
+    default: defaultAddress,
   });
 
   return address;
-}
-
-export function validPrivateKey(privateKey: { privateKeyType: PrivateKey["privateKeyType"] }) {
-  return privateKey.privateKeyType !== "HD_ECDSA_P256";
 }

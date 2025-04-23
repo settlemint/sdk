@@ -194,4 +194,20 @@ describe("servicePrompt", () => {
     expect(mockDefaultHandler).not.toHaveBeenCalled();
     expect(result).toEqual({ uniqueName: "service-2", name: "Service 2" });
   });
+
+  it("returns all services if allowAll is true and accept is true", async () => {
+    const mockDefaultHandler = mock(() => Promise.resolve(undefined));
+    const env: Partial<DotEnv> = { SETTLEMINT_BLOCKCHAIN_NODE: "service-2" };
+
+    const result = await servicePrompt({
+      env,
+      services: MOCK_SERVICES,
+      accept: true,
+      envKey: "SETTLEMINT_BLOCKCHAIN_NODE",
+      defaultHandler: mockDefaultHandler,
+      allowAll: true,
+    });
+    expect(mockDefaultHandler).not.toHaveBeenCalled();
+    expect(result).toEqual(MOCK_SERVICES);
+  });
 });

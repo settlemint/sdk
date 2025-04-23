@@ -2,8 +2,8 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
-import { validPrivateKey } from "@/prompts/smart-contract-set/address.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { hasValidPrivateKey } from "@/utils/cluster-service";
 import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
 import { cancel, note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -41,6 +41,7 @@ export async function selectTargetNode({
       nodes: validNodes,
       accept: autoAccept,
       isRequired: true,
+      filterRunningOnly: true,
       promptMessage:
         "Which blockchain node do you want to connect to? (Only nodes with private keys activated are shown)",
       singleOptionMessage: (node) =>
@@ -69,7 +70,7 @@ function validateNode(node: BlockchainNode, cancelOnError = true) {
     }
     return false;
   }
-  if (node.privateKeys?.filter((privateKey) => validPrivateKey(privateKey)).length === 0) {
+  if (!hasValidPrivateKey(node)) {
     if (cancelOnError) {
       cancel(
         `The specified blockchain node '${node.uniqueName}' does not have an ECDSA P256 or HSM ECDSA P256 private key activated. Please activate an ECDSA P256 or HSM ECDSA P256 private key on your node and try again.`,

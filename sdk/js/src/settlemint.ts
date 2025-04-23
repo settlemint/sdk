@@ -59,6 +59,14 @@ import {
   integrationToolRestart,
 } from "./graphql/integration-tool.js";
 import {
+  type CreateLoadBalancerArgs,
+  type LoadBalancer,
+  loadBalancerCreate,
+  loadBalancerList,
+  loadBalancerRead,
+  loadBalancerRestart,
+} from "./graphql/load-balancer.js";
+import {
   type CreateMiddlewareArgs,
   type Middleware,
   type MiddlewareWithSubgraphs,
@@ -140,6 +148,12 @@ export interface SettlemintClient {
     read: (blockchainNodeUniqueName: string) => Promise<BlockchainNode>;
     create: (args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>;
     restart: (nodeUniqueName: string) => Promise<BlockchainNode>;
+  };
+  loadBalancer: {
+    list: (applicationUniqueName: string) => Promise<LoadBalancer[]>;
+    read: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
+    create: (args: CreateLoadBalancerArgs) => Promise<LoadBalancer>;
+    restart: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
   };
   middleware: {
     list: (applicationUniqueName: string) => Promise<Middleware[]>;
@@ -280,6 +294,12 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       create: blockchainNodeCreate(gqlClient),
       restart: blockchainNodeRestart(gqlClient),
     },
+    loadBalancer: {
+      list: loadBalancerList(gqlClient),
+      read: loadBalancerRead(gqlClient),
+      create: loadBalancerCreate(gqlClient),
+      restart: loadBalancerRestart(gqlClient),
+    },
     middleware: {
       list: middlewareList(gqlClient),
       read: middlewareRead(gqlClient),
@@ -345,6 +365,7 @@ export type { BlockchainNode } from "./graphql/blockchain-node.js";
 export type { CustomDeployment } from "./graphql/custom-deployment.js";
 export type { Insights } from "./graphql/insights.js";
 export type { IntegrationTool } from "./graphql/integration-tool.js";
+export type { LoadBalancer } from "./graphql/load-balancer.js";
 export type { Middleware, MiddlewareWithSubgraphs } from "./graphql/middleware.js";
 export type { PrivateKey } from "./graphql/private-key.js";
 export type { Storage } from "./graphql/storage.js";

@@ -14,7 +14,7 @@ export function isHAGraphMiddleware(middleware: Middleware): middleware is HAGra
   return middleware.__typename === "HAGraphMiddleware";
 }
 
-export interface TheGraphPromptArgs extends BaseServicePromptArgs<HAGraphMiddleware> {
+export interface TheGraphPromptArgs extends BaseServicePromptArgs {
   middlewares: Middleware[];
 }
 

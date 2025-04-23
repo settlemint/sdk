@@ -48,6 +48,7 @@ describe("mono-repo utilities", () => {
       "sdk",
       "thegraph",
       "utils",
+      "viem",
     ]);
   });
 });

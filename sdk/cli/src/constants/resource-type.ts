@@ -10,7 +10,8 @@ export type ResourceType =
   | "middleware"
   | "integration tool"
   | "storage"
-  | "insights";
+  | "insights"
+  | "load balancer";
 
 export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient> = {
   application: "application",
@@ -24,6 +25,7 @@ export const SETTLEMINT_CLIENT_MAP: Record<ResourceType, keyof SettlemintClient>
   storage: "storage",
   insights: "insights",
   "application access token": "applicationAccessToken",
+  "load balancer": "loadBalancer",
 };
 
 export const LABELS_MAP: Record<ResourceType, { singular: string; plural: string; command: string }> = {
@@ -46,4 +48,5 @@ export const LABELS_MAP: Record<ResourceType, { singular: string; plural: string
     plural: "application access tokens",
     command: "application-access-token",
   },
+  "load balancer": { singular: "load balancer", plural: "load balancers", command: "load-balancer" },
 };

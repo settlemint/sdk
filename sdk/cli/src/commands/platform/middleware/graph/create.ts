@@ -2,7 +2,7 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
-import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { blockchainNodeOrLoadBalancerPrompt } from "@/prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -20,11 +20,15 @@ export function graphMiddlewareCreateCommand() {
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option("--application <application>", "Application unique name")
-        .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
+        .option(
+          "--blockchain-node <blockchainNode>",
+          "Blockchain Node unique name (mutually exclusive with load-balancer)",
+        )
+        .option("--load-balancer <loadBalancer>", "Load Balancer unique name (mutually exclusive with blockchain-node)")
         .action(
           async (
             name,
-            { application, blockchainNode, provider, region, size, type, acceptDefaults, ...defaultArgs },
+            { application, blockchainNode, loadBalancer, provider, region, size, type, acceptDefaults, ...defaultArgs },
           ) => {
             return baseAction(
               {
@@ -39,20 +43,29 @@ export function graphMiddlewareCreateCommand() {
                   return missingApplication();
                 }
                 let blockchainNodeUniqueName = blockchainNode;
-                if (!blockchainNodeUniqueName) {
+                let loadBalancerUniqueName = loadBalancer;
+                if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>
                     settlemint.blockchainNode.list(applicationUniqueName),
                   );
-                  const node = await blockchainNodePrompt({
+                  const loadBalancers = await serviceSpinner("load balancer", () =>
+                    settlemint.loadBalancer.list(applicationUniqueName),
+                  );
+                  const nodeOrLoadbalancer = await blockchainNodeOrLoadBalancerPrompt({
                     env,
                     nodes: blockchainNodes,
+                    loadBalancers,
                     accept: acceptDefaults,
                     isRequired: true,
                   });
-                  if (!node) {
-                    return nothingSelectedError("blockchain node");
+                  if (!nodeOrLoadbalancer) {
+                    return nothingSelectedError("blockchain node or load balancer");
                   }
-                  blockchainNodeUniqueName = node.uniqueName;
+                  if (nodeOrLoadbalancer.__typename?.endsWith("LoadBalancer")) {
+                    loadBalancerUniqueName = nodeOrLoadbalancer.uniqueName;
+                  } else {
+                    blockchainNodeUniqueName = nodeOrLoadbalancer.uniqueName;
+                  }
                 }
                 const result = await showSpinner(() =>
                   settlemint.middleware.create({
@@ -60,6 +73,7 @@ export function graphMiddlewareCreateCommand() {
                     applicationUniqueName,
                     interface: "HA_GRAPH",
                     blockchainNodeUniqueName,
+                    loadBalancerUniqueName,
                     provider,
                     region,
                     size,

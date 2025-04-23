@@ -86,6 +86,6 @@ export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DAT
 
   // Warn about missing database variables only during runtime
   if (process.env.NODE_ENV !== "production" && !databaseUrl) {
-    console.warn("[Codegen] Missing database environment variables");
+    note("[Codegen] Missing database environment variables", "warn");
   }
 }

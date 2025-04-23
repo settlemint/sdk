@@ -104,7 +104,7 @@ export function hardhatDeployRemoteCommand() {
 
       let address: string | null = defaultSender ?? null;
       if (!defaultSender) {
-        address = await addressPrompt({ env, accept: autoAccept, prod, node, hardhatConfig });
+        address = await addressPrompt({ accept: autoAccept, node, hardhatConfig });
       }
       if (!address) {
         return nothingSelectedError("private key");

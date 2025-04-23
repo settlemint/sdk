@@ -13,6 +13,7 @@ const SDK_PACKAGES = [
   "portal",
   "thegraph",
   "utils",
+  "viem",
 ] as const;
 
 const SDK_DIR = join(__dirname, "../../", "sdk");

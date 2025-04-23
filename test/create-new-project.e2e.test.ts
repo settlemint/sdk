@@ -79,7 +79,11 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_APPLICATION).toBeString();
 
     expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID).toBeString();
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT).toBeString();
+    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT).toBeString();
 
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
 
