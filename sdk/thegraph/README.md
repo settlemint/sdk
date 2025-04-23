@@ -68,7 +68,7 @@ Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instances`: `string`[]; `subgraphName`: `string`; \} | Configuration options for the client including instance URLs, access token and subgraph name |
+| `options` | \{ `accessToken`: `string`; `cache?`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instances`: `string`[]; `subgraphName`: `string`; \} | Configuration options for the client including instance URLs, access token and subgraph name |
 | `options.accessToken` | `string` | - |
 | `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
 | `options.instances?` | `string`[] | - |

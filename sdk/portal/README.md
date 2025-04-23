@@ -68,7 +68,7 @@ Creates a Portal GraphQL client with the provided configuration.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `cache`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the Portal client |
+| `options` | \{ `accessToken`: `string`; `cache?`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the Portal client |
 | `options.accessToken` | `string` | - |
 | `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
 | `options.instance?` | `string` | - |
