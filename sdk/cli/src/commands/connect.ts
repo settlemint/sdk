@@ -85,19 +85,22 @@ export function connectCommand(): Command {
           loadBalancers,
         } = await servicesSpinner(settlemint, application.uniqueName);
 
+        const nodesWithPrivateKey = blockchainNodes.filter((node) =>
+          node && "privateKeys" in node ? Array.isArray(node?.privateKeys) && node?.privateKeys?.length > 0 : false,
+        );
         const blockchainNode = await blockchainNodePrompt({
           env,
-          nodes: blockchainNodes,
+          nodes: nodesWithPrivateKey,
           accept: acceptDefaults,
           promptMessage: "Which blockchain node do you want to SEND unsigned transactions from?",
         });
 
-        const nodesWithNoSigning = blockchainNodes.filter((node) =>
+        const nodesWithoutPrivateKey = blockchainNodes.filter((node) =>
           node && "privateKeys" in node ? !Array.isArray(node?.privateKeys) || node?.privateKeys?.length === 0 : true,
         );
         const loadBalancerOrBlockchainNode = await blockchainNodeOrLoadBalancerPrompt({
           env,
-          nodes: nodesWithNoSigning,
+          nodes: nodesWithoutPrivateKey,
           loadBalancers: loadBalancers,
           accept: acceptDefaults,
           promptMessage:

@@ -4,6 +4,7 @@ import type {
   CustomDeployment,
   Insights,
   IntegrationTool,
+  LoadBalancer,
   Middleware,
   PrivateKey,
   SettlemintClient,

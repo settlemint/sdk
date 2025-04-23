@@ -6,6 +6,7 @@ import { applicationCreateCommand } from "./application/create";
 import { blockchainNodeCreateCommand } from "./blockchain-node/create";
 import { insightsCreateCommand } from "./insights/create";
 import { integrationToolCreateCommand } from "./integration-tools/create";
+import { loadBalancerCreateCommand } from "./load-balancer/create";
 import { middlewareCreateCommand } from "./middleware/create";
 import { privateKeyCreateCommand } from "./private-key/create";
 import { storageCreateCommand } from "./storage/create";
@@ -29,5 +30,6 @@ export function createCommand(): Command {
     .addCommand(storageCreateCommand())
     .addCommand(integrationToolCreateCommand())
     .addCommand(insightsCreateCommand())
-    .addCommand(applicationAccessTokenCreateCommand());
+    .addCommand(applicationAccessTokenCreateCommand())
+    .addCommand(loadBalancerCreateCommand());
 }

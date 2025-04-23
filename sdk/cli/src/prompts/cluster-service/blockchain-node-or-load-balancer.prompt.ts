@@ -5,7 +5,7 @@ import type { BlockchainNode, LoadBalancer } from "@settlemint/sdk-js";
 /**
  * Arguments for the blockchain node prompt.
  */
-export interface BlockchainNodeOrLoadBalancerPromptArgs extends BaseServicePromptArgs<BlockchainNode | LoadBalancer> {
+export interface BlockchainNodeOrLoadBalancerPromptArgs extends BaseServicePromptArgs {
   nodes: BlockchainNode[];
   loadBalancers: LoadBalancer[];
 }

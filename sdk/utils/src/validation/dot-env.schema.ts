@@ -22,7 +22,7 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_APPLICATION: UniqueNameSchema.optional(),
   /** Unique name of the blockchain network */
   SETTLEMINT_BLOCKCHAIN_NETWORK: UniqueNameSchema.optional(),
-  /** Unique name of the blockchain node that does not require signing transactions */
+  /** Unique name of the blockchain node (should have a private key for signing transactions) */
   SETTLEMINT_BLOCKCHAIN_NODE: UniqueNameSchema.optional(),
   /** Unique name of the blockchain node or load balancer */
   SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: UniqueNameSchema.optional(),

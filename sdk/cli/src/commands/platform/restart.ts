@@ -3,6 +3,7 @@ import { blockchainNetworkRestartCommand } from "./blockchain-network/restart";
 import { customDeploymentRestartCommand } from "./custom-deployments/restart";
 import { insightsRestartCommand } from "./insights/restart";
 import { integrationToolRestartCommand } from "./integration-tools/restart";
+import { loadBalancerRestartCommand } from "./load-balancer/restart";
 import { middlewareRestartCommand } from "./middleware/restart";
 import { storageRestartCommand } from "./storage/restart";
 
@@ -18,7 +19,8 @@ export function restartCommand() {
     .addCommand(insightsRestartCommand())
     .addCommand(integrationToolRestartCommand())
     .addCommand(middlewareRestartCommand())
-    .addCommand(storageRestartCommand());
+    .addCommand(storageRestartCommand())
+    .addCommand(loadBalancerRestartCommand());
 
   return cmd;
 }

@@ -2,7 +2,7 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { Insights } from "@settlemint/sdk-js";
 
-export interface BlockscoutPromptArgs extends BaseServicePromptArgs<Insights> {
+export interface BlockscoutPromptArgs extends BaseServicePromptArgs {
   insights: Insights[];
 }
 

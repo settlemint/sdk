@@ -2,7 +2,7 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { CustomDeployment } from "@settlemint/sdk-js";
 
-export interface CustomDeploymentPromptArgs extends BaseServicePromptArgs<CustomDeployment> {
+export interface CustomDeploymentPromptArgs extends BaseServicePromptArgs {
   customDeployments: CustomDeployment[];
 }
 

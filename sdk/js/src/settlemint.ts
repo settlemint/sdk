@@ -58,7 +58,14 @@ import {
   integrationToolRead,
   integrationToolRestart,
 } from "./graphql/integration-tool.js";
-import { type LoadBalancer, loadBalancerList, loadBalancerRead } from "./graphql/load-balancer.js";
+import {
+  type CreateLoadBalancerArgs,
+  type LoadBalancer,
+  loadBalancerCreate,
+  loadBalancerList,
+  loadBalancerRead,
+  loadBalancerRestart,
+} from "./graphql/load-balancer.js";
 import {
   type CreateMiddlewareArgs,
   type Middleware,
@@ -145,6 +152,8 @@ export interface SettlemintClient {
   loadBalancer: {
     list: (applicationUniqueName: string) => Promise<LoadBalancer[]>;
     read: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
+    create: (args: CreateLoadBalancerArgs) => Promise<LoadBalancer>;
+    restart: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
   };
   middleware: {
     list: (applicationUniqueName: string) => Promise<Middleware[]>;
@@ -288,6 +297,8 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
     loadBalancer: {
       list: loadBalancerList(gqlClient),
       read: loadBalancerRead(gqlClient),
+      create: loadBalancerCreate(gqlClient),
+      restart: loadBalancerRestart(gqlClient),
     },
     middleware: {
       list: middlewareList(gqlClient),

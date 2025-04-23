@@ -2,7 +2,7 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { Storage } from "@settlemint/sdk-js";
 
-export interface IpfsPromptArgs extends BaseServicePromptArgs<Storage> {
+export interface IpfsPromptArgs extends BaseServicePromptArgs {
   storages: Storage[];
 }
 
