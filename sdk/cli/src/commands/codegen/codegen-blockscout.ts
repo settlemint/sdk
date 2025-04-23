@@ -43,6 +43,7 @@ export async function codegenBlockscout(env: DotEnv) {
           __schema {
             queryType { name }
             mutationType { name }
+            subscriptionType { name }
             types {
               ...FullType
             }
@@ -124,10 +125,6 @@ export async function codegenBlockscout(env: DotEnv) {
                         ofType {
                           kind
                           name
-                          ofType {
-                            kind
-                            name
-                          }
                         }
                       }
                     }
