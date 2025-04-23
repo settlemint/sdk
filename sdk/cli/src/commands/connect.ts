@@ -103,7 +103,7 @@ export function connectCommand(): Command {
           nodes: nodesWithoutPrivateKey,
           loadBalancers: loadBalancers,
           accept: acceptDefaults,
-          promptMessage: "Which blockchain node or load balancer do you want to use for read operations?",
+          promptMessage: "Which load balancer or blockchain node do you want to use for read operations?",
         });
         const hasura = await hasuraPrompt({
           env,
@@ -172,12 +172,12 @@ export function connectCommand(): Command {
               uniqueName: blockchainNode.blockchainNetwork?.uniqueName,
             },
             blockchainNode && {
-              type: "Blockchain Node (with private key, use for sending transactions)",
+              type: "Blockchain Node (use for sending transactions)",
               name: blockchainNode.name,
               uniqueName: blockchainNode.uniqueName,
             },
             loadBalancerOrBlockchainNode && {
-              type: "Blockchain Node or Load Balancer (without private key, use for read operations)",
+              type: "Load Balancer or Blockchain Node (use for read operations)",
               name: loadBalancerOrBlockchainNode.name,
               uniqueName: loadBalancerOrBlockchainNode.uniqueName,
             },
