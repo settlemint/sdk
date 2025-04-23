@@ -9,12 +9,14 @@ const PACKAGE_NAME = "@settlemint/sdk-viem";
 export async function codegenViem(env: DotEnv) {
   const chainId = env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID;
   if (!chainId) {
+    note("[Codegen] No chain ID found, skipping Viem resources generation", "warn");
     return;
   }
 
   const loadBalancerRpcEndpoint = env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT;
   const blockchainNodeRpcEndpoint = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT;
   if (!loadBalancerRpcEndpoint && !blockchainNodeRpcEndpoint) {
+    note("[Codegen] No RPC endpoints found, skipping Viem resources generation", "warn");
     return;
   }
 
