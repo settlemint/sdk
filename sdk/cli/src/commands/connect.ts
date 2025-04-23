@@ -92,7 +92,7 @@ export function connectCommand(): Command {
           env,
           nodes: nodesWithPrivateKey,
           accept: acceptDefaults,
-          promptMessage: "Which blockchain node do you want to SEND unsigned transactions from?",
+          promptMessage: "Which blockchain node do you want to use for sending transactions?",
         });
 
         const nodesWithoutPrivateKey = blockchainNodes.filter((node) =>
@@ -103,8 +103,7 @@ export function connectCommand(): Command {
           nodes: nodesWithoutPrivateKey,
           loadBalancers: loadBalancers,
           accept: acceptDefaults,
-          promptMessage:
-            "Which blockchain node or load balancer do you want to READ/WRITE from/to? Transactions should be signed before sending to this node or load balancer",
+          promptMessage: "Which blockchain node or load balancer do you want to use for read operations?",
         });
         const hasura = await hasuraPrompt({
           env,
