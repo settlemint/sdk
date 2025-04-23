@@ -1,6 +1,6 @@
-import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import type { Client } from "minio";
 import type { MinioOperation } from "./operations.js";
+import { ensureServer } from "./runtime.js";
 
 /**
  * Executes a MinIO operation using the provided client

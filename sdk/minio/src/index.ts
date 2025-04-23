@@ -11,6 +11,9 @@ export { createServerMinioClient } from "./minio.js";
 // Export client helper
 export { getMinioClient } from "./helpers/client.js";
 
+// Export runtime utilities
+export { ensureServer } from "./helpers/runtime.js";
+
 // Export operations and executor
 export {
   createDeleteOperation,
@@ -34,6 +37,10 @@ export {
   deleteFile,
   createPresignedUploadUrl,
 } from "./functions.js";
+
+// Export Zod validation utilities
+export { t, validate, type Static } from "./helpers/typebox.js";
+export { z } from "zod";
 
 // Re-export required types from minio
 export type { Client, ItemBucketMetadata } from "minio";

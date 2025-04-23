@@ -4,24 +4,40 @@ import { Buffer } from "node:buffer"; // Use node: prefix for built-in
 import * as fs from "node:fs/promises"; // For file system operations
 import * as os from "node:os"; // For temporary directory
 import * as path from "node:path"; // For joining paths
-import { client as minioClient } from "@/lib/settlemint/minio";
-import { type StaticDecode, t } from "@/lib/utils/typebox";
+import { Client } from "minio";
+import { z } from "zod";
 
 // Remove the next-safe-action import
 // import { action } from "@/lib/safe-action";
 
-// --- Assume these are defined correctly in the full file scope ---
-declare const DEFAULT_BUCKET_NAME: string;
-declare const MINIO_PUBLIC_URL: string | undefined;
-declare const MAX_FILE_SIZE_MB: number;
-// ---
+// Define constants that were previously declared
+const DEFAULT_BUCKET_NAME = "uploads";
+const MINIO_PUBLIC_URL = process.env.NEXT_PUBLIC_MINIO_URL;
+const MAX_FILE_SIZE_MB = 10; // 10MB default limit
 
-const uploadArgsSchema = t.Object({
-  file: t.Any({ description: "File object" }),
-  maxSizeMB: t.Optional(t.Number({ minimum: 0 })),
-  uploadPathPrefix: t.Optional(t.String()),
+// Get MinIO endpoint and credentials
+const minioEndpoint = process.env.SETTLEMINT_MINIO_ENDPOINT || "";
+const minioAccessKey = process.env.SETTLEMINT_MINIO_ACCESS_KEY || "";
+const minioSecretKey = process.env.SETTLEMINT_MINIO_SECRET_KEY || "";
+
+// Initialize MinIO client directly
+const minioClient = new Client({
+  endPoint: new URL(minioEndpoint).hostname,
+  accessKey: minioAccessKey,
+  secretKey: minioSecretKey,
+  useSSL: new URL(minioEndpoint).protocol !== "http:",
+  port: new URL(minioEndpoint).port ? Number(new URL(minioEndpoint).port) : undefined,
+  region: "eu-central-1",
 });
-type UploadArgs = StaticDecode<typeof uploadArgsSchema>;
+
+// Define schema using Zod
+const uploadArgsSchema = z.object({
+  file: z.any().refine((val) => val instanceof File, { message: "Expected a File object" }),
+  maxSizeMB: z.number().min(0).optional(),
+  uploadPathPrefix: z.string().optional(),
+});
+
+type UploadArgs = z.infer<typeof uploadArgsSchema>;
 
 export async function uploadFileToMinio({
   file,
@@ -113,7 +129,3 @@ export async function uploadFileToMinio({
     }
   }
 }
-
-// ... existing code for deleteArgsSchema and deleteFileFromMinio ...
-// Note: Added declarations for missing constants at the top for context
-//       and fixed Number.isNaN usage. Addressed node:buffer import.

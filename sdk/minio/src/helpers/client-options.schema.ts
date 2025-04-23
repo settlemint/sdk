@@ -1,12 +1,11 @@
-import { UrlSchema } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
- * Schema for validating client options for the Portal client.
+ * Schema for validating client options for the MinIO client.
  */
 export const ClientOptionsSchema = z.object({
   /** The URL of the MinIO instance to connect to */
-  instance: UrlSchema,
+  instance: z.string().url(),
 });
 
 /**
@@ -15,10 +14,12 @@ export const ClientOptionsSchema = z.object({
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Schema for validating server client options for the Portal client.
+ * Schema for validating server client options for the MinIO client.
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
-export const ServerClientOptionsSchema = ClientOptionsSchema.extend({
+export const ServerClientOptionsSchema = z.object({
+  /** The URL of the MinIO instance to connect to */
+  instance: z.string().url(),
   /** The MinIO access key used to authenticate with the MinIO server */
   accessKey: z.string(),
   /** The MinIO secret key used to authenticate with the MinIO server */

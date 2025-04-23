@@ -1,7 +1,6 @@
-import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import { validate } from "@settlemint/sdk-utils/validation";
 import { Client } from "minio";
 import { type ServerClientOptions, ServerClientOptionsSchema } from "./helpers/client-options.schema.js";
+import { ensureServer } from "./helpers/runtime.js";
 
 /**
  * Creates a MinIO client for server-side use with authentication.
@@ -22,7 +21,9 @@ import { type ServerClientOptions, ServerClientOptionsSchema } from "./helpers/c
  */
 export function createServerMinioClient(options: ServerClientOptions): { client: Client } {
   ensureServer();
-  const validatedOptions = validate(ServerClientOptionsSchema, options);
+
+  // Validate the options with Zod
+  const validatedOptions = ServerClientOptionsSchema.parse(options);
 
   const url = new URL(validatedOptions.instance);
   return {

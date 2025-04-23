@@ -1,4 +1,4 @@
-import { Type as t } from "@sinclair/typebox";
+import { t } from "./typebox.js";
 
 /**
  * Schema for file metadata

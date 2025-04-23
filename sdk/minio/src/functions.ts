@@ -1,8 +1,5 @@
 import "server-only";
 import { Buffer } from "node:buffer";
-import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import { t } from "@settlemint/sdk-utils/typebox";
-import { validate } from "@settlemint/sdk-utils/validation";
 import { getMinioClient } from "./helpers/client.js";
 import { executeMinioOperation } from "./helpers/executor.js";
 import {
@@ -14,6 +11,8 @@ import {
   createStatObjectOperation,
   createUploadOperation,
 } from "./helpers/operations.js";
+import { ensureServer } from "./helpers/runtime.js";
+import { type Static, t, validate } from "./helpers/typebox.js";
 
 // FileMetadata schema
 const FileMetadataSchema = t.Object(
@@ -48,7 +47,7 @@ export const DEFAULT_BUCKET = "uploads";
 export async function getFilesList(
   prefix = "",
   bucket: string = DEFAULT_BUCKET,
-): Promise<Array<t.Static<typeof FileMetadataSchema>>> {
+): Promise<Array<Static<typeof FileMetadataSchema>>> {
   ensureServer();
   console.log(`Listing files with prefix: "${prefix}" in bucket: "${bucket}"`);
 
@@ -102,7 +101,7 @@ export async function getFilesList(
 export async function getFileById(
   fileId: string,
   bucket: string = DEFAULT_BUCKET,
-): Promise<t.Static<typeof FileMetadataSchema>> {
+): Promise<Static<typeof FileMetadataSchema>> {
   ensureServer();
   console.log(`Getting file details for: ${fileId} in bucket: ${bucket}`);
 
@@ -158,7 +157,7 @@ export async function uploadFile(
   file: File | { arrayBuffer: () => Promise<ArrayBuffer>; name: string; size: number; type: string },
   path = "",
   bucket: string = DEFAULT_BUCKET,
-): Promise<t.Static<typeof FileMetadataSchema>> {
+): Promise<Static<typeof FileMetadataSchema>> {
   ensureServer();
   try {
     const fileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -302,7 +301,7 @@ export async function uploadBuffer(
   objectName: string,
   contentType: string,
   bucket: string = DEFAULT_BUCKET,
-): Promise<t.Static<typeof FileMetadataSchema>> {
+): Promise<Static<typeof FileMetadataSchema>> {
   ensureServer();
   try {
     const client = await getMinioClient();
