@@ -4,7 +4,7 @@ import { getPublicClient, getWalletClient } from "@settlemint/sdk-viem";
 import { parseAbi } from "viem";
 
 describe("Viem E2E Tests", () => {
-  test("should generate a public client", async () => {
+  test("can create a public client", async () => {
     const env = await loadEnv(false, false);
     const publicClient = getPublicClient({
       accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
@@ -24,7 +24,7 @@ describe("Viem E2E Tests", () => {
     expect(transactionHash).toBeDefined();
   });
 
-  test("should generate a wallet client", async () => {
+  test("can create a wallet client", async () => {
     const env = await loadEnv(false, false);
     const walletClient = getWalletClient({
       accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
