@@ -1,4 +1,4 @@
-import { hasValidPrivateKey } from "@/utils/cluster-service";
+import { isValidPrivateKey } from "@/utils/cluster-service";
 import type { HardhatConfig } from "@/utils/smart-contract-set/hardhat-config";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
@@ -23,7 +23,7 @@ export async function addressPrompt({
   node: BlockchainNode;
   hardhatConfig: HardhatConfig;
 }): Promise<string | null> {
-  const possiblePrivateKeys = node.privateKeys?.filter(hasValidPrivateKey) ?? [];
+  const possiblePrivateKeys = node.privateKeys?.filter(isValidPrivateKey) ?? [];
   const defaultAddress = hardhatConfig.networks?.btp?.from ?? possiblePrivateKeys[0]?.address;
   const defaultPossible = accept && defaultAddress;
 

@@ -70,7 +70,7 @@ function validateNode(node: BlockchainNode, cancelOnError = true) {
     }
     return false;
   }
-  if (node.privateKeys?.filter(hasValidPrivateKey).length === 0) {
+  if (!hasValidPrivateKey(node)) {
     if (cancelOnError) {
       cancel(
         `The specified blockchain node '${node.uniqueName}' does not have an ECDSA P256 or HSM ECDSA P256 private key activated. Please activate an ECDSA P256 or HSM ECDSA P256 private key on your node and try again.`,
