@@ -19,7 +19,6 @@ export function loadBalancerEvmCreateCommand() {
     name: "evm",
     type: "load balancer",
     subType: "EVM",
-    alias: "e",
     execute: (cmd, baseAction) => {
       addClusterServiceArgs(cmd)
         .option(
@@ -63,12 +62,13 @@ export function loadBalancerEvmCreateCommand() {
                   if (!network) {
                     return nothingSelectedError("blockchain network");
                   }
+                  networkUniqueName = network.uniqueName;
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>
                     settlemint.blockchainNode.list(applicationUniqueName),
                   );
                   const connectedNodes = await blockchainNodePrompt({
                     env,
-                    nodes: blockchainNodes.filter((node) => node.blockchainNetwork?.uniqueName === networkUniqueName),
+                    nodes: blockchainNodes.filter((node) => node.blockchainNetwork?.uniqueName === network.uniqueName),
                     accept: acceptDefaults,
                     promptMessage: "Which blockchain node do you want to connect the load balancer to?",
                     allowAll: true,

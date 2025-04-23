@@ -61,7 +61,7 @@ export function getCreateCommand({
   name: string;
   type: ResourceType;
   subType?: string;
-  alias: string;
+  alias?: string;
   examples: CommandExample[];
   execute: (
     cmd: Command<[string], DefaultArgs>,
@@ -78,13 +78,16 @@ export function getCreateCommand({
   requiresDeployment?: boolean;
 }) {
   const cmd = new Command(sanitizeCommandName(name))
-    .alias(alias)
     .description(`Create a new ${subType ? `${subType} ${type}` : type} in the SettleMint platform.`)
     .usage(createExamples(examples))
     .argument("<name>", `The ${subType ? `${subType} ${type}` : type} name`)
     .option("-a, --accept-defaults", "Accept the default values")
     .option("-d, --default", `Save as default ${type}`)
     .option("--prod", "Connect to production environment");
+
+  if (alias) {
+    cmd.alias(alias);
+  }
 
   if (requiresDeployment) {
     cmd
