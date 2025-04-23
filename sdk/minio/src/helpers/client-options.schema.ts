@@ -1,3 +1,4 @@
+import { UrlSchema } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
 
 /**
@@ -5,7 +6,7 @@ import { z } from "zod";
  */
 export const ClientOptionsSchema = z.object({
   /** The URL of the MinIO instance to connect to */
-  instance: z.string().url(),
+  instance: UrlSchema,
 });
 
 /**
@@ -19,7 +20,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  */
 export const ServerClientOptionsSchema = z.object({
   /** The URL of the MinIO instance to connect to */
-  instance: z.string().url(),
+  instance: UrlSchema,
   /** The MinIO access key used to authenticate with the MinIO server */
   accessKey: z.string(),
   /** The MinIO secret key used to authenticate with the MinIO server */
