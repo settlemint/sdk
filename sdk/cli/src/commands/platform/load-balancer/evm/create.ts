@@ -79,6 +79,9 @@ export function loadBalancerEvmCreateCommand() {
                       ? [connectedNodes.uniqueName]
                       : [];
                 }
+                if (connectedNodesUniqueNames.length === 0) {
+                  return cancel("A load balancer must connect to at least one blockchain node");
+                }
                 if (!networkUniqueName) {
                   const applicationBlockchainNodes = await serviceSpinner("blockchain node", () =>
                     settlemint.blockchainNode.list(applicationUniqueName),
@@ -87,7 +90,9 @@ export function loadBalancerEvmCreateCommand() {
                     connectedNodesUniqueNames.includes(node.uniqueName),
                   );
                   if (selectedBlockchainNodes.length === 0) {
-                    return cancel("blockchain network");
+                    return cancel(
+                      `Blockchain node(s) '${connectedNodesUniqueNames.join(", ")}' are not part of the application '${applicationUniqueName}'`,
+                    );
                   }
                   const onTheSameNetwork = selectedBlockchainNodes.every(
                     (node) =>
@@ -133,7 +138,7 @@ export function loadBalancerEvmCreateCommand() {
       },
       {
         description: "Create an EVM load balancer and connect to specific blockchain nodes",
-        command: "platform create load-balancer evm my-lb --blockchain-nodes my-node1 my-node2 --accept-defaults",
+        command: "platform create load-balancer evm my-lb --blockchain-network my-network --accept-defaults",
       },
       {
         description: "Create an EVM load balancer in a different application",
