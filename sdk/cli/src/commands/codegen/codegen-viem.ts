@@ -20,8 +20,6 @@ export async function codegenViem(env: DotEnv) {
     return;
   }
 
-  note("Generating Viem resources");
-
   const projectDir = await projectRoot();
   // Install the package only if it's not already installed
   if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {

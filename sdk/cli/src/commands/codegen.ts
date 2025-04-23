@@ -72,6 +72,7 @@ export function codegenCommand(): Command {
         });
 
         if (generateViem) {
+          note("Generating Viem resources");
           await codegenViem(env);
         }
 
