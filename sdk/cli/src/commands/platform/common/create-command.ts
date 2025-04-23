@@ -9,6 +9,7 @@ import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
 import { type CommandExample, createExamples } from "@/utils/commands/create-examples";
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getBlockchainNodeEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { Command } from "@commander-js/extra-typings";
 import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
@@ -181,6 +182,8 @@ export function getCreateCommand({
           const newNode = await settlemint.blockchainNode.read(newEnv.SETTLEMINT_BLOCKCHAIN_NODE);
           newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK = newNode.blockchainNetwork.uniqueName;
           newEnv.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID = getBlockchainNetworkChainId(newNode.blockchainNetwork);
+          newEnv.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT =
+            getBlockchainNodeEndpoints(newNode).SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT;
         }
         await writeEnvSpinner(!!prod, newEnv);
         note(`${capitalizeFirstLetter(type)} ${result.name} set as default`);
