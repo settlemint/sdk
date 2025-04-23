@@ -1,6 +1,7 @@
 import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
 import select from "@inquirer/select";
 import type { BlockchainNode } from "@settlemint/sdk-js";
+import { isRunning } from "../../utils/cluster-service";
 
 /**
  * Arguments for the blockchain node prompt.
@@ -43,13 +44,13 @@ export async function blockchainNodePrompt<AllowAll extends boolean = false>({
       const filteredChoices: typeof choices = filterRunningOnly
         ? choices
             .filter(({ value: node }) => {
-              return Array.isArray(node) ? true : node === undefined || node?.status === "COMPLETED";
+              return Array.isArray(node) ? true : isRunning(node);
             })
             .map((item) => {
               if (Array.isArray(item.value)) {
                 return {
                   ...item,
-                  value: item.value.filter((n) => n === undefined || n.status === "COMPLETED"),
+                  value: item.value.filter(isRunning),
                 } as (typeof choices)[0];
               }
               return item;
