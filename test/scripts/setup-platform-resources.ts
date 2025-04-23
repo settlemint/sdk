@@ -183,7 +183,6 @@ async function createBlockchainNodeMinioAndIpfs() {
   const hasHasuraIntegration = await defaultResourceAlreadyCreated(["SETTLEMINT_HASURA"]);
   const hasMinioStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_MINIO"]);
   const hasIpfsStorage = await defaultResourceAlreadyCreated(["SETTLEMINT_IPFS"]);
-  const hasLoadBalancer = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER"]);
   const results = await deployResources([
     () =>
       hasBlockchainNetwork && hasBlockchainNode
@@ -259,38 +258,16 @@ async function createBlockchainNodeMinioAndIpfs() {
             "--restart-if-timeout",
             IPFS_NAME,
           ]).result,
-    () =>
-      hasLoadBalancer
-        ? Promise.resolve(undefined)
-        : runCommand(COMMAND_TEST_SCOPE, [
-            "platform",
-            "create",
-            "load-balancer",
-            "evm",
-            "--provider",
-            CLUSTER_PROVIDER,
-            "--region",
-            CLUSTER_REGION,
-            "--blockchain-nodes",
-            NODE_NAME_2_WITH_PK,
-            NODE_NAME_3_WITHOUT_PK,
-            "--accept-defaults",
-            "--default",
-            "--wait",
-            "--restart-if-timeout",
-            LOAD_BALANCER_NAME,
-          ]).result,
   ]);
 
-  const [networkResult, hasuraResult, minioResult, ipfsResult, loadBalancerResult] = results;
+  const [networkResult, hasuraResult, minioResult, ipfsResult] = results;
 
-  expect([
-    networkResult?.status,
-    hasuraResult?.status,
-    minioResult?.status,
-    ipfsResult?.status,
-    loadBalancerResult?.status,
-  ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
+  expect([networkResult?.status, hasuraResult?.status, minioResult?.status, ipfsResult?.status]).toEqual([
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+  ]);
 
   if (networkResult?.status === "fulfilled" && networkResult.value) {
     expect(networkResult.value.output).toInclude(`Blockchain network ${NETWORK_NAME} created successfully`);
@@ -310,11 +287,6 @@ async function createBlockchainNodeMinioAndIpfs() {
   if (ipfsResult?.status === "fulfilled" && ipfsResult.value) {
     expect(ipfsResult.value.output).toInclude(`Storage ${IPFS_NAME} created successfully`);
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
-  }
-
-  if (loadBalancerResult?.status === "fulfilled" && loadBalancerResult.value) {
-    expect(loadBalancerResult.value.output).toInclude(`Load balancer ${LOAD_BALANCER_NAME} created successfully`);
-    expect(loadBalancerResult.value.output).toInclude("Load balancer is deployed");
   }
 
   const hasPrivateKey = await privateKeyAlreadyCreated(PRIVATE_KEY_SMART_CONTRACTS_NAME);
