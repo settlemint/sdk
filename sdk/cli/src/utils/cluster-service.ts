@@ -14,5 +14,6 @@ export function hasPrivateKey(service: Pick<BlockchainNode, "privateKeys">) {
 }
 
 export function isRunning(service: Pick<BlockchainNode, "status"> | undefined) {
+  // 'undefined' is passed if the service is set to 'none' (see none option in prompts)
   return service === undefined || service?.status === "COMPLETED";
 }

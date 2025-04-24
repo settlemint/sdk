@@ -95,6 +95,11 @@ export function runCommand(
 }
 
 export function forceExitAllCommands(testScope: string) {
+  if (Array.isArray(commandsRunning[testScope]) && commandsRunning[testScope].length > 0) {
+    console.log(
+      `[forceExitAllCommands] Killing all commands for test scope ${testScope} (count: ${commandsRunning[testScope].length})`,
+    );
+  }
   // biome-ignore lint/complexity/noForEach: <explanation>
   commandsRunning[testScope]?.forEach((command) => command.pid && killProcess(command.pid));
   commandsRunning[testScope] = [];

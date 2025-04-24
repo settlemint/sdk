@@ -1,4 +1,5 @@
 import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { isRunning } from "@/utils/cluster-service";
 import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
 
@@ -45,7 +46,7 @@ export async function theGraphPrompt({
     isRequired,
     defaultHandler: async ({ defaultService: defaultMiddleware, choices }) => {
       const filteredChoices = filterRunningOnly
-        ? choices.filter(({ value: middleware }) => middleware === undefined || middleware?.status === "COMPLETED")
+        ? choices.filter(({ value: middleware }) => isRunning(middleware))
         : choices;
       return select({
         message: "Which The Graph instance do you want to connect to?",

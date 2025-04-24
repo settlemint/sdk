@@ -9,6 +9,7 @@ import { blockchainNodeRead } from "./blockchain-node.js";
  */
 const LoadBalancerFragment = graphql(`
   fragment LoadBalancer on LoadBalancer {
+    __typename
     id
     uniqueName
     name
@@ -131,7 +132,7 @@ export const loadBalancerRead = (
     const { loadBalancerByUniqueName: loadBalancer } = await gqlClient.request(getLoadBalancer, {
       uniqueName: loadBalancerUniqueName,
     });
-    return loadBalancer;
+    return loadBalancer as LoadBalancer;
   };
 };
 
@@ -147,7 +148,7 @@ export const loadBalancerList = (gqlClient: GraphQLClient) => {
     const {
       loadBalancersByUniqueName: { items },
     } = await gqlClient.request(getLoadBalancers, { applicationUniqueName });
-    return items;
+    return items as LoadBalancer[];
   };
 };
 
@@ -172,7 +173,7 @@ export const loadBalancerCreate = (gqlClient: GraphQLClient) => {
       blockchainNetworkId: blockchainNetwork.id,
       connectedNodes: connectedNodes.map((node) => node.id),
     });
-    return loadBalancer;
+    return loadBalancer as LoadBalancer;
   };
 };
 
@@ -189,5 +190,5 @@ export const loadBalancerRestart =
     const { restartLoadBalancerByUniqueName: loadBalancer } = await gqlClient.request(restartLoadBalancer, {
       uniqueName: loadBalancerUniqueName,
     });
-    return loadBalancer;
+    return loadBalancer as LoadBalancer;
   };

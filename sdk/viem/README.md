@@ -31,6 +31,9 @@
   - [Functions](#functions)
     - [getPublicClient()](#getpublicclient)
     - [getWalletClient()](#getwalletclient)
+  - [Enumerations](#enumerations)
+    - [OTPAlgorithm](#otpalgorithm)
+    - [WalletVerificationType](#walletverificationtype)
   - [Interfaces](#interfaces)
     - [ClientOptions](#clientoptions)
     - [WalletVerificationOptions](#walletverificationoptions)
@@ -49,7 +52,7 @@ The SettleMint Viem SDK provides a lightweight wrapper that automatically config
 
 > **getPublicClient**(`options`): `object`
 
-Defined in: [sdk/viem/src/viem.ts:59](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L59)
+Defined in: [sdk/viem/src/viem.ts:66](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L66)
 
 Get a public client. Use this if you need to read from the blockchain.
 
@@ -86,9 +89,9 @@ console.log(block);
 
 #### getWalletClient()
 
-> **getWalletClient**\<`C`\>(`options`): (`verificationOptions?`) => `object`
+> **getWalletClient**\<`C`\>(`options`): (`verificationOptions?`) => `Client`\<`Transport`, `C`, `undefined` \| `Account`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`C`, `undefined` \| `Account`\>\>
 
-Defined in: [sdk/viem/src/viem.ts:121](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L121)
+Defined in: [sdk/viem/src/viem.ts:128](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L128)
 
 Get a wallet client. Use this if you need to write to the blockchain.
 
@@ -108,7 +111,7 @@ Get a wallet client. Use this if you need to write to the blockchain.
 
 A function that returns a wallet client. The function can be called with verification options.
 
-> (`verificationOptions?`): `object`
+> (`verificationOptions?`): `Client`\<`Transport`, `C`, `undefined` \| `Account`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`C`, `undefined` \| `Account`\>\>
 
 ###### Parameters
 
@@ -118,7 +121,7 @@ A function that returns a wallet client. The function can be called with verific
 
 ###### Returns
 
-`object`
+`Client`\<`Transport`, `C`, `undefined` \| `Account`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`C`, `undefined` \| `Account`\>\>
 
 ##### Example
 
@@ -148,11 +151,51 @@ const transactionHash = await walletClient().writeContract({
 console.log(transactionHash);
 ```
 
+### Enumerations
+
+#### OTPAlgorithm
+
+Defined in: [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:18](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L18)
+
+Supported hash algorithms for One-Time Password (OTP) verification.
+These algorithms determine the cryptographic function used to generate OTP codes.
+
+##### Enumeration Members
+
+| Enumeration Member | Value | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="sha1"></a> `SHA1` | `"SHA1"` | SHA-1 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:20](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L20) |
+| <a id="sha224"></a> `SHA224` | `"SHA224"` | SHA-224 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:22](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L22) |
+| <a id="sha256"></a> `SHA256` | `"SHA256"` | SHA-256 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:24](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L24) |
+| <a id="sha3_224"></a> `SHA3_224` | `"SHA3-224"` | SHA3-224 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:30](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L30) |
+| <a id="sha3_256"></a> `SHA3_256` | `"SHA3-256"` | SHA3-256 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:32](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L32) |
+| <a id="sha3_384"></a> `SHA3_384` | `"SHA3-384"` | SHA3-384 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:34](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L34) |
+| <a id="sha3_512"></a> `SHA3_512` | `"SHA3-512"` | SHA3-512 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:36](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L36) |
+| <a id="sha384"></a> `SHA384` | `"SHA384"` | SHA-384 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:26](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L26) |
+| <a id="sha512"></a> `SHA512` | `"SHA512"` | SHA-512 hash algorithm | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:28](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L28) |
+
+***
+
+#### WalletVerificationType
+
+Defined in: [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:5](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L5)
+
+Types of wallet verification methods supported by the system.
+Used to identify different verification mechanisms when creating or managing wallet verifications.
+
+##### Enumeration Members
+
+| Enumeration Member | Value | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="otp"></a> `OTP` | `"OTP"` | One-Time Password verification method | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:9](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L9) |
+| <a id="pincode"></a> `PINCODE` | `"PINCODE"` | PIN code verification method | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:7](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L7) |
+| <a id="secret_codes"></a> `SECRET_CODES` | `"SECRET_CODES"` | Secret recovery codes verification method | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:11](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L11) |
+
 ### Interfaces
 
 #### ClientOptions
 
-Defined in: [sdk/viem/src/viem.ts:16](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L16)
+Defined in: [sdk/viem/src/viem.ts:23](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L23)
 
 The options for the viem client.
 
@@ -160,17 +203,17 @@ The options for the viem client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken` | `string` | The access token | [sdk/viem/src/viem.ts:20](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L20) |
-| <a id="chainid"></a> `chainId` | `string` | The chain id | [sdk/viem/src/viem.ts:24](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L24) |
-| <a id="chainname"></a> `chainName` | `string` | The chain name | [sdk/viem/src/viem.ts:28](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L28) |
-| <a id="httptransportconfig"></a> `httpTransportConfig?` | `HttpTransportConfig` | The http transport config | [sdk/viem/src/viem.ts:36](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L36) |
-| <a id="rpcurl"></a> `rpcUrl` | `string` | The json rpc url | [sdk/viem/src/viem.ts:32](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L32) |
+| <a id="accesstoken"></a> `accessToken` | `string` | The access token | [sdk/viem/src/viem.ts:27](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L27) |
+| <a id="chainid"></a> `chainId` | `string` | The chain id | [sdk/viem/src/viem.ts:31](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L31) |
+| <a id="chainname"></a> `chainName` | `string` | The chain name | [sdk/viem/src/viem.ts:35](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L35) |
+| <a id="httptransportconfig"></a> `httpTransportConfig?` | `HttpTransportConfig` | The http transport config | [sdk/viem/src/viem.ts:43](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L43) |
+| <a id="rpcurl"></a> `rpcUrl` | `string` | The json rpc url | [sdk/viem/src/viem.ts:39](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L39) |
 
 ***
 
 #### WalletVerificationOptions
 
-Defined in: [sdk/viem/src/viem.ts:79](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L79)
+Defined in: [sdk/viem/src/viem.ts:86](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L86)
 
 The options for the wallet client.
 
@@ -178,8 +221,8 @@ The options for the wallet client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeresponse"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:87](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L87) |
-| <a id="verificationid"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:83](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L83) |
+| <a id="challengeresponse"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:94](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L94) |
+| <a id="verificationid"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:90](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/viem/src/viem.ts#L90) |
 
 ## Contributing
 

@@ -50,7 +50,14 @@ export async function subgraphPrompt({
     if (env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH) {
       return [env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH];
     }
-    return subgraphNames.length === 1 ? subgraphNames : [];
+    if (subgraphNames.length === 1) {
+      return subgraphNames;
+    }
+    // Use the kit subgraph as default if it exists
+    if (subgraphNames.includes("kit")) {
+      return ["kit"];
+    }
+    return [];
   }
 
   if (!allowNew) {
