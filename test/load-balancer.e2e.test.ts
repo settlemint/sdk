@@ -1,13 +1,57 @@
-import { describe, expect, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, test } from "bun:test";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { getApplicationOrPersonalAccessToken } from "../sdk/cli/src/utils/get-app-or-personal-token";
 import { CLUSTER_PROVIDER, CLUSTER_REGION } from "./constants/test-resources";
 import { runCommand } from "./utils/run-command";
 
 const COMMAND_TEST_SCOPE = "load-balancer-test";
-const FAKE_NODE_OTHER_NETWORK = "fake-node-other-network";
+const TEST_APPLICATION_NAME = "load-balancer-test-application";
 
 describe("Load Balancer E2E Tests", () => {
-  test("should not allow creating a load balancer without specifying nodes", async () => {
+  let applicationUniqueName: string;
+
+  beforeAll(async () => {
+    const env = await loadEnv(false, false);
+    const accessToken = await getApplicationOrPersonalAccessToken({
+      env,
+      instance: env.SETTLEMINT_INSTANCE!,
+      prefer: "personal",
+    });
+    const settlemint = createSettleMintClient({
+      instance: env.SETTLEMINT_INSTANCE!,
+      accessToken,
+    });
+    try {
+      await runCommand(COMMAND_TEST_SCOPE, [
+        "platform",
+        "create",
+        "application",
+        TEST_APPLICATION_NAME,
+        "--accept-defaults",
+      ]).result;
+    } catch (err) {
+      console.error(err);
+    }
+    const applications = await settlemint.application.list(env.SETTLEMINT_WORKSPACE!);
+    applicationUniqueName = applications.find((application) => application.name === TEST_APPLICATION_NAME)?.uniqueName!;
+    if (!applicationUniqueName) {
+      throw new Error("Application not found");
+    }
+  });
+
+  afterAll(async () => {
+    await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "delete",
+      "application",
+      applicationUniqueName,
+      "--accept-defaults",
+      "-f",
+    ]).result;
+  });
+
+  test("should not allow creating a load balancer without specifying a network", async () => {
     const output: string[] = [];
     const onOutput = (message: string) => {
       output.push(message.toString());
@@ -19,6 +63,10 @@ describe("Load Balancer E2E Tests", () => {
         "load-balancer",
         "evm",
         "test-load-balancer",
+        "--application",
+        applicationUniqueName,
+        "--blockchain-network",
+        "fake-network",
         "--provider",
         CLUSTER_PROVIDER,
         "--region",
@@ -30,7 +78,7 @@ describe("Load Balancer E2E Tests", () => {
       // Should not reach this point
       expect(false).toBe(true);
     } catch (err) {
-      expect(output.join("\n")).toContain("A load balancer must connect to at least one blockchain node");
+      expect(output.join("\n")).toContain("No blockchain network selected");
     }
   });
 
