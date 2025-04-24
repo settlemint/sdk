@@ -1,4 +1,5 @@
 import { maskTokens } from "@/logging/mask-tokens.js";
+import { shouldPrint } from "@/terminal/should-print.js";
 import { greenBright, inverse } from "yoctocolors";
 
 /**
@@ -13,6 +14,9 @@ import { greenBright, inverse } from "yoctocolors";
  * outro("Deployment completed successfully!");
  */
 export const outro = (msg: string): void => {
+  if (!shouldPrint()) {
+    return;
+  }
   console.log("");
   console.log(inverse(greenBright(maskTokens(msg))));
   console.log("");

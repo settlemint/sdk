@@ -22,10 +22,7 @@ export function configCommand() {
     .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
     .addOption(new Option("-o, --output <output>", "The output format").choices(["json", "yaml"]))
     .action(async ({ prod, instance, output }) => {
-      const printToTerminal = !output;
-      if (printToTerminal) {
-        intro("Getting platform configuration");
-      }
+      intro("Getting platform configuration");
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
       const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
@@ -70,7 +67,11 @@ export function configCommand() {
         preDeployedContracts: platformConfig.preDeployedContracts.sort(),
       };
 
-      if (printToTerminal) {
+      if (output === "json") {
+        jsonOutput(platformConfigData);
+      } else if (output === "yaml") {
+        yamlOutput(platformConfigData);
+      } else {
         table("Templates (Kits)", platformConfigData.kits);
 
         table("Use cases (Smart Contract Sets)", platformConfigData.useCases);
@@ -78,14 +79,8 @@ export function configCommand() {
         table("Providers and regions", platformConfigData.deploymentEngineTargets);
 
         list("Pre-deployed abis (Smart Contract Portal)", platformConfigData.preDeployedContracts);
-      } else if (output === "json") {
-        jsonOutput(platformConfigData);
-      } else if (output === "yaml") {
-        yamlOutput(platformConfigData);
       }
 
-      if (printToTerminal) {
-        outro("Platform configuration retrieved");
-      }
+      outro("Platform configuration retrieved");
     });
 }

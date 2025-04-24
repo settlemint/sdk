@@ -2,6 +2,7 @@ import { camelCaseToWords } from "@/string.js";
 import { Table } from "console-table-printer";
 import { whiteBright } from "yoctocolors";
 import { note } from "./note.js";
+import { shouldPrint } from "./should-print.js";
 /**
  * Displays data in a formatted table in the terminal.
  *
@@ -18,6 +19,10 @@ import { note } from "./note.js";
  * table("My Table", data);
  */
 export function table(title: string, data: unknown[]): void {
+  if (!shouldPrint()) {
+    return;
+  }
+
   note(title);
 
   if (!data || data.length === 0) {

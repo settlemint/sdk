@@ -76,10 +76,8 @@ export function servicesCommand() {
     .addOption(new Option("-t, --type <type...>", "The type(s) of service to list").choices(SERVICE_TYPES))
     .addOption(new Option("-o, --output <output>", "The output format").choices(["wide", "json", "yaml"]))
     .action(async ({ application, type, output }) => {
-      const printToTerminal = !output || output === "wide";
-      if (printToTerminal) {
-        intro("Listing application services");
-      }
+      intro("Listing application services");
+
       const env: Partial<DotEnv> = await loadEnv(false, false);
       const selectedInstance = await instancePrompt(env, true);
       const personalAccessToken = await getInstanceCredentials(selectedInstance);
@@ -92,6 +90,7 @@ export function servicesCommand() {
         instance: selectedInstance,
       });
 
+      const printToTerminal = !output || output === "wide";
       const applicationUniqueName =
         application ??
         env.SETTLEMINT_APPLICATION ??
@@ -124,19 +123,19 @@ export function servicesCommand() {
         },
         services: servicesToShow,
       };
-      if (printToTerminal) {
+
+      if (output === "json") {
+        jsonOutput(data);
+      } else if (output === "yaml") {
+        yamlOutput(data);
+      } else {
         table(
           `Services for ${selectedApplication.name} (${applicationUniqueName}) - ${getApplicationUrl(selectedInstance, selectedApplication)}`,
           servicesToShow,
         );
-      } else if (output === "json") {
-        jsonOutput(data);
-      } else if (output === "yaml") {
-        yamlOutput(data);
       }
-      if (printToTerminal) {
-        outro("Application services listed");
-      }
+
+      outro("Application services listed");
     });
 }
 
