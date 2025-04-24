@@ -3,5 +3,5 @@
  * @returns true if the terminal should print, false otherwise.
  */
 export function shouldPrint() {
-  return process.env.DISABLE_TERMINAL !== "true";
+  return process.env.SETTLEMINT_DISABLE_TERMINAL !== "true";
 }

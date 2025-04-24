@@ -64,7 +64,7 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
         rootCmd._lastCommand._commandPath = commandPath;
       }
       if (isJsonOrYamlOutput(thisCommand)) {
-        process.env.DISABLE_TERMINAL = "true";
+        process.env.SETTLEMINT_DISABLE_TERMINAL = "true";
       }
       if (isLeafCommand(thisCommand)) {
         ascii();
