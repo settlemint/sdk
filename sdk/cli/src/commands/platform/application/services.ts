@@ -221,6 +221,8 @@ function getItemsForServiceType(services: Awaited<ReturnType<typeof servicesSpin
       return services.blockchainNetworks;
     case "blockchain-node":
       return services.blockchainNodes;
+    case "load-balancer":
+      return services.loadBalancers;
     default:
       return [];
   }
