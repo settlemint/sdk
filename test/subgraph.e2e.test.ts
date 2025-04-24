@@ -15,8 +15,8 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";
 const COMMAND_TEST_SCOPE = __filename;
-const USE_CASE = "solidity-token-erc721-generative-art";
-const SUBGRAPH_NAME = "token-erc721-generative-art";
+const USE_CASE = "solidity-token-erc721";
+const SUBGRAPH_NAME = "token-erc721";
 
 const projectDir = join(__dirname, PROJECT_NAME);
 
@@ -50,7 +50,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
     ).result;
     expect((await stat(projectDir)).isDirectory()).toBeTrue();
     expect(output).toInclude("Your smart contract set is ready to go!");
-    await $`bun install --frozen-lockfile`.cwd(projectDir);
+    await $`bun install --save-text-lockfile`.cwd(projectDir);
     if (await exists(join(__dirname, "../.env"))) {
       await copyFile(join(__dirname, "../.env"), join(projectDir, ".env"));
     }
@@ -121,7 +121,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
   test("Deploy subgraphs (fix subgraph.config.json and deploy)", async () => {
     const config = await getSubgraphConfig(projectDir);
     const datasourceMap = {
-      ExampleERC721: "MetaDogModule#MetaDog",
+      ExampleERC721: "ExampleERC721Module#ExampleERC721",
     };
     expect(config).toBeDefined();
     expect(config).not.toBeNull();
