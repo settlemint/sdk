@@ -146,13 +146,18 @@ export function getCreateCommand({
       });
 
       if (wait) {
-        await waitForCompletion({
+        const isDeployed = await waitForCompletion({
           settlemint,
           type: waitFor?.resourceType ?? type,
           uniqueName: waitFor?.uniqueName ?? result.uniqueName,
           action: "deploy",
           restartIfTimeout,
         });
+        if (!isDeployed) {
+          throw new Error(
+            `Failed to deploy ${waitFor?.resourceType ?? type} ${waitFor?.uniqueName ?? result.uniqueName}`,
+          );
+        }
 
         if (waitFor) {
           outro(`${capitalizeFirstLetter(waitFor.resourceType)} ${waitFor.name} created successfully`);

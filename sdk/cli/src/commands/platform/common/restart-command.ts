@@ -104,7 +104,15 @@ export function getRestartCommand({
       });
 
       if (wait) {
-        await waitForCompletion({ settlemint, type, uniqueName: serviceUniqueName, action: "restart" });
+        const isRestarted = await waitForCompletion({
+          settlemint,
+          type,
+          uniqueName: serviceUniqueName,
+          action: "restart",
+        });
+        if (!isRestarted) {
+          throw new Error(`Failed to restart ${type} ${uniqueName}`);
+        }
       }
 
       outro(`${capitalizeFirstLetter(type)} ${result.name} restart initiated successfully`);
