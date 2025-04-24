@@ -15,8 +15,8 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs";
 const COMMAND_TEST_SCOPE = __filename;
-const USE_CASE = "solidity-diamond-bond";
-const SUBGRAPH_NAME = "diamond-bond";
+const USE_CASE = "solidity-token-erc721-generative-art";
+const SUBGRAPH_NAME = "token-erc721-generative-art";
 
 const projectDir = join(__dirname, PROJECT_NAME);
 
@@ -87,8 +87,14 @@ describe("Build and deploy a subgraph using the SDK", () => {
     }).result;
     expect(output).toInclude("Build completed");
     const subgraphYaml = await getSubgraphYamlConfig(projectDir);
-    expect(subgraphYaml.dataSources).toHaveLength(4);
-    expect(subgraphYaml.dataSources.map((ds) => ds.name)).toEqual(["diamond", "erc20", "pausable", "accesscontrol"]);
+    expect(subgraphYaml.dataSources).toHaveLength(5);
+    expect(subgraphYaml.dataSources.map((ds) => ds.name)).toEqual([
+      "erc721",
+      "pausable",
+      "ownable",
+      "erc721ipfs",
+      "erc721freezable",
+    ]);
   });
 
   test("Codegen subgraph", async () => {
@@ -114,13 +120,16 @@ describe("Build and deploy a subgraph using the SDK", () => {
 
   test("Deploy subgraphs (fix subgraph.config.json and deploy)", async () => {
     const config = await getSubgraphConfig(projectDir);
+    const datasourceMap = {
+      ExampleERC721: "MetaDogModule#MetaDog",
+    };
     expect(config).toBeDefined();
     expect(config).not.toBeNull();
     await updateSubgraphConfig(
       {
         ...config!,
         datasources: config!.datasources.map((source) => {
-          const addressKey = Object.keys(contractsDeploymentInfo).find((key) => key.endsWith(`#${source.name}`));
+          const addressKey = datasourceMap[source.name as keyof typeof datasourceMap];
           const address = addressKey ? contractsDeploymentInfo[addressKey]! : source.address;
           return {
             ...source,

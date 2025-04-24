@@ -1,6 +1,6 @@
-import { tryParseJson } from "@settlemint/sdk-utils";
+import { extractJsonObject } from "@settlemint/sdk-utils";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand, note } from "@settlemint/sdk-utils/terminal";
+import { type CommandError, executeCommand, note } from "@settlemint/sdk-utils/terminal";
 
 export type HardhatConfig = {
   networks?: {
@@ -14,7 +14,13 @@ export async function getHardhatConfigData(envConfig: Record<string, string>): P
     const { command, args } = await getPackageManagerExecutable();
     const output = await executeCommand(
       command,
-      [...args, "ts-node", "-e", `import hardhat from "hardhat";\nconsole.log(JSON.stringify(hardhat.userConfig));`],
+      [
+        ...args,
+        "ts-node",
+        "-e",
+        `import hardhat from "hardhat";\nconsole.log(JSON.stringify(hardhat.userConfig));`,
+        "--transpileOnly",
+      ],
       {
         env: {
           ...process.env,
@@ -23,14 +29,14 @@ export async function getHardhatConfigData(envConfig: Record<string, string>): P
         silent: true,
       },
     );
-    const config = tryParseJson<unknown>(output.join(" "));
+    const config = extractJsonObject<unknown>(output.join(" "));
     if (isHardhatConfig(config)) {
       return config;
     }
-    throw new Error("Invalid hardhat config");
+    throw new Error(`Invalid hardhat config: ${output.join("\n")}`);
   } catch (err) {
-    const error = err as Error;
-    note(`Error reading hardhat.config.ts: ${error.message}`);
+    const error = err as CommandError;
+    note(`Error reading hardhat.config.ts: ${error.output?.join("\n") ?? error.message}`);
     return {};
   }
 }

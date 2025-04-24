@@ -32,3 +32,17 @@ export function tryParseJson<T>(value: string, defaultValue: T | null = null): T
     return defaultValue;
   }
 }
+
+/**
+ * Extracts a JSON object from a string.
+ *
+ * @param value - The string to extract the JSON object from
+ * @returns The parsed JSON object, or null if no JSON object is found
+ */
+export function extractJsonObject<T>(value: string): T | null {
+  const result = /\{([\s\S]*)\}/.exec(value);
+  if (!result) {
+    return null;
+  }
+  return tryParseJson<T>(result[0]);
+}
