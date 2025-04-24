@@ -1,4 +1,5 @@
 import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { isRunning } from "@/utils/cluster-service";
 import select from "@inquirer/select";
 import type { BlockchainNode, LoadBalancer } from "@settlemint/sdk-js";
 
@@ -39,9 +40,7 @@ export async function blockchainNodeOrLoadBalancerPrompt({
     envKey: "SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER",
     isRequired,
     defaultHandler: async ({ defaultService: defaultNode, choices }) => {
-      const filteredChoices = filterRunningOnly
-        ? choices.filter(({ value: node }) => node === undefined || node?.status === "COMPLETED")
-        : choices;
+      const filteredChoices = filterRunningOnly ? choices.filter(({ value: node }) => isRunning(node)) : choices;
       return select({
         message: promptMessage ?? "Which blockchain node or load balancer do you want to connect to?",
         choices: filteredChoices,

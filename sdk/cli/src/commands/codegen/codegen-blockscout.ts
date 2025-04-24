@@ -135,6 +135,7 @@ export async function codegenBlockscout(env: DotEnv) {
           }
         }
         `,
+        operationName: "IntrospectionQuery",
       }),
     });
     await writeFile(introspectionJsonPath, JSON.stringify(data));

@@ -70,8 +70,8 @@ beforeAll(async () => {
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
     await createBlockchainNodeMinioAndIpfs();
-    await createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode();
     await createLoadBalancer();
+    await createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode();
     await createGraphMiddlewareAndActivatedPrivateKey();
   } catch (err) {
     console.error("Failed to create resources", err);

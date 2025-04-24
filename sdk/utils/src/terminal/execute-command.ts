@@ -10,6 +10,26 @@ export interface ExecuteCommandOptions extends SpawnOptionsWithoutStdio {
 }
 
 /**
+ * Error class for command execution errors
+ * @extends Error
+ */
+export class CommandError extends Error {
+  /**
+   * Constructs a new CommandError
+   * @param message - The error message
+   * @param code - The exit code of the command
+   * @param output - The output of the command
+   */
+  constructor(
+    message: string,
+    public readonly code: number,
+    public readonly output: string[],
+  ) {
+    super(message);
+  }
+}
+
+/**
  * Executes a command with the given arguments in a child process.
  * Pipes stdin to the child process and captures stdout/stderr output.
  * Masks any sensitive tokens in the output before displaying or returning.
@@ -18,7 +38,7 @@ export interface ExecuteCommandOptions extends SpawnOptionsWithoutStdio {
  * @param args - Array of arguments to pass to the command
  * @param options - Options for customizing command execution
  * @returns Array of output strings from stdout and stderr
- * @throws {Error} If the process fails to start or exits with non-zero code
+ * @throws {CommandError} If the process fails to start or exits with non-zero code
  * @example
  * import { executeCommand } from "@settlemint/sdk-utils/terminal";
  *
@@ -51,14 +71,16 @@ export async function executeCommand(
       }
       output.push(maskedData);
     });
-    child.on("error", (err) => reject(err));
+    child.on("error", (err) =>
+      reject(new CommandError(err.message, "code" in err && typeof err.code === "number" ? err.code : 1, output)),
+    );
     child.on("close", (code) => {
       if (code === 0 || code === null || code === 143) {
         process.stdin.unpipe(child.stdin);
         resolve(output);
         return;
       }
-      reject(new Error(`Command "${command}" exited with code ${code}`));
+      reject(new CommandError(`Command "${command}" exited with code ${code}`, code, output));
     });
   });
 }
