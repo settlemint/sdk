@@ -9,6 +9,7 @@ import { blockchainNodeRead } from "./blockchain-node.js";
  */
 const LoadBalancerFragment = graphql(`
   fragment LoadBalancer on LoadBalancer {
+    __typename
     id
     uniqueName
     name
