@@ -42,12 +42,9 @@ export function blockscoutInsightsCreateCommand() {
                 if (!applicationUniqueName) {
                   return missingApplication();
                 }
-                let blockchainNodeUniqueName = loadBalancer
-                  ? undefined
-                  : (blockchainNode ?? env.SETTLEMINT_BLOCKCHAIN_NODE);
-                const loadBalancerUniqueName = blockchainNodeUniqueName
-                  ? undefined
-                  : (loadBalancer ?? env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER);
+
+                let blockchainNodeUniqueName = blockchainNode;
+                let loadBalancerUniqueName = loadBalancer;
 
                 if (!blockchainNodeUniqueName && !loadBalancerUniqueName) {
                   const blockchainNodes = await serviceSpinner("blockchain node", () =>
@@ -56,17 +53,21 @@ export function blockscoutInsightsCreateCommand() {
                   const loadBalancers = await serviceSpinner("load balancer", () =>
                     settlemint.loadBalancer.list(applicationUniqueName),
                   );
-                  const node = await blockchainNodeOrLoadBalancerPrompt({
+                  const nodeOrLoadbalancer = await blockchainNodeOrLoadBalancerPrompt({
                     env,
                     nodes: blockchainNodes,
                     loadBalancers,
                     accept: acceptDefaults,
                     isRequired: true,
                   });
-                  if (!node) {
+                  if (!nodeOrLoadbalancer) {
                     return nothingSelectedError("blockchain node");
                   }
-                  blockchainNodeUniqueName = node.uniqueName;
+                  if (nodeOrLoadbalancer.__typename?.endsWith("LoadBalancer")) {
+                    loadBalancerUniqueName = nodeOrLoadbalancer.uniqueName;
+                  } else {
+                    blockchainNodeUniqueName = nodeOrLoadbalancer.uniqueName;
+                  }
                 }
 
                 const result = await showSpinner(() =>
