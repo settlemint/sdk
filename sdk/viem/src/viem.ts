@@ -78,13 +78,7 @@ export const getPublicClient = (options: ClientOptions) =>
         },
       },
     }),
-  })
-    .extend(createWallet)
-    .extend(getWalletVerifications)
-    .extend(createWalletVerification)
-    .extend(deleteWalletVerification)
-    .extend(createWalletVerificationChallenges)
-    .extend(verifyWalletVerificationChallenge);
+  });
 
 /**
  * The options for the wallet client.
@@ -182,3 +176,5 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
     })
   );
 }
+
+export { OTPAlgorithm, WalletVerificationType } from "./custom-actions/types/wallet-verification.enum.js";
