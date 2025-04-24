@@ -109,9 +109,9 @@ export function subgraphRemoveCommand() {
       await writeEnvSpinner(!!prod, {
         ...env,
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
+        ...graphEndpoints,
         SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH:
           env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH === graphName ? undefined : env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH,
-        ...graphEndpoints,
       });
       outro(`Subgraph ${graphName} removed successfully`);
     });

@@ -142,6 +142,7 @@ export function subgraphDeployCommand() {
         ...env,
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
         ...graphEndpoints,
+        SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? graphName,
       });
       outro(`Subgraph ${graphName} deployed successfully`);
     });
