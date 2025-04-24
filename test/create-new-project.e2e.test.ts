@@ -92,7 +92,7 @@ describe("Setup a project using the SDK", () => {
 
     expect(env.SETTLEMINT_THEGRAPH).toBeString();
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
-    // expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
+    expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
 
     expect(env.SETTLEMINT_PORTAL).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
