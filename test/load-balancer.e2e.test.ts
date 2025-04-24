@@ -5,7 +5,7 @@ import { getInstanceCredentials } from "../sdk/cli/src/utils/config";
 import { CLUSTER_PROVIDER, CLUSTER_REGION } from "./constants/test-resources";
 import { runCommand } from "./utils/run-command";
 
-const COMMAND_TEST_SCOPE = "load-balancer-test";
+const COMMAND_TEST_SCOPE = __filename;
 const TEST_APPLICATION_NAME = "load-balancer-test-application";
 
 describe("Load Balancer E2E Tests", () => {
