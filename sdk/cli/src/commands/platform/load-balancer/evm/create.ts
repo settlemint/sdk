@@ -5,6 +5,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNetworkPrompt } from "@/prompts/cluster-service/blockchain-network.prompt";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { getBlockchainNodeOrLoadBalancerEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -141,6 +142,7 @@ export function loadBalancerEvmCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: result.uniqueName,
+                      ...getBlockchainNodeOrLoadBalancerEndpoints(result),
                     };
                   },
                 };
