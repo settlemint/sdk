@@ -38,8 +38,19 @@ export function tryParseJson<T>(value: string, defaultValue: T | null = null): T
  *
  * @param value - The string to extract the JSON object from
  * @returns The parsed JSON object, or null if no JSON object is found
+ * @throws {Error} If the input string is too long (longer than 1000 characters)
+ * @example
+ * import { extractJsonObject } from "@settlemint/sdk-utils";
+ *
+ * const json = extractJsonObject<{ port: number }>(
+ *   'port info: {"port": 3000}',
+ * );
+ * // Returns: { port: 3000 }
  */
 export function extractJsonObject<T>(value: string): T | null {
+  if (value.length > 1000) {
+    throw new Error("Input too long");
+  }
   const result = /\{([\s\S]*)\}/.exec(value);
   if (!result) {
     return null;
