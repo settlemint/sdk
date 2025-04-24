@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
-const COMMAND_TEST_SCOPE = "login-test";
+const COMMAND_TEST_SCOPE = __filename;
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);

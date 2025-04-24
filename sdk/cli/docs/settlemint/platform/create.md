@@ -646,20 +646,21 @@ Examples:
 Create a new EVM load balancer in the SettleMint platform.
 
 Arguments:
-  name                                     The EVM load balancer name
+  name                                      The EVM load balancer name
 
 Options:
-  -a, --accept-defaults                    Accept the default values
-  -d, --default                            Save as default load balancer
-  --prod                                   Connect to production environment
-  -w, --wait                               Wait until deployed
-  -r, --restart-if-timeout                 Restart if wait time is exceeded
-  --provider &lt;provider&gt;                    Network provider (run `settlemint platform config` to see available providers)
-  --region &lt;region&gt;                        Deployment region (run `settlemint platform config` to see available regions)
-  --size &lt;size&gt;                            Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
-  --type &lt;type&gt;                            Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
-  --app, --application &lt;application&gt;       The application unique name to create the load balancer in (defaults to application from env)
-  --blockchain-nodes &lt;blockchainNodes...&gt;  Blockchain node unique names where the load balancer connects to (must be from the same network)
-  -h, --help                               display help for command
+  -a, --accept-defaults                     Accept the default values
+  -d, --default                             Save as default load balancer
+  --prod                                    Connect to production environment
+  -w, --wait                                Wait until deployed
+  -r, --restart-if-timeout                  Restart if wait time is exceeded
+  --provider &lt;provider&gt;                     Network provider (run `settlemint platform config` to see available providers)
+  --region &lt;region&gt;                         Deployment region (run `settlemint platform config` to see available regions)
+  --size &lt;size&gt;                             Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
+  --type &lt;type&gt;                             Network type (choices: &quot;DEDICATED&quot;, &quot;SHARED&quot;, default: &quot;SHARED&quot;)
+  --app, --application &lt;application&gt;        The application unique name to create the load balancer in (defaults to application from env)
+  --blockchain-nodes &lt;blockchainNodes...&gt;   Blockchain node unique names where the load balancer connects to (must be from the same network)
+  --blockchain-network &lt;blockchainNetwork&gt;  Blockchain network unique name where the load balancer connects to, can be skipped if the --blockchain-nodes option is used (defaults to network from env)
+  -h, --help                                display help for command
 </pre>
 

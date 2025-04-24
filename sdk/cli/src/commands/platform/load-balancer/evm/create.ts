@@ -5,6 +5,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNetworkPrompt } from "@/prompts/cluster-service/blockchain-network.prompt";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { getBlockchainNodeOrLoadBalancerEndpoints } from "@/utils/get-cluster-service-endpoint";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -29,10 +30,24 @@ export function loadBalancerEvmCreateCommand() {
           "--blockchain-nodes <blockchainNodes...>",
           "Blockchain node unique names where the load balancer connects to (must be from the same network)",
         )
+        .option(
+          "--blockchain-network <blockchainNetwork>",
+          "Blockchain network unique name where the load balancer connects to, can be skipped if the --blockchain-nodes option is used (defaults to network from env)",
+        )
         .action(
           async (
             name,
-            { application, provider, region, size, type, blockchainNodes, acceptDefaults, ...defaultArgs },
+            {
+              application,
+              provider,
+              region,
+              size,
+              type,
+              blockchainNodes,
+              blockchainNetwork,
+              acceptDefaults,
+              ...defaultArgs
+            },
           ) => {
             return baseAction(
               {
@@ -47,61 +62,65 @@ export function loadBalancerEvmCreateCommand() {
                   return missingApplication();
                 }
 
-                let networkUniqueName: string | undefined;
+                const applicationBlockchainNodes = await serviceSpinner("blockchain node", () =>
+                  settlemint.blockchainNode.list(applicationUniqueName),
+                );
+
+                let networkUniqueName: string | undefined = blockchainNetwork;
                 let connectedNodesUniqueNames = blockchainNodes;
                 if (!connectedNodesUniqueNames) {
                   const networks = await serviceSpinner("blockchain network", () =>
                     settlemint.blockchainNetwork.list(applicationUniqueName),
                   );
-                  const network = await blockchainNetworkPrompt({
-                    env,
-                    networks,
-                    accept: acceptDefaults,
-                    isRequired: true,
-                  });
+                  const network = networkUniqueName
+                    ? networks.find((network) => network.uniqueName === networkUniqueName)
+                    : await blockchainNetworkPrompt({
+                        env,
+                        networks,
+                        accept: acceptDefaults,
+                        isRequired: true,
+                      });
                   if (!network) {
                     return nothingSelectedError("blockchain network");
                   }
                   networkUniqueName = network.uniqueName;
-                  const blockchainNodes = await serviceSpinner("blockchain node", () =>
-                    settlemint.blockchainNode.list(applicationUniqueName),
-                  );
+
                   const connectedNodes = await blockchainNodePrompt({
                     env,
-                    nodes: blockchainNodes.filter((node) => node.blockchainNetwork?.uniqueName === network.uniqueName),
+                    nodes: applicationBlockchainNodes.filter(
+                      (node) => node.blockchainNetwork?.uniqueName === network.uniqueName,
+                    ),
                     accept: acceptDefaults,
                     promptMessage: "Which blockchain node do you want to connect the load balancer to?",
                     allowAll: true,
                   });
                   connectedNodesUniqueNames = Array.isArray(connectedNodes)
-                    ? blockchainNodes.map((node) => node.uniqueName)
+                    ? applicationBlockchainNodes.map((node) => node.uniqueName)
                     : connectedNodes
                       ? [connectedNodes.uniqueName]
                       : [];
                 }
+
                 if (connectedNodesUniqueNames.length === 0) {
                   return cancel("A load balancer must connect to at least one blockchain node");
                 }
+
+                const selectedBlockchainNodes = applicationBlockchainNodes.filter((node) =>
+                  connectedNodesUniqueNames.includes(node.uniqueName),
+                );
+                if (selectedBlockchainNodes.length === 0) {
+                  return cancel(
+                    `Blockchain node(s) '${connectedNodesUniqueNames.join(", ")}' are not part of the application '${applicationUniqueName}'`,
+                  );
+                }
                 if (!networkUniqueName) {
-                  const applicationBlockchainNodes = await serviceSpinner("blockchain node", () =>
-                    settlemint.blockchainNode.list(applicationUniqueName),
-                  );
-                  const selectedBlockchainNodes = applicationBlockchainNodes.filter((node) =>
-                    connectedNodesUniqueNames.includes(node.uniqueName),
-                  );
-                  if (selectedBlockchainNodes.length === 0) {
-                    return cancel(
-                      `Blockchain node(s) '${connectedNodesUniqueNames.join(", ")}' are not part of the application '${applicationUniqueName}'`,
-                    );
-                  }
-                  const onTheSameNetwork = selectedBlockchainNodes.every(
-                    (node) =>
-                      node.blockchainNetwork?.uniqueName === selectedBlockchainNodes[0].blockchainNetwork?.uniqueName,
-                  );
-                  if (!onTheSameNetwork) {
-                    return cancel("Blockchain nodes must be on the same network");
-                  }
                   networkUniqueName = selectedBlockchainNodes[0].blockchainNetwork?.uniqueName;
+                }
+                const onTheSameNetwork = selectedBlockchainNodes.every(
+                  (node) => node.blockchainNetwork?.uniqueName === networkUniqueName,
+                );
+                if (!onTheSameNetwork) {
+                  return cancel("Blockchain nodes must be on the same network");
                 }
 
                 const result = await showSpinner(() =>
@@ -123,6 +142,7 @@ export function loadBalancerEvmCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: result.uniqueName,
+                      ...getBlockchainNodeOrLoadBalancerEndpoints(result),
                     };
                   },
                 };
