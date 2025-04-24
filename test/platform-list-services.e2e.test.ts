@@ -87,7 +87,7 @@ describe("Test platform list services command", () => {
       name: application.workspace.name,
       url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
     });
-    expect(json.services.length).toBeGreaterThanOrEqual(16);
+    expect(json.services.length).toBeGreaterThanOrEqual(17);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
     expect(json.services[0]).toMatchObject({
       group: "Blockchain networks",
@@ -137,7 +137,7 @@ describe("Test platform list services command", () => {
       name: application.workspace.name,
       url: `https://console-release.settlemint.com/workspaces/${application.workspace.id}`,
     });
-    expect(parsedYaml.services.length).toBeGreaterThanOrEqual(16);
+    expect(parsedYaml.services.length).toBeGreaterThanOrEqual(17);
     const blockchainNetwork = await settlemint.blockchainNetwork.read(env.SETTLEMINT_BLOCKCHAIN_NETWORK!);
     expect(parsedYaml.services[0]).toMatchObject({
       group: "Blockchain networks",
