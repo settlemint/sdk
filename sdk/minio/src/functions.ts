@@ -18,6 +18,25 @@ import { ensureServer } from "./helpers/runtime.js";
 import { DEFAULT_BUCKET, FileMetadataSchema, type Static, validate } from "./helpers/schema.js";
 
 /**
+ * Helper function to normalize paths and prevent double slashes
+ * @param path - The path to normalize
+ * @param fileName - The filename to append
+ * @returns The normalized path with filename
+ */
+function normalizePath(path: string, fileName: string): string {
+  // Remove trailing slashes from path
+  const cleanPath = path.replace(/\/+$/, "");
+
+  // If path is empty, return just the filename
+  if (!cleanPath) {
+    return fileName;
+  }
+
+  // Join with a single slash
+  return `${cleanPath}/${fileName}`;
+}
+
+/**
  * Gets a list of files with optional prefix filter
  *
  * @param prefix - Optional prefix to filter files (like a folder path)
@@ -106,11 +125,26 @@ export async function getFileById(
     );
     const url = await executeMinioOperation(presignedUrlOperation, client);
 
+    // Try to get size from metadata first, then from stat result
+    let size = 0;
+
+    // Check for content-length in metadata
+    if (statResult.metaData["content-length"]) {
+      const parsedSize = Number.parseInt(statResult.metaData["content-length"], 10);
+      if (!Number.isNaN(parsedSize)) {
+        size = parsedSize;
+      }
+    }
+    // Fallback to statResult.size if available and valid
+    else if (typeof statResult.size === "number" && !Number.isNaN(statResult.size)) {
+      size = statResult.size;
+    }
+
     const fileMetadata = {
       id: fileId,
       name: fileId.split("/").pop() || fileId,
       contentType: statResult.metaData["content-type"] || "application/octet-stream",
-      size: statResult.size,
+      size,
       uploadedAt: statResult.lastModified.toISOString(),
       etag: statResult.etag,
       url,
@@ -147,18 +181,23 @@ export async function uploadFile(
   ensureServer();
   try {
     const fileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const objectName = path ? `${path}/${fileName}` : fileName;
+    const objectName = normalizePath(path, fileName);
+
+    // Convert File to Buffer
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // Ensure file size is valid
+    const size = typeof file.size === "number" && !Number.isNaN(file.size) ? file.size : buffer.length; // Use buffer length as fallback
 
     // Add file metadata
     const metadata = {
       "content-type": file.type,
       "original-name": file.name,
       "upload-time": new Date().toISOString(),
+      "content-length": size.toString(), // Store size in metadata
     };
 
-    // Convert File to Buffer
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
     const client = await getMinioClient();
 
     // Upload the file directly passing the Buffer object
@@ -177,7 +216,7 @@ export async function uploadFile(
       id: objectName,
       name: fileName,
       contentType: file.type,
-      size: file.size,
+      size,
       uploadedAt: new Date().toISOString(),
       etag: result.etag,
       url,
@@ -248,7 +287,7 @@ export async function createPresignedUploadUrl(
   ensureServer();
   try {
     const safeFileName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
-    const objectName = path ? `${path}/${safeFileName}` : safeFileName;
+    const objectName = normalizePath(path, safeFileName);
     const client = await getMinioClient();
 
     // Create operation for presigned PUT URL
