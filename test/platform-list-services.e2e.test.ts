@@ -18,6 +18,7 @@ describe("Test platform list services command", () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services"]).result;
     expect(output).toInclude("Blockchain networks");
     expect(output).toInclude("Blockchain nodes");
+    expect(output).toInclude("Load balancers");
     expect(output).toInclude("Insights");
     expect(output).toInclude("Integration tools");
     expect(output).toInclude("Middlewares");
@@ -39,6 +40,7 @@ describe("Test platform list services command", () => {
     expect(output).toInclude("Storage");
     expect(output).not.toInclude("Blockchain networks");
     expect(output).not.toInclude("Blockchain nodes");
+    expect(output).not.toInclude("Load balancers");
     expect(output).not.toInclude("Insights");
     expect(output).not.toInclude("Integration tools");
     expect(output).not.toInclude("Private keys");
@@ -49,6 +51,7 @@ describe("Test platform list services command", () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services", "-o", "wide"]).result;
     expect(output).toInclude("Blockchain networks");
     expect(output).toInclude("Blockchain nodes");
+    expect(output).toInclude("Load balancers");
     expect(output).toInclude("Insights");
     expect(output).toInclude("Integration tools");
     expect(output).toInclude("Middlewares");

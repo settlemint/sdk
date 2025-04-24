@@ -25,6 +25,7 @@ import { formatStatus } from "../utils/formatting/format-status";
 const SERVICE_TYPES: ServiceType[] = [
   "blockchain-network",
   "blockchain-node",
+  "load-balancer",
   "custom-deployment",
   "insights",
   "integration-tool",
@@ -220,6 +221,8 @@ function getItemsForServiceType(services: Awaited<ReturnType<typeof servicesSpin
       return services.blockchainNetworks;
     case "blockchain-node":
       return services.blockchainNodes;
+    case "load-balancer":
+      return services.loadBalancers;
     default:
       return [];
   }
