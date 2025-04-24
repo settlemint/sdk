@@ -1,7 +1,7 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { getApplicationOrPersonalAccessToken } from "../sdk/cli/src/utils/get-app-or-personal-token";
+import { getInstanceCredentials } from "../sdk/cli/src/utils/config";
 import { CLUSTER_PROVIDER, CLUSTER_REGION } from "./constants/test-resources";
 import { runCommand } from "./utils/run-command";
 
@@ -13,14 +13,13 @@ describe("Load Balancer E2E Tests", () => {
 
   beforeAll(async () => {
     const env = await loadEnv(false, false);
-    const accessToken = await getApplicationOrPersonalAccessToken({
-      env,
-      instance: env.SETTLEMINT_INSTANCE!,
-      prefer: "personal",
-    });
+    const credentials = await getInstanceCredentials(env.SETTLEMINT_INSTANCE!);
+    if (!credentials) {
+      throw new Error("No credentials found");
+    }
     const settlemint = createSettleMintClient({
       instance: env.SETTLEMINT_INSTANCE!,
-      accessToken,
+      accessToken: credentials.personalAccessToken,
     });
     try {
       await runCommand(COMMAND_TEST_SCOPE, [
