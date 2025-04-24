@@ -1,10 +1,24 @@
-# MinIO Testing Scripts
+# MinIO Testing
 
-This directory contains standalone scripts for testing MinIO operations in your SettleMint SDK development workflow. These scripts are designed to bypass the authentication issues seen with the Bun test framework while still providing a way to validate MinIO functionality.
+This directory contains resources for testing MinIO operations in your SettleMint SDK development workflow.
 
-## Available Scripts
+## E2E Test Runner
 
-### Basic Operations
+The recommended way to test MinIO functionality is using the E2E test runner script:
+
+```
+./test/minio/run-minio-e2e-test.sh
+```
+
+This script:
+- Loads environment variables from `.env` and secret credentials from `.env.local`
+- Sets up the proper test environment 
+- Runs comprehensive tests of all MinIO operations
+- Handles protocol conversion and validation
+
+## Available Standalone Scripts
+
+These individual scripts can be useful for testing specific operations during development:
 
 1. **List Buckets** - View all available buckets in your MinIO instance:
    ```
@@ -31,8 +45,6 @@ This directory contains standalone scripts for testing MinIO operations in your 
    bun run test/minio/delete-file.ts <objectName>
    ```
 
-### Complete Workflow
-
 6. **Complete Cycle** - Demonstrate a full upload-list-download-delete cycle:
    ```
    bun run test/minio/upload-download-cycle.ts
@@ -40,24 +52,29 @@ This directory contains standalone scripts for testing MinIO operations in your 
 
 ## Environment Configuration
 
-These scripts use the following environment variables:
+MinIO tests use the following environment variables:
 
 - `SETTLEMINT_MINIO_ENDPOINT` - The MinIO server URL (can use s3:// protocol)
 - `SETTLEMINT_MINIO_ACCESS_KEY` - The MinIO access key
 - `SETTLEMINT_MINIO_SECRET_KEY` - The MinIO secret key
 
-All scripts automatically handle converting s3:// URLs to https:// as needed for client compatibility.
+These should be configured in your `.env` and `.env.local` files (secrets should be in `.env.local`).
 
 ## Usage During Development
 
-These scripts are useful for:
+These resources are useful for:
 
-1. **Quick Validation** - Quickly check if your MinIO setup is working
-2. **Debugging Issues** - Isolate and debug specific MinIO operations
-3. **Testing Changes** - Validate changes to MinIO-related code
+1. **Comprehensive Testing** - Run the E2E tests to verify all operations
+2. **Quick Validation** - Use standalone scripts to check specific operations
+3. **Debugging Issues** - Isolate and debug specific MinIO functions
+4. **Testing SDK Changes** - Validate modifications to the MinIO SDK
 
-When making changes to the MinIO SDK functionality, you can use these scripts to verify that basic operations continue to work correctly, even if the formal tests are failing due to test framework issues.
+## Recent Improvements
 
-## Note about the Bun Test Framework
+Recent fixes to the SDK have addressed several issues:
 
-The standard Bun test framework appears to have authentication issues with MinIO, causing the formal E2E tests to fail with "Access Denied" errors. These standalone scripts are a workaround until that issue is resolved. The scripts use the same environment variables and client setup, but run outside the test framework.
+1. **Path Handling** - Improved path normalization to prevent double slashes
+2. **Metadata Management** - Better handling of file size and metadata
+3. **Testing Framework** - Environment variable and validation improvements
+
+The E2E tests now run successfully within the Bun test framework using the provided script.
