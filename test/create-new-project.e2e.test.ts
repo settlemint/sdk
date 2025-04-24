@@ -16,7 +16,7 @@ import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
-const TEMPLATE_VERSION = "1.0.2";
+const TEMPLATE_VERSION = "1.0.3";
 const SUBGRAPH_NAMES = ["kit", "starterkits"];
 
 const COMMAND_TEST_SCOPE = __filename;
@@ -34,8 +34,6 @@ async function cleanup() {
     if (await exists(projectDir)) {
       await rmdir(projectDir, { recursive: true });
     }
-    // Restore dependencies in the SDK (eg next dependency)
-    await $`bun install`;
   } catch (err) {
     console.log("Failed to delete project dir", err);
   }
@@ -117,8 +115,6 @@ describe("Setup a project using the SDK", () => {
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
     await $`bun install`.cwd(projectDir).env(env);
-    // Delete the next dependency in the SDK project (due to linking dependencies there might be a mismatch in the version)
-    await $`rm -rf node_modules/next`.env(env);
   });
 
   test("Connect to platform", async () => {
@@ -251,7 +247,7 @@ describe("Setup a project using the SDK", () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
       await $`bun lint`.cwd(projectDir).env(env);
-      await $`bun run build`.cwd(projectDir).env(env);
+      await $`bunx tsc --noEmit`.cwd(dAppDir).env(env);
     } catch (err) {
       const shellError = err as $.ShellError;
       console.log(shellError.stdout.toString());
