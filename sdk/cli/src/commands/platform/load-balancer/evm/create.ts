@@ -31,7 +31,7 @@ export function loadBalancerEvmCreateCommand() {
         )
         .option(
           "--blockchain-network <blockchainNetwork>",
-          "Blockchain network unique name where the load balancer connects to",
+          "Blockchain network unique name where the load balancer connects to, can be skipped if the --blockchain-nodes option is used (defaults to network from env)",
         )
         .action(
           async (

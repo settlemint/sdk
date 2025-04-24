@@ -39,6 +39,7 @@
     - [ensureServer()](#ensureserver)
     - [executeCommand()](#executecommand)
     - [exists()](#exists)
+    - [extractJsonObject()](#extractjsonobject)
     - [fetchWithRetry()](#fetchwithretry)
     - [findMonoRepoPackages()](#findmonorepopackages)
     - [findMonoRepoRoot()](#findmonoreporoot)
@@ -68,6 +69,7 @@
     - [writeEnv()](#writeenv)
   - [Classes](#classes)
     - [CancelError](#cancelerror)
+    - [CommandError](#commanderror)
     - [SpinnerError](#spinnererror)
   - [Interfaces](#interfaces)
     - [ExecuteCommandOptions](#executecommandoptions)
@@ -347,7 +349,7 @@ ensureServer();
 
 > **executeCommand**(`command`, `args`, `options?`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:31](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/execute-command.ts#L31)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:51](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/execute-command.ts#L51)
 
 Executes a command with the given arguments in a child process.
 Pipes stdin to the child process and captures stdout/stderr output.
@@ -414,6 +416,49 @@ import { exists } from "@settlemint/sdk-utils/filesystem";
 if (await exists('/path/to/file.txt')) {
   // File exists, safe to read
 }
+```
+
+***
+
+#### extractJsonObject()
+
+> **extractJsonObject**\<`T`\>(`value`): `null` \| `T`
+
+Defined in: [sdk/utils/src/json.ts:50](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/json.ts#L50)
+
+Extracts a JSON object from a string.
+
+##### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `value` | `string` | The string to extract the JSON object from |
+
+##### Returns
+
+`null` \| `T`
+
+The parsed JSON object, or null if no JSON object is found
+
+##### Throws
+
+If the input string is too long (longer than 5000 characters)
+
+##### Example
+
+```ts
+import { extractJsonObject } from "@settlemint/sdk-utils";
+
+const json = extractJsonObject<{ port: number }>(
+  'port info: {"port": 3000}',
+);
+// Returns: { port: 3000 }
 ```
 
 ***
@@ -1436,6 +1481,62 @@ This error is used to signal that the operation should be aborted.
 ##### Extends
 
 - `Error`
+
+***
+
+#### CommandError
+
+Defined in: [sdk/utils/src/terminal/execute-command.ts:16](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/execute-command.ts#L16)
+
+Error class for command execution errors
+
+##### Extends
+
+- `Error`
+
+##### Constructors
+
+###### Constructor
+
+> **new CommandError**(`message`, `code`, `output`): [`CommandError`](#commanderror)
+
+Defined in: [sdk/utils/src/terminal/execute-command.ts:23](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/execute-command.ts#L23)
+
+Constructs a new CommandError
+
+###### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `message` | `string` | The error message |
+| `code` | `number` | The exit code of the command |
+| `output` | `string`[] | The output of the command |
+
+###### Returns
+
+[`CommandError`](#commanderror)
+
+###### Overrides
+
+`Error.constructor`
+
+##### Properties
+
+###### code
+
+> `readonly` **code**: `number`
+
+Defined in: [sdk/utils/src/terminal/execute-command.ts:25](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/execute-command.ts#L25)
+
+The exit code of the command
+
+###### output
+
+> `readonly` **output**: `string`[]
+
+Defined in: [sdk/utils/src/terminal/execute-command.ts:26](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/execute-command.ts#L26)
+
+The output of the command
 
 ***
 
