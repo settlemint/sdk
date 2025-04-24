@@ -33,10 +33,10 @@ export async function getHardhatConfigData(envConfig: Record<string, string>): P
     if (isHardhatConfig(config)) {
       return config;
     }
-    throw new Error(`Invalid hardhat config: ${output.join("\n")}`);
+    throw new Error("Invalid hardhat config");
   } catch (err) {
     const error = err as CommandError;
-    note(`Error reading hardhat.config.ts: ${error.output?.join("\n") ?? error.message}`);
+    note(`Error reading hardhat.config.ts: ${error.message}`);
     return {};
   }
 }
