@@ -7,8 +7,15 @@ import {
   createPublicClient,
   createWalletClient,
   defineChain,
+  publicActions,
 } from "viem";
 import * as chains from "viem/chains";
+import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
+import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
+import { createWallet } from "./custom-actions/create-wallet.action.js";
+import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
+import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
+import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
 
 /**
  * The options for the viem client.
@@ -71,7 +78,13 @@ export const getPublicClient = (options: ClientOptions) =>
         },
       },
     }),
-  });
+  })
+    .extend(createWallet)
+    .extend(getWalletVerifications)
+    .extend(createWalletVerification)
+    .extend(deleteWalletVerification)
+    .extend(createWalletVerificationChallenges)
+    .extend(verifyWalletVerificationChallenge);
 
 /**
  * The options for the wallet client.
@@ -120,24 +133,33 @@ export interface WalletVerificationOptions {
  */
 export const getWalletClient = <C extends ViemChain>(options: ClientOptions) => {
   const chain = getChain(options);
-  return (verificationOptions?: WalletVerificationOptions): WalletClient<ViemTransport, C> =>
-    createWalletClient({
-      chain: chain as ViemChain,
-      transport: http(options.rpcUrl, {
-        batch: true,
-        timeout: 60_000,
-        ...options.httpTransportConfig,
-        fetchOptions: {
-          ...options?.httpTransportConfig?.fetchOptions,
-          headers: {
-            ...options?.httpTransportConfig?.fetchOptions?.headers,
-            "x-auth-token": options.accessToken,
-            "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
-            "x-auth-verification-id": verificationOptions?.verificationId ?? "",
+  return (verificationOptions?: WalletVerificationOptions) =>
+    (
+      createWalletClient({
+        chain: chain as ViemChain,
+        transport: http(options.rpcUrl, {
+          batch: true,
+          timeout: 60_000,
+          ...options.httpTransportConfig,
+          fetchOptions: {
+            ...options?.httpTransportConfig?.fetchOptions,
+            headers: {
+              ...options?.httpTransportConfig?.fetchOptions?.headers,
+              "x-auth-token": options.accessToken,
+              "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
+              "x-auth-verification-id": verificationOptions?.verificationId ?? "",
+            },
           },
-        },
-      }),
-    }) as WalletClient<ViemTransport, C>;
+        }),
+      }) as WalletClient<ViemTransport, C>
+    )
+      .extend(publicActions)
+      .extend(createWallet)
+      .extend(getWalletVerifications)
+      .extend(createWalletVerification)
+      .extend(deleteWalletVerification)
+      .extend(createWalletVerificationChallenges)
+      .extend(verifyWalletVerificationChallenge);
 };
 
 function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
