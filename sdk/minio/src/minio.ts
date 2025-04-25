@@ -36,3 +36,20 @@ export function createServerMinioClient(options: ServerClientOptions): { client:
     }),
   };
 }
+// Export validation utilities and schemas
+export {
+  type FileMetadata,
+  DEFAULT_BUCKET,
+} from "./helpers/schema.js";
+
+// Export high-level functions
+export {
+  getFilesList,
+  getFileById,
+  uploadFile,
+  deleteFile,
+  createPresignedUploadUrl,
+} from "./helpers/functions.js";
+
+// Re-export required types from minio
+export type { Client, ItemBucketMetadata } from "minio";
