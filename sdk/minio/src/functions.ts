@@ -3,6 +3,7 @@
 // This will be properly isolated in the build process
 
 import { Buffer } from "node:buffer";
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { getMinioClient } from "./helpers/client.js";
 import { executeMinioOperation } from "./helpers/executor.js";
 import {
@@ -14,7 +15,6 @@ import {
   createStatObjectOperation,
   createUploadOperation,
 } from "./helpers/operations.js";
-import { ensureServer } from "./helpers/runtime.js";
 import { DEFAULT_BUCKET, FileMetadataSchema, type Static, validate } from "./helpers/schema.js";
 
 /**

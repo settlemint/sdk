@@ -1,6 +1,6 @@
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import type { Client } from "minio";
 import { createServerMinioClient } from "../minio.js";
-import { ensureServer } from "./runtime.js";
 
 let cachedClient: Client | null = null;
 
