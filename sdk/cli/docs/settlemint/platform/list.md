@@ -48,9 +48,9 @@ Options:
                                       env)
   -t, --type &lt;type...&gt;                The type(s) of service to list (choices:
                                       &quot;blockchain-network&quot;, &quot;blockchain-node&quot;,
-                                      &quot;custom-deployment&quot;, &quot;insights&quot;,
-                                      &quot;integration-tool&quot;, &quot;middleware&quot;,
-                                      &quot;private-key&quot;, &quot;storage&quot;)
+                                      &quot;load-balancer&quot;, &quot;custom-deployment&quot;,
+                                      &quot;insights&quot;, &quot;integration-tool&quot;,
+                                      &quot;middleware&quot;, &quot;private-key&quot;, &quot;storage&quot;)
   -o, --output &lt;output&gt;               The output format (choices: &quot;wide&quot;,
                                       &quot;json&quot;, &quot;yaml&quot;)
   -h, --help                          display help for command

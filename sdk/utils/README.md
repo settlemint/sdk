@@ -115,7 +115,7 @@ The SettleMint Utils SDK provides a collection of shared utilities and helper fu
 
 > **ascii**(): `void`
 
-Defined in: [sdk/utils/src/terminal/ascii.ts:13](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/ascii.ts#L13)
+Defined in: [sdk/utils/src/terminal/ascii.ts:14](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/ascii.ts#L14)
 
 Prints the SettleMint ASCII art logo to the console in magenta color.
 Used for CLI branding and visual identification.
@@ -757,7 +757,7 @@ await installDependencies(["express", "cors"]);
 
 > **intro**(`msg`): `void`
 
-Defined in: [sdk/utils/src/terminal/intro.ts:15](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/intro.ts#L15)
+Defined in: [sdk/utils/src/terminal/intro.ts:16](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/intro.ts#L16)
 
 Displays an introductory message in magenta text with padding.
 Any sensitive tokens in the message are masked before display.
@@ -975,7 +975,7 @@ const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
 
 > **note**(`message`, `level`): `void`
 
-Defined in: [sdk/utils/src/terminal/note.ts:20](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/note.ts#L20)
+Defined in: [sdk/utils/src/terminal/note.ts:21](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/note.ts#L21)
 
 Displays a note message with optional warning level formatting.
 Regular notes are displayed in normal text, while warnings are shown in yellow.
@@ -1010,7 +1010,7 @@ note("Low disk space remaining", "warn");
 
 > **outro**(`msg`): `void`
 
-Defined in: [sdk/utils/src/terminal/outro.ts:15](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/outro.ts#L15)
+Defined in: [sdk/utils/src/terminal/outro.ts:16](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/outro.ts#L16)
 
 Displays a closing message in green inverted text with padding.
 Any sensitive tokens in the message are masked before display.
@@ -1217,7 +1217,7 @@ await setName("my-new-project-name");
 
 > **spinner**\<`R`\>(`options`): `Promise`\<`R`\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:54](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L54)
+Defined in: [sdk/utils/src/terminal/spinner.ts:55](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L55)
 
 Displays a loading spinner while executing an async task.
 Shows progress with start/stop messages and handles errors.
@@ -1267,7 +1267,7 @@ const result = await spinner({
 
 > **table**(`title`, `data`): `void`
 
-Defined in: [sdk/utils/src/terminal/table.ts:20](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/table.ts#L20)
+Defined in: [sdk/utils/src/terminal/table.ts:21](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/table.ts#L21)
 
 Displays data in a formatted table in the terminal.
 
@@ -1542,7 +1542,7 @@ The output of the command
 
 #### SpinnerError
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:11](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L11)
+Defined in: [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L12)
 
 Error class used to indicate that the spinner operation failed.
 This error is used to signal that the operation should be aborted.
@@ -1607,7 +1607,7 @@ Configuration options for the logger
 
 #### SpinnerOptions\<R\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:24](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L24)
+Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L25)
 
 Options for configuring the spinner behavior
 
@@ -1621,9 +1621,9 @@ Options for configuring the spinner behavior
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:26](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L26) |
-| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:30](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L30) |
-| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L28) |
+| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:27](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L27) |
+| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:31](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L31) |
+| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:29](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/utils/src/terminal/spinner.ts#L29) |
 
 ### Type Aliases
 
