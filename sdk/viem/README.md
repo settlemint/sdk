@@ -36,7 +36,29 @@
     - [WalletVerificationType](#walletverificationtype)
   - [Interfaces](#interfaces)
     - [ClientOptions](#clientoptions)
+    - [CreateWalletParameters](#createwalletparameters)
+    - [CreateWalletResponse](#createwalletresponse)
+    - [CreateWalletVerificationChallengesParameters](#createwalletverificationchallengesparameters)
+    - [CreateWalletVerificationParameters](#createwalletverificationparameters)
+    - [CreateWalletVerificationResponse](#createwalletverificationresponse)
+    - [DeleteWalletVerificationParameters](#deletewalletverificationparameters)
+    - [DeleteWalletVerificationResponse](#deletewalletverificationresponse)
+    - [GetWalletVerificationsParameters](#getwalletverificationsparameters)
+    - [VerificationResult](#verificationresult)
+    - [VerifyWalletVerificationChallengeParameters](#verifywalletverificationchallengeparameters)
+    - [WalletInfo](#walletinfo)
+    - [WalletOTPVerificationInfo](#walletotpverificationinfo)
+    - [WalletPincodeVerificationInfo](#walletpincodeverificationinfo)
+    - [WalletSecretCodesVerificationInfo](#walletsecretcodesverificationinfo)
+    - [WalletVerification](#walletverification)
+    - [WalletVerificationChallenge](#walletverificationchallenge)
     - [WalletVerificationOptions](#walletverificationoptions)
+  - [Type Aliases](#type-aliases)
+    - [AddressOrObject](#addressorobject)
+    - [CreateWalletVerificationChallengesResponse](#createwalletverificationchallengesresponse)
+    - [GetWalletVerificationsResponse](#getwalletverificationsresponse)
+    - [VerifyWalletVerificationChallengeResponse](#verifywalletverificationchallengeresponse)
+    - [WalletVerificationInfo](#walletverificationinfo)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -52,7 +74,7 @@ The SettleMint Viem SDK provides a lightweight wrapper that automatically config
 
 > **getPublicClient**(`options`): `object`
 
-Defined in: [sdk/viem/src/viem.ts:66](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L66)
+Defined in: [sdk/viem/src/viem.ts:64](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L64)
 
 Get a public client. Use this if you need to read from the blockchain.
 
@@ -66,7 +88,7 @@ Get a public client. Use this if you need to read from the blockchain.
 
 `object`
 
-The public client.
+The public client. see [https://viem.sh/docs/clients/public](https://viem.sh/docs/clients/public)
 
 ##### Example
 
@@ -89,17 +111,11 @@ console.log(block);
 
 #### getWalletClient()
 
-> **getWalletClient**\<`C`\>(`options`): (`verificationOptions?`) => `Client`\<`Transport`, `C`, `undefined` \| `Account`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`C`, `undefined` \| `Account`\>\>
+> **getWalletClient**(`options`): (`verificationOptions?`) => `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`Chain`, `undefined`\>\>
 
-Defined in: [sdk/viem/src/viem.ts:128](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L128)
+Defined in: [sdk/viem/src/viem.ts:126](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L126)
 
 Get a wallet client. Use this if you need to write to the blockchain.
-
-##### Type Parameters
-
-| Type Parameter |
-| ------ |
-| `C` *extends* `Chain` |
 
 ##### Parameters
 
@@ -109,9 +125,9 @@ Get a wallet client. Use this if you need to write to the blockchain.
 
 ##### Returns
 
-A function that returns a wallet client. The function can be called with verification options.
+A function that returns a wallet client. The function can be called with verification options for HD wallets. see [https://viem.sh/docs/clients/wallet](https://viem.sh/docs/clients/wallet)
 
-> (`verificationOptions?`): `Client`\<`Transport`, `C`, `undefined` \| `Account`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`C`, `undefined` \| `Account`\>\>
+> (`verificationOptions?`): `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`Chain`, `undefined`\>\>
 
 ###### Parameters
 
@@ -121,7 +137,7 @@ A function that returns a wallet client. The function can be called with verific
 
 ###### Returns
 
-`Client`\<`Transport`, `C`, `undefined` \| `Account`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`C`, `undefined` \| `Account`\>\>
+`Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`Chain`, `undefined`\>\>
 
 ##### Example
 
@@ -195,7 +211,7 @@ Used to identify different verification mechanisms when creating or managing wal
 
 #### ClientOptions
 
-Defined in: [sdk/viem/src/viem.ts:23](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L23)
+Defined in: [sdk/viem/src/viem.ts:21](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L21)
 
 The options for the viem client.
 
@@ -203,17 +219,276 @@ The options for the viem client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken` | `string` | The access token | [sdk/viem/src/viem.ts:27](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L27) |
-| <a id="chainid"></a> `chainId` | `string` | The chain id | [sdk/viem/src/viem.ts:31](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L31) |
-| <a id="chainname"></a> `chainName` | `string` | The chain name | [sdk/viem/src/viem.ts:35](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L35) |
-| <a id="httptransportconfig"></a> `httpTransportConfig?` | `HttpTransportConfig` | The http transport config | [sdk/viem/src/viem.ts:43](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L43) |
-| <a id="rpcurl"></a> `rpcUrl` | `string` | The json rpc url | [sdk/viem/src/viem.ts:39](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L39) |
+| <a id="accesstoken"></a> `accessToken` | `string` | The access token | [sdk/viem/src/viem.ts:25](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L25) |
+| <a id="chainid"></a> `chainId` | `string` | The chain id | [sdk/viem/src/viem.ts:29](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L29) |
+| <a id="chainname"></a> `chainName` | `string` | The chain name | [sdk/viem/src/viem.ts:33](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L33) |
+| <a id="httptransportconfig"></a> `httpTransportConfig?` | `HttpTransportConfig` | The http transport config | [sdk/viem/src/viem.ts:41](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L41) |
+| <a id="rpcurl"></a> `rpcUrl` | `string` | The json rpc url | [sdk/viem/src/viem.ts:37](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L37) |
+
+***
+
+#### CreateWalletParameters
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L14)
+
+Parameters for creating a wallet.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="keyvaultid"></a> `keyVaultId` | `string` | The unique name of the key vault where the wallet will be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L16) |
+| <a id="walletinfo"></a> `walletInfo` | [`WalletInfo`](#walletinfo-1) | Information about the wallet to be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L18) |
+
+***
+
+#### CreateWalletResponse
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:24](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L24)
+
+Response from creating a wallet.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="address"></a> `address` | `string` | The blockchain address of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:30](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L30) |
+| <a id="derivationpath"></a> `derivationPath` | `string` | The HD derivation path used to create the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:32](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L32) |
+| <a id="id"></a> `id` | `string` | The unique identifier of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:26](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L26) |
+| <a id="name"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:28](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L28) |
+
+***
+
+#### CreateWalletVerificationChallengesParameters
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:8](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L8)
+
+Parameters for creating wallet verification challenges.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="addressorobject"></a> `addressOrObject` | [`AddressOrObject`](#addressorobject-2) | The wallet address or object containing wallet address and optional verification ID. | [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:10](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L10) |
+
+***
+
+#### CreateWalletVerificationParameters
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:59](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L59)
+
+Parameters for creating a wallet verification.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="userwalletaddress"></a> `userWalletAddress` | `string` | The wallet address for which to create the verification. | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:61](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L61) |
+| <a id="walletverificationinfo"></a> `walletVerificationInfo` | [`WalletVerificationInfo`](#walletverificationinfo-1) | The verification information to create. | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:63](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L63) |
+
+***
+
+#### CreateWalletVerificationResponse
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:69](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L69)
+
+Response from creating a wallet verification.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="id-1"></a> `id` | `string` | The unique identifier of the verification. | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:71](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L71) |
+| <a id="name-1"></a> `name` | `string` | The name of the verification method. | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:73](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L73) |
+| <a id="parameters"></a> `parameters` | `Record`\<`string`, `string`\> | Additional parameters specific to the verification type. | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:77](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L77) |
+| <a id="verificationtype"></a> `verificationType` | [`WalletVerificationType`](#walletverificationtype) | The type of verification method. | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:75](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L75) |
+
+***
+
+#### DeleteWalletVerificationParameters
+
+Defined in: [sdk/viem/src/custom-actions/delete-wallet-verification.action.ts:6](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/delete-wallet-verification.action.ts#L6)
+
+Parameters for deleting a wallet verification.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="userwalletaddress-1"></a> `userWalletAddress` | `string` | The wallet address for which to delete the verification. | [sdk/viem/src/custom-actions/delete-wallet-verification.action.ts:8](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/delete-wallet-verification.action.ts#L8) |
+| <a id="verificationid"></a> `verificationId` | `string` | The unique identifier of the verification to delete. | [sdk/viem/src/custom-actions/delete-wallet-verification.action.ts:10](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/delete-wallet-verification.action.ts#L10) |
+
+***
+
+#### DeleteWalletVerificationResponse
+
+Defined in: [sdk/viem/src/custom-actions/delete-wallet-verification.action.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/delete-wallet-verification.action.ts#L16)
+
+Response from deleting a wallet verification.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="success"></a> `success` | `boolean` | Whether the deletion was successful. | [sdk/viem/src/custom-actions/delete-wallet-verification.action.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/delete-wallet-verification.action.ts#L18) |
+
+***
+
+#### GetWalletVerificationsParameters
+
+Defined in: [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:7](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L7)
+
+Parameters for getting wallet verifications.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="userwalletaddress-2"></a> `userWalletAddress` | `string` | The wallet address for which to fetch verifications. | [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:9](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L9) |
+
+***
+
+#### VerificationResult
+
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:26](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L26)
+
+Result of a wallet verification challenge.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="verified"></a> `verified` | `boolean` | Whether the verification was successful. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:28](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L28) |
+
+***
+
+#### VerifyWalletVerificationChallengeParameters
+
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L16)
+
+Parameters for verifying a wallet verification challenge.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="addressorobject-1"></a> `addressOrObject` | [`AddressOrObject`](#addressorobject-2) | The wallet address or object containing wallet address and optional verification ID. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L18) |
+| <a id="challengeresponse"></a> `challengeResponse` | `string` | The response to the verification challenge. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:20](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L20) |
+
+***
+
+#### WalletInfo
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:6](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L6)
+
+Information about the wallet to be created.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="name-2"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:8](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L8) |
+
+***
+
+#### WalletOTPVerificationInfo
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:27](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L27)
+
+Information for One-Time Password (OTP) verification.
+
+##### Extends
+
+- `BaseWalletVerificationInfo`
+
+##### Properties
+
+| Property | Type | Description | Overrides | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| <a id="algorithm"></a> `algorithm?` | [`OTPAlgorithm`](#otpalgorithm) | The hash algorithm to use for OTP generation. | - | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:31](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L31) |
+| <a id="digits"></a> `digits?` | `number` | The number of digits in the OTP code. | - | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:33](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L33) |
+| <a id="issuer"></a> `issuer?` | `string` | The issuer of the OTP. | - | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:37](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L37) |
+| <a id="name-3"></a> `name` | `string` | The name of the verification method. | - | `BaseWalletVerificationInfo.name` | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:9](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L9) |
+| <a id="period"></a> `period?` | `number` | The time period in seconds for OTP validity. | - | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:35](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L35) |
+| <a id="verificationtype-1"></a> `verificationType` | [`OTP`](#otp) | The type of verification method. | `BaseWalletVerificationInfo.verificationType` | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:29](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L29) |
+
+***
+
+#### WalletPincodeVerificationInfo
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:17](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L17)
+
+Information for PIN code verification.
+
+##### Extends
+
+- `BaseWalletVerificationInfo`
+
+##### Properties
+
+| Property | Type | Description | Overrides | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| <a id="name-4"></a> `name` | `string` | The name of the verification method. | - | `BaseWalletVerificationInfo.name` | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:9](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L9) |
+| <a id="pincode-1"></a> `pincode` | `string` | The PIN code to use for verification. | - | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:21](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L21) |
+| <a id="verificationtype-2"></a> `verificationType` | [`PINCODE`](#pincode) | The type of verification method. | `BaseWalletVerificationInfo.verificationType` | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:19](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L19) |
+
+***
+
+#### WalletSecretCodesVerificationInfo
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:43](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L43)
+
+Information for secret recovery codes verification.
+
+##### Extends
+
+- `BaseWalletVerificationInfo`
+
+##### Properties
+
+| Property | Type | Description | Overrides | Inherited from | Defined in |
+| ------ | ------ | ------ | ------ | ------ | ------ |
+| <a id="name-5"></a> `name` | `string` | The name of the verification method. | - | `BaseWalletVerificationInfo.name` | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:9](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L9) |
+| <a id="verificationtype-3"></a> `verificationType` | [`SECRET_CODES`](#secret_codes) | The type of verification method. | `BaseWalletVerificationInfo.verificationType` | - | [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:45](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L45) |
+
+***
+
+#### WalletVerification
+
+Defined in: [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:15](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L15)
+
+Represents a wallet verification.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="id-2"></a> `id` | `string` | The unique identifier of the verification. | [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:17](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L17) |
+| <a id="name-6"></a> `name` | `string` | The name of the verification method. | [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:19](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L19) |
+| <a id="verificationtype-4"></a> `verificationType` | [`WalletVerificationType`](#walletverificationtype) | The type of verification method. | [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:21](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L21) |
+
+***
+
+#### WalletVerificationChallenge
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L16)
+
+Represents a wallet verification challenge.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="challenge"></a> `challenge` | `Record`\<`string`, `string`\> | The challenge parameters specific to the verification type. | [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:24](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L24) |
+| <a id="id-3"></a> `id` | `string` | The unique identifier of the challenge. | [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L18) |
+| <a id="name-7"></a> `name` | `string` | The name of the challenge. | [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:20](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L20) |
+| <a id="verificationtype-5"></a> `verificationType` | [`WalletVerificationType`](#walletverificationtype) | The type of verification required. | [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:22](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L22) |
 
 ***
 
 #### WalletVerificationOptions
 
-Defined in: [sdk/viem/src/viem.ts:86](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L86)
+Defined in: [sdk/viem/src/viem.ts:84](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L84)
 
 The options for the wallet client.
 
@@ -221,8 +496,58 @@ The options for the wallet client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeresponse"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:94](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L94) |
-| <a id="verificationid"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:90](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L90) |
+| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:92](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L92) |
+| <a id="verificationid-1"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:88](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L88) |
+
+### Type Aliases
+
+#### AddressOrObject
+
+> **AddressOrObject** = `string` \| \{ `userWalletAddress`: `string`; `verificationId?`: `string`; \}
+
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:6](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L6)
+
+Represents either a wallet address string or an object containing wallet address and optional verification ID.
+
+***
+
+#### CreateWalletVerificationChallengesResponse
+
+> **CreateWalletVerificationChallengesResponse** = [`WalletVerificationChallenge`](#walletverificationchallenge)[]
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:30](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L30)
+
+Response from creating wallet verification challenges.
+
+***
+
+#### GetWalletVerificationsResponse
+
+> **GetWalletVerificationsResponse** = [`WalletVerification`](#walletverification)[]
+
+Defined in: [sdk/viem/src/custom-actions/get-wallet-verifications.action.ts:27](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/get-wallet-verifications.action.ts#L27)
+
+Response from getting wallet verifications.
+
+***
+
+#### VerifyWalletVerificationChallengeResponse
+
+> **VerifyWalletVerificationChallengeResponse** = [`VerificationResult`](#verificationresult)[]
+
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:34](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L34)
+
+Response from verifying a wallet verification challenge.
+
+***
+
+#### WalletVerificationInfo
+
+> **WalletVerificationInfo** = [`WalletPincodeVerificationInfo`](#walletpincodeverificationinfo) \| [`WalletOTPVerificationInfo`](#walletotpverificationinfo) \| [`WalletSecretCodesVerificationInfo`](#walletsecretcodesverificationinfo)
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:51](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L51)
+
+Union type of all possible wallet verification information types.
 
 ## Contributing
 
