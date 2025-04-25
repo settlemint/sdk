@@ -26,7 +26,40 @@ export const FileMetadataSchema = z.object({
 /**
  * Type representing file metadata after validation.
  */
-export type FileMetadata = Static<typeof FileMetadataSchema>;
+export interface FileMetadata {
+  /**
+   * The unique identifier for the file.
+   */
+  id: string;
+  /**
+   * The name of the file.
+   */
+  name: string;
+  /**
+   * The content type of the file.
+   */
+  contentType: string;
+
+  /**
+   * The size of the file in bytes.
+   */
+  size: number;
+
+  /**
+   * The date and time the file was uploaded.
+   */
+  uploadedAt: string;
+
+  /**
+   * The ETag of the file.
+   */
+  etag: string;
+
+  /**
+   * The URL of the file.
+   */
+  url?: string;
+}
 
 /**
  * Default bucket name to use for file storage when none is specified.

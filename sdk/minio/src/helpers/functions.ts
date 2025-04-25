@@ -11,7 +11,8 @@ import {
   createSimpleUploadOperation,
   createStatObjectOperation,
 } from "./operations.js";
-import { DEFAULT_BUCKET, type FileMetadata, FileMetadataSchema } from "./schema.js";
+import { DEFAULT_BUCKET, FileMetadataSchema } from "./schema.js";
+import type { FileMetadata } from "./schema.js";
 
 /**
  * Helper function to normalize paths and prevent double slashes

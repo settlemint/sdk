@@ -35,12 +35,10 @@
     - [getFileById()](#getfilebyid)
     - [getFilesList()](#getfileslist)
     - [uploadFile()](#uploadfile)
-  - [Type Aliases](#type-aliases)
+  - [Interfaces](#interfaces)
     - [FileMetadata](#filemetadata)
-    - [Static\<T\>](#statict)
   - [Variables](#variables)
     - [DEFAULT\_BUCKET](#default_bucket)
-    - [FileMetadataSchema](#filemetadataschema)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -58,7 +56,7 @@ For detailed information about using MinIO with the SettleMint platform, check o
 
 > **createPresignedUploadUrl**(`client`, `fileName`, `path`, `bucket`, `expirySeconds`): `Promise`\<`string`\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:242](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L242)
+Defined in: [sdk/minio/src/helpers/functions.ts:243](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L243)
 
 Creates a presigned upload URL for direct browser uploads
 
@@ -161,7 +159,7 @@ client.listBuckets();
 
 > **deleteFile**(`client`, `fileId`, `bucket`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:195](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L195)
+Defined in: [sdk/minio/src/helpers/functions.ts:196](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L196)
 
 Deletes a file from storage
 
@@ -201,9 +199,9 @@ await deleteFile(client, "documents/report.pdf");
 
 #### getFileById()
 
-> **getFileById**(`client`, `fileId`, `bucket`): `Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+> **getFileById**(`client`, `fileId`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:122](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L122)
+Defined in: [sdk/minio/src/helpers/functions.ts:123](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L123)
 
 Gets a single file by its object name
 
@@ -217,7 +215,7 @@ Gets a single file by its object name
 
 ##### Returns
 
-`Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+`Promise`\<[`FileMetadata`](#filemetadata)\>
 
 File metadata with presigned URL
 
@@ -243,9 +241,9 @@ const file = await getFileByObjectName(client, "documents/report.pdf");
 
 #### getFilesList()
 
-> **getFilesList**(`client`, `prefix`, `bucket`): `Promise`\<`object`[]\>
+> **getFilesList**(`client`, `prefix`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)[]\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:61](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L61)
+Defined in: [sdk/minio/src/helpers/functions.ts:62](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L62)
 
 Gets a list of files with optional prefix filter
 
@@ -259,7 +257,7 @@ Gets a list of files with optional prefix filter
 
 ##### Returns
 
-`Promise`\<`object`[]\>
+`Promise`\<[`FileMetadata`](#filemetadata)[]\>
 
 Array of file metadata objects
 
@@ -285,9 +283,9 @@ const files = await getFilesList(client, "documents/");
 
 #### uploadFile()
 
-> **uploadFile**(`client`, `buffer`, `objectName`, `contentType`, `bucket`): `Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+> **uploadFile**(`client`, `buffer`, `objectName`, `contentType`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:292](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L292)
+Defined in: [sdk/minio/src/helpers/functions.ts:293](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L293)
 
 Uploads a buffer directly to storage
 
@@ -303,7 +301,7 @@ Uploads a buffer directly to storage
 
 ##### Returns
 
-`Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+`Promise`\<[`FileMetadata`](#filemetadata)\>
 
 The uploaded file metadata
 
@@ -326,31 +324,25 @@ const buffer = Buffer.from("Hello, world!");
 const uploadedFile = await uploadFile(client, buffer, "documents/hello.txt", "text/plain");
 ```
 
-### Type Aliases
+### Interfaces
 
 #### FileMetadata
-
-> **FileMetadata** = [`Static`](#static)\<*typeof* [`FileMetadataSchema`](#filemetadataschema)\>
 
 Defined in: [sdk/minio/src/helpers/schema.ts:29](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L29)
 
 Type representing file metadata after validation.
 
-***
+##### Properties
 
-#### Static\<T\>
-
-> **Static**\<`T`\> = [`Static`](#static)\<`T`\>
-
-Defined in: [sdk/minio/src/helpers/schema.ts:8](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L8)
-
-Helper type to extract the inferred type from a Zod schema.
-
-##### Type Parameters
-
-| Type Parameter | Description |
-| ------ | ------ |
-| `T` *extends* `z.ZodType` | The Zod schema type |
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="contenttype"></a> `contentType` | `string` | The content type of the file. | [sdk/minio/src/helpers/schema.ts:41](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L41) |
+| <a id="etag"></a> `etag` | `string` | The ETag of the file. | [sdk/minio/src/helpers/schema.ts:56](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L56) |
+| <a id="id"></a> `id` | `string` | The unique identifier for the file. | [sdk/minio/src/helpers/schema.ts:33](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L33) |
+| <a id="name"></a> `name` | `string` | The name of the file. | [sdk/minio/src/helpers/schema.ts:37](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L37) |
+| <a id="size"></a> `size` | `number` | The size of the file in bytes. | [sdk/minio/src/helpers/schema.ts:46](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L46) |
+| <a id="uploadedat"></a> `uploadedAt` | `string` | The date and time the file was uploaded. | [sdk/minio/src/helpers/schema.ts:51](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L51) |
+| <a id="url"></a> `url?` | `string` | The URL of the file. | [sdk/minio/src/helpers/schema.ts:61](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L61) |
 
 ### Variables
 
@@ -358,20 +350,9 @@ Helper type to extract the inferred type from a Zod schema.
 
 > `const` **DEFAULT\_BUCKET**: `"uploads"` = `"uploads"`
 
-Defined in: [sdk/minio/src/helpers/schema.ts:34](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L34)
+Defined in: [sdk/minio/src/helpers/schema.ts:67](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L67)
 
 Default bucket name to use for file storage when none is specified.
-
-***
-
-#### FileMetadataSchema
-
-> `const` **FileMetadataSchema**: `ZodObject`\<\{ `contentType`: `ZodString`; `etag`: `ZodString`; `id`: `ZodString`; `name`: `ZodString`; `size`: `ZodNumber`; `uploadedAt`: `ZodString`; `url`: `ZodOptional`\<`ZodString`\>; \}, `"strip"`, `ZodTypeAny`, \{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}, \{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
-
-Defined in: [sdk/minio/src/helpers/schema.ts:16](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L16)
-
-Schema for file metadata stored in MinIO.
-Defines the structure and validation rules for file information.
 
 ## Contributing
 

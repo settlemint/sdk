@@ -36,6 +36,11 @@ export function createServerMinioClient(options: ServerClientOptions): { client:
     }),
   };
 }
+// Export validation utilities and schemas
+export {
+  type FileMetadata,
+  DEFAULT_BUCKET,
+} from "./helpers/schema.js";
 
 // Export high-level functions
 export {
@@ -45,14 +50,6 @@ export {
   deleteFile,
   createPresignedUploadUrl,
 } from "./helpers/functions.js";
-
-// Export validation utilities and schemas
-export {
-  type FileMetadata,
-  type FileMetadataSchema,
-  type Static,
-  DEFAULT_BUCKET,
-} from "./helpers/schema.js";
 
 // Re-export required types from minio
 export type { Client, ItemBucketMetadata } from "minio";
