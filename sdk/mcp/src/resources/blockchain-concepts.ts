@@ -119,6 +119,7 @@ export const registerBlockchainConcepts = (server: McpServer) => {
 ### Blockchain Networks
 - **Blockchain Network**: A blockchain instance running on the SettleMint platform
 - **Blockchain Node**: Individual node in a blockchain network
+- **Load Balancer**: Distributes incoming JSON-RPC requests across multiple blockchain nodes
 - **Network Type**: Type of blockchain network (Ethereum, Fabric, etc.)
 - **Consensus Mechanism**: Method used to achieve agreement on the blockchain state
 
