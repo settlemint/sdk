@@ -44,10 +44,7 @@ export function applicationsListCommand() {
     )
     .addOption(new Option("-o, --output <output>", "The output format").choices(["wide", "json", "yaml"]))
     .action(async ({ workspace, output }) => {
-      const printToTerminal = !output || output === "wide";
-      if (printToTerminal) {
-        intro("Listing applications");
-      }
+      intro("Listing applications");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
       const selectedInstance = await instancePrompt(env, true);
@@ -64,14 +61,13 @@ export function applicationsListCommand() {
 
       const workspaceUniqueName = workspace ?? env.SETTLEMINT_WORKSPACE ?? (await selectWorkspace(settlemint, env));
       const applications = await applicationsSpinner(settlemint, workspaceUniqueName);
-      const wide = output === "wide";
       const applicationsData = applications.map((application) => {
         const basicFields = {
           name: application.name,
           uniqueName: application.uniqueName,
         };
 
-        if (wide || !printToTerminal) {
+        if (output) {
           return {
             ...basicFields,
             url: getApplicationUrl(selectedInstance, application),
@@ -81,21 +77,20 @@ export function applicationsListCommand() {
         return basicFields;
       });
 
-      if (printToTerminal) {
-        const selectedWorkspace = await settlemint.workspace.read(workspaceUniqueName);
+      const selectedWorkspace = await settlemint.workspace.read(workspaceUniqueName);
+
+      if (output === "json") {
+        jsonOutput(applicationsData);
+      } else if (output === "yaml") {
+        yamlOutput(applicationsData);
+      } else {
         table(
           `Applications for workspace ${selectedWorkspace.name} (${selectedWorkspace.uniqueName}) - ${getWorkspaceUrl(selectedInstance, selectedWorkspace)}`,
           applicationsData,
         );
-      } else if (output === "json") {
-        jsonOutput(applicationsData);
-      } else if (output === "yaml") {
-        yamlOutput(applicationsData);
       }
 
-      if (printToTerminal) {
-        outro("Applications listed");
-      }
+      outro("Applications listed");
     });
 }
 

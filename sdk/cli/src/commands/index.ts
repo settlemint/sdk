@@ -63,7 +63,10 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
         rootCmd._lastCommand = thisCommand as ExtendedCommand;
         rootCmd._lastCommand._commandPath = commandPath;
       }
-      if (isLeafCommand(thisCommand) && !isJsonOrYamlOutput(thisCommand)) {
+      if (isJsonOrYamlOutput(thisCommand)) {
+        process.env.SETTLEMINT_DISABLE_TERMINAL = "true";
+      }
+      if (isLeafCommand(thisCommand)) {
         ascii();
         await validateSdkVersionFromCommand(thisCommand);
       }

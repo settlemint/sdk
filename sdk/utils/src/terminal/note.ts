@@ -1,5 +1,6 @@
 import { maskTokens } from "@/logging/mask-tokens.js";
 import { yellowBright } from "yoctocolors";
+import { shouldPrint } from "./should-print.js";
 
 /**
  * Displays a note message with optional warning level formatting.
@@ -18,6 +19,9 @@ import { yellowBright } from "yoctocolors";
  * note("Low disk space remaining", "warn");
  */
 export const note = (message: string, level: "info" | "warn" = "info"): void => {
+  if (!shouldPrint()) {
+    return;
+  }
   const maskedMessage = maskTokens(message);
 
   console.log("");

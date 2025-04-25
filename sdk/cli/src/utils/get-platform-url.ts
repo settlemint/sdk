@@ -46,6 +46,9 @@ function getUrlPathForService<Service extends { id: string }>(service: Service, 
   if (serviceType === "insights") {
     return `insights/${encodeURIComponent(service.id)}/details`;
   }
+  if (serviceType === "load-balancer") {
+    return `loadbalancers/${encodeURIComponent(service.id)}/details`;
+  }
   return "";
 }
 

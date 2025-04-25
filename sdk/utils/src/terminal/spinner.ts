@@ -3,6 +3,7 @@ import yoctoSpinner, { type Spinner } from "yocto-spinner";
 import { redBright } from "yoctocolors";
 import { maskTokens } from "../logging/mask-tokens.js";
 import { note } from "./note.js";
+import { shouldPrint } from "./should-print.js";
 
 /**
  * Error class used to indicate that the spinner operation failed.
@@ -57,7 +58,7 @@ export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
     note(redBright(`${errorMessage}\n\n${error.stack}`));
     throw new SpinnerError(errorMessage, error);
   };
-  if (isInCi) {
+  if (isInCi || !shouldPrint()) {
     try {
       return await options.task();
     } catch (err) {

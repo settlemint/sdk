@@ -122,7 +122,7 @@ export function connectCommand(): Command {
               accept: acceptDefaults,
               message: "Which The Graph subgraph do you want to use as the default?",
             })
-          : [];
+          : [graphEndpoints.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH];
         const portal = await portalPrompt({
           env,
           middlewares,

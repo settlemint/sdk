@@ -1,4 +1,5 @@
 import { magentaBright } from "yoctocolors";
+import { shouldPrint } from "./should-print.js";
 
 /**
  * Prints the SettleMint ASCII art logo to the console in magenta color.
@@ -10,7 +11,10 @@ import { magentaBright } from "yoctocolors";
  * // Prints the SettleMint logo
  * ascii();
  */
-export const ascii = (): void =>
+export const ascii = (): void => {
+  if (!shouldPrint()) {
+    return;
+  }
   console.log(
     magentaBright(`
   _________       __    __  .__            _____  .__        __
@@ -20,3 +24,4 @@ export const ascii = (): void =>
 /_________/\\_____>__|  |__| |____/\\_____>____|____/__|___|__/__|
 `),
   );
+};

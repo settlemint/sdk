@@ -1,3 +1,4 @@
+import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
 import { subgraphNamePrompt } from "@/prompts/smart-contract-set/subgraph-name.prompt";
 import select from "@inquirer/select";
 import { cancel } from "@settlemint/sdk-utils/terminal";
@@ -54,8 +55,8 @@ export async function subgraphPrompt({
       return subgraphNames;
     }
     // Use the kit subgraph as default if it exists
-    if (subgraphNames.includes("kit")) {
-      return ["kit"];
+    if (subgraphNames.includes(DEFAULT_SUBGRAPH_NAME)) {
+      return [DEFAULT_SUBGRAPH_NAME];
     }
     return [];
   }

@@ -1,3 +1,4 @@
+import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
 import type {
   BlockchainNode,
   Insights,
@@ -40,9 +41,13 @@ export async function getGraphEndpoint(
   });
 
   const endpoints = theGraphMiddleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
+  const hasKitSubgraph = endpoints
+    .map((endpoint) => endpoint.split("/").pop())
+    .some((endpoint) => endpoint === DEFAULT_SUBGRAPH_NAME);
 
   return {
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: endpoints,
+    SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: hasKitSubgraph ? DEFAULT_SUBGRAPH_NAME : undefined,
   };
 }
 
