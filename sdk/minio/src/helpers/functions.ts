@@ -103,7 +103,7 @@ export async function getFilesList(
  * Gets a single file by its object name
  *
  * @param client - The MinIO client to use
- * @param objectName - The object name/path
+ * @param fileId - The file identifier/path
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
  * @returns File metadata with presigned URL
  * @throws Will throw an error if the file doesn't exist or client initialization fails
@@ -119,23 +119,23 @@ export async function getFilesList(
  *
  * const file = await getFileByObjectName(client, "documents/report.pdf");
  */
-export async function getFileByObjectName(
+export async function getFileById(
   client: Client,
-  objectName: string,
+  fileId: string,
   bucket: string = DEFAULT_BUCKET,
 ): Promise<FileMetadata> {
   ensureServer();
-  console.log(`Getting file details for: ${objectName} in bucket: ${bucket}`);
+  console.log(`Getting file details for: ${fileId} in bucket: ${bucket}`);
 
   try {
     // Get the file metadata
-    const statOperation = createStatObjectOperation(bucket, objectName);
+    const statOperation = createStatObjectOperation(bucket, fileId);
     const statResult = await executeMinioOperation(client, statOperation);
 
     // Generate a presigned URL for access
     const presignedUrlOperation = createPresignedUrlOperation(
       bucket,
-      objectName,
+      fileId,
       3600, // 1 hour expiry
     );
     const url = await executeMinioOperation(client, presignedUrlOperation);
@@ -156,8 +156,8 @@ export async function getFileByObjectName(
     }
 
     const fileMetadata: FileMetadata = {
-      id: objectName,
-      name: objectName.split("/").pop() || objectName,
+      id: fileId,
+      name: fileId.split("/").pop() || fileId,
       contentType: statResult.metaData["content-type"] || "application/octet-stream",
       size,
       uploadedAt: statResult.lastModified.toISOString(),
@@ -167,8 +167,8 @@ export async function getFileByObjectName(
 
     return validate(FileMetadataSchema, fileMetadata);
   } catch (error) {
-    console.error(`Failed to get file ${objectName}:`, error);
-    throw new Error(`Failed to get file ${objectName}: ${error instanceof Error ? error.message : String(error)}`);
+    console.error(`Failed to get file ${fileId}:`, error);
+    throw new Error(`Failed to get file ${fileId}: ${error instanceof Error ? error.message : String(error)}`);
   }
 }
 
@@ -176,7 +176,7 @@ export async function getFileByObjectName(
  * Deletes a file from storage
  *
  * @param client - The MinIO client to use
- * @param fileId - The file identifier/path to delete
+ * @param fileId - The file identifier/path
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
  * @returns Success status
  * @throws Will throw an error if deletion fails or client initialization fails

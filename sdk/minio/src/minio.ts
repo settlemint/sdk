@@ -37,27 +37,14 @@ export function createServerMinioClient(options: ServerClientOptions): { client:
   };
 }
 
-// Export operations and executor
-export {
-  createDeleteOperation,
-  createListObjectsOperation,
-  createPresignedPutOperation,
-  createPresignedUrlOperation,
-  createSimpleUploadOperation,
-  createStatObjectOperation,
-  createUploadOperation,
-  type MinioOperation,
-} from "./helpers/operations.js";
-
 // Export high-level functions
 export {
   getFilesList,
-  getFileByObjectName,
+  getFileById,
   uploadFile,
   deleteFile,
   createPresignedUploadUrl,
 } from "./helpers/functions.js";
-export { executeMinioOperation } from "./helpers/executor.js";
 
 // Export validation utilities and schemas
 export {
