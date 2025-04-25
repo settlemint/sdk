@@ -52,6 +52,10 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
         ),
     },
     async (params) => {
+      if (params.blockchainNodeUniqueName && params.loadBalancerUniqueName) {
+        throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
+      }
+
       const insights = await client.insights.create({
         applicationUniqueName: params.applicationUniqueName,
         name: params.name,

@@ -44,16 +44,20 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
         .string()
         .optional()
         .describe(
-          "Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName), prefered option for interface SMART_CONTRACT_PORTAL",
+          "Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName), preferred option for interface SMART_CONTRACT_PORTAL",
         ),
       loadBalancerUniqueName: z
         .string()
         .optional()
         .describe(
-          "Unique name of the load balancer to connect to (mutually exclusive with blockchainNodeUniqueName), prefered option for all other interfaces",
+          "Unique name of the load balancer to connect to (mutually exclusive with blockchainNodeUniqueName), preferred option for all other interfaces",
         ),
     },
     async (params) => {
+      if (params.blockchainNodeUniqueName && params.loadBalancerUniqueName) {
+        throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
+      }
+
       const middleware = await client.middleware.create({
         applicationUniqueName: params.applicationUniqueName,
         name: params.name,
