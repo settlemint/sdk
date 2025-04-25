@@ -36,6 +36,9 @@
     - [WalletVerificationType](#walletverificationtype)
   - [Interfaces](#interfaces)
     - [ClientOptions](#clientoptions)
+    - [CreateWalletParameters](#createwalletparameters)
+    - [CreateWalletResponse](#createwalletresponse)
+    - [WalletInfo](#walletinfo)
     - [WalletVerificationOptions](#walletverificationoptions)
 - [Contributing](#contributing)
 - [License](#license)
@@ -208,6 +211,52 @@ The options for the viem client.
 | <a id="chainname"></a> `chainName` | `string` | The chain name | [sdk/viem/src/viem.ts:35](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L35) |
 | <a id="httptransportconfig"></a> `httpTransportConfig?` | `HttpTransportConfig` | The http transport config | [sdk/viem/src/viem.ts:43](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L43) |
 | <a id="rpcurl"></a> `rpcUrl` | `string` | The json rpc url | [sdk/viem/src/viem.ts:39](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/viem.ts#L39) |
+
+***
+
+#### CreateWalletParameters
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L14)
+
+Parameters for creating a wallet.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="keyvaultid"></a> `keyVaultId` | `string` | The unique name of the key vault where the wallet will be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L16) |
+| <a id="walletinfo"></a> `walletInfo` | [`WalletInfo`](#walletinfo-1) | Information about the wallet to be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L18) |
+
+***
+
+#### CreateWalletResponse
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:24](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L24)
+
+Response from creating a wallet.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="address"></a> `address` | `string` | The blockchain address of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:30](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L30) |
+| <a id="derivationpath"></a> `derivationPath` | `string` | The HD derivation path used to create the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:32](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L32) |
+| <a id="id"></a> `id` | `string` | The unique identifier of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:26](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L26) |
+| <a id="name"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:28](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L28) |
+
+***
+
+#### WalletInfo
+
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:6](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L6)
+
+Information about the wallet to be created.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="name-1"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:8](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/viem/src/custom-actions/create-wallet.action.ts#L8) |
 
 ***
 

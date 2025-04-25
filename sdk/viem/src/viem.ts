@@ -178,3 +178,37 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
 }
 
 export { OTPAlgorithm, WalletVerificationType } from "./custom-actions/types/wallet-verification.enum.js";
+
+export type {
+  CreateWalletVerificationChallengesResponse,
+  CreateWalletVerificationChallengesParameters,
+  WalletVerificationChallenge,
+} from "./custom-actions/create-wallet-verification-challenges.action.js";
+export type {
+  CreateWalletVerificationResponse,
+  CreateWalletVerificationParameters,
+  WalletVerificationInfo,
+  WalletPincodeVerificationInfo,
+  WalletOTPVerificationInfo,
+  WalletSecretCodesVerificationInfo,
+} from "./custom-actions/create-wallet-verification.action.js";
+export type {
+  CreateWalletResponse,
+  CreateWalletParameters,
+  WalletInfo,
+} from "./custom-actions/create-wallet.action.js";
+export type {
+  DeleteWalletVerificationParameters,
+  DeleteWalletVerificationResponse,
+} from "./custom-actions/delete-wallet-verification.action.js";
+export type {
+  GetWalletVerificationsParameters,
+  GetWalletVerificationsResponse,
+  WalletVerification,
+} from "./custom-actions/get-wallet-verifications.action.js";
+export type {
+  VerifyWalletVerificationChallengeParameters,
+  AddressOrObject,
+  VerifyWalletVerificationChallengeResponse,
+  VerificationResult,
+} from "./custom-actions/verify-wallet-verification-challenge.action.js";
