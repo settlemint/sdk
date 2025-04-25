@@ -125,7 +125,7 @@ Get a wallet client. Use this if you need to write to the blockchain.
 
 ##### Returns
 
-A function that returns a wallet client. see [https://viem.sh/docs/clients/wallet](https://viem.sh/docs/clients/wallet)
+A function that returns a wallet client. The function can be called with verification options for HD wallets. see [https://viem.sh/docs/clients/wallet](https://viem.sh/docs/clients/wallet)
 
 > (`verificationOptions?`): `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`Chain`, `undefined`\>\>
 

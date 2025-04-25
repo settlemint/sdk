@@ -95,7 +95,7 @@ export interface WalletVerificationOptions {
 /**
  * Get a wallet client. Use this if you need to write to the blockchain.
  * @param options - The options for the wallet client.
- * @returns A function that returns a wallet client. see {@link https://viem.sh/docs/clients/wallet}
+ * @returns A function that returns a wallet client. The function can be called with verification options for HD wallets. see {@link https://viem.sh/docs/clients/wallet}
  * @example
  * ```ts
  * import { getWalletClient } from '@settlemint/sdk-viem';
