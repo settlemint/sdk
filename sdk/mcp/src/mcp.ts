@@ -40,6 +40,10 @@ import { platformIntegrationToolCreate } from "./tools/platform/integration-tool
 import { platformIntegrationToolList } from "./tools/platform/integration-tool/list.js";
 import { platformIntegrationToolRead } from "./tools/platform/integration-tool/read.js";
 import { platformIntegrationToolRestart } from "./tools/platform/integration-tool/restart.js";
+import { platformLoadBalancerCreate } from "./tools/platform/load-balancer/create";
+import { platformLoadBalancerList } from "./tools/platform/load-balancer/list";
+import { platformLoadBalancerRead } from "./tools/platform/load-balancer/read";
+import { platformLoadBalancerRestart } from "./tools/platform/load-balancer/restart";
 import { platformMiddlewareCreate } from "./tools/platform/middleware/create.js";
 import { platformMiddlewareList } from "./tools/platform/middleware/list.js";
 import { platformMiddlewareRead } from "./tools/platform/middleware/read.js";
@@ -152,6 +156,12 @@ async function main() {
     platformBlockchainNodeRead(server, env, pat);
     platformBlockchainNodeCreate(server, env, pat);
     platformBlockchainNodeRestart(server, env, pat);
+
+    // Load Balancer tools
+    platformLoadBalancerList(server, env, pat);
+    platformLoadBalancerRead(server, env, pat);
+    platformLoadBalancerCreate(server, env, pat);
+    platformLoadBalancerRestart(server, env, pat);
 
     // Middleware tools
     platformMiddlewareList(server, env, pat);
