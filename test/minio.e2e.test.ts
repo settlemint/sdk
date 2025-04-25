@@ -1,12 +1,13 @@
 import { afterAll, beforeAll, describe, expect, test } from "bun:test";
 import { randomUUID } from "node:crypto";
 import { basename, join } from "node:path";
-import { createServerMinioClient } from "@settlemint/sdk-minio";
+import { createPresignedUploadUrl, createServerMinioClient, getFileByObjectName } from "@settlemint/sdk-minio";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import type { Client } from "minio";
 
 const TEST_BUCKET_NAME = `test-bucket-${randomUUID()}`;
 const TEST_FILES = [join(__dirname, "./data/test-pdf.pdf"), join(__dirname, "./data/test-image.png")];
+const DEFAULT_PATH = "docs";
 
 describe("MinIO E2E Tests", () => {
   let client: Client;
@@ -48,18 +49,31 @@ describe("MinIO E2E Tests", () => {
       try {
         const filename = basename(testFile);
 
+        const objectName = `${DEFAULT_PATH}/${filename}`;
+
         // Upload
         const buffer = Buffer.from(await Bun.file(testFile).arrayBuffer());
-        await client.putObject(TEST_BUCKET_NAME, filename, buffer);
+        const uploadUrl = await createPresignedUploadUrl(client, filename, DEFAULT_PATH, TEST_BUCKET_NAME, 3_600);
+        const uploadResponse = await fetch(uploadUrl, {
+          method: "PUT",
+          body: buffer,
+        });
+        expect(uploadResponse.status).toBe(200);
 
         // Donwload and verify
-        const dataStream = await client.getObject(TEST_BUCKET_NAME, filename);
+        const dataStream = await client.getObject(TEST_BUCKET_NAME, objectName);
         let receivedData = "";
         for await (const chunk of dataStream) {
           receivedData += chunk.toString();
         }
         const rawContents = await Bun.file(testFile).text();
         expect(receivedData).toBe(rawContents);
+        const fileInfo = await getFileByObjectName(client, objectName, TEST_BUCKET_NAME);
+        expect(fileInfo).toBeObject();
+        expect(fileInfo.name).toBe(filename);
+        expect(fileInfo.size).toBe(buffer.length);
+        expect(fileInfo.uploadedAt).toBeDefined();
+        expect(fileInfo.url).toBeDefined();
       } catch (err) {
         console.error(err);
         throw err;
@@ -79,7 +93,7 @@ describe("MinIO E2E Tests", () => {
     expect(objectNames.length).toBe(TEST_FILES.length);
     for (const testFile of TEST_FILES) {
       const filename = basename(testFile);
-      expect(objectNames).toContain(filename);
+      expect(objectNames).toContain(`${DEFAULT_PATH}/${filename}`);
     }
   });
 
@@ -87,7 +101,7 @@ describe("MinIO E2E Tests", () => {
     for (const testFile of TEST_FILES) {
       // Delete the test file
       const filename = basename(testFile);
-      await client.removeObject(TEST_BUCKET_NAME, filename, {
+      await client.removeObject(TEST_BUCKET_NAME, `${DEFAULT_PATH}/${filename}`, {
         forceDelete: true,
       });
     }

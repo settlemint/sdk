@@ -52,9 +52,8 @@ export {
 // Export high-level functions
 export {
   getFilesList,
-  getFileById,
+  getFileByObjectName,
   uploadFile,
-  uploadBuffer,
   deleteFile,
   createPresignedUploadUrl,
 } from "./helpers/functions.js";
