@@ -20,8 +20,13 @@ import { DEFAULT_BUCKET, type FileMetadata, FileMetadataSchema } from "./schema.
  * @param path - The path to normalize
  * @param fileName - The filename to append
  * @returns The normalized path with filename
+ * @throws Will throw an error if the path is too long (max 1000 characters)
  */
 function normalizePath(path: string, fileName: string): string {
+  if (path.length > 1_000) {
+    throw new Error("Path is too long");
+  }
+
   // Remove trailing slashes from path
   const cleanPath = path.replace(/\/+$/, "");
 
