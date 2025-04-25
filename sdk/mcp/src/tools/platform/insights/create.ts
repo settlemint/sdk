@@ -40,7 +40,16 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
       insightsCategory: z
         .enum(["BLOCKCHAIN_EXPLORER", "HYPERLEDGER_EXPLORER", "OTTERSCAN_BLOCKCHAIN_EXPLORER"])
         .describe("Category of insights"),
-      blockchainNodeUniqueName: z.string().optional().describe("Unique name of the blockchain node to connect to"),
+      blockchainNodeUniqueName: z
+        .string()
+        .optional()
+        .describe("Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName)"),
+      loadBalancerUniqueName: z
+        .string()
+        .optional()
+        .describe(
+          "Unique name of the load balancer to connect to (mutually exclusive with blockchainNodeUniqueName), prefer using a load balancer if available",
+        ),
     },
     async (params) => {
       const insights = await client.insights.create({
@@ -52,6 +61,7 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
         region: params.region,
         insightsCategory: params.insightsCategory,
         blockchainNodeUniqueName: params.blockchainNodeUniqueName,
+        loadBalancerUniqueName: params.loadBalancerUniqueName,
       });
 
       return {

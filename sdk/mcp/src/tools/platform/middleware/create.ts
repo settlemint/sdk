@@ -40,7 +40,18 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
       interface: z
         .enum(["ATTESTATION_INDEXER", "BESU", "FIREFLY_FABCONNECT", "GRAPH", "HA_GRAPH", "SMART_CONTRACT_PORTAL"])
         .describe("Interface type for the middleware"),
-      blockchainNodeUniqueName: z.string().optional().describe("Unique name of the blockchain node to connect to"),
+      blockchainNodeUniqueName: z
+        .string()
+        .optional()
+        .describe(
+          "Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName), prefered option for interface SMART_CONTRACT_PORTAL",
+        ),
+      loadBalancerUniqueName: z
+        .string()
+        .optional()
+        .describe(
+          "Unique name of the load balancer to connect to (mutually exclusive with blockchainNodeUniqueName), prefered option for all other interfaces",
+        ),
     },
     async (params) => {
       const middleware = await client.middleware.create({
@@ -52,6 +63,7 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
         region: params.region,
         interface: params.interface,
         blockchainNodeUniqueName: params.blockchainNodeUniqueName,
+        loadBalancerUniqueName: params.loadBalancerUniqueName,
       });
 
       return {
