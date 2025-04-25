@@ -47,7 +47,7 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE .",
-    "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/viem.ts --exclude '**/node_modules/test' --out ./docs"
+    "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/viem.ts --exclude '**/node_modules/!(viem)/**' --out ./docs"
   },
   "devDependencies": {},
   "dependencies": {
