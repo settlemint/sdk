@@ -29,7 +29,18 @@
 - [About](#about)
 - [API Reference](#api-reference)
   - [Functions](#functions)
+    - [createPresignedUploadUrl()](#createpresigneduploadurl)
     - [createServerMinioClient()](#createserverminioclient)
+    - [deleteFile()](#deletefile)
+    - [getFileById()](#getfilebyid)
+    - [getFilesList()](#getfileslist)
+    - [uploadFile()](#uploadfile)
+  - [Type Aliases](#type-aliases)
+    - [FileMetadata](#filemetadata)
+    - [Static\<T\>](#statict)
+  - [Variables](#variables)
+    - [DEFAULT\_BUCKET](#default_bucket)
+    - [FileMetadataSchema](#filemetadataschema)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -42,6 +53,63 @@ For detailed information about using MinIO with the SettleMint platform, check o
 ## API Reference
 
 ### Functions
+
+#### createPresignedUploadUrl()
+
+> **createPresignedUploadUrl**(`client`, `fileName`, `path`, `bucket`, `expirySeconds`): `Promise`\<`string`\>
+
+Defined in: [sdk/minio/src/helpers/functions.ts:242](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L242)
+
+Creates a presigned upload URL for direct browser uploads
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `client` | `Client` | `undefined` | The MinIO client to use |
+| `fileName` | `string` | `undefined` | The file name to use |
+| `path` | `string` | `""` | Optional path/folder |
+| `bucket` | `string` | `DEFAULT_BUCKET` | Optional bucket name (defaults to DEFAULT_BUCKET) |
+| `expirySeconds` | `number` | `3600` | How long the URL should be valid for |
+
+##### Returns
+
+`Promise`\<`string`\>
+
+Presigned URL for PUT operation
+
+##### Throws
+
+Will throw an error if URL creation fails or client initialization fails
+
+##### Example
+
+```ts
+import { createServerMinioClient, createPresignedUploadUrl } from "@settlemint/sdk-minio";
+
+const { client } = createServerMinioClient({
+  instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+  accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+  secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+});
+
+// Generate the presigned URL on the server
+const url = await createPresignedUploadUrl(client, "report.pdf", "documents/");
+
+// Send the URL to the client/browser via HTTP response
+return Response.json({ uploadUrl: url });
+
+// Then in the browser:
+const response = await fetch('/api/get-upload-url');
+const { uploadUrl } = await response.json();
+await fetch(uploadUrl, {
+ method: 'PUT',
+ headers: { 'Content-Type': 'application/pdf' },
+ body: pdfFile
+});
+```
+
+***
 
 #### createServerMinioClient()
 
@@ -86,6 +154,224 @@ const { client } = createServerMinioClient({
 });
 client.listBuckets();
 ```
+
+***
+
+#### deleteFile()
+
+> **deleteFile**(`client`, `fileId`, `bucket`): `Promise`\<`boolean`\>
+
+Defined in: [sdk/minio/src/helpers/functions.ts:195](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L195)
+
+Deletes a file from storage
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `client` | `Client` | `undefined` | The MinIO client to use |
+| `fileId` | `string` | `undefined` | The file identifier/path |
+| `bucket` | `string` | `DEFAULT_BUCKET` | Optional bucket name (defaults to DEFAULT_BUCKET) |
+
+##### Returns
+
+`Promise`\<`boolean`\>
+
+Success status
+
+##### Throws
+
+Will throw an error if deletion fails or client initialization fails
+
+##### Example
+
+```ts
+import { createServerMinioClient, deleteFile } from "@settlemint/sdk-minio";
+
+const { client } = createServerMinioClient({
+  instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+  accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+  secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+});
+
+await deleteFile(client, "documents/report.pdf");
+```
+
+***
+
+#### getFileById()
+
+> **getFileById**(`client`, `fileId`, `bucket`): `Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+
+Defined in: [sdk/minio/src/helpers/functions.ts:122](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L122)
+
+Gets a single file by its object name
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `client` | `Client` | `undefined` | The MinIO client to use |
+| `fileId` | `string` | `undefined` | The file identifier/path |
+| `bucket` | `string` | `DEFAULT_BUCKET` | Optional bucket name (defaults to DEFAULT_BUCKET) |
+
+##### Returns
+
+`Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+
+File metadata with presigned URL
+
+##### Throws
+
+Will throw an error if the file doesn't exist or client initialization fails
+
+##### Example
+
+```ts
+import { createServerMinioClient, getFileByObjectName } from "@settlemint/sdk-minio";
+
+const { client } = createServerMinioClient({
+  instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+  accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+  secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+});
+
+const file = await getFileByObjectName(client, "documents/report.pdf");
+```
+
+***
+
+#### getFilesList()
+
+> **getFilesList**(`client`, `prefix`, `bucket`): `Promise`\<`object`[]\>
+
+Defined in: [sdk/minio/src/helpers/functions.ts:61](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L61)
+
+Gets a list of files with optional prefix filter
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `client` | `Client` | `undefined` | The MinIO client to use |
+| `prefix` | `string` | `""` | Optional prefix to filter files (like a folder path) |
+| `bucket` | `string` | `DEFAULT_BUCKET` | Optional bucket name (defaults to DEFAULT_BUCKET) |
+
+##### Returns
+
+`Promise`\<`object`[]\>
+
+Array of file metadata objects
+
+##### Throws
+
+Will throw an error if the operation fails or client initialization fails
+
+##### Example
+
+```ts
+import { createServerMinioClient, getFilesList } from "@settlemint/sdk-minio";
+
+const { client } = createServerMinioClient({
+  instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+  accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+  secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+});
+
+const files = await getFilesList(client, "documents/");
+```
+
+***
+
+#### uploadFile()
+
+> **uploadFile**(`client`, `buffer`, `objectName`, `contentType`, `bucket`): `Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+
+Defined in: [sdk/minio/src/helpers/functions.ts:292](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/functions.ts#L292)
+
+Uploads a buffer directly to storage
+
+##### Parameters
+
+| Parameter | Type | Default value | Description |
+| ------ | ------ | ------ | ------ |
+| `client` | `Client` | `undefined` | The MinIO client to use |
+| `buffer` | `Buffer` | `undefined` | The buffer to upload |
+| `objectName` | `string` | `undefined` | The full object name/path |
+| `contentType` | `string` | `undefined` | The content type of the file |
+| `bucket` | `string` | `DEFAULT_BUCKET` | Optional bucket name (defaults to DEFAULT_BUCKET) |
+
+##### Returns
+
+`Promise`\<\{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+
+The uploaded file metadata
+
+##### Throws
+
+Will throw an error if upload fails or client initialization fails
+
+##### Example
+
+```ts
+import { createServerMinioClient, uploadBuffer } from "@settlemint/sdk-minio";
+
+const { client } = createServerMinioClient({
+  instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+  accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+  secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+});
+
+const buffer = Buffer.from("Hello, world!");
+const uploadedFile = await uploadFile(client, buffer, "documents/hello.txt", "text/plain");
+```
+
+### Type Aliases
+
+#### FileMetadata
+
+> **FileMetadata** = [`Static`](#static)\<*typeof* [`FileMetadataSchema`](#filemetadataschema)\>
+
+Defined in: [sdk/minio/src/helpers/schema.ts:29](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L29)
+
+Type representing file metadata after validation.
+
+***
+
+#### Static\<T\>
+
+> **Static**\<`T`\> = [`Static`](#static)\<`T`\>
+
+Defined in: [sdk/minio/src/helpers/schema.ts:8](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L8)
+
+Helper type to extract the inferred type from a Zod schema.
+
+##### Type Parameters
+
+| Type Parameter | Description |
+| ------ | ------ |
+| `T` *extends* `z.ZodType` | The Zod schema type |
+
+### Variables
+
+#### DEFAULT\_BUCKET
+
+> `const` **DEFAULT\_BUCKET**: `"uploads"` = `"uploads"`
+
+Defined in: [sdk/minio/src/helpers/schema.ts:34](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L34)
+
+Default bucket name to use for file storage when none is specified.
+
+***
+
+#### FileMetadataSchema
+
+> `const` **FileMetadataSchema**: `ZodObject`\<\{ `contentType`: `ZodString`; `etag`: `ZodString`; `id`: `ZodString`; `name`: `ZodString`; `size`: `ZodNumber`; `uploadedAt`: `ZodString`; `url`: `ZodOptional`\<`ZodString`\>; \}, `"strip"`, `ZodTypeAny`, \{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}, \{ `contentType`: `string`; `etag`: `string`; `id`: `string`; `name`: `string`; `size`: `number`; `uploadedAt`: `string`; `url?`: `string`; \}\>
+
+Defined in: [sdk/minio/src/helpers/schema.ts:16](https://github.com/settlemint/sdk/blob/v2.1.4/sdk/minio/src/helpers/schema.ts#L16)
+
+Schema for file metadata stored in MinIO.
+Defines the structure and validation rules for file information.
 
 ## Contributing
 

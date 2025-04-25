@@ -49,6 +49,8 @@ export {
 // Export validation utilities and schemas
 export {
   type FileMetadata,
+  type FileMetadataSchema,
+  type Static,
   DEFAULT_BUCKET,
 } from "./helpers/schema.js";
 
