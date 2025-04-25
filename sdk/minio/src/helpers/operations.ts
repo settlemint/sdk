@@ -16,12 +16,13 @@ export interface MinioOperation<T> {
  * @param bucket - The bucket name to list objects from
  * @param prefix - Optional prefix to filter objects (like a folder path)
  * @returns A MinioOperation that lists objects when executed
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createListObjectsOperation, executeMinioOperation } from "@settlemint/sdk-minio";
  *
  * const listOperation = createListObjectsOperation("my-bucket", "folder/");
- * const objects = await executeMinioOperation(listOperation);
+ * const objects = await executeMinioOperation(client, listOperation);
  */
 export function createListObjectsOperation(
   bucket: string,
@@ -78,12 +79,13 @@ export function createListObjectsOperation(
  * @param bucket - The bucket name containing the object
  * @param objectName - The object name/path
  * @returns A MinioOperation that gets object stats when executed
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createStatObjectOperation, executeMinioOperation } from "@settlemint/sdk-minio";
  *
  * const statOperation = createStatObjectOperation("my-bucket", "folder/file.txt");
- * const stats = await executeMinioOperation(statOperation);
+ * const stats = await executeMinioOperation(client, statOperation);
  */
 export function createStatObjectOperation(
   bucket: string,
@@ -109,13 +111,14 @@ export function createStatObjectOperation(
  * @param buffer - The buffer containing the file data
  * @param metadata - Optional metadata to attach to the object
  * @returns A MinioOperation that uploads the buffer when executed
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createUploadOperation, executeMinioOperation } from "@settlemint/sdk-minio";
  *
  * const buffer = Buffer.from("file content");
  * const uploadOperation = createUploadOperation("my-bucket", "folder/file.txt", buffer, { "content-type": "text/plain" });
- * const result = await executeMinioOperation(uploadOperation);
+ * const result = await executeMinioOperation(client, uploadOperation);
  */
 export function createUploadOperation(
   bucket: string,
@@ -136,12 +139,13 @@ export function createUploadOperation(
  * @param bucket - The bucket name containing the object
  * @param objectName - The object name/path to delete
  * @returns A MinioOperation that deletes the object when executed
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createDeleteOperation, executeMinioOperation } from "@settlemint/sdk-minio";
  *
  * const deleteOperation = createDeleteOperation("my-bucket", "folder/file.txt");
- * await executeMinioOperation(deleteOperation);
+ * await executeMinioOperation(client, deleteOperation);
  */
 export function createDeleteOperation(bucket: string, objectName: string): MinioOperation<void> {
   return {
@@ -158,12 +162,13 @@ export function createDeleteOperation(bucket: string, objectName: string): Minio
  * @param objectName - The object name/path
  * @param expirySeconds - How long the URL should be valid for in seconds
  * @returns A MinioOperation that creates a presigned URL when executed
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createPresignedUrlOperation, executeMinioOperation } from "@settlemint/sdk-minio";
  *
  * const urlOperation = createPresignedUrlOperation("my-bucket", "folder/file.txt", 3600);
- * const url = await executeMinioOperation(urlOperation);
+ * const url = await executeMinioOperation(client, urlOperation);
  */
 export function createPresignedUrlOperation(
   bucket: string,
@@ -183,20 +188,19 @@ export function createPresignedUrlOperation(
  * @param bucket - The bucket name to upload to
  * @param objectName - The object name/path to create
  * @param expirySeconds - How long the URL should be valid for in seconds
- * @param metadata - Optional object with metadata to attach
  * @returns A MinioOperation that creates a presigned PUT URL when executed
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createPresignedPutOperation, executeMinioOperation } from "@settlemint/sdk-minio";
  *
  * const putUrlOperation = createPresignedPutOperation("my-bucket", "folder/file.txt", 3600);
- * const url = await executeMinioOperation(putUrlOperation);
+ * const url = await executeMinioOperation(client, putUrlOperation);
  */
 export function createPresignedPutOperation(
   bucket: string,
   objectName: string,
   expirySeconds: number,
-  metadata?: Record<string, string>,
 ): MinioOperation<string> {
   return {
     execute: async (client: Client) => {
@@ -212,6 +216,7 @@ export function createPresignedPutOperation(
  *
  * @param client - The MinIO client to use for uploads
  * @returns A function that uploads buffers to MinIO
+ * @throws Will throw an error if the operation fails
  *
  * @example
  * import { createSimpleUploadOperation, getMinioClient } from "@settlemint/sdk-minio";

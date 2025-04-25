@@ -1,11 +1,8 @@
-// For production: import "server-only";
-// For testing, we're using a no-op import check
-// This will be properly isolated in the build process
-
 import { Buffer } from "node:buffer";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import { getMinioClient } from "./helpers/client.js";
-import { executeMinioOperation } from "./helpers/executor.js";
+import { validate } from "@settlemint/sdk-utils/validation";
+import type { Client } from "minio";
+import { executeMinioOperation } from "./executor.js";
 import {
   createDeleteOperation,
   createListObjectsOperation,
@@ -14,11 +11,12 @@ import {
   createSimpleUploadOperation,
   createStatObjectOperation,
   createUploadOperation,
-} from "./helpers/operations.js";
-import { DEFAULT_BUCKET, FileMetadataSchema, type Static, validate } from "./helpers/schema.js";
+} from "./operations.js";
+import { DEFAULT_BUCKET, type FileMetadata, FileMetadataSchema } from "./schema.js";
 
 /**
  * Helper function to normalize paths and prevent double slashes
+ *
  * @param path - The path to normalize
  * @param fileName - The filename to append
  * @returns The normalized path with filename
@@ -39,37 +37,44 @@ function normalizePath(path: string, fileName: string): string {
 /**
  * Gets a list of files with optional prefix filter
  *
+ * @param client - The MinIO client to use
  * @param prefix - Optional prefix to filter files (like a folder path)
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
  * @returns Array of file metadata objects
- * @throws Will throw an error if client initialization fails
+ * @throws Will throw an error if the operation fails or client initialization fails
  *
  * @example
- * import { getFilesList } from "@settlemint/sdk-minio";
+ * import { createServerMinioClient, getFilesList } from "@settlemint/sdk-minio";
  *
- * const files = await getFilesList("documents/");
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
+ *
+ * const files = await getFilesList(client, "documents/");
  */
 export async function getFilesList(
+  client: Client,
   prefix = "",
   bucket: string = DEFAULT_BUCKET,
-): Promise<Array<Static<typeof FileMetadataSchema>>> {
+): Promise<FileMetadata[]> {
   ensureServer();
   console.log(`Listing files with prefix: "${prefix}" in bucket: "${bucket}"`);
 
   try {
-    const client = await getMinioClient();
     const listOperation = createListObjectsOperation(bucket, prefix);
-    const objects = await executeMinioOperation(listOperation, client);
+    const objects = await executeMinioOperation(client, listOperation);
     console.log(`Found ${objects.length} files in MinIO`);
 
     const fileObjects = await Promise.all(
-      objects.map(async (obj) => {
+      objects.map(async (obj): Promise<FileMetadata> => {
         const presignedUrlOperation = createPresignedUrlOperation(
           bucket,
           obj.name,
           3600, // 1 hour expiry
         );
-        const url = await executeMinioOperation(presignedUrlOperation, client);
+        const url = await executeMinioOperation(client, presignedUrlOperation);
 
         return {
           id: obj.name,
@@ -93,29 +98,35 @@ export async function getFilesList(
 /**
  * Gets a single file by its path/id
  *
+ * @param client - The MinIO client to use
  * @param fileId - The file identifier/path
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
  * @returns File metadata with presigned URL
  * @throws Will throw an error if the file doesn't exist or client initialization fails
  *
  * @example
- * import { getFileById } from "@settlemint/sdk-minio";
+ * import { createServerMinioClient, getFileById } from "@settlemint/sdk-minio";
  *
- * const file = await getFileById("documents/report.pdf");
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
+ *
+ * const file = await getFileById(client, "documents/report.pdf");
  */
 export async function getFileById(
+  client: Client,
   fileId: string,
   bucket: string = DEFAULT_BUCKET,
-): Promise<Static<typeof FileMetadataSchema>> {
+): Promise<FileMetadata> {
   ensureServer();
   console.log(`Getting file details for: ${fileId} in bucket: ${bucket}`);
 
   try {
-    const client = await getMinioClient();
-
     // Get the file metadata
     const statOperation = createStatObjectOperation(bucket, fileId);
-    const statResult = await executeMinioOperation(statOperation, client);
+    const statResult = await executeMinioOperation(client, statOperation);
 
     // Generate a presigned URL for access
     const presignedUrlOperation = createPresignedUrlOperation(
@@ -123,7 +134,7 @@ export async function getFileById(
       fileId,
       3600, // 1 hour expiry
     );
-    const url = await executeMinioOperation(presignedUrlOperation, client);
+    const url = await executeMinioOperation(client, presignedUrlOperation);
 
     // Try to get size from metadata first, then from stat result
     let size = 0;
@@ -140,7 +151,7 @@ export async function getFileById(
       size = statResult.size;
     }
 
-    const fileMetadata = {
+    const fileMetadata: FileMetadata = {
       id: fileId,
       name: fileId.split("/").pop() || fileId,
       contentType: statResult.metaData["content-type"] || "application/octet-stream",
@@ -160,6 +171,7 @@ export async function getFileById(
 /**
  * Uploads a file to storage
  *
+ * @param client - The MinIO client to use
  * @param file - The file to upload (Browser File or Buffer with additional properties)
  * @param path - Optional path/folder to store the file in
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
@@ -167,17 +179,24 @@ export async function getFileById(
  * @throws Will throw an error if upload fails or client initialization fails
  *
  * @example
- * import { uploadFile } from "@settlemint/sdk-minio";
+ * import { createServerMinioClient, uploadFile } from "@settlemint/sdk-minio";
+ *
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
  *
  * // In a browser environment with a File object:
  * const file = document.querySelector('input[type="file"]').files[0];
- * const uploadedFile = await uploadFile(file, "documents/");
+ * const uploadedFile = await uploadFile(client, file, "documents/");
  */
 export async function uploadFile(
+  client: Client,
   file: File | { arrayBuffer: () => Promise<ArrayBuffer>; name: string; size: number; type: string },
   path = "",
   bucket: string = DEFAULT_BUCKET,
-): Promise<Static<typeof FileMetadataSchema>> {
+): Promise<FileMetadata> {
   ensureServer();
   try {
     const fileName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
@@ -198,11 +217,9 @@ export async function uploadFile(
       "content-length": size.toString(), // Store size in metadata
     };
 
-    const client = await getMinioClient();
-
     // Upload the file directly passing the Buffer object
     const uploadOperation = createUploadOperation(bucket, objectName, buffer, metadata);
-    const result = await executeMinioOperation(uploadOperation, client);
+    const result = await executeMinioOperation(client, uploadOperation);
 
     // Generate a presigned URL for immediate access
     const presignedUrlOperation = createPresignedUrlOperation(
@@ -210,9 +227,9 @@ export async function uploadFile(
       objectName,
       3600, // 1 hour expiry
     );
-    const url = await executeMinioOperation(presignedUrlOperation, client);
+    const url = await executeMinioOperation(client, presignedUrlOperation);
 
-    const fileMetadata = {
+    const fileMetadata: FileMetadata = {
       id: objectName,
       name: fileName,
       contentType: file.type,
@@ -232,22 +249,28 @@ export async function uploadFile(
 /**
  * Deletes a file from storage
  *
+ * @param client - The MinIO client to use
  * @param fileId - The file identifier/path to delete
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
  * @returns Success status
  * @throws Will throw an error if deletion fails or client initialization fails
  *
  * @example
- * import { deleteFile } from "@settlemint/sdk-minio";
+ * import { createServerMinioClient, deleteFile } from "@settlemint/sdk-minio";
  *
- * await deleteFile("documents/report.pdf");
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
+ *
+ * await deleteFile(client, "documents/report.pdf");
  */
-export async function deleteFile(fileId: string, bucket: string = DEFAULT_BUCKET): Promise<boolean> {
+export async function deleteFile(client: Client, fileId: string, bucket: string = DEFAULT_BUCKET): Promise<boolean> {
   ensureServer();
   try {
-    const client = await getMinioClient();
     const deleteOperation = createDeleteOperation(bucket, fileId);
-    await executeMinioOperation(deleteOperation, client);
+    await executeMinioOperation(client, deleteOperation);
     return true;
   } catch (error) {
     console.error(`Failed to delete file ${fileId}:`, error);
@@ -258,8 +281,8 @@ export async function deleteFile(fileId: string, bucket: string = DEFAULT_BUCKET
 /**
  * Creates a presigned upload URL for direct browser uploads
  *
+ * @param client - The MinIO client to use
  * @param fileName - The file name to use
- * @param contentType - The content type of the file
  * @param path - Optional path/folder
  * @param bucket - Optional bucket name (defaults to DEFAULT_BUCKET)
  * @param expirySeconds - How long the URL should be valid for
@@ -267,9 +290,15 @@ export async function deleteFile(fileId: string, bucket: string = DEFAULT_BUCKET
  * @throws Will throw an error if URL creation fails or client initialization fails
  *
  * @example
- * import { createPresignedUploadUrl } from "@settlemint/sdk-minio";
+ * import { createServerMinioClient, createPresignedUploadUrl } from "@settlemint/sdk-minio";
  *
- * const url = await createPresignedUploadUrl("report.pdf", "application/pdf", "documents/");
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
+ *
+ * const url = await createPresignedUploadUrl(client, "report.pdf", "documents/");
  * // Use the URL for direct browser upload with fetch:
  * await fetch(url, {
  *   method: 'PUT',
@@ -278,8 +307,8 @@ export async function deleteFile(fileId: string, bucket: string = DEFAULT_BUCKET
  * });
  */
 export async function createPresignedUploadUrl(
+  client: Client,
   fileName: string,
-  contentType: string,
   path = "",
   bucket: string = DEFAULT_BUCKET,
   expirySeconds = 3600,
@@ -288,12 +317,11 @@ export async function createPresignedUploadUrl(
   try {
     const safeFileName = fileName.replace(/[^a-zA-Z0-9._-]/g, "_");
     const objectName = normalizePath(path, safeFileName);
-    const client = await getMinioClient();
 
     // Create operation for presigned PUT URL
     const presignedPutOperation = createPresignedPutOperation(bucket, objectName, expirySeconds);
 
-    const url = await executeMinioOperation(presignedPutOperation, client);
+    const url = await executeMinioOperation(client, presignedPutOperation);
     if (!url) {
       throw new Error("Failed to generate presigned upload URL");
     }
@@ -308,6 +336,7 @@ export async function createPresignedUploadUrl(
 /**
  * Uploads a buffer directly to storage
  *
+ * @param client - The MinIO client to use
  * @param buffer - The buffer to upload
  * @param objectName - The full object name/path
  * @param contentType - The content type of the file
@@ -316,21 +345,26 @@ export async function createPresignedUploadUrl(
  * @throws Will throw an error if upload fails or client initialization fails
  *
  * @example
- * import { uploadBuffer } from "@settlemint/sdk-minio";
+ * import { createServerMinioClient, uploadBuffer } from "@settlemint/sdk-minio";
+ *
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
  *
  * const buffer = Buffer.from("Hello, world!");
- * const uploadedFile = await uploadBuffer(buffer, "documents/hello.txt", "text/plain");
+ * const uploadedFile = await uploadBuffer(client, buffer, "documents/hello.txt", "text/plain");
  */
 export async function uploadBuffer(
+  client: Client,
   buffer: Buffer,
   objectName: string,
   contentType: string,
   bucket: string = DEFAULT_BUCKET,
-): Promise<Static<typeof FileMetadataSchema>> {
+): Promise<FileMetadata> {
   ensureServer();
   try {
-    const client = await getMinioClient();
-
     // Add file metadata
     const metadata = {
       "content-type": contentType,
@@ -347,11 +381,11 @@ export async function uploadBuffer(
       objectName,
       3600, // 1 hour expiry
     );
-    const url = await executeMinioOperation(presignedUrlOperation, client);
+    const url = await executeMinioOperation(client, presignedUrlOperation);
 
     const fileName = objectName.split("/").pop() || objectName;
 
-    const fileMetadata = {
+    const fileMetadata: FileMetadata = {
       id: objectName,
       name: fileName,
       contentType,

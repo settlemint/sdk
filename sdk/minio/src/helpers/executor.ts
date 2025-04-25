@@ -5,23 +5,23 @@ import type { MinioOperation } from "./operations.js";
 /**
  * Executes a MinIO operation using the provided client
  *
+ * @param client - MinIO client to use
  * @param operation - The operation to execute
- * @param client - Optional MinIO client to use (if not provided, current client must be available)
  * @returns The result of the operation execution
  * @throws Will throw an error if the operation fails
  *
  * @example
- * import { createListObjectsOperation, executeMinioOperation } from "@settlemint/sdk-minio";
- *
- * const operation = createListObjectsOperation("my-bucket", "prefix/");
- * const result = await executeMinioOperation(operation);
+ * import { createServerMinioClient, createListObjectsOperation, executeMinioOperation } from "@settlemint/sdk-minio";
+ * const { client } = createServerMinioClient({
+ *   instance: process.env.SETTLEMINT_MINIO_ENDPOINT!,
+ *   accessKey: process.env.SETTLEMINT_MINIO_ACCESS_KEY!,
+ *   secretKey: process.env.SETTLEMINT_MINIO_SECRET_KEY!
+ * });
+ * const listOperation = createListObjectsOperation("my-bucket", "prefix/");
+ * const result = await executeMinioOperation(client, listOperation);
  */
-export async function executeMinioOperation<T>(operation: MinioOperation<T>, client?: Client): Promise<T> {
+export async function executeMinioOperation<T>(client: Client, operation: MinioOperation<T>): Promise<T> {
   ensureServer();
-
-  if (!client) {
-    throw new Error("MinIO client is required. Provide a client or use getMinioClient to get the default client.");
-  }
 
   return operation.execute(client);
 }

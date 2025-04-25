@@ -1,80 +1,34 @@
-/**
- * Zod-based schema validation utilities
- *
- * This module provides a wrapper around Zod with an API surface that maintains
- * compatibility with the previous validation system. It provides simple functions
- * for creating and validating schemas.
- */
 import { z } from "zod";
 
-// Re-export Zod's infer type to maintain API compatibility
-export type Static<T extends z.ZodType> = z.infer<T>;
-
-// Simple wrapper around Zod to maintain API compatibility
-export const t = {
-  String: (options: { format?: string } = {}): z.ZodString => {
-    let schema = z.string();
-    if (options.format === "date-time") {
-      schema = schema.datetime();
-    } else if (options.format === "uri") {
-      schema = schema.url();
-    }
-    return schema;
-  },
-
-  Number: (): z.ZodNumber => {
-    return z.number();
-  },
-
-  Boolean: (): z.ZodBoolean => {
-    return z.boolean();
-  },
-
-  Object: <T extends Record<string, z.ZodType>>(shape: T, options: { $id?: string } = {}): z.ZodObject<T> => {
-    // Zod doesn't use $id, we just use it for API compatibility
-    return z.object(shape);
-  },
-
-  Array: <T extends z.ZodType>(items: T): z.ZodArray<T> => {
-    return z.array(items);
-  },
-
-  Optional: <T extends z.ZodType>(schema: T): z.ZodOptional<T> => {
-    return schema.optional();
-  },
-};
-
 /**
- * Validate data against a schema
+ * Helper type to extract the inferred type from a Zod schema.
  *
- * @param schema The Zod schema to validate against
- * @param value The value to validate
- * @returns The validated and typed value
- * @throws Will throw an error if validation fails
+ * @template T - The Zod schema type
  */
-export function validate<T extends z.ZodType>(schema: T, value: unknown): Static<T> {
-  return schema.parse(value);
-}
+export type Static<T extends z.ZodType> = z.infer<T>;
 
 // ----- Schema Definitions -----
 
 /**
- * Schema for file metadata
+ * Schema for file metadata stored in MinIO.
+ * Defines the structure and validation rules for file information.
  */
-export const FileMetadataSchema = t.Object(
-  {
-    id: t.String(),
-    name: t.String(),
-    contentType: t.String(),
-    size: t.Number(),
-    uploadedAt: t.String({ format: "date-time" }),
-    etag: t.String(),
-    url: t.Optional(t.String({ format: "uri" })),
-  },
-  { $id: "FileMetadata" },
-);
+export const FileMetadataSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  contentType: z.string(),
+  size: z.number(),
+  uploadedAt: z.string().datetime(),
+  etag: z.string(),
+  url: z.string().url().optional(),
+});
 
 /**
- * Default bucket to use for file storage
+ * Type representing file metadata after validation.
+ */
+export type FileMetadata = Static<typeof FileMetadataSchema>;
+
+/**
+ * Default bucket name to use for file storage when none is specified.
  */
 export const DEFAULT_BUCKET = "uploads";

@@ -1,7 +1,7 @@
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
+import { validate } from "@settlemint/sdk-utils/validation";
 import { Client } from "minio";
 import { type ServerClientOptions, ServerClientOptionsSchema } from "./helpers/client-options.schema.js";
-import { validate } from "./helpers/schema.js";
 
 /**
  * Creates a MinIO client for server-side use with authentication.
@@ -23,7 +23,6 @@ import { validate } from "./helpers/schema.js";
 export function createServerMinioClient(options: ServerClientOptions): { client: Client } {
   ensureServer();
 
-  // Validate the options with our utility that formats validation errors
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 
   const url = new URL(validatedOptions.instance);
@@ -38,3 +37,35 @@ export function createServerMinioClient(options: ServerClientOptions): { client:
     }),
   };
 }
+
+// Export operations and executor
+export {
+  createDeleteOperation,
+  createListObjectsOperation,
+  createPresignedPutOperation,
+  createPresignedUrlOperation,
+  createSimpleUploadOperation,
+  createStatObjectOperation,
+  createUploadOperation,
+  type MinioOperation,
+} from "./helpers/operations.js";
+
+// Export high-level functions
+export {
+  getFilesList,
+  getFileById,
+  uploadFile,
+  uploadBuffer,
+  deleteFile,
+  createPresignedUploadUrl,
+} from "./helpers/functions.js";
+export { executeMinioOperation } from "./helpers/executor.js";
+
+// Export validation utilities and schemas
+export {
+  type FileMetadata,
+  DEFAULT_BUCKET,
+} from "./helpers/schema.js";
+
+// Re-export required types from minio
+export type { Client, ItemBucketMetadata } from "minio";
