@@ -22,7 +22,6 @@ import { type ServerClientOptions, ServerClientOptionsSchema } from "./helpers/c
  */
 export function createServerMinioClient(options: ServerClientOptions): { client: Client } {
   ensureServer();
-
   const validatedOptions = validate(ServerClientOptionsSchema, options);
 
   const url = new URL(validatedOptions.instance);
