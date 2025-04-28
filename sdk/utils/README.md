@@ -115,7 +115,7 @@ The SettleMint Utils SDK provides a collection of shared utilities and helper fu
 
 > **ascii**(): `void`
 
-Defined in: [sdk/utils/src/terminal/ascii.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/ascii.ts#L14)
+Defined in: [sdk/utils/src/terminal/ascii.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/ascii.ts#L14)
 
 Prints the SettleMint ASCII art logo to the console in magenta color.
 Used for CLI branding and visual identification.
@@ -139,7 +139,7 @@ ascii();
 
 > **camelCaseToWords**(`s`): `string`
 
-Defined in: [sdk/utils/src/string.ts:29](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/string.ts#L29)
+Defined in: [sdk/utils/src/string.ts:29](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/string.ts#L29)
 
 Converts a camelCase string to a human-readable string.
 
@@ -170,7 +170,7 @@ const words = camelCaseToWords("camelCaseString");
 
 > **cancel**(`msg`): `never`
 
-Defined in: [sdk/utils/src/terminal/cancel.ts:23](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/cancel.ts#L23)
+Defined in: [sdk/utils/src/terminal/cancel.ts:23](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/cancel.ts#L23)
 
 Displays an error message in red inverse text and throws a CancelError.
 Used to terminate execution with a visible error message.
@@ -203,7 +203,7 @@ cancel("An error occurred");
 
 > **capitalizeFirstLetter**(`val`): `string`
 
-Defined in: [sdk/utils/src/string.ts:13](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/string.ts#L13)
+Defined in: [sdk/utils/src/string.ts:13](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/string.ts#L13)
 
 Capitalizes the first letter of a string.
 
@@ -234,7 +234,7 @@ const capitalized = capitalizeFirstLetter("hello");
 
 > **createLogger**(`options`): [`Logger`](#logger)
 
-Defined in: [sdk/utils/src/logging/logger.ts:50](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L50)
+Defined in: [sdk/utils/src/logging/logger.ts:50](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L50)
 
 Creates a simple logger with configurable log level
 
@@ -267,7 +267,7 @@ logger.error('Operation failed', new Error('Connection timeout'));
 
 > **emptyDir**(`dir`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:45](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/download-and-extract.ts#L45)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:45](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/download-and-extract.ts#L45)
 
 Removes all contents of a directory except the .git folder
 
@@ -295,7 +295,7 @@ await emptyDir("/path/to/dir"); // Removes all contents except .git
 
 > **ensureBrowser**(): `void`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:31](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/runtime/ensure-server.ts#L31)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:31](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/runtime/ensure-server.ts#L31)
 
 Ensures that code is running in a browser environment and not on the server.
 
@@ -322,7 +322,7 @@ ensureBrowser();
 
 > **ensureServer**(): `void`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:13](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/runtime/ensure-server.ts#L13)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:13](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/runtime/ensure-server.ts#L13)
 
 Ensures that code is running on the server and not in a browser environment.
 
@@ -349,7 +349,7 @@ ensureServer();
 
 > **executeCommand**(`command`, `args`, `options?`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:51](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L51)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:51](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L51)
 
 Executes a command with the given arguments in a child process.
 Pipes stdin to the child process and captures stdout/stderr output.
@@ -391,7 +391,7 @@ await executeCommand("npm", ["install"], { silent: true });
 
 > **exists**(`path`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/filesystem/exists.ts:17](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/filesystem/exists.ts#L17)
+Defined in: [sdk/utils/src/filesystem/exists.ts:17](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/filesystem/exists.ts#L17)
 
 Checks if a file or directory exists at the given path
 
@@ -424,7 +424,7 @@ if (await exists('/path/to/file.txt')) {
 
 > **extractJsonObject**\<`T`\>(`value`): `null` \| `T`
 
-Defined in: [sdk/utils/src/json.ts:50](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/json.ts#L50)
+Defined in: [sdk/utils/src/json.ts:50](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/json.ts#L50)
 
 Extracts a JSON object from a string.
 
@@ -467,7 +467,7 @@ const json = extractJsonObject<{ port: number }>(
 
 > **fetchWithRetry**(`input`, `init?`, `maxRetries?`, `initialSleepTime?`): `Promise`\<`Response`\>
 
-Defined in: [sdk/utils/src/http/fetch-with-retry.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/http/fetch-with-retry.ts#L18)
+Defined in: [sdk/utils/src/http/fetch-with-retry.ts:18](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/http/fetch-with-retry.ts#L18)
 
 Retry an HTTP request with exponential backoff and jitter.
 Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
@@ -505,7 +505,7 @@ const response = await fetchWithRetry("https://api.example.com/data");
 
 > **findMonoRepoPackages**(`projectDir`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/filesystem/mono-repo.ts:59](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/filesystem/mono-repo.ts#L59)
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:59](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/filesystem/mono-repo.ts#L59)
 
 Finds all packages in a monorepo
 
@@ -536,7 +536,7 @@ console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path
 
 > **findMonoRepoRoot**(`startDir`): `Promise`\<`null` \| `string`\>
 
-Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/filesystem/mono-repo.ts#L19)
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/filesystem/mono-repo.ts#L19)
 
 Finds the root directory of a monorepo
 
@@ -567,7 +567,7 @@ console.log(root); // Output: /path/to/your/project/packages/core
 
 > **formatTargetDir**(`targetDir`): `string`
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:15](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/download-and-extract.ts#L15)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:15](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/download-and-extract.ts#L15)
 
 Formats a directory path by removing trailing slashes and whitespace
 
@@ -597,7 +597,7 @@ const formatted = formatTargetDir("/path/to/dir/ "); // "/path/to/dir"
 
 > **getPackageManager**(`targetDir?`): `Promise`\<`AgentName`\>
 
-Defined in: [sdk/utils/src/package-manager/get-package-manager.ts:15](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/get-package-manager.ts#L15)
+Defined in: [sdk/utils/src/package-manager/get-package-manager.ts:15](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/get-package-manager.ts#L15)
 
 Detects the package manager used in the current project
 
@@ -628,7 +628,7 @@ console.log(`Using ${packageManager}`);
 
 > **getPackageManagerExecutable**(`targetDir?`): `Promise`\<\{ `args`: `string`[]; `command`: `string`; \}\>
 
-Defined in: [sdk/utils/src/package-manager/get-package-manager-executable.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/get-package-manager-executable.ts#L14)
+Defined in: [sdk/utils/src/package-manager/get-package-manager-executable.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/get-package-manager-executable.ts#L14)
 
 Retrieves the executable command and arguments for the package manager
 
@@ -659,7 +659,7 @@ console.log(`Using ${command} with args: ${args.join(" ")}`);
 
 > **graphqlFetchWithRetry**\<`Data`\>(`input`, `init?`, `maxRetries?`, `initialSleepTime?`): `Promise`\<`Data`\>
 
-Defined in: [sdk/utils/src/http/graphql-fetch-with-retry.ts:34](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/http/graphql-fetch-with-retry.ts#L34)
+Defined in: [sdk/utils/src/http/graphql-fetch-with-retry.ts:34](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/http/graphql-fetch-with-retry.ts#L34)
 
 Executes a GraphQL request with automatic retries using exponential backoff and jitter.
 Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
@@ -718,7 +718,7 @@ const data = await graphqlFetchWithRetry<{ user: { id: string } }>(
 
 > **installDependencies**(`pkgs`, `cwd?`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:20](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/install-dependencies.ts#L20)
+Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:20](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/install-dependencies.ts#L20)
 
 Installs one or more packages as dependencies using the detected package manager
 
@@ -757,7 +757,7 @@ await installDependencies(["express", "cors"]);
 
 > **intro**(`msg`): `void`
 
-Defined in: [sdk/utils/src/terminal/intro.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/intro.ts#L16)
+Defined in: [sdk/utils/src/terminal/intro.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/intro.ts#L16)
 
 Displays an introductory message in magenta text with padding.
 Any sensitive tokens in the message are masked before display.
@@ -787,7 +787,7 @@ intro("Starting deployment...");
 
 > **isEmpty**(`path`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:31](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/download-and-extract.ts#L31)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:31](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/download-and-extract.ts#L31)
 
 Checks if a directory is empty or contains only a .git folder
 
@@ -819,7 +819,7 @@ if (await isEmpty("/path/to/dir")) {
 
 > **isPackageInstalled**(`name`, `path?`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:17](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/is-package-installed.ts#L17)
+Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:17](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/is-package-installed.ts#L17)
 
 Checks if a package is installed in the project's dependencies, devDependencies, or peerDependencies.
 
@@ -855,7 +855,7 @@ console.log(`@settlemint/sdk-utils is installed: ${isInstalled}`);
 
 > **list**(`title`, `items`): `void`
 
-Defined in: [sdk/utils/src/terminal/list.ts:23](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/list.ts#L23)
+Defined in: [sdk/utils/src/terminal/list.ts:23](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/list.ts#L23)
 
 Displays a list of items in a formatted manner, supporting nested items.
 
@@ -895,7 +895,7 @@ list("Providers", [
 
 > **loadEnv**\<`T`\>(`validateEnv`, `prod`, `path`): `Promise`\<`T` *extends* `true` ? `object` : `object`\>
 
-Defined in: [sdk/utils/src/environment/load-env.ts:25](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/environment/load-env.ts#L25)
+Defined in: [sdk/utils/src/environment/load-env.ts:25](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/environment/load-env.ts#L25)
 
 Loads environment variables from .env files.
 To enable encryption with dotenvx (https://www.dotenvx.com/docs) run `bunx dotenvx encrypt`
@@ -943,7 +943,7 @@ const rawEnv = await loadEnv(false, false);
 
 > **maskTokens**(`output`): `string`
 
-Defined in: [sdk/utils/src/logging/mask-tokens.ts:13](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/mask-tokens.ts#L13)
+Defined in: [sdk/utils/src/logging/mask-tokens.ts:13](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/mask-tokens.ts#L13)
 
 Masks sensitive SettleMint tokens in output text by replacing them with asterisks.
 Handles personal access tokens (PAT), application access tokens (AAT), and service account tokens (SAT).
@@ -975,7 +975,7 @@ const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
 
 > **note**(`message`, `level`): `void`
 
-Defined in: [sdk/utils/src/terminal/note.ts:21](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/note.ts#L21)
+Defined in: [sdk/utils/src/terminal/note.ts:21](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/note.ts#L21)
 
 Displays a note message with optional warning level formatting.
 Regular notes are displayed in normal text, while warnings are shown in yellow.
@@ -1010,7 +1010,7 @@ note("Low disk space remaining", "warn");
 
 > **outro**(`msg`): `void`
 
-Defined in: [sdk/utils/src/terminal/outro.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/outro.ts#L16)
+Defined in: [sdk/utils/src/terminal/outro.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/outro.ts#L16)
 
 Displays a closing message in green inverted text with padding.
 Any sensitive tokens in the message are masked before display.
@@ -1040,7 +1040,7 @@ outro("Deployment completed successfully!");
 
 > **projectRoot**(`fallbackToCwd`, `cwd?`): `Promise`\<`string`\>
 
-Defined in: [sdk/utils/src/filesystem/project-root.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/filesystem/project-root.ts#L18)
+Defined in: [sdk/utils/src/filesystem/project-root.ts:18](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/filesystem/project-root.ts#L18)
 
 Finds the root directory of the current project by locating the nearest package.json file
 
@@ -1077,7 +1077,7 @@ console.log(`Project root is at: ${rootDir}`);
 
 > **replaceUnderscoresAndHyphensWithSpaces**(`s`): `string`
 
-Defined in: [sdk/utils/src/string.ts:48](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/string.ts#L48)
+Defined in: [sdk/utils/src/string.ts:48](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/string.ts#L48)
 
 Replaces underscores and hyphens with spaces.
 
@@ -1108,7 +1108,7 @@ const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
 
 > **requestLogger**(`logger`, `name`, `fn`): (...`args`) => `Promise`\<`Response`\>
 
-Defined in: [sdk/utils/src/logging/request-logger.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/request-logger.ts#L14)
+Defined in: [sdk/utils/src/logging/request-logger.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/request-logger.ts#L14)
 
 Logs the request and duration of a fetch call (> 500ms is logged as warn, otherwise info)
 
@@ -1142,7 +1142,7 @@ The fetch function
 
 > **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError?`): `Promise`\<`T`\>
 
-Defined in: [sdk/utils/src/retry.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/retry.ts#L14)
+Defined in: [sdk/utils/src/retry.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/retry.ts#L14)
 
 Retry a function when it fails.
 
@@ -1182,7 +1182,7 @@ const result = await retryWhenFailed(() => readFile("/path/to/file.txt"), 3, 1_0
 
 > **setName**(`name`, `path?`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/set-name.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/package-manager/set-name.ts#L16)
+Defined in: [sdk/utils/src/package-manager/set-name.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/package-manager/set-name.ts#L16)
 
 Sets the name field in the package.json file
 
@@ -1217,7 +1217,7 @@ await setName("my-new-project-name");
 
 > **spinner**\<`R`\>(`options`): `Promise`\<`R`\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:55](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/spinner.ts#L55)
+Defined in: [sdk/utils/src/terminal/spinner.ts:55](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/spinner.ts#L55)
 
 Displays a loading spinner while executing an async task.
 Shows progress with start/stop messages and handles errors.
@@ -1267,7 +1267,7 @@ const result = await spinner({
 
 > **table**(`title`, `data`): `void`
 
-Defined in: [sdk/utils/src/terminal/table.ts:21](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/table.ts#L21)
+Defined in: [sdk/utils/src/terminal/table.ts:21](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/table.ts#L21)
 
 Displays data in a formatted table in the terminal.
 
@@ -1301,7 +1301,7 @@ table("My Table", data);
 
 > **truncate**(`value`, `maxLength`): `string`
 
-Defined in: [sdk/utils/src/string.ts:65](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/string.ts#L65)
+Defined in: [sdk/utils/src/string.ts:65](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/string.ts#L65)
 
 Truncates a string to a maximum length and appends "..." if it is longer.
 
@@ -1333,7 +1333,7 @@ const truncated = truncate("Hello, world!", 10);
 
 > **tryParseJson**\<`T`\>(`value`, `defaultValue`): `null` \| `T`
 
-Defined in: [sdk/utils/src/json.ts:23](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/json.ts#L23)
+Defined in: [sdk/utils/src/json.ts:23](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/json.ts#L23)
 
 Attempts to parse a JSON string into a typed value, returning a default value if parsing fails.
 
@@ -1380,7 +1380,7 @@ const invalid = tryParseJson<string[]>(
 
 > **validate**\<`T`\>(`schema`, `value`): `T`\[`"_output"`\]
 
-Defined in: [sdk/utils/src/validation/validate.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/validate.ts#L16)
+Defined in: [sdk/utils/src/validation/validate.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/validate.ts#L16)
 
 Validates a value against a given Zod schema.
 
@@ -1421,7 +1421,7 @@ const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 
 > **writeEnv**(`options`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/environment/write-env.ts:41](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/environment/write-env.ts#L41)
+Defined in: [sdk/utils/src/environment/write-env.ts:41](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/environment/write-env.ts#L41)
 
 Writes environment variables to .env files across a project or monorepo
 
@@ -1473,7 +1473,7 @@ await writeEnv({
 
 #### CancelError
 
-Defined in: [sdk/utils/src/terminal/cancel.ts:8](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/cancel.ts#L8)
+Defined in: [sdk/utils/src/terminal/cancel.ts:8](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/cancel.ts#L8)
 
 Error class used to indicate that the operation was cancelled.
 This error is used to signal that the operation should be aborted.
@@ -1486,7 +1486,7 @@ This error is used to signal that the operation should be aborted.
 
 #### CommandError
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L16)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L16)
 
 Error class for command execution errors
 
@@ -1500,7 +1500,7 @@ Error class for command execution errors
 
 > **new CommandError**(`message`, `code`, `output`): [`CommandError`](#commanderror)
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:23](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L23)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:23](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L23)
 
 Constructs a new CommandError
 
@@ -1526,7 +1526,7 @@ Constructs a new CommandError
 
 > `readonly` **code**: `number`
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:25](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L25)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:25](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L25)
 
 The exit code of the command
 
@@ -1534,7 +1534,7 @@ The exit code of the command
 
 > `readonly` **output**: `string`[]
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:26](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L26)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:26](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L26)
 
 The output of the command
 
@@ -1542,7 +1542,7 @@ The output of the command
 
 #### SpinnerError
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/spinner.ts#L12)
+Defined in: [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/spinner.ts#L12)
 
 Error class used to indicate that the spinner operation failed.
 This error is used to signal that the operation should be aborted.
@@ -1555,7 +1555,7 @@ This error is used to signal that the operation should be aborted.
 
 #### ExecuteCommandOptions
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:7](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L7)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:7](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L7)
 
 Options for executing a command, extending SpawnOptionsWithoutStdio
 
@@ -1567,13 +1567,13 @@ Options for executing a command, extending SpawnOptionsWithoutStdio
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="silent"></a> `silent?` | `boolean` | Whether to suppress output to stdout/stderr | [sdk/utils/src/terminal/execute-command.ts:9](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/execute-command.ts#L9) |
+| <a id="silent"></a> `silent?` | `boolean` | Whether to suppress output to stdout/stderr | [sdk/utils/src/terminal/execute-command.ts:9](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/execute-command.ts#L9) |
 
 ***
 
 #### Logger
 
-Defined in: [sdk/utils/src/logging/logger.ts:23](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L23)
+Defined in: [sdk/utils/src/logging/logger.ts:23](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L23)
 
 Simple logger interface with basic logging methods
  Logger
@@ -1582,16 +1582,16 @@ Simple logger interface with basic logging methods
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="debug"></a> `debug` | (`message`, ...`args`) => `void` | Log debug information | [sdk/utils/src/logging/logger.ts:25](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L25) |
-| <a id="error"></a> `error` | (`message`, ...`args`) => `void` | Log errors | [sdk/utils/src/logging/logger.ts:31](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L31) |
-| <a id="info"></a> `info` | (`message`, ...`args`) => `void` | Log general information | [sdk/utils/src/logging/logger.ts:27](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L27) |
-| <a id="warn"></a> `warn` | (`message`, ...`args`) => `void` | Log warnings | [sdk/utils/src/logging/logger.ts:29](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L29) |
+| <a id="debug"></a> `debug` | (`message`, ...`args`) => `void` | Log debug information | [sdk/utils/src/logging/logger.ts:25](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L25) |
+| <a id="error"></a> `error` | (`message`, ...`args`) => `void` | Log errors | [sdk/utils/src/logging/logger.ts:31](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L31) |
+| <a id="info"></a> `info` | (`message`, ...`args`) => `void` | Log general information | [sdk/utils/src/logging/logger.ts:27](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L27) |
+| <a id="warn"></a> `warn` | (`message`, ...`args`) => `void` | Log warnings | [sdk/utils/src/logging/logger.ts:29](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L29) |
 
 ***
 
 #### LoggerOptions
 
-Defined in: [sdk/utils/src/logging/logger.ts:12](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L12)
+Defined in: [sdk/utils/src/logging/logger.ts:12](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L12)
 
 Configuration options for the logger
  LoggerOptions
@@ -1600,14 +1600,14 @@ Configuration options for the logger
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="level"></a> `level?` | [`LogLevel`](#loglevel) | The minimum log level to output | [sdk/utils/src/logging/logger.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L14) |
-| <a id="prefix"></a> `prefix?` | `string` | The prefix to add to the log message | [sdk/utils/src/logging/logger.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L16) |
+| <a id="level"></a> `level?` | [`LogLevel`](#loglevel) | The minimum log level to output | [sdk/utils/src/logging/logger.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L14) |
+| <a id="prefix"></a> `prefix?` | `string` | The prefix to add to the log message | [sdk/utils/src/logging/logger.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L16) |
 
 ***
 
 #### SpinnerOptions\<R\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/spinner.ts#L25)
+Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/spinner.ts#L25)
 
 Options for configuring the spinner behavior
 
@@ -1621,9 +1621,9 @@ Options for configuring the spinner behavior
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:27](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/spinner.ts#L27) |
-| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:31](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/spinner.ts#L31) |
-| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:29](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/terminal/spinner.ts#L29) |
+| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:27](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/spinner.ts#L27) |
+| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:31](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/spinner.ts#L31) |
+| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:29](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/terminal/spinner.ts#L29) |
 
 ### Type Aliases
 
@@ -1631,7 +1631,7 @@ Options for configuring the spinner behavior
 
 > **AccessToken** = `string`
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:22](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/access-token.schema.ts#L22)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:22](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/access-token.schema.ts#L22)
 
 Schema for validating both application and personal access tokens.
 Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
@@ -1642,7 +1642,7 @@ Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
 
 > **ApplicationAccessToken** = `string`
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:8](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/access-token.schema.ts#L8)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:8](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/access-token.schema.ts#L8)
 
 Schema for validating application access tokens.
 Application access tokens start with 'sm_aat_' prefix.
@@ -1653,7 +1653,7 @@ Application access tokens start with 'sm_aat_' prefix.
 
 > **DotEnv** = `object`
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:97](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L97)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:97](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L97)
 
 Type definition for the environment variables schema.
 
@@ -1661,43 +1661,43 @@ Type definition for the environment variables schema.
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="settlemint_access_token"></a> `SETTLEMINT_ACCESS_TOKEN?` | `string` | Application access token for authenticating with SettleMint services | [sdk/utils/src/validation/dot-env.schema.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L16) |
-| <a id="settlemint_accessible_private_key"></a> `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY?` | `string` | Unique name of the accessible private key | [sdk/utils/src/validation/dot-env.schema.ts:61](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L61) |
-| <a id="settlemint_application"></a> `SETTLEMINT_APPLICATION?` | `string` | Unique name of the application | [sdk/utils/src/validation/dot-env.schema.ts:22](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L22) |
-| <a id="settlemint_blockchain_network"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK?` | `string` | Unique name of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:24](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L24) |
-| <a id="settlemint_blockchain_network_chain_id"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID?` | `string` | Chain ID of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:26](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L26) |
-| <a id="settlemint_blockchain_node"></a> `SETTLEMINT_BLOCKCHAIN_NODE?` | `string` | Unique name of the blockchain node (should have a private key for signing transactions) | [sdk/utils/src/validation/dot-env.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L28) |
-| <a id="settlemint_blockchain_node_json_rpc_endpoint"></a> `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L30) |
-| <a id="settlemint_blockchain_node_or_load_balancer"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER?` | `string` | Unique name of the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:32](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L32) |
-| <a id="settlemint_blockchain_node_or_load_balancer_json_rpc_endpoint"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L34) |
-| <a id="settlemint_blockscout"></a> `SETTLEMINT_BLOCKSCOUT?` | `string` | Unique name of the Blockscout instance | [sdk/utils/src/validation/dot-env.schema.ts:83](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L83) |
-| <a id="settlemint_blockscout_graphql_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:85](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L85) |
-| <a id="settlemint_blockscout_ui_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT?` | `string` | UI endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:87](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L87) |
-| <a id="settlemint_custom_deployment"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT?` | `string` | Unique name of the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:79](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L79) |
-| <a id="settlemint_custom_deployment_endpoint"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT?` | `string` | Endpoint URL for the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:81](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L81) |
-| <a id="settlemint_hasura"></a> `SETTLEMINT_HASURA?` | `string` | Unique name of the Hasura instance | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L36) |
-| <a id="settlemint_hasura_admin_secret"></a> `SETTLEMINT_HASURA_ADMIN_SECRET?` | `string` | Admin secret for authenticating with Hasura | [sdk/utils/src/validation/dot-env.schema.ts:40](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L40) |
-| <a id="settlemint_hasura_database_url"></a> `SETTLEMINT_HASURA_DATABASE_URL?` | `string` | Database connection URL for Hasura | [sdk/utils/src/validation/dot-env.schema.ts:42](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L42) |
-| <a id="settlemint_hasura_endpoint"></a> `SETTLEMINT_HASURA_ENDPOINT?` | `string` | Endpoint URL for the Hasura GraphQL API | [sdk/utils/src/validation/dot-env.schema.ts:38](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L38) |
-| <a id="settlemint_hd_private_key"></a> `SETTLEMINT_HD_PRIVATE_KEY?` | `string` | Unique name of the HD private key | [sdk/utils/src/validation/dot-env.schema.ts:59](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L59) |
-| <a id="settlemint_instance"></a> `SETTLEMINT_INSTANCE` | `string` | Base URL of the SettleMint platform instance | [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L14) |
-| <a id="settlemint_ipfs"></a> `SETTLEMINT_IPFS?` | `string` | Unique name of the IPFS instance | [sdk/utils/src/validation/dot-env.schema.ts:71](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L71) |
-| <a id="settlemint_ipfs_api_endpoint"></a> `SETTLEMINT_IPFS_API_ENDPOINT?` | `string` | API endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:73](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L73) |
-| <a id="settlemint_ipfs_gateway_endpoint"></a> `SETTLEMINT_IPFS_GATEWAY_ENDPOINT?` | `string` | Gateway endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:77](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L77) |
-| <a id="settlemint_ipfs_pinning_endpoint"></a> `SETTLEMINT_IPFS_PINNING_ENDPOINT?` | `string` | Pinning service endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:75](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L75) |
-| <a id="settlemint_log_level"></a> `SETTLEMINT_LOG_LEVEL` | `"error"` \| `"info"` \| `"warn"` \| `"debug"` \| `"none"` | The log level to use | [sdk/utils/src/validation/dot-env.schema.ts:91](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L91) |
-| <a id="settlemint_minio"></a> `SETTLEMINT_MINIO?` | `string` | Unique name of the MinIO instance | [sdk/utils/src/validation/dot-env.schema.ts:63](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L63) |
-| <a id="settlemint_minio_access_key"></a> `SETTLEMINT_MINIO_ACCESS_KEY?` | `string` | Access key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:67](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L67) |
-| <a id="settlemint_minio_endpoint"></a> `SETTLEMINT_MINIO_ENDPOINT?` | `string` | Endpoint URL for MinIO | [sdk/utils/src/validation/dot-env.schema.ts:65](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L65) |
-| <a id="settlemint_minio_secret_key"></a> `SETTLEMINT_MINIO_SECRET_KEY?` | `string` | Secret key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:69](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L69) |
-| <a id="settlemint_new_project_name"></a> `SETTLEMINT_NEW_PROJECT_NAME?` | `string` | Name of the new project being created | [sdk/utils/src/validation/dot-env.schema.ts:89](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L89) |
-| <a id="settlemint_portal"></a> `SETTLEMINT_PORTAL?` | `string` | Unique name of the Smart Contract Portal instance | [sdk/utils/src/validation/dot-env.schema.ts:53](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L53) |
-| <a id="settlemint_portal_graphql_endpoint"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:55](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L55) |
-| <a id="settlemint_portal_rest_endpoint"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT?` | `string` | REST endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:57](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L57) |
-| <a id="settlemint_thegraph"></a> `SETTLEMINT_THEGRAPH?` | `string` | Unique name of The Graph instance | [sdk/utils/src/validation/dot-env.schema.ts:44](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L44) |
-| <a id="settlemint_thegraph_default_subgraph"></a> `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH?` | `string` | Default The Graph subgraph to use | [sdk/utils/src/validation/dot-env.schema.ts:51](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L51) |
-| <a id="settlemint_thegraph_subgraphs_endpoints"></a> `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?` | `string`[] | Array of endpoint URLs for The Graph subgraphs | [sdk/utils/src/validation/dot-env.schema.ts:46](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L46) |
-| <a id="settlemint_workspace"></a> `SETTLEMINT_WORKSPACE?` | `string` | Unique name of the workspace | [sdk/utils/src/validation/dot-env.schema.ts:20](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L20) |
+| <a id="settlemint_access_token"></a> `SETTLEMINT_ACCESS_TOKEN?` | `string` | Application access token for authenticating with SettleMint services | [sdk/utils/src/validation/dot-env.schema.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L16) |
+| <a id="settlemint_accessible_private_key"></a> `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY?` | `string` | Unique name of the accessible private key | [sdk/utils/src/validation/dot-env.schema.ts:61](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L61) |
+| <a id="settlemint_application"></a> `SETTLEMINT_APPLICATION?` | `string` | Unique name of the application | [sdk/utils/src/validation/dot-env.schema.ts:22](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L22) |
+| <a id="settlemint_blockchain_network"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK?` | `string` | Unique name of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:24](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L24) |
+| <a id="settlemint_blockchain_network_chain_id"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID?` | `string` | Chain ID of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:26](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L26) |
+| <a id="settlemint_blockchain_node"></a> `SETTLEMINT_BLOCKCHAIN_NODE?` | `string` | Unique name of the blockchain node (should have a private key for signing transactions) | [sdk/utils/src/validation/dot-env.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L28) |
+| <a id="settlemint_blockchain_node_json_rpc_endpoint"></a> `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L30) |
+| <a id="settlemint_blockchain_node_or_load_balancer"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER?` | `string` | Unique name of the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:32](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L32) |
+| <a id="settlemint_blockchain_node_or_load_balancer_json_rpc_endpoint"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L34) |
+| <a id="settlemint_blockscout"></a> `SETTLEMINT_BLOCKSCOUT?` | `string` | Unique name of the Blockscout instance | [sdk/utils/src/validation/dot-env.schema.ts:83](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L83) |
+| <a id="settlemint_blockscout_graphql_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:85](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L85) |
+| <a id="settlemint_blockscout_ui_endpoint"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT?` | `string` | UI endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:87](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L87) |
+| <a id="settlemint_custom_deployment"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT?` | `string` | Unique name of the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:79](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L79) |
+| <a id="settlemint_custom_deployment_endpoint"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT?` | `string` | Endpoint URL for the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:81](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L81) |
+| <a id="settlemint_hasura"></a> `SETTLEMINT_HASURA?` | `string` | Unique name of the Hasura instance | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L36) |
+| <a id="settlemint_hasura_admin_secret"></a> `SETTLEMINT_HASURA_ADMIN_SECRET?` | `string` | Admin secret for authenticating with Hasura | [sdk/utils/src/validation/dot-env.schema.ts:40](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L40) |
+| <a id="settlemint_hasura_database_url"></a> `SETTLEMINT_HASURA_DATABASE_URL?` | `string` | Database connection URL for Hasura | [sdk/utils/src/validation/dot-env.schema.ts:42](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L42) |
+| <a id="settlemint_hasura_endpoint"></a> `SETTLEMINT_HASURA_ENDPOINT?` | `string` | Endpoint URL for the Hasura GraphQL API | [sdk/utils/src/validation/dot-env.schema.ts:38](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L38) |
+| <a id="settlemint_hd_private_key"></a> `SETTLEMINT_HD_PRIVATE_KEY?` | `string` | Unique name of the HD private key | [sdk/utils/src/validation/dot-env.schema.ts:59](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L59) |
+| <a id="settlemint_instance"></a> `SETTLEMINT_INSTANCE` | `string` | Base URL of the SettleMint platform instance | [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L14) |
+| <a id="settlemint_ipfs"></a> `SETTLEMINT_IPFS?` | `string` | Unique name of the IPFS instance | [sdk/utils/src/validation/dot-env.schema.ts:71](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L71) |
+| <a id="settlemint_ipfs_api_endpoint"></a> `SETTLEMINT_IPFS_API_ENDPOINT?` | `string` | API endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:73](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L73) |
+| <a id="settlemint_ipfs_gateway_endpoint"></a> `SETTLEMINT_IPFS_GATEWAY_ENDPOINT?` | `string` | Gateway endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:77](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L77) |
+| <a id="settlemint_ipfs_pinning_endpoint"></a> `SETTLEMINT_IPFS_PINNING_ENDPOINT?` | `string` | Pinning service endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:75](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L75) |
+| <a id="settlemint_log_level"></a> `SETTLEMINT_LOG_LEVEL` | `"error"` \| `"info"` \| `"warn"` \| `"debug"` \| `"none"` | The log level to use | [sdk/utils/src/validation/dot-env.schema.ts:91](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L91) |
+| <a id="settlemint_minio"></a> `SETTLEMINT_MINIO?` | `string` | Unique name of the MinIO instance | [sdk/utils/src/validation/dot-env.schema.ts:63](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L63) |
+| <a id="settlemint_minio_access_key"></a> `SETTLEMINT_MINIO_ACCESS_KEY?` | `string` | Access key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:67](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L67) |
+| <a id="settlemint_minio_endpoint"></a> `SETTLEMINT_MINIO_ENDPOINT?` | `string` | Endpoint URL for MinIO | [sdk/utils/src/validation/dot-env.schema.ts:65](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L65) |
+| <a id="settlemint_minio_secret_key"></a> `SETTLEMINT_MINIO_SECRET_KEY?` | `string` | Secret key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:69](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L69) |
+| <a id="settlemint_new_project_name"></a> `SETTLEMINT_NEW_PROJECT_NAME?` | `string` | Name of the new project being created | [sdk/utils/src/validation/dot-env.schema.ts:89](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L89) |
+| <a id="settlemint_portal"></a> `SETTLEMINT_PORTAL?` | `string` | Unique name of the Smart Contract Portal instance | [sdk/utils/src/validation/dot-env.schema.ts:53](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L53) |
+| <a id="settlemint_portal_graphql_endpoint"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:55](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L55) |
+| <a id="settlemint_portal_rest_endpoint"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT?` | `string` | REST endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:57](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L57) |
+| <a id="settlemint_thegraph"></a> `SETTLEMINT_THEGRAPH?` | `string` | Unique name of The Graph instance | [sdk/utils/src/validation/dot-env.schema.ts:44](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L44) |
+| <a id="settlemint_thegraph_default_subgraph"></a> `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH?` | `string` | Default The Graph subgraph to use | [sdk/utils/src/validation/dot-env.schema.ts:51](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L51) |
+| <a id="settlemint_thegraph_subgraphs_endpoints"></a> `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?` | `string`[] | Array of endpoint URLs for The Graph subgraphs | [sdk/utils/src/validation/dot-env.schema.ts:46](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L46) |
+| <a id="settlemint_workspace"></a> `SETTLEMINT_WORKSPACE?` | `string` | Unique name of the workspace | [sdk/utils/src/validation/dot-env.schema.ts:20](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L20) |
 
 ***
 
@@ -1705,7 +1705,7 @@ Type definition for the environment variables schema.
 
 > **DotEnvPartial** = `object`
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:108](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L108)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:108](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L108)
 
 Type definition for the partial environment variables schema.
 
@@ -1713,43 +1713,43 @@ Type definition for the partial environment variables schema.
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="settlemint_access_token-1"></a> `SETTLEMINT_ACCESS_TOKEN?` | `string` | Application access token for authenticating with SettleMint services | [sdk/utils/src/validation/dot-env.schema.ts:16](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L16) |
-| <a id="settlemint_accessible_private_key-1"></a> `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY?` | `string` | Unique name of the accessible private key | [sdk/utils/src/validation/dot-env.schema.ts:61](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L61) |
-| <a id="settlemint_application-1"></a> `SETTLEMINT_APPLICATION?` | `string` | Unique name of the application | [sdk/utils/src/validation/dot-env.schema.ts:22](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L22) |
-| <a id="settlemint_blockchain_network-1"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK?` | `string` | Unique name of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:24](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L24) |
-| <a id="settlemint_blockchain_network_chain_id-1"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID?` | `string` | Chain ID of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:26](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L26) |
-| <a id="settlemint_blockchain_node-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE?` | `string` | Unique name of the blockchain node (should have a private key for signing transactions) | [sdk/utils/src/validation/dot-env.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L28) |
-| <a id="settlemint_blockchain_node_json_rpc_endpoint-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L30) |
-| <a id="settlemint_blockchain_node_or_load_balancer-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER?` | `string` | Unique name of the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:32](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L32) |
-| <a id="settlemint_blockchain_node_or_load_balancer_json_rpc_endpoint-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L34) |
-| <a id="settlemint_blockscout-1"></a> `SETTLEMINT_BLOCKSCOUT?` | `string` | Unique name of the Blockscout instance | [sdk/utils/src/validation/dot-env.schema.ts:83](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L83) |
-| <a id="settlemint_blockscout_graphql_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:85](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L85) |
-| <a id="settlemint_blockscout_ui_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT?` | `string` | UI endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:87](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L87) |
-| <a id="settlemint_custom_deployment-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT?` | `string` | Unique name of the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:79](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L79) |
-| <a id="settlemint_custom_deployment_endpoint-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT?` | `string` | Endpoint URL for the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:81](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L81) |
-| <a id="settlemint_hasura-1"></a> `SETTLEMINT_HASURA?` | `string` | Unique name of the Hasura instance | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L36) |
-| <a id="settlemint_hasura_admin_secret-1"></a> `SETTLEMINT_HASURA_ADMIN_SECRET?` | `string` | Admin secret for authenticating with Hasura | [sdk/utils/src/validation/dot-env.schema.ts:40](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L40) |
-| <a id="settlemint_hasura_database_url-1"></a> `SETTLEMINT_HASURA_DATABASE_URL?` | `string` | Database connection URL for Hasura | [sdk/utils/src/validation/dot-env.schema.ts:42](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L42) |
-| <a id="settlemint_hasura_endpoint-1"></a> `SETTLEMINT_HASURA_ENDPOINT?` | `string` | Endpoint URL for the Hasura GraphQL API | [sdk/utils/src/validation/dot-env.schema.ts:38](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L38) |
-| <a id="settlemint_hd_private_key-1"></a> `SETTLEMINT_HD_PRIVATE_KEY?` | `string` | Unique name of the HD private key | [sdk/utils/src/validation/dot-env.schema.ts:59](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L59) |
-| <a id="settlemint_instance-1"></a> `SETTLEMINT_INSTANCE?` | `string` | Base URL of the SettleMint platform instance | [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L14) |
-| <a id="settlemint_ipfs-1"></a> `SETTLEMINT_IPFS?` | `string` | Unique name of the IPFS instance | [sdk/utils/src/validation/dot-env.schema.ts:71](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L71) |
-| <a id="settlemint_ipfs_api_endpoint-1"></a> `SETTLEMINT_IPFS_API_ENDPOINT?` | `string` | API endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:73](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L73) |
-| <a id="settlemint_ipfs_gateway_endpoint-1"></a> `SETTLEMINT_IPFS_GATEWAY_ENDPOINT?` | `string` | Gateway endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:77](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L77) |
-| <a id="settlemint_ipfs_pinning_endpoint-1"></a> `SETTLEMINT_IPFS_PINNING_ENDPOINT?` | `string` | Pinning service endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:75](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L75) |
-| <a id="settlemint_log_level-1"></a> `SETTLEMINT_LOG_LEVEL?` | `"error"` \| `"info"` \| `"warn"` \| `"debug"` \| `"none"` | The log level to use | [sdk/utils/src/validation/dot-env.schema.ts:91](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L91) |
-| <a id="settlemint_minio-1"></a> `SETTLEMINT_MINIO?` | `string` | Unique name of the MinIO instance | [sdk/utils/src/validation/dot-env.schema.ts:63](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L63) |
-| <a id="settlemint_minio_access_key-1"></a> `SETTLEMINT_MINIO_ACCESS_KEY?` | `string` | Access key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:67](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L67) |
-| <a id="settlemint_minio_endpoint-1"></a> `SETTLEMINT_MINIO_ENDPOINT?` | `string` | Endpoint URL for MinIO | [sdk/utils/src/validation/dot-env.schema.ts:65](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L65) |
-| <a id="settlemint_minio_secret_key-1"></a> `SETTLEMINT_MINIO_SECRET_KEY?` | `string` | Secret key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:69](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L69) |
-| <a id="settlemint_new_project_name-1"></a> `SETTLEMINT_NEW_PROJECT_NAME?` | `string` | Name of the new project being created | [sdk/utils/src/validation/dot-env.schema.ts:89](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L89) |
-| <a id="settlemint_portal-1"></a> `SETTLEMINT_PORTAL?` | `string` | Unique name of the Smart Contract Portal instance | [sdk/utils/src/validation/dot-env.schema.ts:53](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L53) |
-| <a id="settlemint_portal_graphql_endpoint-1"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:55](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L55) |
-| <a id="settlemint_portal_rest_endpoint-1"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT?` | `string` | REST endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:57](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L57) |
-| <a id="settlemint_thegraph-1"></a> `SETTLEMINT_THEGRAPH?` | `string` | Unique name of The Graph instance | [sdk/utils/src/validation/dot-env.schema.ts:44](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L44) |
-| <a id="settlemint_thegraph_default_subgraph-1"></a> `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH?` | `string` | Default The Graph subgraph to use | [sdk/utils/src/validation/dot-env.schema.ts:51](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L51) |
-| <a id="settlemint_thegraph_subgraphs_endpoints-1"></a> `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?` | `string`[] | Array of endpoint URLs for The Graph subgraphs | [sdk/utils/src/validation/dot-env.schema.ts:46](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L46) |
-| <a id="settlemint_workspace-1"></a> `SETTLEMINT_WORKSPACE?` | `string` | Unique name of the workspace | [sdk/utils/src/validation/dot-env.schema.ts:20](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L20) |
+| <a id="settlemint_access_token-1"></a> `SETTLEMINT_ACCESS_TOKEN?` | `string` | Application access token for authenticating with SettleMint services | [sdk/utils/src/validation/dot-env.schema.ts:16](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L16) |
+| <a id="settlemint_accessible_private_key-1"></a> `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY?` | `string` | Unique name of the accessible private key | [sdk/utils/src/validation/dot-env.schema.ts:61](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L61) |
+| <a id="settlemint_application-1"></a> `SETTLEMINT_APPLICATION?` | `string` | Unique name of the application | [sdk/utils/src/validation/dot-env.schema.ts:22](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L22) |
+| <a id="settlemint_blockchain_network-1"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK?` | `string` | Unique name of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:24](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L24) |
+| <a id="settlemint_blockchain_network_chain_id-1"></a> `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID?` | `string` | Chain ID of the blockchain network | [sdk/utils/src/validation/dot-env.schema.ts:26](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L26) |
+| <a id="settlemint_blockchain_node-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE?` | `string` | Unique name of the blockchain node (should have a private key for signing transactions) | [sdk/utils/src/validation/dot-env.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L28) |
+| <a id="settlemint_blockchain_node_json_rpc_endpoint-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node | [sdk/utils/src/validation/dot-env.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L30) |
+| <a id="settlemint_blockchain_node_or_load_balancer-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER?` | `string` | Unique name of the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:32](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L32) |
+| <a id="settlemint_blockchain_node_or_load_balancer_json_rpc_endpoint-1"></a> `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT?` | `string` | JSON RPC endpoint for the blockchain node or load balancer | [sdk/utils/src/validation/dot-env.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L34) |
+| <a id="settlemint_blockscout-1"></a> `SETTLEMINT_BLOCKSCOUT?` | `string` | Unique name of the Blockscout instance | [sdk/utils/src/validation/dot-env.schema.ts:83](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L83) |
+| <a id="settlemint_blockscout_graphql_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:85](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L85) |
+| <a id="settlemint_blockscout_ui_endpoint-1"></a> `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT?` | `string` | UI endpoint URL for Blockscout | [sdk/utils/src/validation/dot-env.schema.ts:87](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L87) |
+| <a id="settlemint_custom_deployment-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT?` | `string` | Unique name of the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:79](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L79) |
+| <a id="settlemint_custom_deployment_endpoint-1"></a> `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT?` | `string` | Endpoint URL for the custom deployment | [sdk/utils/src/validation/dot-env.schema.ts:81](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L81) |
+| <a id="settlemint_hasura-1"></a> `SETTLEMINT_HASURA?` | `string` | Unique name of the Hasura instance | [sdk/utils/src/validation/dot-env.schema.ts:36](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L36) |
+| <a id="settlemint_hasura_admin_secret-1"></a> `SETTLEMINT_HASURA_ADMIN_SECRET?` | `string` | Admin secret for authenticating with Hasura | [sdk/utils/src/validation/dot-env.schema.ts:40](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L40) |
+| <a id="settlemint_hasura_database_url-1"></a> `SETTLEMINT_HASURA_DATABASE_URL?` | `string` | Database connection URL for Hasura | [sdk/utils/src/validation/dot-env.schema.ts:42](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L42) |
+| <a id="settlemint_hasura_endpoint-1"></a> `SETTLEMINT_HASURA_ENDPOINT?` | `string` | Endpoint URL for the Hasura GraphQL API | [sdk/utils/src/validation/dot-env.schema.ts:38](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L38) |
+| <a id="settlemint_hd_private_key-1"></a> `SETTLEMINT_HD_PRIVATE_KEY?` | `string` | Unique name of the HD private key | [sdk/utils/src/validation/dot-env.schema.ts:59](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L59) |
+| <a id="settlemint_instance-1"></a> `SETTLEMINT_INSTANCE?` | `string` | Base URL of the SettleMint platform instance | [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L14) |
+| <a id="settlemint_ipfs-1"></a> `SETTLEMINT_IPFS?` | `string` | Unique name of the IPFS instance | [sdk/utils/src/validation/dot-env.schema.ts:71](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L71) |
+| <a id="settlemint_ipfs_api_endpoint-1"></a> `SETTLEMINT_IPFS_API_ENDPOINT?` | `string` | API endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:73](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L73) |
+| <a id="settlemint_ipfs_gateway_endpoint-1"></a> `SETTLEMINT_IPFS_GATEWAY_ENDPOINT?` | `string` | Gateway endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:77](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L77) |
+| <a id="settlemint_ipfs_pinning_endpoint-1"></a> `SETTLEMINT_IPFS_PINNING_ENDPOINT?` | `string` | Pinning service endpoint URL for IPFS | [sdk/utils/src/validation/dot-env.schema.ts:75](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L75) |
+| <a id="settlemint_log_level-1"></a> `SETTLEMINT_LOG_LEVEL?` | `"error"` \| `"info"` \| `"warn"` \| `"debug"` \| `"none"` | The log level to use | [sdk/utils/src/validation/dot-env.schema.ts:91](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L91) |
+| <a id="settlemint_minio-1"></a> `SETTLEMINT_MINIO?` | `string` | Unique name of the MinIO instance | [sdk/utils/src/validation/dot-env.schema.ts:63](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L63) |
+| <a id="settlemint_minio_access_key-1"></a> `SETTLEMINT_MINIO_ACCESS_KEY?` | `string` | Access key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:67](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L67) |
+| <a id="settlemint_minio_endpoint-1"></a> `SETTLEMINT_MINIO_ENDPOINT?` | `string` | Endpoint URL for MinIO | [sdk/utils/src/validation/dot-env.schema.ts:65](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L65) |
+| <a id="settlemint_minio_secret_key-1"></a> `SETTLEMINT_MINIO_SECRET_KEY?` | `string` | Secret key for MinIO authentication | [sdk/utils/src/validation/dot-env.schema.ts:69](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L69) |
+| <a id="settlemint_new_project_name-1"></a> `SETTLEMINT_NEW_PROJECT_NAME?` | `string` | Name of the new project being created | [sdk/utils/src/validation/dot-env.schema.ts:89](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L89) |
+| <a id="settlemint_portal-1"></a> `SETTLEMINT_PORTAL?` | `string` | Unique name of the Smart Contract Portal instance | [sdk/utils/src/validation/dot-env.schema.ts:53](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L53) |
+| <a id="settlemint_portal_graphql_endpoint-1"></a> `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT?` | `string` | GraphQL endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:55](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L55) |
+| <a id="settlemint_portal_rest_endpoint-1"></a> `SETTLEMINT_PORTAL_REST_ENDPOINT?` | `string` | REST endpoint URL for the Portal | [sdk/utils/src/validation/dot-env.schema.ts:57](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L57) |
+| <a id="settlemint_thegraph-1"></a> `SETTLEMINT_THEGRAPH?` | `string` | Unique name of The Graph instance | [sdk/utils/src/validation/dot-env.schema.ts:44](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L44) |
+| <a id="settlemint_thegraph_default_subgraph-1"></a> `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH?` | `string` | Default The Graph subgraph to use | [sdk/utils/src/validation/dot-env.schema.ts:51](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L51) |
+| <a id="settlemint_thegraph_subgraphs_endpoints-1"></a> `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?` | `string`[] | Array of endpoint URLs for The Graph subgraphs | [sdk/utils/src/validation/dot-env.schema.ts:46](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L46) |
+| <a id="settlemint_workspace-1"></a> `SETTLEMINT_WORKSPACE?` | `string` | Unique name of the workspace | [sdk/utils/src/validation/dot-env.schema.ts:20](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L20) |
 
 ***
 
@@ -1757,7 +1757,7 @@ Type definition for the partial environment variables schema.
 
 > **Id** = `string`
 
-Defined in: [sdk/utils/src/validation/id.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/id.schema.ts#L30)
+Defined in: [sdk/utils/src/validation/id.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/id.schema.ts#L30)
 
 Type definition for database IDs, inferred from IdSchema.
 Can be either a PostgreSQL UUID string or MongoDB ObjectID string.
@@ -1768,7 +1768,7 @@ Can be either a PostgreSQL UUID string or MongoDB ObjectID string.
 
 > **LogLevel** = `"debug"` \| `"info"` \| `"warn"` \| `"error"` \| `"none"`
 
-Defined in: [sdk/utils/src/logging/logger.ts:6](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/logging/logger.ts#L6)
+Defined in: [sdk/utils/src/logging/logger.ts:6](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/logging/logger.ts#L6)
 
 Log levels supported by the logger
 
@@ -1778,7 +1778,7 @@ Log levels supported by the logger
 
 > **PersonalAccessToken** = `string`
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:15](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/access-token.schema.ts#L15)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:15](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/access-token.schema.ts#L15)
 
 Schema for validating personal access tokens.
 Personal access tokens start with 'sm_pat_' prefix.
@@ -1789,7 +1789,7 @@ Personal access tokens start with 'sm_pat_' prefix.
 
 > **Url** = `string`
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:18](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/url.schema.ts#L18)
+Defined in: [sdk/utils/src/validation/url.schema.ts:18](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/url.schema.ts#L18)
 
 Schema for validating URLs.
 
@@ -1813,7 +1813,7 @@ const isInvalidUrl = UrlSchema.safeParse("not-a-url").success;
 
 > **UrlOrPath** = `string`
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:55](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/url.schema.ts#L55)
+Defined in: [sdk/utils/src/validation/url.schema.ts:55](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/url.schema.ts#L55)
 
 Schema that accepts either a full URL or a URL path.
 
@@ -1837,7 +1837,7 @@ const isValidPath = UrlOrPathSchema.safeParse("/api/v1/users").success;
 
 > **UrlPath** = `string`
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:38](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/url.schema.ts#L38)
+Defined in: [sdk/utils/src/validation/url.schema.ts:38](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/url.schema.ts#L38)
 
 Schema for validating URL paths.
 
@@ -1861,7 +1861,7 @@ const isInvalidPath = UrlPathSchema.safeParse("not-a-path").success;
 
 > `const` **AccessTokenSchema**: `ZodString`\<[`AccessToken`](#accesstoken)\>
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:21](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/access-token.schema.ts#L21)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:21](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/access-token.schema.ts#L21)
 
 Schema for validating both application and personal access tokens.
 Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
@@ -1872,7 +1872,7 @@ Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
 
 > `const` **ApplicationAccessTokenSchema**: `ZodString`\<[`ApplicationAccessToken`](#applicationaccesstoken)\>
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:7](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/access-token.schema.ts#L7)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:7](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/access-token.schema.ts#L7)
 
 Schema for validating application access tokens.
 Application access tokens start with 'sm_aat_' prefix.
@@ -1883,7 +1883,7 @@ Application access tokens start with 'sm_aat_' prefix.
 
 > `const` **DotEnvSchema**: `ZodObject`\<[`DotEnv`](#dotenv)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:12](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L12)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:12](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L12)
 
 Schema for validating environment variables used by the SettleMint SDK.
 Defines validation rules and types for configuration values like URLs,
@@ -1895,7 +1895,7 @@ access tokens, workspace names, and service endpoints.
 
 > `const` **DotEnvSchemaPartial**: `ZodObject`\<[`DotEnvPartial`](#dotenvpartial)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:103](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/dot-env.schema.ts#L103)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:103](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/dot-env.schema.ts#L103)
 
 Partial version of the environment variables schema where all fields are optional.
 Useful for validating incomplete configurations during development or build time.
@@ -1906,7 +1906,7 @@ Useful for validating incomplete configurations during development or build time
 
 > `const` **IdSchema**: `ZodUnion`\<[`Id`](#id)\>
 
-Defined in: [sdk/utils/src/validation/id.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/id.schema.ts#L17)
+Defined in: [sdk/utils/src/validation/id.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/id.schema.ts#L17)
 
 Schema for validating database IDs. Accepts both PostgreSQL UUIDs and MongoDB ObjectIDs.
 PostgreSQL UUIDs are 32 hexadecimal characters with hyphens (e.g. 123e4567-e89b-12d3-a456-426614174000).
@@ -1930,7 +1930,7 @@ const isValidObjectId = IdSchema.safeParse("507f1f77bcf86cd799439011").success;
 
 > `const` **PersonalAccessTokenSchema**: `ZodString`\<[`PersonalAccessToken`](#personalaccesstoken)\>
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/access-token.schema.ts#L14)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/access-token.schema.ts#L14)
 
 Schema for validating personal access tokens.
 Personal access tokens start with 'sm_pat_' prefix.
@@ -1941,7 +1941,7 @@ Personal access tokens start with 'sm_pat_' prefix.
 
 > `const` **runsInBrowser**: `boolean` = `isBrowser`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:40](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/runtime/ensure-server.ts#L40)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:40](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/runtime/ensure-server.ts#L40)
 
 Boolean indicating if code is currently running in a browser environment
 
@@ -1951,7 +1951,7 @@ Boolean indicating if code is currently running in a browser environment
 
 > `const` **runsOnServer**: `boolean` = `!isBrowser`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:45](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/runtime/ensure-server.ts#L45)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:45](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/runtime/ensure-server.ts#L45)
 
 Boolean indicating if code is currently running in a server environment
 
@@ -1961,7 +1961,7 @@ Boolean indicating if code is currently running in a server environment
 
 > `const` **UniqueNameSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/unique-name.schema.ts:19](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/unique-name.schema.ts#L19)
+Defined in: [sdk/utils/src/validation/unique-name.schema.ts:19](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/unique-name.schema.ts#L19)
 
 Schema for validating unique names used across the SettleMint platform.
 Only accepts lowercase alphanumeric characters and hyphens.
@@ -1987,7 +1987,7 @@ const isInvalidName = UniqueNameSchema.safeParse("My Workspace!").success;
 
 > `const` **UrlOrPathSchema**: `ZodUnion`\<[`UrlOrPath`](#urlorpath)\>
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:54](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/url.schema.ts#L54)
+Defined in: [sdk/utils/src/validation/url.schema.ts:54](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/url.schema.ts#L54)
 
 Schema that accepts either a full URL or a URL path.
 
@@ -2011,7 +2011,7 @@ const isValidPath = UrlOrPathSchema.safeParse("/api/v1/users").success;
 
 > `const` **UrlPathSchema**: `ZodString`\<[`UrlPath`](#urlpath)\>
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/url.schema.ts#L34)
+Defined in: [sdk/utils/src/validation/url.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/url.schema.ts#L34)
 
 Schema for validating URL paths.
 
@@ -2035,7 +2035,7 @@ const isInvalidPath = UrlPathSchema.safeParse("not-a-path").success;
 
 > `const` **UrlSchema**: `ZodString`\<[`Url`](#url)\>
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.1.5/sdk/utils/src/validation/url.schema.ts#L17)
+Defined in: [sdk/utils/src/validation/url.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/utils/src/validation/url.schema.ts#L17)
 
 Schema for validating URLs.
 
