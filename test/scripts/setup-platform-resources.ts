@@ -69,9 +69,10 @@ beforeAll(async () => {
     await login();
     await createWorkspaceAndApplication();
     await createApplicationAccessToken();
-    await createBlockchainNodeMinioAndIpfs();
+    await createBlockchainNetworkMinioAndIpfs();
+    await createBlockchainNodes();
     await createLoadBalancer();
-    await createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode();
+    await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddlewareAndActivatedPrivateKey();
   } catch (err) {
     console.error("Failed to create resources", err);
@@ -177,7 +178,7 @@ async function createWorkspaceAndApplication() {
   }
 }
 
-async function createBlockchainNodeMinioAndIpfs() {
+async function createBlockchainNetworkMinioAndIpfs() {
   const hasBlockchainNetwork = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NETWORK"]);
   const hasBlockchainNode = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKCHAIN_NODE"]);
   const hasHasuraIntegration = await defaultResourceAlreadyCreated(["SETTLEMINT_HASURA"]);
@@ -312,12 +313,72 @@ async function createBlockchainNodeMinioAndIpfs() {
   }
 }
 
-async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
+async function createBlockchainNodes() {
+  const hasBlockchainNodeWithPk = await blockchainNodeAlreadyCreated(NODE_NAME_2_WITH_PK);
+  const hasBlockchainNodeWithoutPk = await blockchainNodeAlreadyCreated(NODE_NAME_3_WITHOUT_PK);
+
+  const results = await deployResources([
+    () =>
+      hasBlockchainNodeWithPk
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "blockchain-node",
+            "besu",
+            "--node-type",
+            "NON_VALIDATOR",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
+            "--restart-if-timeout",
+            NODE_NAME_2_WITH_PK,
+          ]).result,
+    () =>
+      hasBlockchainNodeWithoutPk
+        ? Promise.resolve(undefined)
+        : runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "blockchain-node",
+            "besu",
+            "--node-type",
+            "NON_VALIDATOR",
+            "--provider",
+            CLUSTER_PROVIDER,
+            "--region",
+            CLUSTER_REGION,
+            "--accept-defaults",
+            "--wait",
+            "--restart-if-timeout",
+            NODE_NAME_3_WITHOUT_PK,
+          ]).result,
+  ]);
+
+  const [nodeWithPkResult, nodeWithoutPkResult] = results;
+
+  expect([nodeWithPkResult?.status, nodeWithoutPkResult?.status]).toEqual(["fulfilled", "fulfilled"]);
+
+  if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
+    expect(nodeWithPkResult.value.output).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
+    expect(nodeWithPkResult.value.output).toInclude("Blockchain node is deployed");
+  }
+
+  if (nodeWithoutPkResult?.status === "fulfilled" && nodeWithoutPkResult.value) {
+    expect(nodeWithoutPkResult.value.output).toInclude(
+      `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
+    );
+    expect(nodeWithoutPkResult.value.output).toInclude("Blockchain node is deployed");
+  }
+}
+
+async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const hasPrivateKey = await defaultResourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
   const hasPortalMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
   const hasBlockscoutInsights = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
-  const hasBlockchainNodeWithPk = await blockchainNodeAlreadyCreated(NODE_NAME_2_WITH_PK);
-  const hasBlockchainNodeWithoutPk = await blockchainNodeAlreadyCreated(NODE_NAME_3_WITHOUT_PK);
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
   const results = await deployResources([
@@ -388,55 +449,15 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
             "--restart-if-timeout",
             BLOCKSCOUT_NAME,
           ]).result,
-    () =>
-      hasBlockchainNodeWithPk
-        ? Promise.resolve(undefined)
-        : runCommand(COMMAND_TEST_SCOPE, [
-            "platform",
-            "create",
-            "blockchain-node",
-            "besu",
-            "--node-type",
-            "NON_VALIDATOR",
-            "--provider",
-            CLUSTER_PROVIDER,
-            "--region",
-            CLUSTER_REGION,
-            "--accept-defaults",
-            "--wait",
-            "--restart-if-timeout",
-            NODE_NAME_2_WITH_PK,
-          ]).result,
-    () =>
-      hasBlockchainNodeWithoutPk
-        ? Promise.resolve(undefined)
-        : runCommand(COMMAND_TEST_SCOPE, [
-            "platform",
-            "create",
-            "blockchain-node",
-            "besu",
-            "--node-type",
-            "NON_VALIDATOR",
-            "--provider",
-            CLUSTER_PROVIDER,
-            "--region",
-            CLUSTER_REGION,
-            "--accept-defaults",
-            "--wait",
-            "--restart-if-timeout",
-            NODE_NAME_3_WITHOUT_PK,
-          ]).result,
   ]);
 
-  const [privateKeyResult, portalResult, blockscoutResult, nodeWithPkResult, nodeWithoutPkResult] = results;
+  const [privateKeyResult, portalResult, blockscoutResult] = results;
 
-  expect([
-    privateKeyResult?.status,
-    portalResult?.status,
-    blockscoutResult?.status,
-    nodeWithPkResult?.status,
-    nodeWithoutPkResult?.status,
-  ]).toEqual(["fulfilled", "fulfilled", "fulfilled", "fulfilled", "fulfilled"]);
+  expect([privateKeyResult?.status, portalResult?.status, blockscoutResult?.status]).toEqual([
+    "fulfilled",
+    "fulfilled",
+    "fulfilled",
+  ]);
 
   if (privateKeyResult?.status === "fulfilled" && privateKeyResult.value) {
     expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
@@ -451,18 +472,6 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscoutAndNode() {
   if (blockscoutResult?.status === "fulfilled" && blockscoutResult.value) {
     expect(blockscoutResult.value.output).toInclude(`Insights ${BLOCKSCOUT_NAME} created successfully`);
     expect(blockscoutResult.value.output).toInclude("Insights is deployed");
-  }
-
-  if (nodeWithPkResult?.status === "fulfilled" && nodeWithPkResult.value) {
-    expect(nodeWithPkResult.value.output).toInclude(`Blockchain node ${NODE_NAME_2_WITH_PK} created successfully`);
-    expect(nodeWithPkResult.value.output).toInclude("Blockchain node is deployed");
-  }
-
-  if (nodeWithoutPkResult?.status === "fulfilled" && nodeWithoutPkResult.value) {
-    expect(nodeWithoutPkResult.value.output).toInclude(
-      `Blockchain node ${NODE_NAME_3_WITHOUT_PK} created successfully`,
-    );
-    expect(nodeWithoutPkResult.value.output).toInclude("Blockchain node is deployed");
   }
 }
 
