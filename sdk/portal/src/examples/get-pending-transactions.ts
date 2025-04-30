@@ -1,3 +1,13 @@
+/**
+ * This example demonstrates how to get the number of pending transactions in the SettleMint Portal.
+ *
+ * The process involves:
+ * 1. Creating a portal client
+ * 2. Making a GraphQL query to get the number of pending transactions
+ *
+ * This pattern is useful for applications that need to monitor the status of pending transactions
+ * in the SettleMint Portal, providing a way to track the progress of blockchain operations.
+ */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"

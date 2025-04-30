@@ -62,10 +62,22 @@ export interface WaitForTransactionReceiptOptions {
 }
 
 /**
- * Wait for the transaction receipt
- * @param transactionHash transaction hash
- * @param options options
- * @returns receipt
+ * Waits for a blockchain transaction receipt by subscribing to transaction updates via GraphQL.
+ * This function polls until the transaction is confirmed or the timeout is reached.
+ *
+ * @param transactionHash - The hash of the transaction to wait for
+ * @param options - Configuration options for the waiting process
+ * @returns The transaction details including receipt information when the transaction is confirmed
+ * @throws Error if the transaction receipt cannot be retrieved within the specified timeout
+ *
+ * @example
+ * import { waitForTransactionReceipt } from "@settlemint/sdk-portal";
+ *
+ * const transaction = await waitForTransactionReceipt("0x123...", {
+ *   portalGraphqlEndpoint: "https://example.settlemint.com/graphql",
+ *   accessToken: "your-access-token",
+ *   timeout: 30000 // 30 seconds timeout
+ * });
  */
 export async function waitForTransactionReceipt(transactionHash: string, options: WaitForTransactionReceiptOptions) {
   const wsClient = createClient({

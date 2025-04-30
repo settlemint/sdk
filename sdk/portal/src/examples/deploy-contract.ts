@@ -1,3 +1,16 @@
+/**
+ * This example demonstrates how to deploy a contract using the SettleMint Portal.
+ *
+ * The process involves:
+ * 1. Creating a portal client
+ * 2. Deploying a forwarder contract
+ * 3. Waiting for the forwarder contract deployment to be finalized
+ * 4. Deploying a stablecoin factory contract
+ * 5. Getting all contracts and filtering by ABI name
+ *
+ * This pattern is useful for applications that need to deploy smart contracts
+ * in the SettleMint Portal, providing a way to track the progress of blockchain operations.
+ */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { getAddress } from "viem";
@@ -72,3 +85,23 @@ const deployStableCoinFactory = await portalClient.request(
 );
 
 console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);
+
+const contractAddresses = await portalClient.request(
+  portalGraphql(`
+    query GetContracts {
+        getContracts {
+            count
+            records {
+                address
+                abiName
+                createdAt
+            }
+        }
+    }
+  `),
+);
+// Print total count
+console.log(`Total contracts: ${contractAddresses.getContracts?.count}`);
+
+// Contracts for StableCoinFactory
+console.log(contractAddresses.getContracts?.records.filter((record) => record.abiName === "StableCoinFactory"));

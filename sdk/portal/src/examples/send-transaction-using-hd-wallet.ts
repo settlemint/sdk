@@ -1,3 +1,16 @@
+/**
+ * This example demonstrates how to send a transaction using an HD wallet in the SettleMint Portal.
+ *
+ * The process involves:
+ * 1. Creating a wallet for a user using the HD private key
+ * 2. Setting up a pincode for wallet verification
+ * 3. Handling the wallet verification challenge
+ * 4. Sending a transaction to the blockchain
+ *
+ * This pattern is useful for applications that need to manage multiple user wallets
+ * derived from a single HD wallet, providing a secure and scalable approach to
+ * blockchain interactions in enterprise applications.
+ */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import type { Address } from "viem";
