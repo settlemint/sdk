@@ -1,5 +1,5 @@
-// #region imports
 import { describe, expect, test } from "bun:test";
+// #region imports
 import { createPortalClient } from "@settlemint/sdk-portal";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";

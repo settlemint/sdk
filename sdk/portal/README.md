@@ -27,6 +27,8 @@
 ## Table of Contents
 
 - [About](#about)
+- [Examples](#examples)
+  - [Get pending transactions](#get-pending-transactions)
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [createPortalClient()](#createportalclient)
@@ -43,8 +45,48 @@
 The SettleMint Smart Contract Portal SDK provides a seamless way to interact with the Smart Contract Portal Middleware API. It enables you to easily interact with your smart contracts using a REST or GraphQL API.
 
 The SDK offers a type-safe interface for all Portal API operations, with comprehensive error handling and validation. It integrates smoothly with modern TypeScript applications while providing a simple and intuitive developer experience.
+## Examples
 
-For detailed information about using the Smart Contract Portal Middleware, check out our [official documentation](https://console.settlemint.com/documentation).
+### Get pending transactions
+
+```ts
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+import { createPortalClient } from "../portal.js";
+
+const env = await loadEnv(false, false);
+const logger = createLogger();
+
+const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  introspection: any;
+  disableMasking: true;
+  scalars: {
+    // Change unknown to the type you are using to store metadata
+    JSON: unknown;
+  };
+}>(
+  {
+    instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+  },
+  {
+    fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+  },
+);
+
+// Making GraphQL queries
+const query = portalGraphql(`
+  query GetPendingTransactions {
+    getPendingTransactions {
+      count
+    }
+  }
+`);
+
+const result = await portalClient.request(query);
+
+```
 
 ## API Reference
 
@@ -54,7 +96,7 @@ For detailed information about using the Smart Contract Portal Middleware, check
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/portal/src/portal.ts:66](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L66)
+Defined in: [sdk/portal/src/portal.ts:37](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L37)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -82,8 +124,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:70](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L70) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:71](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L71) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:41](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L41) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:42](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L42) |
 
 ##### Throws
 
@@ -92,28 +134,32 @@ If the provided options fail validation
 ##### Example
 
 ```ts
-import { createPortalClient } from '@settlemint/sdk-portal';
-import type { introspection } from "@schemas/portal-env";
-import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
-
+import { createPortalClient } from "@settlemint/sdk-portal";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+import type { introspection } from "./test-app/portal-env";
+const env = await loadEnv(false, false);
 const logger = createLogger();
 
-export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
   introspection: introspection;
   disableMasking: true;
   scalars: {
     // Change unknown to the type you are using to store metadata
     JSON: unknown;
   };
-}>({
-  instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
-}, {
-  fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
-});
+}>(
+  {
+    instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+  },
+  {
+    fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+  },
+);
 
 // Making GraphQL queries
-const query = graphql(`
+const query = portalGraphql(`
   query GetPendingTransactions {
     getPendingTransactions {
       count
@@ -121,7 +167,7 @@ const query = graphql(`
   }
 `);
 
-const result = await client.request(query);
+const result = await portalClient.request(query);
 ```
 
 ### Type Aliases
