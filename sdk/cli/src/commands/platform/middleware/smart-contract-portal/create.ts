@@ -155,6 +155,14 @@ export function smartContractPortalMiddlewareCreateCommand() {
         command:
           "platform create middleware smart-contract-portal my-portal --application my-app --blockchain-node node-123",
       },
+      {
+        description: "Create a smart contract portal middleware and connect to a specific blockchain node",
+        command: "platform create middleware smart-contract-portal my-portal --blockchain-node my-blockchain-node",
+      },
+      {
+        description: "Create a smart contract portal middleware and connect to a specific load balancer",
+        command: "platform create middleware smart-contract-portal my-portal --load-balancer my-load-balancer",
+      },
     ],
   });
 }

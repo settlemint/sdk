@@ -1,6 +1,16 @@
 <h1 id="home"><a href="../../settlemint.md">SettleMint CLI</a> > <a href="../platform.md">Platform</a> > Config</h1>
 
-<pre>Usage: settlemint platform config|cfg [options]
+<pre>Usage: settlemint platform config|cfg 
+Examples:
+
+  # Get platform configuration
+  $ settlemint settlemint config
+
+  # Get platform configuration in JSON format
+  $ settlemint settlemint config -o json
+
+  # Get platform configuration in YAML format
+  $ settlemint settlemint config -o yaml
 
 Get platform configuration
 

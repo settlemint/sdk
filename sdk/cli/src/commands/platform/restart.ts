@@ -1,5 +1,6 @@
 import { Command } from "@commander-js/extra-typings";
 import { blockchainNetworkRestartCommand } from "./blockchain-network/restart";
+import { blockchainNodeRestartCommand } from "./blockchain-node/restart";
 import { customDeploymentRestartCommand } from "./custom-deployments/restart";
 import { insightsRestartCommand } from "./insights/restart";
 import { integrationToolRestartCommand } from "./integration-tools/restart";
@@ -15,12 +16,13 @@ export function restartCommand() {
   const cmd = new Command("restart")
     .description("Restart a resource in the SettleMint platform")
     .addCommand(blockchainNetworkRestartCommand())
+    .addCommand(blockchainNodeRestartCommand())
     .addCommand(customDeploymentRestartCommand())
     .addCommand(insightsRestartCommand())
     .addCommand(integrationToolRestartCommand())
+    .addCommand(loadBalancerRestartCommand())
     .addCommand(middlewareRestartCommand())
-    .addCommand(storageRestartCommand())
-    .addCommand(loadBalancerRestartCommand());
+    .addCommand(storageRestartCommand());
 
   return cmd;
 }

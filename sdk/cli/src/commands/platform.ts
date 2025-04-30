@@ -18,8 +18,8 @@ export function platformCommand(): Command {
     .description("Manage SettleMint platform resources")
     .addCommand(configCommand())
     .addCommand(createCommand())
-    .addCommand(updateCommand())
     .addCommand(deleteCommand())
+    .addCommand(listCommand())
     .addCommand(restartCommand())
-    .addCommand(listCommand());
+    .addCommand(updateCommand());
 }

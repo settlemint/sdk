@@ -151,15 +151,15 @@ export function registerCommands() {
     .passThroughOptions();
 
   // Add commands to the CLI
-  sdkcli.addCommand(connectCommand());
   sdkcli.addCommand(codegenCommand());
-  sdkcli.addCommand(platformCommand());
-  sdkcli.addCommand(smartContractSetCommand());
+  sdkcli.addCommand(connectCommand());
   sdkcli.addCommand(createCommand());
+  sdkcli.addCommand(hasuraCommand());
   sdkcli.addCommand(loginCommand());
   sdkcli.addCommand(logoutCommand());
   sdkcli.addCommand(pincodeVerificationResponseCommand());
-  sdkcli.addCommand(hasuraCommand());
+  sdkcli.addCommand(platformCommand());
+  sdkcli.addCommand(smartContractSetCommand());
   return sdkcli;
 }
 

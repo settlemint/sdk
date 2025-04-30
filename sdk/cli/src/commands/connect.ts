@@ -11,12 +11,14 @@ import { minioPrompt } from "@/prompts/cluster-service/minio.prompt";
 import { portalPrompt } from "@/prompts/cluster-service/portal.prompt";
 import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { workspacePrompt } from "@/prompts/workspace.prompt";
 import { servicesSpinner } from "@/spinners/services.spinner";
 import { workspaceSpinner } from "@/spinners/workspaces.spinner";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
 import { hasPrivateKey } from "@/utils/cluster-service";
+import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import {
   getBlockchainNodeEndpoints,
@@ -35,7 +37,6 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { blockchainNodeOrLoadBalancerPrompt } from "../prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
-import { subgraphPrompt } from "../prompts/smart-contract-set/subgraph.prompt";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -53,6 +54,22 @@ export function connectCommand(): Command {
       .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
       // Set the command description
       .description("Connects your project to your application on SettleMint")
+      .usage(
+        createExamples([
+          {
+            description: "Connect to your environment",
+            command: "settlemint connect",
+          },
+          {
+            description: "Connect to your environment using defaults from the .env file",
+            command: "settlemint connect --accept-defaults",
+          },
+          {
+            description: "Connect to your production environment",
+            command: "settlemint connect --prod",
+          },
+        ]),
+      )
       // Define the action to be executed when the command is run
       .action(async ({ acceptDefaults, prod, instance }) => {
         intro("Connecting your dApp to SettleMint");

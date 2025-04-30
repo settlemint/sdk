@@ -9,12 +9,13 @@ Options:
 
 Commands:
   <a href="#restart-blockchain-network">blockchain-network|bn</a> [options] &lt;unique-name&gt;  Restart a blockchain network in the SettleMint platform. Provide the blockchain network unique name or use &#039;default&#039; to restart the default blockchain network from your .env file.
+  <a href="#restart-blockchain-node">blockchain-node|bn</a> [options] &lt;unique-name&gt;     Restart a blockchain node in the SettleMint platform. Provide the blockchain node unique name or use &#039;default&#039; to restart the default blockchain node from your .env file.
   <a href="#restart-custom-deployment">custom-deployment|cd</a> [options] &lt;unique-name&gt;   Restart a custom deployment in the SettleMint platform. Provide the custom deployment unique name or use &#039;default&#039; to restart the default custom deployment from your .env file.
   <a href="#restart-insights">insights|in</a>                                    Restart an insights service in the SettleMint platform
   <a href="#restart-integration-tool">integration-tool|it</a>                            Restart an integration tool service in the SettleMint platform
+  <a href="#restart-load-balancer">load-balancer|lb</a> [options] &lt;unique-name&gt;       Restart a load balancer in the SettleMint platform. Provide the load balancer unique name or use &#039;default&#039; to restart the default load balancer from your .env file.
   <a href="#restart-middleware">middleware|mw</a>                                  Restart a middleware service in the SettleMint platform
   <a href="#restart-storage">storage|st</a>                                     Restart a storage service in the SettleMint platform
-  <a href="#restart-load-balancer">load-balancer|lb</a> [options] &lt;unique-name&gt;       Restart a load balancer in the SettleMint platform. Provide the load balancer unique name or use &#039;default&#039; to restart the default load balancer from your .env file.
   help [command]                                 display help for command
 </pre>
 
@@ -37,6 +38,32 @@ Arguments:
   unique-name            The unique name of the blockchain network, use
                          &#039;default&#039; to restart the default one from your .env
                          file
+
+Options:
+  -a, --accept-defaults  Accept the default and previously set values
+  --prod                 Connect to your production environment
+  -w, --wait             Wait until restarted
+  -h, --help             display help for command
+</pre>
+
+<h2 id="restart-blockchain-node"><a href="#home">Restart</a> > Blockchain node</h2>
+
+<pre>Usage: settlemint platform restart blockchain-node|bn 
+Examples:
+
+  # Restarts the specified blockchain node by id
+  $ settlemint platform restart blockchain-node &lt;blockchain node-id&gt;
+
+  # Restarts the default blockchain node in the production environment
+  $ settlemint platform restart blockchain-node default --prod
+
+Restart a blockchain node in the SettleMint platform. Provide the blockchain
+node unique name or use &#039;default&#039; to restart the default blockchain node from
+your .env file.
+
+Arguments:
+  unique-name            The unique name of the blockchain node, use &#039;default&#039;
+                         to restart the default one from your .env file
 
 Options:
   -a, --accept-defaults  Accept the default and previously set values
@@ -147,6 +174,32 @@ your .env file.
 Arguments:
   unique-name            The unique name of the integration tool, use &#039;default&#039;
                          to restart the default one from your .env file
+
+Options:
+  -a, --accept-defaults  Accept the default and previously set values
+  --prod                 Connect to your production environment
+  -w, --wait             Wait until restarted
+  -h, --help             display help for command
+</pre>
+
+<h2 id="restart-load-balancer"><a href="#home">Restart</a> > Load balancer</h2>
+
+<pre>Usage: settlemint platform restart load-balancer|lb 
+Examples:
+
+  # Restarts the specified load balancer by id
+  $ settlemint platform restart load-balancer &lt;load balancer-id&gt;
+
+  # Restarts the default load balancer in the production environment
+  $ settlemint platform restart load-balancer default --prod
+
+Restart a load balancer in the SettleMint platform. Provide the load balancer
+unique name or use &#039;default&#039; to restart the default load balancer from your
+.env file.
+
+Arguments:
+  unique-name            The unique name of the load balancer, use &#039;default&#039; to
+                         restart the default one from your .env file
 
 Options:
   -a, --accept-defaults  Accept the default and previously set values
@@ -282,32 +335,6 @@ or use &#039;default&#039; to restart the default storage from your .env file.
 
 Arguments:
   unique-name            The unique name of the storage, use &#039;default&#039; to
-                         restart the default one from your .env file
-
-Options:
-  -a, --accept-defaults  Accept the default and previously set values
-  --prod                 Connect to your production environment
-  -w, --wait             Wait until restarted
-  -h, --help             display help for command
-</pre>
-
-<h2 id="restart-load-balancer"><a href="#home">Restart</a> > Load balancer</h2>
-
-<pre>Usage: settlemint platform restart load-balancer|lb 
-Examples:
-
-  # Restarts the specified load balancer by id
-  $ settlemint platform restart load-balancer &lt;load balancer-id&gt;
-
-  # Restarts the default load balancer in the production environment
-  $ settlemint platform restart load-balancer default --prod
-
-Restart a load balancer in the SettleMint platform. Provide the load balancer
-unique name or use &#039;default&#039; to restart the default load balancer from your
-.env file.
-
-Arguments:
-  unique-name            The unique name of the load balancer, use &#039;default&#039; to
                          restart the default one from your .env file
 
 Options:

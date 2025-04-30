@@ -17,7 +17,11 @@ Commands:
 
 <h2 id="subgraph-build"><a href="#home">Subgraph</a> > Build</h2>
 
-<pre>Usage: settlemint smart-contract-set subgraph build [options]
+<pre>Usage: settlemint smart-contract-set subgraph build 
+Examples:
+
+  # Build the subgraph
+  $ settlemint settlemint subgraph build
 
 Build the subgraph
 
@@ -27,7 +31,11 @@ Options:
 
 <h2 id="subgraph-codegen"><a href="#home">Subgraph</a> > Codegen</h2>
 
-<pre>Usage: settlemint smart-contract-set subgraph codegen [options]
+<pre>Usage: settlemint smart-contract-set subgraph codegen 
+Examples:
+
+  # Generate subgraph types
+  $ settlemint settlemint subgraph codegen
 
 Codegen the subgraph types
 

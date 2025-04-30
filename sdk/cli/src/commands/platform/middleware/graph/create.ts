@@ -105,6 +105,14 @@ export function graphMiddlewareCreateCommand() {
         description: "Create a graph middleware in a different application",
         command: "platform create middleware graph my-graph --application my-app --blockchain-node node-123",
       },
+      {
+        description: "Create a graph middleware and connect to a specific load balancer",
+        command: "platform create middleware graph my-graph --load-balancer my-load-balancer",
+      },
+      {
+        description: "Create a graph middleware and connect to a specific blockchain node",
+        command: "platform create middleware graph my-graph --blockchain-node my-blockchain-node",
+      },
     ],
   });
 }

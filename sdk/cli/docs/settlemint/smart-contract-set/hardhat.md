@@ -160,19 +160,26 @@ Options:
   -h, --help        display help for command
 
 Commands:
-  <a href="#script-remote">remote</a> [options]  Run a Hardhat script to deploy a contract on the platform
-                    or interact with a deployed contract.
-  <a href="#script-local">local</a> [options]   Run a Hardhat script to deploy a contract on the platform
-                    or interact with a deployed contract.
+  <a href="#script-remote">remote</a> [options]  Run a Hardhat script on a remote network on the platform.
+  <a href="#script-local">local</a> [options]   Run a Hardhat script on a local development network.
   help [command]    display help for command
 </pre>
 
 <h3 id="script-remote"><a href="#home">Hardhat</a> > <a href="#hardhat-script">Script</a> > Remote</h3>
 
-<pre>Usage: settlemint smart-contract-set hardhat script remote [options]
+<pre>Usage: settlemint smart-contract-set hardhat script remote 
+Examples:
 
-Run a Hardhat script to deploy a contract on the platform or interact with a
-deployed contract.
+  # Run a Hardhat script on a remote network
+  $ settlemint settlemint hardhat script remote --script scripts/deploy.ts
+
+  # Run a Hardhat script on a remote network with a specific blockchain node
+  $ settlemint settlemint hardhat script remote --script scripts/deploy.ts --blockchain-node my-blockchain-node
+
+  # Run a Hardhat script on a remote network without compiling
+  $ settlemint settlemint hardhat script remote --script scripts/deploy.ts --no-compile
+
+Run a Hardhat script on a remote network on the platform.
 
 Options:
   -s, --script &lt;script&gt;               The script to run with Hardhat , e.g.
@@ -189,10 +196,13 @@ Options:
 
 <h3 id="script-local"><a href="#home">Hardhat</a> > <a href="#hardhat-script">Script</a> > Local</h3>
 
-<pre>Usage: settlemint smart-contract-set hardhat script local [options]
+<pre>Usage: settlemint smart-contract-set hardhat script local 
+Examples:
 
-Run a Hardhat script to deploy a contract on the platform or interact with a
-deployed contract.
+  # Run a Hardhat script on a local network
+  $ settlemint settlemint hardhat script local --script scripts/deploy.ts
+
+Run a Hardhat script on a local development network.
 
 Options:
   -s, --script &lt;script&gt;  The script to run with Hardhat , e.g.

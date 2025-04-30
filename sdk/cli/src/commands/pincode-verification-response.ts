@@ -2,7 +2,9 @@ import { missingApplication, missingPersonalAccessTokenError } from "@/error/mis
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { pincodeVerificationPrompt } from "@/prompts/pincode-verification.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
@@ -11,7 +13,6 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { pincodeVerificationPrompt } from "../prompts/pincode-verification.prompt";
 
 export function pincodeVerificationResponseCommand() {
   return new Command("pincode-verification-response")
@@ -22,6 +23,21 @@ export function pincodeVerificationResponseCommand() {
     .option(
       "--blockchain-node <blockchainNode>",
       "Blockchain Node unique name to get pincode verification response for",
+    )
+    .usage(
+      createExamples([
+        {
+          description: "Get pincode verification response for a wallet address",
+          command:
+            "settlemint pincode-verification-response --wallet-address 0x1234567890123456789012345678901234567890",
+        },
+        {
+          description:
+            "Get pincode verification response for a wallet address and connect to a specific blockchain node",
+          command:
+            "settlemint pincode-verification-response --wallet-address 0x1234567890123456789012345678901234567890 --blockchain-node my-blockchain-node",
+        },
+      ]),
     )
     .action(async ({ instance, blockchainNode, walletAddress }) => {
       intro("Generating pincode verification response for wallet address");

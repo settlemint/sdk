@@ -1,3 +1,4 @@
+import { createExamples } from "@/utils/commands/create-examples";
 import { getInstances, removeCredentials } from "@/utils/config";
 import { Command } from "@commander-js/extra-typings";
 import select from "@inquirer/select";
@@ -15,6 +16,18 @@ export function logoutCommand(): Command {
   return new Command("logout")
     .description("Logout from your SettleMint account")
     .option("--all", "Logout from all instances")
+    .usage(
+      createExamples([
+        {
+          description: "Logout from your SettleMint account",
+          command: "settlemint logout",
+        },
+        {
+          description: "Logout from all instances",
+          command: "settlemint logout --all",
+        },
+      ]),
+    )
     .action(async (options) => {
       intro("Logging out from SettleMint");
       const instances = await getInstances();

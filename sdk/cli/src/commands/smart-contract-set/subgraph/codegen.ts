@@ -1,4 +1,5 @@
 import { dirname } from "node:path";
+import { createExamples } from "@/utils/commands/create-examples";
 import { SETTLEMINT_NETWORK, subgraphSetup } from "@/utils/subgraph/setup";
 import { getSubgraphYamlFile } from "@/utils/subgraph/subgraph-config";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
@@ -7,18 +8,28 @@ import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manag
 import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function subgraphCodegenCommand() {
-  return new Command("codegen").description("Codegen the subgraph types").action(async () => {
-    intro("Generating subgraph types");
-    await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
-    await subgraphSetup({
-      network: SETTLEMINT_NETWORK,
-    });
+  return new Command("codegen")
+    .description("Codegen the subgraph types")
+    .usage(
+      createExamples([
+        {
+          description: "Generate subgraph types",
+          command: "settlemint subgraph codegen",
+        },
+      ]),
+    )
+    .action(async () => {
+      intro("Generating subgraph types");
+      await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
+      await subgraphSetup({
+        network: SETTLEMINT_NETWORK,
+      });
 
-    const { command, args } = await getPackageManagerExecutable();
-    const subgraphYamlFile = await getSubgraphYamlFile();
-    await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], {
-      cwd: dirname(subgraphYamlFile),
+      const { command, args } = await getPackageManagerExecutable();
+      const subgraphYamlFile = await getSubgraphYamlFile();
+      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], {
+        cwd: dirname(subgraphYamlFile),
+      });
+      outro("Subgraph types generated successfully");
     });
-    outro("Subgraph types generated successfully");
-  });
 }
