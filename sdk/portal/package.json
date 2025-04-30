@@ -47,7 +47,8 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE .",
-    "docs": "gql-tada generate-output && typedoc --options '../../typedoc.config.mjs' --entryPoints src/portal.ts --out ./docs"
+    "codegen": "gql-tada generate-output",
+    "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/portal.ts --out ./docs"
   },
   "devDependencies": {},
   "dependencies": {

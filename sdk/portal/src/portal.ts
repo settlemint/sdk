@@ -1,3 +1,4 @@
+import {} from "@settlemint/sdk-utils/logging";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
@@ -32,7 +33,41 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @throws If the provided options fail validation
  *
  * @example
- * {@includeCode ../../../test/portal.e2e.test.ts#imports,example}
+ * import { createPortalClient } from "@settlemint/sdk-portal";
+ * import { loadEnv } from "@settlemint/sdk-utils/environment";
+ * import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+ * import type { introspection } from "@schemas/portal-env";
+ *
+ * const env = await loadEnv(false, false);
+ * const logger = createLogger();
+ *
+ * const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+ *   introspection: introspection;
+ *   disableMasking: true;
+ *   scalars: {
+ *     // Change unknown to the type you are using to store metadata
+ *     JSON: unknown;
+ *   };
+ * }>(
+ *   {
+ *     instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+ *     accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+ *   },
+ *   {
+ *     fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+ *   },
+ * );
+ *
+ * // Making GraphQL queries
+ * const query = portalGraphql(`
+ *   query GetPendingTransactions {
+ *     getPendingTransactions {
+ *       count
+ *     }
+ *   }
+ * `);
+ *
+ * const result = await portalClient.request(query);
  */
 export function createPortalClient<const Setup extends AbstractSetupSchema>(
   options: ClientOptions,
@@ -58,6 +93,7 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
 export {
   handleWalletVerificationChallenge,
   type HandleWalletVerificationChallengeOptions,
-} from "./wallet-verification-challenge.js";
+} from "./utils/wallet-verification-challenge.js";
+export { waitForTransactionReceipt, type Transaction } from "./utils/wait-for-transaction-receipt.js";
 export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";

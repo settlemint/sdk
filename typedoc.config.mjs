@@ -28,11 +28,6 @@ export default {
   hidePageHeader: true,
   hidePageTitle: true,
 
-  // JSDoc compatibility
-  jsDocCompatibility: {
-    exampleTag: false,
-  },
-
   // Plugins
   plugin: ["typedoc-plugin-markdown", "typedoc-plugin-merge-modules", "typedoc-plugin-zod"],
 };

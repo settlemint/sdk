@@ -44,8 +44,6 @@ The SettleMint TheGraph SDK provides a seamless way to interact with TheGraph AP
 
 The SDK offers a type-safe interface for all TheGraph operations, with comprehensive error handling and validation. It integrates smoothly with modern TypeScript applications while providing a simple and intuitive developer experience.
 
-For detailed information about using TheGraph with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
-
 ## API Reference
 
 ### Functions
@@ -94,7 +92,6 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 
 ##### Example
 
-```ts
 import { createTheGraphClient } from '@settlemint/sdk-thegraph';
 import type { introspection } from '@schemas/the-graph-env-kits';
 import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
@@ -131,7 +128,6 @@ const query = graphql(`
 `);
 
 const result = await client.request(query);
-```
 
 ### Type Aliases
 

@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import type { Address } from "viem";
-import type { createPortalClient } from "./portal.js";
+import type { createPortalClient } from "../portal.js";
 
 /**
  * Custom error class for challenge-related errors

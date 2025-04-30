@@ -421,6 +421,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "--wait",
             "--restart-if-timeout",
             "--include-predeployed-abis",
+            "Forwarder",
             "Bond",
             "BondFactory",
             "CryptoCurrency",

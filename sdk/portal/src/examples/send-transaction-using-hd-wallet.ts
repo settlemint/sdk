@@ -2,8 +2,8 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import type { Address } from "viem";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
-import { handleWalletVerificationChallenge } from "../wallet-verification-challenge.js"; // Replace this path with "@settlemint/sdk-portal"
-import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
+import { handleWalletVerificationChallenge } from "../utils/wallet-verification-challenge.js"; // Replace this path with "@settlemint/sdk-portal"
+import type { introspection } from "./schemas/portal-env.js"; // Replace this path with the generated introspection type
 
 const env = await loadEnv(false, false);
 const logger = createLogger();
@@ -79,7 +79,8 @@ const challengeResponse = await handleWalletVerificationChallenge({
 
 /**
  * Send a transaction to the chain
- * This is a sample of how to send a transaction to the chain using the portal client and the asset tokenization keyVaultId
+ * This is a sample of how to send a transaction to the chain using the portal client and the asset tokenization kit
+ * The challenge response is generated using the handleWalletVerificationChallenge function, this is used to verifiy wallet access
  * @see https://github.com/settlemint/asset-tokenization-kit
  */
 const result = await portalClient.request(
@@ -108,8 +109,8 @@ const result = await portalClient.request(
     address: wallet.createWallet?.address!,
     from: wallet.createWallet?.address!,
     input: {
-      to: "0x0000000000000000000000000000000000000000",
-      amount: "1000000000000000000",
+      to: wallet.createWallet?.address!,
+      amount: "1000",
     },
   },
 );

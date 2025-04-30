@@ -34,7 +34,7 @@
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "codegen"],
       "cache": false,
       "persistent": true
     },
@@ -51,7 +51,7 @@
       "dependsOn": ["^build", "codegen"]
     },
     "docs": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "codegen"],
       "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json"],
       "outputs": ["docs/**", "!docs/ABOUT.md"]
     },
