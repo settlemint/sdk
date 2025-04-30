@@ -1,5 +1,5 @@
 /**
- * This example demonstrates how to get the number of pending transactions in the SettleMint Portal.
+ * This example demonstrates how to get the number of pending transactions in the SettleMint Smart Contract Portal.
  *
  * The process involves:
  * 1. Creating a portal client

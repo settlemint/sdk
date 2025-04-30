@@ -1,5 +1,5 @@
 /**
- * This example demonstrates how to send a transaction using an HD wallet in the SettleMint Portal.
+ * This example demonstrates how to send a transaction using an HD wallet in the SettleMint Smart Contract Portal.
  *
  * The process involves:
  * 1. Creating a wallet for a user using the HD private key
