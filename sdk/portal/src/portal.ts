@@ -93,6 +93,10 @@ export {
   handleWalletVerificationChallenge,
   type HandleWalletVerificationChallengeOptions,
 } from "./utils/wallet-verification-challenge.js";
-export { waitForTransactionReceipt, type Transaction } from "./utils/wait-for-transaction-receipt.js";
+export {
+  waitForTransactionReceipt,
+  type Transaction,
+  type WaitForTransactionReceiptOptions,
+} from "./utils/wait-for-transaction-receipt.js";
 export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";

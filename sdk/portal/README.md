@@ -39,6 +39,7 @@
   - [Interfaces](#interfaces)
     - [HandleWalletVerificationChallengeOptions\<Setup\>](#handlewalletverificationchallengeoptionssetup)
     - [Transaction](#transaction)
+    - [WaitForTransactionReceiptOptions](#waitfortransactionreceiptoptions)
   - [Type Aliases](#type-aliases)
     - [ClientOptions](#clientoptions)
     - [RequestConfig](#requestconfig)
@@ -452,7 +453,7 @@ Wait for the transaction receipt
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `transactionHash` | `string` | transaction hash |
-| `options` | `WaitForTransactionReceiptOptions` | options |
+| `options` | [`WaitForTransactionReceiptOptions`](#waitfortransactionreceiptoptions) | options |
 
 ##### Returns
 
@@ -481,6 +482,14 @@ Options for handling a wallet verification challenge
 Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:25](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L25)
 
 Represents the structure of a blockchain transaction with its receipt
+
+***
+
+#### WaitForTransactionReceiptOptions
+
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:58](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L58)
+
+Options for waiting for a transaction receipt
 
 ### Type Aliases
 

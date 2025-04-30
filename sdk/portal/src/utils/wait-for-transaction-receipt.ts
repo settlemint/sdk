@@ -55,7 +55,7 @@ interface GetTransactionResponse {
  * @property {string} accessToken - The access token for authentication with the Portal API
  * @property {number} [timeout] - Optional timeout in milliseconds before the operation fails
  */
-interface WaitForTransactionReceiptOptions {
+export interface WaitForTransactionReceiptOptions {
   portalGraphqlEndpoint: string;
   accessToken: string;
   timeout?: number;

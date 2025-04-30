@@ -52,7 +52,7 @@
     },
     "docs": {
       "dependsOn": ["^build", "codegen"],
-      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json"],
+      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json", "examples/**"],
       "outputs": ["docs/**", "!docs/ABOUT.md"]
     },
     "//#generate-readme": {
