@@ -18,7 +18,7 @@ export function pincodeVerificationResponseCommand() {
   return new Command("pincode-verification-response")
     .alias("pvr")
     .description("Get pincode verification response for a blockchain node")
-    .requiredOption("--wallet-address <walletAddress>", "The  wallet address to get pincode verification response for")
+    .requiredOption("--wallet-address <walletAddress>", "The wallet address to get pincode verification response for")
     .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
     .option(
       "--blockchain-node <blockchainNode>",

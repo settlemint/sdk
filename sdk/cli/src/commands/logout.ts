@@ -22,6 +22,10 @@ export function logoutCommand(): Command {
           description: "Logout from your SettleMint account",
           command: "settlemint logout",
         },
+        {
+          description: "Logout from all instances",
+          command: "settlemint logout --all",
+        },
       ]),
     )
     .action(async (options) => {

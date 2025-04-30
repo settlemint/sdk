@@ -6,7 +6,7 @@ import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatScriptLocalCommand() {
   return new Command("local")
-    .description("Run a Hardhat script to deploy a contract on a local development network.")
+    .description("Run a Hardhat script on a local development network.")
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"')
     .option("--no-compile", "Don't compile before running this task")
     .usage(

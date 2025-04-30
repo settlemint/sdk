@@ -28,6 +28,14 @@ export function configCommand() {
           description: "Get platform configuration",
           command: "settlemint config",
         },
+        {
+          description: "Get platform configuration in JSON format",
+          command: "settlemint config -o json",
+        },
+        {
+          description: "Get platform configuration in YAML format",
+          command: "settlemint config -o yaml",
+        },
       ]),
     )
     .action(async ({ prod, instance, output }) => {
