@@ -15,7 +15,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { getAddress } from "viem";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
-import { waitForTransactionReceipt } from "../utils/wait-for-transaction-receipt.js";
+import { waitForTransactionReceipt } from "../utils/wait-for-transaction-receipt.js"; // Replace this path with "@settlemint/sdk-portal"
 import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
 
 const env = await loadEnv(false, false);
