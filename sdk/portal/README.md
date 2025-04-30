@@ -145,7 +145,7 @@ const deployForwarder = await portalClient.request(
 );
 
 /**
- * Wait for the forwared contract deployment to be finalized
+ * Wait for the forwarder contract deployment to be finalized
  */
 const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
   portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
