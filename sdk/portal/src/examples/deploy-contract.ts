@@ -50,7 +50,10 @@ const deployForwarder = await portalClient.request(
 const wsClient = createClient({
   url: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
 });
-const receipt = await waitForTransactionReceipt(wsClient, deployForwarder.DeployContractForwarder?.transactionHash!);
+const transaction = await waitForTransactionReceipt(
+  wsClient,
+  deployForwarder.DeployContractForwarder?.transactionHash!,
+);
 
 /**
  * Deploy a bond factory contract
@@ -66,7 +69,7 @@ const deployBondFactory = await portalClient.request(
   {
     from: FROM,
     constructorArguments: {
-      forwarder: receipt?.contractAddress!,
+      forwarder: transaction?.receipt.contractAddress!,
     },
   },
 );
