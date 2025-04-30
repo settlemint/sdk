@@ -85,14 +85,14 @@ const challengeResponse = await handleWalletVerificationChallenge({
  */
 const result = await portalClient.request(
   portalGraphql(`
-    mutation BondMint(
-      $challengeResponse: String!,
-      $verificationId: String,
-      $address: String!,
-      $from: String!,
-      $input: BondMintInput!
+    mutation StableCoinFactoryCreate(
+      $challengeResponse: String!
+      $verificationId: String
+      $address: String!
+      $from: String!
+      $input: StableCoinFactoryCreateInput!
     ) {
-      BondMint(
+      StableCoinFactoryCreate(
         challengeResponse: $challengeResponse
         verificationId: $verificationId
         address: $address
@@ -106,14 +106,16 @@ const result = await portalClient.request(
   {
     challengeResponse: challengeResponse.challengeResponse,
     verificationId: pincodeVerification.createWalletVerification?.id!,
-    address: wallet.createWallet?.address!,
+    address: "0x5e771e1417100000000000000000000000000004",
     from: wallet.createWallet?.address!,
     input: {
-      to: wallet.createWallet?.address!,
-      amount: "1000",
+      name: "Test Coin",
+      symbol: "TEST",
+      decimals: 18,
+      collateralLivenessSeconds: 3_600,
     },
   },
 );
 
 // Log the transaction hash
-console.log("Transaction hash:", result.BondMint?.transactionHash);
+console.log("Transaction hash:", result.StableCoinFactoryCreate?.transactionHash);

@@ -77,7 +77,7 @@ describe("Portal E2E Tests", () => {
         accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
       });
       expect(transaction?.receipt.contractAddress).toBeString();
-      expect(transaction?.receipt.status).toBe("success");
+      expect(transaction?.receipt.status).toBe("Success");
 
       const deployStableCoinFactory = await portalClient.request(
         portalGraphql(`
@@ -96,26 +96,28 @@ describe("Portal E2E Tests", () => {
       );
       expect(deployStableCoinFactory.DeployContractStableCoinFactory?.transactionHash).toBeString();
     },
-    { timeout: 120_000 },
+    { timeout: 60_000 },
   );
 
-  test("can send transaction using hd wallet", async () => {
-    const wallet = await portalClient.request(
-      portalGraphql(`
-        mutation createUserWallet($keyVaultId: String!, $name: String!) {
-          createWallet(keyVaultId: $keyVaultId, walletInfo: { name: $name }) {
-            address
+  test(
+    "can send transaction using hd wallet",
+    async () => {
+      const wallet = await portalClient.request(
+        portalGraphql(`
+          mutation createUserWallet($keyVaultId: String!, $name: String!) {
+            createWallet(keyVaultId: $keyVaultId, walletInfo: { name: $name }) {
+              address
+            }
           }
-        }
-      `),
-      {
-        keyVaultId: env.SETTLEMINT_HD_PRIVATE_KEY!,
-        name: "My Wallet",
-      },
-    );
-    expect(wallet.createWallet?.address).toBeString();
-    const pincodeVerification = await portalClient.request(
-      portalGraphql(`
+        `),
+        {
+          keyVaultId: env.SETTLEMINT_HD_PRIVATE_KEY!,
+          name: `My Wallet ${new Date().toISOString()}`,
+        },
+      );
+      expect(wallet.createWallet?.address).toBeString();
+      const pincodeVerification = await portalClient.request(
+        portalGraphql(`
         mutation setPinCode($address: String!, $pincode: String!) {
           createWalletVerification(
             userWalletAddress: $address
@@ -128,56 +130,61 @@ describe("Portal E2E Tests", () => {
           }
         }
         `),
-      {
-        address: wallet.createWallet?.address!,
-        pincode: "123456",
-      },
-    );
-    expect(pincodeVerification.createWalletVerification?.id).toBeString();
-
-    const challengeResponse = await handleWalletVerificationChallenge({
-      portalClient,
-      portalGraphql,
-      verificationId: pincodeVerification.createWalletVerification?.id!,
-      userWalletAddress: wallet.createWallet?.address! as Address,
-      code: "123456",
-      verificationType: "pincode",
-    });
-    expect(challengeResponse.challengeResponse).toBeString();
-    expect(challengeResponse.verificationId).toBe(pincodeVerification.createWalletVerification?.id!);
-
-    const result = await portalClient.request(
-      portalGraphql(`
-        mutation BondMint(
-          $challengeResponse: String!,
-          $verificationId: String,
-          $address: String!,
-          $from: String!,
-          $input: BondMintInput!
-        ) {
-          BondMint(
-            challengeResponse: $challengeResponse
-            verificationId: $verificationId
-            address: $address
-            from: $from
-            input: $input
-          ) {
-            transactionHash
-          }
-        }
-      `),
-      {
-        challengeResponse: challengeResponse.challengeResponse,
-        verificationId: pincodeVerification.createWalletVerification?.id!,
-        address: wallet.createWallet?.address!,
-        from: wallet.createWallet?.address!,
-        input: {
-          to: wallet.createWallet?.address!,
-          amount: "1000",
+        {
+          address: wallet.createWallet?.address!,
+          pincode: "123456",
         },
-      },
-    );
+      );
+      expect(pincodeVerification.createWalletVerification?.id).toBeString();
 
-    expect(result.BondMint?.transactionHash).toBeString();
-  });
+      const challengeResponse = await handleWalletVerificationChallenge({
+        portalClient,
+        portalGraphql,
+        verificationId: pincodeVerification.createWalletVerification?.id!,
+        userWalletAddress: wallet.createWallet?.address! as Address,
+        code: "123456",
+        verificationType: "pincode",
+      });
+      expect(challengeResponse.challengeResponse).toBeString();
+      expect(challengeResponse.verificationId).toBe(pincodeVerification.createWalletVerification?.id!);
+
+      const result = await portalClient.request(
+        portalGraphql(`
+          mutation StableCoinFactoryCreate(
+            $challengeResponse: String!
+            $verificationId: String
+            $address: String!
+            $from: String!
+            $input: StableCoinFactoryCreateInput!
+          ) {
+            StableCoinFactoryCreate(
+              challengeResponse: $challengeResponse
+              verificationId: $verificationId
+              address: $address
+              from: $from
+              input: $input
+              gasLimit: "0x3d0900"
+            ) {
+              transactionHash
+            }
+          }
+        `),
+        {
+          challengeResponse: challengeResponse.challengeResponse,
+          verificationId: pincodeVerification.createWalletVerification?.id!,
+          address: "0x5e771e1417100000000000000000000000000004",
+          from: wallet.createWallet?.address!,
+          input: {
+            name: `Test Coin ${new Date().toISOString()}`,
+            symbol: "TEST",
+            decimals: 18,
+            collateralLivenessSeconds: 3_600,
+          },
+        },
+      );
+
+      expect(result.StableCoinFactoryCreate?.transactionHash).toBeString();
+    },
+    { timeout: 60_000 },
+  );
 });
