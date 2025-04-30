@@ -32,36 +32,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @throws If the provided options fail validation
  *
  * @example
- * import { createPortalClient } from '@settlemint/sdk-portal';
- * import type { introspection } from "@schemas/portal-env";
- * import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
- *
- * const logger = createLogger();
- *
- * export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
- *   introspection: introspection;
- *   disableMasking: true;
- *   scalars: {
- *     // Change unknown to the type you are using to store metadata
- *     JSON: unknown;
- *   };
- * }>({
- *   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
- *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
- * }, {
- *   fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
- * });
- *
- * // Making GraphQL queries
- * const query = graphql(`
- *   query GetPendingTransactions {
- *     getPendingTransactions {
- *       count
- *     }
- *   }
- * `);
- *
- * const result = await client.request(query);
+ * {@includeCode ../../../test/portal.e2e.test.ts#imports,example}
  */
 export function createPortalClient<const Setup extends AbstractSetupSchema>(
   options: ClientOptions,

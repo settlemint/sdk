@@ -1,11 +1,14 @@
+// #region imports
 import { describe, expect, test } from "bun:test";
 import { createPortalClient } from "@settlemint/sdk-portal";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import type { introspection } from "./test-app/portal-env";
+// #endregion imports
 
 describe("Portal E2E Tests", () => {
   test("can get pending transactions", async () => {
+    // #region example
     const env = await loadEnv(false, false);
     const logger = createLogger();
 
@@ -36,6 +39,7 @@ describe("Portal E2E Tests", () => {
     `);
 
     const result = await portalClient.request(query);
+    // #endregion example
     expect(result.getPendingTransactions?.count).toBeNumber();
   });
 });
