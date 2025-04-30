@@ -21,15 +21,15 @@ export function createCommand(): Command {
   return new Command("create")
     .alias("c")
     .description("Create a resource in the SettleMint platform")
-    .addCommand(workspaceCreateCommand())
+    .addCommand(applicationAccessTokenCreateCommand())
     .addCommand(applicationCreateCommand())
     .addCommand(blockchainNetworkCreateCommand())
     .addCommand(blockchainNodeCreateCommand())
-    .addCommand(privateKeyCreateCommand())
-    .addCommand(middlewareCreateCommand())
-    .addCommand(storageCreateCommand())
-    .addCommand(integrationToolCreateCommand())
     .addCommand(insightsCreateCommand())
-    .addCommand(applicationAccessTokenCreateCommand())
-    .addCommand(loadBalancerCreateCommand());
+    .addCommand(integrationToolCreateCommand())
+    .addCommand(loadBalancerCreateCommand())
+    .addCommand(middlewareCreateCommand())
+    .addCommand(privateKeyCreateCommand())
+    .addCommand(storageCreateCommand())
+    .addCommand(workspaceCreateCommand());
 }

@@ -1,5 +1,6 @@
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -26,6 +27,18 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
     .option("--prod", "Connect to your production environment")
     .option("--wait", "Wait for the custom deployment to be redeployed")
     .description("Update a custom deployment in the SettleMint platform")
+    .usage(
+      createExamples([
+        {
+          description: "Update a custom deployment",
+          command: "settlemint custom-deployment update v1.0.0",
+        },
+        {
+          description: "Update a custom deployment with a specific unique name",
+          command: "settlemint custom-deployment update v1.0.0 --unique-name my-custom-deployment",
+        },
+      ]),
+    )
     .action(async (tag, { uniqueName, prod, wait }) => {
       intro("Updating custom deployment in the SettleMint platform");
 

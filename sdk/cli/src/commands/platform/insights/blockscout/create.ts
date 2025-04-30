@@ -107,6 +107,14 @@ export function blockscoutInsightsCreateCommand() {
         description: "Create a Blockscout insights service in a different application",
         command: "platform create insights blockscout my-blockscout --application app-123",
       },
+      {
+        description: "Create a Blockscout insights service and connect to a specific load balancer",
+        command: "platform create insights blockscout my-blockscout --load-balancer my-load-balancer",
+      },
+      {
+        description: "Create a Blockscout insights service and connect to a specific blockchain node",
+        command: "platform create insights blockscout my-blockscout --blockchain-node my-blockchain-node",
+      },
     ],
   });
 }

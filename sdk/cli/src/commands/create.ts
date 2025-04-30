@@ -4,6 +4,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { templatePrompt } from "@/prompts/kit/template.prompt";
 import { projectNamePrompt } from "@/prompts/project-name.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
 import { downloadAndExtractNpmPackage } from "@/utils/download-extract";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
@@ -25,7 +26,7 @@ export function createCommand(): Command {
   return (
     new Command("create")
       // Set the command description
-      .description("Bootstrap your SettleMint project")
+      .description("Create a new application from a template")
       .option("-n, --project-name <name>", "The name for your SettleMint project")
       .option(
         "-t, --template <template>",
@@ -33,6 +34,22 @@ export function createCommand(): Command {
       )
       .option("-v, --version <version>", "Specify the template version to use (defaults to latest stable version)")
       .option("-i, --instance <instance>", "The instance to connect to")
+      .usage(
+        createExamples([
+          {
+            description: "Create a new application from a template",
+            command: "settlemint create",
+          },
+          {
+            description: "Create a new asset tokenization application",
+            command: "settlemint create --template asset-tokenization",
+          },
+          {
+            description: "Create a new asset tokenization application from a specific version",
+            command: "settlemint create --template asset-tokenization --version 1.0.0",
+          },
+        ]),
+      )
       .action(async ({ projectName, template, version, instance }) => {
         intro("Creating a new SettleMint project");
         const env: Partial<DotEnv> = await loadEnv(false, false);

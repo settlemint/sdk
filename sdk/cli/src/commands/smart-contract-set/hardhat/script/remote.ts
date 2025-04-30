@@ -1,5 +1,6 @@
 import { selectTargetNode } from "@/commands/smart-contract-set/hardhat/utils/select-target-node";
 import { instancePrompt } from "@/prompts/instance.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
@@ -11,7 +12,7 @@ import isInCi from "is-in-ci";
 
 export function hardhatScriptRemoteCommand() {
   const cmd = new Command("remote")
-    .description("Run a Hardhat script to deploy a contract on the platform or interact with a deployed contract.")
+    .description("Run a Hardhat script on a remote network on the platform.")
     .requiredOption("-s, --script <script>", 'The script to run with Hardhat , e.g. "scripts/deploy.ts"')
     .option(
       "--blockchain-node <blockchainNode>",
@@ -19,7 +20,23 @@ export function hardhatScriptRemoteCommand() {
     )
     .option("--prod", "Connect to your production environment")
     .option("-a, --accept-defaults", "Accept the default and previously set values")
-    .option("--no-compile", "Don't compile before running this task");
+    .option("--no-compile", "Don't compile before running this task")
+    .usage(
+      createExamples([
+        {
+          description: "Run a Hardhat script on a remote network",
+          command: "settlemint hardhat script remote --script scripts/deploy.ts",
+        },
+        {
+          description: "Run a Hardhat script on a remote network with a specific blockchain node",
+          command: "settlemint hardhat script remote --script scripts/deploy.ts --blockchain-node my-blockchain-node",
+        },
+        {
+          description: "Run a Hardhat script on a remote network without compiling",
+          command: "settlemint hardhat script remote --script scripts/deploy.ts --no-compile",
+        },
+      ]),
+    );
 
   cmd.action(async ({ script, prod, blockchainNode: blockchainNodeUniqueName, acceptDefaults, compile }) => {
     intro("Running Hardhat script on remote network");
