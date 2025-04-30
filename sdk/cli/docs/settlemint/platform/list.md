@@ -8,10 +8,37 @@ Options:
   -h, --help                display help for command
 
 Commands:
+  <a href="#list-applications">applications|a</a> [options]  List applications
   <a href="#list-services">services|s</a> [options]      List the application services
   <a href="#list-workspaces">workspaces|w</a> [options]    List workspaces
-  <a href="#list-applications">applications|a</a> [options]  List applications
   help [command]            display help for command
+</pre>
+
+<h2 id="list-applications"><a href="#home">List</a> > Applications</h2>
+
+<pre>Usage: settlemint platform list applications|a 
+Examples:
+
+  # List applications
+  $ settlemint platform list applications
+
+  # List applications in wide format with more information
+  $ settlemint platform list applications -o wide
+
+  # List applications in JSON format
+  $ settlemint platform list applications -o json &gt; applications.json
+
+  # List applications in YAML format
+  $ settlemint platform list applications -o yaml &gt; applications.yaml
+
+List applications
+
+Options:
+  -w, --workspace &lt;workspace&gt;  The workspace unique name to list applications
+                               for (defaults to workspace from env)
+  -o, --output &lt;output&gt;        The output format (choices: &quot;wide&quot;, &quot;json&quot;,
+                               &quot;yaml&quot;)
+  -h, --help                   display help for command
 </pre>
 
 <h2 id="list-services"><a href="#home">List</a> > Services</h2>
@@ -78,32 +105,5 @@ List workspaces
 Options:
   -o, --output &lt;output&gt;  The output format (choices: &quot;wide&quot;, &quot;json&quot;, &quot;yaml&quot;)
   -h, --help             display help for command
-</pre>
-
-<h2 id="list-applications"><a href="#home">List</a> > Applications</h2>
-
-<pre>Usage: settlemint platform list applications|a 
-Examples:
-
-  # List applications
-  $ settlemint platform list applications
-
-  # List applications in wide format with more information
-  $ settlemint platform list applications -o wide
-
-  # List applications in JSON format
-  $ settlemint platform list applications -o json &gt; applications.json
-
-  # List applications in YAML format
-  $ settlemint platform list applications -o yaml &gt; applications.yaml
-
-List applications
-
-Options:
-  -w, --workspace &lt;workspace&gt;  The workspace unique name to list applications
-                               for (defaults to workspace from env)
-  -o, --output &lt;output&gt;        The output format (choices: &quot;wide&quot;, &quot;json&quot;,
-                               &quot;yaml&quot;)
-  -h, --help                   display help for command
 </pre>
 

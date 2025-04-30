@@ -20,15 +20,15 @@ Options:
   -h, --help                                   Display help for command
 
 Commands:
-  <a href="./settlemint/connect.md">connect</a> [options]                            Connects your project to your application on SettleMint
   <a href="./settlemint/codegen.md">codegen</a> [options]                            Generate GraphQL and REST types and queries
-  <a href="./settlemint/platform.md">platform</a>                                     Manage SettleMint platform resources
-  <a href="./settlemint/smart-contract-set.md">smart-contract-set|scs</a>                       Manage smart contract sets and subgraphs
-  <a href="./settlemint/create.md">create</a> [options]                             Bootstrap your SettleMint project
+  <a href="./settlemint/connect.md">connect</a> [options]                            Connects your project to your application on SettleMint
+  <a href="./settlemint/create.md">create</a> [options]                             Create a new application from a template
+  <a href="./settlemint/hasura.md">hasura|ha</a>                                    Manage Hasura service in the SettleMint platform
   <a href="./settlemint/login.md">login</a> [options]                              Login to your SettleMint account.
   <a href="./settlemint/logout.md">logout</a> [options]                             Logout from your SettleMint account
   <a href="./settlemint/pincode-verification-response.md">pincode-verification-response|pvr</a> [options]  Get pincode verification response for a blockchain node
-  <a href="./settlemint/hasura.md">hasura|ha</a>                                    Manage Hasura service in the SettleMint platform
+  <a href="./settlemint/platform.md">platform</a>                                     Manage SettleMint platform resources
+  <a href="./settlemint/smart-contract-set.md">smart-contract-set|scs</a>                       Manage smart contract sets and subgraphs
   help [command]                               display help for command
 </pre>
 

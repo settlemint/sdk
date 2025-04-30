@@ -1,6 +1,10 @@
 <h1 id="home"><a href="../../settlemint.md">SettleMint CLI</a> > <a href="../smart-contract-set.md">Smart contract set</a> > Create</h1>
 
-<pre>Usage: settlemint smart-contract-set create [options]
+<pre>Usage: settlemint smart-contract-set create 
+Examples:
+
+  # Create a new solidity-token-erc20 smart contract set
+  $ settlemint settlemint smart-contract-set create --project-name erc20-contracts --use-case solidity-token-erc20
 
 Bootstrap your smart contract set
 

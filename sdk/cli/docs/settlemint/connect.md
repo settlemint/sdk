@@ -1,6 +1,16 @@
 <h1 id="home"><a href="../settlemint.md">SettleMint CLI</a> > Connect</h1>
 
-<pre>Usage: settlemint connect [options]
+<pre>Usage: settlemint connect 
+Examples:
+
+  # Connect to your environment
+  $ settlemint settlemint connect
+
+  # Connect to your environment using defaults from the .env file
+  $ settlemint settlemint connect --accept-defaults
+
+  # Connect to your production environment
+  $ settlemint settlemint connect --prod
 
 Connects your project to your application on SettleMint
 

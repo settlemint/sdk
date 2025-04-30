@@ -1,6 +1,13 @@
 <h1 id="home"><a href="../settlemint.md">SettleMint CLI</a> > Pincode verification response</h1>
 
-<pre>Usage: settlemint pincode-verification-response|pvr [options]
+<pre>Usage: settlemint pincode-verification-response|pvr 
+Examples:
+
+  # Get pincode verification response for a wallet address
+  $ settlemint settlemint pincode-verification-response --wallet-address 0x1234567890123456789012345678901234567890
+
+  # Get pincode verification response for a wallet address and connect to a specific blockchain node
+  $ settlemint settlemint pincode-verification-response --wallet-address 0x1234567890123456789012345678901234567890 --blockchain-node my-blockchain-node
 
 Get pincode verification response for a blockchain node
 
