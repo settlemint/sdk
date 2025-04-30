@@ -46,6 +46,7 @@ test/kit-demo
 test/unknown
 test/contracts
 test/contracts-subgraphs
+test/test-app
 .temp-mono-repo-test
 
 # Docs

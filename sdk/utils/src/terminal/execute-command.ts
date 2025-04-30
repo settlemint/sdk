@@ -53,20 +53,21 @@ export async function executeCommand(
   args: string[],
   options?: ExecuteCommandOptions,
 ): Promise<string[]> {
-  const child = spawn(command, args, { env: { ...process.env, ...options?.env } });
+  const { silent, ...spawnOptions } = options ?? {};
+  const child = spawn(command, args, { ...spawnOptions, env: { ...process.env, ...options?.env } });
   process.stdin.pipe(child.stdin);
   const output: string[] = [];
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data: Buffer | string) => {
       const maskedData = maskTokens(data.toString());
-      if (!options?.silent) {
+      if (!silent) {
         process.stdout.write(maskedData);
       }
       output.push(maskedData);
     });
     child.stderr.on("data", (data: Buffer | string) => {
       const maskedData = maskTokens(data.toString());
-      if (!options?.silent) {
+      if (!silent) {
         process.stderr.write(maskedData);
       }
       output.push(maskedData);
