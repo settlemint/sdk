@@ -47,6 +47,7 @@ test/unknown
 test/contracts
 test/contracts-subgraphs
 test/test-app
+!test/test-app/portal-env.d.ts
 .temp-mono-repo-test
 
 # Docs
