@@ -59,7 +59,7 @@ The SDK offers a type-safe interface for all Portal API operations, with compreh
 
 ```ts
 /**
- * This example demonstrates how to deploy a contract using the SettleMint Smart Contract Portal.
+ * This example demonstrates how to deploy a contract.
  *
  * The process involves:
  * 1. Creating a portal client
@@ -171,7 +171,7 @@ console.log(contractAddresses.getContracts?.records.filter((record) => record.ab
 
 ```ts
 /**
- * This example demonstrates how to get the number of pending transactions in the SettleMint Smart Contract Portal.
+ * This example demonstrates how to get the number of pending transactions.
  *
  * The process involves:
  * 1. Creating a portal client
@@ -222,7 +222,7 @@ console.log(`There are ${result.getPendingTransactions?.count} pending transacti
 
 ```ts
 /**
- * This example demonstrates how to send a transaction using an HD wallet in the SettleMint Smart Contract Portal.
+ * This example demonstrates how to send a transaction using an HD wallet.
  *
  * The process involves:
  * 1. Creating a wallet for a user using the HD private key

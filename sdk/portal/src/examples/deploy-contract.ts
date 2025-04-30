@@ -1,5 +1,5 @@
 /**
- * This example demonstrates how to deploy a contract using the SettleMint Smart Contract Portal.
+ * This example demonstrates how to deploy a contract.
  *
  * The process involves:
  * 1. Creating a portal client
