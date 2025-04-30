@@ -4,6 +4,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { projectNamePrompt } from "@/prompts/project-name.prompt";
 import { useCasePrompt } from "@/prompts/smart-contract-set/use-case.prompt";
+import { createExamples } from "@/utils/commands/create-examples";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
 import { Command } from "@commander-js/extra-typings";
@@ -30,6 +31,15 @@ export function createCommand(): Command {
       "Use case for the smart contract set (run `settlemint platform config` to see available use cases)",
     )
     .option("-i, --instance <instance>", "The instance to connect to")
+    .usage(
+      createExamples([
+        {
+          description: "Create a new solidity-token-erc20 smart contract set",
+          command:
+            "settlemint smart-contract-set create --project-name erc20-contracts --use-case solidity-token-erc20",
+        },
+      ]),
+    )
     .action(async ({ projectName, useCase, instance }) => {
       intro("Creating a new smart contract set");
 

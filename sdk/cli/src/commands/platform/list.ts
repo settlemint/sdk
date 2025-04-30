@@ -13,7 +13,7 @@ export function listCommand(): Command {
   return new Command("list")
     .alias("ls")
     .description("List resources in the SettleMint platform")
+    .addCommand(applicationsListCommand())
     .addCommand(servicesCommand())
-    .addCommand(workspacesListCommand())
-    .addCommand(applicationsListCommand());
+    .addCommand(workspacesListCommand());
 }

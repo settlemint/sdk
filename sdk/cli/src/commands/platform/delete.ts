@@ -12,6 +12,6 @@ export function deleteCommand(): Command {
   return new Command("delete")
     .alias("d")
     .description("Delete a resource in the SettleMint platform")
-    .addCommand(workspaceDeleteCommand())
-    .addCommand(applicationDeleteCommand());
+    .addCommand(applicationDeleteCommand())
+    .addCommand(workspaceDeleteCommand());
 }

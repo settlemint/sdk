@@ -1,5 +1,6 @@
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { getRegionId } from "@/utils/cluster-region";
+import { createExamples } from "@/utils/commands/create-examples";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { jsonOutput } from "@/utils/output/json-output";
 import { yamlOutput } from "@/utils/output/yaml-output";
@@ -21,6 +22,14 @@ export function configCommand() {
     .option("--prod", "Connect to your production environment")
     .option("-i, --instance <instance>", "The instance to connect to (defaults to the instance in the .env file)")
     .addOption(new Option("-o, --output <output>", "The output format").choices(["json", "yaml"]))
+    .usage(
+      createExamples([
+        {
+          description: "Get platform configuration",
+          command: "settlemint config",
+        },
+      ]),
+    )
     .action(async ({ prod, instance, output }) => {
       intro("Getting platform configuration");
 
