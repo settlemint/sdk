@@ -1,4 +1,4 @@
-import { createClient } from "graphql-ws";
+import { type FormattedExecutionResult, createClient } from "graphql-ws";
 
 /**
  * Represents the structure of a blockchain transaction with its receipt
@@ -96,22 +96,27 @@ export async function waitForTransactionReceipt(transactionHash: string, options
       }`,
     variables: { transactionHash },
   });
-  return Promise.race([
-    new Promise<undefined>((_resolve, reject) => {
-      if (options.timeout) {
-        setTimeout(() => {
-          wsClient.dispose();
-          reject(new Error("Transaction receipt not found"));
-        }, options.timeout);
-      }
-    }),
-    (async () => {
-      for await (const result of subscription) {
-        if (result?.data?.getTransaction?.receipt) {
-          wsClient.dispose();
-          return result.data.getTransaction;
-        }
-      }
-    })(),
-  ]);
+  const promises = [getTransactionFromSubscription(subscription)];
+  if (options.timeout) {
+    promises.push(createTimeoutPromise(options.timeout));
+  }
+
+  return Promise.race(promises);
+}
+
+function createTimeoutPromise(timeout: number): Promise<never> {
+  return new Promise((_, reject) => {
+    setTimeout(() => reject(new Error("Transaction receipt not found")), timeout);
+  });
+}
+
+async function getTransactionFromSubscription(
+  subscription: AsyncIterableIterator<FormattedExecutionResult<GetTransactionResponse, unknown>>,
+): Promise<Transaction> {
+  for await (const result of subscription) {
+    if (result?.data?.getTransaction?.receipt) {
+      return result.data.getTransaction;
+    }
+  }
+  throw new Error("No transaction found");
 }
