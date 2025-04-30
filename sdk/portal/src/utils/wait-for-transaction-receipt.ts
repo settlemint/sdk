@@ -100,6 +100,7 @@ export async function waitForTransactionReceipt(transactionHash: string, options
     new Promise<undefined>((_resolve, reject) => {
       if (options.timeout) {
         setTimeout(() => {
+          wsClient.dispose();
           reject(new Error("Transaction receipt not found"));
         }, options.timeout);
       }
@@ -107,6 +108,7 @@ export async function waitForTransactionReceipt(transactionHash: string, options
     (async () => {
       for await (const result of subscription) {
         if (result?.data?.getTransaction?.receipt) {
+          wsClient.dispose();
           return result.data.getTransaction;
         }
       }
