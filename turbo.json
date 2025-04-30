@@ -10,7 +10,7 @@
     },
     "codegen": {
       "inputs": ["graphql/**"],
-      "outputs": [".settlemint/**", "schema.graphql"]
+      "outputs": [".settlemint/**", "schema.graphql", "src/examples/schemas/**"]
     },
     "publish-npm": {
       "dependsOn": ["build"],

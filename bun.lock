@@ -151,6 +151,8 @@
         "@settlemint/sdk-utils": "workspace:*",
         "gql.tada": "^1",
         "graphql-request": "^7",
+        "graphql-ws": "^6",
+        "viem": "^2",
         "zod": "^3",
       },
     },

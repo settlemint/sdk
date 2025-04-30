@@ -1,6 +1,6 @@
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
-import { createClient } from "graphql-ws";
+import { getAddress } from "viem";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
 import { waitForTransactionReceipt } from "../utils/wait-for-transaction-receipt.js";
 import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
@@ -26,7 +26,7 @@ const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
 );
 
 // Replace with the address of your private key which you use to deploy smart contracts
-const FROM = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
+const FROM = getAddress("0x4B03331cF2db1497ec58CAa4AFD8b93611906960");
 
 /**
  * Deploy a forwarder contract
@@ -34,7 +34,7 @@ const FROM = "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266";
 const deployForwarder = await portalClient.request(
   portalGraphql(`
     mutation DeployContractForwarder($from: String!) {
-      DeployContractForwarder(from: $from) {
+      DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
         transactionHash
       }
     }
@@ -47,21 +47,18 @@ const deployForwarder = await portalClient.request(
 /**
  * Wait for the forwared contract deployment to be finalized
  */
-const wsClient = createClient({
-  url: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
+  portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });
-const transaction = await waitForTransactionReceipt(
-  wsClient,
-  deployForwarder.DeployContractForwarder?.transactionHash!,
-);
 
 /**
- * Deploy a bond factory contract
+ * Deploy a stablecoin factory contract
  */
-const deployBondFactory = await portalClient.request(
+const deployStableCoinFactory = await portalClient.request(
   portalGraphql(`
-    mutation DeployContractBondFactory($from: String!, $constructorArguments: DeployContractBondFactoryInput!) {
-      DeployContractBondFactory(from: $from, constructorArguments: $constructorArguments) {
+    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
+      DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
         transactionHash
       }
     }
@@ -69,9 +66,9 @@ const deployBondFactory = await portalClient.request(
   {
     from: FROM,
     constructorArguments: {
-      forwarder: transaction?.receipt.contractAddress!,
+      forwarder: getAddress(transaction?.receipt.contractAddress!),
     },
   },
 );
 
-console.log(deployBondFactory?.DeployContractBondFactory?.transactionHash);
+console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);

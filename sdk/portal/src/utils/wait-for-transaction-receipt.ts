@@ -1,4 +1,4 @@
-import type { Client } from "graphql-ws";
+import { createClient } from "graphql-ws";
 
 /**
  * Represents the structure of a blockchain transaction with its receipt
@@ -48,41 +48,68 @@ interface GetTransactionResponse {
 }
 
 /**
+ * Options for waiting for a transaction receipt
+ *
+ * @typedef {Object} WaitForTransactionReceiptOptions
+ * @property {string} portalGraphqlEndpoint - The GraphQL endpoint URL for the Portal API
+ * @property {string} accessToken - The access token for authentication with the Portal API
+ * @property {number} [timeout] - Optional timeout in milliseconds before the operation fails
+ */
+interface WaitForTransactionReceiptOptions {
+  portalGraphqlEndpoint: string;
+  accessToken: string;
+  timeout?: number;
+}
+
+/**
  * Wait for the transaction receipt
- * @param wsClient websocket client
  * @param transactionHash transaction hash
+ * @param options options
  * @returns receipt
  */
-export async function waitForTransactionReceipt(wsClient: Client, transactionHash: string) {
+export async function waitForTransactionReceipt(transactionHash: string, options: WaitForTransactionReceiptOptions) {
+  const wsClient = createClient({
+    url: options.portalGraphqlEndpoint.toLowerCase().replace("/graphql", `/${options.accessToken}/graphql`),
+  });
   const subscription = wsClient.iterate<GetTransactionResponse>({
     query: `subscription getTransaction($transactionHash: String!) {
-    getTransaction(transactionHash: $transactionHash) {
-      receipt {
-        transactionHash
-        to
-        status
-        from
-        type
-        revertReason
-        revertReasonDecoded
-        logs
-        events
-        contractAddress
-      }
-      transactionHash
-      from
-      createdAt
-      address
-      functionName
-      isContract
-    }
-  }`,
+        getTransaction(transactionHash: $transactionHash) {
+          receipt {
+            transactionHash
+            to
+            status
+            from
+            type
+            revertReason
+            revertReasonDecoded
+            logs
+            events
+            contractAddress
+          }
+          transactionHash
+          from
+          createdAt
+          address
+          functionName
+          isContract
+        }
+      }`,
     variables: { transactionHash },
   });
-
-  for await (const result of subscription) {
-    if (result?.data?.getTransaction?.receipt) {
-      return result.data.getTransaction;
-    }
-  }
+  return Promise.race([
+    new Promise<undefined>((_resolve, reject) => {
+      if (options.timeout) {
+        setTimeout(() => {
+          reject(new Error("Transaction receipt not found"));
+        }, options.timeout);
+      }
+    }),
+    (async () => {
+      for await (const result of subscription) {
+        if (result?.data?.getTransaction?.receipt) {
+          return result.data.getTransaction;
+        }
+      }
+    })(),
+  ]);
 }

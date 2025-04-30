@@ -18,6 +18,14 @@ const PrivateKeyFragment = graphql(`
     healthStatus
     provider
     region
+    address
+    blockchainNodes {
+      ... on BlockchainNode {
+        id
+        name
+        uniqueName
+      }
+    }
   }
 `);
 
