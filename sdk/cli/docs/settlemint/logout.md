@@ -4,10 +4,10 @@
 Examples:
 
   # Logout from your SettleMint account
-  $ settlemint settlemint logout
+  $ settlemint logout
 
   # Logout from all instances
-  $ settlemint settlemint logout --all
+  $ settlemint logout --all
 
 Logout from your SettleMint account
 

@@ -19,10 +19,10 @@ Commands:
 Examples:
 
   # Update a custom deployment
-  $ settlemint settlemint custom-deployment update v1.0.0
+  $ settlemint custom-deployment update v1.0.0
 
   # Update a custom deployment with a specific unique name
-  $ settlemint settlemint custom-deployment update v1.0.0 --unique-name my-custom-deployment
+  $ settlemint custom-deployment update v1.0.0 --unique-name my-custom-deployment
 
 Update a custom deployment in the SettleMint platform
 

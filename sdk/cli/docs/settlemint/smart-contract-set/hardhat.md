@@ -171,13 +171,13 @@ Commands:
 Examples:
 
   # Run a Hardhat script on a remote network
-  $ settlemint settlemint hardhat script remote --script scripts/deploy.ts
+  $ settlemint hardhat script remote --script scripts/deploy.ts
 
   # Run a Hardhat script on a remote network with a specific blockchain node
-  $ settlemint settlemint hardhat script remote --script scripts/deploy.ts --blockchain-node my-blockchain-node
+  $ settlemint hardhat script remote --script scripts/deploy.ts --blockchain-node my-blockchain-node
 
   # Run a Hardhat script on a remote network without compiling
-  $ settlemint settlemint hardhat script remote --script scripts/deploy.ts --no-compile
+  $ settlemint hardhat script remote --script scripts/deploy.ts --no-compile
 
 Run a Hardhat script on a remote network on the platform.
 
@@ -200,7 +200,7 @@ Options:
 Examples:
 
   # Run a Hardhat script on a local network
-  $ settlemint settlemint hardhat script local --script scripts/deploy.ts
+  $ settlemint hardhat script local --script scripts/deploy.ts
 
 Run a Hardhat script on a local development network.
 

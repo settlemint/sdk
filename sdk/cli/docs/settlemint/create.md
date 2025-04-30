@@ -4,13 +4,13 @@
 Examples:
 
   # Create a new application from a template
-  $ settlemint settlemint create
+  $ settlemint create
 
   # Create a new asset tokenization application
-  $ settlemint settlemint create --template asset-tokenization
+  $ settlemint create --template asset-tokenization
 
   # Create a new asset tokenization application from a specific version
-  $ settlemint settlemint create --template asset-tokenization --version 1.0.0
+  $ settlemint create --template asset-tokenization --version 1.0.0
 
 Create a new application from a template
 

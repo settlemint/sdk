@@ -21,7 +21,7 @@ Commands:
 Examples:
 
   # Build the subgraph
-  $ settlemint settlemint subgraph build
+  $ settlemint subgraph build
 
 Build the subgraph
 
@@ -35,7 +35,7 @@ Options:
 Examples:
 
   # Generate subgraph types
-  $ settlemint settlemint subgraph codegen
+  $ settlemint subgraph codegen
 
 Codegen the subgraph types
 

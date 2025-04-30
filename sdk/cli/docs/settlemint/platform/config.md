@@ -4,13 +4,13 @@
 Examples:
 
   # Get platform configuration
-  $ settlemint settlemint config
+  $ settlemint config
 
   # Get platform configuration in JSON format
-  $ settlemint settlemint config -o json
+  $ settlemint config -o json
 
   # Get platform configuration in YAML format
-  $ settlemint settlemint config -o yaml
+  $ settlemint config -o yaml
 
 Get platform configuration
 

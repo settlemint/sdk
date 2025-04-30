@@ -4,13 +4,13 @@
 Examples:
 
   # Connect to your environment
-  $ settlemint settlemint connect
+  $ settlemint connect
 
   # Connect to your environment using defaults from the .env file
-  $ settlemint settlemint connect --accept-defaults
+  $ settlemint connect --accept-defaults
 
   # Connect to your production environment
-  $ settlemint settlemint connect --prod
+  $ settlemint connect --prod
 
 Connects your project to your application on SettleMint
 
