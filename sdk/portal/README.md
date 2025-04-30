@@ -29,13 +29,16 @@
 - [About](#about)
 - [Examples](#examples)
   - [Get pending transactions](#get-pending-transactions)
-  - [Hd wallet](#hd-wallet)
+  - [Deploy contract](#deploy-contract)
+  - [Send transaction using hd wallet](#send-transaction-using-hd-wallet)
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [createPortalClient()](#createportalclient)
     - [handleWalletVerificationChallenge()](#handlewalletverificationchallenge)
+    - [waitForTransactionReceipt()](#waitfortransactionreceipt)
   - [Interfaces](#interfaces)
     - [HandleWalletVerificationChallengeOptions\<Setup\>](#handlewalletverificationchallengeoptionssetup)
+    - [Transaction](#transaction)
   - [Type Aliases](#type-aliases)
     - [ClientOptions](#clientoptions)
     - [RequestConfig](#requestconfig)
@@ -92,15 +95,94 @@ const result = await portalClient.request(query);
 console.log(`There are ${result.getPendingTransactions?.count} pending transactions`);
 
 ```
-### Hd wallet
+### Deploy contract
+
+```ts
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+import { getAddress } from "viem";
+import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
+import { waitForTransactionReceipt } from "../utils/wait-for-transaction-receipt.js";
+import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
+
+const env = await loadEnv(false, false);
+const logger = createLogger();
+
+const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    // Change unknown to the type you are using to store metadata
+    JSON: unknown;
+  };
+}>(
+  {
+    instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+  },
+  {
+    fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+  },
+);
+
+// Replace with the address of your private key which you use to deploy smart contracts
+const FROM = getAddress("0x4B03331cF2db1497ec58CAa4AFD8b93611906960");
+
+/**
+ * Deploy a forwarder contract
+ */
+const deployForwarder = await portalClient.request(
+  portalGraphql(`
+    mutation DeployContractForwarder($from: String!) {
+      DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
+        transactionHash
+      }
+    }
+  `),
+  {
+    from: FROM,
+  },
+);
+
+/**
+ * Wait for the forwared contract deployment to be finalized
+ */
+const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
+  portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+});
+
+/**
+ * Deploy a stablecoin factory contract
+ */
+const deployStableCoinFactory = await portalClient.request(
+  portalGraphql(`
+    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
+      DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
+        transactionHash
+      }
+    }
+  `),
+  {
+    from: FROM,
+    constructorArguments: {
+      forwarder: getAddress(transaction?.receipt.contractAddress!),
+    },
+  },
+);
+
+console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);
+
+```
+### Send transaction using hd wallet
 
 ```ts
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import type { Address } from "viem";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
-import { handleWalletVerificationChallenge } from "../wallet-verification-challenge.js"; // Replace this path with "@settlemint/sdk-portal"
-import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
+import { handleWalletVerificationChallenge } from "../utils/wallet-verification-challenge.js"; // Replace this path with "@settlemint/sdk-portal"
+import type { introspection } from "./schemas/portal-env.js"; // Replace this path with the generated introspection type
 
 const env = await loadEnv(false, false);
 const logger = createLogger();
@@ -176,19 +258,20 @@ const challengeResponse = await handleWalletVerificationChallenge({
 
 /**
  * Send a transaction to the chain
- * This is a sample of how to send a transaction to the chain using the portal client and the asset tokenization keyVaultId
+ * This is a sample of how to send a transaction to the chain using the portal client and the asset tokenization kit
+ * The challenge response is generated using the handleWalletVerificationChallenge function, this is used to verifiy wallet access
  * @see https://github.com/settlemint/asset-tokenization-kit
  */
 const result = await portalClient.request(
   portalGraphql(`
-    mutation BondMint(
-      $challengeResponse: String!,
-      $verificationId: String,
-      $address: String!,
-      $from: String!,
-      $input: BondMintInput!
+    mutation StableCoinFactoryCreate(
+      $challengeResponse: String!
+      $verificationId: String
+      $address: String!
+      $from: String!
+      $input: StableCoinFactoryCreateInput!
     ) {
-      BondMint(
+      StableCoinFactoryCreate(
         challengeResponse: $challengeResponse
         verificationId: $verificationId
         address: $address
@@ -202,17 +285,19 @@ const result = await portalClient.request(
   {
     challengeResponse: challengeResponse.challengeResponse,
     verificationId: pincodeVerification.createWalletVerification?.id!,
-    address: wallet.createWallet?.address!,
+    address: "0x5e771e1417100000000000000000000000000004",
     from: wallet.createWallet?.address!,
     input: {
-      to: "0x0000000000000000000000000000000000000000",
-      amount: "1000000000000000000",
+      name: "Test Coin",
+      symbol: "TEST",
+      decimals: 18,
+      collateralLivenessSeconds: 3_600,
     },
   },
 );
 
 // Log the transaction hash
-console.log("Transaction hash:", result.BondMint?.transactionHash);
+console.log("Transaction hash:", result.StableCoinFactoryCreate?.transactionHash);
 
 ```
 
@@ -224,7 +309,7 @@ console.log("Transaction hash:", result.BondMint?.transactionHash);
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/portal/src/portal.ts:37](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L37)
+Defined in: [sdk/portal/src/portal.ts:71](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L71)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -252,8 +337,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:41](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L41) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:42](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L42) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:75](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L75) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/portal.ts#L76) |
 
 ##### Throws
 
@@ -265,7 +350,8 @@ If the provided options fail validation
 import { createPortalClient } from "@settlemint/sdk-portal";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
-import type { introspection } from "./test-app/portal-env";
+import type { introspection } from "@schemas/portal-env";
+
 const env = await loadEnv(false, false);
 const logger = createLogger();
 
@@ -304,7 +390,7 @@ const result = await portalClient.request(query);
 
 > **handleWalletVerificationChallenge**\<`Setup`\>(`options`): `Promise`\<\{ `challengeResponse`: `string`; `verificationId?`: `string`; \}\>
 
-Defined in: [sdk/portal/src/wallet-verification-challenge.ts:106](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/wallet-verification-challenge.ts#L106)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:106](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L106)
 
 Handles a wallet verification challenge by generating an appropriate response
 
@@ -332,6 +418,7 @@ If the challenge cannot be created or is invalid
 
 ##### Example
 
+```ts
 import { createPortalClient } from "@settlemint/sdk-portal";
 import { handleWalletVerificationChallenge } from "@settlemint/sdk-portal";
 
@@ -348,12 +435,36 @@ const result = await handleWalletVerificationChallenge({
   code: "123456",
   verificationType: "otp"
 });
+```
+
+***
+
+#### waitForTransactionReceipt()
+
+> **waitForTransactionReceipt**(`transactionHash`, `options`): `Promise`\<`undefined` \| [`Transaction`](#transaction)\>
+
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:70](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L70)
+
+Wait for the transaction receipt
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `transactionHash` | `string` | transaction hash |
+| `options` | `WaitForTransactionReceiptOptions` | options |
+
+##### Returns
+
+`Promise`\<`undefined` \| [`Transaction`](#transaction)\>
+
+receipt
 
 ### Interfaces
 
 #### HandleWalletVerificationChallengeOptions\<Setup\>
 
-Defined in: [sdk/portal/src/wallet-verification-challenge.ts:73](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/wallet-verification-challenge.ts#L73)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:73](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L73)
 
 Options for handling a wallet verification challenge
 
@@ -362,6 +473,14 @@ Options for handling a wallet verification challenge
 | Type Parameter | Description |
 | ------ | ------ |
 | `Setup` *extends* `AbstractSetupSchema` | The GraphQL schema setup type |
+
+***
+
+#### Transaction
+
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:25](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L25)
+
+Represents the structure of a blockchain transaction with its receipt
 
 ### Type Aliases
 

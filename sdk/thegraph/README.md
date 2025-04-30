@@ -92,6 +92,7 @@ Will throw an error if the options fail validation against ClientOptionsSchema
 
 ##### Example
 
+```ts
 import { createTheGraphClient } from '@settlemint/sdk-thegraph';
 import type { introspection } from '@schemas/the-graph-env-kits';
 import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
@@ -128,6 +129,7 @@ const query = graphql(`
 `);
 
 const result = await client.request(query);
+```
 
 ### Type Aliases
 
