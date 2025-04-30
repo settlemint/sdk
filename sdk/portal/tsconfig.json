@@ -17,7 +17,21 @@
     "noEmit": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "gql.tada/ts-plugin",
+        "trackFieldUsage": false,
+        "shouldCheckForColocatedFragments": false,
+        "schemas": [
+          {
+            "name": "portal",
+            "schema": "./src/examples/schemas/portal-schema.graphql",
+            "tadaOutputLocation": "./src/examples/schemas/portal-env.d.ts"
+          }
+        ]
+      }
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"]

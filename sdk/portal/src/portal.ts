@@ -55,5 +55,9 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
+export {
+  handleWalletVerificationChallenge,
+  type HandleWalletVerificationChallengeOptions,
+} from "./wallet-verification-challenge.js";
 export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";

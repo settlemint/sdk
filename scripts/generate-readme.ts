@@ -8,7 +8,7 @@ interface Placeholders {
   about?: string;
   "api-reference"?: string;
   "toc-contents"?: string;
-  examples?: string[];
+  examples?: string;
 }
 
 /**
@@ -53,7 +53,7 @@ async function generateReadme() {
         ? await readdir(examplesPath, { withFileTypes: true })
         : [];
       const exampleFiles = exampleDirContents
-        .filter((entry) => entry.isFile())
+        .filter((entry) => entry.isFile() && (entry.name.endsWith(".ts") || entry.name.endsWith(".tsx")))
         .map((entry) => join(entry.parentPath, entry.name));
       const examples =
         exampleFiles.length > 0
@@ -69,7 +69,7 @@ async function generateReadme() {
         "package-name": name,
         about,
         "api-reference": apiReference,
-        examples,
+        examples: examples?.join("\n"),
       });
 
       const toc = getTocContents(templateWithoutToc);
