@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import type { AbstractSetupSchema, initGraphQLTada } from "gql.tada";
+import type { GraphQLClient } from "graphql-request";
 import type { Address } from "viem";
-import type { createPortalClient } from "../portal.js";
 
 /**
  * Custom error class for challenge-related errors
@@ -63,7 +63,7 @@ function generateResponse(pincode: string, salt: string, challenge: string): str
  *
  * @typedef {Object} HandleWalletVerificationChallengeOptions
  * @template {AbstractSetupSchema} Setup - The GraphQL schema setup type
- * @property {ReturnType<typeof createPortalClient>["client"]} portalClient - The portal client instance
+ * @property {GraphQLClient} portalClient - The portal client instance
  * @property {initGraphQLTada<Setup>} portalGraphql - The GraphQL query builder
  * @property {string} verificationId - The ID of the verification challenge
  * @property {Address} userWalletAddress - The wallet address to verify
@@ -71,7 +71,7 @@ function generateResponse(pincode: string, salt: string, challenge: string): str
  * @property {"otp" | "secret-code" | "pincode"} verificationType - The type of verification being performed
  */
 export interface HandleWalletVerificationChallengeOptions<Setup extends AbstractSetupSchema> {
-  portalClient: ReturnType<typeof createPortalClient>["client"];
+  portalClient: GraphQLClient;
   portalGraphql: initGraphQLTada<Setup>;
   verificationId: string;
   userWalletAddress: Address;
