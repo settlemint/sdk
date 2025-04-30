@@ -8,6 +8,7 @@ import { getTsconfig } from "get-tsconfig";
 export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: string[]) {
   const tsconfig = getTsconfig();
   if (!tsconfig?.config) {
+    note("No tsconfig found, skipping codegen for hasura, portal, thegraph and blockscout", "warn");
     return {
       hasura: false,
       portal: false,

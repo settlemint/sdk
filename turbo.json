@@ -10,7 +10,7 @@
     },
     "codegen": {
       "inputs": ["graphql/**"],
-      "outputs": [".settlemint/**", "schema.graphql"]
+      "outputs": [".settlemint/**", "schema.graphql", "src/examples/schemas/**"]
     },
     "publish-npm": {
       "dependsOn": ["build"],
@@ -34,7 +34,7 @@
     },
     "publint": { "dependsOn": ["build"] },
     "dev": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^build", "codegen"],
       "cache": false,
       "persistent": true
     },
@@ -51,8 +51,8 @@
       "dependsOn": ["^build", "codegen"]
     },
     "docs": {
-      "dependsOn": ["^build"],
-      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json"],
+      "dependsOn": ["^build", "codegen"],
+      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json", "examples/**"],
       "outputs": ["docs/**", "!docs/ABOUT.md"]
     },
     "//#generate-readme": {

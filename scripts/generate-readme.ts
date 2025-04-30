@@ -1,5 +1,5 @@
 import { exists, readFile, readdir, writeFile } from "node:fs/promises";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import * as mustache from "mustache";
 
@@ -8,6 +8,7 @@ interface Placeholders {
   about?: string;
   "api-reference"?: string;
   "toc-contents"?: string;
+  examples?: string;
 }
 
 /**
@@ -47,10 +48,28 @@ async function generateReadme() {
         apiReference = await processApiReference(apiReferenceRaw);
       }
 
+      const examplesPath = join(sdkDir, pkg, "src", "examples");
+      const exampleDirContents = (await exists(examplesPath))
+        ? await readdir(examplesPath, { withFileTypes: true })
+        : [];
+      const exampleFiles = exampleDirContents
+        .filter((entry) => entry.isFile() && (entry.name.endsWith(".ts") || entry.name.endsWith(".tsx")))
+        .map((entry) => join(entry.parentPath, entry.name));
+      const examples =
+        exampleFiles.length > 0
+          ? await Promise.all(
+              exampleFiles.map(async (examplePath) => {
+                const exampleContent = await readFile(examplePath, "utf-8");
+                return `### ${getExampleTitle(examplePath)}\n\n\`\`\`ts\n${exampleContent}\n\`\`\``;
+              }),
+            )
+          : undefined;
+
       const templateWithoutToc = replacePlaceholders(template, {
         "package-name": name,
         about,
         "api-reference": apiReference,
+        examples: examples?.join("\n"),
       });
 
       const toc = getTocContents(templateWithoutToc);
@@ -96,6 +115,13 @@ It enables seamless interaction with the SettleMint platform's features and serv
 function replacePlaceholders(template: string, placeholders: Placeholders): string {
   const mustacheExport = mustache as unknown as { default: { render: typeof mustache.render } };
   return mustacheExport.default.render(template, placeholders);
+}
+
+function getExampleTitle(examplePath: string): string {
+  return basename(examplePath)
+    .replace(".ts", "")
+    .replace(/-/g, " ")
+    .replace(/^\w/, (c) => c.toUpperCase());
 }
 
 function getTocContents(templateContents: string): string {

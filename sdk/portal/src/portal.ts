@@ -32,28 +32,33 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  * @throws If the provided options fail validation
  *
  * @example
- * import { createPortalClient } from '@settlemint/sdk-portal';
+ * import { createPortalClient } from "@settlemint/sdk-portal";
+ * import { loadEnv } from "@settlemint/sdk-utils/environment";
+ * import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
  * import type { introspection } from "@schemas/portal-env";
- * import { createLogger, requestLogger } from '@settlemint/sdk-utils/logging';
  *
+ * const env = await loadEnv(false, false);
  * const logger = createLogger();
  *
- * export const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+ * const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
  *   introspection: introspection;
  *   disableMasking: true;
  *   scalars: {
  *     // Change unknown to the type you are using to store metadata
  *     JSON: unknown;
  *   };
- * }>({
- *   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
- *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
- * }, {
- *   fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
- * });
+ * }>(
+ *   {
+ *     instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+ *     accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+ *   },
+ *   {
+ *     fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+ *   },
+ * );
  *
  * // Making GraphQL queries
- * const query = graphql(`
+ * const query = portalGraphql(`
  *   query GetPendingTransactions {
  *     getPendingTransactions {
  *       count
@@ -61,7 +66,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  *   }
  * `);
  *
- * const result = await client.request(query);
+ * const result = await portalClient.request(query);
  */
 export function createPortalClient<const Setup extends AbstractSetupSchema>(
   options: ClientOptions,
@@ -84,5 +89,14 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
+export {
+  handleWalletVerificationChallenge,
+  type HandleWalletVerificationChallengeOptions,
+} from "./utils/wallet-verification-challenge.js";
+export {
+  waitForTransactionReceipt,
+  type Transaction,
+  type WaitForTransactionReceiptOptions,
+} from "./utils/wait-for-transaction-receipt.js";
 export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";

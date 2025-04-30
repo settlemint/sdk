@@ -1,6 +1,10 @@
 import { afterAll, beforeAll, expect } from "bun:test";
+import { copyFile, mkdir } from "node:fs/promises";
+import { join } from "node:path";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { exists } from "@settlemint/sdk-utils/filesystem";
+import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import {
   AAT_NAME,
@@ -74,6 +78,7 @@ beforeAll(async () => {
     await createLoadBalancer();
     await createPrivateKeySmartcontractSetPortalAndBlockscout();
     await createGraphMiddlewareAndActivatedPrivateKey();
+    await prepareTestApp();
   } catch (err) {
     console.error("Failed to create resources", err);
     await cleanup();
@@ -416,6 +421,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "--wait",
             "--restart-if-timeout",
             "--include-predeployed-abis",
+            "Forwarder",
             "Bond",
             "BondFactory",
             "CryptoCurrency",
@@ -615,4 +621,32 @@ async function deployResources(commands: (() => Promise<CommandResult | undefine
     return results;
   }
   return await Promise.allSettled(commands.map((command) => command()));
+}
+
+export async function prepareTestApp() {
+  const cwd = process.cwd();
+  try {
+    const testAppDir = join(__dirname, "../test-app");
+    await mkdir(testAppDir, { recursive: true });
+    console.log("Initializing npm project in", testAppDir);
+    process.chdir(testAppDir);
+    await executeCommand("npm", ["init", "-y"]);
+    console.log("Initializing tsconfig in", testAppDir);
+    if (!(await exists(join(testAppDir, "tsconfig.json")))) {
+      await executeCommand("npx", ["tsc", "--init"]);
+    }
+    console.log("Copying .env in", testAppDir);
+    if (await exists(join(__dirname, "../../.env"))) {
+      await copyFile(join(__dirname, "../../.env"), join(testAppDir, ".env"));
+    }
+    if (await exists(join(__dirname, "../../.env.local"))) {
+      await copyFile(join(__dirname, "../../.env.local"), join(testAppDir, ".env.local"));
+    }
+    console.log("Running codegen in", testAppDir);
+    await runCommand(COMMAND_TEST_SCOPE, ["codegen"], {
+      cwd: testAppDir,
+    }).result;
+  } finally {
+    process.chdir(cwd);
+  }
 }

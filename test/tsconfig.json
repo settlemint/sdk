@@ -16,5 +16,5 @@
     "noEmit": true
   },
   "include": ["**/*.ts"],
-  "exclude": ["node_modules", "dist", "./dist"]
+  "exclude": ["node_modules", "dist", "./dist", "test-app"]
 }

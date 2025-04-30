@@ -33,6 +33,11 @@
 
 {{{ about }}}
 {{/about}}
+{{#examples}}
+## Examples
+
+{{{ examples }}}
+{{/examples}}
 {{#api-reference}}
 
 ## API Reference

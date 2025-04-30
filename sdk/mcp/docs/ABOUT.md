@@ -1,7 +1,5 @@
 The SettleMint Model Context Provider provides a simple way integrate an LLM, AI IDE, or AI Agent with the SettleMint platform and your deployed usecase.
 
-For detailed information about using MCP with the SettleMint platform, check out our [official documentation](https://console.settlemint.com/documentation).
-
 ## Introduction to Model Context Protocol (MCP)
 
 The Model Context Protocol (MCP) is a framework designed to enhance the capabilities of AI agents and large language models (LLMs) by providing structured, contextual access to external data. It acts as a bridge between AI models and a variety of data sources such as blockchain networks, external APIs, databases, and developer environments. In essence, MCP allows an AI model to pull in relevant context from the outside world, enabling more informed reasoning and interaction.
