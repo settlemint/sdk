@@ -95,6 +95,29 @@ describe("Portal E2E Tests", () => {
         },
       );
       expect(deployStableCoinFactory.DeployContractStableCoinFactory?.transactionHash).toBeString();
+
+      const contractAddresses = await portalClient.request(
+        portalGraphql(`
+          query GetContracts {
+              getContracts {
+                  count
+                  records {
+                      address
+                      abiName
+                      createdAt
+                  }
+              }
+          }
+        `),
+      );
+
+      expect(contractAddresses.getContracts?.count).toBeGreaterThan(0);
+      expect(contractAddresses.getContracts?.records).toBeArray();
+      expect(
+        contractAddresses.getContracts?.records.some(
+          (record) => record.address === transaction?.receipt.contractAddress,
+        ),
+      ).toBeTrue();
     },
     { timeout: 60_000 },
   );

@@ -54,7 +54,8 @@ async function generateReadme() {
         : [];
       const exampleFiles = exampleDirContents
         .filter((entry) => entry.isFile() && (entry.name.endsWith(".ts") || entry.name.endsWith(".tsx")))
-        .map((entry) => join(entry.parentPath, entry.name));
+        .map((entry) => join(entry.parentPath, entry.name))
+        .sort((a, b) => a.localeCompare(b));
       const examples =
         exampleFiles.length > 0
           ? await Promise.all(

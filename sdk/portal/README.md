@@ -28,9 +28,9 @@
 
 - [About](#about)
 - [Examples](#examples)
+  - [Deploy contract](#deploy-contract)
   - [Get pending transactions](#get-pending-transactions)
   - [Send transaction using hd wallet](#send-transaction-using-hd-wallet)
-  - [Deploy contract](#deploy-contract)
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [createPortalClient()](#createportalclient)
@@ -55,9 +55,131 @@ The SettleMint Smart Contract Portal SDK provides a seamless way to interact wit
 The SDK offers a type-safe interface for all Portal API operations, with comprehensive error handling and validation. It integrates smoothly with modern TypeScript applications while providing a simple and intuitive developer experience.
 ## Examples
 
+### Deploy contract
+
+```ts
+/**
+ * This example demonstrates how to deploy a contract.
+ *
+ * The process involves:
+ * 1. Creating a portal client
+ * 2. Deploying a forwarder contract
+ * 3. Waiting for the forwarder contract deployment to be finalized
+ * 4. Deploying a stablecoin factory contract
+ * 5. Getting all contracts and filtering by ABI name
+ *
+ * This pattern is useful for applications that need to deploy smart contracts
+ * in the SettleMint Portal, providing a way to track the progress of blockchain operations.
+ */
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+import { getAddress } from "viem";
+import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
+import { waitForTransactionReceipt } from "../utils/wait-for-transaction-receipt.js";
+import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
+
+const env = await loadEnv(false, false);
+const logger = createLogger();
+
+const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+  introspection: introspection;
+  disableMasking: true;
+  scalars: {
+    // Change unknown to the type you are using to store metadata
+    JSON: unknown;
+  };
+}>(
+  {
+    instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+  },
+  {
+    fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+  },
+);
+
+// Replace with the address of your private key which you use to deploy smart contracts
+const FROM = getAddress("0x4B03331cF2db1497ec58CAa4AFD8b93611906960");
+
+/**
+ * Deploy a forwarder contract
+ */
+const deployForwarder = await portalClient.request(
+  portalGraphql(`
+    mutation DeployContractForwarder($from: String!) {
+      DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
+        transactionHash
+      }
+    }
+  `),
+  {
+    from: FROM,
+  },
+);
+
+/**
+ * Wait for the forwarder contract deployment to be finalized
+ */
+const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
+  portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+});
+
+/**
+ * Deploy a stablecoin factory contract
+ */
+const deployStableCoinFactory = await portalClient.request(
+  portalGraphql(`
+    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
+      DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
+        transactionHash
+      }
+    }
+  `),
+  {
+    from: FROM,
+    constructorArguments: {
+      forwarder: getAddress(transaction?.receipt.contractAddress!),
+    },
+  },
+);
+
+console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);
+
+const contractAddresses = await portalClient.request(
+  portalGraphql(`
+    query GetContracts {
+        getContracts {
+            count
+            records {
+                address
+                abiName
+                createdAt
+            }
+        }
+    }
+  `),
+);
+// Print total count
+console.log(`Total contracts: ${contractAddresses.getContracts?.count}`);
+
+// Contracts for StableCoinFactory
+console.log(contractAddresses.getContracts?.records.filter((record) => record.abiName === "StableCoinFactory"));
+
+```
 ### Get pending transactions
 
 ```ts
+/**
+ * This example demonstrates how to get the number of pending transactions.
+ *
+ * The process involves:
+ * 1. Creating a portal client
+ * 2. Making a GraphQL query to get the number of pending transactions
+ *
+ * This pattern is useful for applications that need to monitor the status of pending transactions
+ * in the SettleMint Portal, providing a way to track the progress of blockchain operations.
+ */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
@@ -99,6 +221,19 @@ console.log(`There are ${result.getPendingTransactions?.count} pending transacti
 ### Send transaction using hd wallet
 
 ```ts
+/**
+ * This example demonstrates how to send a transaction using an HD wallet.
+ *
+ * The process involves:
+ * 1. Creating a wallet for a user using the HD private key
+ * 2. Setting up a pincode for wallet verification
+ * 3. Handling the wallet verification challenge
+ * 4. Sending a transaction to the blockchain
+ *
+ * This pattern is useful for applications that need to manage multiple user wallets
+ * derived from a single HD wallet, providing a secure and scalable approach to
+ * blockchain interactions in enterprise applications.
+ */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import type { Address } from "viem";
@@ -220,85 +355,6 @@ const result = await portalClient.request(
 
 // Log the transaction hash
 console.log("Transaction hash:", result.StableCoinFactoryCreate?.transactionHash);
-
-```
-### Deploy contract
-
-```ts
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
-import { getAddress } from "viem";
-import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
-import { waitForTransactionReceipt } from "../utils/wait-for-transaction-receipt.js";
-import type { introspection } from "./schemas/portal-env.d.ts"; // Replace this path with the generated introspection type
-
-const env = await loadEnv(false, false);
-const logger = createLogger();
-
-const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
-  introspection: introspection;
-  disableMasking: true;
-  scalars: {
-    // Change unknown to the type you are using to store metadata
-    JSON: unknown;
-  };
-}>(
-  {
-    instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-    accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
-  },
-  {
-    fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
-  },
-);
-
-// Replace with the address of your private key which you use to deploy smart contracts
-const FROM = getAddress("0x4B03331cF2db1497ec58CAa4AFD8b93611906960");
-
-/**
- * Deploy a forwarder contract
- */
-const deployForwarder = await portalClient.request(
-  portalGraphql(`
-    mutation DeployContractForwarder($from: String!) {
-      DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
-        transactionHash
-      }
-    }
-  `),
-  {
-    from: FROM,
-  },
-);
-
-/**
- * Wait for the forwarder contract deployment to be finalized
- */
-const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
-  portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-  accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
-});
-
-/**
- * Deploy a stablecoin factory contract
- */
-const deployStableCoinFactory = await portalClient.request(
-  portalGraphql(`
-    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
-      DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
-        transactionHash
-      }
-    }
-  `),
-  {
-    from: FROM,
-    constructorArguments: {
-      forwarder: getAddress(transaction?.receipt.contractAddress!),
-    },
-  },
-);
-
-console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);
 
 ```
 
@@ -444,22 +500,39 @@ const result = await handleWalletVerificationChallenge({
 
 > **waitForTransactionReceipt**(`transactionHash`, `options`): `Promise`\<[`Transaction`](#transaction)\>
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:70](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L70)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:82](https://github.com/settlemint/sdk/blob/v2.2.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L82)
 
-Wait for the transaction receipt
+Waits for a blockchain transaction receipt by subscribing to transaction updates via GraphQL.
+This function polls until the transaction is confirmed or the timeout is reached.
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `transactionHash` | `string` | transaction hash |
-| `options` | [`WaitForTransactionReceiptOptions`](#waitfortransactionreceiptoptions) | options |
+| `transactionHash` | `string` | The hash of the transaction to wait for |
+| `options` | [`WaitForTransactionReceiptOptions`](#waitfortransactionreceiptoptions) | Configuration options for the waiting process |
 
 ##### Returns
 
 `Promise`\<[`Transaction`](#transaction)\>
 
-receipt
+The transaction details including receipt information when the transaction is confirmed
+
+##### Throws
+
+Error if the transaction receipt cannot be retrieved within the specified timeout
+
+##### Example
+
+```ts
+import { waitForTransactionReceipt } from "@settlemint/sdk-portal";
+
+const transaction = await waitForTransactionReceipt("0x123...", {
+  portalGraphqlEndpoint: "https://example.settlemint.com/graphql",
+  accessToken: "your-access-token",
+  timeout: 30000 // 30 seconds timeout
+});
+```
 
 ### Interfaces
 

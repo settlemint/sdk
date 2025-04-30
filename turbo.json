@@ -52,12 +52,17 @@
     },
     "docs": {
       "dependsOn": ["^build", "codegen"],
-      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json", "examples/**"],
+      "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json"],
       "outputs": ["docs/**", "!docs/ABOUT.md"]
     },
     "//#generate-readme": {
       "dependsOn": ["^build"],
-      "inputs": ["scripts/generate-readme.ts", "scripts/templates/README-template.md", "sdk/**/docs/**"],
+      "inputs": [
+        "scripts/generate-readme.ts",
+        "scripts/templates/README-template.md",
+        "sdk/**/docs/**",
+        "sdk/**/examples/**"
+      ],
       "outputs": ["sdk/**/README.md"]
     }
   }
