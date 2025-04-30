@@ -31,11 +31,11 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
       createExamples([
         {
           description: "Update a custom deployment",
-          command: "settlemint custom-deployment update v1.0.0",
+          command: "custom-deployment update v1.0.0",
         },
         {
           description: "Update a custom deployment with a specific unique name",
-          command: "settlemint custom-deployment update v1.0.0 --unique-name my-custom-deployment",
+          command: "custom-deployment update v1.0.0 --unique-name my-custom-deployment",
         },
       ]),
     )

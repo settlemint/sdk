@@ -13,7 +13,7 @@ export function hardhatScriptLocalCommand() {
       createExamples([
         {
           description: "Run a Hardhat script on a local network",
-          command: "settlemint hardhat script local --script scripts/deploy.ts",
+          command: "hardhat script local --script scripts/deploy.ts",
         },
       ]),
     )

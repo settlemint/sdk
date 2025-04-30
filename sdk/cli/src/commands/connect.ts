@@ -58,15 +58,15 @@ export function connectCommand(): Command {
         createExamples([
           {
             description: "Connect to your environment",
-            command: "settlemint connect",
+            command: "connect",
           },
           {
             description: "Connect to your environment using defaults from the .env file",
-            command: "settlemint connect --accept-defaults",
+            command: "connect --accept-defaults",
           },
           {
             description: "Connect to your production environment",
-            command: "settlemint connect --prod",
+            command: "connect --prod",
           },
         ]),
       )

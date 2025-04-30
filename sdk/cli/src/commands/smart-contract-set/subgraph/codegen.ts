@@ -14,7 +14,7 @@ export function subgraphCodegenCommand() {
       createExamples([
         {
           description: "Generate subgraph types",
-          command: "settlemint subgraph codegen",
+          command: "subgraph codegen",
         },
       ]),
     )

@@ -25,15 +25,15 @@ export function hardhatScriptRemoteCommand() {
       createExamples([
         {
           description: "Run a Hardhat script on a remote network",
-          command: "settlemint hardhat script remote --script scripts/deploy.ts",
+          command: "hardhat script remote --script scripts/deploy.ts",
         },
         {
           description: "Run a Hardhat script on a remote network with a specific blockchain node",
-          command: "settlemint hardhat script remote --script scripts/deploy.ts --blockchain-node my-blockchain-node",
+          command: "hardhat script remote --script scripts/deploy.ts --blockchain-node my-blockchain-node",
         },
         {
           description: "Run a Hardhat script on a remote network without compiling",
-          command: "settlemint hardhat script remote --script scripts/deploy.ts --no-compile",
+          command: "hardhat script remote --script scripts/deploy.ts --no-compile",
         },
       ]),
     );

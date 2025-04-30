@@ -20,11 +20,11 @@ export function logoutCommand(): Command {
       createExamples([
         {
           description: "Logout from your SettleMint account",
-          command: "settlemint logout",
+          command: "logout",
         },
         {
           description: "Logout from all instances",
-          command: "settlemint logout --all",
+          command: "logout --all",
         },
       ]),
     )

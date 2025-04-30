@@ -38,15 +38,15 @@ export function createCommand(): Command {
         createExamples([
           {
             description: "Create a new application from a template",
-            command: "settlemint create",
+            command: "create",
           },
           {
             description: "Create a new asset tokenization application",
-            command: "settlemint create --template asset-tokenization",
+            command: "create --template asset-tokenization",
           },
           {
             description: "Create a new asset tokenization application from a specific version",
-            command: "settlemint create --template asset-tokenization --version 1.0.0",
+            command: "create --template asset-tokenization --version 1.0.0",
           },
         ]),
       )

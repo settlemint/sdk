@@ -26,15 +26,15 @@ export function configCommand() {
       createExamples([
         {
           description: "Get platform configuration",
-          command: "settlemint config",
+          command: "config",
         },
         {
           description: "Get platform configuration in JSON format",
-          command: "settlemint config -o json",
+          command: "config -o json",
         },
         {
           description: "Get platform configuration in YAML format",
-          command: "settlemint config -o yaml",
+          command: "config -o yaml",
         },
       ]),
     )
