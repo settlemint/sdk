@@ -174,7 +174,7 @@
       "dependencies": {
         "@antfu/install-pkg": "^1",
         "@dotenvx/dotenvx": "^1",
-        "@manypkg/find-root": "^2",
+        "@manypkg/find-root": "^3.0.0",
         "@npmcli/package-json": "^6",
         "console-table-printer": "^2",
         "deepmerge-ts": "^7",
@@ -445,9 +445,9 @@
 
     "@loaderkit/resolve": ["@loaderkit/resolve@1.0.4", "", { "dependencies": { "@braidai/lang": "^1.0.0" } }, "sha512-rJzYKVcV4dxJv+vW6jlvagF8zvGxHJ2+HTr1e2qOejfmGhAApgJHl8Aog4mMszxceTRiKTTbnpgmTO1bEZHV/A=="],
 
-    "@manypkg/find-root": ["@manypkg/find-root@2.2.3", "", { "dependencies": { "@manypkg/tools": "^1.1.2" } }, "sha512-jtEZKczWTueJYHjGpxU3KJQ08Gsrf4r6Q2GjmPp/RGk5leeYAA1eyDADSAF+KVCsQ6EwZd/FMcOFCoMhtqdCtQ=="],
+    "@manypkg/find-root": ["@manypkg/find-root@3.0.0", "", { "dependencies": { "@manypkg/tools": "^2.0.0" } }, "sha512-uO3Rag7b0upqBGTJyZN2dPwaBdbGBZwT892RkUxzEgxgWccHGM5hZnXAy13Es95CVpsJ/QuEb2uNJ8pYBK0ZlA=="],
 
-    "@manypkg/tools": ["@manypkg/tools@1.1.2", "", { "dependencies": { "fast-glob": "^3.3.2", "jju": "^1.4.0", "js-yaml": "^4.1.0" } }, "sha512-3lBouSuF7CqlseLB+FKES0K4FQ02JrbEoRtJhxnsyB1s5v4AP03gsoohN8jp7DcOImhaR9scYdztq3/sLfk/qQ=="],
+    "@manypkg/tools": ["@manypkg/tools@2.0.0", "", { "dependencies": { "jju": "^1.4.0", "js-yaml": "^4.1.0", "tinyglobby": "^0.2.13" } }, "sha512-o4ZC8J9OmFT6Ar8hhObWrFe7M7TRFuskm8ROhroZZWdQ+/V1+RswP74wJkkDKY/VDcteKYCACq2PblifRRnj1g=="],
 
     "@modelcontextprotocol/sdk": ["@modelcontextprotocol/sdk@1.10.2", "", { "dependencies": { "content-type": "^1.0.5", "cors": "^2.8.5", "cross-spawn": "^7.0.3", "eventsource": "^3.0.2", "express": "^5.0.1", "express-rate-limit": "^7.5.0", "pkce-challenge": "^5.0.0", "raw-body": "^3.0.0", "zod": "^3.23.8", "zod-to-json-schema": "^3.24.1" } }, "sha512-rb6AMp2DR4SN+kc6L1ta2NCpApyA9WYNx3CrTSZvGxq9wH71bRur+zRqPfg0vQ9mjywR7qZdX2RGHOPq3ss+tA=="],
 
