@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createEASClient } from "./index";
+import { createEASClient } from "./index.ts";
 
 describe("EAS Client", () => {
   test("should create an EAS client", () => {
