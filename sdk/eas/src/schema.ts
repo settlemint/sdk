@@ -193,6 +193,8 @@ export interface RegisterSchemaOptions {
   revocable: boolean;
 }
 
+import { isAddress } from "viem";
+
 /**
  * Validates an Ethereum address.
  * @param address - The address to validate
@@ -213,7 +215,7 @@ export function validateEthereumAddress(address: string): void {
   if (!address) {
     throw new Error("Resolver address cannot be empty");
   }
-  if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
+  if (!isAddress(address)) {
     throw new Error("Invalid Ethereum address format");
   }
 }
