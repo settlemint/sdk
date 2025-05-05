@@ -1,4 +1,3 @@
-import { dirname } from "node:path";
 import { createExamples } from "@/utils/commands/create-examples";
 import { SETTLEMINT_NETWORK, subgraphSetup } from "@/utils/subgraph/setup";
 import { getSubgraphYamlFile } from "@/utils/subgraph/subgraph-config";
@@ -27,9 +26,7 @@ export function subgraphCodegenCommand() {
 
       const { command, args } = await getPackageManagerExecutable();
       const subgraphYamlFile = await getSubgraphYamlFile();
-      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], {
-        cwd: dirname(subgraphYamlFile),
-      });
+      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile]);
       outro("Subgraph types generated successfully");
     });
 }
