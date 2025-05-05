@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createEASClient } from "./index.js";
+import { createEASClient } from "./eas.js";
 
 describe("EAS Client", () => {
   test("should create an EAS client", () => {
