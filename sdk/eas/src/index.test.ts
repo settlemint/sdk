@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { createEASClient } from "./index.ts";
+import { createEASClient } from "./index.js";
 
 describe("EAS Client", () => {
   test("should create an EAS client", () => {
@@ -12,12 +12,12 @@ describe("EAS Client", () => {
     expect(typeof eas.getAttestations).toBe("function");
   });
 
-  test("should execute all functions without errors", () => {
+  test("should execute all functions without errors", async () => {
     const eas = createEASClient();
-    expect(() => eas.submitAttestation()).not.toThrow();
-    expect(() => eas.parseAttestation()).not.toThrow();
-    expect(() => eas.createSchema()).not.toThrow();
-    expect(() => eas.getSchema()).not.toThrow();
-    expect(() => eas.getAttestations()).not.toThrow();
+    await eas.submitAttestation();
+    await eas.parseAttestation();
+    await eas.createSchema();
+    await eas.getSchema();
+    await eas.getAttestations();
   });
 });
