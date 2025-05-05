@@ -38,6 +38,7 @@ describe("mono-repo utilities", () => {
     expect(packages.map((p) => basename(p)).sort()).toEqual([
       "blockscout",
       "cli",
+      "eas",
       "hasura",
       "ipfs",
       "js",
