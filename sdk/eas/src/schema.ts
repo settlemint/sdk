@@ -257,10 +257,15 @@ export interface RegisterSchemaOptions {
 }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { isAddress } from "viem";
 
 =======
 >>>>>>> e7f97da (feat: add EAS schema support and validation tests)
+=======
+import { isAddress } from "viem";
+
+>>>>>>> 97c63a1 (feat: enhance Ethereum address validation in EAS schema using viem library)
 /**
  * Validates an Ethereum address.
  * @param address - The address to validate
@@ -291,10 +296,14 @@ export function validateEthereumAddress(address: string): void {
     throw new Error("Resolver address cannot be empty");
   }
 <<<<<<< HEAD
+<<<<<<< HEAD
   if (!isAddress(address)) {
 =======
   if (!/^0x[a-fA-F0-9]{40}$/.test(address)) {
 >>>>>>> e7f97da (feat: add EAS schema support and validation tests)
+=======
+  if (!isAddress(address)) {
+>>>>>>> 97c63a1 (feat: enhance Ethereum address validation in EAS schema using viem library)
     throw new Error("Invalid Ethereum address format");
   }
 }
