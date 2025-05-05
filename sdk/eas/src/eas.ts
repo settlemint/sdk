@@ -1,3 +1,5 @@
+export * from "./schema.js";
+
 export function createEASClient() {
   return {
     submitAttestation() {
