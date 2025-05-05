@@ -1,4 +1,3 @@
-import { dirname } from "node:path";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
@@ -74,9 +73,7 @@ export function subgraphDeployCommand() {
       await updateSpecVersion(theGraphMiddleware.specVersion as string);
 
       const { command, args } = await getPackageManagerExecutable();
-      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], {
-        cwd: dirname(subgraphYamlFile),
-      });
+      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile]);
 
       const generated = await isGenerated();
       if (generated) {

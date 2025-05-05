@@ -1,4 +1,3 @@
-import { dirname } from "node:path";
 import { createExamples } from "@/utils/commands/create-examples";
 import { subgraphSetup } from "@/utils/subgraph/setup";
 import { SETTLEMINT_NETWORK } from "@/utils/subgraph/setup";
@@ -28,9 +27,8 @@ export function subgraphBuildCommand() {
 
       const { command, args } = await getPackageManagerExecutable();
       const subgraphYamlFile = await getSubgraphYamlFile();
-      const cwd = dirname(subgraphYamlFile);
-      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile], { cwd });
-      await executeCommand(command, [...args, "graph", "build", subgraphYamlFile], { cwd });
+      await executeCommand(command, [...args, "graph", "codegen", subgraphYamlFile]);
+      await executeCommand(command, [...args, "graph", "build", subgraphYamlFile]);
       outro("Subgraph built successfully");
     });
 }
