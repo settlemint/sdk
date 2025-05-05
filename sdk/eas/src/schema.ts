@@ -1,6 +1,16 @@
 /**
  * Supported EAS schema field types.
  * Maps user-friendly type names to EAS-compatible type strings.
+ * @example
+ * ```ts
+ * import { EAS_FIELD_TYPES } from '@settlemint/sdk-eas';
+ *
+ * // Use in type definitions
+ * type MyFieldType = keyof typeof EAS_FIELD_TYPES;
+ *
+ * // Check if a type is supported
+ * const isValidType = "string" in EAS_FIELD_TYPES;
+ * ```
  */
 export const EAS_FIELD_TYPES = {
   string: "string",
@@ -21,6 +31,16 @@ export type EASFieldType = keyof typeof EAS_FIELD_TYPES;
 
 /**
  * Interface for defining a schema field.
+ * @example
+ * ```ts
+ * import { SchemaField } from '@settlemint/sdk-eas';
+ *
+ * const field: SchemaField = {
+ *   name: "userAddress",
+ *   type: "address",
+ *   description: "The Ethereum address of the user"
+ * };
+ * ```
  */
 export interface SchemaField {
   /** The name of the field */
@@ -35,6 +55,18 @@ export interface SchemaField {
  * Validates a schema field name.
  * @param name - The field name to validate
  * @throws Error if the name is invalid
+ * @example
+ * ```ts
+ * import { validateFieldName } from '@settlemint/sdk-eas';
+ *
+ * // Valid names
+ * validateFieldName("userAddress"); // OK
+ * validateFieldName("user_address"); // OK
+ *
+ * // Invalid names
+ * validateFieldName("user address"); // Throws: "Field name cannot contain spaces"
+ * validateFieldName("123user"); // Throws: "Field name must start with a letter or underscore"
+ * ```
  */
 export function validateFieldName(name: string): void {
   if (!name) {
@@ -54,6 +86,17 @@ export function validateFieldName(name: string): void {
  * Validates a schema field type.
  * @param type - The field type to validate
  * @throws Error if the type is invalid
+ * @example
+ * ```ts
+ * import { validateFieldType } from '@settlemint/sdk-eas';
+ *
+ * // Valid types
+ * validateFieldType("string"); // OK
+ * validateFieldType("address"); // OK
+ *
+ * // Invalid types
+ * validateFieldType("invalidType"); // Throws: "Invalid field type: invalidType"
+ * ```
  */
 export function validateFieldType(type: string): asserts type is EASFieldType {
   if (!(type in EAS_FIELD_TYPES)) {
@@ -65,6 +108,24 @@ export function validateFieldType(type: string): asserts type is EASFieldType {
  * Validates an array of schema fields.
  * @param fields - The fields to validate
  * @throws Error if any field is invalid
+ * @example
+ * ```ts
+ * import { validateSchemaFields, SchemaField } from '@settlemint/sdk-eas';
+ *
+ * const fields: SchemaField[] = [
+ *   { name: "userAddress", type: "address" },
+ *   { name: "age", type: "uint8" }
+ * ];
+ *
+ * validateSchemaFields(fields); // OK
+ *
+ * // Invalid fields
+ * validateSchemaFields([]); // Throws: "Schema must have at least one field"
+ * validateSchemaFields([
+ *   { name: "userAddress", type: "address" },
+ *   { name: "userAddress", type: "uint8" }
+ * ]); // Throws: "Duplicate field name: userAddress"
+ * ```
  */
 export function validateSchemaFields(fields: SchemaField[]): void {
   if (!fields || fields.length === 0) {
@@ -88,6 +149,19 @@ export function validateSchemaFields(fields: SchemaField[]): void {
  * @param fields - The fields to include in the schema
  * @returns The EAS-compatible schema string
  * @throws Error if any field is invalid
+ * @example
+ * ```ts
+ * import { buildSchemaString, SchemaField } from '@settlemint/sdk-eas';
+ *
+ * const fields: SchemaField[] = [
+ *   { name: "userAddress", type: "address" },
+ *   { name: "age", type: "uint8" },
+ *   { name: "isActive", type: "bool" }
+ * ];
+ *
+ * const schemaString = buildSchemaString(fields);
+ * // Result: "address userAddress, uint8 age, bool isActive"
+ * ```
  */
 export function buildSchemaString(fields: SchemaField[]): string {
   validateSchemaFields(fields);
@@ -96,6 +170,19 @@ export function buildSchemaString(fields: SchemaField[]): string {
 
 /**
  * Options for registering a schema.
+ * @example
+ * ```ts
+ * import { RegisterSchemaOptions, SchemaField } from '@settlemint/sdk-eas';
+ *
+ * const options: RegisterSchemaOptions = {
+ *   fields: [
+ *     { name: "userAddress", type: "address" },
+ *     { name: "age", type: "uint8" }
+ *   ],
+ *   resolverAddress: "0x1234567890123456789012345678901234567890",
+ *   revocable: true
+ * };
+ * ```
  */
 export interface RegisterSchemaOptions {
   /** The fields that make up the schema */
@@ -110,6 +197,17 @@ export interface RegisterSchemaOptions {
  * Validates an Ethereum address.
  * @param address - The address to validate
  * @throws Error if the address is invalid
+ * @example
+ * ```ts
+ * import { validateEthereumAddress } from '@settlemint/sdk-eas';
+ *
+ * // Valid address
+ * validateEthereumAddress("0x1234567890123456789012345678901234567890"); // OK
+ *
+ * // Invalid addresses
+ * validateEthereumAddress("0x123"); // Throws: "Invalid Ethereum address format"
+ * validateEthereumAddress(""); // Throws: "Resolver address cannot be empty"
+ * ```
  */
 export function validateEthereumAddress(address: string): void {
   if (!address) {
@@ -125,6 +223,23 @@ export function validateEthereumAddress(address: string): void {
  * @param options - The schema registration options
  * @returns A promise that resolves to the schema UID
  * @throws Error if the schema registration fails
+ * @example
+ * ```ts
+ * import { registerSchema, SchemaField } from '@settlemint/sdk-eas';
+ *
+ * const fields: SchemaField[] = [
+ *   { name: "userAddress", type: "address" },
+ *   { name: "age", type: "uint8" }
+ * ];
+ *
+ * const schemaUID = await registerSchema({
+ *   fields,
+ *   resolverAddress: "0x1234567890123456789012345678901234567890",
+ *   revocable: true
+ * });
+ *
+ * console.log(`Schema registered with UID: ${schemaUID}`);
+ * ```
  */
 export async function registerSchema(options: RegisterSchemaOptions): Promise<string> {
   const { fields, resolverAddress, revocable } = options;
