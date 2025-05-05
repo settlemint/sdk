@@ -21,19 +21,19 @@
     "email": "support@settlemint.com"
   },
   "files": ["dist"],
-  "main": "./dist/eas.cjs",
-  "module": "./dist/eas.mjs",
-  "types": "./dist/eas.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
-        "types": "./dist/eas.d.ts",
-        "default": "./dist/eas.mjs"
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.mjs"
       },
       "require": {
-        "types": "./dist/eas.d.cts",
-        "default": "./dist/eas.cjs"
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
     }
   },
@@ -49,7 +49,9 @@
     "prepack": "cp ../../LICENSE .",
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/index.ts --out ./docs"
   },
+  "devDependencies": {},
   "dependencies": {
+    "@settlemint/sdk-utils": "workspace:*",
     "viem": "^2.7.9"
   },
   "peerDependencies": {},
