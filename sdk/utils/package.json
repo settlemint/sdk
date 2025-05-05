@@ -66,7 +66,7 @@
     "is-in-ci": "^1",
     "@antfu/install-pkg": "^1",
     "@dotenvx/dotenvx": "^1",
-    "@manypkg/find-root": "^2",
+    "@manypkg/find-root": "^3.0.0",
     "@npmcli/package-json": "^6",
     "console-table-printer": "^2",
     "deepmerge-ts": "^7",
