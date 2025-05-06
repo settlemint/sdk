@@ -9,7 +9,7 @@ import { retryWhenFailed } from "@settlemint/sdk-utils";
  * @param retryDelay - The delay between retries in milliseconds.
  * @returns The result of the command.
  */
-export function retryCommand<T>(command: () => Promise<T>, maxRetries = 3, retryDelay = 15_000) {
+export function retryCommand<T>(command: () => Promise<T>, maxRetries = 3, retryDelay = 60_000) {
   return retryWhenFailed(command, maxRetries, retryDelay, (error) => {
     return error.message.includes("Access token found in output");
   });
