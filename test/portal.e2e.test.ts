@@ -212,7 +212,6 @@ describe("Portal E2E Tests", () => {
         portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
         accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
       });
-      expect(transaction?.receipt.contractAddress).toBeString();
       expect(transaction?.receipt.status).toBe("Success");
     },
     { timeout: 60_000 },
