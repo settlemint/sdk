@@ -16266,6 +16266,7 @@ type PlatformConfigDto {
   id: ID!
   kits: [KitConfig!]!
   observability: ObservabilityDto!
+  preDeployedAbis: [String!]!
   preDeployedContracts: [String!]!
   sdkVersion: String!
   smartContractSets: SmartContractSetsDto!

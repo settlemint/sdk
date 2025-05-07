@@ -81,7 +81,7 @@ export function configCommand() {
               })),
           )
           .sort((a, b) => a.providerId.localeCompare(b.providerId) || a.regionId.localeCompare(b.regionId)),
-        preDeployedContracts: platformConfig.preDeployedContracts.sort(),
+        preDeployedAbis: platformConfig.preDeployedAbis.sort(),
       };
 
       if (output === "json") {
@@ -95,7 +95,7 @@ export function configCommand() {
 
         table("Providers and regions", platformConfigData.deploymentEngineTargets);
 
-        list("Pre-deployed abis (Smart Contract Portal)", platformConfigData.preDeployedContracts);
+        list("Pre-deployed abis (Smart Contract Portal)", platformConfigData.preDeployedAbis);
       }
 
       outro("Platform configuration retrieved");
