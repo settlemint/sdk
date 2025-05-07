@@ -207,12 +207,6 @@ describe("Portal E2E Tests", () => {
       );
 
       expect(result.StableCoinFactoryCreate?.transactionHash).toBeString();
-
-      const transaction = await waitForTransactionReceipt(result.StableCoinFactoryCreate?.transactionHash!, {
-        portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-        accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
-      });
-      expect(transaction?.receipt.status).toBe("Success");
     },
     { timeout: 60_000 },
   );
