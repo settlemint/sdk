@@ -1,4 +1,5 @@
 import { describe, expect, mock, test } from "bun:test";
+import type { Address } from "viem";
 import { createEASClient } from "./eas.js";
 
 // Mock the viem client functions
@@ -33,8 +34,8 @@ mock.module("@settlemint/sdk-viem", () => ({
 
 describe("EAS Client", () => {
   const options = {
-    schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
-    attestationAddress: "0x1234567890123456789012345678901234567890",
+    schemaRegistryAddress: "0x1234567890123456789012345678901234567890" as Address,
+    attestationAddress: "0x1234567890123456789012345678901234567890" as Address,
     accessToken: "sm_aat_test_access_token",
     chainId: "1",
     chainName: "Ethereum",
