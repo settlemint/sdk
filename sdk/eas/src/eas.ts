@@ -15,21 +15,23 @@ import { buildSchemaString, validateSchemaFields } from "./validation.js";
  * @example
  * ```ts
  * import { createEASClient } from '@settlemint/sdk-eas';
+ * import { Wallet } from 'ethers';
  *
+ * // Using a private key
  * const client = createEASClient({
  *   schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
  *   attestationAddress: "0x1234567890123456789012345678901234567890",
- *   blockchainNode: "http://localhost:8545"
+ *   blockchainNode: "http://localhost:8545",
+ *   wallet: "your-private-key-here"
  * });
  *
- * // Register a schema
- * const schema = await client.registerSchema({
- *   fields: [
- *     { name: "eventId", type: "uint256" },
- *     { name: "voteIndex", type: "uint8" }
- *   ],
- *   resolverAddress: "0x0000000000000000000000000000000000000000",
- *   revocable: true
+ * // Or using a Wallet instance
+ * const wallet = new Wallet("your-private-key-here");
+ * const client = createEASClient({
+ *   schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
+ *   attestationAddress: "0x1234567890123456789012345678901234567890",
+ *   blockchainNode: "http://localhost:8545",
+ *   wallet
  * });
  * ```
  */
@@ -37,7 +39,8 @@ export function createEASClient(options: ClientOptions) {
   validate(ClientOptionsSchema, options);
 
   const provider = new JsonRpcProvider(options.blockchainNode);
-  const wallet = Wallet.createRandom().connect(provider);
+  const wallet =
+    typeof options.wallet === "string" ? new Wallet(options.wallet, provider) : options.wallet.connect(provider);
   const schemaRegistry = new SchemaRegistry(options.schemaRegistryAddress);
 
   schemaRegistry.connect(wallet);
