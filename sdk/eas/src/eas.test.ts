@@ -35,7 +35,7 @@ describe("EAS Client", () => {
   const options = {
     schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
     attestationAddress: "0x1234567890123456789012345678901234567890",
-    accessToken: "test-access-token",
+    accessToken: "sm_aat_test_access_token",
     chainId: "1",
     chainName: "Ethereum",
     rpcUrl: "http://localhost:8545",
