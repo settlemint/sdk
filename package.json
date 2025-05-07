@@ -51,7 +51,7 @@
     "mustache": "4.2.0",
     "publint": "0.3.12",
     "tsup": "8.4.0",
-    "turbo": "2.5.2",
+    "turbo": "2.5.3",
     "typedoc": "0.28.4",
     "typedoc-plugin-markdown": "4.6.3",
     "typedoc-plugin-merge-modules": "7.0.0",
