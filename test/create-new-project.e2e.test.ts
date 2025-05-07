@@ -6,6 +6,7 @@ import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { $ } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
+import { PRIVATE_KEY_SMART_CONTRACTS_NAMES } from "./constants/test-resources";
 import {
   registerLinkedDependencies,
   unlinkLinkedDependencies,
@@ -13,6 +14,7 @@ import {
 } from "./utils/link-dependencies";
 import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
+import { findPrivateKeyByName } from "./utils/test-resources";
 
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
@@ -130,30 +132,35 @@ describe("Setup a project using the SDK", () => {
 
   test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "asset-tokenization-kit";
+    let retries = 0;
     // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
-    const { output: deployOutput } = await retryCommand(
-      () =>
-        runCommand(
-          COMMAND_TEST_SCOPE,
-          [
-            "scs",
-            "hardhat",
-            "deploy",
-            "remote",
-            "--deployment-id",
-            deploymentId,
-            "--module",
-            "ignition/modules/stable-coin-factory.ts",
-            "--accept-defaults",
-          ],
-          {
-            cwd: contractsDir,
-            env: {
-              HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
-            },
+    const { output: deployOutput } = await retryCommand(async () => {
+      const privateKey = await findPrivateKeyByName(PRIVATE_KEY_SMART_CONTRACTS_NAMES[retries]!);
+      retries++;
+      return runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "scs",
+          "hardhat",
+          "deploy",
+          "remote",
+          "--default-sender",
+          privateKey?.address!,
+          "--deployment-id",
+          deploymentId,
+          "--module",
+          "ignition/modules/stable-coin-factory.ts",
+          "--accept-defaults",
+        ],
+        {
+          cwd: contractsDir,
+          env: {
+            HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
           },
-        ).result,
-    );
+        },
+      ).result;
+    });
+
     const deploymentInfoData = await readFile(
       join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );

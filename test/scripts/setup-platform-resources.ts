@@ -1,7 +1,6 @@
 import { afterAll, beforeAll, expect } from "bun:test";
 import { copyFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
-import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
@@ -24,11 +23,19 @@ import {
   PORTAL_NAME,
   PRIVATE_KEY_2_NAME,
   PRIVATE_KEY_NAME,
-  PRIVATE_KEY_SMART_CONTRACTS_NAME,
+  PRIVATE_KEY_SMART_CONTRACTS_NAMES,
   WORKSPACE_NAME,
 } from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
 import { type CommandResult, runCommand } from "../utils/run-command";
+import {
+  blockchainNodeAlreadyCreated,
+  defaultResourceAlreadyCreated,
+  findBlockchainNodeByName,
+  findLoadBalancerByName,
+  privateKeyAlreadyCreated,
+  setupSettleMintClient,
+} from "../utils/test-resources";
 
 // Needed so it loads the correct environment variables
 // @ts-ignore
@@ -87,47 +94,6 @@ beforeAll(async () => {
 });
 
 afterAll(cleanup);
-
-async function setupSettleMintClient() {
-  const env: Partial<DotEnv> = await loadEnv(false, false);
-  return createSettleMintClient({
-    accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
-    instance: env.SETTLEMINT_INSTANCE!,
-  });
-}
-
-async function defaultResourceAlreadyCreated(envNames: (keyof DotEnv)[]) {
-  const env: Partial<DotEnv> = await loadEnv(false, false);
-  return envNames.every((envName) => env[envName] !== undefined);
-}
-
-async function blockchainNodeAlreadyCreated(blockchainNodeName: string) {
-  const env: Partial<DotEnv> = await loadEnv(false, false);
-  const settlemint = await setupSettleMintClient();
-  const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
-  return nodes.some((node) => node.name === blockchainNodeName);
-}
-
-async function privateKeyAlreadyCreated(privateKeyName: string) {
-  const env: Partial<DotEnv> = await loadEnv(false, false);
-  const settlemint = await setupSettleMintClient();
-  const privateKeys = await settlemint.privateKey.list(env.SETTLEMINT_APPLICATION!);
-  return privateKeys.some((privateKey) => privateKey.name === privateKeyName);
-}
-
-async function findBlockchainNodeByName(blockchainNodeName: string) {
-  const env: Partial<DotEnv> = await loadEnv(false, false);
-  const settlemint = await setupSettleMintClient();
-  const nodes = await settlemint.blockchainNode.list(env.SETTLEMINT_APPLICATION!);
-  return nodes.find((node) => node.name === blockchainNodeName);
-}
-
-async function findLoadBalancerByName(loadBalancerName: string) {
-  const env: Partial<DotEnv> = await loadEnv(false, false);
-  const settlemint = await setupSettleMintClient();
-  const loadBalancers = await settlemint.loadBalancer.list(env.SETTLEMINT_APPLICATION!);
-  return loadBalancers.find((loadBalancer) => loadBalancer.name === loadBalancerName);
-}
 
 async function addWorkspaceCredits() {
   // Add some credits so the workspace will not be auto paused
@@ -295,26 +261,26 @@ async function createBlockchainNetworkMinioAndIpfs() {
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 
-  const hasPrivateKey = await privateKeyAlreadyCreated(PRIVATE_KEY_SMART_CONTRACTS_NAME);
-  if (!hasPrivateKey) {
-    const env: Partial<DotEnv> = await loadEnv(false, false);
-    const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
-      "platform",
-      "create",
-      "private-key",
-      "hsm-ecdsa-p256",
-      "--blockchain-node",
-      env.SETTLEMINT_BLOCKCHAIN_NODE!,
-      "--accept-defaults",
-      "--default",
-      "--wait",
-      "--restart-if-timeout",
-      PRIVATE_KEY_SMART_CONTRACTS_NAME,
-    ]).result;
-    expect(privateKeyHsmCreateCommandOutput).toInclude(
-      `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAME} created successfully`,
-    );
-    expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
+  for (const privateKeyName of PRIVATE_KEY_SMART_CONTRACTS_NAMES) {
+    const hasPrivateKey = await privateKeyAlreadyCreated(privateKeyName);
+    if (!hasPrivateKey) {
+      const env: Partial<DotEnv> = await loadEnv(false, false);
+      const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+        "platform",
+        "create",
+        "private-key",
+        "hsm-ecdsa-p256",
+        "--blockchain-node",
+        env.SETTLEMINT_BLOCKCHAIN_NODE!,
+        "--accept-defaults",
+        "--default",
+        "--wait",
+        "--restart-if-timeout",
+        privateKeyName,
+      ]).result;
+      expect(privateKeyHsmCreateCommandOutput).toInclude(`Private key ${privateKeyName} created successfully`);
+      expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
+    }
   }
 }
 

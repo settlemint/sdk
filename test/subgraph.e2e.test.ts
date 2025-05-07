@@ -10,8 +10,10 @@ import {
   getSubgraphYamlConfig,
   updateSubgraphConfig,
 } from "../sdk/cli/src/utils/subgraph/subgraph-config";
+import { PRIVATE_KEY_SMART_CONTRACTS_NAMES } from "./constants/test-resources";
 import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
+import { findPrivateKeyByName } from "./utils/test-resources";
 
 const PROJECT_NAME = "contracts-subgraphs";
 const COMMAND_TEST_SCOPE = __filename;
@@ -61,19 +63,32 @@ describe("Build and deploy a subgraph using the SDK", () => {
 
   test("Deploy smart contract and get address info", async () => {
     const deploymentId = "diamond-bond";
-    const { output: deployOutput } = await retryCommand(
-      () =>
-        runCommand(
-          COMMAND_TEST_SCOPE,
-          ["scs", "hardhat", "deploy", "remote", "--deployment-id", deploymentId, "--accept-defaults"],
-          {
-            cwd: projectDir,
-            env: {
-              HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
-            },
+
+    let retries = 0;
+    const { output: deployOutput } = await retryCommand(async () => {
+      const privateKey = await findPrivateKeyByName(PRIVATE_KEY_SMART_CONTRACTS_NAMES[retries]!);
+      retries++;
+      return runCommand(
+        COMMAND_TEST_SCOPE,
+        [
+          "scs",
+          "hardhat",
+          "deploy",
+          "remote",
+          "--default-sender",
+          privateKey?.address!,
+          "--deployment-id",
+          deploymentId,
+          "--accept-defaults",
+        ],
+        {
+          cwd: projectDir,
+          env: {
+            HARDHAT_IGNITION_CONFIRM_DEPLOYMENT: "false",
           },
-        ).result,
-    );
+        },
+      ).result;
+    });
     const deploymentInfoData = await readFile(
       join(projectDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );

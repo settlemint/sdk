@@ -10,7 +10,15 @@ export const LOAD_BALANCER_NAME = "SDK Demo Load Balancer";
 
 export const PRIVATE_KEY_NAME = "SDK Demo Private Key";
 export const PRIVATE_KEY_2_NAME = "SDK Demo Private Key 2";
-export const PRIVATE_KEY_SMART_CONTRACTS_NAME = "SDK Demo Private Key Smart Contracts";
+export const PRIVATE_KEY_SMART_CONTRACTS_NAMES = [
+  "SDK Demo Private Key Smart Contracts Deployment 1",
+  "SDK Demo Private Key Smart Contracts Deployment 2",
+  "SDK Demo Private Key Smart Contracts Deployment 3",
+  "SDK Demo Private Key Smart Contracts Deployment 4",
+  "SDK Demo Private Key Smart Contracts Deployment 5",
+] as const;
+export const PRIVATE_KEY_SMART_CONTRACTS_NAME_4 = "SDK Demo Private Key Smart Contracts Deployment 4";
+export const PRIVATE_KEY_SMART_CONTRACTS_NAME_5 = "SDK Demo Private Key Smart Contracts Deployment 5";
 export const MINIO_NAME = "SDK Demo MinIO";
 export const IPFS_NAME = "SDK Demo IPFS";
 export const GRAPH_NAME = "SDK Demo Graph";
