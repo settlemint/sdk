@@ -56,6 +56,7 @@ export function createEASClient(options: ClientOptions) {
         revocable: options.revocable,
       });
 
+      await tx.wait();
       return tx.toString();
     } catch (error) {
       throw new Error(`Failed to register schema: ${(error as Error).message}`);
