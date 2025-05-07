@@ -75,7 +75,7 @@ export function createEASClient(options: ClientOptions) {
       await tx.wait();
       return tx.toString();
     } catch (error) {
-      throw new Error(`Failed to register schema: ${(error as Error).message}`);
+      throw new Error(`Failed to register schema: ${(error as Error).message}`, { cause: error });
     }
   }
 
