@@ -7,6 +7,11 @@ import { publicClientToProvider, walletClientToSigner } from "./ethers-adapter.j
 import type { RegisterSchemaOptions } from "./types.js";
 import { buildSchemaString, validateSchemaFields } from "./validation.js";
 
+// Re-export types and constants
+export type { ClientOptions } from "./client-options.schema.js";
+export type { RegisterSchemaOptions, SchemaField, EASFieldType } from "./types.js";
+export { EAS_FIELD_TYPES } from "./types.js";
+
 /**
  * Creates an EAS client for interacting with the Ethereum Attestation Service.
  *
