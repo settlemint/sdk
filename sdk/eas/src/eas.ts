@@ -1,7 +1,9 @@
 import { SchemaRegistry } from "@ethereum-attestation-service/eas-sdk";
 import { validate } from "@settlemint/sdk-utils/validation";
-import { JsonRpcProvider, Wallet } from "ethers";
+import { getPublicClient, getWalletClient } from "@settlemint/sdk-viem";
+import type { PublicClient } from "viem";
 import { type ClientOptions, ClientOptionsSchema } from "./client-options.schema.js";
+import { publicClientToProvider, walletClientToSigner } from "./ethers-adapter.js";
 import type { RegisterSchemaOptions } from "./types.js";
 import { buildSchemaString, validateSchemaFields } from "./validation.js";
 
@@ -15,34 +17,40 @@ import { buildSchemaString, validateSchemaFields } from "./validation.js";
  * @example
  * ```ts
  * import { createEASClient } from '@settlemint/sdk-eas';
- * import { Wallet } from 'ethers';
  *
- * // Using a private key
  * const client = createEASClient({
  *   schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
  *   attestationAddress: "0x1234567890123456789012345678901234567890",
- *   blockchainNode: "http://localhost:8545",
- *   wallet: "your-private-key-here"
- * });
- *
- * // Or using a Wallet instance
- * const wallet = new Wallet("your-private-key-here");
- * const client = createEASClient({
- *   schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
- *   attestationAddress: "0x1234567890123456789012345678901234567890",
- *   blockchainNode: "http://localhost:8545",
- *   wallet
+ *   accessToken: "your-access-token",
+ *   chainId: "1",
+ *   chainName: "Ethereum",
+ *   rpcUrl: "http://localhost:8545"
  * });
  * ```
  */
 export function createEASClient(options: ClientOptions) {
   validate(ClientOptionsSchema, options);
 
-  const provider = new JsonRpcProvider(options.blockchainNode);
-  const wallet =
-    typeof options.wallet === "string" ? new Wallet(options.wallet, provider) : options.wallet.connect(provider);
-  const schemaRegistry = new SchemaRegistry(options.schemaRegistryAddress);
+  // Create viem clients
+  const publicClient = getPublicClient({
+    accessToken: options.accessToken,
+    chainId: options.chainId,
+    chainName: options.chainName,
+    rpcUrl: options.rpcUrl,
+  }) as PublicClient;
 
+  const walletClient = getWalletClient({
+    accessToken: options.accessToken,
+    chainId: options.chainId,
+    chainName: options.chainName,
+    rpcUrl: options.rpcUrl,
+  })();
+
+  // Convert to ethers for EAS SDK
+  const provider = publicClientToProvider(publicClient);
+  const wallet = walletClientToSigner(walletClient);
+
+  const schemaRegistry = new SchemaRegistry(options.schemaRegistryAddress);
   schemaRegistry.connect(wallet);
 
   async function registerSchema(options: RegisterSchemaOptions): Promise<string> {
