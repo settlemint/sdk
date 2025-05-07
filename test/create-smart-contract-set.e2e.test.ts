@@ -8,10 +8,11 @@ import {
   NODE_NAME_2_WITH_PK,
   NODE_NAME_3_WITHOUT_PK,
   PRIVATE_KEY_2_NAME,
-  PRIVATE_KEY_SMART_CONTRACTS_NAME,
+  PRIVATE_KEY_SMART_CONTRACTS_NAMES,
 } from "./constants/test-resources";
 import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
+import { findPrivateKeyByName } from "./utils/test-resources";
 
 const SMART_CONTRACT_SET_NAME = "contracts";
 const COMMAND_TEST_SCOPE = __filename;
@@ -144,10 +145,13 @@ describe("Setup a smart contract set using the SDK", () => {
   });
 
   test("Hardhat - Deploy smart contract set (remote)", async () => {
+    let deployRetries = 0;
     await retryCommand(async () => {
+      const privateKey = await findPrivateKeyByName(PRIVATE_KEY_SMART_CONTRACTS_NAMES[deployRetries]!);
+      deployRetries++;
       const deployCommand = runCommand(
         COMMAND_TEST_SCOPE,
-        ["scs", "hardhat", "deploy", "remote", "--accept-defaults"],
+        ["scs", "hardhat", "deploy", "remote", "--default-sender", privateKey?.address!, "--accept-defaults"],
         {
           cwd: projectDir,
         },
@@ -167,10 +171,24 @@ describe("Setup a smart contract set using the SDK", () => {
       expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
     });
 
+    let resetRetries = 0;
     await retryCommand(async () => {
+      const privateKey = await findPrivateKeyByName(PRIVATE_KEY_SMART_CONTRACTS_NAMES[resetRetries]!);
+      resetRetries++;
       const resetCommand = runCommand(
         COMMAND_TEST_SCOPE,
-        ["scs", "hardhat", "deploy", "remote", "--reset", "-m", "ignition/modules/main.ts", "--accept-defaults"],
+        [
+          "scs",
+          "hardhat",
+          "deploy",
+          "remote",
+          "--reset",
+          "-m",
+          "ignition/modules/main.ts",
+          "--default-sender",
+          privateKey?.address!,
+          "--accept-defaults",
+        ],
         {
           cwd: projectDir,
         },
@@ -236,7 +254,9 @@ describe("Setup a smart contract set using the SDK", () => {
       expect(nodeListString).not.toContain(NODE_NAME_3_WITHOUT_PK);
 
       const privateKeyString = privateKeyCapture.join("\n");
-      expect(privateKeyString).toContain(PRIVATE_KEY_SMART_CONTRACTS_NAME);
+      for (const privateKeyName of PRIVATE_KEY_SMART_CONTRACTS_NAMES) {
+        expect(privateKeyString).toContain(privateKeyName);
+      }
       expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME);
     });
   });

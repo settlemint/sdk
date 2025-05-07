@@ -31,7 +31,7 @@
     "*.mts": "${capture}.typegen.ts",
     "*.ts": "${capture}.js, ${capture}.typegen.ts, ${capture}.spec.ts, ${capture}.test.ts",
     "*.tsx": "${capture}.ts, ${capture}.typegen.ts",
-    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lockb",
+    "package.json": "package-lock.json, yarn.lock, pnpm-lock.yaml, bun.lock",
     "tsconfig.json": "tsconfig.*.json"
   },
   "files.associations": {

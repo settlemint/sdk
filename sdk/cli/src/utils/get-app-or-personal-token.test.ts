@@ -30,7 +30,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
       env: {
         SETTLEMINT_ACCESS_TOKEN: appToken,
       },
-      instance: "test-instance",
+      instance: "http://test-instance",
       prefer: "application",
     });
 
@@ -46,7 +46,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
 
     const result = await getApplicationOrPersonalAccessToken({
       env: {},
-      instance: "test-instance",
+      instance: "http://test-instance",
       prefer: "application",
     });
 
@@ -64,7 +64,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
       env: {
         SETTLEMINT_ACCESS_TOKEN: appToken,
       },
-      instance: "test-instance",
+      instance: "http://test-instance/",
       prefer: "personal",
     });
 
@@ -83,7 +83,7 @@ describe("getApplicationOrPersonalAccessToken", () => {
         env: {
           SETTLEMINT_ACCESS_TOKEN: appToken,
         },
-        instance: "test-instance",
+        instance: "http://test-instance",
         prefer: "personal",
       });
     } catch (err) {
