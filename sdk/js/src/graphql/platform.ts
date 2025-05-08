@@ -31,7 +31,7 @@ const getPlatformConfigQuery = graphql(
             disabled
           }
         }
-        preDeployedContracts
+        preDeployedAbis
         sdkVersion
         kits {
           id

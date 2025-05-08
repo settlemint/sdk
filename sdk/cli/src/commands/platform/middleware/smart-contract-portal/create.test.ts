@@ -57,8 +57,7 @@ describe("smartContractPortalMiddlewareCreateCommand", () => {
       "./supply-chain.json",
       "./erc20.json",
       "--include-predeployed-abis",
-      "StableCoin",
-      "Bond",
+      "asset-tokenization",
     ]);
 
     expect(commandArgs).toBe("test-portal");
@@ -69,7 +68,7 @@ describe("smartContractPortalMiddlewareCreateCommand", () => {
       application: "my-app",
       loadBalancer: "lb-123",
       abis: ["./supply-chain.json", "./erc20.json"],
-      includePredeployedAbis: ["StableCoin", "Bond"],
+      includePredeployedAbis: ["asset-tokenization"],
       size: "SMALL",
       type: "SHARED",
     });

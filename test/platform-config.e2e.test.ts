@@ -41,7 +41,7 @@ describe("Test commands depending on platform configuration", () => {
       "--include-predeployed-abis",
       "invalid-abi",
       "other-invalid-abi",
-      "StableCoin",
+      "asset-tokenization",
     ]);
     const outputs: string[] = [];
     command.stdout.on("data", (data: Buffer) => {
