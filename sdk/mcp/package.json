@@ -42,7 +42,7 @@
   "dependencies": {
     "@graphql-tools/load": "8.1.0",
     "@graphql-tools/url-loader": "8.0.31",
-    "@modelcontextprotocol/sdk": "1.11.0",
+    "@modelcontextprotocol/sdk": "1.11.1",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "@commander-js/extra-typings": "11.1.0",
