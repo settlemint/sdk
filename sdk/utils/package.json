@@ -72,7 +72,7 @@
     "deepmerge-ts": "^7",
     "environment": "^1",
     "find-up": "^7",
-    "nano-spawn": "^0.2",
+    "nano-spawn": "^1.0.0",
     "package-manager-detector": "^1.0.0",
     "yocto-spinner": "^0.2.0",
     "yoctocolors": "^2"
