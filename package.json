@@ -42,7 +42,7 @@
     "generate-readme": "bun scripts/generate-readme.ts"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.18.0",
+    "@arethetypeswrong/cli": "0.18.1",
     "@biomejs/biome": "1.9.4",
     "@types/bun": "1.2.12",
     "@types/mustache": "4.2.6",
