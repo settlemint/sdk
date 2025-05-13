@@ -16266,6 +16266,7 @@ type PlatformConfigDto {
   id: ID!
   kits: [KitConfig!]!
   observability: ObservabilityDto!
+  preDeployedAbis: [PreDeployedAbi!]!
   preDeployedContracts: [String!]!
   sdkVersion: String!
   smartContractSets: SmartContractSetsDto!
@@ -18657,6 +18658,20 @@ type PolygonZkEvmTestnetBlockchainNode implements AbstractClusterService & Abstr
 
   """Version of the service"""
   version: String
+}
+
+type PreDeployedAbi {
+  """Predeployed abi name"""
+  abis: [String!]!
+
+  """Whether this abi is behind a feature flag"""
+  featureflagged: Boolean!
+
+  """Predeployed abi id"""
+  id: String!
+
+  """Predeployed abi label"""
+  label: String!
 }
 
 interface PrivateKey implements AbstractClusterService & AbstractEntity {

@@ -36,7 +36,7 @@ describe("platform config command", () => {
   });
 
   test("should output platform configuration", async () => {
-    await sdkCliCommand(["bun", "settlemint", "platform", "config", "-i", "https://console.settlemint.com"]);
+    await sdkCliCommand(["bun", "settlemint", "platform", "config", "-i", "https://console-release.settlemint.com"]);
     expect(mockTable).toHaveBeenCalledTimes(3);
     expect(mockJsonOutput).not.toHaveBeenCalled();
     expect(mockYamlOutput).not.toHaveBeenCalled();
@@ -49,7 +49,7 @@ describe("platform config command", () => {
       "platform",
       "config",
       "-i",
-      "https://console.settlemint.com",
+      "https://console-release.settlemint.com",
       "-o",
       "json",
     ]);
@@ -65,7 +65,7 @@ describe("platform config command", () => {
       "platform",
       "config",
       "-i",
-      "https://console.settlemint.com",
+      "https://console-release.settlemint.com",
       "-o",
       "yaml",
     ]);

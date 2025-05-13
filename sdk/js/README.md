@@ -229,7 +229,7 @@ Type representing a middleware entity with subgraphs.
 
 > **PlatformConfig** = `ResultOf`\<*typeof* `getPlatformConfigQuery`\>\[`"config"`\]
 
-Defined in: [graphql/platform.ts:51](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/js/src/graphql/platform.ts#L51)
+Defined in: [graphql/platform.ts:56](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/js/src/graphql/platform.ts#L56)
 
 Type representing the platform configuration.
 
