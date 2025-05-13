@@ -19,6 +19,15 @@ const PrivateKeyFragment = graphql(`
     provider
     region
     address
+    trustedForwarderName
+    trustedForwarderAddress
+    relayerKey {
+      ... on PrivateKey {
+        id
+        name
+        uniqueName
+      }
+    }
     blockchainNodes {
       ... on BlockchainNode {
         id
@@ -78,6 +87,9 @@ const createPrivateKey = graphql(
       $size: ClusterServiceSize
       $type: ClusterServiceType
       $blockchainNodes: [ID!]
+      $trustedForwarderName: String
+      $trustedForwarderAddress: String
+      $relayerKey: ID
     ) {
       createPrivateKey(
         applicationId: $applicationId
@@ -88,6 +100,9 @@ const createPrivateKey = graphql(
         size: $size
         type: $type
         blockchainNodes: $blockchainNodes
+        trustedForwarderName: $trustedForwarderName
+        trustedForwarderAddress: $trustedForwarderAddress
+        relayerKey: $relayerKey
       ) {
         ...PrivateKey
       }
@@ -101,10 +116,11 @@ const createPrivateKey = graphql(
  */
 export type CreatePrivateKeyArgs = Omit<
   VariablesOf<typeof createPrivateKey>,
-  "applicationId" | "blockchainNodes" | "region" | "provider" | "size" | "type"
+  "applicationId" | "blockchainNodes" | "region" | "provider" | "size" | "type" | "relayerKey"
 > & {
   applicationUniqueName: string;
   blockchainNodeUniqueNames?: string[];
+  relayerKeyUniqueName?: string;
 };
 
 /**
@@ -135,7 +151,7 @@ export const privateKeyList = (
     const {
       privateKeysByUniqueName: { items },
     } = await gqlClient.request(getPrivateKeys, { applicationUniqueName });
-    return items;
+    return items as PrivateKey[];
   };
 };
 
@@ -151,7 +167,7 @@ export const privatekeyRead = (gqlClient: GraphQLClient): ((privateKeyUniqueName
     const { privateKeyByUniqueName: privateKey } = await gqlClient.request(getPrivateKey, {
       uniqueName: privateKeyUniqueName,
     });
-    return privateKey;
+    return privateKey as PrivateKey;
   };
 };
 
@@ -164,11 +180,12 @@ export const privatekeyRead = (gqlClient: GraphQLClient): ((privateKeyUniqueName
  */
 export const privateKeyCreate = (gqlClient: GraphQLClient): ((args: CreatePrivateKeyArgs) => Promise<PrivateKey>) => {
   return async (args: CreatePrivateKeyArgs) => {
-    const { applicationUniqueName, blockchainNodeUniqueNames, ...otherArgs } = args;
+    const { applicationUniqueName, blockchainNodeUniqueNames, relayerKeyUniqueName, ...otherArgs } = args;
     const application = await applicationRead(gqlClient)(applicationUniqueName);
     const blockchainNodes = blockchainNodeUniqueNames
       ? await Promise.all(blockchainNodeUniqueNames.map((uniqueName) => blockchainNodeRead(gqlClient)(uniqueName)))
       : [];
+    const relayerKey = relayerKeyUniqueName ? await privatekeyRead(gqlClient)(relayerKeyUniqueName) : undefined;
     const platformConfig = await getPlatformConfig(gqlClient)();
     const defaultProvider = platformConfig.deploymentEngineTargets.find(
       (target) => !target.disabled && target.clusters.some((cluster) => !cluster.disabled),
@@ -178,6 +195,7 @@ export const privateKeyCreate = (gqlClient: GraphQLClient): ((args: CreatePrivat
       ...otherArgs,
       applicationId: application.id,
       blockchainNodes: blockchainNodes.map((node) => node?.id),
+      relayerKey: relayerKey?.id,
       provider: defaultProvider?.id ?? "gke",
       region: defaultRegion?.id?.split("-")[1] ?? "europe",
       size: "SMALL",
@@ -200,5 +218,5 @@ export const privateKeyRestart =
     const { restartPrivateKeyByUniqueName: privateKey } = await gqlClient.request(restartPrivateKey, {
       uniqueName: privateKeyUniqueName,
     });
-    return privateKey;
+    return privateKey as PrivateKey;
   };

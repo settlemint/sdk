@@ -4,7 +4,7 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodeOrLoadBalancerPrompt } from "@/prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
-import { getBlockscoutEndpoints } from "@/utils/get-cluster-service-endpoint";
+import { getBlockscoutEnv } from "@/utils/get-cluster-service-env";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -89,7 +89,7 @@ export function blockscoutInsightsCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_BLOCKSCOUT: result.uniqueName,
-                      ...getBlockscoutEndpoints(result),
+                      ...getBlockscoutEnv(result),
                     };
                   },
                 };

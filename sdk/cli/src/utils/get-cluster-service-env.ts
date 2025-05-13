@@ -1,10 +1,12 @@
 import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
 import type {
   BlockchainNode,
+  CustomDeployment,
   Insights,
   IntegrationTool,
   LoadBalancer,
   Middleware,
+  PrivateKey,
   SettlemintClient,
   Storage,
 } from "@settlemint/sdk-js";
@@ -12,7 +14,7 @@ import { retryWhenFailed } from "@settlemint/sdk-utils";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
-export async function getGraphEndpoint(
+export async function getGraphEnv(
   settlemint: SettlemintClient,
   service: Middleware | undefined,
   graphName?: string,
@@ -51,47 +53,51 @@ export async function getGraphEndpoint(
   };
 }
 
-export function getIpfsEndpoints(service: Storage | undefined): Partial<DotEnv> {
+export function getIpfsEnv(service: Storage | undefined): Partial<DotEnv> {
   if (!service || service.__typename !== "IPFSStorage") {
     return {};
   }
 
   return {
-    SETTLEMINT_IPFS_API_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.includes("api"))?.displayValue,
-    SETTLEMINT_IPFS_PINNING_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.includes("cluster-pinning-api"))
-      ?.displayValue,
-    SETTLEMINT_IPFS_GATEWAY_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.includes("gateway"))
+    SETTLEMINT_IPFS_API_ENDPOINT: service?.endpoints.find(
+      (endpoint) => endpoint.id.endsWith("-api") && !endpoint.id.endsWith("-cluster-api"),
+    )?.displayValue,
+    SETTLEMINT_IPFS_PINNING_ENDPOINT: service?.endpoints.find((endpoint) =>
+      endpoint.id.endsWith("-cluster-pinning-api"),
+    )?.displayValue,
+    SETTLEMINT_IPFS_GATEWAY_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.endsWith("-gateway"))
       ?.displayValue,
   };
 }
 
-export function getPortalEndpoints(service: Middleware | undefined): Partial<DotEnv> {
+export function getPortalEnv(service: Middleware | undefined): Partial<DotEnv> {
   if (!service || service.__typename !== "SmartContractPortalMiddleware") {
     return {};
   }
 
   return {
-    SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))
+    SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.endsWith("-graphql"))
       ?.displayValue,
-    SETTLEMINT_PORTAL_REST_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("rest"))?.displayValue,
+    SETTLEMINT_PORTAL_REST_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.endsWith("-rest"))?.displayValue,
+    SETTLEMINT_PORTAL_WS_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.endsWith("-ws"))?.displayValue,
   };
 }
 
-export function getHasuraEndpoints(service: IntegrationTool | undefined): Partial<DotEnv> {
+export function getHasuraEnv(service: IntegrationTool | undefined): Partial<DotEnv> {
   if (!service || service.__typename !== "Hasura") {
     return {};
   }
 
   return {
-    SETTLEMINT_HASURA_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("graphql"))?.displayValue,
-    SETTLEMINT_HASURA_ADMIN_SECRET: service.credentials.find((credential) => credential.id.includes("admin-secret"))
+    SETTLEMINT_HASURA_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.endsWith("-graphql"))?.displayValue,
+    SETTLEMINT_HASURA_ADMIN_SECRET: service.credentials.find((credential) => credential.id.endsWith("-admin-secret"))
       ?.displayValue,
-    SETTLEMINT_HASURA_DATABASE_URL: service.endpoints.find((endpoint) => endpoint.id.includes("postgresql"))
+    SETTLEMINT_HASURA_DATABASE_URL: service.endpoints.find((endpoint) => endpoint.id.endsWith("-postgresql"))
       ?.displayValue,
   };
 }
 
-export function getBlockscoutEndpoints(service: Insights | undefined): Partial<DotEnv> {
+export function getBlockscoutEnv(service: Insights | undefined): Partial<DotEnv> {
   if (!service || service.__typename !== "BlockchainExplorer") {
     return {};
   }
@@ -106,34 +112,33 @@ export function getBlockscoutEndpoints(service: Insights | undefined): Partial<D
   };
 }
 
-export function getMinioEndpoints(service: Storage | undefined): Partial<DotEnv> {
+export function getMinioEnv(service: Storage | undefined): Partial<DotEnv> {
   if (!service || service.__typename !== "MinioStorage") {
     return {};
   }
 
   return {
-    SETTLEMINT_MINIO_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.includes("s3-api"))?.displayValue,
-    SETTLEMINT_MINIO_ACCESS_KEY: service?.credentials.find((credential) => credential.id.includes("access-key"))
+    SETTLEMINT_MINIO_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.endsWith("-s3-api"))?.displayValue,
+    SETTLEMINT_MINIO_ACCESS_KEY: service?.credentials.find((credential) => credential.id.endsWith("access-key"))
       ?.displayValue,
-    SETTLEMINT_MINIO_SECRET_KEY: service?.credentials.find((credential) => credential.id.includes("secret-key"))
+    SETTLEMINT_MINIO_SECRET_KEY: service?.credentials.find((credential) => credential.id.endsWith("secret-key"))
       ?.displayValue,
   };
 }
 
-export function getBlockchainNodeEndpoints(
-  service: Pick<BlockchainNode, "endpoints"> | undefined | null,
-): Partial<DotEnv> {
+export function getBlockchainNodeEnv(service: Pick<BlockchainNode, "endpoints"> | undefined | null): Partial<DotEnv> {
   if (!service) {
     return {};
   }
 
   return {
-    SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: service.endpoints.find((endpoint) => endpoint.id.includes("json-rpc"))
-      ?.displayValue,
+    SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: service.endpoints.find((endpoint) =>
+      endpoint.id.endsWith("-json-rpc"),
+    )?.displayValue,
   };
 }
 
-export function getBlockchainNodeOrLoadBalancerEndpoints(
+export function getBlockchainNodeOrLoadBalancerEnv(
   service: Pick<BlockchainNode, "endpoints"> | Pick<LoadBalancer, "endpoints"> | undefined,
 ): Partial<DotEnv> {
   if (!service) {
@@ -142,7 +147,26 @@ export function getBlockchainNodeOrLoadBalancerEndpoints(
 
   return {
     SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT: service.endpoints.find((endpoint) =>
-      endpoint.id.includes("json-rpc"),
+      endpoint.id.endsWith("-json-rpc"),
     )?.displayValue,
+  };
+}
+
+export function getCustomDeploymentEnv(service: CustomDeployment | undefined): Partial<DotEnv> {
+  if (!service) {
+    return {};
+  }
+  return {
+    SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: service?.endpoints.find((endpoint) => endpoint.id.endsWith("-internal"))
+      ?.displayValue,
+  };
+}
+
+export function getHdPrivateKeyEnv(service: PrivateKey | undefined): Partial<DotEnv> {
+  if (!service || service.__typename !== "HdEcdsaP256PrivateKey") {
+    return {};
+  }
+  return {
+    SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS: service?.trustedForwarderAddress ?? undefined,
   };
 }

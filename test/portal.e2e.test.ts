@@ -61,7 +61,7 @@ describe("Portal E2E Tests", () => {
       const deployForwarder = await portalClient.request(
         portalGraphql(`
           mutation DeployContractForwarder($from: String!) {
-            DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
+            DeployContractForwarder(from: $from) {
               transactionHash
             }
           }
@@ -82,7 +82,7 @@ describe("Portal E2E Tests", () => {
       const deployStableCoinFactory = await portalClient.request(
         portalGraphql(`
           mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
-            DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
+            DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments) {
               transactionHash
             }
           }
@@ -186,7 +186,6 @@ describe("Portal E2E Tests", () => {
               address: $address
               from: $from
               input: $input
-              gasLimit: "0x3d0900"
             ) {
               transactionHash
             }

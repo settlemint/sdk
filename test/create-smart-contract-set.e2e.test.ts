@@ -7,7 +7,7 @@ import {
   NODE_NAME,
   NODE_NAME_2_WITH_PK,
   NODE_NAME_3_WITHOUT_PK,
-  PRIVATE_KEY_2_NAME,
+  PRIVATE_KEY_NODE_2_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAMES,
 } from "./constants/test-resources";
 import { retryCommand } from "./utils/retry-command";
@@ -257,7 +257,7 @@ describe("Setup a smart contract set using the SDK", () => {
       for (const privateKeyName of PRIVATE_KEY_SMART_CONTRACTS_NAMES) {
         expect(privateKeyString).toContain(privateKeyName);
       }
-      expect(privateKeyString).not.toContain(PRIVATE_KEY_2_NAME);
+      expect(privateKeyString).not.toContain(PRIVATE_KEY_NODE_2_NAME);
     });
   });
 });

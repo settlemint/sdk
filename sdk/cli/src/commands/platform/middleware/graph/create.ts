@@ -4,7 +4,7 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodeOrLoadBalancerPrompt } from "@/prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
-import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
+import { getGraphEnv } from "@/utils/get-cluster-service-env";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -87,7 +87,7 @@ export function graphMiddlewareCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_THEGRAPH: result.uniqueName,
-                      ...(await getGraphEndpoint(settlemint, graphMiddleware)),
+                      ...(await getGraphEnv(settlemint, graphMiddleware)),
                     };
                   },
                 };

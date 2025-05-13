@@ -21,15 +21,17 @@ import { hasPrivateKey } from "@/utils/cluster-service";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getInstanceCredentials } from "@/utils/config";
 import {
-  getBlockchainNodeEndpoints,
-  getBlockchainNodeOrLoadBalancerEndpoints,
-  getBlockscoutEndpoints,
-  getGraphEndpoint,
-  getHasuraEndpoints,
-  getIpfsEndpoints,
-  getMinioEndpoints,
-  getPortalEndpoints,
-} from "@/utils/get-cluster-service-endpoint";
+  getBlockchainNodeEnv,
+  getBlockchainNodeOrLoadBalancerEnv,
+  getBlockscoutEnv,
+  getCustomDeploymentEnv,
+  getGraphEnv,
+  getHasuraEnv,
+  getHdPrivateKeyEnv,
+  getIpfsEnv,
+  getMinioEnv,
+  getPortalEnv,
+} from "@/utils/get-cluster-service-env";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
@@ -132,14 +134,14 @@ export function connectCommand(): Command {
           middlewares,
           accept: acceptDefaults,
         });
-        const graphEndpoints = await getGraphEndpoint(settlemint, thegraph);
+        const graphEnv = await getGraphEnv(settlemint, thegraph);
         const [defaultSubgraph] = thegraph
           ? await subgraphPrompt({
-              env: { ...env, ...graphEndpoints },
+              env: { ...env, ...graphEnv },
               accept: acceptDefaults,
               message: "Which The Graph subgraph do you want to use as the default?",
             })
-          : [graphEndpoints.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH];
+          : [graphEnv.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH];
         const portal = await portalPrompt({
           env,
           middlewares,
@@ -250,27 +252,26 @@ export function connectCommand(): Command {
           SETTLEMINT_BLOCKCHAIN_NETWORK: blockchainNode?.blockchainNetwork?.uniqueName,
           SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID: getBlockchainNetworkChainId(blockchainNode?.blockchainNetwork),
           SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
-          ...getBlockchainNodeEndpoints(blockchainNode),
+          ...getBlockchainNodeEnv(blockchainNode),
           SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: loadBalancerOrBlockchainNode?.uniqueName,
-          ...getBlockchainNodeOrLoadBalancerEndpoints(loadBalancerOrBlockchainNode),
+          ...getBlockchainNodeOrLoadBalancerEnv(loadBalancerOrBlockchainNode),
           SETTLEMINT_HASURA: hasura?.uniqueName,
-          ...getHasuraEndpoints(hasura),
+          ...getHasuraEnv(hasura),
           SETTLEMINT_THEGRAPH: thegraph?.uniqueName,
-          ...graphEndpoints,
+          ...graphEnv,
           SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: defaultSubgraph,
           SETTLEMINT_PORTAL: portal?.uniqueName,
-          ...getPortalEndpoints(portal),
+          ...getPortalEnv(portal),
           SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
+          ...getHdPrivateKeyEnv(hdPrivateKey),
           SETTLEMINT_MINIO: minio?.uniqueName,
-          ...getMinioEndpoints(minio),
+          ...getMinioEnv(minio),
           SETTLEMINT_IPFS: ipfs?.uniqueName,
-          ...getIpfsEndpoints(ipfs),
+          ...getIpfsEnv(ipfs),
           SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.uniqueName,
-          SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT: cDeployment?.endpoints.find((endpoint) =>
-            endpoint.id.includes("internal"),
-          )?.displayValue,
+          ...getCustomDeploymentEnv(cDeployment),
           SETTLEMINT_BLOCKSCOUT: blockscout?.uniqueName,
-          ...getBlockscoutEndpoints(blockscout),
+          ...getBlockscoutEnv(blockscout),
         });
 
         outro("Connected to SettleMint");

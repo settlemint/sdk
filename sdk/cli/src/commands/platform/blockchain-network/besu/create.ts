@@ -2,10 +2,7 @@ import { addClusterServiceArgs } from "@/commands/platform/common/cluster-servic
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
-import {
-  getBlockchainNodeEndpoints,
-  getBlockchainNodeOrLoadBalancerEndpoints,
-} from "@/utils/get-cluster-service-endpoint";
+import { getBlockchainNodeEnv, getBlockchainNodeOrLoadBalancerEnv } from "@/utils/get-cluster-service-env";
 import { parseNumber } from "@/utils/parse-number";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -100,9 +97,9 @@ export function blockchainNetworkBesuCreateCommand() {
                       SETTLEMINT_BLOCKCHAIN_NETWORK: result.uniqueName,
                       SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID: getBlockchainNetworkChainId(result),
                       SETTLEMINT_BLOCKCHAIN_NODE: blockchainNode?.uniqueName,
-                      ...getBlockchainNodeEndpoints(blockchainNode),
+                      ...getBlockchainNodeEnv(blockchainNode),
                       SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: undefined,
-                      ...getBlockchainNodeOrLoadBalancerEndpoints(undefined),
+                      ...getBlockchainNodeOrLoadBalancerEnv(undefined),
                     };
                   },
                 };

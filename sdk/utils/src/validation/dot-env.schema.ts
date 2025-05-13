@@ -55,6 +55,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: UrlSchema.optional(),
   /** REST endpoint URL for the Portal */
   SETTLEMINT_PORTAL_REST_ENDPOINT: UrlSchema.optional(),
+  /** WebSocket endpoint URL for the Portal */
+  SETTLEMINT_PORTAL_WS_ENDPOINT: UrlSchema.optional(),
   /** Unique name of the HD private key */
   SETTLEMINT_HD_PRIVATE_KEY: UniqueNameSchema.optional(),
   /** Address of the HD private key forwarder */

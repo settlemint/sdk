@@ -5,6 +5,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { $ } from "bun";
+import { isAddress } from "viem";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { PRIVATE_KEY_SMART_CONTRACTS_NAMES } from "./constants/test-resources";
 import {
@@ -86,6 +87,8 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT).toBeString();
 
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
+    expect(env.SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS).toBeString();
+    expect(isAddress(env.SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS!)).toBeTrue();
 
     expect(env.SETTLEMINT_IPFS).toBeString();
     expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
@@ -99,6 +102,7 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_PORTAL).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_PORTAL_REST_ENDPOINT).toBeString();
+    expect(env.SETTLEMINT_PORTAL_WS_ENDPOINT).toBeString();
 
     expect(env.SETTLEMINT_HASURA).toBeString();
     expect(env.SETTLEMINT_HASURA_ENDPOINT).toBeString();

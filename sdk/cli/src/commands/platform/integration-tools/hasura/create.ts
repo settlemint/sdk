@@ -1,7 +1,7 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
-import { getHasuraEndpoints } from "@/utils/get-cluster-service-endpoint";
+import { getHasuraEnv } from "@/utils/get-cluster-service-env";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -46,7 +46,7 @@ export function hasuraIntegrationCreateCommand() {
                   return {
                     SETTLEMINT_APPLICATION: applicationUniqueName,
                     SETTLEMINT_HASURA: result.uniqueName,
-                    ...getHasuraEndpoints(result),
+                    ...getHasuraEnv(result),
                   };
                 },
               };

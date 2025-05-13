@@ -8,13 +8,14 @@ export const NODE_NAME_2_WITH_PK = "SDK Demo Node 2 (with activated PK)";
 export const NODE_NAME_3_WITHOUT_PK = "SDK Demo Node 3 (without activated PK)";
 export const LOAD_BALANCER_NAME = "SDK Demo Load Balancer";
 
-export const PRIVATE_KEY_NAME = "SDK Demo Private Key";
-export const PRIVATE_KEY_2_NAME = "SDK Demo Private Key 2";
+export const HD_PRIVATE_KEY_NAME = "SDK Demo HD Private Key (Meta-Transactions)";
+export const PRIVATE_KEY_NODE_2_NAME = "SDK Demo Private Key Node 2";
 export const PRIVATE_KEY_SMART_CONTRACTS_NAMES = [
   "SDK Demo Private Key Smart Contracts Deployment 1",
   "SDK Demo Private Key Smart Contracts Deployment 2",
   "SDK Demo Private Key Smart Contracts Deployment 3",
 ] as const;
+export const RELAYER_PRIVATE_KEY_NAME = "SDK Demo Relayer Key";
 export const MINIO_NAME = "SDK Demo MinIO";
 export const IPFS_NAME = "SDK Demo IPFS";
 export const GRAPH_NAME = "SDK Demo Graph";
