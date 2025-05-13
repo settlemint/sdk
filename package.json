@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -42,11 +42,11 @@
     "generate-readme": "bun scripts/generate-readme.ts"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "0.17.4",
+    "@arethetypeswrong/cli": "0.18.1",
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.2.12",
+    "@types/bun": "1.2.13",
     "@types/mustache": "4.2.6",
-    "knip": "5.54.1",
+    "knip": "5.55.1",
     "lefthook": "1.11.12",
     "mustache": "4.2.0",
     "publint": "0.3.12",
@@ -79,6 +79,6 @@
     "ws": "8.18.2",
     "adm-zip": "0.5.16",
     "react-is": "19.1.0",
-    "undici": "7.8.0"
+    "undici": "7.9.0"
   }
 }
