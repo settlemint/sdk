@@ -81,7 +81,7 @@ export function configCommand() {
               })),
           )
           .sort((a, b) => a.providerId.localeCompare(b.providerId) || a.regionId.localeCompare(b.regionId)),
-        preDeployedAbis: platformConfig.preDeployedAbis.sort(),
+        preDeployedAbis: platformConfig.preDeployedAbis.flatMap((abi) => abi.abis).sort(),
       };
 
       if (output === "json") {

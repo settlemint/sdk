@@ -30,7 +30,7 @@ afterAll(() => {
 
 describe("CLI Telemetry", () => {
   test("successful command execution logs telemetry", async () => {
-    await sdkCliCommand(["bun", "settlemint", "platform", "config", "-i", "https://console.settlemint.com"]);
+    await sdkCliCommand(["bun", "settlemint", "platform", "config", "-i", "https://console-release.settlemint.com"]);
 
     expect(mockTelemetry).toHaveBeenCalledWith({
       command: "platform config",

@@ -106,11 +106,15 @@ export function smartContractPortalMiddlewareCreateCommand() {
                 if (includePredeployedAbis && includePredeployedAbis.length > 0) {
                   const platformConfig = await settlemint.platform.config();
                   const invalidPredeployedAbis = includePredeployedAbis.filter(
-                    (abi) => !platformConfig.preDeployedAbis.some((predeployedAbi) => predeployedAbi === abi),
+                    (abi) =>
+                      !platformConfig.preDeployedAbis.some((predeployedAbi) => predeployedAbi.abis.includes(abi)),
                   );
                   if (invalidPredeployedAbis.length > 0) {
                     cancel(
-                      `Invalid pre-deployed abis: '${invalidPredeployedAbis.join(", ")}'. Possible values: '${platformConfig.preDeployedAbis.sort().join(", ")}'`,
+                      `Invalid pre-deployed abis: '${invalidPredeployedAbis.join(", ")}'. Possible values: '${platformConfig.preDeployedAbis
+                        .flatMap((abi) => abi.abis)
+                        .sort()
+                        .join(", ")}'`,
                     );
                   }
                 }
