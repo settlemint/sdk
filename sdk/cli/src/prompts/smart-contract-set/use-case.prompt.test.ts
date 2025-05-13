@@ -74,7 +74,7 @@ describe("useCasePrompt", () => {
     },
     kits: [],
     deploymentEngineTargets: [],
-    preDeployedContracts: [],
+    preDeployedAbis: [],
     sdkVersion: "0.0.1",
   };
 
@@ -86,7 +86,7 @@ describe("useCasePrompt", () => {
       },
       kits: [],
       deploymentEngineTargets: [],
-      preDeployedContracts: [],
+      preDeployedAbis: [],
       sdkVersion: "0.0.1",
     };
 
@@ -112,7 +112,7 @@ describe("useCasePrompt", () => {
       },
       kits: [],
       deploymentEngineTargets: [],
-      preDeployedContracts: [],
+      preDeployedAbis: [],
       sdkVersion: "0.0.1",
     };
 
