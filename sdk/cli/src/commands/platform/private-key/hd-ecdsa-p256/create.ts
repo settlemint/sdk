@@ -3,6 +3,7 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { getHdPrivateKeyEnv } from "@/utils/get-cluster-service-env";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -97,6 +98,7 @@ export function privateKeyHdCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
+                      ...getHdPrivateKeyEnv(result),
                     };
                   },
                 };
