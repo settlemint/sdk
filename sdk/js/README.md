@@ -239,7 +239,7 @@ Type representing the platform configuration.
 
 > **PrivateKey** = `ResultOf`\<*typeof* `PrivateKeyFragment`\>
 
-Defined in: [graphql/private-key.ts:35](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/js/src/graphql/private-key.ts#L35)
+Defined in: [graphql/private-key.ts:44](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/js/src/graphql/private-key.ts#L44)
 
 Type representing a private key entity.
 
