@@ -52,7 +52,7 @@ describe("Portal E2E Tests", () => {
       const privateKeys = await settlemintClient.privateKey.list(env.SETTLEMINT_APPLICATION!);
       const privateKeyToDeploy = privateKeys.find(
         (key) =>
-          key.__typename === "HsmEcDsaP256PrivateKey" &&
+          key.__typename === "AccessibleEcdsaP256PrivateKey" &&
           key.blockchainNodes?.some((node) => node.uniqueName === env.SETTLEMINT_BLOCKCHAIN_NODE!),
       );
       expect(privateKeyToDeploy).toBeDefined();
@@ -99,14 +99,14 @@ describe("Portal E2E Tests", () => {
       const contractAddresses = await portalClient.request(
         portalGraphql(`
           query GetContracts {
-              getContracts {
-                  count
-                  records {
-                      address
-                      abiName
-                      createdAt
-                  }
+            getContracts {
+              count
+              records {
+                address
+                abiName
+                createdAt
               }
+            }
           }
         `),
       );
@@ -141,17 +141,17 @@ describe("Portal E2E Tests", () => {
       expect(wallet.createWallet?.address).toBeString();
       const pincodeVerification = await portalClient.request(
         portalGraphql(`
-        mutation setPinCode($address: String!, $pincode: String!) {
-          createWalletVerification(
-            userWalletAddress: $address
-            verificationInfo: {pincode: {name: "PINCODE", pincode: $pincode}}
-          ) {
-            id
-            name
-            parameters
-            verificationType
+          mutation setPinCode($address: String!, $pincode: String!) {
+            createWalletVerification(
+              userWalletAddress: $address
+              verificationInfo: {pincode: {name: "PINCODE", pincode: $pincode}}
+            ) {
+              id
+              name
+              parameters
+              verificationType
+            }
           }
-        }
         `),
         {
           address: wallet.createWallet?.address!,

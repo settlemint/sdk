@@ -76,7 +76,8 @@ export async function writeEnv({
         currentEnv = {};
       }
 
-      const mergedEnv = deepmerge(pruneCurrentEnv(currentEnv, env), env);
+      const prunedEnv = pruneCurrentEnv(currentEnv, env);
+      const mergedEnv = deepmerge(prunedEnv, env as Record<string, unknown>);
       await writeFile(envFile, stringify(mergedEnv));
     }),
   );

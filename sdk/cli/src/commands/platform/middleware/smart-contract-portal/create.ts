@@ -6,7 +6,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { hasValidPrivateKey } from "@/utils/cluster-service";
-import { getPortalEndpoints } from "@/utils/get-cluster-service-endpoint";
+import { getPortalEnv } from "@/utils/get-cluster-service-env";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
@@ -140,7 +140,7 @@ export function smartContractPortalMiddlewareCreateCommand() {
                     return {
                       SETTLEMINT_APPLICATION: applicationUniqueName,
                       SETTLEMINT_PORTAL: result.uniqueName,
-                      ...getPortalEndpoints(result),
+                      ...getPortalEnv(result),
                     };
                   },
                 };

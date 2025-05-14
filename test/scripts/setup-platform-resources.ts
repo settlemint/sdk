@@ -13,6 +13,7 @@ import {
   CLUSTER_REGION,
   GRAPH_NAME,
   HASURA_NAME,
+  HD_PRIVATE_KEY_NAME,
   IPFS_NAME,
   LOAD_BALANCER_NAME,
   MINIO_NAME,
@@ -21,9 +22,9 @@ import {
   NODE_NAME_2_WITH_PK,
   NODE_NAME_3_WITHOUT_PK,
   PORTAL_NAME,
-  PRIVATE_KEY_2_NAME,
-  PRIVATE_KEY_NAME,
+  PRIVATE_KEY_NODE_2_NAME,
   PRIVATE_KEY_SMART_CONTRACTS_NAMES,
+  RELAYER_PRIVATE_KEY_NAME,
   WORKSPACE_NAME,
 } from "../constants/test-resources";
 import { isLocalEnv } from "../utils/is-local-env";
@@ -33,6 +34,7 @@ import {
   defaultResourceAlreadyCreated,
   findBlockchainNodeByName,
   findLoadBalancerByName,
+  findPrivateKeyByName,
   privateKeyAlreadyCreated,
   setupSettleMintClient,
 } from "../utils/test-resources";
@@ -261,26 +263,60 @@ async function createBlockchainNetworkMinioAndIpfs() {
     expect(ipfsResult.value.output).toInclude("Storage is deployed");
   }
 
-  for (const privateKeyName of PRIVATE_KEY_SMART_CONTRACTS_NAMES) {
-    const hasPrivateKey = await privateKeyAlreadyCreated(privateKeyName);
-    if (!hasPrivateKey) {
-      const env: Partial<DotEnv> = await loadEnv(false, false);
-      const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
-        "platform",
-        "create",
-        "private-key",
-        "hsm-ecdsa-p256",
-        "--blockchain-node",
-        env.SETTLEMINT_BLOCKCHAIN_NODE!,
-        "--accept-defaults",
-        "--default",
-        "--wait",
-        "--restart-if-timeout",
-        privateKeyName,
-      ]).result;
-      expect(privateKeyHsmCreateCommandOutput).toInclude(`Private key ${privateKeyName} created successfully`);
-      expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
-    }
+  const privateKeyResults = await deployResources(
+    PRIVATE_KEY_SMART_CONTRACTS_NAMES.map((privateKeyName) => {
+      return async () => {
+        const hasPrivateKey = await privateKeyAlreadyCreated(privateKeyName);
+        if (!hasPrivateKey) {
+          const env: Partial<DotEnv> = await loadEnv(false, false);
+          return runCommand(COMMAND_TEST_SCOPE, [
+            "platform",
+            "create",
+            "private-key",
+            "accessible-ecdsa-p256",
+            "--blockchain-node",
+            env.SETTLEMINT_BLOCKCHAIN_NODE!,
+            "--accept-defaults",
+            "--default",
+            "--wait",
+            "--restart-if-timeout",
+            privateKeyName,
+          ]).result;
+        }
+        return Promise.resolve(undefined);
+      };
+    }),
+  );
+  expect(privateKeyResults.every((result) => result?.status === "fulfilled")).toBe(true);
+  expect(
+    privateKeyResults.every(
+      (result, index) =>
+        result?.status === "fulfilled" &&
+        result?.value?.output.includes(
+          `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAMES[index]} created successfully`,
+        ) &&
+        result?.value?.output.includes("Private key is deployed"),
+    ),
+  ).toBe(true);
+
+  const hasRelayerPrivateKey = await privateKeyAlreadyCreated(RELAYER_PRIVATE_KEY_NAME);
+  if (!hasRelayerPrivateKey) {
+    const env: Partial<DotEnv> = await loadEnv(false, false);
+    const { output: privateKeyRelayerCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "create",
+      "private-key",
+      "accessible-ecdsa-p256",
+      "--blockchain-node",
+      env.SETTLEMINT_BLOCKCHAIN_NODE!,
+      "--accept-defaults",
+      "--default",
+      "--wait",
+      "--restart-if-timeout",
+      RELAYER_PRIVATE_KEY_NAME,
+    ]).result;
+    expect(privateKeyRelayerCommandOutput).toInclude(`Private key ${RELAYER_PRIVATE_KEY_NAME} created successfully`);
+    expect(privateKeyRelayerCommandOutput).toInclude("Private key is deployed");
   }
 }
 
@@ -350,6 +386,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   const hasPrivateKey = await defaultResourceAlreadyCreated(["SETTLEMINT_HD_PRIVATE_KEY"]);
   const hasPortalMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_PORTAL"]);
   const hasBlockscoutInsights = await defaultResourceAlreadyCreated(["SETTLEMINT_BLOCKSCOUT"]);
+  const relayerPrivateKey = await findPrivateKeyByName(RELAYER_PRIVATE_KEY_NAME);
   const env: Partial<DotEnv> = await loadEnv(false, false);
 
   const results = await deployResources([
@@ -363,11 +400,17 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "hd-ecdsa-p256",
             "--blockchain-node",
             env.SETTLEMINT_BLOCKCHAIN_NODE!,
+            "--trusted-forwarder-address",
+            "0x5e771e1417100000000000000000000000000099",
+            "--trusted-forwarder-name",
+            "AssetTokenizationForwarder",
+            "--relayer-key-unique-name",
+            relayerPrivateKey!.uniqueName,
             "--accept-defaults",
             "--default",
             "--wait",
             "--restart-if-timeout",
-            PRIVATE_KEY_NAME,
+            HD_PRIVATE_KEY_NAME,
           ]).result,
     () =>
       hasPortalMiddleware
@@ -418,7 +461,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
   ]);
 
   if (privateKeyResult?.status === "fulfilled" && privateKeyResult.value) {
-    expect(privateKeyResult.value.output).toInclude(`Private key ${PRIVATE_KEY_NAME} created successfully`);
+    expect(privateKeyResult.value.output).toInclude(`Private key ${HD_PRIVATE_KEY_NAME} created successfully`);
     expect(privateKeyResult.value.output).toInclude("Private key is deployed");
   }
 
@@ -435,7 +478,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
 
 async function createGraphMiddlewareAndActivatedPrivateKey() {
   const hasGraphMiddleware = await defaultResourceAlreadyCreated(["SETTLEMINT_THEGRAPH"]);
-  const hasPrivateKey2 = await privateKeyAlreadyCreated(PRIVATE_KEY_2_NAME);
+  const hasPrivateKey2 = await privateKeyAlreadyCreated(PRIVATE_KEY_NODE_2_NAME);
   const blockchainNodeWithPk = await findBlockchainNodeByName(NODE_NAME_2_WITH_PK);
   const loadBalancer = await findLoadBalancerByName(LOAD_BALANCER_NAME);
 
@@ -473,7 +516,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--accept-defaults",
             "--wait",
             "--restart-if-timeout",
-            PRIVATE_KEY_2_NAME,
+            PRIVATE_KEY_NODE_2_NAME,
           ]).result,
   ]);
 
@@ -485,7 +528,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
     expect(graphMiddlewareResult.value.output).toInclude("Middleware is deployed");
   }
   if (privateKey2Result?.status === "fulfilled" && privateKey2Result.value) {
-    expect(privateKey2Result.value.output).toInclude(`Private key ${PRIVATE_KEY_2_NAME} created successfully`);
+    expect(privateKey2Result.value.output).toInclude(`Private key ${PRIVATE_KEY_NODE_2_NAME} created successfully`);
     expect(privateKey2Result.value.output).toInclude("Private key is deployed");
   }
 }

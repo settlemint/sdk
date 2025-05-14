@@ -3,6 +3,7 @@ import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
+import { getHdPrivateKeyEnv } from "@/utils/get-cluster-service-env";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -19,53 +20,92 @@ export function privateKeyHdCreateCommand() {
       cmd
         .option("--application <application>", "Application unique name")
         .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
-        .action(async (name, { application, blockchainNode, acceptDefaults, ...defaultArgs }) => {
-          return baseAction(
+        .option(
+          "-tfa, --trusted-forwarder-address <trustedForwarderAddress>",
+          "The address of the trusted forwarder contract. Must inherit from OpenZeppelin's ERC2771Forwarder contract",
+        )
+        .option(
+          "-tfn, --trusted-forwarder-name <trustedForwarderName>",
+          "The name of the trusted forwarder contract as known to OpenZeppelin's extension (e.g. 'OpenZeppelinERC2771Forwarder'). This exact name is required for the verification process",
+        )
+        .option(
+          "-rku, --relayer-key-unique-name <relayerKeyUniqueName>",
+          "Private key unique name to use for relaying meta-transactions",
+        )
+        .action(
+          async (
+            name,
             {
-              ...defaultArgs,
+              application,
+              blockchainNode,
+              trustedForwarderAddress,
+              trustedForwarderName,
+              relayerKeyUniqueName,
               acceptDefaults,
+              ...defaultArgs
             },
-            async ({ settlemint, env, showSpinner, provider, region }) => {
-              const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
-              if (!applicationUniqueName) {
-                return missingApplication();
-              }
-              let blockchainNodeUniqueName = blockchainNode;
-              if (!blockchainNodeUniqueName) {
-                const blockchainNodes = await serviceSpinner("blockchain node", () =>
-                  settlemint.blockchainNode.list(applicationUniqueName),
-                );
-                const node = await blockchainNodePrompt({
-                  env,
-                  nodes: blockchainNodes,
-                  accept: acceptDefaults,
-                  isRequired: true,
-                });
-                if (!node) {
-                  return nothingSelectedError("blockchain node");
+          ) => {
+            return baseAction(
+              {
+                ...defaultArgs,
+                acceptDefaults,
+              },
+              async ({ settlemint, env, showSpinner }) => {
+                const applicationUniqueName = application ?? env.SETTLEMINT_APPLICATION;
+                if (!applicationUniqueName) {
+                  return missingApplication();
                 }
-                blockchainNodeUniqueName = node.uniqueName;
-              }
-              const result = await showSpinner(() =>
-                settlemint.privateKey.create({
-                  name,
-                  applicationUniqueName,
-                  privateKeyType: "HD_ECDSA_P256",
-                  blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
-                }),
-              );
-              return {
-                result,
-                mapDefaultEnv: (): Partial<DotEnv> => {
-                  return {
-                    SETTLEMINT_APPLICATION: applicationUniqueName,
-                    SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
-                  };
-                },
-              };
-            },
-          );
-        });
+                // Validate that either all trusted forwarder and relayer options are set or none are set
+                if (
+                  (trustedForwarderAddress || trustedForwarderName || relayerKeyUniqueName) &&
+                  !(trustedForwarderAddress && trustedForwarderName && relayerKeyUniqueName)
+                ) {
+                  throw new Error(
+                    "When using meta-transaction functionality, you must provide all three options: " +
+                      "--trusted-forwarder-address, --trusted-forwarder-name, and --relayer-key-unique-name",
+                  );
+                }
+                let blockchainNodeUniqueName = blockchainNode;
+                if (!blockchainNodeUniqueName) {
+                  const blockchainNodes = await serviceSpinner("blockchain node", () =>
+                    settlemint.blockchainNode.list(applicationUniqueName),
+                  );
+                  const node = await blockchainNodePrompt({
+                    env,
+                    nodes: blockchainNodes,
+                    accept: acceptDefaults,
+                    isRequired: true,
+                  });
+                  if (!node) {
+                    return nothingSelectedError("blockchain node");
+                  }
+                  blockchainNodeUniqueName = node.uniqueName;
+                }
+                const result = await showSpinner(() =>
+                  settlemint.privateKey.create({
+                    name,
+                    applicationUniqueName,
+                    privateKeyType: "HD_ECDSA_P256",
+                    blockchainNodeUniqueNames: blockchainNodeUniqueName ? [blockchainNodeUniqueName] : [],
+                    trustedForwarderAddress,
+                    trustedForwarderName,
+                    relayerKeyUniqueName,
+                  }),
+                );
+                return {
+                  result,
+                  mapDefaultEnv: (): Partial<DotEnv> => {
+                    return {
+                      SETTLEMINT_APPLICATION: applicationUniqueName,
+                      SETTLEMINT_HD_PRIVATE_KEY: result.uniqueName,
+                      ...getHdPrivateKeyEnv(result),
+                    };
+                  },
+                };
+              },
+            );
+          },
+        );
     },
     examples: [
       {

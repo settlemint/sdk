@@ -5,7 +5,7 @@ import { instancePrompt } from "@/prompts/instance.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getHasuraEndpoints } from "@/utils/get-cluster-service-endpoint";
+import { getHasuraEnv } from "@/utils/get-cluster-service-env";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -66,9 +66,9 @@ export function hasuraTrackCommand() {
         return nothingSelectedError("Hasura instance");
       }
 
-      const hasuraEndpoints = getHasuraEndpoints(hasura);
-      const hasuraGraphqlEndpoint = hasuraEndpoints.SETTLEMINT_HASURA_ENDPOINT;
-      const hasuraAdminSecret = hasuraEndpoints.SETTLEMINT_HASURA_ADMIN_SECRET;
+      const hasuraEnv = getHasuraEnv(hasura);
+      const hasuraGraphqlEndpoint = hasuraEnv.SETTLEMINT_HASURA_ENDPOINT;
+      const hasuraAdminSecret = hasuraEnv.SETTLEMINT_HASURA_ADMIN_SECRET;
 
       if (!hasuraGraphqlEndpoint || !hasuraAdminSecret) {
         return note("Could not retrieve Hasura endpoint or admin secret. Please check your configuration.");

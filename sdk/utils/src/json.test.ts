@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { extractJsonObject } from "./json.js";
+import { extractJsonObject, makeJsonStringifiable } from "./json.js";
 
 describe("extractJsonObject", () => {
   test("extracts a JSON object from a string", () => {
@@ -11,6 +11,35 @@ describe("extractJsonObject", () => {
       networks: { hardhat: {}, btp: { url: "", gasPrice: "auto" } },
       etherscan: {},
       sourcify: { enabled: true },
+    });
+  });
+});
+
+describe("makeJsonStringifiable", () => {
+  test("converts a value to a JSON stringifiable format", () => {
+    const result = makeJsonStringifiable({ amount: BigInt(1000) });
+    expect(result).toEqual({ amount: "1000" });
+  });
+  test("returns the value if it is already JSON stringifiable", () => {
+    const result = makeJsonStringifiable({ amount: 1000 });
+    expect(result).toEqual({ amount: 1000 });
+  });
+  test("returns the value if it is undefined", () => {
+    const result = makeJsonStringifiable(undefined);
+    expect(result).toEqual(undefined);
+  });
+  test("returns the value if it is null", () => {
+    const result = makeJsonStringifiable(null);
+    expect(result).toEqual(null);
+  });
+  test("supports nested objects and arrays", () => {
+    const result = makeJsonStringifiable({
+      amount: { value: BigInt(1000) },
+      items: [{ value: BigInt(1000) }, { value: BigInt(2000) }],
+    });
+    expect(result).toEqual({
+      amount: { value: "1000" },
+      items: [{ value: "1000" }, { value: "2000" }],
     });
   });
 });

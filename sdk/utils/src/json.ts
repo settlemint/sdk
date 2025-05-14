@@ -57,3 +57,27 @@ export function extractJsonObject<T>(value: string): T | null {
   }
   return tryParseJson<T>(result[0]);
 }
+
+/**
+ * Converts a value to a JSON stringifiable format.
+ *
+ * @param value - The value to convert
+ * @returns The JSON stringifiable value
+ *
+ * @example
+ * import { makeJsonStringifiable } from "@settlemint/sdk-utils";
+ *
+ * const json = makeJsonStringifiable<{ amount: bigint }>({ amount: BigInt(1000) });
+ * // Returns: '{"amount":"1000"}'
+ */
+export function makeJsonStringifiable<T>(value: unknown): T {
+  if (value === undefined || value === null) {
+    return value as T;
+  }
+  return tryParseJson<T>(
+    JSON.stringify(
+      value,
+      (_, value) => (typeof value === "bigint" ? value.toString() : value), // return everything else unchanged
+    ),
+  ) as T;
+}

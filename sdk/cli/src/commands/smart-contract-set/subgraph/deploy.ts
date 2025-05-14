@@ -6,7 +6,7 @@ import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
+import { getGraphEnv } from "@/utils/get-cluster-service-env";
 import { getTheGraphMiddleware, getTheGraphNetwork, subgraphSetup } from "@/utils/subgraph/setup";
 import {
   getSubgraphConfig,
@@ -134,11 +134,11 @@ export function subgraphDeployCommand() {
         instance,
       });
       const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
-      const graphEndpoints = await getGraphEndpoint(settlemintClient, middleware, graphName);
+      const graphEnv = await getGraphEnv(settlemintClient, middleware, graphName);
       await writeEnvSpinner(!!prod, {
         ...env,
         SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
-        ...graphEndpoints,
+        ...graphEnv,
         SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? graphName,
       });
       outro(`Subgraph ${graphName} deployed successfully`);

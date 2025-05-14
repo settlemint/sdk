@@ -7,7 +7,7 @@ import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getGraphEndpoint } from "@/utils/get-cluster-service-endpoint";
+import { getGraphEnv } from "@/utils/get-cluster-service-env";
 import { getTheGraphMiddleware } from "@/utils/subgraph/setup";
 import { getSubgraphYamlFile } from "@/utils/subgraph/subgraph-config";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
@@ -92,7 +92,7 @@ export function subgraphRemoveCommand() {
           retryWhenFailed(
             async () => {
               const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
-              const endpoints = await getGraphEndpoint(settlemintClient, middleware);
+              const endpoints = await getGraphEnv(settlemintClient, middleware);
               if (endpoints.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) => endpoint.endsWith(graphName))) {
                 throw new Error(
                   `Subgraph '${graphName}' not removed from middleware '${theGraphMiddleware.uniqueName}'`,

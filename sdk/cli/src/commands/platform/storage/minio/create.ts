@@ -1,7 +1,7 @@
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
-import { getMinioEndpoints } from "@/utils/get-cluster-service-endpoint";
+import { getMinioEnv } from "@/utils/get-cluster-service-env";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
@@ -46,7 +46,7 @@ export function minioStorageCreateCommand() {
                   return {
                     SETTLEMINT_APPLICATION: applicationUniqueName,
                     SETTLEMINT_MINIO: result.uniqueName,
-                    ...getMinioEndpoints(result),
+                    ...getMinioEnv(result),
                   };
                 },
               };
