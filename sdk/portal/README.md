@@ -34,12 +34,14 @@
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [createPortalClient()](#createportalclient)
+    - [getWebsocketClient()](#getwebsocketclient)
     - [handleWalletVerificationChallenge()](#handlewalletverificationchallenge)
     - [waitForTransactionReceipt()](#waitfortransactionreceipt)
   - [Interfaces](#interfaces)
     - [HandleWalletVerificationChallengeOptions\<Setup\>](#handlewalletverificationchallengeoptionssetup)
     - [Transaction](#transaction)
     - [WaitForTransactionReceiptOptions](#waitfortransactionreceiptoptions)
+    - [WebsocketClientOptions](#websocketclientoptions)
   - [Type Aliases](#type-aliases)
     - [ClientOptions](#clientoptions)
     - [RequestConfig](#requestconfig)
@@ -443,6 +445,28 @@ const result = await portalClient.request(query);
 
 ***
 
+#### getWebsocketClient()
+
+> **getWebsocketClient**(`options`): `Client`
+
+Defined in: sdk/portal/src/utils/websocket-client.ts:23
+
+Creates a GraphQL WebSocket client for the Portal API
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`WebsocketClientOptions`](#websocketclientoptions) | The options for the client |
+
+##### Returns
+
+`Client`
+
+The GraphQL WebSocket client
+
+***
+
 #### handleWalletVerificationChallenge()
 
 > **handleWalletVerificationChallenge**\<`Setup`\>(`options`): `Promise`\<\{ `challengeResponse`: `string`; `verificationId?`: `string`; \}\>
@@ -500,7 +524,7 @@ const result = await handleWalletVerificationChallenge({
 
 > **waitForTransactionReceipt**(`transactionHash`, `options`): `Promise`\<[`Transaction`](#transaction)\>
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:82](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L82)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:79](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L79)
 
 Waits for a blockchain transaction receipt by subscribing to transaction updates via GraphQL.
 This function polls until the transaction is confirmed or the timeout is reached.
@@ -552,7 +576,7 @@ Options for handling a wallet verification challenge
 
 #### Transaction
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:25](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L25)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:26](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L26)
 
 Represents the structure of a blockchain transaction with its receipt
 
@@ -560,9 +584,25 @@ Represents the structure of a blockchain transaction with its receipt
 
 #### WaitForTransactionReceiptOptions
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:58](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L58)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:57](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L57)
 
 Options for waiting for a transaction receipt
+
+##### Extends
+
+- [`WebsocketClientOptions`](#websocketclientoptions)
+
+***
+
+#### WebsocketClientOptions
+
+Defined in: sdk/portal/src/utils/websocket-client.ts:10
+
+Options for the GraphQL WebSocket client
+
+##### Extended by
+
+- [`WaitForTransactionReceiptOptions`](#waitfortransactionreceiptoptions)
 
 ### Type Aliases
 

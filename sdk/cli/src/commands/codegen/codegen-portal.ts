@@ -30,7 +30,7 @@ export async function codegenPortal(env: DotEnv) {
     },
   });
 
-  const template = `import { createPortalClient } from "${PACKAGE_NAME}";
+  const template = `import { createPortalClient, getWebsocketClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/portal-env";
 import { createLogger, requestLogger, type LogLevel } from '@settlemint/sdk-utils/logging';
 
@@ -48,7 +48,13 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
 }, {
   fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
-});`;
+});
+
+export const getPortalWebsocketClient = getWebsocketClient({
+  portalGraphqlEndpoint: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+});
+`;
 
   await writeTemplate(template, "/lib/settlemint", "portal.ts");
 
