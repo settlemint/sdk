@@ -269,7 +269,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
         const hasPrivateKey = await privateKeyAlreadyCreated(privateKeyName);
         if (!hasPrivateKey) {
           const env: Partial<DotEnv> = await loadEnv(false, false);
-          return runCommand(COMMAND_TEST_SCOPE, [
+          const privateKeyHsmCreateCommandOutput = await runCommand(COMMAND_TEST_SCOPE, [
             "platform",
             "create",
             "private-key",
@@ -282,22 +282,14 @@ async function createBlockchainNetworkMinioAndIpfs() {
             "--restart-if-timeout",
             privateKeyName,
           ]).result;
+          expect(privateKeyHsmCreateCommandOutput).toInclude(`Private key ${privateKeyName} created successfully`);
+          expect(privateKeyHsmCreateCommandOutput).toInclude("Private key is deployed");
         }
         return Promise.resolve(undefined);
       };
     }),
   );
   expect(privateKeyResults.every((result) => result?.status === "fulfilled")).toBe(true);
-  expect(
-    privateKeyResults.every(
-      (result, index) =>
-        result?.status === "fulfilled" &&
-        result?.value?.output.includes(
-          `Private key ${PRIVATE_KEY_SMART_CONTRACTS_NAMES[index]} created successfully`,
-        ) &&
-        result?.value?.output.includes("Private key is deployed"),
-    ),
-  ).toBe(true);
 
   const hasRelayerPrivateKey = await privateKeyAlreadyCreated(RELAYER_PRIVATE_KEY_NAME);
   if (!hasRelayerPrivateKey) {
