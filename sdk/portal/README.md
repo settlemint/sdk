@@ -449,7 +449,7 @@ const result = await portalClient.request(query);
 
 > **getWebsocketClient**(`options`): `Client`
 
-Defined in: sdk/portal/src/utils/websocket-client.ts:23
+Defined in: [sdk/portal/src/utils/websocket-client.ts:23](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/websocket-client.ts#L23)
 
 Creates a GraphQL WebSocket client for the Portal API
 
@@ -596,7 +596,7 @@ Options for waiting for a transaction receipt
 
 #### WebsocketClientOptions
 
-Defined in: sdk/portal/src/utils/websocket-client.ts:10
+Defined in: [sdk/portal/src/utils/websocket-client.ts:10](https://github.com/settlemint/sdk/blob/v2.2.3/sdk/portal/src/utils/websocket-client.ts#L10)
 
 Options for the GraphQL WebSocket client
 
