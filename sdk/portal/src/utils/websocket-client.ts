@@ -27,9 +27,20 @@ export function getWebsocketClient({ portalGraphqlEndpoint, accessToken }: Webso
   if (!accessToken) {
     throw new Error("accessToken is required");
   }
-  const graphqlEndpoint = new URL(portalGraphqlEndpoint);
-  graphqlEndpoint.protocol = graphqlEndpoint.protocol === "http:" ? "ws:" : "wss:";
+  const graphqlEndpoint = setWsProtocol(new URL(portalGraphqlEndpoint));
   return createClient({
     url: `${graphqlEndpoint.protocol}//${graphqlEndpoint.host}/${accessToken}${graphqlEndpoint.pathname}${graphqlEndpoint.search}`,
   });
+}
+
+function setWsProtocol(url: URL) {
+  if (url.protocol === "ws:" || url.protocol === "wss:") {
+    return url;
+  }
+  if (url.protocol === "http:") {
+    url.protocol = "ws:";
+  } else {
+    url.protocol = "wss:";
+  }
+  return url;
 }
