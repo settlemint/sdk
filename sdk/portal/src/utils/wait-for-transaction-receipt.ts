@@ -1,4 +1,5 @@
-import { type FormattedExecutionResult, createClient } from "graphql-ws";
+import type { FormattedExecutionResult } from "graphql-ws";
+import { type WebsocketClientOptions, getWebsocketClient } from "./websocket-client.js";
 
 /**
  * Represents the structure of a blockchain transaction with its receipt
@@ -51,13 +52,9 @@ interface GetTransactionResponse {
  * Options for waiting for a transaction receipt
  *
  * @typedef {Object} WaitForTransactionReceiptOptions
- * @property {string} portalGraphqlEndpoint - The GraphQL endpoint URL for the Portal API
- * @property {string} accessToken - The access token for authentication with the Portal API
  * @property {number} [timeout] - Optional timeout in milliseconds before the operation fails
  */
-export interface WaitForTransactionReceiptOptions {
-  portalGraphqlEndpoint: string;
-  accessToken: string;
+export interface WaitForTransactionReceiptOptions extends WebsocketClientOptions {
   timeout?: number;
 }
 
@@ -80,9 +77,7 @@ export interface WaitForTransactionReceiptOptions {
  * });
  */
 export async function waitForTransactionReceipt(transactionHash: string, options: WaitForTransactionReceiptOptions) {
-  const wsClient = createClient({
-    url: options.portalGraphqlEndpoint.toLowerCase().replace("/graphql", `/${options.accessToken}/graphql`),
-  });
+  const wsClient = getWebsocketClient(options);
   const subscription = wsClient.iterate<GetTransactionResponse>({
     query: `subscription getTransaction($transactionHash: String!) {
         getTransaction(transactionHash: $transactionHash) {
