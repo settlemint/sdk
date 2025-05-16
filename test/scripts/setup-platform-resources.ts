@@ -269,7 +269,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
         const hasPrivateKey = await privateKeyAlreadyCreated(privateKeyName);
         if (!hasPrivateKey) {
           const env: Partial<DotEnv> = await loadEnv(false, false);
-          const privateKeyHsmCreateCommandOutput = await runCommand(COMMAND_TEST_SCOPE, [
+          const { output: privateKeyHsmCreateCommandOutput } = await runCommand(COMMAND_TEST_SCOPE, [
             "platform",
             "create",
             "private-key",
