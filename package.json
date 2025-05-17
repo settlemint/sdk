@@ -50,7 +50,7 @@
     "lefthook": "1.11.12",
     "mustache": "4.2.0",
     "publint": "0.3.12",
-    "tsup": "8.4.0",
+    "tsup": "8.5.0",
     "turbo": "2.5.3",
     "typedoc": "0.28.4",
     "typedoc-plugin-markdown": "4.6.3",
