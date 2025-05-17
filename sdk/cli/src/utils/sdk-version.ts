@@ -46,27 +46,31 @@ export async function validateSdkVersion(instance: string) {
     anonymous: true,
   });
 
-  const platformConfig = await settlemint.platform.config();
-  const currentVersion = pkg.version;
+  try {
+    const platformConfig = await settlemint.platform.config();
+    const currentVersion = pkg.version;
 
-  if (semver.gt(currentVersion, platformConfig.sdkVersion)) {
-    const url = new URL(instance);
-    const isManagedInstance = url.host === "settlemint.com" || url.host.endsWith(".settlemint.com");
-    if (isManagedInstance) {
-      // Newer versions are considered compatible with managed instances
-      return;
+    if (semver.gt(currentVersion, platformConfig.sdkVersion)) {
+      const url = new URL(instance);
+      const isManagedInstance = url.host === "settlemint.com" || url.host.endsWith(".settlemint.com");
+      if (isManagedInstance) {
+        // Newer versions are considered compatible with managed instances
+        return;
+      }
+      const instructions = await getUpgradeInstructions();
+      note(
+        `SDK CLI version mismatch. The platform requires version '${platformConfig.sdkVersion}' but you are using a newer version '${currentVersion}'. This might lead to compatibility issues with the platform.\n\n${instructions}`,
+        "warn",
+      );
+    } else if (semver.lt(currentVersion, platformConfig.sdkVersion)) {
+      const instructions = await getUpgradeInstructions();
+      note(
+        `A newer version of the SDK CLI is available (${platformConfig.sdkVersion}). Please update your SDK CLI to ensure compatibility with the platform.\n\n${instructions}`,
+        "warn",
+      );
     }
-    const instructions = await getUpgradeInstructions();
-    note(
-      `SDK CLI version mismatch. The platform requires version '${platformConfig.sdkVersion}' but you are using a newer version '${currentVersion}'. This might lead to compatibility issues with the platform.\n\n${instructions}`,
-      "warn",
-    );
-  } else if (semver.lt(currentVersion, platformConfig.sdkVersion)) {
-    const instructions = await getUpgradeInstructions();
-    note(
-      `A newer version of the SDK CLI is available (${platformConfig.sdkVersion}). Please update your SDK CLI to ensure compatibility with the platform.\n\n${instructions}`,
-      "warn",
-    );
+  } catch {
+    // Ignore errors
   }
 }
 
