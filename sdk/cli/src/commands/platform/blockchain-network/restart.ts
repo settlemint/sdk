@@ -8,7 +8,7 @@ export function blockchainNetworkRestartCommand() {
   return getRestartCommand({
     name: "blockchain-network",
     type: "blockchain network",
-    alias: "bn",
+    alias: "bnw",
     envKey: "SETTLEMINT_BLOCKCHAIN_NETWORK",
     restartFunction: async (settlemint, uniqueName) => {
       return settlemint.blockchainNetwork.restart(uniqueName);
