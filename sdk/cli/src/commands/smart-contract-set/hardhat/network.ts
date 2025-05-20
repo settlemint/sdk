@@ -28,10 +28,11 @@ export function hardhatNetworkCommand() {
     .option("-h, --help", "Get list of possible hardhat node options")
     .passThroughOptions()
     .allowUnknownOption(true)
-    .action(async (passThroughOptions, cmd) => {
+    .arguments("[operands...]")
+    .action(async (operands, options, cmd) => {
       intro("Starting development network using Hardhat");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
-      const hardhatOptions = mapPassthroughOptions(passThroughOptions, cmd);
+      const hardhatOptions = mapPassthroughOptions(options, { args: operands } as Command);
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [...args, "hardhat", "node", ...hardhatOptions]);
       outro("Development network started successfully");

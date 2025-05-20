@@ -28,10 +28,11 @@ export function hardhatBuildCommand() {
     .option("-h, --help", "Get list of possible hardhat compile options")
     .passThroughOptions()
     .allowUnknownOption(true)
-    .action(async (passThroughOptions, cmd) => {
+    .arguments("[operands...]")
+    .action(async (operands, options, cmd) => {
       intro("Building smart contracts using Hardhat");
       await validateIfRequiredPackagesAreInstalled(["hardhat"]);
-      const hardhatOptions = mapPassthroughOptions(passThroughOptions, cmd);
+      const hardhatOptions = mapPassthroughOptions(options, { args: operands } as Command);
       const { command, args } = await getPackageManagerExecutable();
       await executeCommand(command, [...args, "hardhat", "compile", ...hardhatOptions]);
       outro("Smart contracts built successfully");
