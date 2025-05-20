@@ -1,36 +1,46 @@
-import { describe, expect, mock, test } from "bun:test";
+import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
 import type { Address } from "viem";
+import { ModuleMocker } from "../../cli/src/utils/test/module-mocker.js";
 import { createEASClient } from "./eas.js";
 
-// Mock the viem client functions
-mock.module("@settlemint/sdk-viem", () => ({
-  getPublicClient: () => ({
-    chain: {
-      id: 1,
-      name: "Ethereum",
-      contracts: { ensRegistry: { address: undefined } },
-    },
-    transport: {
-      type: "http",
-      url: "http://localhost:8545",
-    },
-    request: async () => ({}),
-  }),
-  getWalletClient: () => () => ({
-    account: {
-      address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-      privateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
-    },
-    chain: {
-      id: 1,
-      name: "Ethereum",
-    },
-    transport: {
-      type: "http",
-      url: "http://localhost:8545",
-    },
-  }),
-}));
+const moduleMocker = new ModuleMocker();
+
+beforeAll(async () => {
+  // Mock the viem client functions
+  await moduleMocker.mock("@settlemint/sdk-viem", () => ({
+    getPublicClient: () => ({
+      chain: {
+        id: 1,
+        name: "Ethereum",
+        contracts: { ensRegistry: { address: undefined } },
+      },
+      transport: {
+        type: "http",
+        url: "http://localhost:8545",
+      },
+      request: async () => ({}),
+    }),
+    getWalletClient: () => () => ({
+      account: {
+        address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+        privateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
+      },
+      chain: {
+        id: 1,
+        name: "Ethereum",
+      },
+      transport: {
+        type: "http",
+        url: "http://localhost:8545",
+      },
+    }),
+  }));
+});
+
+afterAll(() => {
+  mock.restore();
+  moduleMocker.clear();
+});
 
 describe("EAS Client", () => {
   const options = {
