@@ -26,8 +26,9 @@ export function foundryNetworkCommand() {
     .option("-h, --help", "Get list of possible anvil options")
     .passThroughOptions()
     .allowUnknownOption(true)
-    .action(async (passThroughOptions, cmd) => {
-      const anvilOptions = mapPassthroughOptions(passThroughOptions, cmd);
+    .arguments("[operands...]")
+    .action(async (operands, options, cmd) => {
+      const anvilOptions = mapPassthroughOptions(options, { args: operands } as Command);
       await executeFoundryCommand("anvil", anvilOptions);
     });
 }
