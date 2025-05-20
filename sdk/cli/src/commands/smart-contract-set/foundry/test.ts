@@ -27,9 +27,10 @@ export function foundryTestCommand() {
     .option("-h, --help", "Get list of possible forge options")
     .passThroughOptions()
     .allowUnknownOption(true)
-    .action(async (passThroughOptions, cmd) => {
+    .arguments("[operands...]")
+    .action(async (operands, options, cmd) => {
       intro("Running smart contract tests using Foundry");
-      const forgeOptions = mapPassthroughOptions(passThroughOptions, cmd);
+      const forgeOptions = mapPassthroughOptions(options, { args: operands } as Command);
       await executeFoundryCommand("forge", ["test", ...forgeOptions]);
       outro("Smart contract tests completed");
     });
