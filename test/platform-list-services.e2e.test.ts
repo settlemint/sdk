@@ -66,15 +66,8 @@ describe("Test platform list services command", () => {
       accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
       instance: env.SETTLEMINT_INSTANCE!,
     });
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, [
-      "platform",
-      "list",
-      "services",
-      "--output",
-      "json",
-      ">",
-      "output.json",
-    ]).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services", "--output", "json"])
+      .result;
     const json = JSON.parse(output);
     const application = await settlemint.application.read(env.SETTLEMINT_APPLICATION!);
     expect(json.application).toEqual({
@@ -109,15 +102,8 @@ describe("Test platform list services command", () => {
   });
 
   test("List services in YAML format", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, [
-      "platform",
-      "list",
-      "services",
-      "--output",
-      "yaml",
-      ">",
-      "output.yaml",
-    ]).result;
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["platform", "list", "services", "--output", "yaml"])
+      .result;
     const yaml = parseDocument(output);
     expect(yaml).toBeObject();
     const parsedYaml = yaml.toJSON();

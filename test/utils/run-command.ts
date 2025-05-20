@@ -90,6 +90,7 @@ export function runCommand(
     result: p,
     stdin: proc.stdin,
     stdout: proc.stdout,
+    stderr: proc.stderr,
     kill: () => proc.pid && killProcess(proc.pid),
   };
 }

@@ -1,8 +1,11 @@
-import { afterEach, beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
+import { type Mock, afterAll, afterEach, beforeAll, beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 import type { ServiceType } from "@/spinners/services.spinner";
+import { ModuleMocker } from "@/utils/test/module-mocker";
 import { Command } from "@commander-js/extra-typings";
 import type { Application, SettlemintClient, Workspace } from "@settlemint/sdk-js";
 import * as servicesModule from "./services";
+
+const moduleMocker = new ModuleMocker();
 
 // Define an interface for the arguments to getServicesAndMapResults
 interface GetServicesAndMapResultsArgs {
@@ -57,31 +60,42 @@ const mockNothingSelectedErrorFn = mock(() => {
 });
 
 // --- Controlled mock implementations for internal functions ---
-const mockGetServicesAndMapResultsImpl = async (args: GetServicesAndMapResultsArgs) => [];
-const mockSelectApplicationImpl = async () => "selected-app-from-prompt";
+const mockGetServicesAndMapResultsImpl: typeof servicesModule.getServicesAndMapResults = async () => [];
+const mockSelectApplicationImpl: typeof servicesModule.selectApplication = async () => "selected-app-from-prompt";
 
-// --- Bun mock.module calls for external dependencies ---
-mock.module("@settlemint/sdk-utils/environment", () => ({ loadEnv: mockLoadEnvFn }));
-mock.module("@/prompts/instance.prompt", () => ({ instancePrompt: mockInstancePromptFn }));
-mock.module("@/utils/config", () => ({ getInstanceCredentials: mockGetInstanceCredentialsFn }));
-mock.module("@settlemint/sdk-js", () => ({ createSettleMintClient: mockCreateSettleMintClientFn }));
-mock.module("@/error/missing-config-error", () => ({
-  missingPersonalAccessTokenError: mockMissingPersonalAccessTokenErrorFn,
-}));
-mock.module("@/error/nothing-selected-error", () => ({ nothingSelectedError: mockNothingSelectedErrorFn }));
-mock.module("@/utils/output/json-output", () => ({ jsonOutput: mockJsonOutputFn }));
-mock.module("@/utils/output/yaml-output", () => ({ yamlOutput: mockYamlOutputFn }));
-mock.module("@settlemint/sdk-utils/terminal", () => ({ intro: mockIntroFn, outro: mockOutroFn, table: mockTableFn }));
+beforeAll(async () => {
+  // --- Bun mock.module calls for external dependencies ---
+  await moduleMocker.mock("@settlemint/sdk-utils/environment", () => ({ loadEnv: mockLoadEnvFn }));
+  await moduleMocker.mock("@/prompts/instance.prompt", () => ({ instancePrompt: mockInstancePromptFn }));
+  await moduleMocker.mock("@/utils/config", () => ({ getInstanceCredentials: mockGetInstanceCredentialsFn }));
+  await moduleMocker.mock("@settlemint/sdk-js", () => ({ createSettleMintClient: mockCreateSettleMintClientFn }));
+  await moduleMocker.mock("@/error/missing-config-error", () => ({
+    missingPersonalAccessTokenError: mockMissingPersonalAccessTokenErrorFn,
+  }));
+  await moduleMocker.mock("@/error/nothing-selected-error", () => ({
+    nothingSelectedError: mockNothingSelectedErrorFn,
+  }));
+  await moduleMocker.mock("@/utils/output/json-output", () => ({ jsonOutput: mockJsonOutputFn }));
+  await moduleMocker.mock("@/utils/output/yaml-output", () => ({ yamlOutput: mockYamlOutputFn }));
+  await moduleMocker.mock("@settlemint/sdk-utils/terminal", () => ({
+    intro: mockIntroFn,
+    outro: mockOutroFn,
+    table: mockTableFn,
+  }));
+});
+
+afterAll(() => {
+  mock.restore();
+  moduleMocker.clear();
+});
 
 // servicesCommand and SERVICE_TYPES are imported via servicesModule
-const { servicesCommand, SERVICE_TYPES } = servicesModule;
+const { servicesCommand } = servicesModule;
 
 describe("servicesCommand", () => {
   let program: Command;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  let getServicesAndMapResultsSpy: any;
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  let selectApplicationSpy: any;
+  let getServicesAndMapResultsSpy: Mock<typeof servicesModule.getServicesAndMapResults>;
+  let selectApplicationSpy: Mock<typeof servicesModule.selectApplication>;
 
   beforeEach(async () => {
     // Reset direct function mocks for external dependencies
