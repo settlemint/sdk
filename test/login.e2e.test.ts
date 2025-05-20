@@ -69,7 +69,10 @@ describe("Login command", () => {
     command.stdout.on("data", (data: Buffer) => {
       outputs.push(data.toString());
     });
+    command.stderr.on("data", (data: Buffer) => {
+      outputs.push(data.toString());
+    });
     expect(() => command.result).toThrow();
-    expect(outputs.join("\n")).toInclude("A token should be provided using STDIN, not as an argument");
+    expect(outputs.join("\n")).toInclude("error: too many arguments for 'login'. Expected 0 arguments but got 1");
   });
 });
