@@ -45,7 +45,7 @@
     "@modelcontextprotocol/sdk": "1.11.4",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@commander-js/extra-typings": "11.1.0",
+    "@commander-js/extra-typings": "14.0.0",
     "commander": "11.1.0",
     "zod": "3.24.4"
   },
