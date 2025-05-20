@@ -63,7 +63,7 @@ describe("Login command", () => {
     const command = runCommand(COMMAND_TEST_SCOPE, [
       "login",
       "--token-stdin",
-      process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS ?? "some_token",
+      process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS || "some_token",
     ]);
     const outputs: string[] = [];
     command.stdout.on("data", (data: Buffer) => {
