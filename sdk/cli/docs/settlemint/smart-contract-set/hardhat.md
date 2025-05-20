@@ -113,8 +113,8 @@ Options:
   -m, --module &lt;ignitionmodule&gt;       The module to deploy with Ignition,
                                       defaults to &quot;ignition/modules/main.ts&quot;
   --deployment-id &lt;deploymentId&gt;      Set the id of the deployment
-  -r, --reset                         Wipes the existing deployment state
-                                      before deploying
+  -r, --reset                         Wipes the existing deployment state before
+                                      deploying
   -v, --verify                        Verify the deployment on Etherscan
   --default-sender &lt;defaultSender&gt;    Set the default sender for the deployment
   --parameters &lt;parameters&gt;           A relative path to a JSON file to use for

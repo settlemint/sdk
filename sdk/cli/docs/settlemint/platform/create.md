@@ -119,12 +119,10 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider (run `settlemint
-                                      platform config` to see available
-                                      providers)
+  --provider &lt;provider&gt;               Network provider (run `settlemint platform
+                                      config` to see available providers)
   --region &lt;region&gt;                   Deployment region (run `settlemint
-                                      platform config` to see available
-                                      regions)
+                                      platform config` to see available regions)
   --size &lt;size&gt;                       Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
                                       &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
@@ -236,12 +234,10 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider (run `settlemint
-                                      platform config` to see available
-                                      providers)
+  --provider &lt;provider&gt;               Network provider (run `settlemint platform
+                                      config` to see available providers)
   --region &lt;region&gt;                   Deployment region (run `settlemint
-                                      platform config` to see available
-                                      regions)
+                                      platform config` to see available regions)
   --size &lt;size&gt;                       Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
                                       &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
@@ -396,12 +392,10 @@ Options:
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
   -r, --restart-if-timeout            Restart if wait time is exceeded
-  --provider &lt;provider&gt;               Network provider (run `settlemint
-                                      platform config` to see available
-                                      providers)
+  --provider &lt;provider&gt;               Network provider (run `settlemint platform
+                                      config` to see available providers)
   --region &lt;region&gt;                   Deployment region (run `settlemint
-                                      platform config` to see available
-                                      regions)
+                                      platform config` to see available regions)
   --size &lt;size&gt;                       Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;,
                                       &quot;SMALL&quot;, default: &quot;SMALL&quot;)
   --type &lt;type&gt;                       Network type (choices: &quot;DEDICATED&quot;,
@@ -487,20 +481,20 @@ Examples:
 Create a new HD-ECDSA-P256 private key in the SettleMint platform.
 
 Arguments:
-  name                                                         The HD-ECDSA-P256 private key name
+  name                                                   The HD-ECDSA-P256 private key name
 
 Options:
-  -a, --accept-defaults                                        Accept the default values
-  -d, --default                                                Save as default private key
-  --prod                                                       Connect to production environment
-  -w, --wait                                                   Wait until deployed
-  -r, --restart-if-timeout                                     Restart if wait time is exceeded
-  --application &lt;application&gt;                                  Application unique name
-  --blockchain-node &lt;blockchainNode&gt;                           Blockchain Node unique name
-  -tfa, --trusted-forwarder-address &lt;trustedForwarderAddress&gt;  The address of the trusted forwarder contract. Must inherit from OpenZeppelin&#039;s ERC2771Forwarder contract
-  -tfn, --trusted-forwarder-name &lt;trustedForwarderName&gt;        The name of the trusted forwarder contract as known to OpenZeppelin&#039;s extension (e.g. &#039;OpenZeppelinERC2771Forwarder&#039;). This exact name is required for the verification process
-  -rku, --relayer-key-unique-name &lt;relayerKeyUniqueName&gt;       Private key unique name to use for relaying meta-transactions
-  -h, --help                                                   display help for command
+  -a, --accept-defaults                                  Accept the default values
+  -d, --default                                          Save as default private key
+  --prod                                                 Connect to production environment
+  -w, --wait                                             Wait until deployed
+  -r, --restart-if-timeout                               Restart if wait time is exceeded
+  --application &lt;application&gt;                            Application unique name
+  --blockchain-node &lt;blockchainNode&gt;                     Blockchain Node unique name
+  --trusted-forwarder-address &lt;trustedForwarderAddress&gt;  The address of the trusted forwarder contract. Must inherit from OpenZeppelin&#039;s ERC2771Forwarder contract
+  --trusted-forwarder-name &lt;trustedForwarderName&gt;        The name of the trusted forwarder contract as known to OpenZeppelin&#039;s extension (e.g. &#039;OpenZeppelinERC2771Forwarder&#039;). This exact name is required for the verification process
+  --relayer-key-unique-name &lt;relayerKeyUniqueName&gt;       Private key unique name to use for relaying meta-transactions
+  -h, --help                                             display help for command
 </pre>
 
 <h3 id="private-key-hsm-ecdsa-p256"><a href="#home">Create</a> > <a href="#create-private-key">Private key</a> > Hsm ecdsa p256</h3>
@@ -550,20 +544,20 @@ Examples:
 Create a new ACCESSIBLE-ECDSA-P256 private key in the SettleMint platform.
 
 Arguments:
-  name                                                         The ACCESSIBLE-ECDSA-P256 private key name
+  name                                                   The ACCESSIBLE-ECDSA-P256 private key name
 
 Options:
-  -a, --accept-defaults                                        Accept the default values
-  -d, --default                                                Save as default private key
-  --prod                                                       Connect to production environment
-  -w, --wait                                                   Wait until deployed
-  -r, --restart-if-timeout                                     Restart if wait time is exceeded
-  --application &lt;application&gt;                                  Application unique name
-  --blockchain-node &lt;blockchainNode&gt;                           Blockchain Node unique name
-  -tfa, --trusted-forwarder-address &lt;trustedForwarderAddress&gt;  The address of the trusted forwarder contract. Must inherit from OpenZeppelin&#039;s ERC2771Forwarder contract
-  -tfn, --trusted-forwarder-name &lt;trustedForwarderName&gt;        The name of the trusted forwarder contract as known to OpenZeppelin&#039;s extension (e.g. &#039;OpenZeppelinERC2771Forwarder&#039;). This exact name is required for the verification process
-  -rku, --relayer-key-unique-name &lt;relayerKeyUniqueName&gt;       Private key unique name to use for relaying meta-transactions
-  -h, --help                                                   display help for command
+  -a, --accept-defaults                                  Accept the default values
+  -d, --default                                          Save as default private key
+  --prod                                                 Connect to production environment
+  -w, --wait                                             Wait until deployed
+  -r, --restart-if-timeout                               Restart if wait time is exceeded
+  --application &lt;application&gt;                            Application unique name
+  --blockchain-node &lt;blockchainNode&gt;                     Blockchain Node unique name
+  --trusted-forwarder-address &lt;trustedForwarderAddress&gt;  The address of the trusted forwarder contract. Must inherit from OpenZeppelin&#039;s ERC2771Forwarder contract
+  --trusted-forwarder-name &lt;trustedForwarderName&gt;        The name of the trusted forwarder contract as known to OpenZeppelin&#039;s extension (e.g. &#039;OpenZeppelinERC2771Forwarder&#039;). This exact name is required for the verification process
+  --relayer-key-unique-name &lt;relayerKeyUniqueName&gt;       Private key unique name to use for relaying meta-transactions
+  -h, --help                                             display help for command
 </pre>
 
 <h2 id="create-storage"><a href="#home">Create</a> > Storage</h2>

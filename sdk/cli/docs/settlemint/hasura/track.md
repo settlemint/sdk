@@ -12,8 +12,8 @@ Examples:
 Track all tables in Hasura
 
 Options:
-  -a, --accept-defaults       Accept the default and previously set values
-  -db, --database &lt;database&gt;  Database name (default: &quot;default&quot;)
-  -h, --help                  display help for command
+  -a, --accept-defaults      Accept the default and previously set values
+  -d, --database &lt;database&gt;  Database name (default: &quot;default&quot;)
+  -h, --help                 display help for command
 </pre>
 

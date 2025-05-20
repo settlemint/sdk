@@ -55,8 +55,8 @@ Examples:
   # Force deletes the specified workspace without confirmation
   $ settlemint platform delete workspace &lt;workspace-unique-name&gt; --force
 
-Delete a workspace in the SettleMint platform. Provide the workspace unique
-name or use &#039;default&#039; to delete the default workspace from your .env file.
+Delete a workspace in the SettleMint platform. Provide the workspace unique name
+or use &#039;default&#039; to delete the default workspace from your .env file.
 
 Arguments:
   unique-name            The unique name of the workspace, use &#039;default&#039; to

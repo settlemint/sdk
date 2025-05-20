@@ -16,8 +16,8 @@ Options:
                                       verification response for
   -i, --instance &lt;instance&gt;           The instance to connect to (defaults to
                                       the instance in the .env file)
-  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name to get
-                                      pincode verification response for
+  --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name to get pincode
+                                      verification response for
   -h, --help                          display help for command
 </pre>
 
