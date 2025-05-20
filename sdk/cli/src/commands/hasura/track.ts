@@ -29,7 +29,7 @@ export function hasuraTrackCommand() {
       ]),
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
-    .option("-db, --database <database>", "Database name", "default")
+    .option("-d, --database <database>", "Database name", "default")
     .action(async ({ acceptDefaults, database }) => {
       intro("Tracking all tables in Hasura");
 

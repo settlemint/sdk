@@ -2718,6 +2718,9 @@ interface BaseBesuGenesisConfig {
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
 
+  """The block number for the Cancun hard fork"""
+  cancunBlock: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -2856,6 +2859,9 @@ input BesuIbft2GenesisConfigInput {
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
 
+  """The block number for the Cancun hard fork"""
+  cancunBlock: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -2911,6 +2917,9 @@ type BesuIbft2GenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
+
+  """The block number for the Cancun hard fork"""
+  cancunBlock: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -3800,6 +3809,9 @@ input BesuQbftGenesisConfigInput {
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
 
+  """The block number for the Cancun hard fork"""
+  cancunBlock: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -3855,6 +3867,9 @@ type BesuQbftGenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
+
+  """The block number for the Cancun hard fork"""
+  cancunBlock: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -3940,6 +3955,9 @@ type BesusCliqueGenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Byzantium hard fork"""
   byzantiumBlock: Float
+
+  """The block number for the Cancun hard fork"""
+  cancunBlock: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -19623,6 +19641,9 @@ input QuorumGenesisConfigInput {
   """Block number for Byzantium hard fork"""
   byzantiumBlock: Float
 
+  """Block number for Cancun hard fork"""
+  cancunBlock: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -19681,6 +19702,9 @@ type QuorumGenesisConfigType {
 
   """Block number for Byzantium hard fork"""
   byzantiumBlock: Float
+
+  """Block number for Cancun hard fork"""
+  cancunBlock: Float
 
   """The chain ID of the network"""
   chainId: Float!
