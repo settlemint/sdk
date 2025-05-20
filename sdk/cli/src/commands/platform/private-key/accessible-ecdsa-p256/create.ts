@@ -19,15 +19,15 @@ export function privateKeyAccessibleCreateCommand() {
         .option("--application <application>", "Application unique name")
         .option("--blockchain-node <blockchainNode>", "Blockchain Node unique name")
         .option(
-          "-tfa, --trusted-forwarder-address <trustedForwarderAddress>",
+          "--trusted-forwarder-address <trustedForwarderAddress>",
           "The address of the trusted forwarder contract. Must inherit from OpenZeppelin's ERC2771Forwarder contract",
         )
         .option(
-          "-tfn, --trusted-forwarder-name <trustedForwarderName>",
+          "--trusted-forwarder-name <trustedForwarderName>",
           "The name of the trusted forwarder contract as known to OpenZeppelin's extension (e.g. 'OpenZeppelinERC2771Forwarder'). This exact name is required for the verification process",
         )
         .option(
-          "-rku, --relayer-key-unique-name <relayerKeyUniqueName>",
+          "--relayer-key-unique-name <relayerKeyUniqueName>",
           "Private key unique name to use for relaying meta-transactions",
         )
         .action(
