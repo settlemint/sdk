@@ -22,7 +22,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { formatHealthStatus } from "../utils/formatting/format-health-status";
 import { formatStatus } from "../utils/formatting/format-status";
 
-const SERVICE_TYPES: ServiceType[] = [
+export const SERVICE_TYPES: ServiceType[] = [
   "blockchain-network",
   "blockchain-node",
   "load-balancer",
@@ -76,7 +76,8 @@ export function servicesCommand() {
     )
     .addOption(new Option("-t, --type <type...>", "The type(s) of service to list").choices(SERVICE_TYPES))
     .addOption(new Option("-o, --output <output>", "The output format").choices(["wide", "json", "yaml"]))
-    .action(async ({ application, type, output }) => {
+    .arguments("[typeOperands...]")
+    .action(async (typeOperands, options) => {
       intro("Listing application services");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
@@ -91,9 +92,9 @@ export function servicesCommand() {
         instance: selectedInstance,
       });
 
-      const printToTerminal = !output || output === "wide";
+      const printToTerminal = !options.output || options.output === "wide";
       const applicationUniqueName =
-        application ??
+        options.application ??
         env.SETTLEMINT_APPLICATION ??
         (printToTerminal ? await selectApplication(settlemint, env) : null);
 
@@ -101,12 +102,25 @@ export function servicesCommand() {
         return nothingSelectedError("application");
       }
 
-      const wide = output === "wide";
+      let effectiveTypes: ServiceType[] | undefined = undefined;
+      if (options.type && options.type.length > 0) {
+        effectiveTypes = options.type as ServiceType[];
+      } else if (typeOperands && typeOperands.length > 0) {
+        effectiveTypes = typeOperands.filter((op) => SERVICE_TYPES.includes(op as ServiceType)) as ServiceType[];
+        if (effectiveTypes.length === 0 && typeOperands.length > 0) {
+          // If operands were provided but none were valid, it's like asking for invalid types.
+          // Depending on desired behavior, could warn or proceed as if no types specified.
+          // For now, let it proceed (will show no services for these invalid types or all if effectiveTypes is empty but not undefined).
+          // To be stricter, one might throw an error or inform the user.
+        }
+      }
+
+      const wide = options.output === "wide";
       const servicesToShow = await getServicesAndMapResults({
         instance: selectedInstance,
         settlemint,
         applicationUniqueName,
-        types: type,
+        types: effectiveTypes,
         printToTerminal,
         wide,
       });
@@ -125,9 +139,9 @@ export function servicesCommand() {
         services: servicesToShow,
       };
 
-      if (output === "json") {
+      if (options.output === "json") {
         jsonOutput(data);
-      } else if (output === "yaml") {
+      } else if (options.output === "yaml") {
         yamlOutput(data);
       } else {
         table(
@@ -140,7 +154,7 @@ export function servicesCommand() {
     });
 }
 
-async function selectApplication(settlemint: SettlemintClient, env: Partial<DotEnv>) {
+export async function selectApplication(settlemint: SettlemintClient, env: Partial<DotEnv>) {
   const workspaces = await workspaceSpinner(settlemint);
   const workspace = await workspacePrompt(env, workspaces, true);
   const applications = await applicationsSpinner(settlemint, workspace.uniqueName);
@@ -148,7 +162,7 @@ async function selectApplication(settlemint: SettlemintClient, env: Partial<DotE
   return selectedApplication.uniqueName;
 }
 
-async function getServicesAndMapResults({
+export async function getServicesAndMapResults({
   instance,
   settlemint,
   applicationUniqueName,
