@@ -17,37 +17,25 @@
     "schedule:nonOfficeHours",
     "helpers:pinGitHubActionDigests"
   ],
-  "labels": [
-    "dependencies"
-  ],
+  "labels": ["dependencies"],
   "rebaseWhen": "auto",
   "customManagers": [
     {
       "customType": "regex",
       "datasourceTemplate": "npm",
       "depNameTemplate": "@biomejs/biome",
-      "managerFilePatterns": [
-        "/(^|/)biome.jsonc?$/"
-      ],
-      "matchStrings": [
-        "\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""
-      ]
+      "managerFilePatterns": ["/(^|/)biome.jsonc?$/"],
+      "matchStrings": ["\"https://biomejs.dev/schemas/(?<currentValue>[^\"]+)/schema.json\""]
     }
   ],
   "packageRules": [
     {
-      "matchFileNames": [
-        "apps/**"
-      ],
+      "matchFileNames": ["apps/**"],
       "rangeStrategy": "pin"
     },
     {
-      "matchManagers": [
-        "github-actions"
-      ],
-      "matchDepTypes": [
-        "action"
-      ],
+      "matchManagers": ["github-actions"],
+      "matchDepTypes": ["action"],
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true
