@@ -1,5 +1,5 @@
 import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Schema for validating SettleMint client options.

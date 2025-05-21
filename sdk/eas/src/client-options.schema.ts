@@ -1,7 +1,7 @@
 import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import type { ClientOptions as ViemClientOptions } from "@settlemint/sdk-viem";
 import { isAddress } from "viem";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Schema for validating EAS client configuration options.

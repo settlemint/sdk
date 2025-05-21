@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Schema for validating database IDs. Accepts both PostgreSQL UUIDs and MongoDB ObjectIDs.

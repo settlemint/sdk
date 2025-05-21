@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { ZodError } from "zod";
+import { ZodError } from "zod/v4";
 import { ClientOptionsSchema } from "./client-options.schema.js";
 
 describe("Schemas", () => {

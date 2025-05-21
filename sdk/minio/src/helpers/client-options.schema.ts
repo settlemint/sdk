@@ -1,5 +1,5 @@
 import { UrlSchema } from "@settlemint/sdk-utils/validation";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Schema for validating server client options for the MinIO client.

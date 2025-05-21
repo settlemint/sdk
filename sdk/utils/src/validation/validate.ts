@@ -1,4 +1,4 @@
-import { ZodError, type ZodSchema } from "zod";
+import { ZodError, type ZodType } from "zod/v4";
 
 /**
  * Validates a value against a given Zod schema.
@@ -13,13 +13,13 @@ import { ZodError, type ZodSchema } from "zod";
  *
  * const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
  */
-export function validate<T extends ZodSchema>(schema: T, value: unknown): T["_output"] {
+export function validate<T extends ZodType>(schema: T, value: unknown): T["_output"] {
   try {
     return schema.parse(value);
   } catch (error) {
     if (error instanceof ZodError) {
-      const formattedErrors = error.errors.map((err) => `- ${err.path.join(".")}: ${err.message}`).join("\n");
-      throw new Error(`Validation error${error.errors.length > 1 ? "s" : ""}:\n${formattedErrors}`);
+      const formattedErrors = error.issues.map((err) => `- ${err.path.join(".")}: ${err.message}`).join("\n");
+      throw new Error(`Validation error${error.issues.length > 1 ? "s" : ""}:\n${formattedErrors}`);
     }
     throw error; // Re-throw if it's not a ZodError
   }
