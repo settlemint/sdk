@@ -124,7 +124,7 @@ Combines EAS-specific options with base Viem client options.
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `attestationAddress`: `ZodEffects`\<`ZodString`, `` `0x${string}` ``, `string`\>; `chainId`: `ZodString`; `chainName`: `ZodString`; `rpcUrl`: `ZodString`; `schemaRegistryAddress`: `ZodEffects`\<`ZodString`, `` `0x${string}` ``, `string`\>; \}, `"strip"`, `ZodTypeAny`, \{ `accessToken`: `string`; `attestationAddress`: `` `0x${string}` ``; `chainId`: `string`; `chainName`: `string`; `rpcUrl`: `string`; `schemaRegistryAddress`: `` `0x${string}` ``; \}, \{ `accessToken`: `string`; `attestationAddress`: `string`; `chainId`: `string`; `chainName`: `string`; `rpcUrl`: `string`; `schemaRegistryAddress`: `string`; \}\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `attestationAddress`: `ZodString`; `chainId`: `ZodString`; `chainName`: `ZodString`; `rpcUrl`: `ZodString`; `schemaRegistryAddress`: `ZodString`; \}, `$strip`\>
 
 Defined in: [sdk/eas/src/client-options.schema.ts:10](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/eas/src/client-options.schema.ts#L10)
 

@@ -5,15 +5,15 @@
 Hardhat commands for building, testing and deploying smart contracts
 
 Options:
-  -h, --help         display help for command
+  -h, --help                       display help for command
 
 Commands:
-  <a href="#hardhat-build">build</a> [options]    Build the smart contracts using Hardhat
-  <a href="#hardhat-deploy">deploy</a>             Deploy the smart contracts using Hardhat
-  <a href="#hardhat-network">network</a> [options]  Start a development network using Hardhat
-  <a href="#hardhat-script">script</a>             Run a script using Hardhat
-  <a href="#hardhat-test">test</a> [options]     Test the smart contracts using Hardhat
-  help [command]     display help for command
+  <a href="#hardhat-build">build</a> [options] [operands...]    Build the smart contracts using Hardhat
+  <a href="#hardhat-deploy">deploy</a>                           Deploy the smart contracts using Hardhat
+  <a href="#hardhat-network">network</a> [options] [operands...]  Start a development network using Hardhat
+  <a href="#hardhat-script">script</a>                           Run a script using Hardhat
+  <a href="#hardhat-test">test</a> [options] [operands...]     Test the smart contracts using Hardhat
+  help [command]                   display help for command
 </pre>
 
 <h2 id="hardhat-build"><a href="#home">Hardhat</a> > Build</h2>

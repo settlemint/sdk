@@ -183,20 +183,11 @@ try {
 
 #### ClientOptions
 
-> **ClientOptions** = `object`
+> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
 Defined in: [sdk/hasura/src/hasura.ts:26](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/hasura/src/hasura.ts#L26)
 
 Type definition for client options derived from the ClientOptionsSchema.
-
-##### Type declaration
-
-| Name | Type | Default value | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken` | `string` | `ApplicationAccessTokenSchema` | [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/hasura/src/hasura.ts#L18) |
-| <a id="adminsecret"></a> `adminSecret` | `string` | - | [sdk/hasura/src/hasura.ts:19](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/hasura/src/hasura.ts#L19) |
-| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/hasura/src/hasura.ts:20](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/hasura/src/hasura.ts#L20) |
-| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/hasura/src/hasura.ts:17](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/hasura/src/hasura.ts#L17) |
 
 ***
 
@@ -212,7 +203,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `adminSecret`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\{ `default`: `"default"`; `force-cache`: `"force-cache"`; `no-cache`: `"no-cache"`; `no-store`: `"no-store"`; `only-if-cached`: `"only-if-cached"`; `reload`: `"reload"`; \}\>\>; `instance`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
 
 Defined in: [sdk/hasura/src/hasura.ts:16](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/hasura/src/hasura.ts#L16)
 

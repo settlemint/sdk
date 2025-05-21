@@ -5,14 +5,15 @@
 Foundry commands for building and testing smart contracts
 
 Options:
-  -h, --help         display help for command
+  -h, --help                       display help for command
 
 Commands:
-  <a href="#foundry-build">build</a> [options]    Build the smart contracts using Foundry/forge
-  <a href="#foundry-format">format</a> [options]   Format the smart contracts using Foundry/forge
-  <a href="#foundry-network">network</a> [options]  Start a development network Foundry/anvil
-  <a href="#foundry-test">test</a> [options]     Test the smart contracts using Foundry/forge
-  help [command]     display help for command
+  <a href="#foundry-build">build</a> [options] [operands...]    Build the smart contracts using Foundry/forge
+  <a href="#foundry-format">format</a> [options] [operands...]   Format the smart contracts using
+                                   Foundry/forge
+  <a href="#foundry-network">network</a> [options] [operands...]  Start a development network Foundry/anvil
+  <a href="#foundry-test">test</a> [options] [operands...]     Test the smart contracts using Foundry/forge
+  help [command]                   display help for command
 </pre>
 
 <h2 id="foundry-build"><a href="#home">Foundry</a> > Build</h2>

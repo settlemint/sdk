@@ -608,19 +608,11 @@ Options for the GraphQL WebSocket client
 
 #### ClientOptions
 
-> **ClientOptions** = `object`
+> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
 Defined in: [sdk/portal/src/portal.ts:24](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/portal/src/portal.ts#L24)
 
 Type representing the validated client options.
-
-##### Type declaration
-
-| Name | Type | Default value | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken` | `string` | `ApplicationAccessTokenSchema` | [sdk/portal/src/portal.ts:17](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/portal/src/portal.ts#L17) |
-| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/portal/src/portal.ts:18](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/portal/src/portal.ts#L18) |
-| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/portal/src/portal.ts#L16) |
 
 ***
 
@@ -636,7 +628,7 @@ Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\{ `default`: `"default"`; `force-cache`: `"force-cache"`; `no-cache`: `"no-cache"`; `no-store`: `"no-store"`; `only-if-cached`: `"only-if-cached"`; `reload`: `"reload"`; \}\>\>; `instance`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
 
 Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/portal/src/portal.ts#L15)
 

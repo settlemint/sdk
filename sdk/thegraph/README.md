@@ -135,20 +135,11 @@ const result = await client.request(query);
 
 #### ClientOptions
 
-> **ClientOptions** = `object`
+> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
 Defined in: [sdk/thegraph/src/thegraph.ts:25](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/thegraph/src/thegraph.ts#L25)
 
 Type definition for client options derived from the ClientOptionsSchema
-
-##### Type declaration
-
-| Name | Type | Default value | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken` | `string` | `ApplicationAccessTokenSchema` | [sdk/thegraph/src/thegraph.ts:17](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/thegraph/src/thegraph.ts#L17) |
-| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/thegraph/src/thegraph.ts:19](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/thegraph/src/thegraph.ts#L19) |
-| <a id="instances"></a> `instances` | `string`[] | - | [sdk/thegraph/src/thegraph.ts:16](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/thegraph/src/thegraph.ts#L16) |
-| <a id="subgraphname"></a> `subgraphName` | `string` | - | [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/thegraph/src/thegraph.ts#L18) |
 
 ***
 
@@ -164,7 +155,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\{ `default`: `"default"`; `force-cache`: `"force-cache"`; `no-cache`: `"no-cache"`; `no-store`: `"no-store"`; `only-if-cached`: `"only-if-cached"`; `reload`: `"reload"`; \}\>\>; `instances`: `ZodArray`\<`ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>\>; `subgraphName`: `ZodString`; \}, `$strip`\>
 
 Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v2.3.1/sdk/thegraph/src/thegraph.ts#L15)
 

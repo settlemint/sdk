@@ -5,13 +5,13 @@
 List resources in the SettleMint platform
 
 Options:
-  -h, --help                display help for command
+  -h, --help                              display help for command
 
 Commands:
-  <a href="#list-applications">applications|a</a> [options]  List applications
-  <a href="#list-services">services|s</a> [options]      List the application services
-  <a href="#list-workspaces">workspaces|w</a> [options]    List workspaces
-  help [command]            display help for command
+  <a href="#list-applications">applications|a</a> [options]                List applications
+  <a href="#list-services">services|s</a> [options] [typeOperands...]  List the application services
+  <a href="#list-workspaces">workspaces|w</a> [options]                  List workspaces
+  help [command]                          display help for command
 </pre>
 
 <h2 id="list-applications"><a href="#home">List</a> > Applications</h2>
