@@ -8,7 +8,7 @@ import type { FormattedExecutionResult } from "graphql";
 export type AlertHandlers = {
   onAddressActivity: (transaction: Transaction, addresses: string[]) => void;
   onEvent: (transaction: Transaction, eventNames: string[]) => void;
-  onFailure: (transaction: Transaction, reason: string) => void;
+  onFailure: (transaction: Transaction) => void;
 };
 
 /**
@@ -118,7 +118,7 @@ function processTransaction(transaction: Transaction, handlers: AlertHandlers) {
   handlers.onEvent(transaction, ["Transfer", "Approval"]);
 
   // Monitor for failed transactions
-  handlers.onFailure(transaction, "Unknown reason");
+  handlers.onFailure(transaction);
 }
 
 /**
@@ -186,7 +186,7 @@ const notify = (message: string) => {
 };
 
 /**
- * Example usage - monitoring specific blockchain activity
+ * Example usage - monitoring specific on-chain activity
  */
 export function runMonitoringExample() {
   // Basic usage
