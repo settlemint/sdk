@@ -1,5 +1,5 @@
-import { type Transaction, type WebsocketClientOptions, getWebsocketClient } from "@settlemint/sdk-portal";
 import type { FormattedExecutionResult } from "graphql";
+import { type Transaction, type WebsocketClientOptions, getWebsocketClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
 
 /**
  * Handlers for different monitoring scenarios
@@ -175,7 +175,7 @@ export function monitorContractEvents(transaction: Transaction, eventNames: stri
 export function monitorFailedTransactions(transaction: Transaction) {
   const status = transaction.receipt?.status;
 
-  if (status === "Reverted") {
+  if (status === "reverted") {
     const reason = transaction.receipt.revertReasonDecoded;
     notify(`[FAILED] Transaction ${transaction.transactionHash} failed: ${reason}`);
   }
