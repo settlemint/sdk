@@ -95,9 +95,9 @@ export {
 } from "./utils/wallet-verification-challenge.js";
 export {
   waitForTransactionReceipt,
-  type Transaction,
   type WaitForTransactionReceiptOptions,
 } from "./utils/wait-for-transaction-receipt.js";
 export { getWebsocketClient, type WebsocketClientOptions } from "./utils/websocket-client.js";
 export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+export * from "./utils/transaction.types.js";
