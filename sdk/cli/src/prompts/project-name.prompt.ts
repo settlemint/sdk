@@ -1,6 +1,6 @@
 import input from "@inquirer/input";
 import { type DotEnv, validate } from "@settlemint/sdk-utils/validation";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Prompts the user for the name of their new SettleMint project.

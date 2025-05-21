@@ -3,7 +3,7 @@ import { generateFieldSDL } from "@/utils/sdl";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import type { GraphQLField } from "graphql";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 export const hasuraQuery = (server: McpServer, env: Partial<DotEnv>) => {
   const hasuraEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;

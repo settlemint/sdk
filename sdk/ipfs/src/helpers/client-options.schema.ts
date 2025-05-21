@@ -1,5 +1,5 @@
 import { ApplicationAccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Schema for validating client options for the Portal client.

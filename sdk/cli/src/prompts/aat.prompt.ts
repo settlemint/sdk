@@ -4,7 +4,7 @@ import password from "@inquirer/password";
 import type { Application, SettlemintClient } from "@settlemint/sdk-js";
 import { ApplicationAccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
-import { z } from "zod";
+import { z } from "zod/v4";
 
 /**
  * Prompts the user for the access token of their SettleMint application.

@@ -58,7 +58,7 @@
     "graphql-ws": "^6",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
-    "zod": "^3"
+    "zod": "^3.25.0"
   },
   "peerDependencies": {},
   "engines": {

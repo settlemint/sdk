@@ -1,5 +1,5 @@
 import { tryParseJson } from "@/json.js";
-import { z } from "zod";
+import { z } from "zod/v4";
 import { ApplicationAccessTokenSchema, PersonalAccessTokenSchema } from "./access-token.schema.js";
 import { UniqueNameSchema } from "./unique-name.schema.js";
 import { UrlSchema } from "./url.schema.js";
