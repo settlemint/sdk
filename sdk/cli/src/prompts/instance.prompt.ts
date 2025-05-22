@@ -2,7 +2,7 @@ import { getInstances } from "@/utils/config";
 import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
-import { cancel } from "@settlemint/sdk-utils/terminal";
+import { note } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, STANDALONE_INSTANCE, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
@@ -59,11 +59,9 @@ export async function instancePrompt(
   }
 
   if (knownInstances.length === 0) {
-    cancel("No instances found. Please run `settlemint login` to configure an instance.");
+    note("No instances found. Run `settlemint login` to configure an instance.", "warn");
   }
-  if (knownInstances.length === 1) {
-    return sanitizeInstanceUrl(knownInstances[0]);
-  }
+
   return select({
     message: "What instance do you want to connect to?",
     choices: [
