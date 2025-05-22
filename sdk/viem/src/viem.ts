@@ -50,7 +50,7 @@ export interface ClientOptions {
  * import { getPublicClient } from '@settlemint/sdk-viem';
  *
  * const publicClient = getPublicClient({
- *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
  *   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
  *   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
  *   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
@@ -102,7 +102,7 @@ export interface WalletVerificationOptions {
  * import { parseAbi } from "viem";
  *
  * const walletClient = getWalletClient({
- *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
  *   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
  *   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
  *   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,

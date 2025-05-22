@@ -1,6 +1,7 @@
 import { getVariableName } from "@/commands/codegen/utils/get-variable-name";
 import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
@@ -31,7 +32,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
   ];
 
   const toGenerate = gqlEndpoints.filter((gqlEndpoint) => {
-    const name = gqlEndpoint.split("/").pop();
+    const name = getSubgraphName(gqlEndpoint);
     if (!name) {
       return false;
     }
@@ -47,7 +48,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
   template.push("", "const logger = createLogger({ level: process.env.SETTLEMINT_LOG_LEVEL as LogLevel });");
 
   for (const gqlEndpoint of toGenerate) {
-    const name = gqlEndpoint.split("/").pop()!;
+    const name = getSubgraphName(gqlEndpoint)!;
     const introspectionVariable = getVariableName(`${name}Introspection`);
     note(`Generating TheGraph subgraph ${name}`);
     await generateSchema({
@@ -77,7 +78,7 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
   };
   }>({
   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   subgraphName: "${name}",
   cache: "force-cache",
 }, {
@@ -89,7 +90,7 @@ export const { client: ${graphqlClientVariable}, graphql: ${graphqlVariable} } =
 
   if (env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH) {
     const isDefaulSubgraphGenerated = toGenerate.some((gqlEndpoint) => {
-      const name = gqlEndpoint.split("/").pop()!;
+      const name = getSubgraphName(gqlEndpoint);
       return name === env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH;
     });
     if (isDefaulSubgraphGenerated) {

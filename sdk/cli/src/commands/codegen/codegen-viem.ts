@@ -43,6 +43,7 @@ export async function codegenViem(env: DotEnv) {
  * The public client. Use this if you need to read from the blockchain.
  */
 export const publicClient = getPublicClient({
+  accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN,
   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
@@ -55,6 +56,7 @@ export const publicClient = getPublicClient({
  * The wallet client. Use this if you need to write to the blockchain.
  */
 export const walletClient = getWalletClient({
+  accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN,
   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,
@@ -65,6 +67,7 @@ export const walletClient = getWalletClient({
  * HD wallets require a challenge response to be sent with the request.
  */
 export const hdWalletClient = getWalletClient({
+  accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN,
   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,

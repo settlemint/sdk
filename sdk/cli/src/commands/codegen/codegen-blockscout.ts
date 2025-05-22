@@ -185,7 +185,7 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
   };
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
 }, {
   fetch: requestLogger(logger, "blockscout", fetch) as typeof fetch,
 });
