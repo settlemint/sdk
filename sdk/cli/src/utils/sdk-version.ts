@@ -3,6 +3,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
+import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import * as semver from "semver";
 import pkg from "../../package.json";
 import { readConfig, setLastSdkVersionCheck } from "./config";
@@ -30,7 +31,7 @@ export async function validateSdkVersionFromCommand(
 
   await setLastSdkVersionCheck(new Date(now).toJSON());
   const instance = await getInstanceFromCommand(command);
-  if (instance !== "STANDALONE") {
+  if (instance !== STANDALONE_INSTANCE) {
     await validateSdkVersion(instance);
   }
 }
