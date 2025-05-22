@@ -124,7 +124,7 @@
         "@commander-js/extra-typings": "14.0.0",
         "@graphql-tools/load": "8.1.0",
         "@graphql-tools/url-loader": "8.0.31",
-        "@modelcontextprotocol/sdk": "1.11.4",
+        "@modelcontextprotocol/sdk": "1.11.5",
         "@settlemint/sdk-js": "workspace:*",
         "@settlemint/sdk-utils": "workspace:*",
         "commander": "14.0.0",
@@ -219,11 +219,11 @@
     "lefthook",
   ],
   "overrides": {
-    "elliptic": "6.6.1",
-    "ws": "8.18.2",
     "adm-zip": "0.5.16",
+    "elliptic": "6.6.1",
     "react-is": "19.1.0",
     "undici": "7.10.0",
+    "ws": "8.18.2",
   },
   "packages": {
     "@0no-co/graphql.web": ["@0no-co/graphql.web@1.1.2", "", { "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0" }, "optionalPeers": ["graphql"] }, "sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw=="],
@@ -524,7 +524,7 @@
 
     "@metamask/utils": ["@metamask/utils@9.3.0", "", { "dependencies": { "@ethereumjs/tx": "^4.2.0", "@metamask/superstruct": "^3.1.0", "@noble/hashes": "^1.3.1", "@scure/base": "^1.1.3", "@types/debug": "^4.1.7", "debug": "^4.3.4", "pony-cause": "^2.1.10", "semver": "^7.5.4", "uuid": "^9.0.1" } }, "sha512-w8CVbdkDrVXFJbfBSlDfafDR6BAkpDmv1bC1UJVCoVny5tW2RKAdn9i68Xf7asYT4TnUhl/hN4zfUiKQq9II4g=="],
 
-    "@modelcontextprotocol/sdk": ["@modelcontextprotocol/sdk@1.11.4", "", { "dependencies": { "ajv": "^8.17.1", "content-type": "^1.0.5", "cors": "^2.8.5", "cross-spawn": "^7.0.5", "eventsource": "^3.0.2", "express": "^5.0.1", "express-rate-limit": "^7.5.0", "pkce-challenge": "^5.0.0", "raw-body": "^3.0.0", "zod": "^3.23.8", "zod-to-json-schema": "^3.24.1" } }, "sha512-OTbhe5slIjiOtLxXhKalkKGhIQrwvhgCDs/C2r8kcBTy5HR/g43aDQU0l7r8O0VGbJPTNJvDc7ZdQMdQDJXmbw=="],
+    "@modelcontextprotocol/sdk": ["@modelcontextprotocol/sdk@1.11.5", "", { "dependencies": { "ajv": "^8.17.1", "content-type": "^1.0.5", "cors": "^2.8.5", "cross-spawn": "^7.0.5", "eventsource": "^3.0.2", "express": "^5.0.1", "express-rate-limit": "^7.5.0", "pkce-challenge": "^5.0.0", "raw-body": "^3.0.0", "zod": "^3.23.8", "zod-to-json-schema": "^3.24.1" } }, "sha512-gS7Q7IHpKxjVaNLMUZyTtatZ63ca3h418zPPntAhu/MvG5yfz/8HMcDAOpvpQfx3V3dsw9QQxk8RuFNrQhLlgA=="],
 
     "@multiformats/dns": ["@multiformats/dns@1.0.6", "", { "dependencies": { "@types/dns-packet": "^5.6.5", "buffer": "^6.0.3", "dns-packet": "^5.6.1", "hashlru": "^2.3.0", "p-queue": "^8.0.1", "progress-events": "^1.0.0", "uint8arrays": "^5.0.2" } }, "sha512-nt/5UqjMPtyvkG9BQYdJ4GfLK3nMqGpFZOzf4hAmIa0sJh2LlS9YKXZ4FgwBDsaHvzZqR/rUFIywIc7pkHNNuw=="],
 
