@@ -181,7 +181,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test.skip("subgraph - Update contract addresses", async () => {
+  test("subgraph - Update contract addresses", async () => {
     const config = await getSubgraphYamlConfig(subgraphDir);
     const updatedConfig: typeof config = {
       ...config,
@@ -200,14 +200,14 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     await updateSubgraphYamlConfig(updatedConfig, subgraphDir);
   });
 
-  test.skip("subgraph - Build subgraph", async () => {
+  test("subgraph - Build subgraph", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "build"], {
       cwd: subgraphDir,
     }).result;
     expect(output).toInclude("Build completed");
   });
 
-  test.skip("subgraph - Codegen subgraph", async () => {
+  test("subgraph - Codegen subgraph", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "codegen"], {
       cwd: subgraphDir,
     }).result;
@@ -244,7 +244,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     }
   });
 
-  test.skip("dApp - Codegen", async () => {
+  test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["codegen", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
@@ -262,7 +262,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test.skip("Build app", async () => {
+  test("Build app", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
       await $`bun lint`.cwd(projectDir).env(env);
