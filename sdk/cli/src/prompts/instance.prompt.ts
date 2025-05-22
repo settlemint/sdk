@@ -70,7 +70,7 @@ export async function instancePrompt(
         value: sanitizeInstanceUrl(instance),
       })),
       {
-        name: "Standalone (resources not part of the SettleMint platform)",
+        name: "Standalone (services run independently of SettleMint platform)",
         value: STANDALONE_INSTANCE,
       },
     ],
