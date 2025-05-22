@@ -178,12 +178,18 @@ export const GetChainIdOptionsSchema = z.object({
    * The json rpc url
    */
   rpcUrl: UrlOrPathSchema,
+  /**
+   * The http transport config
+   */
+  httpTransportConfig: z.any().optional(),
 });
 
 /**
  * Type representing the validated get chain id options.
  */
-export type GetChainIdOptions = z.infer<typeof GetChainIdOptionsSchema>;
+export type GetChainIdOptions = Omit<z.infer<typeof GetChainIdOptionsSchema>, "httpTransportConfig"> & {
+  httpTransportConfig?: HttpTransportConfig;
+};
 
 /**
  * Get the chain id of a blockchain network.
@@ -202,15 +208,15 @@ export type GetChainIdOptions = z.infer<typeof GetChainIdOptionsSchema>;
  */
 export async function getChainId(options: GetChainIdOptions): Promise<number> {
   ensureServer();
-  const validatedOptions = validate(GetChainIdOptionsSchema, options);
+  const validatedOptions: GetChainIdOptions = validate(GetChainIdOptionsSchema, options);
   const client = createPublicClient({
     transport: http(validatedOptions.rpcUrl, {
+      ...validatedOptions.httpTransportConfig,
       fetchOptions: {
-        headers: validatedOptions.accessToken
-          ? {
-              "x-auth-token": validatedOptions.accessToken,
-            }
-          : undefined,
+        ...validatedOptions?.httpTransportConfig?.fetchOptions,
+        headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+          "x-auth-token": validatedOptions.accessToken,
+        }),
       },
     }),
   });
