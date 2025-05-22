@@ -30,7 +30,9 @@ export async function validateSdkVersionFromCommand(
 
   await setLastSdkVersionCheck(new Date(now).toJSON());
   const instance = await getInstanceFromCommand(command);
-  await validateSdkVersion(instance);
+  if (instance !== "STANDALONE") {
+    await validateSdkVersion(instance);
+  }
 }
 
 /**

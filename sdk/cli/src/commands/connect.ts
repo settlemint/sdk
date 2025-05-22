@@ -40,6 +40,7 @@ import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { maskTokens } from "@settlemint/sdk-utils/logging";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
@@ -417,6 +418,7 @@ async function connectToStandalone(
       {
         label: string;
         result: string | undefined;
+        isSecret: boolean;
       }
     >
   > = {};
@@ -437,11 +439,28 @@ async function connectToStandalone(
     selectedServices[id] = {
       label: prompt.label,
       result,
+      isSecret,
     };
   }
 
   if (acceptDefaults) {
-    table("Selected services", Object.values(selectedServices).filter(Boolean));
+    table(
+      "Selected services",
+      Object.values(selectedServices)
+        .map((item) => {
+          if (item.isSecret) {
+            return {
+              ...item,
+              result: "********",
+            };
+          }
+          return {
+            ...item,
+            result: item.result ? maskTokens(item.result) : undefined,
+          };
+        })
+        .filter(Boolean),
+    );
   }
 
   await writeEnvSpinner(!!prod, {

@@ -16,7 +16,7 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  *   "development"
  * );
  */
-export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Promise<void> {
+export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>, cwd?: string): Promise<void> {
   return spinner({
     startMessage: "Saving .env and .env.local files",
     stopMessage: "Written .env and .env.local file",
@@ -31,6 +31,7 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Prom
         prod,
         env: updatedSecrets,
         secrets: true,
+        cwd,
       });
 
       const updatedEnv: Omit<
@@ -78,6 +79,7 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Prom
         prod,
         env: updatedEnv as Partial<DotEnv>,
         secrets: false,
+        cwd,
       });
     },
   });

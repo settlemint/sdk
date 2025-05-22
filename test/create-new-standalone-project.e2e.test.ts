@@ -1,5 +1,5 @@
 import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
+import { copyFile, readFile, rmdir, stat, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
@@ -67,6 +67,37 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     if (await exists(join(__dirname, "../.env.local"))) {
       await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
     }
+    const env = await loadEnv(false, false, projectDir);
+    const envWithAccessTokenInUrl = Object.entries(env).reduce(
+      (acc, [key, value]) => {
+        try {
+          if (typeof value === "string" && key !== "SETTLEMINT_INSTANCE") {
+            const url = new URL(value);
+            url.pathname = `/${encodeURIComponent(env.SETTLEMINT_ACCESS_TOKEN!)}/${url.pathname.slice(1)}`;
+            acc[key] = url.toString();
+          }
+          if (Array.isArray(value)) {
+            acc[key] = value.map((v) => {
+              if (typeof v === "string") {
+                const url = new URL(v);
+                url.pathname = `/${encodeURIComponent(env.SETTLEMINT_ACCESS_TOKEN!)}/${url.pathname.slice(1)}`;
+                return url.toString();
+              }
+              return v;
+            });
+          }
+        } catch {}
+        return acc;
+      },
+      env as Record<string, unknown>,
+    );
+    await writeFile(
+      join(projectDir, ".env"),
+      Object.entries(envWithAccessTokenInUrl)
+        .map(([key, value]) => `${key}=${typeof value === "string" ? value : JSON.stringify(value)}`)
+        .join("\n"),
+    );
+    await unlink(join(projectDir, ".env.local"));
   });
 
   test("Install dependencies and link SDK to use local one", async () => {
@@ -135,12 +166,12 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 
-  test.skip("contracts - Install dependencies", async () => {
+  test("contracts - Install dependencies", async () => {
     const result = await $`bun run dependencies`.cwd(contractsDir);
     expect(result.exitCode).toBe(0);
   });
 
-  test.skip("contracts - Build and Deploy smart contracts", async () => {
+  test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "asset-tokenization-kit";
     let retries = 0;
     // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
