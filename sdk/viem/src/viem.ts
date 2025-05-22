@@ -1,7 +1,9 @@
+import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import {
   http,
+  type HttpTransportConfig,
   type Chain as ViemChain,
   createPublicClient,
   createWalletClient,
@@ -46,7 +48,9 @@ export const ClientOptionsSchema = z.object({
 /**
  * Type representing the validated client options.
  */
-export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
+export type ClientOptions = Omit<z.infer<typeof ClientOptionsSchema>, "httpTransportConfig"> & {
+  httpTransportConfig?: HttpTransportConfig;
+};
 
 /**
  * Get a public client. Use this if you need to read from the blockchain.
@@ -70,7 +74,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  */
 export const getPublicClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions = validate(ClientOptionsSchema, options);
+  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
   return createPublicClient({
     chain: getChain(validatedOptions),
     transport: http(validatedOptions.rpcUrl, {
@@ -79,10 +83,9 @@ export const getPublicClient = (options: ClientOptions) => {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {
         ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers: {
-          ...validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
+        headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
           "x-auth-token": validatedOptions.accessToken,
-        },
+        }),
       },
     }),
   });
@@ -135,7 +138,7 @@ export interface WalletVerificationOptions {
  */
 export const getWalletClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions = validate(ClientOptionsSchema, options);
+  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
   const chain = getChain(validatedOptions);
   return (verificationOptions?: WalletVerificationOptions) =>
     createWalletClient({
@@ -146,12 +149,11 @@ export const getWalletClient = (options: ClientOptions) => {
         ...validatedOptions.httpTransportConfig,
         fetchOptions: {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
-          headers: {
-            ...validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
+          headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
             "x-auth-token": validatedOptions.accessToken,
             "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
             "x-auth-verification-id": verificationOptions?.verificationId ?? "",
-          },
+          }),
         },
       }),
     })
