@@ -1,14 +1,12 @@
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 export async function setupSettleMintClient() {
   const env: Partial<DotEnv> = await loadEnv(false, false);
   return createSettleMintClient({
     accessToken: process.env.SETTLEMINT_ACCESS_TOKEN_E2E_TESTS!,
-    // For the standalone tests, we need to use the process.env.SETTLEMINT_INSTANCE (which is set by the CI)
-    instance:
-      env.SETTLEMINT_INSTANCE === STANDALONE_INSTANCE ? process.env.SETTLEMINT_INSTANCE! : env.SETTLEMINT_INSTANCE!,
+    instance: env.SETTLEMINT_INSTANCE!,
   });
 }
 

@@ -174,6 +174,7 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
       join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );
     contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).toInclude("Connected to blockchain node");
     expect(deployOutput).toInclude("successfully deployed 🚀");
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });

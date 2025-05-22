@@ -176,6 +176,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
       join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );
     contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).not.toInclude("Connected to blockchain node");
     expect(deployOutput).toInclude("successfully deployed 🚀");
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
