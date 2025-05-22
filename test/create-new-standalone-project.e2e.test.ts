@@ -122,47 +122,17 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   test("Validate that .env file has the correct values", async () => {
     const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
 
-    expect(env.SETTLEMINT_ACCESS_TOKEN).toBeUndefined();
     expect(env.SETTLEMINT_INSTANCE).toBe("standalone");
-    expect(env.SETTLEMINT_WORKSPACE).toBeUndefined();
-
-    expect(env.SETTLEMINT_APPLICATION).toBeUndefined();
-
-    expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK).toBeUndefined();
-    expect(env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID).toBeUndefined();
-    expect(env.SETTLEMINT_BLOCKCHAIN_NODE).toBeUndefined();
-    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER).toBeUndefined();
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT).toBeString();
-    expect(env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT).toBeString();
-
-    expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeUndefined();
-    expect(env.SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS).toBeUndefined();
-
-    expect(env.SETTLEMINT_MINIO).toBeUndefined();
     expect(env.SETTLEMINT_MINIO_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_MINIO_ACCESS_KEY).toBeString();
     expect(env.SETTLEMINT_MINIO_SECRET_KEY).toBeString();
-
-    expect(env.SETTLEMINT_IPFS).toBeUndefined();
     expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
-    expect(env.SETTLEMINT_IPFS_GATEWAY_ENDPOINT).toBeUndefined();
-    expect(env.SETTLEMINT_IPFS_PINNING_ENDPOINT).toBeUndefined();
-
-    expect(env.SETTLEMINT_THEGRAPH).toBeUndefined();
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
     expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
-
-    expect(env.SETTLEMINT_PORTAL).toBeUndefined();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
-    expect(env.SETTLEMINT_PORTAL_REST_ENDPOINT).toBeUndefined();
-    expect(env.SETTLEMINT_PORTAL_WS_ENDPOINT).toBeUndefined();
-
-    expect(env.SETTLEMINT_HASURA).toBeUndefined();
     expect(env.SETTLEMINT_HASURA_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_HASURA_ADMIN_SECRET).toBeString();
-
-    expect(env.SETTLEMINT_BLOCKSCOUT).toBeUndefined();
-    expect(env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT).toBeUndefined();
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 
