@@ -19,7 +19,7 @@ import { findPrivateKeyByName } from "./utils/test-resources";
 
 const PROJECT_NAME = "kit-demo";
 const TEMPLATE_NAME = "asset-tokenization";
-const TEMPLATE_VERSION = "1.0.3";
+const TEMPLATE_VERSION = "1.1.1";
 const SUBGRAPH_NAMES = ["kit", "starterkits"];
 
 const COMMAND_TEST_SCOPE = __filename;
