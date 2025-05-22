@@ -3,20 +3,26 @@ import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { getChainId } from "@settlemint/sdk-viem";
 
 const PACKAGE_NAME = "@settlemint/sdk-viem";
 
 export async function codegenViem(env: DotEnv) {
-  const chainId = env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID;
-  if (!chainId) {
-    note("[Codegen] No chain ID found, skipping Viem resources generation", "warn");
-    return;
-  }
-
   const loadBalancerRpcEndpoint = env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT;
   const blockchainNodeRpcEndpoint = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT;
   if (!loadBalancerRpcEndpoint && !blockchainNodeRpcEndpoint) {
     note("[Codegen] No RPC endpoints found, skipping Viem resources generation", "warn");
+    return;
+  }
+
+  const chainId =
+    env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ??
+    (await getChainId({
+      accessToken: env.SETTLEMINT_ACCESS_TOKEN,
+      rpcUrl: env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
+    }));
+  if (!chainId) {
+    note("[Codegen] No chain ID found, skipping Viem resources generation", "warn");
     return;
   }
 
@@ -44,7 +50,7 @@ export async function codegenViem(env: DotEnv) {
  */
 export const publicClient = getPublicClient({
   accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN,
-  chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
+  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!" : `"${chainId}"`},
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
 });`);
@@ -57,7 +63,7 @@ export const publicClient = getPublicClient({
  */
 export const walletClient = getWalletClient({
   accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN,
-  chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
+  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!" : `"${chainId}"`},
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,
 })();
@@ -68,7 +74,7 @@ export const walletClient = getWalletClient({
  */
 export const hdWalletClient = getWalletClient({
   accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN,
-  chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
+  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!" : `"${chainId}"`},
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,
 });`);

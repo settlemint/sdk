@@ -5,13 +5,18 @@ import { UniqueNameSchema } from "./unique-name.schema.js";
 import { UrlSchema } from "./url.schema.js";
 
 /**
+ * Use this value to indicate that the resources are not part of the SettleMint platform.
+ */
+export const STANDALONE_INSTANCE = "standalone";
+
+/**
  * Schema for validating environment variables used by the SettleMint SDK.
  * Defines validation rules and types for configuration values like URLs,
  * access tokens, workspace names, and service endpoints.
  */
 export const DotEnvSchema = z.object({
-  /** Base URL of the SettleMint platform instance */
-  SETTLEMINT_INSTANCE: UrlSchema.default("https://console.settlemint.com"),
+  /** Base URL of the SettleMint platform instance, set to standalone if your resources are not part of the SettleMint platform */
+  SETTLEMINT_INSTANCE: z.union([UrlSchema, z.literal(STANDALONE_INSTANCE)]).default("https://console.settlemint.com"),
   /** Application access token for authenticating with SettleMint services */
   SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema.optional(),
   /** @internal */

@@ -3,7 +3,7 @@ import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
 import { cancel } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, STANDALONE_INSTANCE, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 /**
@@ -24,7 +24,6 @@ export async function instancePrompt(
   freeTextInput = false,
   isCi = isInCi,
 ): Promise<string> {
-  const knownInstances = await getInstances();
   const autoAccept = !!accept || isCi;
   const defaultInstance = env.SETTLEMINT_INSTANCE;
   const defaultPossible = autoAccept && defaultInstance;
@@ -33,6 +32,7 @@ export async function instancePrompt(
     return sanitizeInstanceUrl(defaultInstance);
   }
 
+  const knownInstances = await getInstances();
   const defaultPromptInstance =
     defaultInstance ?? (knownInstances.length > 0 ? knownInstances[0] : "https://console.settlemint.com");
 
@@ -65,12 +65,16 @@ export async function instancePrompt(
     return sanitizeInstanceUrl(knownInstances[0]);
   }
   return select({
-    message: "What SettleMint instance do you want to connect to?",
+    message: "What instance do you want to connect to?",
     choices: [
       ...knownInstances.map((instance) => ({
         name: instance,
         value: sanitizeInstanceUrl(instance),
       })),
+      {
+        name: "Standalone (resources not part of the SettleMint platform)",
+        value: STANDALONE_INSTANCE,
+      },
     ],
     default: sanitizeInstanceUrl(defaultPromptInstance),
   });

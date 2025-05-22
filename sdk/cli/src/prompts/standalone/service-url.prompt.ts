@@ -1,0 +1,63 @@
+import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
+import input from "@inquirer/input";
+import { UrlSchema, validate } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
+/**
+ * Prompts the user for a service URL in standalone mode.
+ *
+ * @param options - Configuration options for the prompt
+ * @param options.defaultUrl - The default URL to use if available
+ * @param options.message - Custom prompt message to display
+ * @param options.accept - Whether to automatically accept the default value
+ * @param options.isCi - Whether the code is running in a CI environment
+ * @returns A promise that resolves to the user-input or default service URL
+ *
+ * @example
+ * import { serviceUrlPrompt } from "@/prompts/standalone/service-url.prompt";
+ *
+ * const serviceUrl = await serviceUrlPrompt({
+ *   defaultUrl: "https://example.com/api",
+ *   message: "Enter API URL:"
+ * });
+ * console.log(serviceUrl); // Output: https://example.com/api or user input
+ */
+export async function serviceUrlPrompt({
+  defaultUrl,
+  example = "https://example.com/api",
+  message = "Enter service URL:",
+  accept = false,
+  isCi = isInCi,
+}: {
+  defaultUrl?: string;
+  example?: string;
+  message?: string;
+  accept?: boolean;
+  isCi?: boolean;
+}): Promise<string> {
+  const autoAccept = !!accept || isCi;
+
+  if (autoAccept && defaultUrl) {
+    return sanitizeInstanceUrl(defaultUrl);
+  }
+
+  if (isCi) {
+    return sanitizeInstanceUrl(defaultUrl || "");
+  }
+
+  const serviceUrl = await input({
+    message: example ? `${message} (eg ${example})` : message,
+    default: defaultUrl,
+    required: true,
+    validate(value) {
+      try {
+        validate(UrlSchema, value);
+        return true;
+      } catch (error) {
+        return "Invalid URL";
+      }
+    },
+    transformer: (value) => value.trim(),
+  });
+
+  return sanitizeInstanceUrl(serviceUrl);
+}

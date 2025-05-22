@@ -1,6 +1,7 @@
+import { ensureServer } from "@settlemint/sdk-utils/runtime";
+import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import {
   http,
-  type HttpTransportConfig,
   type Chain as ViemChain,
   createPublicClient,
   createWalletClient,
@@ -8,6 +9,7 @@ import {
   publicActions,
 } from "viem";
 import * as chains from "viem/chains";
+import { z } from "zod/v4";
 import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
 import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
 import { createWallet } from "./custom-actions/create-wallet.action.js";
@@ -16,30 +18,39 @@ import { getWalletVerifications } from "./custom-actions/get-wallet-verification
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
 
 /**
- * The options for the viem client.
+ * Schema for the viem client options.
  */
-export interface ClientOptions {
+export const ClientOptionsSchema = z.object({
+  /**
+   * The instance URL
+   */
+  instance: UrlOrPathSchema,
   /**
    * The access token
    */
-  accessToken: string;
+  accessToken: ApplicationAccessTokenSchema.optional(),
   /**
    * The chain id
    */
-  chainId: string;
+  chainId: z.string().optional(),
   /**
    * The chain name
    */
-  chainName: string;
+  chainName: z.string(),
   /**
    * The json rpc url
    */
-  rpcUrl: string;
+  rpcUrl: UrlOrPathSchema,
   /**
    * The http transport config
    */
-  httpTransportConfig?: HttpTransportConfig;
-}
+  httpTransportConfig: z.any().optional(),
+});
+
+/**
+ * Type representing the validated client options.
+ */
+export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
  * Get a public client. Use this if you need to read from the blockchain.
@@ -61,22 +72,25 @@ export interface ClientOptions {
  * console.log(block);
  * ```
  */
-export const getPublicClient = (options: ClientOptions) =>
-  createPublicClient({
-    chain: getChain(options),
-    transport: http(options.rpcUrl, {
+export const getPublicClient = (options: ClientOptions) => {
+  ensureServer();
+  const validatedOptions = validate(ClientOptionsSchema, options);
+  return createPublicClient({
+    chain: getChain(validatedOptions),
+    transport: http(validatedOptions.rpcUrl, {
       batch: true,
       timeout: 60_000,
-      ...options.httpTransportConfig,
+      ...validatedOptions.httpTransportConfig,
       fetchOptions: {
-        ...options?.httpTransportConfig?.fetchOptions,
+        ...validatedOptions?.httpTransportConfig?.fetchOptions,
         headers: {
-          ...options?.httpTransportConfig?.fetchOptions?.headers,
-          "x-auth-token": options.accessToken,
+          ...validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
+          "x-auth-token": validatedOptions.accessToken,
         },
       },
     }),
   });
+};
 
 /**
  * The options for the wallet client.
@@ -124,19 +138,21 @@ export interface WalletVerificationOptions {
  * ```
  */
 export const getWalletClient = (options: ClientOptions) => {
-  const chain = getChain(options);
+  ensureServer();
+  const validatedOptions = validate(ClientOptionsSchema, options);
+  const chain = getChain(validatedOptions);
   return (verificationOptions?: WalletVerificationOptions) =>
     createWalletClient({
       chain: chain,
-      transport: http(options.rpcUrl, {
+      transport: http(validatedOptions.rpcUrl, {
         batch: true,
         timeout: 60_000,
-        ...options.httpTransportConfig,
+        ...validatedOptions.httpTransportConfig,
         fetchOptions: {
-          ...options?.httpTransportConfig?.fetchOptions,
+          ...validatedOptions?.httpTransportConfig?.fetchOptions,
           headers: {
-            ...options?.httpTransportConfig?.fetchOptions?.headers,
-            "x-auth-token": options.accessToken,
+            ...validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
+            "x-auth-token": validatedOptions.accessToken,
             "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
             "x-auth-verification-id": verificationOptions?.verificationId ?? "",
           },
@@ -151,6 +167,58 @@ export const getWalletClient = (options: ClientOptions) => {
       .extend(createWalletVerificationChallenges)
       .extend(verifyWalletVerificationChallenge);
 };
+
+/**
+ * Schema for the viem client options.
+ */
+export const GetChainIdOptionsSchema = z.object({
+  /**
+   * The access token
+   */
+  accessToken: ApplicationAccessTokenSchema.optional(),
+  /**
+   * The json rpc url
+   */
+  rpcUrl: UrlOrPathSchema,
+});
+
+/**
+ * Type representing the validated get chain id options.
+ */
+export type GetChainIdOptions = z.infer<typeof GetChainIdOptionsSchema>;
+
+/**
+ * Get the chain id of a blockchain network.
+ * @param options - The options for the public client.
+ * @returns The chain id.
+ * @example
+ * ```ts
+ * import { getChainId } from '@settlemint/sdk-viem';
+ *
+ * const chainId = await getChainId({
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ *   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
+ * });
+ * console.log(chainId);
+ * ```
+ */
+export async function getChainId(options: GetChainIdOptions): Promise<number> {
+  ensureServer();
+  const validatedOptions = validate(GetChainIdOptionsSchema, options);
+  const client = createPublicClient({
+    transport: http(validatedOptions.rpcUrl, {
+      fetchOptions: {
+        headers: validatedOptions.accessToken
+          ? {
+              "x-auth-token": validatedOptions.accessToken,
+            }
+          : undefined,
+      },
+    }),
+  });
+
+  return client.getChainId();
+}
 
 function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
   const knownChain = Object.values(chains).find((chain) => chain.id.toString() === chainId);
