@@ -58,10 +58,10 @@ export function connectCommand(): Command {
       .option("-a, --accept-defaults", "Accept the default and previously set values")
       .option(
         "-i, --instance <instance>",
-        "The instance to connect to (defaults to the instance in the .env file). Use 'standalone' if your resources are not part of the SettleMint platform",
+        "The instance to connect to (defaults to the instance in the .env file). Use 'standalone' if your resources are not deployed on the SettleMint platform",
       )
       // Set the command description
-      .description("Connects your project to your application on SettleMint")
+      .description("Connects your dApp to your application")
       .usage(
         createExamples([
           {
@@ -75,6 +75,10 @@ export function connectCommand(): Command {
           {
             description: "Connect to your production environment",
             command: "connect --prod",
+          },
+          {
+            description: "Connect to a standalone environment (when not using the SettleMint platform)",
+            command: "connect --instance standalone",
           },
         ]),
       )
@@ -90,7 +94,7 @@ export function connectCommand(): Command {
           await connectToPlatform(env, selectedInstance, acceptDefaults, prod);
         }
 
-        outro("Connected to SettleMint");
+        outro("dApp connected");
       })
   );
 }
@@ -412,7 +416,7 @@ async function connectToStandalone(
       (typeof standalonePrompts)[number]["id"],
       {
         label: string;
-        result: string;
+        result: string | undefined;
       }
     >
   > = {};
@@ -447,10 +451,10 @@ async function connectToStandalone(
     SETTLEMINT_HASURA_ENDPOINT: selectedServices.hasuraEndpoint?.result,
     SETTLEMINT_HASURA_ADMIN_SECRET: selectedServices.hasuraAdminSecret?.result,
     SETTLEMINT_HASURA_DATABASE_URL: selectedServices.hasuraDatabaseUrl?.result,
-    SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: selectedServices.theGraphEndpoint
+    SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: selectedServices.theGraphEndpoint?.result
       ? [selectedServices.theGraphEndpoint.result]
       : [],
-    SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: selectedServices.theGraphEndpoint
+    SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: selectedServices.theGraphEndpoint?.result
       ? getSubgraphName(selectedServices.theGraphEndpoint.result)
       : undefined,
     SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: selectedServices.portalGraphqlEndpoint?.result,

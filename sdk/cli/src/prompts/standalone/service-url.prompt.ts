@@ -33,15 +33,15 @@ export async function serviceUrlPrompt({
   message?: string;
   accept?: boolean;
   isCi?: boolean;
-}): Promise<string> {
+}): Promise<string | undefined> {
   const autoAccept = !!accept || isCi;
 
   if (autoAccept && defaultUrl) {
-    return sanitizeInstanceUrl(defaultUrl);
+    return new URL(defaultUrl).toString();
   }
 
   if (isCi) {
-    return sanitizeInstanceUrl(defaultUrl || "");
+    return defaultUrl ? new URL(defaultUrl).toString() : undefined;
   }
 
   const serviceUrl = await input({

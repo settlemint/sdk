@@ -31,7 +31,7 @@ export async function serviceSecretPrompt({
   message?: string;
   accept?: boolean;
   isCi?: boolean;
-}): Promise<string> {
+}): Promise<string | undefined> {
   const autoAccept = !!accept || isCi;
 
   if (autoAccept && defaultSecret) {
@@ -39,7 +39,7 @@ export async function serviceSecretPrompt({
   }
 
   if (isCi) {
-    return defaultSecret || "";
+    return defaultSecret;
   }
 
   if (defaultSecret) {
