@@ -2,7 +2,7 @@ import { ApplicationAccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/v
 import { z } from "zod/v4";
 
 /**
- * Schema for validating client options for the Portal client.
+ * Schema for validating client options for the IPFS client.
  */
 export const ClientOptionsSchema = z.object({
   /** The URL of the IPFS instance to connect to */
@@ -15,7 +15,7 @@ export const ClientOptionsSchema = z.object({
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
 
 /**
- * Schema for validating server client options for the Portal client.
+ * Schema for validating server client options for the IPFS client.
  * Extends the ClientOptionsSchema with additional server-specific fields.
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({

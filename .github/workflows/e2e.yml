@@ -64,6 +64,9 @@ jobs:
       - name: Setup Foundry
         uses: foundry-rs/foundry-toolchain@82dee4ba654bd2146511f85f0d013af94670c4de # v1
 
+      - name: Install Node Gyp
+        run: bun install -g node-gyp
+
       - name: Install Bun dependencies
         run: bun install
 
