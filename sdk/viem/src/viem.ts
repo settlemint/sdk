@@ -22,10 +22,6 @@ import { verifyWalletVerificationChallenge } from "./custom-actions/verify-walle
  */
 export const ClientOptionsSchema = z.object({
   /**
-   * The instance URL
-   */
-  instance: UrlOrPathSchema,
-  /**
    * The access token
    */
   accessToken: ApplicationAccessTokenSchema.optional(),
@@ -244,21 +240,21 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
 export { OTPAlgorithm, WalletVerificationType } from "./custom-actions/types/wallet-verification.enum.js";
 
 export type {
-  CreateWalletVerificationChallengesResponse,
   CreateWalletVerificationChallengesParameters,
+  CreateWalletVerificationChallengesResponse,
   WalletVerificationChallenge,
 } from "./custom-actions/create-wallet-verification-challenges.action.js";
 export type {
-  CreateWalletVerificationResponse,
   CreateWalletVerificationParameters,
-  WalletVerificationInfo,
-  WalletPincodeVerificationInfo,
+  CreateWalletVerificationResponse,
   WalletOTPVerificationInfo,
+  WalletPincodeVerificationInfo,
   WalletSecretCodesVerificationInfo,
+  WalletVerificationInfo,
 } from "./custom-actions/create-wallet-verification.action.js";
 export type {
-  CreateWalletResponse,
   CreateWalletParameters,
+  CreateWalletResponse,
   WalletInfo,
 } from "./custom-actions/create-wallet.action.js";
 export type {
@@ -271,8 +267,8 @@ export type {
   WalletVerification,
 } from "./custom-actions/get-wallet-verifications.action.js";
 export type {
-  VerifyWalletVerificationChallengeParameters,
   AddressOrObject,
-  VerifyWalletVerificationChallengeResponse,
   VerificationResult,
+  VerifyWalletVerificationChallengeParameters,
+  VerifyWalletVerificationChallengeResponse,
 } from "./custom-actions/verify-wallet-verification-challenge.action.js";
