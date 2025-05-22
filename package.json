@@ -46,7 +46,7 @@
     "@biomejs/biome": "1.9.4",
     "@types/bun": "1.2.13",
     "@types/mustache": "4.2.6",
-    "knip": "5.57.0",
+    "knip": "5.57.1",
     "lefthook": "1.11.13",
     "mustache": "4.2.0",
     "publint": "0.3.12",
