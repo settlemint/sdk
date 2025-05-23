@@ -1,4 +1,4 @@
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, mock, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, mock, test } from "bun:test";
 import { exists, rename, rm } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
@@ -26,6 +26,9 @@ async function restoreBackup() {
 }
 
 beforeAll(async () => {
+  await moduleMocker.mock("@inquirer/select", () => ({
+    default: mockSelect,
+  }));
   await restoreBackup();
   if (await exists(CONFIG_DIR)) {
     await rename(CONFIG_DIR, BACKUP_DIR);
@@ -34,18 +37,11 @@ beforeAll(async () => {
 
 afterAll(async () => {
   mock.restore();
-  moduleMocker.clear();
+  //moduleMocker.clear();
   await restoreBackup();
 });
 
 describe("instancePrompt", () => {
-  beforeEach(async () => {
-    moduleMocker.clear("@inquirer/select");
-    await moduleMocker.mock("@inquirer/select", () => ({
-      default: mockSelect,
-    }));
-  });
-
   afterEach(async () => {
     await removeCredentials(TEST_INSTANCE);
     await removeCredentials(SECOND_INSTANCE);
