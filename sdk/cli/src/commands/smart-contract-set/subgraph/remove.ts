@@ -1,22 +1,23 @@
-import { dirname } from "node:path";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { deleteConfirmationPrompt } from "@/prompts/delete-confirmation.prompt";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
+import { serviceUrlPrompt } from "@/prompts/standalone/service-url.prompt";
 import { writeEnvSpinner } from "@/spinners/write-env.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getGraphEnv } from "@/utils/get-cluster-service-env";
 import { getTheGraphMiddleware } from "@/utils/subgraph/setup";
-import { getSubgraphYamlFile } from "@/utils/subgraph/subgraph-config";
+import { getTheGraphUrl, getUpdatedSubgraphEndpoints } from "@/utils/subgraph/thegraph-url";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { retryWhenFailed } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { cancel, executeCommand, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 export function subgraphRemoveCommand() {
@@ -59,63 +60,97 @@ export function subgraphRemoveCommand() {
         env,
         accept: true,
       });
-      const accessToken = await getApplicationOrPersonalAccessToken({
-        env,
-        instance,
-        prefer: "application",
-      });
 
-      const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
-      if (!theGraphMiddleware) {
-        return nothingSelectedError("graph middleware");
-      }
-      if (theGraphMiddleware.status !== "COMPLETED") {
-        serviceNotRunningError("graph middleware", theGraphMiddleware.status);
-      }
+      let theGraphMiddleware: Middleware | undefined;
+      let accessToken: string | undefined;
+      if (instance !== STANDALONE_INSTANCE) {
+        accessToken = await getApplicationOrPersonalAccessToken({
+          env,
+          instance,
+          prefer: "application",
+        });
 
-      const subgraphYamlFile = await getSubgraphYamlFile();
-      const cwd = dirname(subgraphYamlFile);
+        theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
+        if (!theGraphMiddleware) {
+          return nothingSelectedError("graph middleware");
+        }
+        if (theGraphMiddleware.status !== "COMPLETED") {
+          serviceNotRunningError("graph middleware", theGraphMiddleware.status);
+        }
+      }
 
       const { command, args } = await getPackageManagerExecutable();
-      const middlewareAdminUrl = new URL(
-        `/${encodeURIComponent(accessToken)}/admin`,
-        theGraphMiddleware.serviceUrl,
-      ).toString();
+
+      let middlewareAdminUrl: string;
+      if (accessToken && theGraphMiddleware) {
+        middlewareAdminUrl = new URL(
+          `/${encodeURIComponent(accessToken)}/admin`,
+          theGraphMiddleware.serviceUrl,
+        ).toString();
+      } else {
+        const serviceUrl = await serviceUrlPrompt({
+          defaultUrl: `${getTheGraphUrl(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS)}/admin`,
+          accept: autoAccept,
+          message: "What is the admin endpoint for the The Graph instance you want to connect to?",
+          example: "https://thegraph.mydomain.com/admin",
+        });
+        if (!serviceUrl) {
+          cancel("No The Graph admin URL provided. Please provide a The Graph admin URL to continue.");
+        }
+        middlewareAdminUrl = serviceUrl.includes("/admin") ? serviceUrl : new URL(`${serviceUrl}/admin`).toString();
+      }
 
       await executeCommand(command, [...args, "graph", "remove", "--node", middlewareAdminUrl, graphName]);
 
-      const settlemintClient = createSettleMintClient({
-        accessToken,
-        instance,
-      });
+      if (accessToken && theGraphMiddleware) {
+        const settlemintClient = createSettleMintClient({
+          accessToken,
+          instance,
+        });
+        const graphEndpoints = await spinner({
+          startMessage: "Waiting for subgraph to be removed",
+          task: () =>
+            retryWhenFailed(
+              async () => {
+                const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
+                const endpoints = await getGraphEnv(settlemintClient, middleware);
+                if (
+                  endpoints.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) => endpoint.endsWith(graphName))
+                ) {
+                  throw new Error(
+                    `Subgraph '${graphName}' not removed from middleware '${theGraphMiddleware.uniqueName}'`,
+                  );
+                }
+                return endpoints;
+              },
+              5,
+              5_000,
+            ),
+          stopMessage: "Waiting finished",
+        });
 
-      const graphEndpoints = await spinner({
-        startMessage: "Waiting for subgraph to be removed",
-        task: () =>
-          retryWhenFailed(
-            async () => {
-              const middleware = await settlemintClient.middleware.read(theGraphMiddleware.uniqueName);
-              const endpoints = await getGraphEnv(settlemintClient, middleware);
-              if (endpoints.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) => endpoint.endsWith(graphName))) {
-                throw new Error(
-                  `Subgraph '${graphName}' not removed from middleware '${theGraphMiddleware.uniqueName}'`,
-                );
-              }
-              return endpoints;
-            },
-            5,
-            5_000,
-          ),
-        stopMessage: "Waiting finished",
-      });
-
-      await writeEnvSpinner(!!prod, {
-        ...env,
-        SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
-        ...graphEndpoints,
-        SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH:
-          env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH === graphName ? undefined : env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH,
-      });
+        await writeEnvSpinner(!!prod, {
+          ...env,
+          SETTLEMINT_THEGRAPH: theGraphMiddleware.uniqueName,
+          ...graphEndpoints,
+          SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH:
+            env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH === graphName
+              ? undefined
+              : env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH,
+        });
+      } else {
+        await writeEnvSpinner(!!prod, {
+          ...env,
+          SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: getUpdatedSubgraphEndpoints({
+            existingEndpoints: env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? [],
+            removedSubgraphName: graphName,
+          }),
+          SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH:
+            env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH === graphName
+              ? undefined
+              : env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH,
+        });
+      }
       outro(`Subgraph ${graphName} removed successfully`);
     });
 }

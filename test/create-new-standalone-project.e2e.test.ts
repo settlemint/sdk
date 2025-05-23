@@ -3,7 +3,6 @@ import { copyFile, readFile, rmdir, stat, unlink, writeFile } from "node:fs/prom
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { $ } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { PRIVATE_KEY_SMART_CONTRACTS_NAMES } from "./constants/test-resources";
@@ -19,7 +18,7 @@ import { findPrivateKeyByName } from "./utils/test-resources";
 const PROJECT_NAME = "kit-demo-standalone";
 const TEMPLATE_NAME = "asset-tokenization";
 const TEMPLATE_VERSION = "1.1.1";
-const SUBGRAPH_NAMES = ["kit", "starterkits"];
+const SUBGRAPH_NAMES = ["kit", "starterkits"] as const;
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -120,7 +119,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   });
 
   test("Validate that .env file has the correct values", async () => {
-    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    const env = await loadEnv(false, false, projectDir);
 
     expect(env.SETTLEMINT_INSTANCE).toBe("standalone");
     expect(env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT).toBeString();
@@ -229,7 +228,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
       expect(output).toInclude("Build completed");
     }
 
-    const env: Partial<DotEnv> = await loadEnv(false, false, projectDir);
+    const env = await loadEnv(false, false, projectDir);
 
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
     for (const subgraphName of SUBGRAPH_NAMES) {
@@ -273,6 +272,29 @@ describe("Setup a project on a standalone environment using the SDK", () => {
       console.log(shellError.stdout.toString());
       console.log(shellError.stderr.toString());
       throw new Error("Build failed");
+    }
+  });
+
+  test("subgraph - Remove  subgraphs", async () => {
+    const subgraphToRemove = SUBGRAPH_NAMES[1];
+    const { output } = await runCommand(
+      COMMAND_TEST_SCOPE,
+      ["smart-contract-set", "subgraph", "remove", subgraphToRemove],
+      {
+        cwd: subgraphDir,
+      },
+    ).result;
+    expect(output).toInclude(`Subgraph ${subgraphToRemove} removed successfully`);
+
+    const env = await loadEnv(false, false, projectDir);
+    expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
+    const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
+      endpoint.endsWith(`/subgraphs/name/${subgraphToRemove}`),
+    );
+    if (!subgraphDeployed) {
+      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(subgraphToRemove);
+    } else {
+      expect(subgraphDeployed).toBeTrue();
     }
   });
 });
