@@ -8,26 +8,23 @@ import { z } from "zod/v4";
  * Extends the base Viem client options with EAS-specific requirements.
  */
 export const ClientOptionsSchema = z.object({
+  /** The address of the EAS Schema Registry contract */
   schemaRegistryAddress: z.string().refine(isAddress, "Invalid Ethereum address format"),
+  /** The address of the EAS Attestation contract */
   attestationAddress: z.string().refine(isAddress, "Invalid Ethereum address format"),
-  ...z.object({
-    accessToken: AccessTokenSchema,
-    chainId: z.string().min(1),
-    chainName: z.string().min(1),
-    rpcUrl: UrlSchema,
-  }).shape,
+  /** Access token for the RPC provider (must start with 'sm_aat_' or 'sm_pat_') */
+  accessToken: AccessTokenSchema,
+  /** The chain ID to connect to */
+  chainId: z.string().min(1),
+  /** The name of the chain to connect to */
+  chainName: z.string().min(1),
+  /** The RPC URL to connect to (must be a valid URL) */
+  rpcUrl: UrlSchema,
 });
 
 /**
  * Configuration options for creating an EAS client.
  * Combines EAS-specific options with base Viem client options.
- *
- * @property schemaRegistryAddress - The address of the EAS Schema Registry contract
- * @property attestationAddress - The address of the EAS Attestation contract
- * @property accessToken - Access token for the RPC provider (must start with 'sm_aat_' or 'sm_pat_')
- * @property chainId - The chain ID to connect to
- * @property chainName - The name of the chain to connect to
- * @property rpcUrl - The RPC URL to connect to (must be a valid URL)
  */
 export type ClientOptions = z.infer<typeof ClientOptionsSchema> &
   Pick<ViemClientOptions, "accessToken" | "chainId" | "chainName" | "rpcUrl">;

@@ -2,13 +2,15 @@ import { createClient } from "graphql-ws";
 
 /**
  * Options for the GraphQL WebSocket client
- *
- * @typedef {Object} WebsocketClientOptions
- * @property {string} portalGraphqlEndpoint - The GraphQL endpoint URL for the Portal API
- * @property {string} accessToken - The access token for authentication with the Portal API
  */
 export interface WebsocketClientOptions {
+  /**
+   * The GraphQL endpoint URL for the Portal API
+   */
   portalGraphqlEndpoint: string;
+  /**
+   * The access token for authentication with the Portal API
+   */
   accessToken: string;
 }
 

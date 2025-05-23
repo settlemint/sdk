@@ -97,17 +97,33 @@ const client = createEASClient({
 
 #### RegisterSchemaOptions
 
-Defined in: [sdk/eas/src/types.ts:39](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L39)
+Defined in: [sdk/eas/src/types.ts:34](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L34)
 
 Options for registering a new schema in the EAS Schema Registry.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="fields"></a> `fields` | [`SchemaField`](#schemafield)[] | Array of fields that make up the schema | [sdk/eas/src/types.ts:36](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L36) |
+| <a id="resolveraddress"></a> `resolverAddress` | `string` | Address of the resolver contract that will handle attestations | [sdk/eas/src/types.ts:38](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L38) |
+| <a id="revocable"></a> `revocable` | `boolean` | Whether attestations using this schema can be revoked | [sdk/eas/src/types.ts:40](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L40) |
 
 ***
 
 #### SchemaField
 
-Defined in: [sdk/eas/src/types.ts:26](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L26)
+Defined in: [sdk/eas/src/types.ts:22](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L22)
 
 Represents a single field in an EAS schema.
+
+##### Properties
+
+| Property | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="description"></a> `description?` | `string` | Optional description of the field's purpose | [sdk/eas/src/types.ts:28](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L28) |
+| <a id="name"></a> `name` | `string` | The name of the field | [sdk/eas/src/types.ts:24](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L24) |
+| <a id="type"></a> `type` | `"string"` \| `"address"` \| `"bool"` \| `"bytes"` \| `"bytes32"` \| `"int8"` \| `"int256"` \| `"uint8"` \| `"uint256"` | The Solidity type of the field | [sdk/eas/src/types.ts:26](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/types.ts#L26) |
 
 ### Type Aliases
 
@@ -115,7 +131,7 @@ Represents a single field in an EAS schema.
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\> & `Pick`\<`ViemClientOptions`, `"accessToken"` \| `"chainId"` \| `"chainName"` \| `"rpcUrl"`\>
 
-Defined in: [sdk/eas/src/client-options.schema.ts:32](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/client-options.schema.ts#L32)
+Defined in: [sdk/eas/src/client-options.schema.ts:29](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/client-options.schema.ts#L29)
 
 Configuration options for creating an EAS client.
 Combines EAS-specific options with base Viem client options.

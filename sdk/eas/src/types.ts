@@ -18,26 +18,24 @@ export type EASFieldType = keyof typeof EAS_FIELD_TYPES;
 
 /**
  * Represents a single field in an EAS schema.
- *
- * @property name - The name of the field
- * @property type - The Solidity type of the field
- * @property description - Optional description of the field's purpose
  */
 export interface SchemaField {
+  /** The name of the field */
   name: string;
+  /** The Solidity type of the field */
   type: EASFieldType;
+  /** Optional description of the field's purpose */
   description?: string;
 }
 
 /**
  * Options for registering a new schema in the EAS Schema Registry.
- *
- * @property fields - Array of fields that make up the schema
- * @property resolverAddress - Address of the resolver contract that will handle attestations
- * @property revocable - Whether attestations using this schema can be revoked
  */
 export interface RegisterSchemaOptions {
+  /** Array of fields that make up the schema */
   fields: SchemaField[];
+  /** Address of the resolver contract that will handle attestations */
   resolverAddress: string;
+  /** Whether attestations using this schema can be revoked */
   revocable: boolean;
 }
