@@ -242,6 +242,13 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
     }
   });
 
+  test("hasura - Track tables", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["hasura", "track", "--accept-defaults"], {
+      cwd: projectDir,
+    }).result;
+    expect(output).toInclude("Table tracking completed successfully");
+  });
+
   test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,

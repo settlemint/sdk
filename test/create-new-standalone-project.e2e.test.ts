@@ -243,6 +243,13 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     }
   });
 
+  test("hasura - Track tables", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["hasura", "track", "--accept-defaults"], {
+      cwd: projectDir,
+    }).result;
+    expect(output).toInclude("Table tracking completed successfully");
+  });
+
   test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
@@ -261,6 +268,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
+  // dApp needs an updated SDK cli for this to work
   test.skip("Build app", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
