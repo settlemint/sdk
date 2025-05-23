@@ -109,7 +109,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     await $`bun install`.cwd(projectDir).env(env);
   });
 
-  test("Connect to platform", async () => {
+  test("Connect to standalone environment", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["connect", "--instance", "standalone", "--accept-defaults"],
