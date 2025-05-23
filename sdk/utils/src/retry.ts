@@ -1,3 +1,5 @@
+import { logger } from "./logging/logger.js";
+
 /**
  * Retry a function when it fails.
  * @param fn - The function to retry.
@@ -23,8 +25,8 @@ export async function retryWhenFailed<T>(
     try {
       return await fn();
     } catch (e) {
+      const error = e as Error;
       if (typeof stopOnError === "function") {
-        const error = e as Error;
         if (stopOnError(error)) {
           throw error;
         }
@@ -38,6 +40,7 @@ export async function retryWhenFailed<T>(
       const jitterAmount = initialSleepTime * (Math.random() / 10);
       const delay = baseDelay + jitterAmount;
       attempt += 1;
+      logger.warn(`An error occurred ${error.message}, retrying in ${delay.toFixed(0)}ms...`);
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
