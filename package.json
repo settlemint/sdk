@@ -44,9 +44,9 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.1",
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.2.13",
+    "@types/bun": "1.2.14",
     "@types/mustache": "4.2.6",
-    "knip": "5.57.1",
+    "knip": "5.57.2",
     "lefthook": "1.11.13",
     "mustache": "4.2.0",
     "publint": "0.3.12",
