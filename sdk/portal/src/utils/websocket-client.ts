@@ -23,7 +23,7 @@ export interface WebsocketClientOptions {
  * import { getWebsocketClient } from "@settlemint/sdk-portal";
  *
  * const client = getWebsocketClient({
- *   portalGraphqlEndpoint: "https://console.settlemint.com/graphql",
+ *   portalGraphqlEndpoint: "https://portal.settlemint.com/graphql",
  *   accessToken: "your-access-token",
  * });
  */
