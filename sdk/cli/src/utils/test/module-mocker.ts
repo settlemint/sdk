@@ -59,9 +59,7 @@ export class ModuleMocker {
       if (modulePath && mockResult.modulePath !== modulePath) {
         continue;
       }
-      // Sometimes race conditions occur between tests
-      // This prevents them from happening
-      process.nextTick(() => mockResult.clear());
+      mockResult.clear();
     }
     this.mocks = modulePath ? this.mocks.filter((mock) => mock.modulePath !== modulePath) : [];
   }
