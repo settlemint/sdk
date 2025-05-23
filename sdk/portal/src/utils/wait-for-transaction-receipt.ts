@@ -4,16 +4,13 @@ import { type WebsocketClientOptions, getWebsocketClient } from "./websocket-cli
 
 /**
  * Represents an event emitted during a transaction execution
- *
- * @typedef {Object} TransactionEvent
- * @property {string} eventName - The name of the event that was emitted
- * @property {Record<string, unknown>} args - The arguments emitted by the event
- * @property {Hex[]} topics - Indexed event parameters used for filtering and searching
  */
-
 export interface TransactionEvent {
+  /** The name of the event that was emitted */
   eventName: string;
+  /** The arguments emitted by the event */
   args: Record<string, unknown>;
+  /** Indexed event parameters used for filtering and searching */
   topics: Hex[];
 }
 
