@@ -30,6 +30,9 @@ export class ModuleMocker {
 
   public async mock(modulePath: string, renderMocks: () => Record<string, unknown>) {
     try {
+      if (this.mocks.some((mock) => mock.modulePath === modulePath)) {
+        throw new Error(`Module '${modulePath}' is already mocked`);
+      }
       const original = {
         ...(await import(modulePath)),
       };
@@ -56,7 +59,9 @@ export class ModuleMocker {
       if (modulePath && mockResult.modulePath !== modulePath) {
         continue;
       }
-      mockResult.clear();
+      // Sometimes race conditions occur between tests
+      // This prevents them from happening
+      process.nextTick(() => mockResult.clear());
     }
     this.mocks = modulePath ? this.mocks.filter((mock) => mock.modulePath !== modulePath) : [];
   }
