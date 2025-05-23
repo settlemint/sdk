@@ -4,7 +4,7 @@ import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
-import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
@@ -46,7 +46,6 @@ export function hardhatScriptRemoteCommand() {
     const autoAccept = !!acceptDefaults || isInCi;
     const env = await loadEnv(false, !!prod);
 
-    let node: BlockchainNode | undefined;
     let envHardhatConfig: Record<string, string> = {};
 
     const instance = await instancePrompt({

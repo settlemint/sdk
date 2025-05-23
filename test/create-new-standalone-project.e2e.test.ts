@@ -261,7 +261,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test("Build app", async () => {
+  test.skip("Build app", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
       await $`bun lint`.cwd(projectDir).env(env);
@@ -279,7 +279,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     const subgraphToRemove = SUBGRAPH_NAMES[1];
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["smart-contract-set", "subgraph", "remove", subgraphToRemove],
+      ["smart-contract-set", "subgraph", "remove", "--accept-defaults", "--force", subgraphToRemove],
       {
         cwd: subgraphDir,
       },

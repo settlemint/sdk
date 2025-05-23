@@ -9,8 +9,9 @@ import { getHasuraEnv } from "@/utils/get-cluster-service-env";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 export function hasuraTrackCommand() {
   return new Command("track")
@@ -34,44 +35,54 @@ export function hasuraTrackCommand() {
       intro("Tracking all tables in Hasura");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
-      const applicationUniqueName = env.SETTLEMINT_APPLICATION;
-      if (!applicationUniqueName) {
-        return missingApplication();
-      }
 
       const selectedInstance = await instancePrompt({
         env,
         accept: true,
       });
-      const accessToken = await getApplicationOrPersonalAccessToken({
-        env,
-        instance: selectedInstance,
-        prefer: "application",
-      });
 
-      const settlemint = createSettleMintClient({
-        accessToken,
-        instance: selectedInstance,
-      });
+      let hasuraGraphqlEndpoint: string | undefined;
+      let hasuraAdminSecret: string | undefined;
+      let accessToken: string | undefined;
 
-      const integrationTools = await serviceSpinner("integration tool", () =>
-        settlemint.integrationTool.list(applicationUniqueName),
-      );
+      if (selectedInstance === STANDALONE_INSTANCE) {
+        hasuraGraphqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
+        hasuraAdminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET;
+      } else {
+        const applicationUniqueName = env.SETTLEMINT_APPLICATION;
+        if (!applicationUniqueName) {
+          return missingApplication();
+        }
+        accessToken = await getApplicationOrPersonalAccessToken({
+          env,
+          instance: selectedInstance,
+          prefer: "application",
+        });
 
-      const hasura = await hasuraPrompt({
-        env,
-        integrations: integrationTools,
-        accept: acceptDefaults,
-        isRequired: true,
-      });
+        const settlemint = createSettleMintClient({
+          accessToken,
+          instance: selectedInstance,
+        });
 
-      if (!hasura) {
-        return nothingSelectedError("Hasura instance");
+        const integrationTools = await serviceSpinner("integration tool", () =>
+          settlemint.integrationTool.list(applicationUniqueName),
+        );
+
+        const hasura = await hasuraPrompt({
+          env,
+          integrations: integrationTools,
+          accept: acceptDefaults,
+          isRequired: true,
+        });
+
+        if (!hasura) {
+          return nothingSelectedError("Hasura instance");
+        }
+
+        const hasuraEnv = getHasuraEnv(hasura);
+        hasuraGraphqlEndpoint = hasuraEnv.SETTLEMINT_HASURA_ENDPOINT;
+        hasuraAdminSecret = hasuraEnv.SETTLEMINT_HASURA_ADMIN_SECRET;
       }
-
-      const hasuraEnv = getHasuraEnv(hasura);
-      const hasuraGraphqlEndpoint = hasuraEnv.SETTLEMINT_HASURA_ENDPOINT;
-      const hasuraAdminSecret = hasuraEnv.SETTLEMINT_HASURA_ADMIN_SECRET;
 
       if (!hasuraGraphqlEndpoint || !hasuraAdminSecret) {
         return note("Could not retrieve Hasura endpoint or admin secret. Please check your configuration.");
@@ -90,11 +101,15 @@ export function hasuraTrackCommand() {
           const executeHasuraQuery = async <T>(query: object): Promise<{ ok: boolean; data: T }> => {
             const response = await fetch(queryEndpoint, {
               method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "X-Hasura-Admin-Secret": hasuraAdminSecret,
-                "x-auth-token": accessToken,
-              },
+              headers: appendHeaders(
+                {
+                  "Content-Type": "application/json",
+                  "X-Hasura-Admin-Secret": hasuraAdminSecret,
+                },
+                {
+                  "x-auth-token": accessToken,
+                },
+              ),
               body: JSON.stringify(query),
             });
 
