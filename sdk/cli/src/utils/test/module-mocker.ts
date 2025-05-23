@@ -6,7 +6,6 @@ const GLOBAL_MOCKS: Map<
   string,
   {
     instanceRef: string;
-    original: unknown;
   }
 > = new Map();
 
@@ -62,14 +61,13 @@ export class ModuleMocker {
       mock.module(modulePath, () => result);
       GLOBAL_MOCKS.set(modulePath, {
         instanceRef: this.instanceRef,
-        original,
       });
       this.mocks.push({
         modulePath,
         clear: () => {
           const globalMock = GLOBAL_MOCKS.get(modulePath);
           if (globalMock?.instanceRef === this.instanceRef) {
-            mock.module(modulePath, () => globalMock.original);
+            mock.module(modulePath, () => original);
             GLOBAL_MOCKS.delete(modulePath);
           }
         },
