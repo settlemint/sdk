@@ -283,7 +283,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     }
   });
 
-  test("subgraph - Remove  subgraphs", async () => {
+  test("subgraph - Remove subgraphs", async () => {
     const subgraphToRemove = SUBGRAPH_NAMES[1];
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
