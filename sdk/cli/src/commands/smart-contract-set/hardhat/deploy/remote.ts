@@ -7,10 +7,11 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { getHardhatConfigData } from "@/utils/smart-contract-set/hardhat-config";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { cancel, executeCommand, intro, note, outro } from "@settlemint/sdk-utils/terminal";
+import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 export function hardhatDeployRemoteCommand() {
@@ -80,22 +81,32 @@ export function hardhatDeployRemoteCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const instance = await instancePrompt(env, true);
-      const accessToken = await getApplicationOrPersonalAccessToken({
+      let node: BlockchainNode | undefined;
+      let envHardhatConfig: Record<string, string> = {};
+
+      const instance = await instancePrompt({
         env,
-        instance,
-        prefer: "application",
+        accept: true,
       });
+      if (instance === STANDALONE_INSTANCE) {
+        envHardhatConfig.BTP_RPC_URL = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT ?? "";
+      } else {
+        const accessToken = await getApplicationOrPersonalAccessToken({
+          env,
+          instance,
+          prefer: "application",
+        });
 
-      const settlemint = createSettleMintClient({
-        accessToken,
-        instance,
-      });
+        const settlemint = createSettleMintClient({
+          accessToken,
+          instance,
+        });
 
-      const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+        node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+        envHardhatConfig = await settlemint.foundry.env(node.uniqueName);
+      }
 
-      const envConfig = await settlemint.foundry.env(node.uniqueName);
-      const hardhatConfig = await getHardhatConfigData(envConfig);
+      const hardhatConfig = await getHardhatConfigData(envHardhatConfig);
       if (verify && !hardhatConfig?.etherscan?.apiKey) {
         cancel(
           "It is not possible to verify the deployment on this network unless you supply an Etherscan API key in the hardhat.config.ts file",
@@ -130,7 +141,7 @@ export function hardhatDeployRemoteCommand() {
             address,
             module ?? "ignition/modules/main.ts",
           ].filter(Boolean),
-          { env: envConfig },
+          { env: envHardhatConfig },
         );
 
         // Only show success message if deployment wasn't cancelled

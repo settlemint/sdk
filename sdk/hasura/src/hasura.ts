@@ -1,3 +1,4 @@
+import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { type Logger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
@@ -15,7 +16,7 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
  */
 export const ClientOptionsSchema = z.object({
   instance: UrlOrPathSchema,
-  accessToken: ApplicationAccessTokenSchema,
+  accessToken: ApplicationAccessTokenSchema.optional(),
   adminSecret: z.string(),
   cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
 });
@@ -94,11 +95,10 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
   return {
     client: new GraphQLClient(fullUrl, {
       ...clientOptions,
-      headers: {
-        ...(clientOptions?.headers ?? {}),
+      headers: appendHeaders(clientOptions?.headers, {
         "x-auth-token": validatedOptions.accessToken,
         "x-hasura-admin-secret": validatedOptions.adminSecret,
-      },
+      }),
       fetch: (logger ? requestLogger(logger, "hasura", fetch) : fetch) as typeof fetch,
     }),
     graphql,

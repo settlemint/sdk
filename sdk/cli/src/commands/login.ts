@@ -42,7 +42,11 @@ export function loginCommand(): Command {
 
       const selectedInstance = instance
         ? sanitizeAndValidateInstanceUrl(instance)
-        : await instancePrompt(env, autoAccept, true);
+        : await instancePrompt({
+            env,
+            accept: autoAccept,
+            freeTextInput: true,
+          });
 
       let personalAccessToken = "";
       if (tokenStdin) {

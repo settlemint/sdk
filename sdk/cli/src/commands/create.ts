@@ -58,7 +58,12 @@ export function createCommand(): Command {
           cancel("The --version option requires the --template option to be set");
         }
 
-        const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
+        const selectedInstance = instance
+          ? sanitizeAndValidateInstanceUrl(instance)
+          : await instancePrompt({
+              env,
+              accept: true,
+            });
         const settlemint = createSettleMintClient({
           instance: selectedInstance,
           accessToken: "",

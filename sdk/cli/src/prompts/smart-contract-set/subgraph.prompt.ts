@@ -1,5 +1,6 @@
 import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
 import { subgraphNamePrompt } from "@/prompts/smart-contract-set/subgraph-name.prompt";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import select from "@inquirer/select";
 import { cancel } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
@@ -40,9 +41,7 @@ export async function subgraphPrompt({
 }): Promise<string[]> {
   const autoAccept = isCi || !!accept;
   const subgraphNames =
-    (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.map((endpoint) => endpoint.split("/").pop()).filter(
-      Boolean,
-    ) as string[]) ?? [];
+    (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.map(getSubgraphName).filter(Boolean) as string[]) ?? [];
 
   if (autoAccept) {
     if (allowAll) {

@@ -51,7 +51,10 @@ export function customDeploymentsUpdateCommand(): Command<[tag: string], { prod?
         );
       }
 
-      const instance = await instancePrompt(env, true);
+      const instance = await instancePrompt({
+        env,
+        accept: true,
+      });
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

@@ -8,6 +8,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 export function hardhatScriptRemoteCommand() {
@@ -45,26 +46,35 @@ export function hardhatScriptRemoteCommand() {
     const autoAccept = !!acceptDefaults || isInCi;
     const env = await loadEnv(false, !!prod);
 
-    const instance = await instancePrompt(env, true);
-    const accessToken = await getApplicationOrPersonalAccessToken({
+    let envHardhatConfig: Record<string, string> = {};
+
+    const instance = await instancePrompt({
       env,
-      instance,
-      prefer: "application",
+      accept: true,
     });
+    if (instance === STANDALONE_INSTANCE) {
+      envHardhatConfig.BTP_RPC_URL = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT ?? "";
+    } else {
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: "application",
+      });
 
-    const settlemint = createSettleMintClient({
-      accessToken,
-      instance,
-    });
+      const settlemint = createSettleMintClient({
+        accessToken,
+        instance,
+      });
 
-    const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+      const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+      envHardhatConfig = await settlemint.foundry.env(node.uniqueName);
+    }
 
-    const envConfig = await settlemint.foundry.env(node.uniqueName);
     const { command, args } = await getPackageManagerExecutable();
     await executeCommand(
       command,
       [...args, "hardhat", "run", script, "--network", "btp", ...(compile ? ["--no-compile"] : [])],
-      { env: envConfig },
+      { env: envHardhatConfig },
     );
     outro("Script execution completed successfully");
   });

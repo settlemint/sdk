@@ -11,7 +11,7 @@ export interface WebsocketClientOptions {
   /**
    * The access token for authentication with the Portal API
    */
-  accessToken: string;
+  accessToken?: string;
 }
 
 /**
@@ -30,9 +30,6 @@ export interface WebsocketClientOptions {
 export function getWebsocketClient({ portalGraphqlEndpoint, accessToken }: WebsocketClientOptions) {
   if (!portalGraphqlEndpoint) {
     throw new Error("portalGraphqlEndpoint is required");
-  }
-  if (!accessToken) {
-    throw new Error("accessToken is required");
   }
   const graphqlEndpoint = setWsProtocol(new URL(portalGraphqlEndpoint));
   return createClient({

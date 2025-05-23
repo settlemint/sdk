@@ -46,7 +46,12 @@ export function createCommand(): Command {
       const env: Partial<DotEnv> = await loadEnv(false, false);
       const name = await projectNamePrompt(env, projectName);
 
-      const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
+      const selectedInstance = instance
+        ? sanitizeAndValidateInstanceUrl(instance)
+        : await instancePrompt({
+            env,
+            accept: true,
+          });
       const settlemint = createSettleMintClient({
         instance: selectedInstance,
         accessToken: "",

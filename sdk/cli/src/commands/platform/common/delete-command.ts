@@ -78,7 +78,7 @@ export function getDeleteCommand({
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
-      const instance = await instancePrompt(env, acceptDefaults);
+      const instance = await instancePrompt({ env, accept: acceptDefaults });
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

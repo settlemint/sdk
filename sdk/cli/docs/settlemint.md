@@ -21,7 +21,7 @@ Options:
 
 Commands:
   <a href="./settlemint/codegen.md">codegen</a> [options]                            Generate GraphQL and REST types and queries
-  <a href="./settlemint/connect.md">connect</a> [options]                            Connects your project to your application on SettleMint
+  <a href="./settlemint/connect.md">connect</a> [options]                            Connects your dApp to your application
   <a href="./settlemint/create.md">create</a> [options]                             Create a new application from a template
   <a href="./settlemint/hasura.md">hasura|ha</a>                                    Manage Hasura service in the SettleMint platform
   <a href="./settlemint/login.md">login</a> [options]                              Login to your SettleMint account.

@@ -1,4 +1,4 @@
-import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
+import { appendHeaders, graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { ApplicationAccessToken } from "@settlemint/sdk-utils/validation";
 
@@ -17,7 +17,7 @@ export async function testGqlEndpoint({
   gqlEndpoint,
   isHasura = false,
 }: {
-  accessToken: ApplicationAccessToken;
+  accessToken?: ApplicationAccessToken;
   hasuraAdminSecret?: string;
   gqlEndpoint?: string;
   isHasura?: boolean;
@@ -29,11 +29,15 @@ export async function testGqlEndpoint({
   try {
     await graphqlFetchWithRetry(gqlEndpoint, {
       method: "POST",
-      headers: {
-        "x-auth-token": accessToken,
-        ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
-        "Content-Type": "application/json",
-      },
+      headers: appendHeaders(
+        {
+          "Content-Type": "application/json",
+          ...(isHasura ? { "x-hasura-admin-secret": hasuraAdminSecret ?? "" } : {}),
+        },
+        {
+          "x-auth-token": accessToken,
+        },
+      ),
       body: JSON.stringify({
         query: `
           query {

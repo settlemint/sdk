@@ -29,13 +29,13 @@
 - [About](#about)
 - [API Reference](#api-reference)
   - [Functions](#functions)
+    - [getChainId()](#getchainid)
     - [getPublicClient()](#getpublicclient)
     - [getWalletClient()](#getwalletclient)
   - [Enumerations](#enumerations)
     - [OTPAlgorithm](#otpalgorithm)
     - [WalletVerificationType](#walletverificationtype)
   - [Interfaces](#interfaces)
-    - [ClientOptions](#clientoptions)
     - [CreateWalletParameters](#createwalletparameters)
     - [CreateWalletResponse](#createwalletresponse)
     - [CreateWalletVerificationChallengesParameters](#createwalletverificationchallengesparameters)
@@ -55,10 +55,15 @@
     - [WalletVerificationOptions](#walletverificationoptions)
   - [Type Aliases](#type-aliases)
     - [AddressOrObject](#addressorobject)
+    - [ClientOptions](#clientoptions)
     - [CreateWalletVerificationChallengesResponse](#createwalletverificationchallengesresponse)
+    - [GetChainIdOptions](#getchainidoptions)
     - [GetWalletVerificationsResponse](#getwalletverificationsresponse)
     - [VerifyWalletVerificationChallengeResponse](#verifywalletverificationchallengeresponse)
     - [WalletVerificationInfo](#walletverificationinfo)
+  - [Variables](#variables)
+    - [ClientOptionsSchema](#clientoptionsschema)
+    - [GetChainIdOptionsSchema](#getchainidoptionsschema)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -70,11 +75,45 @@ The SettleMint Viem SDK provides a lightweight wrapper that automatically config
 
 ### Functions
 
+#### getChainId()
+
+> **getChainId**(`options`): `Promise`\<`number`\>
+
+Defined in: [sdk/viem/src/viem.ts:209](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L209)
+
+Get the chain id of a blockchain network.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | [`GetChainIdOptions`](#getchainidoptions) | The options for the public client. |
+
+##### Returns
+
+`Promise`\<`number`\>
+
+The chain id.
+
+##### Example
+
+```ts
+import { getChainId } from '@settlemint/sdk-viem';
+
+const chainId = await getChainId({
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
+});
+console.log(chainId);
+```
+
+***
+
 #### getPublicClient()
 
 > **getPublicClient**(`options`): `object`
 
-Defined in: [sdk/viem/src/viem.ts:64](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L64)
+Defined in: [sdk/viem/src/viem.ts:75](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L75)
 
 Get a public client. Use this if you need to read from the blockchain.
 
@@ -96,7 +135,7 @@ The public client. see [https://viem.sh/docs/clients/public](https://viem.sh/doc
 import { getPublicClient } from '@settlemint/sdk-viem';
 
 const publicClient = getPublicClient({
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
@@ -113,7 +152,7 @@ console.log(block);
 
 > **getWalletClient**(`options`): (`verificationOptions?`) => `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`Chain`, `undefined`\>\>
 
-Defined in: [sdk/viem/src/viem.ts:126](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L126)
+Defined in: [sdk/viem/src/viem.ts:139](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L139)
 
 Get a wallet client. Use this if you need to write to the blockchain.
 
@@ -146,7 +185,7 @@ import { getWalletClient } from '@settlemint/sdk-viem';
 import { parseAbi } from "viem";
 
 const walletClient = getWalletClient({
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   chainId: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!,
   chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
   rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
@@ -208,24 +247,6 @@ Used to identify different verification mechanisms when creating or managing wal
 | <a id="secret_codes"></a> `SECRET_CODES` | `"SECRET_CODES"` | Secret recovery codes verification method | [sdk/viem/src/custom-actions/types/wallet-verification.enum.ts:11](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/custom-actions/types/wallet-verification.enum.ts#L11) |
 
 ### Interfaces
-
-#### ClientOptions
-
-Defined in: [sdk/viem/src/viem.ts:21](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L21)
-
-The options for the viem client.
-
-##### Properties
-
-| Property | Type | Description | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken` | `string` | The access token | [sdk/viem/src/viem.ts:25](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L25) |
-| <a id="chainid"></a> `chainId` | `string` | The chain id | [sdk/viem/src/viem.ts:29](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L29) |
-| <a id="chainname"></a> `chainName` | `string` | The chain name | [sdk/viem/src/viem.ts:33](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L33) |
-| <a id="httptransportconfig"></a> `httpTransportConfig?` | `HttpTransportConfig` | The http transport config | [sdk/viem/src/viem.ts:41](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L41) |
-| <a id="rpcurl"></a> `rpcUrl` | `string` | The json rpc url | [sdk/viem/src/viem.ts:37](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L37) |
-
-***
 
 #### CreateWalletParameters
 
@@ -488,7 +509,7 @@ Represents a wallet verification challenge.
 
 #### WalletVerificationOptions
 
-Defined in: [sdk/viem/src/viem.ts:84](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L84)
+Defined in: [sdk/viem/src/viem.ts:97](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L97)
 
 The options for the wallet client.
 
@@ -496,8 +517,8 @@ The options for the wallet client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:92](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L92) |
-| <a id="verificationid-1"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:88](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L88) |
+| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:105](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L105) |
+| <a id="verificationid-1"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:101](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L101) |
 
 ### Type Aliases
 
@@ -511,6 +532,22 @@ Represents either a wallet address string or an object containing wallet address
 
 ***
 
+#### ClientOptions
+
+> **ClientOptions** = `Omit`\<`z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>, `"httpTransportConfig"`\> & `object`
+
+Defined in: [sdk/viem/src/viem.ts:51](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L51)
+
+Type representing the validated client options.
+
+##### Type declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:52](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L52) |
+
+***
+
 #### CreateWalletVerificationChallengesResponse
 
 > **CreateWalletVerificationChallengesResponse** = [`WalletVerificationChallenge`](#walletverificationchallenge)[]
@@ -518,6 +555,22 @@ Represents either a wallet address string or an object containing wallet address
 Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:30](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L30)
 
 Response from creating wallet verification challenges.
+
+***
+
+#### GetChainIdOptions
+
+> **GetChainIdOptions** = `Omit`\<`z.infer`\<*typeof* [`GetChainIdOptionsSchema`](#getchainidoptionsschema)\>, `"httpTransportConfig"`\> & `object`
+
+Defined in: [sdk/viem/src/viem.ts:190](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L190)
+
+Type representing the validated get chain id options.
+
+##### Type declaration
+
+| Name | Type | Defined in |
+| ------ | ------ | ------ |
+| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:191](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L191) |
 
 ***
 
@@ -548,6 +601,26 @@ Response from verifying a wallet verification challenge.
 Defined in: [sdk/viem/src/custom-actions/create-wallet-verification.action.ts:51](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/custom-actions/create-wallet-verification.action.ts#L51)
 
 Union type of all possible wallet verification information types.
+
+### Variables
+
+#### ClientOptionsSchema
+
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `chainId`: `ZodOptional`\<`ZodString`\>; `chainName`: `ZodString`; `httpTransportConfig`: `ZodOptional`\<`ZodAny`\>; `rpcUrl`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
+
+Defined in: [sdk/viem/src/viem.ts:25](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L25)
+
+Schema for the viem client options.
+
+***
+
+#### GetChainIdOptionsSchema
+
+> `const` **GetChainIdOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `httpTransportConfig`: `ZodOptional`\<`ZodAny`\>; `rpcUrl`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
+
+Defined in: [sdk/viem/src/viem.ts:172](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/viem/src/viem.ts#L172)
+
+Schema for the viem client options.
 
 ## Contributing
 
