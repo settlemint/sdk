@@ -1,3 +1,22 @@
+/**
+ * This example demonstrates how to implement real-time transaction monitoring and alerting.
+ *
+ * The process involves:
+ * 1. Creating a WebSocket subscription to monitor all blockchain transactions
+ * 2. Setting up custom handlers for different monitoring scenarios
+ * 3. Processing transactions in real-time as they are confirmed
+ * 4. Implementing specific monitoring functions for addresses, events, and failures
+ * 5. Triggering alerts based on predefined conditions
+ *
+ * This pattern is useful for applications that need to:
+ * - Detect suspicious activities for security purposes
+ * - Track high-value transfers or specific contract interactions
+ * - Monitor for failed transactions that require attention
+ * - Implement compliance reporting and audit trails
+ * - Build automated workflows that respond to on-chain events
+ * - Provide real-time notifications to stakeholders
+ */
+
 import type { FormattedExecutionResult } from "graphql";
 import { type Transaction, type WebsocketClientOptions, getWebsocketClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
 
@@ -173,7 +192,7 @@ export function monitorContractEvents(transaction: Transaction, eventNames: stri
  * monitorFailedTransactions(transaction, "Unknown reason");
  */
 export function monitorFailedTransactions(transaction: Transaction) {
-  const status = transaction.receipt?.status;
+  const status = transaction.receipt?.status?.toLowerCase();
 
   if (status === "reverted") {
     const reason = transaction.receipt.revertReasonDecoded;
