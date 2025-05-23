@@ -464,18 +464,13 @@ async function connectToStandalone(
 
   if (acceptDefaults) {
     table(
-      "Selected services",
+      "Configuration",
       Object.values(selectedServices)
+        .filter((item) => !item.isSecret)
         .map((item) => {
-          if (item.isSecret) {
-            return {
-              ...item,
-              result: "********",
-            };
-          }
           return {
-            ...item,
-            result: item.result ? maskTokens(item.result) : undefined,
+            name: item.label,
+            value: item.result ? maskTokens(item.result) : undefined,
           };
         })
         .filter(Boolean),

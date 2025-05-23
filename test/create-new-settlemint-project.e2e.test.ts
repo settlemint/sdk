@@ -252,7 +252,7 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
   test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["codegen", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
+      ["codegen", "--generate-viem", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
       {
         cwd: dAppDir,
       },

@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -41,7 +41,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -253,7 +253,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["codegen", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
+      ["codegen", "--generate-viem", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
       {
         cwd: dAppDir,
       },
