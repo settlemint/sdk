@@ -61,6 +61,8 @@ Arguments:
                          in .env if not provided)
 
 Options:
+  --ipfs &lt;ipfs-url&gt;      The IPFS URL to use for the subgraph deployment
+                         (defaults to https://ipfs.console.settlemint.com)
   -a, --accept-defaults  Accept the default and previously set values
   --prod                 Connect to your production environment
   -h, --help             display help for command

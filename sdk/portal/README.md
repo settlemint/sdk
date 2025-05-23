@@ -600,7 +600,7 @@ console.log("Transaction hash:", result.StableCoinFactoryCreate?.transactionHash
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/portal/src/portal.ts:71](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L71)
+Defined in: [sdk/portal/src/portal.ts:72](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L72)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -614,8 +614,8 @@ Creates a Portal GraphQL client with the provided configuration.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `cache?`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the Portal client |
-| `options.accessToken` | `string` | - |
+| `options` | \{ `accessToken?`: `string`; `cache?`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the Portal client |
+| `options.accessToken?` | `string` | - |
 | `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
 | `options.instance?` | `string` | - |
 | `clientOptions?` | `RequestConfig` | Additional GraphQL client configuration options |
@@ -628,8 +628,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:75](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L75) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L76) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L76) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:77](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L77) |
 
 ##### Throws
 
@@ -850,7 +850,7 @@ Options for the GraphQL WebSocket client
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/portal/src/portal.ts:24](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L24)
+Defined in: [sdk/portal/src/portal.ts:25](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L25)
 
 Type representing the validated client options.
 
@@ -860,7 +860,7 @@ Type representing the validated client options.
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/portal/src/portal.ts:10](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L10)
+Defined in: [sdk/portal/src/portal.ts:11](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L11)
 
 Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
@@ -868,9 +868,9 @@ Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\{ `default`: `"default"`; `force-cache`: `"force-cache"`; `no-cache`: `"no-cache"`; `no-store`: `"no-store"`; `only-if-cached`: `"only-if-cached"`; `reload`: `"reload"`; \}\>\>; `instance`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `cache`: `ZodOptional`\<`ZodEnum`\<\{ `default`: `"default"`; `force-cache`: `"force-cache"`; `no-cache`: `"no-cache"`; `no-store`: `"no-store"`; `only-if-cached`: `"only-if-cached"`; `reload`: `"reload"`; \}\>\>; `instance`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
 
-Defined in: [sdk/portal/src/portal.ts:15](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L15)
+Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/portal.ts#L16)
 
 Schema for validating Portal client configuration options.
 

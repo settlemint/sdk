@@ -39,6 +39,7 @@
     - [ensureServer()](#ensureserver)
     - [executeCommand()](#executecommand)
     - [exists()](#exists)
+    - [extractBaseUrlBeforeSegment()](#extractbaseurlbeforesegment)
     - [extractJsonObject()](#extractjsonobject)
     - [fetchWithRetry()](#fetchwithretry)
     - [findMonoRepoPackages()](#findmonorepopackages)
@@ -91,6 +92,7 @@
     - [PersonalAccessTokenSchema](#personalaccesstokenschema)
     - [runsInBrowser](#runsinbrowser)
     - [runsOnServer](#runsonserver)
+    - [STANDALONE\_INSTANCE](#standalone_instance)
     - [UniqueNameSchema](#uniquenameschema)
     - [UrlOrPathSchema](#urlorpathschema)
     - [UrlPathSchema](#urlpathschema)
@@ -411,6 +413,38 @@ import { exists } from "@settlemint/sdk-utils/filesystem";
 if (await exists('/path/to/file.txt')) {
   // File exists, safe to read
 }
+```
+
+***
+
+#### extractBaseUrlBeforeSegment()
+
+> **extractBaseUrlBeforeSegment**(`baseUrl`, `pathSegment`): `string`
+
+Defined in: [sdk/utils/src/url.ts:15](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/url.ts#L15)
+
+Extracts the base URL before a specific segment in a URL.
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `baseUrl` | `string` | The base URL to extract the path from |
+| `pathSegment` | `string` | The path segment to start from |
+
+##### Returns
+
+`string`
+
+The base URL before the specified segment
+
+##### Example
+
+```typescript
+import { extractBaseUrlBeforeSegment } from "@settlemint/sdk-utils/url";
+
+const baseUrl = extractBaseUrlBeforeSegment("https://example.com/api/v1/subgraphs/name/my-subgraph", "/subgraphs");
+// Returns: "https://example.com/api/v1"
 ```
 
 ***
@@ -1663,7 +1697,7 @@ Options for configuring the spinner behavior
 
 > **DotEnv** = `z.infer`\<*typeof* [`DotEnvSchema`](#dotenvschema)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:101](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L101)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:106](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L106)
 
 Type definition for the environment variables schema.
 
@@ -1673,7 +1707,7 @@ Type definition for the environment variables schema.
 
 > **DotEnvPartial** = `z.infer`\<*typeof* [`DotEnvSchemaPartial`](#dotenvschemapartial)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:112](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L112)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:117](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L117)
 
 Type definition for the partial environment variables schema.
 
@@ -1724,9 +1758,9 @@ Application access tokens start with 'sm_aat_' prefix.
 
 #### DotEnvSchema
 
-> `const` **DotEnvSchema**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_INSTANCE`: `ZodDefault`\<`ZodString`\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_LOG_LEVEL`: `ZodDefault`\<`ZodEnum`\<\{ `debug`: `"debug"`; `error`: `"error"`; `info`: `"info"`; `none`: `"none"`; `warn`: `"warn"`; \}\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_WS_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodPipe`\<`ZodTransform`\<`null` \| `never`[], `unknown`\>, `ZodOptional`\<`ZodArray`\<`ZodString`\>\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodString`\>; \}, `$strip`\>
+> `const` **DotEnvSchema**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_INSTANCE`: `ZodDefault`\<`ZodUnion`\<readonly \[`ZodString`, `ZodLiteral`\<`"standalone"`\>\]\>\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_LOG_LEVEL`: `ZodDefault`\<`ZodEnum`\<\{ `debug`: `"debug"`; `error`: `"error"`; `info`: `"info"`; `none`: `"none"`; `warn`: `"warn"`; \}\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_WS_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodPipe`\<`ZodTransform`\<`null` \| `never`[], `unknown`\>, `ZodOptional`\<`ZodArray`\<`ZodString`\>\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodString`\>; \}, `$strip`\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:12](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L12)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L17)
 
 Schema for validating environment variables used by the SettleMint SDK.
 Defines validation rules and types for configuration values like URLs,
@@ -1736,9 +1770,9 @@ access tokens, workspace names, and service endpoints.
 
 #### DotEnvSchemaPartial
 
-> `const` **DotEnvSchemaPartial**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_INSTANCE`: `ZodOptional`\<`ZodDefault`\<`ZodString`\>\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_LOG_LEVEL`: `ZodOptional`\<`ZodDefault`\<`ZodEnum`\<\{ `debug`: `"debug"`; `error`: `"error"`; `info`: `"info"`; `none`: `"none"`; `warn`: `"warn"`; \}\>\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_WS_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodOptional`\<`ZodPipe`\<`ZodTransform`\<`null` \| `never`[], `unknown`\>, `ZodOptional`\<`ZodArray`\<`ZodString`\>\>\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; \}, `$strip`\>
+> `const` **DotEnvSchemaPartial**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_INSTANCE`: `ZodOptional`\<`ZodDefault`\<`ZodUnion`\<readonly \[`ZodString`, `ZodLiteral`\<`"standalone"`\>\]\>\>\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_LOG_LEVEL`: `ZodOptional`\<`ZodDefault`\<`ZodEnum`\<\{ `debug`: `"debug"`; `error`: `"error"`; `info`: `"info"`; `none`: `"none"`; `warn`: `"warn"`; \}\>\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_WS_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodOptional`\<`ZodPipe`\<`ZodTransform`\<`null` \| `never`[], `unknown`\>, `ZodOptional`\<`ZodArray`\<`ZodString`\>\>\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; \}, `$strip`\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:107](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L107)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:112](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L112)
 
 Partial version of the environment variables schema where all fields are optional.
 Useful for validating incomplete configurations during development or build time.
@@ -1797,6 +1831,16 @@ Boolean indicating if code is currently running in a browser environment
 Defined in: [sdk/utils/src/runtime/ensure-server.ts:45](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/runtime/ensure-server.ts#L45)
 
 Boolean indicating if code is currently running in a server environment
+
+***
+
+#### STANDALONE\_INSTANCE
+
+> `const` **STANDALONE\_INSTANCE**: `"standalone"` = `"standalone"`
+
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:10](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/validation/dot-env.schema.ts#L10)
+
+Use this value to indicate that the resources are not part of the SettleMint platform.
 
 ***
 
