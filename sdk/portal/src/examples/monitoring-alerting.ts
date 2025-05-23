@@ -192,9 +192,9 @@ export function monitorContractEvents(transaction: Transaction, eventNames: stri
  * monitorFailedTransactions(transaction, "Unknown reason");
  */
 export function monitorFailedTransactions(transaction: Transaction) {
-  const status = transaction.receipt?.status?.toLowerCase();
+  const status = transaction.receipt?.status;
 
-  if (status === "reverted") {
+  if (status === "Reverted") {
     const reason = transaction.receipt.revertReasonDecoded;
     notify(`[FAILED] Transaction ${transaction.transactionHash} failed: ${reason}`);
   }

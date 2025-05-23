@@ -41,7 +41,7 @@ export interface TransactionEvent {
  * @property {boolean} isContract - Whether the transaction is a contract deployment
  */
 export interface Transaction {
-  receipt: TransactionReceipt & {
+  receipt: TransactionReceipt<string, number, "Success" | "Reverted"> & {
     revertReason: string;
     revertReasonDecoded: string;
     events: TransactionEvent[];
