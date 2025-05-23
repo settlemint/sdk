@@ -20,17 +20,28 @@ export function getUpdatedSubgraphEndpoints({
     }
     const baseUrl = new URL(middlewareAdminUrl).origin;
     if (baseUrl) {
-      existingEndpointsWithoutRemoved.push(`${baseUrl}/subgraphs/name/${getSubgraphName(newSubgraphName)}`);
+      existingEndpointsWithoutRemoved.push(`${getTheGraphSubgraphUrl(baseUrl, newSubgraphName)}`);
     }
   }
   return existingEndpointsWithoutRemoved;
 }
 
 export function getTheGraphUrl(subgraphUrls?: string[]) {
-  if (subgraphUrls?.length === 1) {
+  if (Array.isArray(subgraphUrls) && subgraphUrls.length > 0) {
     const url = new URL(subgraphUrls[0]);
     const subgraphsPathIndex = url.pathname.indexOf("/subgraphs");
     return url.origin + (subgraphsPathIndex >= 0 ? url.pathname.substring(0, subgraphsPathIndex) : url.pathname);
   }
   return undefined;
+}
+
+export function getTheGraphSubgraphNames(subgraphUrls?: string[]) {
+  if (Array.isArray(subgraphUrls) && subgraphUrls.length > 0) {
+    return subgraphUrls.map((url) => getSubgraphName(url));
+  }
+  return [];
+}
+
+export function getTheGraphSubgraphUrl(theGraphUrl: string, subgraphName: string) {
+  return `${theGraphUrl}/subgraphs/name/${subgraphName}`;
 }

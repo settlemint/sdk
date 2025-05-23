@@ -214,7 +214,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Types generated successfully");
   });
 
-  test.skip("subgraph - Deploy subgraphs", async () => {
+  test("subgraph - Deploy subgraphs", async () => {
     for (const subgraphName of SUBGRAPH_NAMES) {
       const { output } = await retryCommand(
         () =>

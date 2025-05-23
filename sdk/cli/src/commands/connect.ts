@@ -36,7 +36,7 @@ import {
   getPortalEnv,
 } from "@/utils/get-cluster-service-env";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
-import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
+import { getTheGraphSubgraphNames, getTheGraphSubgraphUrl, getTheGraphUrl } from "@/utils/subgraph/thegraph-url";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -358,14 +358,18 @@ async function connectToStandalone(
     },
     {
       id: "theGraphEndpoint",
-      label: "The Graph subgraph GraphQL Endpoint",
-      message: "What is the GraphQL endpoint for the The Graph subgraph you want to connect to?",
-      example: "https://thegraph.mydomain.com/subgraphs/name/my-subgraph",
-      defaultValue:
-        Array.isArray(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS) &&
-        env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS.length > 0
-          ? env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS[0]
-          : undefined,
+      label: "The Graph Endpoint",
+      message: "What is the endpoint for the The Graph instance you want to connect to?",
+      example: "https://thegraph.mydomain.com",
+      defaultValue: getTheGraphUrl(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS),
+      isSecret: false,
+    },
+    {
+      id: "theGraphSubgraphNames",
+      label: "The Graph subgraph names",
+      message: "What are the names of the subgraphs you want to connect to (separated by commas)?",
+      example: "subgraph-1,subgraph-2",
+      defaultValue: getTheGraphSubgraphNames(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).join(","),
       isSecret: false,
     },
     {
@@ -468,6 +472,9 @@ async function connectToStandalone(
     );
   }
 
+  const theGraphUrl = selectedServices.theGraphEndpoint?.result;
+  const theGraphSubgraphNames = selectedServices.theGraphSubgraphNames?.result;
+
   await writeEnvSpinner(!!prod, {
     SETTLEMINT_INSTANCE: STANDALONE_INSTANCE,
     SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: selectedServices.blockchainNodeJsonRpcEndpoint?.result,
@@ -475,12 +482,11 @@ async function connectToStandalone(
     SETTLEMINT_HASURA_ENDPOINT: selectedServices.hasuraEndpoint?.result,
     SETTLEMINT_HASURA_ADMIN_SECRET: selectedServices.hasuraAdminSecret?.result,
     SETTLEMINT_HASURA_DATABASE_URL: selectedServices.hasuraDatabaseUrl?.result,
-    SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: selectedServices.theGraphEndpoint?.result
-      ? [selectedServices.theGraphEndpoint.result]
-      : [],
-    SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: selectedServices.theGraphEndpoint?.result
-      ? getSubgraphName(selectedServices.theGraphEndpoint.result)
-      : undefined,
+    SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS:
+      theGraphUrl && theGraphSubgraphNames
+        ? theGraphSubgraphNames.split(",").map((name) => getTheGraphSubgraphUrl(theGraphUrl, name))
+        : [],
+    SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: theGraphSubgraphNames ? theGraphSubgraphNames.split(",")[0] : undefined,
     SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: selectedServices.portalGraphqlEndpoint?.result,
     SETTLEMINT_MINIO_ENDPOINT: selectedServices.minioEndpoint?.result,
     SETTLEMINT_MINIO_ACCESS_KEY: selectedServices.minioAccessKey?.result,

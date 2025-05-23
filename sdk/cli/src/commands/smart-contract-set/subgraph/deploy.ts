@@ -42,10 +42,14 @@ export function subgraphDeployCommand() {
         },
       ]),
     )
+    .option(
+      "--ipfs <ipfs-url>",
+      "The IPFS URL to use for the subgraph deployment (defaults to https://ipfs.console.settlemint.com)",
+    )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
     .argument("[subgraph-name]", "The name of the subgraph to deploy (defaults to value in .env if not provided)")
-    .action(async (subgraphName, { prod, acceptDefaults }) => {
+    .action(async (subgraphName, { prod, acceptDefaults, ipfs }) => {
       intro("Deploying subgraph");
       await validateIfRequiredPackagesAreInstalled(["@graphprotocol/graph-cli"]);
 
@@ -150,7 +154,7 @@ export function subgraphDeployCommand() {
         "--node",
         middlewareAdminUrl,
         "--ipfs",
-        "https://ipfs.console.settlemint.com",
+        ipfs ?? "https://ipfs.console.settlemint.com",
         graphName,
         subgraphYamlFile,
       ]);
