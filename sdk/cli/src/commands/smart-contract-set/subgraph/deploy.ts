@@ -139,9 +139,9 @@ export function subgraphDeployCommand() {
           example: "https://thegraph.mydomain.com/admin",
         });
         if (!serviceUrl) {
-          cancel("No The Graph instance URL provided. Please provide a The Graph instance URL to continue.");
+          cancel("No The Graph admin URL provided. Please provide a The Graph admin URL to continue.");
         }
-        middlewareAdminUrl = new URL(serviceUrl, "/admin").toString();
+        middlewareAdminUrl = serviceUrl.includes("/admin") ? serviceUrl : new URL(`${serviceUrl}/admin`).toString();
       }
 
       await executeCommand(command, [...args, "graph", "create", "--node", middlewareAdminUrl, graphName]);
@@ -177,6 +177,7 @@ export function subgraphDeployCommand() {
           ...env,
           SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: getUpdatedSubgraphEndpoints({
             existingEndpoints: env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? [],
+            middlewareAdminUrl,
             newSubgraphName: graphName,
           }),
           SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? graphName,
