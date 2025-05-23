@@ -71,6 +71,7 @@ describe("instancePrompt", () => {
     const result = await instancePrompt({
       env: { SETTLEMINT_INSTANCE: SECOND_INSTANCE },
       accept: false,
+      isCi: false,
     });
     expect(mockSelect).toHaveBeenCalledWith({
       message: "What instance do you want to connect to?",
@@ -93,6 +94,7 @@ describe("instancePrompt", () => {
     const result = await instancePrompt({
       env: {},
       accept: false,
+      isCi: false,
     });
     expect(mockSelect).toHaveBeenCalledWith({
       message: "What instance do you want to connect to?",

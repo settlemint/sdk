@@ -1,13 +1,4 @@
 import { mock } from "bun:test";
-import { randomUUID } from "node:crypto";
-import { retryWhenFailed } from "@settlemint/sdk-utils";
-
-const GLOBAL_MOCKS: Map<
-  string,
-  {
-    instanceRef: string;
-  }
-> = new Map();
 
 type MockResult = {
   modulePath: string;
@@ -36,20 +27,9 @@ type MockResult = {
  */
 export class ModuleMocker {
   private mocks: MockResult[] = [];
-  private readonly instanceRef = randomUUID();
 
   public async mock(modulePath: string, renderMocks: () => Record<string, unknown>) {
     try {
-      // Racing issues can occur between tests, so we need to retry and ensure there are no conflicting mocks between tests
-      await retryWhenFailed(
-        async () => {
-          if (GLOBAL_MOCKS.has(modulePath)) {
-            throw new Error(`Module '${modulePath}' is already mocked by another test`);
-          }
-        },
-        5,
-        10,
-      );
       const original = {
         ...(await import(modulePath)),
       };
@@ -59,17 +39,11 @@ export class ModuleMocker {
         ...mocks,
       };
       mock.module(modulePath, () => result);
-      GLOBAL_MOCKS.set(modulePath, {
-        instanceRef: this.instanceRef,
-      });
+
       this.mocks.push({
         modulePath,
         clear: () => {
-          const globalMock = GLOBAL_MOCKS.get(modulePath);
-          if (globalMock?.instanceRef === this.instanceRef) {
-            mock.module(modulePath, () => original);
-            GLOBAL_MOCKS.delete(modulePath);
-          }
+          mock.module(modulePath, () => original);
         },
       });
     } catch (error) {
