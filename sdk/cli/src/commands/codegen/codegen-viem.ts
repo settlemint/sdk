@@ -19,7 +19,7 @@ export async function codegenViem(env: DotEnv) {
     env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ??
     (await getChainId({
       accessToken: env.SETTLEMINT_ACCESS_TOKEN,
-      rpcUrl: env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
+      rpcUrl: loadBalancerRpcEndpoint ?? blockchainNodeRpcEndpoint!,
     }));
   if (!chainId) {
     note("[Codegen] No chain ID found, skipping Viem resources generation", "warn");

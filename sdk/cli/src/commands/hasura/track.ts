@@ -39,7 +39,7 @@ export function hasuraTrackCommand() {
 
       const selectedInstance = await instancePrompt({
         env,
-        accept: true,
+        accept: acceptDefaults,
       });
 
       let hasuraGraphqlEndpoint: string | undefined;
