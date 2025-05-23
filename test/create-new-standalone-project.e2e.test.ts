@@ -270,11 +270,11 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   });
 
   test("dApp - Build", async () => {
-    const env = { ...process.env, NODE_ENV: "production", NODE_OPTIONS: "--max-old-space-size=2048" };
+    const env = { ...process.env, NODE_ENV: "production", NODE_OPTIONS: "--max-old-space-size=4096" };
     try {
       await $`bun addresses`.cwd(dAppDir).env(env);
       await $`bun lint`.cwd(dAppDir).env(env);
-      await $`bunx tsc --noEmit`.cwd(dAppDir).env(env);
+      await $`bunx tsc --diagnostics --noEmit`.cwd(dAppDir).env(env);
     } catch (err) {
       const shellError = err as $.ShellError;
       console.log(shellError.stdout.toString());
