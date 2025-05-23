@@ -1,8 +1,9 @@
 import { writeFile } from "node:fs/promises";
 import { testGqlEndpoint } from "@/commands/codegen/utils/test-gql-endpoint";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { note } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
 
 export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: string[]) {
@@ -17,23 +18,26 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
     };
   }
 
-  const accessToken = await getApplicationOrPersonalAccessToken({
-    env,
-    instance: env.SETTLEMINT_INSTANCE,
-    prefer: "application",
-  });
-  if (!accessToken) {
-    note("No access token found, skipping codegen for hasura, portal, thegraph and blockscout", "warn");
-    return {
-      hasura: false,
-      portal: false,
-      thegraph: false,
-      blockscout: false,
-    };
+  let accessToken: string | undefined;
+  if (env.SETTLEMINT_INSTANCE !== STANDALONE_INSTANCE) {
+    accessToken = await getApplicationOrPersonalAccessToken({
+      env,
+      instance: env.SETTLEMINT_INSTANCE,
+      prefer: "application",
+    });
+    if (!accessToken) {
+      note("No access token found, skipping codegen for hasura, portal, thegraph and blockscout", "warn");
+      return {
+        hasura: false,
+        portal: false,
+        thegraph: false,
+        blockscout: false,
+      };
+    }
   }
 
   const theGraphEndpoints = (env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS ?? []).filter((gqlEndpoint) => {
-    const name = gqlEndpoint.split("/").pop();
+    const name = getSubgraphName(gqlEndpoint);
     return name && (!thegraphSubgraphNames || thegraphSubgraphNames.includes(name));
   });
 
@@ -88,7 +92,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
       ...thegraph
         .filter((endpoint) => endpoint.success)
         .map(({ endpoint }) => {
-          const name = endpoint.split("/").pop()!;
+          const name = getSubgraphName(endpoint)!;
           return {
             name: `thegraph-${name}`,
             schema: `the-graph-schema-${name}.graphql`,

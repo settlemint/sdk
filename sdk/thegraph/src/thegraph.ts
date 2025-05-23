@@ -68,7 +68,7 @@ function getFullUrl(options: ClientOptions): string {
  *   };
  * }>({
  *   instances: JSON.parse(process.env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || '[]'),
- *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
  *   subgraphName: 'kits'
  * }, {
  *   fetch: requestLogger(logger, "the-graph-kits", fetch) as typeof fetch,

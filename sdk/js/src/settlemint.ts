@@ -1,6 +1,6 @@
 import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import { type Id, validate } from "@settlemint/sdk-utils/validation";
+import { type Id, STANDALONE_INSTANCE, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod/v4";
 import {
@@ -236,6 +236,16 @@ export interface SettlemintClient {
  */
 export function createSettleMintClient(options: SettlemintClientOptions): SettlemintClient {
   ensureServer();
+
+  if (options.instance === STANDALONE_INSTANCE) {
+    if (options.anonymous) {
+      // Fallback to the public instance for anonymous access
+      // Anonymous use does not interact with platform services, only used for bootstrapping new projects using SettleMint templates
+      options.instance = "https://console.settlemint.com";
+    } else {
+      throw new Error("Standalone instances cannot connect to the SettleMint platform");
+    }
+  }
 
   const validatedOptions = options.anonymous
     ? validate(

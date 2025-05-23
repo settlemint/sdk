@@ -13,6 +13,7 @@ import type {
 import { retryWhenFailed } from "@settlemint/sdk-utils";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { getSubgraphName } from "./subgraph/subgraph-name";
 
 export async function getGraphEnv(
   settlemint: SettlemintClient,
@@ -44,7 +45,7 @@ export async function getGraphEnv(
 
   const endpoints = theGraphMiddleware.subgraphs.map(({ graphqlQueryEndpoint }) => graphqlQueryEndpoint?.displayValue);
   const hasKitSubgraph = endpoints
-    .map((endpoint) => endpoint.split("/").pop())
+    .map((endpoint) => getSubgraphName(endpoint))
     .some((endpoint) => endpoint === DEFAULT_SUBGRAPH_NAME);
 
   return {

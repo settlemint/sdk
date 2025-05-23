@@ -11,8 +11,8 @@ import { Command } from "@commander-js/extra-typings";
 import password from "@inquirer/password";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { cancel, intro, note, outro } from "@settlemint/sdk-utils/terminal";
+import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 export function pincodeVerificationResponseCommand() {
   return new Command("pincode-verification-response")
@@ -43,12 +43,23 @@ export function pincodeVerificationResponseCommand() {
       intro("Generating pincode verification response for wallet address");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
+
+      const selectedInstance = instance
+        ? sanitizeAndValidateInstanceUrl(instance)
+        : await instancePrompt({
+            env,
+            accept: true,
+          });
+
+      if (selectedInstance === STANDALONE_INSTANCE) {
+        return cancel("This command does not support standalone instances");
+      }
+
       const applicationUniqueName = env.SETTLEMINT_APPLICATION;
       if (!applicationUniqueName) {
         return missingApplication();
       }
 
-      const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
       const personalAccessToken = await getInstanceCredentials(selectedInstance);
       if (!personalAccessToken) {
         return missingPersonalAccessTokenError();

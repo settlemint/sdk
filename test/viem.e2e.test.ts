@@ -1,7 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { WalletVerificationType, getPublicClient, getWalletClient } from "@settlemint/sdk-viem";
+import { WalletVerificationType, getChainId, getPublicClient, getWalletClient } from "@settlemint/sdk-viem";
 import { parseAbi } from "viem";
 
 describe("Viem E2E Tests", () => {
@@ -102,5 +102,14 @@ describe("Viem E2E Tests", () => {
     });
     expect(updatedVerifications).toBeArray();
     expect(updatedVerifications.length).toBe(0);
+  });
+
+  test("can get the chain id", async () => {
+    const env = await loadEnv(false, false);
+    const chainId = await getChainId({
+      accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+      rpcUrl: env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,
+    });
+    expect(chainId).toBe(Number(env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID));
   });
 });

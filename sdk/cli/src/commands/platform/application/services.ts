@@ -81,7 +81,10 @@ export function servicesCommand() {
       intro("Listing application services");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
-      const selectedInstance = await instancePrompt(env, true);
+      const selectedInstance = await instancePrompt({
+        env,
+        accept: true,
+      });
       const personalAccessToken = await getInstanceCredentials(selectedInstance);
       if (!personalAccessToken) {
         return missingPersonalAccessTokenError();

@@ -9,7 +9,7 @@ import { createClient } from "graphql-ws";
  */
 export interface WebsocketClientOptions {
   portalGraphqlEndpoint: string;
-  accessToken: string;
+  accessToken?: string;
 }
 
 /**
@@ -23,9 +23,6 @@ export interface WebsocketClientOptions {
 export function getWebsocketClient({ portalGraphqlEndpoint, accessToken }: WebsocketClientOptions) {
   if (!portalGraphqlEndpoint) {
     throw new Error("portalGraphqlEndpoint is required");
-  }
-  if (!accessToken) {
-    throw new Error("accessToken is required");
   }
   const graphqlEndpoint = setWsProtocol(new URL(portalGraphqlEndpoint));
   return createClient({

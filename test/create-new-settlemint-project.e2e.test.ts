@@ -17,9 +17,9 @@ import { retryCommand } from "./utils/retry-command";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 import { findPrivateKeyByName } from "./utils/test-resources";
 
-const PROJECT_NAME = "kit-demo";
+const PROJECT_NAME = "kit-demo-settlemint";
 const TEMPLATE_NAME = "asset-tokenization";
-const TEMPLATE_VERSION = "1.0.3";
+const TEMPLATE_VERSION = "1.1.1";
 const SUBGRAPH_NAMES = ["kit", "starterkits"];
 
 const COMMAND_TEST_SCOPE = __filename;
@@ -49,8 +49,8 @@ afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
 });
 
-describe("Setup a project using the SDK", () => {
-  let contractsDeploymentInfo: Record<string, string>;
+describe("Setup a project on the SettleMint platform using the SDK", () => {
+  let contractsDeploymentInfo: Record<string, string> = {};
 
   test(`Create a ${TEMPLATE_NAME} project`, async () => {
     const { output } = await runCommand(
@@ -68,6 +68,22 @@ describe("Setup a project using the SDK", () => {
     if (await exists(join(__dirname, "../.env.local"))) {
       await copyFile(join(__dirname, "../.env.local"), join(projectDir, ".env.local"));
     }
+  });
+
+  test("Install dependencies and link SDK to use local one", async () => {
+    const env = { ...process.env, NODE_ENV: "production" };
+    await registerLinkedDependencies();
+    await updatePackageJsonToUseLinkedDependencies(projectDir);
+    await updatePackageJsonToUseLinkedDependencies(dAppDir);
+    await updatePackageJsonToUseLinkedDependencies(contractsDir);
+    await updatePackageJsonToUseLinkedDependencies(subgraphDir);
+    await $`bun install`.cwd(projectDir).env(env);
+  });
+
+  test("Connect to platform", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
+      .result;
+    expect(output).toInclude("dApp connected");
   });
 
   test("Validate that .env file has the correct values", async () => {
@@ -89,6 +105,11 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_HD_PRIVATE_KEY).toBeString();
     expect(env.SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS).toBeString();
     expect(isAddress(env.SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS!)).toBeTrue();
+
+    expect(env.SETTLEMINT_MINIO).toBeString();
+    expect(env.SETTLEMINT_MINIO_ENDPOINT).toBeString();
+    expect(env.SETTLEMINT_MINIO_ACCESS_KEY).toBeString();
+    expect(env.SETTLEMINT_MINIO_SECRET_KEY).toBeString();
 
     expect(env.SETTLEMINT_IPFS).toBeString();
     expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
@@ -113,22 +134,6 @@ describe("Setup a project using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 
-  test("Install dependencies and link SDK to use local one", async () => {
-    const env = { ...process.env, NODE_ENV: "production" };
-    await registerLinkedDependencies();
-    await updatePackageJsonToUseLinkedDependencies(projectDir);
-    await updatePackageJsonToUseLinkedDependencies(dAppDir);
-    await updatePackageJsonToUseLinkedDependencies(contractsDir);
-    await updatePackageJsonToUseLinkedDependencies(subgraphDir);
-    await $`bun install`.cwd(projectDir).env(env);
-  });
-
-  test("Connect to platform", async () => {
-    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["connect", "--accept-defaults"], { cwd: projectDir })
-      .result;
-    expect(output).toInclude("Connected to SettleMint");
-  });
-
   test("contracts - Install dependencies", async () => {
     const result = await $`bun run dependencies`.cwd(contractsDir);
     expect(result.exitCode).toBe(0);
@@ -137,7 +142,7 @@ describe("Setup a project using the SDK", () => {
   test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "asset-tokenization-kit";
     let retries = 0;
-    // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
+    // Only deploy the forwarder, otherwise it will take very long to deploy all the contracts
     const { output: deployOutput } = await retryCommand(async () => {
       const privateKey = await findPrivateKeyByName(PRIVATE_KEY_SMART_CONTRACTS_NAMES[retries]!);
       retries++;
@@ -153,7 +158,7 @@ describe("Setup a project using the SDK", () => {
           "--deployment-id",
           deploymentId,
           "--module",
-          "ignition/modules/stable-coin-factory.ts",
+          "ignition/modules/forwarder.ts",
           "--accept-defaults",
         ],
         {
@@ -169,6 +174,7 @@ describe("Setup a project using the SDK", () => {
       join(contractsDir, "ignition", "deployments", deploymentId, "deployed_addresses.json"),
     );
     contractsDeploymentInfo = JSON.parse(deploymentInfoData.toString());
+    expect(deployOutput).toInclude("Connected to blockchain node");
     expect(deployOutput).toInclude("successfully deployed 🚀");
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
@@ -236,10 +242,17 @@ describe("Setup a project using the SDK", () => {
     }
   });
 
+  test("hasura - Track tables", async () => {
+    const { output } = await runCommand(COMMAND_TEST_SCOPE, ["hasura", "track", "--accept-defaults"], {
+      cwd: projectDir,
+    }).result;
+    expect(output).toInclude("Table tracking completed successfully");
+  });
+
   test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
-      ["codegen", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
+      ["codegen", "--generate-viem", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
       {
         cwd: dAppDir,
       },
@@ -251,15 +264,16 @@ describe("Setup a project using the SDK", () => {
     expect(output).toInclude("Generating Blockscout resources");
     expect(output).toInclude("Generating Portal resources");
     expect(output).toInclude("Generating TheGraph resources");
+    expect(output).toInclude("Generating Viem resources");
     expect(output).toInclude("Codegen complete");
   });
 
-  test("Build app", async () => {
-    const env = { ...process.env, NODE_ENV: "production" };
+  test("dApp - Build", async () => {
+    const env = { ...process.env, NODE_ENV: "production", NODE_OPTIONS: "--max-old-space-size=4096" };
     try {
-      await $`bun lint`.cwd(projectDir).env(env);
       await $`bun addresses`.cwd(dAppDir).env(env);
-      await $`bunx tsc --noEmit`.cwd(dAppDir).env(env);
+      await $`bun lint`.cwd(dAppDir).env(env);
+      await $`bunx tsc --diagnostics --noEmit`.cwd(dAppDir).env(env);
     } catch (err) {
       const shellError = err as $.ShellError;
       console.log(shellError.stdout.toString());

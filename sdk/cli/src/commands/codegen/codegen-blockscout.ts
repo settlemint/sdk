@@ -4,10 +4,10 @@ import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
-import { graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
+import { appendHeaders, graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-blockscout";
 
@@ -17,14 +17,15 @@ export async function codegenBlockscout(env: DotEnv) {
     return;
   }
 
-  const accessToken = await getApplicationOrPersonalAccessToken({
-    env,
-    instance: env.SETTLEMINT_INSTANCE,
-    prefer: "application",
-  });
-  if (!accessToken) {
-    return;
-  }
+  const instance = env.SETTLEMINT_INSTANCE;
+  const accessToken =
+    instance === STANDALONE_INSTANCE
+      ? undefined
+      : await getApplicationOrPersonalAccessToken({
+          env,
+          instance: env.SETTLEMINT_INSTANCE,
+          prefer: "application",
+        });
 
   const introspectionJsonPath = resolve(process.cwd(), "__blockscout-introspection__.json");
 
@@ -33,10 +34,14 @@ export async function codegenBlockscout(env: DotEnv) {
     // This query is the same one that blockscout uses on its playground for introspection
     const data = await graphqlFetchWithRetry(endpoint, {
       method: "POST",
-      headers: {
-        "x-auth-token": accessToken,
-        "Content-Type": "application/json",
-      },
+      headers: appendHeaders(
+        {
+          "Content-Type": "application/json",
+        },
+        {
+          "x-auth-token": accessToken,
+        },
+      ),
       body: JSON.stringify({
         query: `
         query IntrospectionQuery {
@@ -185,7 +190,7 @@ export const { client: blockscoutClient, graphql: blockscoutGraphql } = createBl
   };
 }>({
   instance: process.env.SETTLEMINT_BLOCKSCOUT_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN ?? "",
 }, {
   fetch: requestLogger(logger, "blockscout", fetch) as typeof fetch,
 });
