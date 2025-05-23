@@ -11,15 +11,6 @@ import isInCi from "is-in-ci";
  * @param options.accept - Whether to automatically accept the default value
  * @param options.isCi - Whether the code is running in a CI environment
  * @returns A promise that resolves to the user-input or default service URL
- *
- * @example
- * import { serviceUrlPrompt } from "@/prompts/standalone/service-url.prompt";
- *
- * const serviceUrl = await serviceUrlPrompt({
- *   defaultUrl: "https://example.com/api",
- *   message: "Enter API URL:"
- * });
- * console.log(serviceUrl); // Output: https://example.com/api or user input
  */
 export async function serviceUrlPrompt({
   defaultUrl,

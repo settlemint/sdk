@@ -43,6 +43,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { maskTokens } from "@settlemint/sdk-utils/logging";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { serviceValuePrompt } from "../prompts/standalone/service-value.prompt";
 
 /**
  * Creates and returns the 'connect' command for the SettleMint SDK.
@@ -321,7 +322,7 @@ async function connectToStandalone(
       message: "What is the JSON RPC endpoint for the blockchain node you want to use for sending transactions?",
       example: "https://blockchain-node.mydomain.com",
       defaultValue: env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "loadBalancerJsonRpcEndpoint",
@@ -330,7 +331,7 @@ async function connectToStandalone(
         "What is the JSON RPC endpoint for the load balancer or blockchain node you want to use for read operations?",
       example: "https://load-balancer.mydomain.com",
       defaultValue: env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "hasuraEndpoint",
@@ -338,7 +339,7 @@ async function connectToStandalone(
       message: "What is the GraphQL endpoint for the Hasura instance you want to connect to?",
       example: "https://hasura.mydomain.com/v1/graphql",
       defaultValue: env.SETTLEMINT_HASURA_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "hasuraAdminSecret",
@@ -346,7 +347,7 @@ async function connectToStandalone(
       message: "What is the admin secret for the Hasura instance you want to connect to?",
       example: "",
       defaultValue: env.SETTLEMINT_HASURA_ADMIN_SECRET,
-      isSecret: true,
+      type: "secret",
     },
     {
       id: "hasuraDatabaseUrl",
@@ -354,7 +355,7 @@ async function connectToStandalone(
       message: "What is the database URL for the Hasura instance you want to connect to?",
       example: "postgresql://username:password@host:port/database",
       defaultValue: env.SETTLEMINT_HASURA_DATABASE_URL,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "theGraphEndpoint",
@@ -362,7 +363,7 @@ async function connectToStandalone(
       message: "What is the endpoint for the The Graph instance you want to connect to?",
       example: "https://thegraph.mydomain.com",
       defaultValue: getTheGraphUrl(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS),
-      isSecret: false,
+      type: "url",
     },
     {
       id: "theGraphSubgraphNames",
@@ -370,7 +371,7 @@ async function connectToStandalone(
       message: "What are the names of the subgraphs you want to connect to (separated by commas)?",
       example: "subgraph-1,subgraph-2",
       defaultValue: getTheGraphSubgraphNames(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).join(","),
-      isSecret: false,
+      type: "value",
     },
     {
       id: "portalGraphqlEndpoint",
@@ -378,7 +379,7 @@ async function connectToStandalone(
       message: "What is the GraphQL endpoint for the Smart Contract Portal instance you want to connect to?",
       example: "https://portal.mydomain.com/graphql",
       defaultValue: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "minioEndpoint",
@@ -386,7 +387,7 @@ async function connectToStandalone(
       message: "What is the endpoint for the MinIO instance you want to connect to?",
       example: "s3://minio.mydomain.com",
       defaultValue: env.SETTLEMINT_MINIO_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "minioAccessKey",
@@ -394,7 +395,7 @@ async function connectToStandalone(
       message: "What is the access key for the MinIO instance you want to connect to?",
       example: "",
       defaultValue: env.SETTLEMINT_MINIO_ACCESS_KEY,
-      isSecret: true,
+      type: "secret",
     },
     {
       id: "minioSecretKey",
@@ -402,7 +403,7 @@ async function connectToStandalone(
       message: "What is the secret key for the MinIO instance you want to connect to?",
       example: "",
       defaultValue: env.SETTLEMINT_MINIO_SECRET_KEY,
-      isSecret: true,
+      type: "secret",
     },
     {
       id: "ipfsApiEndpoint",
@@ -410,7 +411,7 @@ async function connectToStandalone(
       message: "What is the endpoint for the IPFS instance you want to connect to?",
       example: "https://ipfs.mydomain.com/api/v0",
       defaultValue: env.SETTLEMINT_IPFS_API_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
     {
       id: "blockscoutGraphqlEndpoint",
@@ -418,7 +419,7 @@ async function connectToStandalone(
       message: "What is the GraphQL endpoint for the Blockscout instance you want to connect to?",
       example: "https://blockscout.mydomain.com/api/v1/graphql",
       defaultValue: env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT,
-      isSecret: false,
+      type: "url",
     },
   ] as const;
   const selectedServices: Partial<
@@ -432,23 +433,31 @@ async function connectToStandalone(
     >
   > = {};
   for (const prompt of standalonePrompts) {
-    const { id, message, example, defaultValue, isSecret } = prompt;
-    const result = isSecret
-      ? await serviceSecretPrompt({
-          message,
-          defaultSecret: defaultValue,
-          accept: acceptDefaults,
-        })
-      : await serviceUrlPrompt({
-          message,
-          example,
-          defaultUrl: defaultValue,
-          accept: acceptDefaults,
-        });
+    const { id, message, example, defaultValue, type } = prompt;
+    const result =
+      type === "secret"
+        ? await serviceSecretPrompt({
+            message,
+            defaultSecret: defaultValue,
+            accept: acceptDefaults,
+          })
+        : type === "url"
+          ? await serviceUrlPrompt({
+              message,
+              example,
+              defaultUrl: defaultValue,
+              accept: acceptDefaults,
+            })
+          : await serviceValuePrompt({
+              message,
+              example,
+              defaultValue,
+              accept: acceptDefaults,
+            });
     selectedServices[id] = {
       label: prompt.label,
       result,
-      isSecret,
+      isSecret: type === "secret",
     };
   }
 

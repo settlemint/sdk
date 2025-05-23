@@ -11,15 +11,6 @@ import isInCi from "is-in-ci";
  * @param options.accept - Whether to automatically accept the default value
  * @param options.isCi - Whether the code is running in a CI environment
  * @returns A promise that resolves to the user-input or default service secret
- *
- * @example
- * import { serviceSecretPrompt } from "@/prompts/standalone/service-secret.prompt";
- *
- * const serviceSecret = await serviceSecretPrompt({
- *   defaultSecret: "your-api-key",
- *   message: "Enter API key:"
- * });
- * console.log(serviceSecret); // Output: your-api-key or user input
  */
 export async function serviceSecretPrompt({
   defaultSecret,
