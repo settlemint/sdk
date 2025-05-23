@@ -7,7 +7,7 @@ import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-thegraph";
 
@@ -17,14 +17,15 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
     return;
   }
 
-  const accessToken = await getApplicationOrPersonalAccessToken({
-    env,
-    instance: env.SETTLEMINT_INSTANCE,
-    prefer: "application",
-  });
-  if (!accessToken) {
-    return;
-  }
+  const instance = env.SETTLEMINT_INSTANCE;
+  const accessToken =
+    instance === STANDALONE_INSTANCE
+      ? undefined
+      : await getApplicationOrPersonalAccessToken({
+          env,
+          instance: env.SETTLEMINT_INSTANCE,
+          prefer: "application",
+        });
 
   const template = [
     `import { createTheGraphClient } from "${PACKAGE_NAME}";`,
@@ -55,9 +56,11 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
       input: gqlEndpoint,
       output: `the-graph-schema-${name}.graphql`,
       tsconfig: undefined,
-      headers: {
-        "x-auth-token": accessToken,
-      },
+      headers: accessToken
+        ? {
+            "x-auth-token": accessToken,
+          }
+        : {},
     });
     const nameSuffix = capitalizeFirstLetter(name);
     const graphqlClientVariable = getVariableName(`theGraphClient${nameSuffix}`);

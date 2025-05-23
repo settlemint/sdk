@@ -299,10 +299,10 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     const subgraphDeployed = env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.some((endpoint) =>
       endpoint.endsWith(`/subgraphs/name/${subgraphToRemove}`),
     );
-    if (!subgraphDeployed) {
-      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toInclude(subgraphToRemove);
+    if (subgraphDeployed) {
+      expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS?.join(",")).not.toInclude(subgraphToRemove);
     } else {
-      expect(subgraphDeployed).toBeTrue();
+      expect(subgraphDeployed).toBeFalse();
     }
   });
 });

@@ -18,9 +18,12 @@ export function getUpdatedSubgraphEndpoints({
     if (!middlewareAdminUrl) {
       throw new Error("Middleware admin URL is required to add a new subgraph");
     }
-    const baseUrl = new URL(middlewareAdminUrl).origin;
+    const baseUrl = extractBaseUrlBeforeSegment(middlewareAdminUrl, "/admin");
     if (baseUrl) {
-      existingEndpointsWithoutRemoved.push(`${getTheGraphSubgraphUrl(baseUrl, newSubgraphName)}`);
+      const endpoint = `${getTheGraphSubgraphUrl(baseUrl, newSubgraphName)}`;
+      if (!existingEndpointsWithoutRemoved.includes(endpoint)) {
+        existingEndpointsWithoutRemoved.push(endpoint);
+      }
     }
   }
   return existingEndpointsWithoutRemoved;
@@ -28,9 +31,7 @@ export function getUpdatedSubgraphEndpoints({
 
 export function getTheGraphUrl(subgraphUrls?: string[]) {
   if (Array.isArray(subgraphUrls) && subgraphUrls.length > 0) {
-    const url = new URL(subgraphUrls[0]);
-    const subgraphsPathIndex = url.pathname.indexOf("/subgraphs");
-    return url.origin + (subgraphsPathIndex >= 0 ? url.pathname.substring(0, subgraphsPathIndex) : url.pathname);
+    return extractBaseUrlBeforeSegment(subgraphUrls[0], "/subgraphs");
   }
   return undefined;
 }
@@ -44,4 +45,10 @@ export function getTheGraphSubgraphNames(subgraphUrls?: string[]) {
 
 export function getTheGraphSubgraphUrl(theGraphUrl: string, subgraphName: string) {
   return `${theGraphUrl}/subgraphs/name/${subgraphName}`;
+}
+
+function extractBaseUrlBeforeSegment(baseUrl: string, pathSegment: string) {
+  const url = new URL(baseUrl);
+  const segmentIndex = url.pathname.indexOf(pathSegment);
+  return url.origin + (segmentIndex >= 0 ? url.pathname.substring(0, segmentIndex) : url.pathname);
 }

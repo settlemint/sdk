@@ -3,7 +3,7 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-portal";
 export async function codegenPortal(env: DotEnv) {
@@ -12,22 +12,25 @@ export async function codegenPortal(env: DotEnv) {
     return;
   }
 
-  const accessToken = await getApplicationOrPersonalAccessToken({
-    env,
-    instance: env.SETTLEMINT_INSTANCE,
-    prefer: "application",
-  });
-  if (!accessToken) {
-    return;
-  }
+  const instance = env.SETTLEMINT_INSTANCE;
+  const accessToken =
+    instance === STANDALONE_INSTANCE
+      ? undefined
+      : await getApplicationOrPersonalAccessToken({
+          env,
+          instance: env.SETTLEMINT_INSTANCE,
+          prefer: "application",
+        });
 
   await generateSchema({
     input: gqlEndpoint,
     output: "portal-schema.graphql",
     tsconfig: undefined,
-    headers: {
-      "x-auth-token": accessToken ?? "",
-    },
+    headers: accessToken
+      ? {
+          "x-auth-token": accessToken,
+        }
+      : {},
   });
 
   const template = `import { createPortalClient, getWebsocketClient } from "${PACKAGE_NAME}";

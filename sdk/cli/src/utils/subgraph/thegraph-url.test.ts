@@ -57,6 +57,22 @@ describe("getUpdatedSubgraphEndpoints", () => {
     ]);
   });
 
+  it("should not have duplicates", () => {
+    const existingEndpoints = [
+      "https://thegraph.example.com/subgraphs/name/subgraph1",
+      "https://thegraph.example.com/subgraphs/name/subgraph2",
+    ];
+    const result = getUpdatedSubgraphEndpoints({
+      existingEndpoints,
+      newSubgraphName: "subgraph2",
+      middlewareAdminUrl: "https://thegraph.example.com/admin",
+    });
+    expect(result).toEqual([
+      "https://thegraph.example.com/subgraphs/name/subgraph1",
+      "https://thegraph.example.com/subgraphs/name/subgraph2",
+    ]);
+  });
+
   it("should throw error when middlewareAdminUrl is missing", () => {
     const existingEndpoints = ["https://thegraph.example.com/subgraphs/name/subgraph1"];
     expect(() =>
@@ -91,6 +107,15 @@ describe("getUpdatedSubgraphEndpoints", () => {
       "https://thegraph.example.com/subgraphs/name/subgraph2",
       "https://thegraph.example.com/subgraphs/name/subgraph3",
     ]);
+  });
+
+  it("should preserve the url path of admin endpoint", () => {
+    const result = getUpdatedSubgraphEndpoints({
+      existingEndpoints: [],
+      newSubgraphName: "subgraph2",
+      middlewareAdminUrl: "https://thegraph.example.com/path/to/admin",
+    });
+    expect(result).toEqual(["https://thegraph.example.com/path/to/subgraphs/name/subgraph2"]);
   });
 });
 
