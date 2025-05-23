@@ -4,10 +4,11 @@ import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
 import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
+import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 export function hardhatScriptRemoteCommand() {
@@ -45,29 +46,36 @@ export function hardhatScriptRemoteCommand() {
     const autoAccept = !!acceptDefaults || isInCi;
     const env = await loadEnv(false, !!prod);
 
+    let node: BlockchainNode | undefined;
+    let envHardhatConfig: Record<string, string> = {};
+
     const instance = await instancePrompt({
       env,
       accept: true,
     });
-    const accessToken = await getApplicationOrPersonalAccessToken({
-      env,
-      instance,
-      prefer: "application",
-    });
+    if (instance === STANDALONE_INSTANCE) {
+      envHardhatConfig.BTP_RPC_URL = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT ?? "";
+    } else {
+      const accessToken = await getApplicationOrPersonalAccessToken({
+        env,
+        instance,
+        prefer: "application",
+      });
 
-    const settlemint = createSettleMintClient({
-      accessToken,
-      instance,
-    });
+      const settlemint = createSettleMintClient({
+        accessToken,
+        instance,
+      });
 
-    const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+      const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+      envHardhatConfig = await settlemint.foundry.env(node.uniqueName);
+    }
 
-    const envConfig = await settlemint.foundry.env(node.uniqueName);
     const { command, args } = await getPackageManagerExecutable();
     await executeCommand(
       command,
       [...args, "hardhat", "run", script, "--network", "btp", ...(compile ? ["--no-compile"] : [])],
-      { env: envConfig },
+      { env: envHardhatConfig },
     );
     outro("Script execution completed successfully");
   });

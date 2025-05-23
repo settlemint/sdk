@@ -238,7 +238,13 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
   ensureServer();
 
   if (options.instance === STANDALONE_INSTANCE) {
-    throw new Error("Standalone instances cannot connect to the SettleMint platform");
+    if (options.anonymous) {
+      // Fallback to the public instance for anonymous access
+      // Anonymous use does not interact with platform services, only used for bootstrapping new projects using SettleMint templates
+      options.instance = "https://console.settlemint.com";
+    } else {
+      throw new Error("Standalone instances cannot connect to the SettleMint platform");
+    }
   }
 
   const validatedOptions = options.anonymous
