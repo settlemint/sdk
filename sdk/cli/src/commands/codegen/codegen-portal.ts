@@ -48,14 +48,14 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   };
 }>({
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN ?? "",
 }, {
   fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
 });
 
 export const getPortalWebsocketClient = getWebsocketClient({
   portalGraphqlEndpoint: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN ?? "",
 });
 `;
 

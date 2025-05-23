@@ -58,7 +58,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   };
 }>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN ?? "",
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
 }, {
   fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
@@ -74,7 +74,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
     // Generate Drizzle client template with build time safety
     const drizzleTemplate = `import { createPostgresPool } from "${PACKAGE_NAME}/postgres";
 
-export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL ?? '');
+export const postgresPool = createPostgresPool(process.env.SETTLEMINT_HASURA_DATABASE_URL ?? "");
 `;
 
     // Always generate the Drizzle template, but with proper build time handling
