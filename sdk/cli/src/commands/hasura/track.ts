@@ -8,6 +8,7 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 import { getHasuraEnv } from "@/utils/get-cluster-service-env";
 import { Command } from "@commander-js/extra-typings";
 import { createSettleMintClient } from "@settlemint/sdk-js";
+import { extractBaseUrlBeforeSegment } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
@@ -89,8 +90,8 @@ export function hasuraTrackCommand() {
       }
 
       // Convert GraphQL endpoint to Query endpoint
-      const baseUrl = new URL(hasuraGraphqlEndpoint);
-      const queryEndpoint = new URL("/v1/metadata", baseUrl.origin).toString();
+      const baseUrl = extractBaseUrlBeforeSegment(hasuraGraphqlEndpoint, "/v1/graphql");
+      const queryEndpoint = new URL(`${baseUrl}/v1/metadata`).toString();
 
       const messages: string[] = [];
 
