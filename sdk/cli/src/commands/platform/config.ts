@@ -42,7 +42,12 @@ export function configCommand() {
       intro("Getting platform configuration");
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-      const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
+      const selectedInstance = instance
+        ? sanitizeAndValidateInstanceUrl(instance)
+        : await instancePrompt({
+            env,
+            accept: true,
+          });
       const settlemint = createSettleMintClient({
         accessToken: "",
         instance: selectedInstance,

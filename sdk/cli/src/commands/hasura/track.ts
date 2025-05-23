@@ -39,7 +39,10 @@ export function hasuraTrackCommand() {
         return missingApplication();
       }
 
-      const selectedInstance = await instancePrompt(env, true);
+      const selectedInstance = await instancePrompt({
+        env,
+        accept: true,
+      });
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance: selectedInstance,

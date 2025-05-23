@@ -55,7 +55,10 @@ export function subgraphRemoveCommand() {
         await deleteConfirmationPrompt(`the subgraph ${graphName}`);
       }
 
-      const instance = await instancePrompt(env, true);
+      const instance = await instancePrompt({
+        env,
+        accept: true,
+      });
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

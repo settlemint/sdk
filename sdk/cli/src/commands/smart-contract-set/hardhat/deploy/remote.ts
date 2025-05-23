@@ -84,7 +84,10 @@ export function hardhatDeployRemoteCommand() {
       let node: BlockchainNode | undefined;
       let envHardhatConfig: Record<string, string> = {};
 
-      const instance = await instancePrompt(env, true);
+      const instance = await instancePrompt({
+        env,
+        accept: true,
+      });
       if (instance === STANDALONE_INSTANCE) {
         envHardhatConfig.BTP_RPC_URL = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT ?? "";
       } else {

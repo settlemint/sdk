@@ -87,7 +87,12 @@ export function connectCommand(): Command {
       .action(async ({ acceptDefaults, prod, instance }) => {
         intro("Connecting your dApp");
         const env: Partial<DotEnv> = await loadEnv(false, !!prod);
-        const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
+        const selectedInstance = instance
+          ? sanitizeAndValidateInstanceUrl(instance)
+          : await instancePrompt({
+              env,
+              accept: true,
+            });
 
         if (selectedInstance === STANDALONE_INSTANCE) {
           await connectToStandalone(env, acceptDefaults, prod);

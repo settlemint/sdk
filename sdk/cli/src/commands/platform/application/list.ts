@@ -47,7 +47,10 @@ export function applicationsListCommand() {
       intro("Listing applications");
 
       const env: Partial<DotEnv> = await loadEnv(false, false);
-      const selectedInstance = await instancePrompt(env, true);
+      const selectedInstance = await instancePrompt({
+        env,
+        accept: true,
+      });
       const personalAccessToken = await getInstanceCredentials(selectedInstance);
 
       if (!personalAccessToken) {

@@ -49,7 +49,10 @@ export function subgraphDeployCommand() {
       const autoAccept = !!acceptDefaults || isInCi;
       const env = await loadEnv(false, !!prod);
 
-      const instance = await instancePrompt(env, true);
+      const instance = await instancePrompt({
+        env,
+        accept: true,
+      });
       const accessToken = await getApplicationOrPersonalAccessToken({
         env,
         instance,

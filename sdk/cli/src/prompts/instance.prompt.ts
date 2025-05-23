@@ -9,21 +9,25 @@ import isInCi from "is-in-ci";
 /**
  * Prompts the user for the URL of their SettleMint instance.
  *
- * @param env - Partial environment variables, potentially containing a pre-configured instance URL.
- * @returns A promise that resolves to the user-input or default SettleMint instance URL.
- * @throws Will throw an error if the input validation fails.
- *
- * @example
- * const env: Partial<DotEnv> = { SETTLEMINT_INSTANCE: "https://example.settlemint.com" };
- * const instanceUrl = await instancePrompt(env);
- * console.log(instanceUrl); // Output: https://example.settlemint.com or user input
+ * @param options - The options for the instance prompt
+ * @param options.env - Partial environment variables, potentially containing a pre-configured instance URL
+ * @param options.accept - Whether to automatically accept the default value
+ * @param options.freeTextInput - Whether to allow free text input instead of selection
+ * @param options.isCi - Whether the code is running in a CI environment
+ * @returns A promise that resolves to the sanitized SettleMint instance URL
+ * @throws Will throw an error if the input validation fails
  */
-export async function instancePrompt(
-  env: Partial<DotEnv>,
-  accept: boolean | undefined,
+export async function instancePrompt({
+  env,
+  accept,
   freeTextInput = false,
   isCi = isInCi,
-): Promise<string> {
+}: {
+  env: Partial<DotEnv>;
+  accept: boolean | undefined;
+  freeTextInput?: boolean;
+  isCi?: boolean;
+}): Promise<string> {
   const autoAccept = !!accept || isCi;
   const defaultInstance = env.SETTLEMINT_INSTANCE;
   const defaultPossible = autoAccept && defaultInstance;
@@ -74,6 +78,6 @@ export async function instancePrompt(
         value: STANDALONE_INSTANCE,
       },
     ],
-    default: sanitizeInstanceUrl(defaultPromptInstance),
+    default: sanitizeInstanceUrl(knownInstances.length > 0 ? defaultPromptInstance : STANDALONE_INSTANCE),
   });
 }

@@ -48,7 +48,12 @@ export function pincodeVerificationResponseCommand() {
         return missingApplication();
       }
 
-      const selectedInstance = instance ? sanitizeAndValidateInstanceUrl(instance) : await instancePrompt(env, true);
+      const selectedInstance = instance
+        ? sanitizeAndValidateInstanceUrl(instance)
+        : await instancePrompt({
+            env,
+            accept: true,
+          });
       const personalAccessToken = await getInstanceCredentials(selectedInstance);
       if (!personalAccessToken) {
         return missingPersonalAccessTokenError();
