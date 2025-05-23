@@ -102,7 +102,7 @@ export function hardhatDeployRemoteCommand() {
           instance,
         });
 
-        const node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
+        node = await selectTargetNode({ env, blockchainNodeUniqueName, autoAccept, settlemint });
         envHardhatConfig = await settlemint.foundry.env(node.uniqueName);
       }
 

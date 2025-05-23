@@ -48,7 +48,7 @@ afterEach(() => {
 });
 
 describe("Setup a project on a standalone environment using the SDK", () => {
-  let contractsDeploymentInfo: Record<string, string>;
+  let contractsDeploymentInfo: Record<string, string> = {};
 
   test(`Create a ${TEMPLATE_NAME} project`, async () => {
     const { output } = await runCommand(
@@ -143,7 +143,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "asset-tokenization-kit";
     let retries = 0;
-    // Only deploy the stable coin factory, otherwise it will take very long to deploy all the contracts
+    // Only deploy the forwarder, otherwise it will take very long to deploy all the contracts
     const { output: deployOutput } = await retryCommand(async () => {
       const privateKey = await findPrivateKeyByName(PRIVATE_KEY_SMART_CONTRACTS_NAMES[retries]!);
       retries++;
@@ -159,7 +159,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
           "--deployment-id",
           deploymentId,
           "--module",
-          "ignition/modules/stable-coin-factory.ts",
+          "ignition/modules/forwarder.ts",
           "--accept-defaults",
         ],
         {
@@ -265,6 +265,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Generating Blockscout resources");
     expect(output).toInclude("Generating Portal resources");
     expect(output).toInclude("Generating TheGraph resources");
+    expect(output).toInclude("Generating Viem resources");
     expect(output).toInclude("Codegen complete");
   });
 

@@ -70,7 +70,7 @@ export function subgraphDeployCommand() {
           prefer: "application",
         });
 
-        const theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
+        theGraphMiddleware = await getTheGraphMiddleware({ env, instance, accessToken, autoAccept });
         if (!theGraphMiddleware) {
           return nothingSelectedError("graph middleware");
         }
