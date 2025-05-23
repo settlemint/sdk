@@ -19,7 +19,7 @@ export async function retryWhenFailed<T>(
 ): Promise<T> {
   let attempt = 0;
 
-  while (attempt < maxRetries) {
+  while (attempt < maxRetries + 1) {
     try {
       return await fn();
     } catch (e) {
@@ -29,13 +29,15 @@ export async function retryWhenFailed<T>(
           throw error;
         }
       }
-      attempt += 1;
       if (attempt >= maxRetries) {
         throw e;
       }
-      // Exponential backoff with full jitter to prevent thundering herd
-      const jitter = Math.random();
-      const delay = 2 ** attempt * initialSleepTime * jitter; // 0-1x of 1s, 2s, 4s base
+      // Exponential backoff with jitter to prevent thundering herd
+      // Jitter: Random value between 0-10% of initialSleepTime
+      const baseDelay = 2 ** attempt * initialSleepTime;
+      const jitterAmount = initialSleepTime * (Math.random() / 10);
+      const delay = baseDelay + jitterAmount;
+      attempt += 1;
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }
