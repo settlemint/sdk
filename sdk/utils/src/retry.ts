@@ -1,3 +1,5 @@
+import { logger } from "./logging/logger.js";
+
 /**
  * Retry a function when it fails.
  * @param fn - The function to retry.
@@ -17,25 +19,31 @@ export async function retryWhenFailed<T>(
   initialSleepTime = 1_000,
   stopOnError?: (error: Error) => boolean,
 ): Promise<T> {
-  let attempt = 0;
+  let retries = 0;
+  const maxAttempts = maxRetries + 1;
 
-  while (attempt < maxRetries) {
+  while (retries < maxAttempts) {
     try {
       return await fn();
     } catch (e) {
+      const error = e as Error;
       if (typeof stopOnError === "function") {
-        const error = e as Error;
         if (stopOnError(error)) {
           throw error;
         }
       }
-      attempt += 1;
-      if (attempt >= maxRetries) {
+      if (retries >= maxRetries) {
         throw e;
       }
-      // Exponential backoff with full jitter to prevent thundering herd
-      const jitter = Math.random();
-      const delay = 2 ** attempt * initialSleepTime * jitter; // 0-1x of 1s, 2s, 4s base
+      // Exponential backoff with jitter to prevent thundering herd
+      // Jitter: Random value between 0-10% of initialSleepTime
+      const baseDelay = 2 ** retries * initialSleepTime;
+      const jitterAmount = initialSleepTime * (Math.random() / 10);
+      const delay = baseDelay + jitterAmount;
+      retries += 1;
+      logger.warn(
+        `An error occurred ${error.message}, retrying in ${delay.toFixed(0)}ms (retry ${retries} of ${maxRetries})...`,
+      );
       await new Promise((resolve) => setTimeout(resolve, delay));
     }
   }

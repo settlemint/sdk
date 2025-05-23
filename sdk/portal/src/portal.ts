@@ -90,16 +90,17 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
+export { readFragment } from "gql.tada";
+export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+export {
+  waitForTransactionReceipt,
+  type Transaction,
+  type TransactionEvent,
+  type TransactionReceipt,
+  type WaitForTransactionReceiptOptions,
+} from "./utils/wait-for-transaction-receipt.js";
 export {
   handleWalletVerificationChallenge,
   type HandleWalletVerificationChallengeOptions,
 } from "./utils/wallet-verification-challenge.js";
-export {
-  waitForTransactionReceipt,
-  type WaitForTransactionReceiptOptions,
-  type Transaction,
-  type TransactionEvent,
-} from "./utils/wait-for-transaction-receipt.js";
 export { getWebsocketClient, type WebsocketClientOptions } from "./utils/websocket-client.js";
-export { readFragment } from "gql.tada";
-export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";

@@ -1208,7 +1208,7 @@ The fetch function
 
 > **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError?`): `Promise`\<`T`\>
 
-Defined in: [sdk/utils/src/retry.ts:14](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/retry.ts#L14)
+Defined in: [sdk/utils/src/retry.ts:16](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/utils/src/retry.ts#L16)
 
 Retry a function when it fails.
 

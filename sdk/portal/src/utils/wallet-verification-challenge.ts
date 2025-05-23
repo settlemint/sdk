@@ -60,22 +60,19 @@ function generateResponse(pincode: string, salt: string, challenge: string): str
 
 /**
  * Options for handling a wallet verification challenge
- *
- * @typedef {Object} HandleWalletVerificationChallengeOptions
- * @template {AbstractSetupSchema} Setup - The GraphQL schema setup type
- * @property {GraphQLClient} portalClient - The portal client instance
- * @property {initGraphQLTada<Setup>} portalGraphql - The GraphQL query builder
- * @property {string} verificationId - The ID of the verification challenge
- * @property {Address} userWalletAddress - The wallet address to verify
- * @property {string | number} code - The verification code provided by the user
- * @property {"otp" | "secret-code" | "pincode"} verificationType - The type of verification being performed
  */
 export interface HandleWalletVerificationChallengeOptions<Setup extends AbstractSetupSchema> {
+  /** The portal client instance */
   portalClient: GraphQLClient;
+  /** The GraphQL query builder */
   portalGraphql: initGraphQLTada<Setup>;
+  /** The ID of the verification challenge */
   verificationId: string;
+  /** The wallet address to verify */
   userWalletAddress: Address;
+  /** The verification code provided by the user */
   code: string | number;
+  /** The type of verification being performed */
   verificationType: "otp" | "secret-code" | "pincode";
 }
 
