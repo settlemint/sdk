@@ -37,7 +37,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   mock.restore();
-  //moduleMocker.clear();
+  moduleMocker.clear();
   await restoreBackup();
 });
 
