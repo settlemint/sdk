@@ -1,5 +1,4 @@
 import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
-import type { ClientOptions as ViemClientOptions } from "@settlemint/sdk-viem";
 import { isAddress } from "viem";
 import { z } from "zod/v4";
 
@@ -26,5 +25,4 @@ export const ClientOptionsSchema = z.object({
  * Configuration options for creating an EAS client.
  * Combines EAS-specific options with base Viem client options.
  */
-export type ClientOptions = z.infer<typeof ClientOptionsSchema> &
-  Pick<ViemClientOptions, "accessToken" | "chainId" | "chainName" | "rpcUrl">;
+export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
