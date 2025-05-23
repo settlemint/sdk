@@ -358,8 +358,8 @@ async function connectToStandalone(
     },
     {
       id: "theGraphEndpoint",
-      label: "The Graph GraphQL Endpoint",
-      message: "What is the GraphQL endpoint for the The Graph instance you want to connect to?",
+      label: "The Graph subgraph GraphQL Endpoint",
+      message: "What is the GraphQL endpoint for the The Graph subgraph you want to connect to?",
       example: "https://thegraph.mydomain.com/subgraphs/name/my-subgraph",
       defaultValue:
         Array.isArray(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS) &&
