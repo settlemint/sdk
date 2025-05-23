@@ -40,5 +40,5 @@ export async function serviceValuePrompt({
     default: defaultValue,
   });
 
-  return serviceSecret.trim();
+  return serviceSecret || undefined;
 }

@@ -6,6 +6,7 @@ import isInCi from "is-in-ci";
  * Prompts the user for a service secret in standalone mode.
  *
  * @param options - Configuration options for the prompt
+ * @param options.name - The name of the secret
  * @param options.defaultSecret - The default secret to use if available
  * @param options.message - Custom prompt message to display
  * @param options.accept - Whether to automatically accept the default value
@@ -13,11 +14,13 @@ import isInCi from "is-in-ci";
  * @returns A promise that resolves to the user-input or default service secret
  */
 export async function serviceSecretPrompt({
+  name,
   defaultSecret,
   message = "Enter service secret:",
   accept = false,
   isCi = isInCi,
 }: {
+  name: string;
   defaultSecret?: string;
   message?: string;
   accept?: boolean;
@@ -35,7 +38,7 @@ export async function serviceSecretPrompt({
 
   if (defaultSecret) {
     const keep = await confirm({
-      message: "Do you want to use the existing secret?",
+      message: `Do you want to use the existing ${name} secret?`,
       default: true,
     });
     if (keep) {
@@ -47,5 +50,5 @@ export async function serviceSecretPrompt({
     message,
   });
 
-  return serviceSecret.trim();
+  return serviceSecret || undefined;
 }

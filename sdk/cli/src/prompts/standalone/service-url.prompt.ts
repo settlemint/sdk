@@ -1,7 +1,7 @@
-import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import { UrlSchema, validate } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
+
 /**
  * Prompts the user for a service URL in standalone mode.
  *
@@ -50,5 +50,5 @@ export async function serviceUrlPrompt({
     transformer: (value) => value.trim(),
   });
 
-  return sanitizeInstanceUrl(serviceUrl);
+  return serviceUrl || undefined;
 }

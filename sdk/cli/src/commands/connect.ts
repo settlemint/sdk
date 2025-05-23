@@ -433,10 +433,11 @@ async function connectToStandalone(
     >
   > = {};
   for (const prompt of standalonePrompts) {
-    const { id, message, example, defaultValue, type } = prompt;
+    const { id, label, message, example, defaultValue, type } = prompt;
     const result =
       type === "secret"
         ? await serviceSecretPrompt({
+            name: label,
             message,
             defaultSecret: defaultValue,
             accept: acceptDefaults,
