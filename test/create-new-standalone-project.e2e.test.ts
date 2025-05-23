@@ -270,7 +270,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   });
 
   test("dApp - Build", async () => {
-    const env = { ...process.env, NODE_ENV: "production", NODE_OPTIONS: "--max-old-space-size=1024" };
+    const env = { ...process.env, NODE_ENV: "production", NODE_OPTIONS: "--max-old-space-size=2048" };
     try {
       await $`bun addresses`.cwd(dAppDir).env(env);
       await $`bun lint`.cwd(dAppDir).env(env);
