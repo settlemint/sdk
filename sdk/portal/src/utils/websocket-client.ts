@@ -16,9 +16,14 @@ export interface WebsocketClientOptions {
  * Creates a GraphQL WebSocket client for the Portal API
  *
  * @param {WebsocketClientOptions} options - The options for the client
- * @param {string} options.portalGraphqlEndpoint - The GraphQL endpoint URL for the Portal API
- * @param {string} options.accessToken - The access token for authentication with the Portal API
  * @returns {Client} The GraphQL WebSocket client
+ * @example
+ * import { getWebsocketClient } from "@settlemint/sdk-portal";
+ *
+ * const client = getWebsocketClient({
+ *   portalGraphqlEndpoint: "https://console.settlemint.com/graphql",
+ *   accessToken: "your-access-token",
+ * });
  */
 export function getWebsocketClient({ portalGraphqlEndpoint, accessToken }: WebsocketClientOptions) {
   if (!portalGraphqlEndpoint) {

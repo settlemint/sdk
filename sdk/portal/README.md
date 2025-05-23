@@ -449,7 +449,7 @@ const result = await portalClient.request(query);
 
 > **getWebsocketClient**(`options`): `Client`
 
-Defined in: [sdk/portal/src/utils/websocket-client.ts:23](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/utils/websocket-client.ts#L23)
+Defined in: [sdk/portal/src/utils/websocket-client.ts:28](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/portal/src/utils/websocket-client.ts#L28)
 
 Creates a GraphQL WebSocket client for the Portal API
 
@@ -464,6 +464,17 @@ Creates a GraphQL WebSocket client for the Portal API
 `Client`
 
 The GraphQL WebSocket client
+
+##### Example
+
+```ts
+import { getWebsocketClient } from "@settlemint/sdk-portal";
+
+const client = getWebsocketClient({
+  portalGraphqlEndpoint: "https://console.settlemint.com/graphql",
+  accessToken: "your-access-token",
+});
+```
 
 ***
 
