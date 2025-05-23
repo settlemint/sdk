@@ -61,7 +61,13 @@ Creates an EAS client for interacting with the Ethereum Attestation Service.
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | [`ClientOptions`](#clientoptions) | Configuration options for the client |
+| `options` | \{ `accessToken`: `string`; `attestationAddress`: `string`; `chainId`: `string`; `chainName`: `string`; `rpcUrl`: `string`; `schemaRegistryAddress`: `string`; \} | Configuration options for the client |
+| `options.accessToken` | `string` | Access token for the RPC provider (must start with 'sm_aat_' or 'sm_pat_') |
+| `options.attestationAddress` | `string` | The address of the EAS Attestation contract |
+| `options.chainId` | `string` | The chain ID to connect to |
+| `options.chainName` | `string` | The name of the chain to connect to |
+| `options.rpcUrl` | `string` | The RPC URL to connect to (must be a valid URL) |
+| `options.schemaRegistryAddress` | `string` | The address of the EAS Schema Registry contract |
 
 ##### Returns
 
@@ -129,9 +135,9 @@ Represents a single field in an EAS schema.
 
 #### ClientOptions
 
-> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\> & `Pick`\<`ViemClientOptions`, `"accessToken"` \| `"chainId"` \| `"chainName"` \| `"rpcUrl"`\>
+> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/eas/src/client-options.schema.ts:29](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/client-options.schema.ts#L29)
+Defined in: [sdk/eas/src/client-options.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/client-options.schema.ts#L28)
 
 Configuration options for creating an EAS client.
 Combines EAS-specific options with base Viem client options.
@@ -142,7 +148,7 @@ Combines EAS-specific options with base Viem client options.
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `attestationAddress`: `ZodString`; `chainId`: `ZodString`; `chainName`: `ZodString`; `rpcUrl`: `ZodString`; `schemaRegistryAddress`: `ZodString`; \}, `$strip`\>
 
-Defined in: [sdk/eas/src/client-options.schema.ts:10](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/client-options.schema.ts#L10)
+Defined in: [sdk/eas/src/client-options.schema.ts:9](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/eas/src/client-options.schema.ts#L9)
 
 Schema for validating EAS client configuration options.
 Extends the base Viem client options with EAS-specific requirements.
