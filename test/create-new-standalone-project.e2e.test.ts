@@ -269,7 +269,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test("Build app", async () => {
+  test("dApp - Build", async () => {
     const env = { ...process.env, NODE_ENV: "production" };
     try {
       await $`bun addresses`.cwd(dAppDir).env(env);
