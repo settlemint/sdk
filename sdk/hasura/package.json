@@ -48,8 +48,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack . || exit 0",
     "test": "bun test",

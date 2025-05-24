@@ -39,8 +39,8 @@
   },
   "scripts": {
     "codegen": "gql-tada generate-schema ${CONSOLE_GRAPHQL:-https://console.settlemint.com/api/graphql} && gql-tada generate-output && gql-tada turbo",
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",
