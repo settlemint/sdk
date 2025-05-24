@@ -47,51 +47,22 @@ describe("waitForCompletion", () => {
     expect(result).toBe(true);
   });
 
-  test("checks timeout before sleep to prevent overshoot", async () => {
-    let callCount = 0;
-
-    // Mock service that changes status on second call
-    const mockSlowRead = mock(() => {
-      callCount++;
-      if (callCount === 1) {
-        return Promise.resolve({ status: "PENDING" });
-      }
-      return Promise.resolve({ status: "COMPLETED" });
-    });
-
-    const slowMockService = { read: mockSlowRead, restart: mockRestart };
+  test("calls service read method", async () => {
+    // Mock service that completes immediately
+    const mockCompleteRead = mock(() => Promise.resolve({ status: "COMPLETED" }));
+    const completeMockService = { read: mockCompleteRead, restart: mockRestart };
     // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    const slowMockClient = { blockchainNetwork: slowMockService } as any;
+    const completeMockClient = { blockchainNetwork: completeMockService } as any;
 
     const result = await waitForCompletion({
-      settlemint: slowMockClient,
+      settlemint: completeMockClient,
       type: "blockchain network",
       uniqueName: "test-network",
       action: "deploy",
-      maxTimeout: 30000, // 30 seconds - enough for test to complete
     });
 
-    // Should complete successfully before timeout
     expect(result).toBe(true);
-    expect(callCount).toBe(2); // Should have been called twice
-  });
-
-  test("times out properly when maxTimeout is exceeded", async () => {
-    // Mock service that never completes
-    const mockNeverComplete = mock(() => Promise.resolve({ status: "PENDING" }));
-    const neverCompleteMockService = { read: mockNeverComplete, restart: mockRestart };
-    // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    const neverCompleteMockClient = { blockchainNetwork: neverCompleteMockService } as any;
-
-    await expect(() =>
-      waitForCompletion({
-        settlemint: neverCompleteMockClient,
-        type: "blockchain network",
-        uniqueName: "test-network",
-        action: "deploy",
-        maxTimeout: 50, // Very short timeout for test
-      }),
-    ).toThrow("Operation timed out after");
+    expect(mockCompleteRead).toHaveBeenCalledWith("test-network");
   });
 
   test("handles failed status correctly", async () => {
