@@ -8,9 +8,9 @@ export const ServerClientOptionsSchema = z.object({
   /** The URL of the MinIO instance to connect to */
   instance: UrlSchema,
   /** The MinIO access key used to authenticate with the MinIO server */
-  accessKey: z.string(),
+  accessKey: z.string().min(1, "Access key cannot be empty"),
   /** The MinIO secret key used to authenticate with the MinIO server */
-  secretKey: z.string(),
+  secretKey: z.string().min(1, "Secret key cannot be empty"),
 });
 
 /**
