@@ -54,7 +54,7 @@ The SettleMint MinIO SDK provides a simple way to interact with MinIO object sto
 
 > **createPresignedUploadUrl**(`client`, `fileName`, `path`, `bucket`, `expirySeconds`): `Promise`\<`string`\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:243](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L243)
+Defined in: [sdk/minio/src/helpers/functions.ts:261](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L261)
 
 Creates a presigned upload URL for direct browser uploads
 
@@ -157,7 +157,7 @@ client.listBuckets();
 
 > **deleteFile**(`client`, `fileId`, `bucket`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:196](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L196)
+Defined in: [sdk/minio/src/helpers/functions.ts:214](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L214)
 
 Deletes a file from storage
 
@@ -199,7 +199,7 @@ await deleteFile(client, "documents/report.pdf");
 
 > **getFileById**(`client`, `fileId`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:123](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L123)
+Defined in: [sdk/minio/src/helpers/functions.ts:141](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L141)
 
 Gets a single file by its object name
 
@@ -283,7 +283,7 @@ const files = await getFilesList(client, "documents/");
 
 > **uploadFile**(`client`, `buffer`, `objectName`, `contentType`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:293](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L293)
+Defined in: [sdk/minio/src/helpers/functions.ts:311](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/minio/src/helpers/functions.ts#L311)
 
 Uploads a buffer directly to storage
 

@@ -142,7 +142,7 @@ const result = await client.request(query);
 
 > **createPostgresPool**(`databaseUrl`): `Pool`
 
-Defined in: [sdk/hasura/src/postgres.ts:83](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/hasura/src/postgres.ts#L83)
+Defined in: [sdk/hasura/src/postgres.ts:107](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/hasura/src/postgres.ts#L107)
 
 Creates a PostgreSQL connection pool with error handling and retry mechanisms
 
