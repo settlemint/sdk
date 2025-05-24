@@ -72,12 +72,13 @@ export async function executeCommand(
       }
       output.push(maskedData);
     });
-    child.on("error", (err) =>
-      reject(new CommandError(err.message, "code" in err && typeof err.code === "number" ? err.code : 1, output)),
-    );
+    child.on("error", (err) => {
+      process.stdin.unpipe(child.stdin);
+      reject(new CommandError(err.message, "code" in err && typeof err.code === "number" ? err.code : 1, output));
+    });
     child.on("close", (code) => {
+      process.stdin.unpipe(child.stdin);
       if (code === 0 || code === null || code === 143) {
-        process.stdin.unpipe(child.stdin);
         resolve(output);
         return;
       }

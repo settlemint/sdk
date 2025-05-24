@@ -72,25 +72,43 @@ export async function getFilesList(
     const objects = await executeMinioOperation(client, listOperation);
     console.log(`Found ${objects.length} files in MinIO`);
 
-    const fileObjects = await Promise.all(
+    const fileObjects = await Promise.allSettled(
       objects.map(async (obj): Promise<FileMetadata> => {
-        const presignedUrlOperation = createPresignedUrlOperation(
-          bucket,
-          obj.name,
-          3600, // 1 hour expiry
-        );
-        const url = await executeMinioOperation(client, presignedUrlOperation);
+        try {
+          const presignedUrlOperation = createPresignedUrlOperation(
+            bucket,
+            obj.name,
+            3600, // 1 hour expiry
+          );
+          const url = await executeMinioOperation(client, presignedUrlOperation);
 
-        return {
-          id: obj.name,
-          name: obj.name.split("/").pop() || obj.name,
-          contentType: "application/octet-stream", // Default type
-          size: obj.size,
-          uploadedAt: obj.lastModified.toISOString(),
-          etag: obj.etag,
-          url,
-        };
+          return {
+            id: obj.name,
+            name: obj.name.split("/").pop() || obj.name,
+            contentType: "application/octet-stream", // Default type
+            size: obj.size,
+            uploadedAt: obj.lastModified.toISOString(),
+            etag: obj.etag,
+            url,
+          };
+        } catch (error) {
+          console.warn(`Failed to generate presigned URL for ${obj.name}:`, error);
+          // Return metadata without URL for failed presigned URL operations
+          return {
+            id: obj.name,
+            name: obj.name.split("/").pop() || obj.name,
+            contentType: "application/octet-stream", // Default type
+            size: obj.size,
+            uploadedAt: obj.lastModified.toISOString(),
+            etag: obj.etag,
+            // url is omitted for failed operations (undefined)
+          };
+        }
       }),
+    ).then((results) =>
+      results
+        .filter((result): result is PromiseFulfilledResult<FileMetadata> => result.status === "fulfilled")
+        .map((result) => result.value),
     );
 
     return validate(FileMetadataSchema.array(), fileObjects);
@@ -147,7 +165,7 @@ export async function getFileById(
     // Check for content-length in metadata
     if (statResult.metaData["content-length"]) {
       const parsedSize = Number.parseInt(statResult.metaData["content-length"], 10);
-      if (!Number.isNaN(parsedSize)) {
+      if (!Number.isNaN(parsedSize) && parsedSize >= 0 && Number.isFinite(parsedSize)) {
         size = parsedSize;
       }
     }
