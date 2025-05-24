@@ -35,19 +35,21 @@ describe("postgres connection handling", () => {
   test("validates connection string requirement", () => {
     const { createPostgresPool } = require("./postgres.js");
 
-    // Test that function accepts a connection string parameter
-    // Note: pg.Pool will accept empty strings and handle validation internally
-    // We're testing that our function doesn't crash on various inputs
+    // Test that function accepts a valid connection string
     expect(() => {
       const pool = createPostgresPool("postgresql://test");
       expect(pool).toBeDefined();
       pool.end();
     }).not.toThrow();
 
+    // Test that function throws error for empty connection string
     expect(() => {
-      const pool = createPostgresPool("");
-      expect(pool).toBeDefined();
-      pool.end();
-    }).not.toThrow();
+      createPostgresPool("");
+    }).toThrow("Database URL is required");
+
+    // Test that function throws error for null/undefined connection string
+    expect(() => {
+      createPostgresPool(null as any);
+    }).toThrow("Database URL is required");
   });
 });

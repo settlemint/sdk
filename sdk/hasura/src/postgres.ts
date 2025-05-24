@@ -46,8 +46,11 @@ function setupErrorHandling(pool: pg.Pool) {
       try {
         const client = await pool.connect();
         try {
-          // Test the connection
-          await client.query("SELECT 1");
+          // Test the connection with timeout
+          await Promise.race([
+            client.query("SELECT 1"),
+            new Promise((_, reject) => setTimeout(() => reject(new Error("Query timeout")), 5000)),
+          ]);
           console.log("[Drizzle] Successfully recovered connection");
           retryCount = 0;
         } finally {
@@ -102,6 +105,10 @@ function setupErrorHandling(pool: pg.Pool) {
  * }
  */
 export function createPostgresPool(databaseUrl: string) {
+  if (!databaseUrl?.trim()) {
+    throw new Error("Database URL is required");
+  }
+
   if (!runsOnServer) {
     throw new Error("Drizzle client can only be created on the server side");
   }

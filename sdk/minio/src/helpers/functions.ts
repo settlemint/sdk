@@ -101,7 +101,7 @@ export async function getFilesList(
             size: obj.size,
             uploadedAt: obj.lastModified.toISOString(),
             etag: obj.etag,
-            url: "", // Empty URL for failed operations
+            // url is omitted for failed operations (undefined)
           };
         }
       }),
