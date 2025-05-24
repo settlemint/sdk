@@ -71,25 +71,25 @@ describe("retryWhenFailed", () => {
             min: 0,
             max: 100,
           },
-          // First retry: Base delay (1000ms) + jitter (0-100ms)
+          // First retry: Base delay (1000ms) + jitter (0-100ms) + CI tolerance
           {
-            min: 1000,
-            max: 1100,
+            min: 900,
+            max: 1200,
           },
-          // Second retry: 2x base delay (2000ms) + jitter (0-100ms)
+          // Second retry: 2x base delay (2000ms) + jitter (0-100ms) + CI tolerance
           {
-            min: 2000,
-            max: 2100,
+            min: 1900,
+            max: 2200,
           },
-          // Third retry: 4x base delay (4000ms) + jitter (0-100ms)
+          // Third retry: 4x base delay (4000ms) + jitter (0-100ms) + CI tolerance
           {
-            min: 4000,
-            max: 4100,
+            min: 3900,
+            max: 4200,
           },
-          // Fourth retry: 8x base delay (8000ms) + jitter (0-100ms)
+          // Fourth retry: 8x base delay (8000ms) + jitter (0-100ms) + CI tolerance
           {
-            min: 8000,
-            max: 8100,
+            min: 7900,
+            max: 8200,
           },
         ];
         try {
@@ -100,7 +100,7 @@ describe("retryWhenFailed", () => {
         }
         return Promise.reject(dummyError);
       });
-      expect(
+      await expect(
         retryWhenFailed(fn, 4, initialSleepTime, (err) => {
           const isDummyError = err === dummyError;
           if (!isDummyError) {

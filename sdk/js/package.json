@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/settlemint.cjs",
-  "module": "./dist/settlemint.mjs",
+  "module": "./dist/settlemint.js",
   "types": "./dist/settlemint.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/settlemint.d.ts",
-        "default": "./dist/settlemint.mjs"
+        "default": "./dist/settlemint.js"
       },
       "require": {
         "types": "./dist/settlemint.d.cts",

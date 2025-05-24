@@ -24,6 +24,7 @@ export const createConfig = (options: ConfigOptions): Options => {
     dts: true,
     sourcemap: !isProd || "inline",
     splitting: !options.bundle && options.format?.includes("esm"),
+    bundle: options.bundle,
     treeshake: isProd,
     minify: options.minifyOverride ?? isProd,
     target: options.target || (options.platform === "browser" ? "es2022" : "node20"),
@@ -151,10 +152,10 @@ export const withPerformanceMonitoring = (config: Options): Options => ({
 
     if (result.metafile && shouldAnalyze) {
       console.log("📊 Bundle Analysis:");
-      Object.entries(result.metafile.outputs).forEach(([file, output]) => {
+      for (const [file, output] of Object.entries(result.metafile.outputs)) {
         const sizeKb = (output.bytes / 1024).toFixed(2);
         console.log(`📦 ${file}: ${sizeKb}kb`);
-      });
+      }
     }
   },
 });
