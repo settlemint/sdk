@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/ipfs.cjs",
-  "module": "./dist/ipfs.mjs",
+  "module": "./dist/ipfs.js",
   "types": "./dist/ipfs.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/ipfs.d.ts",
-        "default": "./dist/ipfs.mjs"
+        "default": "./dist/ipfs.js"
       },
       "require": {
         "types": "./dist/ipfs.d.cts",

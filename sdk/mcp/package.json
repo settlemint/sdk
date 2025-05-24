@@ -24,7 +24,7 @@
   "exports": {
     "./*": {
       "types": "./dist/*.d.ts",
-      "default": "./dist/*.mjs"
+      "default": "./dist/*.js"
     }
   },
   "bin": {

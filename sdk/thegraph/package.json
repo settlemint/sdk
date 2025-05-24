@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/thegraph.cjs",
-  "module": "./dist/thegraph.mjs",
+  "module": "./dist/thegraph.js",
   "types": "./dist/thegraph.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/thegraph.d.ts",
-        "default": "./dist/thegraph.mjs"
+        "default": "./dist/thegraph.js"
       },
       "require": {
         "types": "./dist/thegraph.d.cts",

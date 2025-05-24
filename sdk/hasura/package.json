@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/hasura.cjs",
-  "module": "./dist/hasura.mjs",
+  "module": "./dist/hasura.js",
   "types": "./dist/hasura.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/hasura.d.ts",
-        "default": "./dist/hasura.mjs"
+        "default": "./dist/hasura.js"
       },
       "require": {
         "types": "./dist/hasura.d.cts",
@@ -39,7 +39,7 @@
     "./postgres": {
       "import": {
         "types": "./dist/postgres.d.ts",
-        "default": "./dist/postgres.mjs"
+        "default": "./dist/postgres.js"
       },
       "require": {
         "types": "./dist/postgres.d.cts",
