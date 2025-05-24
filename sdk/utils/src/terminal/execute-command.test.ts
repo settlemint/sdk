@@ -79,6 +79,8 @@ describe("executeCommand", () => {
 
     try {
       await expect(() => executeCommand("false", [])).toThrow();
+      // Wait a bit to ensure the cleanup has happened
+      await new Promise((resolve) => setTimeout(resolve, 100));
       expect(unpipeCalled).toBe(true);
     } catch {
       // Expected to throw
