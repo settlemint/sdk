@@ -10,7 +10,7 @@ import type {
   SettlemintClient,
   Storage,
 } from "@settlemint/sdk-js";
-import { retryWhenFailed } from "@settlemint/sdk-utils";
+import { retryWhenFailed } from "@settlemint/sdk-utils/retry";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getSubgraphName } from "./subgraph/subgraph-name";

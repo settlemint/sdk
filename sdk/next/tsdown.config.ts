@@ -1,36 +1,43 @@
 import { defineConfig } from "tsdown";
+import { createMultiConfig, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig([
+export default createMultiConfig([
   {
     entry: ["src/all.ts"],
     format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
+    platform: "neutral", // Works in both Node.js and browser
+    external: ["react", "react-dom", "next", "@settlemint/sdk-js"],
+    banner: {
+      js: "/* SettleMint Next.js SDK - Full Stack */",
+    },
+    define: {
+      __NEXTJS_PACKAGE__: "true",
+    },
   },
   {
     entry: ["src/components/*.tsx"],
     format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
+    platform: "neutral",
     outDir: "dist/components",
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
+    external: ["react", "react-dom", "next"],
+    banner: {
+      js: "/* SettleMint Next.js Components */",
+    },
+    define: {
+      __NEXTJS_COMPONENTS__: "true",
+    },
   },
   {
     entry: ["src/config/*.ts"],
     format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
+    platform: "neutral",
     outDir: "dist/config",
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
+    external: ["next", "@settlemint/sdk-js"],
+    banner: {
+      js: "/* SettleMint Next.js Config */",
+    },
+    define: {
+      __NEXTJS_CONFIG__: "true",
+    },
   },
-]);
+]).map((config) => defineConfig(withPerformanceMonitoring(config)));

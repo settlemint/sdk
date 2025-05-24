@@ -1,13 +1,26 @@
 import { defineConfig } from "tsdown";
+import { createCLIPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig({
-  entry: ["src/cli.ts"],
-  format: ["cjs", "esm"],
-  dts: true,
-  sourcemap: true,
-  splitting: false,
-  shims: true,
-  outExtension: ({ format }) => ({
-    js: format === "esm" ? ".mjs" : ".cjs",
-  }),
-});
+export default defineConfig(
+  withPerformanceMonitoring(
+    createCLIPackage(["src/cli.ts"], {
+      external: [
+        "node:*",
+        "@settlemint/sdk-js",
+        "@settlemint/sdk-utils",
+        "node-fetch-native",
+        // CLI-specific externals
+        "commander",
+        "@commander-js/extra-typings",
+        "@inquirer/confirm",
+        "@inquirer/input",
+        "@inquirer/password",
+        "@inquirer/select",
+      ],
+      define: {
+        __CLI_NAME__: '"settlemint"',
+        __IS_CLI__: "true",
+      },
+    }),
+  ),
+);

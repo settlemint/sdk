@@ -1,94 +1,26 @@
 import { defineConfig } from "tsdown";
+import { createSmartExternal, createUtilsPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig([
-  {
-    entry: ["src/index.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
+const modules = [
+  "environment",
+  "filesystem",
+  "http",
+  "json",
+  "logging",
+  "package-manager",
+  "retry",
+  "runtime",
+  "string",
+  "terminal",
+  "url",
+  "validation",
+];
+
+const configs = createUtilsPackage(modules, {
+  external: createSmartExternal(true),
+  banner: {
+    js: "/* SettleMint SDK Utils - Optimized Build */",
   },
-  {
-    entry: ["src/environment.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/filesystem.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/http.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/logging.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/package-manager.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/runtime.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/terminal.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-  {
-    entry: ["src/validation.ts"],
-    format: ["cjs", "esm"],
-    dts: true,
-    sourcemap: true,
-    splitting: false,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
-    }),
-  },
-]);
+});
+
+export default defineConfig(configs.map((config) => withPerformanceMonitoring(config)));

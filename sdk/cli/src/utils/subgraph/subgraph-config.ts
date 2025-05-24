@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
-import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
+import { tryParseJson } from "@settlemint/sdk-utils/json";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { parse, stringify } from "yaml";
 

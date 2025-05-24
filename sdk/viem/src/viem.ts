@@ -30,7 +30,7 @@ export const ClientOptionsSchema = z.object({
   /**
    * The chain id
    */
-  chainId: z.string().optional(),
+  chainId: z.string(),
   /**
    * The chain name
    */
@@ -76,7 +76,11 @@ export const getPublicClient = (options: ClientOptions) => {
   ensureServer();
   const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
   return createPublicClient({
-    chain: getChain(validatedOptions),
+    chain: getChain({
+      chainId: validatedOptions.chainId,
+      chainName: validatedOptions.chainName,
+      rpcUrl: validatedOptions.rpcUrl,
+    }),
     transport: http(validatedOptions.rpcUrl, {
       batch: true,
       timeout: 60_000,
@@ -139,7 +143,11 @@ export interface WalletVerificationOptions {
 export const getWalletClient = (options: ClientOptions) => {
   ensureServer();
   const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
-  const chain = getChain(validatedOptions);
+  const chain = getChain({
+    chainId: validatedOptions.chainId,
+    chainName: validatedOptions.chainName,
+    rpcUrl: validatedOptions.rpcUrl,
+  });
   return (verificationOptions?: WalletVerificationOptions) =>
     createWalletClient({
       chain: chain,

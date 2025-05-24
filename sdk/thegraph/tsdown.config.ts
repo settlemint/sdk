@@ -1,12 +1,15 @@
 import { defineConfig } from "tsdown";
+import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig({
-  entry: ["src/thegraph.ts"],
-  format: ["cjs", "esm"],
-  dts: true,
-  sourcemap: true,
-  splitting: false,
-  outExtension: ({ format }) => ({
-    js: format === "esm" ? ".mjs" : ".cjs",
-  }),
+const configs = createWebOptimizedPackage(["src/thegraph.ts"], {
+  external: ["graphql", "@settlemint/sdk-js"],
+  banner: {
+    js: "/* SettleMint The Graph SDK - Indexing Protocol */",
+  },
+  define: {
+    __THEGRAPH_PACKAGE__: "true",
+    __INDEXING_PROTOCOL__: "true",
+  },
 });
+
+export default defineConfig(configs.map((config) => withPerformanceMonitoring(config)));

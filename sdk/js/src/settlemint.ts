@@ -114,7 +114,9 @@ import {
 /**
  * Options for the Settlemint client.
  */
-export interface SettlemintClientOptions extends ClientOptions {
+export interface SettlemintClientOptions extends Omit<ClientOptions, "accessToken"> {
+  /** The access token used to authenticate with the SettleMint platform */
+  accessToken?: string;
   /** Whether to allow anonymous access (no access token required) */
   anonymous?: boolean;
 }

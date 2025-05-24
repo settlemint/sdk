@@ -1,0 +1,98 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Next.js Integration Patterns
+
+## Next.js SDK Package
+The Next.js integration is located in [sdk/next/](mdc:sdk/next) with components and configuration helpers.
+
+### Package Structure
+- [sdk/next/src/components/](mdc:sdk/next/src/components) - React components for SettleMint integration
+- [sdk/next/src/config/](mdc:sdk/next/src/config) - Next.js configuration helpers
+
+## Configuration Wrapper Goals
+Based on project requirements, the Next.js package should provide:
+
+### Environment Variable Management
+- **Build Time**: Environment variables filled with empty strings for Zod validation
+- **Runtime**: Actual environment variable validation and usage
+- Differentiate between build-time and runtime contexts
+
+### Configuration Factory Pattern
+```typescript
+// Expected pattern for Next.js config wrapper
+export const createSettleMintConfig = (userConfig: NextConfig = {}): NextConfig => {
+  return {
+    ...userConfig,
+    // SettleMint-specific configurations
+    webpack: (config, options) => {
+      // SettleMint webpack configurations
+      config.externals.push("pino-pretty", "lokijs", "encoding", "debug");
+      config.resolve.fallback = { fs: false, net: false, tls: false };
+      
+      // Allow user webpack config
+      if (userConfig.webpack) {
+        return userConfig.webpack(config, options);
+      }
+      return config;
+    },
+    experimental: {
+      reactCompiler: true,
+      staleTimes: {
+        dynamic: 30,
+        static: 180,
+      },
+      ...userConfig.experimental,
+    },
+  };
+};
+```
+
+### Environment Variable Validation
+```typescript
+// Build vs Runtime environment handling
+export const createEnvConfig = <T extends Record<string, string>>(
+  schema: ZodSchema<T>,
+  buildTimeDefaults?: Partial<T>
+) => {
+  if (process.env.NODE_ENV === 'development' || process.env.BUILD_TIME) {
+    // Use empty strings or defaults for build time
+    return schema.parse(buildTimeDefaults || {});
+  }
+  
+  // Runtime validation with actual values
+  return schema.parse(process.env);
+};
+```
+
+## React 19 & Next.js 15 Patterns
+
+### Server Components
+- Favor React Server Components (RSC) where possible
+- Minimize 'use client' directives
+- Use Suspense for async operations
+
+### Async Runtime APIs
+```typescript
+// Always use async versions
+const cookieStore = await cookies();
+const headersList = await headers();
+const { isEnabled } = await draftMode();
+
+// Handle async params
+const params = await props.params;
+const searchParams = await props.searchParams;
+```
+
+### Data Fetching
+- Fetch requests are no longer cached by default
+- Use `cache: 'force-cache'` for specific cached requests
+- Implement `fetchCache = 'default-cache'` for layout/page-level caching
+
+## Integration Guidelines
+- Support multiple blockchain networks configuration
+- Provide GraphQL schema integration helpers
+- Include Drizzle database schema typing support
+- Maintain compatibility with SettleMint platform services

@@ -1,13 +1,17 @@
 import { defineConfig } from "tsdown";
+import { createNodePackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig({
-  entry: ["src/blockscout.ts"],
-  format: ["cjs", "esm"],
-  dts: true,
-  sourcemap: true,
-  splitting: false,
-  shims: true,
-  outExtension: ({ format }) => ({
-    js: format === "esm" ? ".mjs" : ".cjs",
-  }),
-});
+export default defineConfig(
+  withPerformanceMonitoring(
+    createNodePackage(["src/blockscout.ts"], {
+      shims: true,
+      external: ["@settlemint/sdk-js"],
+      banner: {
+        js: "/* SettleMint Blockscout SDK - Blockchain Explorer */",
+      },
+      define: {
+        __BLOCKSCOUT_PACKAGE__: "true",
+      },
+    }),
+  ),
+);

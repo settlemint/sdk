@@ -1,13 +1,15 @@
 import { defineConfig } from "tsdown";
+import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig({
-  entry: ["src/viem.ts"],
-  format: ["cjs", "esm"],
-  dts: true,
-  sourcemap: true,
-  splitting: false,
+const configs = createWebOptimizedPackage(["src/viem.ts"], {
   shims: true,
-  outExtension: ({ format }) => ({
-    js: format === "esm" ? ".mjs" : ".cjs",
-  }),
+  external: ["viem", "viem/accounts", "viem/chains", "@settlemint/sdk-js"],
+  banner: {
+    js: "/* SettleMint Viem SDK - Web3 Optimized */",
+  },
+  define: {
+    __WEB3_PACKAGE__: "true",
+  },
 });
+
+export default defineConfig(configs.map((config) => withPerformanceMonitoring(config)));

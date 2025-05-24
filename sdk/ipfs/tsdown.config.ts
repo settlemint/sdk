@@ -1,12 +1,15 @@
 import { defineConfig } from "tsdown";
+import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
 
-export default defineConfig({
-  entry: ["src/ipfs.ts"],
-  format: ["cjs", "esm"],
-  dts: true,
-  sourcemap: true,
-  splitting: false,
-  outExtension: ({ format }) => ({
-    js: format === "esm" ? ".mjs" : ".cjs",
-  }),
+const configs = createWebOptimizedPackage(["src/ipfs.ts"], {
+  external: ["@settlemint/sdk-js"],
+  banner: {
+    js: "/* SettleMint IPFS SDK - Distributed Storage */",
+  },
+  define: {
+    __IPFS_PACKAGE__: "true",
+    __DISTRIBUTED_STORAGE__: "true",
+  },
 });
+
+export default defineConfig(configs.map((config) => withPerformanceMonitoring(config)));

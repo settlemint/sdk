@@ -1,4 +1,4 @@
-import { extractJsonObject } from "@settlemint/sdk-utils";
+import { extractJsonObject } from "@settlemint/sdk-utils/json";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { type CommandError, executeCommand, note } from "@settlemint/sdk-utils/terminal";
 

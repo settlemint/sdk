@@ -1,8 +1,8 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { homedir } from "node:os";
 import { join } from "node:path";
-import { tryParseJson } from "@settlemint/sdk-utils";
 import { exists } from "@settlemint/sdk-utils/filesystem";
+import { tryParseJson } from "@settlemint/sdk-utils/json";
 import { cancel, list } from "@settlemint/sdk-utils/terminal";
 
 const CONFIG_DIR = join(homedir(), ".config", "settlemint");
