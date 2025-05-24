@@ -56,4 +56,66 @@ describe("fetchWithRetry", () => {
 
     expect(mockFetch).toHaveBeenCalledWith(url, undefined);
   });
+
+  it("should retry on 5xx server errors", async () => {
+    const errorResponse = new Response("Server Error", { status: 500, statusText: "Internal Server Error" });
+    const successResponse = new Response("success", { status: 200 });
+
+    mockFetch.mockResolvedValueOnce(errorResponse);
+    mockFetch.mockResolvedValueOnce(successResponse);
+
+    const result = await fetchWithRetry("https://api.example.com", undefined, 3, 10);
+
+    expect(result).toBe(successResponse);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("should retry on 429 rate limit errors", async () => {
+    const rateLimitResponse = new Response("Too Many Requests", { status: 429, statusText: "Too Many Requests" });
+    const successResponse = new Response("success", { status: 200 });
+
+    mockFetch.mockResolvedValueOnce(rateLimitResponse);
+    mockFetch.mockResolvedValueOnce(successResponse);
+
+    const result = await fetchWithRetry("https://api.example.com", undefined, 3, 10);
+
+    expect(result).toBe(successResponse);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("should retry on network errors", async () => {
+    const networkError = new Error("Network error");
+    const successResponse = new Response("success", { status: 200 });
+
+    mockFetch.mockRejectedValueOnce(networkError);
+    mockFetch.mockResolvedValueOnce(successResponse);
+
+    const result = await fetchWithRetry("https://api.example.com", undefined, 3, 10);
+
+    expect(result).toBe(successResponse);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("should retry on timeout errors (408)", async () => {
+    const timeoutResponse = new Response("Request Timeout", { status: 408, statusText: "Request Timeout" });
+    const successResponse = new Response("success", { status: 200 });
+
+    mockFetch.mockResolvedValueOnce(timeoutResponse);
+    mockFetch.mockResolvedValueOnce(successResponse);
+
+    const result = await fetchWithRetry("https://api.example.com", undefined, 3, 10);
+
+    expect(result).toBe(successResponse);
+    expect(mockFetch).toHaveBeenCalledTimes(2);
+  });
+
+  it("should throw error after max retries exceeded", async () => {
+    const errorResponse = new Response("Server Error", { status: 500, statusText: "Internal Server Error" });
+    mockFetch.mockResolvedValue(errorResponse);
+
+    await expect(fetchWithRetry("https://api.example.com", undefined, 2, 10)).rejects.toThrow(
+      "HTTP error! status: 500 Internal Server Error",
+    );
+    expect(mockFetch).toHaveBeenCalledTimes(3); // initial + 2 retries
+  });
 });

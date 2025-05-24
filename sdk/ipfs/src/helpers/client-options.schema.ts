@@ -1,4 +1,4 @@
-import { ApplicationAccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
+import { AccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import { z } from "zod/v4";
 
 /**
@@ -20,7 +20,7 @@ export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
  */
 export const ServerClientOptionsSchema = ClientOptionsSchema.extend({
   /** The access token used to authenticate with the SettleMint platform */
-  accessToken: ApplicationAccessTokenSchema,
+  accessToken: AccessTokenSchema,
 });
 
 /**

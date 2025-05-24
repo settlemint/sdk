@@ -38,10 +38,23 @@ describe("ClientOptionsSchema", () => {
 });
 
 describe("ServerClientOptionsSchema", () => {
+  const generateTestToken = () => `sm_aat_${Math.random().toString(36).substring(2, 15)}`;
+  const generatePersonalToken = () => `sm_pat_${Math.random().toString(36).substring(2, 15)}`;
+
   it("should validate valid server options", () => {
     const validOptions = {
       instance: "https://ipfs.example.com",
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
+    };
+
+    const result = ServerClientOptionsSchema.safeParse(validOptions);
+    expect(result.success).toBe(true);
+  });
+
+  it("should validate server options with personal access token", () => {
+    const validOptions = {
+      instance: "https://ipfs.example.com",
+      accessToken: generatePersonalToken(),
     };
 
     const result = ServerClientOptionsSchema.safeParse(validOptions);

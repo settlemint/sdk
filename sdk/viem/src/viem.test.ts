@@ -2,9 +2,11 @@ import { describe, expect, it } from "bun:test";
 import { ClientOptionsSchema, GetChainIdOptionsSchema } from "./viem.js";
 
 describe("ClientOptionsSchema", () => {
+  const generateTestToken = () => `sm_aat_${Math.random().toString(36).substring(2, 15)}`;
+
   it("should validate valid options", () => {
     const validOptions = {
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       chainId: "1",
       chainName: "Ethereum",
       rpcUrl: "https://rpc.example.com",
@@ -27,7 +29,7 @@ describe("ClientOptionsSchema", () => {
 
   it("should reject invalid RPC URL", () => {
     const invalidOptions = {
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       chainId: "1",
       chainName: "Ethereum",
       rpcUrl: "not-a-url",
@@ -39,7 +41,7 @@ describe("ClientOptionsSchema", () => {
 
   it("should reject missing required fields", () => {
     const invalidOptions = {
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
     };
 
     const result = ClientOptionsSchema.safeParse(invalidOptions);
@@ -48,9 +50,11 @@ describe("ClientOptionsSchema", () => {
 });
 
 describe("GetChainIdOptionsSchema", () => {
+  const generateTestToken = () => `sm_aat_${Math.random().toString(36).substring(2, 15)}`;
+
   it("should validate valid options", () => {
     const validOptions = {
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       rpcUrl: "https://rpc.example.com",
     };
 

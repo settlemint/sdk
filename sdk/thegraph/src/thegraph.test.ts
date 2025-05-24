@@ -2,10 +2,12 @@ import { describe, expect, it } from "bun:test";
 import { ClientOptionsSchema } from "./thegraph.js";
 
 describe("ClientOptionsSchema", () => {
+  const generateTestToken = () => `sm_aat_${Math.random().toString(36).substring(2, 15)}`;
+
   it("should validate valid options", () => {
     const validOptions = {
       instances: ["https://api.thegraph.com/subgraphs/name/user/my-subgraph"],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       subgraphName: "my-subgraph",
     };
 
@@ -16,7 +18,7 @@ describe("ClientOptionsSchema", () => {
   it("should validate options with cache setting", () => {
     const validOptions = {
       instances: ["https://api.thegraph.com/subgraphs/name/user/my-subgraph"],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       subgraphName: "my-subgraph",
       cache: "no-cache" as const,
     };
@@ -31,7 +33,7 @@ describe("ClientOptionsSchema", () => {
         "https://api.thegraph.com/subgraphs/name/user/subgraph1",
         "https://api.thegraph.com/subgraphs/name/user/subgraph2",
       ],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       subgraphName: "subgraph1",
     };
 
@@ -42,7 +44,7 @@ describe("ClientOptionsSchema", () => {
   it("should require at least one instance", () => {
     const invalidOptions = {
       instances: [],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       subgraphName: "my-subgraph",
     };
 
@@ -55,7 +57,7 @@ describe("ClientOptionsSchema", () => {
   it("should reject invalid instance URLs", () => {
     const invalidOptions = {
       instances: ["not-a-url"],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       subgraphName: "my-subgraph",
     };
 
@@ -77,7 +79,7 @@ describe("ClientOptionsSchema", () => {
   it("should reject missing subgraphName", () => {
     const invalidOptions = {
       instances: ["https://api.thegraph.com/subgraphs/name/user/my-subgraph"],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
     };
 
     const result = ClientOptionsSchema.safeParse(invalidOptions);
@@ -87,7 +89,7 @@ describe("ClientOptionsSchema", () => {
   it("should reject invalid cache value", () => {
     const invalidOptions = {
       instances: ["https://api.thegraph.com/subgraphs/name/user/my-subgraph"],
-      accessToken: "sm_aat_abcdef123456789",
+      accessToken: generateTestToken(),
       subgraphName: "my-subgraph",
       cache: "invalid-cache",
     };

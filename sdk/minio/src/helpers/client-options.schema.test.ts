@@ -76,7 +76,7 @@ describe("ServerClientOptionsSchema", () => {
     expect(result.success).toBe(false);
   });
 
-  it("should allow empty strings (but they may fail at runtime)", () => {
+  it("should reject empty access/secret keys", () => {
     const invalidOptions = {
       instance: "https://minio.example.com",
       accessKey: "",
@@ -84,8 +84,6 @@ describe("ServerClientOptionsSchema", () => {
     };
 
     const result = ServerClientOptionsSchema.safeParse(invalidOptions);
-    // Note: Empty strings pass schema validation but would fail at runtime
-    // This test documents the current behavior
-    expect(result.success).toBe(true);
+    expect(result.success).toBe(false);
   });
 });
