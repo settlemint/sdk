@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/viem.cjs",
-  "module": "./dist/viem.mjs",
+  "module": "./dist/viem.js",
   "types": "./dist/viem.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/viem.d.ts",
-        "default": "./dist/viem.mjs"
+        "default": "./dist/viem.js"
       },
       "require": {
         "types": "./dist/viem.d.cts",
@@ -38,8 +38,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",

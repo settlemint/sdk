@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/index.cjs",
-  "module": "./dist/index.mjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/index.d.ts",
-        "default": "./dist/index.mjs"
+        "default": "./dist/index.js"
       },
       "require": {
         "types": "./dist/index.d.cts",
@@ -39,7 +39,7 @@
     "./*": {
       "import": {
         "types": "./dist/*.d.ts",
-        "default": "./dist/*.mjs"
+        "default": "./dist/*.js"
       },
       "require": {
         "types": "./dist/*.d.cts",
@@ -48,8 +48,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",

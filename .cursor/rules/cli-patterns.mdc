@@ -1,0 +1,58 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# CLI Development Patterns
+
+## CLI Package Structure
+The CLI is located in [sdk/cli/](mdc:sdk/cli) with the following organization:
+
+### Command Structure
+- [sdk/cli/src/commands/](mdc:sdk/cli/src/commands) - All CLI commands
+- [sdk/cli/src/commands/codegen/](mdc:sdk/cli/src/commands/codegen) - Code generation utilities
+- [sdk/cli/src/commands/hasura/](mdc:sdk/cli/src/commands/hasura) - Hasura integration commands
+- [sdk/cli/src/commands/platform/](mdc:sdk/cli/src/commands/platform) - Platform management commands
+- [sdk/cli/src/commands/smart-contract-set/](mdc:sdk/cli/src/commands/smart-contract-set) - Smart contract commands
+
+### Supporting Infrastructure
+- [sdk/cli/src/constants/](mdc:sdk/cli/src/constants) - CLI constants and configuration
+- [sdk/cli/src/error/](mdc:sdk/cli/src/error) - Error handling utilities
+- [sdk/cli/src/prompts/](mdc:sdk/cli/src/prompts) - Interactive prompts
+- [sdk/cli/src/spinners/](mdc:sdk/cli/src/spinners) - Loading indicators
+- [sdk/cli/src/utils/](mdc:sdk/cli/src/utils) - CLI utility functions
+
+## Platform Commands
+The platform commands cover various blockchain and infrastructure services:
+
+### Blockchain Networks
+- [sdk/cli/src/commands/platform/blockchain-network/besu/](mdc:sdk/cli/src/commands/platform/blockchain-network/besu) - Besu network management
+
+### Infrastructure Services
+- [sdk/cli/src/commands/platform/storage/ipfs/](mdc:sdk/cli/src/commands/platform/storage/ipfs) - IPFS storage
+- [sdk/cli/src/commands/platform/storage/minio/](mdc:sdk/cli/src/commands/platform/storage/minio) - MinIO storage
+- [sdk/cli/src/commands/platform/middleware/graph/](mdc:sdk/cli/src/commands/platform/middleware/graph) - Graph middleware
+- [sdk/cli/src/commands/platform/insights/blockscout/](mdc:sdk/cli/src/commands/platform/insights/blockscout) - Blockscout explorer
+
+### Smart Contract Development
+- [sdk/cli/src/commands/smart-contract-set/foundry/](mdc:sdk/cli/src/commands/smart-contract-set/foundry) - Foundry integration
+- [sdk/cli/src/commands/smart-contract-set/hardhat/](mdc:sdk/cli/src/commands/smart-contract-set/hardhat) - Hardhat integration
+- [sdk/cli/src/commands/smart-contract-set/subgraph/](mdc:sdk/cli/src/commands/smart-contract-set/subgraph) - Subgraph development
+
+## CLI Build Configuration
+Use the CLI-specific build configuration from [shared/tsdown-factory.ts](mdc:shared/tsdown-factory.ts):
+
+```typescript
+import { createCLIPackage } from "../../shared/tsdown-factory";
+
+export default createCLIPackage(["src/cli.ts"], {
+  // CLI-specific options
+});
+```
+
+## Development Guidelines
+- All CLI commands should be properly typed
+- Use interactive prompts for user input
+- Include proper error handling and user feedback
+- Implement spinners for long-running operations
+- Follow consistent command naming patterns

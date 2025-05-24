@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/blockscout.cjs",
-  "module": "./dist/blockscout.mjs",
+  "module": "./dist/blockscout.js",
   "types": "./dist/blockscout.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/blockscout.d.ts",
-        "default": "./dist/blockscout.mjs"
+        "default": "./dist/blockscout.js"
       },
       "require": {
         "types": "./dist/blockscout.d.cts",
@@ -38,8 +38,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",

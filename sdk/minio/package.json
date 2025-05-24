@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/minio.cjs",
-  "module": "./dist/minio.mjs",
+  "module": "./dist/minio.js",
   "types": "./dist/minio.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/minio.d.ts",
-        "default": "./dist/minio.mjs"
+        "default": "./dist/minio.js"
       },
       "require": {
         "types": "./dist/minio.d.cts",
@@ -38,8 +38,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",

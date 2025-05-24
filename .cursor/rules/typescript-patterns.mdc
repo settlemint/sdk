@@ -1,0 +1,68 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# TypeScript Development Patterns
+
+## Code Style Guidelines
+
+### Naming Conventions
+- Use descriptive names with auxiliary verbs: `isLoading`, `hasError`
+- Prefix event handlers with "handle": `handleClick`, `handleSubmit`
+- Use lowercase with dashes for directories: `components/auth-wizard`
+- Favor named exports over default exports
+
+### Type Definitions
+- Prefer `interface` over `type` for object shapes
+- Avoid enums; use const maps instead
+- Use `satisfies` operator for type validation
+- Implement proper type safety and inference
+
+### Documentation Standards
+- Follow TSDoc specification strictly
+- Use only: `@param`, `@returns`, `@throws`, `@example`, `@inheritDoc`
+- Add `@example` for all exported functions
+- Examples must start with import statement
+
+## Project-Specific Patterns
+
+### Configuration Objects
+```typescript
+export interface ConfigOptions {
+  entry: string[];
+  format?: ("cjs" | "esm")[];
+  platform?: "node" | "browser" | "neutral";
+  // ... other options
+}
+```
+
+### Factory Functions
+```typescript
+export const createConfig = (options: ConfigOptions): Options => {
+  const config: Options = {
+    // configuration logic
+  };
+  return config;
+};
+```
+
+### Environment Variable Handling
+- Build time: Fill with empty strings for Zod validation
+- Runtime: Use actual validation
+- Differentiate between build and runtime contexts
+
+### Database Schema Typing
+- Support multiple schemas in Drizzle client
+- Maintain type safety across database operations
+- Proper error handling and validation
+
+## Import Patterns
+- Convert relative imports to `@/*` aliases where possible
+- Use named imports for better tree-shaking
+- Group imports: external, internal, relative
+
+## Error Handling
+- Implement comprehensive error boundaries
+- Use proper TypeScript error types
+- Handle async operation failures gracefully

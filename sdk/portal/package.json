@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/portal.cjs",
-  "module": "./dist/portal.mjs",
+  "module": "./dist/portal.js",
   "types": "./dist/portal.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/portal.d.ts",
-        "default": "./dist/portal.mjs"
+        "default": "./dist/portal.js"
       },
       "require": {
         "types": "./dist/portal.d.cts",
@@ -38,8 +38,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",

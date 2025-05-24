@@ -22,14 +22,14 @@
   },
   "files": ["dist"],
   "main": "./dist/eas.cjs",
-  "module": "./dist/eas.mjs",
+  "module": "./dist/eas.js",
   "types": "./dist/eas.d.ts",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": {
         "types": "./dist/eas.d.ts",
-        "default": "./dist/eas.mjs"
+        "default": "./dist/eas.js"
       },
       "require": {
         "types": "./dist/eas.d.cts",
@@ -38,8 +38,8 @@
     }
   },
   "scripts": {
-    "build": "tsup-node",
-    "dev": "tsup-node --watch",
+    "build": "tsdown",
+    "dev": "tsdown --watch",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",
