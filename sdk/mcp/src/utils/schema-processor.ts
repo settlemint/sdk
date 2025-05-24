@@ -10,16 +10,25 @@ import type {
 } from "graphql";
 
 /**
- * Creates a promise that rejects after a specified timeout
+ * Creates a promise that rejects after a specified timeout with proper cleanup
  * @param ms - Timeout in milliseconds
- * @returns A promise that rejects after the specified timeout
+ * @returns An object with the promise and a cleanup function
  */
-const createTimeoutPromise = (ms: number): Promise<never> => {
-  return new Promise((_, reject) => {
-    setTimeout(() => {
+const createTimeoutPromise = (ms: number): { promise: Promise<never>; cleanup: () => void } => {
+  let timeoutId: NodeJS.Timeout;
+  const promise = new Promise<never>((_, reject) => {
+    timeoutId = setTimeout(() => {
       reject(new Error(`Operation timed out after ${ms}ms`));
     }, ms);
   });
+
+  const cleanup = () => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+  };
+
+  return { promise, cleanup };
 };
 
 /**
@@ -47,8 +56,13 @@ async function fetchGraphQLSchema(
     method: "POST",
   });
 
-  // Race between the schema loading and a timeout
-  return Promise.race([schemaPromise, createTimeoutPromise(timeoutMs)]);
+  // Race between the schema loading and a timeout with proper cleanup
+  const timeout = createTimeoutPromise(timeoutMs);
+  try {
+    return await Promise.race([schemaPromise, timeout.promise]);
+  } finally {
+    timeout.cleanup();
+  }
 }
 
 /**

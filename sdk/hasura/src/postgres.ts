@@ -26,38 +26,59 @@ const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
  */
 function setupErrorHandling(pool: pg.Pool) {
   let retryCount = 0;
+  let isRetrying = false;
+  const clientErrorHandlers = new WeakSet<pg.PoolClient>();
 
-  pool.on("error", async (err: Error) => {
+  const handlePoolError = async (err: Error) => {
     console.error("[Drizzle] Pool error occurred:", err);
 
+    // Prevent concurrent retry attempts
+    if (isRetrying) {
+      console.log("[Drizzle] Recovery already in progress, skipping");
+      return;
+    }
+
     if (retryCount < 3) {
+      isRetrying = true;
       retryCount++;
       console.log(`[Drizzle] Attempting to recover - retry ${retryCount}/3`);
 
       try {
         const client = await pool.connect();
-        client.release();
-        console.log("[Drizzle] Successfully recovered connection");
-        retryCount = 0;
+        try {
+          // Test the connection
+          await client.query("SELECT 1");
+          console.log("[Drizzle] Successfully recovered connection");
+          retryCount = 0;
+        } finally {
+          client.release();
+        }
       } catch (retryError) {
         console.error(`[Drizzle] Recovery attempt ${retryCount} failed:`, retryError);
         await sleep(5000 * 2 ** (retryCount - 1));
+      } finally {
+        isRetrying = false;
       }
     } else {
       console.error("[Drizzle] Max retries exceeded - pool is in an error state");
       pool.emit("permanent-failure", err);
     }
-  });
+  };
 
-  pool.on("connect", (client: pg.PoolClient) => {
-    client.on("error", (err: Error) => {
-      console.error("[Drizzle] Database client error:", err);
-    });
-  });
-
-  pool.on("connect", () => {
+  const handleConnect = (client: pg.PoolClient) => {
+    // Only add error handler if not already added (prevent memory leaks)
+    if (!clientErrorHandlers.has(client)) {
+      clientErrorHandlers.add(client);
+      client.on("error", (err: Error) => {
+        console.error("[Drizzle] Database client error:", err);
+      });
+    }
     retryCount = 0;
-  });
+    isRetrying = false;
+  };
+
+  pool.on("error", handlePoolError);
+  pool.on("connect", handleConnect);
 }
 
 /**

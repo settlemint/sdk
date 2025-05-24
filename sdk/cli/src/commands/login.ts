@@ -53,16 +53,33 @@ export function loginCommand(): Command {
         if (cmd.args.length > 0) {
           cancel("A token should be provided using STDIN, not as an argument");
         }
-        personalAccessToken = await Promise.race([
-          (async () => {
-            const chunks: Buffer[] = [];
-            for await (const chunk of process.stdin) {
-              chunks.push(Buffer.from(chunk));
+        personalAccessToken = await (async () => {
+          const chunks: Buffer[] = [];
+          let timeout: NodeJS.Timeout | undefined;
+
+          // Set up a timeout to prevent hanging if STDIN never closes
+          const timeoutPromise = new Promise<never>((_, reject) => {
+            timeout = setTimeout(() => {
+              reject(new Error("Timeout reading from STDIN after 30 seconds"));
+            }, 30_000);
+          });
+
+          try {
+            const readPromise = (async () => {
+              for await (const chunk of process.stdin) {
+                chunks.push(Buffer.from(chunk));
+              }
+              return Buffer.concat(chunks).toString().trim();
+            })();
+
+            const result = await Promise.race([readPromise, timeoutPromise]);
+            return result;
+          } finally {
+            if (timeout) {
+              clearTimeout(timeout);
             }
-            return Buffer.concat(chunks).toString().trim();
-          })(),
-          new Promise<string>((resolve) => setTimeout(() => resolve(""), 1_000)),
-        ]);
+          }
+        })();
         try {
           validate(PersonalAccessTokenSchema, personalAccessToken);
         } catch {
