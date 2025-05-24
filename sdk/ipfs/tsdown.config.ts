@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
+import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 const configs = createWebOptimizedPackage(["src/ipfs.ts"], {
   external: ["@settlemint/sdk-js"],

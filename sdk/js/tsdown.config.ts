@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
+import { withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 export default defineConfig(
   withPerformanceMonitoring({

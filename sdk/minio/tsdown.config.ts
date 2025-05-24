@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { createNodePackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.js";
+import { createNodePackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 export default defineConfig(
   withPerformanceMonitoring(
