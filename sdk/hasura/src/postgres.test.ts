@@ -49,6 +49,7 @@ describe("postgres connection handling", () => {
 
     // Test that function throws error for null/undefined connection string
     expect(() => {
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       createPostgresPool(null as any);
     }).toThrow("Database URL is required");
   });
