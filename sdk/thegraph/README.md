@@ -52,7 +52,7 @@ The SDK offers a type-safe interface for all TheGraph operations, with comprehen
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:90](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/thegraph/src/thegraph.ts#L90)
+Defined in: [sdk/thegraph/src/thegraph.ts:90](https://github.com/settlemint/sdk/blob/v2.3.3/sdk/thegraph/src/thegraph.ts#L90)
 
 Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
@@ -83,8 +83,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:94](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/thegraph/src/thegraph.ts#L94) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:95](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/thegraph/src/thegraph.ts#L95) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:94](https://github.com/settlemint/sdk/blob/v2.3.3/sdk/thegraph/src/thegraph.ts#L94) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:95](https://github.com/settlemint/sdk/blob/v2.3.3/sdk/thegraph/src/thegraph.ts#L95) |
 
 ##### Throws
 
@@ -137,7 +137,7 @@ const result = await client.request(query);
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:25](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/thegraph/src/thegraph.ts#L25)
+Defined in: [sdk/thegraph/src/thegraph.ts:25](https://github.com/settlemint/sdk/blob/v2.3.3/sdk/thegraph/src/thegraph.ts#L25)
 
 Type definition for client options derived from the ClientOptionsSchema
 
@@ -147,7 +147,7 @@ Type definition for client options derived from the ClientOptionsSchema
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/thegraph/src/thegraph.ts#L10)
+Defined in: [sdk/thegraph/src/thegraph.ts:10](https://github.com/settlemint/sdk/blob/v2.3.3/sdk/thegraph/src/thegraph.ts#L10)
 
 Type definition for GraphQL client configuration options
 
@@ -157,7 +157,7 @@ Type definition for GraphQL client configuration options
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `cache`: `ZodOptional`\<`ZodEnum`\<\{ `default`: `"default"`; `force-cache`: `"force-cache"`; `no-cache`: `"no-cache"`; `no-store`: `"no-store"`; `only-if-cached`: `"only-if-cached"`; `reload`: `"reload"`; \}\>\>; `instances`: `ZodArray`\<`ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>\>; `subgraphName`: `ZodString`; \}, `$strip`\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v2.3.2/sdk/thegraph/src/thegraph.ts#L15)
+Defined in: [sdk/thegraph/src/thegraph.ts:15](https://github.com/settlemint/sdk/blob/v2.3.3/sdk/thegraph/src/thegraph.ts#L15)
 
 Schema for validating client options for the TheGraph client.
 
