@@ -31,7 +31,7 @@
     "settlemint": "dist/cli.js"
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "bun run build.ts",
     "dev": "tsdown --watch",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
