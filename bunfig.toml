@@ -3,11 +3,5 @@ exact = true
 saveTextLockfile = true
 
 [test]
-coverage.exclude = [
-  "**/dist/**",
-  "**/node_modules/**",
-  "**/*.d.ts",
-  "**/test/**",
-  "**/*.test.ts",
-  "**/*.test.js"
-]
+coverage = true
+coverageSkipTestFiles = true
