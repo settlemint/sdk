@@ -13,7 +13,7 @@ export function subgraphCodegenCommand() {
       createExamples([
         {
           description: "Generate subgraph types",
-          command: "subgraph codegen",
+          command: "scs subgraph codegen",
         },
       ]),
     )

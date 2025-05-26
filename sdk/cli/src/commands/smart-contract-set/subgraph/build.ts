@@ -14,7 +14,7 @@ export function subgraphBuildCommand() {
       createExamples([
         {
           description: "Build the subgraph",
-          command: "subgraph build",
+          command: "scs subgraph build",
         },
       ]),
     )
