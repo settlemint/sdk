@@ -42,7 +42,7 @@
       },
       "devDependencies": {
         "@commander-js/extra-typings": "14.0.0",
-        "@inquirer/confirm": "5.1.11",
+        "@inquirer/confirm": "5.1.12",
         "@inquirer/input": "4.1.11",
         "@inquirer/password": "4.0.14",
         "@inquirer/select": "4.2.2",
@@ -479,9 +479,9 @@
 
     "@img/sharp-win32-x64": ["@img/sharp-win32-x64@0.34.2", "", { "os": "win32", "cpu": "x64" }, "sha512-aUdT6zEYtDKCaxkofmmJDJYGCf0+pJg3eU9/oBuqvEeoB9dKI6ZLc/1iLJCTuJQDO4ptntAlkUmHgGjyuobZbw=="],
 
-    "@inquirer/confirm": ["@inquirer/confirm@5.1.11", "", { "dependencies": { "@inquirer/core": "^10.1.12", "@inquirer/type": "^3.0.7" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-HgVha2B1lurfZ8u7cBWmu60HpkpnnIT/1IrreBx5g2oxQOVYU15WQDl6oZqjuXVbzteFKSpmMkLTMf2OmbUjaw=="],
+    "@inquirer/confirm": ["@inquirer/confirm@5.1.12", "", { "dependencies": { "@inquirer/core": "^10.1.13", "@inquirer/type": "^3.0.7" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-dpq+ielV9/bqgXRUbNH//KsY6WEw9DrGPmipkpmgC1Y46cwuBTNx7PXFWTjc3MQ+urcc0QxoVHcMI0FW4Ok0hg=="],
 
-    "@inquirer/core": ["@inquirer/core@10.1.12", "", { "dependencies": { "@inquirer/figures": "^1.0.12", "@inquirer/type": "^3.0.7", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-uoaDadeJCYSVKYCMPwJi3AjCF9w+l9aWbHYA4iskKX84cVW/A2M6bJlWBoy3k81GpFp6EX3IElV1Z5xKw0g1QQ=="],
+    "@inquirer/core": ["@inquirer/core@10.1.13", "", { "dependencies": { "@inquirer/figures": "^1.0.12", "@inquirer/type": "^3.0.7", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-1viSxebkYN2nJULlzCxES6G9/stgHSepZ9LqqfdIGPHj5OHhiBUXVS0a6R0bEC2A+VL4D9w6QB66ebCr6HGllA=="],
 
     "@inquirer/figures": ["@inquirer/figures@1.0.12", "", {}, "sha512-MJttijd8rMFcKJC8NYmprWr6hD3r9Gd9qUC0XwPNwoEPWSMVJwA2MlXxF+nhZZNMY+HXsWa+o7KY2emWYIn0jQ=="],
 
@@ -1962,6 +1962,12 @@
     "@graphql-tools/utils/tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
 
     "@graphql-tools/wrap/tslib": ["tslib@2.8.1", "", {}, "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w=="],
+
+    "@inquirer/input/@inquirer/core": ["@inquirer/core@10.1.12", "", { "dependencies": { "@inquirer/figures": "^1.0.12", "@inquirer/type": "^3.0.7", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-uoaDadeJCYSVKYCMPwJi3AjCF9w+l9aWbHYA4iskKX84cVW/A2M6bJlWBoy3k81GpFp6EX3IElV1Z5xKw0g1QQ=="],
+
+    "@inquirer/password/@inquirer/core": ["@inquirer/core@10.1.12", "", { "dependencies": { "@inquirer/figures": "^1.0.12", "@inquirer/type": "^3.0.7", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-uoaDadeJCYSVKYCMPwJi3AjCF9w+l9aWbHYA4iskKX84cVW/A2M6bJlWBoy3k81GpFp6EX3IElV1Z5xKw0g1QQ=="],
+
+    "@inquirer/select/@inquirer/core": ["@inquirer/core@10.1.12", "", { "dependencies": { "@inquirer/figures": "^1.0.12", "@inquirer/type": "^3.0.7", "ansi-escapes": "^4.3.2", "cli-width": "^4.1.0", "mute-stream": "^2.0.0", "signal-exit": "^4.1.0", "wrap-ansi": "^6.2.0", "yoctocolors-cjs": "^2.1.2" }, "peerDependencies": { "@types/node": ">=18" }, "optionalPeers": ["@types/node"] }, "sha512-uoaDadeJCYSVKYCMPwJi3AjCF9w+l9aWbHYA4iskKX84cVW/A2M6bJlWBoy3k81GpFp6EX3IElV1Z5xKw0g1QQ=="],
 
     "@ipld/dag-cbor/multiformats": ["multiformats@13.3.6", "", {}, "sha512-yakbt9cPYj8d3vi/8o/XWm61MrOILo7fsTL0qxNx6zS0Nso6K5JqqS2WV7vK/KSuDBvrW3KfCwAdAgarAgOmww=="],
 
