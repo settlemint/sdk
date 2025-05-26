@@ -61,7 +61,7 @@ export function loginCommand(): Command {
           const timeoutPromise = new Promise<never>((_, reject) => {
             timeout = setTimeout(() => {
               reject(new Error("Timeout reading from STDIN after 30 seconds"));
-            }, 30_000);
+            }, 1_000);
           });
 
           try {

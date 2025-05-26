@@ -24,7 +24,7 @@ describe("login STDIN reading", () => {
       const timeoutPromise = new Promise<never>((_, reject) => {
         timeout = setTimeout(() => {
           reject(new Error("Timeout reading from STDIN after 30 seconds"));
-        }, 30_000);
+        }, 1_000);
       });
 
       try {
@@ -94,18 +94,14 @@ describe("login STDIN reading", () => {
     const originalSetTimeout = global.setTimeout;
     const originalClearTimeout = global.clearTimeout;
 
-    // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    global.setTimeout = mock((fn: any, delay: number) => {
+    global.setTimeout = mock((fn: TimerHandler, delay: number) => {
       return originalSetTimeout(fn, delay);
-      // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    }) as any;
+    }) as unknown as typeof originalSetTimeout;
 
-    // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    global.clearTimeout = mock((id: any) => {
+    global.clearTimeout = mock((id: number) => {
       timeoutCleared = true;
       return originalClearTimeout(id);
-      // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    }) as any;
+    }) as typeof originalClearTimeout;
 
     const mockStdin = new Readable({
       read() {
