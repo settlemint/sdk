@@ -6,32 +6,22 @@ import { createEASClient } from "./eas.js";
 const moduleMocker = new ModuleMocker();
 
 beforeAll(async () => {
-  // Mock the viem client functions
-  await moduleMocker.mock("@settlemint/sdk-viem", () => ({
-    getPublicClient: () => ({
-      chain: {
-        id: 1,
-        name: "Ethereum",
-        contracts: { ensRegistry: { address: undefined } },
+  // Mock the Portal client functions
+  await moduleMocker.mock("@settlemint/sdk-portal", () => ({
+    createPortalClient: () => ({
+      client: {
+        request: async () => ({
+          callContract: {
+            transactionHash: "0x1234567890abcdef",
+          },
+        }),
       },
-      transport: {
-        type: "http",
-        url: "http://localhost:8545",
-      },
-      request: async () => ({}),
+      graphql: (query: string) => query,
     }),
-    getWalletClient: () => () => ({
-      account: {
-        address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-        privateKey: "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80",
-      },
-      chain: {
-        id: 1,
-        name: "Ethereum",
-      },
-      transport: {
-        type: "http",
-        url: "http://localhost:8545",
+    waitForTransactionReceipt: async () => ({
+      receipt: {
+        status: "Success",
+        events: [],
       },
     }),
   }));
@@ -42,34 +32,78 @@ afterAll(() => {
   moduleMocker.clear();
 });
 
-describe("EAS Client", () => {
+describe("EAS Portal Client", () => {
   const options = {
-    schemaRegistryAddress: "0x1234567890123456789012345678901234567890" as Address,
-    attestationAddress: "0x1234567890123456789012345678901234567890" as Address,
+    instance: "https://portal.settlemint.com",
     accessToken: "sm_aat_test_access_token",
-    chainId: "1",
-    chainName: "Ethereum",
-    rpcUrl: "http://localhost:8545",
+    easContractAddress: "0x1234567890123456789012345678901234567890" as Address,
+    schemaRegistryContractAddress: "0x1234567890123456789012345678901234567890" as Address,
+    abiSource: { type: "hardcoded" as const },
   };
 
-  test("should create an EAS client", () => {
-    const eas = createEASClient(options);
-    expect(eas).toBeDefined();
-    expect(typeof eas.registerSchema).toBe("function");
-    expect(typeof eas.getSchema).toBe("function");
+  test("should create an EAS Portal client", () => {
+    const client = createEASClient(options);
+    expect(client).toBeDefined();
+    expect(typeof client.registerSchema).toBe("function");
+    expect(typeof client.getSchema).toBe("function");
+    expect(typeof client.attest).toBe("function");
+    expect(typeof client.revoke).toBe("function");
   });
 
-  test("should execute all functions without errors", async () => {
-    const eas = createEASClient(options);
-    await expect(
-      eas.registerSchema({
-        fields: [
-          { name: "userAddress", type: "address" },
-          { name: "age", type: "uint8" },
-        ],
-        resolverAddress: "0x1234567890123456789012345678901234567890",
-        revocable: true,
-      }),
-    ).rejects.toThrow();
+  test("should have Portal client methods", () => {
+    const client = createEASClient(options);
+    expect(typeof client.getPortalClient).toBe("function");
+    expect(typeof client.getOptions).toBe("function");
+    expect(typeof client.getAbis).toBe("function");
+  });
+
+  test("should validate options", () => {
+    expect(() => {
+      createEASClient({
+        ...options,
+        easContractAddress: "invalid-address",
+      });
+    }).toThrow();
+  });
+
+  test("should use hardcoded ABIs by default", () => {
+    const client = createEASClient(options);
+    const abis = client.getAbis();
+    expect(abis.easAbi).toBeDefined();
+    expect(abis.schemaRegistryAbi).toBeDefined();
+  });
+
+  test("should support custom ABIs", () => {
+    const customEasAbi = [
+      {
+        type: "function",
+        name: "test",
+        inputs: [],
+        outputs: [],
+        stateMutability: "view",
+      },
+    ] as const;
+    const customSchemaRegistryAbi = [
+      {
+        type: "function",
+        name: "testSchema",
+        inputs: [],
+        outputs: [],
+        stateMutability: "view",
+      },
+    ] as const;
+
+    const client = createEASClient({
+      ...options,
+      abiSource: {
+        type: "custom",
+        easAbi: customEasAbi,
+        schemaRegistryAbi: customSchemaRegistryAbi,
+      },
+    });
+
+    const abis = client.getAbis();
+    expect(abis.easAbi).toEqual(customEasAbi);
+    expect(abis.schemaRegistryAbi).toEqual(customSchemaRegistryAbi);
   });
 });
