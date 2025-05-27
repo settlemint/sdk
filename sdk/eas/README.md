@@ -53,7 +53,7 @@ The SettleMint EAS SDK provides a lightweight wrapper for the Ethereum Attestati
 
 > **createEASClient**(`options`): `object`
 
-Defined in: [sdk/eas/src/eas.ts:36](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/eas.ts#L36)
+Defined in: [sdk/eas/src/eas.ts:36](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/eas.ts#L36)
 
 Creates an EAS client for interacting with the Ethereum Attestation Service.
 
@@ -77,8 +77,8 @@ An object containing the EAS client instance
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `getSchema()` | (`uid`) => `Promise`\<`string`\> | [sdk/eas/src/eas.ts:96](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/eas.ts#L96) |
-| `registerSchema()` | (`options`) => `Promise`\<`string`\> | [sdk/eas/src/eas.ts:95](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/eas.ts#L95) |
+| `getSchema()` | (`uid`) => `Promise`\<`string`\> | [sdk/eas/src/eas.ts:96](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/eas.ts#L96) |
+| `registerSchema()` | (`options`) => `Promise`\<`string`\> | [sdk/eas/src/eas.ts:95](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/eas.ts#L95) |
 
 ##### Throws
 
@@ -103,7 +103,7 @@ const client = createEASClient({
 
 #### RegisterSchemaOptions
 
-Defined in: [sdk/eas/src/types.ts:34](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L34)
+Defined in: [sdk/eas/src/types.ts:34](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L34)
 
 Options for registering a new schema in the EAS Schema Registry.
 
@@ -111,15 +111,15 @@ Options for registering a new schema in the EAS Schema Registry.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="fields"></a> `fields` | [`SchemaField`](#schemafield)[] | Array of fields that make up the schema | [sdk/eas/src/types.ts:36](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L36) |
-| <a id="resolveraddress"></a> `resolverAddress` | `string` | Address of the resolver contract that will handle attestations | [sdk/eas/src/types.ts:38](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L38) |
-| <a id="revocable"></a> `revocable` | `boolean` | Whether attestations using this schema can be revoked | [sdk/eas/src/types.ts:40](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L40) |
+| <a id="fields"></a> `fields` | [`SchemaField`](#schemafield)[] | Array of fields that make up the schema | [sdk/eas/src/types.ts:36](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L36) |
+| <a id="resolveraddress"></a> `resolverAddress` | `string` | Address of the resolver contract that will handle attestations | [sdk/eas/src/types.ts:38](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L38) |
+| <a id="revocable"></a> `revocable` | `boolean` | Whether attestations using this schema can be revoked | [sdk/eas/src/types.ts:40](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L40) |
 
 ***
 
 #### SchemaField
 
-Defined in: [sdk/eas/src/types.ts:22](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L22)
+Defined in: [sdk/eas/src/types.ts:22](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L22)
 
 Represents a single field in an EAS schema.
 
@@ -127,9 +127,9 @@ Represents a single field in an EAS schema.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="description"></a> `description?` | `string` | Optional description of the field's purpose | [sdk/eas/src/types.ts:28](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L28) |
-| <a id="name"></a> `name` | `string` | The name of the field | [sdk/eas/src/types.ts:24](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L24) |
-| <a id="type"></a> `type` | `"string"` \| `"address"` \| `"bool"` \| `"bytes"` \| `"bytes32"` \| `"int8"` \| `"int256"` \| `"uint8"` \| `"uint256"` | The Solidity type of the field | [sdk/eas/src/types.ts:26](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L26) |
+| <a id="description"></a> `description?` | `string` | Optional description of the field's purpose | [sdk/eas/src/types.ts:28](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L28) |
+| <a id="name"></a> `name` | `string` | The name of the field | [sdk/eas/src/types.ts:24](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L24) |
+| <a id="type"></a> `type` | `"string"` \| `"address"` \| `"bool"` \| `"bytes"` \| `"bytes32"` \| `"int8"` \| `"int256"` \| `"uint8"` \| `"uint256"` | The Solidity type of the field | [sdk/eas/src/types.ts:26](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L26) |
 
 ### Type Aliases
 
@@ -137,7 +137,7 @@ Represents a single field in an EAS schema.
 
 > **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
 
-Defined in: [sdk/eas/src/client-options.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/client-options.schema.ts#L28)
+Defined in: [sdk/eas/src/client-options.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/client-options.schema.ts#L28)
 
 Configuration options for creating an EAS client.
 Combines EAS-specific options with base Viem client options.
@@ -148,7 +148,7 @@ Combines EAS-specific options with base Viem client options.
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `attestationAddress`: `ZodString`; `chainId`: `ZodString`; `chainName`: `ZodString`; `rpcUrl`: `ZodString`; `schemaRegistryAddress`: `ZodString`; \}, `$strip`\>
 
-Defined in: [sdk/eas/src/client-options.schema.ts:9](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/client-options.schema.ts#L9)
+Defined in: [sdk/eas/src/client-options.schema.ts:9](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/client-options.schema.ts#L9)
 
 Schema for validating EAS client configuration options.
 Extends the base Viem client options with EAS-specific requirements.
@@ -159,7 +159,7 @@ Extends the base Viem client options with EAS-specific requirements.
 
 > `const` **EAS\_FIELD\_TYPES**: `object`
 
-Defined in: [sdk/eas/src/types.ts:5](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L5)
+Defined in: [sdk/eas/src/types.ts:5](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L5)
 
 Supported field types for EAS schema fields.
 Maps to the Solidity types that can be used in EAS schemas.
@@ -168,15 +168,15 @@ Maps to the Solidity types that can be used in EAS schemas.
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="address"></a> `address` | `"address"` | `"address"` | [sdk/eas/src/types.ts:7](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L7) |
-| <a id="bool"></a> `bool` | `"bool"` | `"bool"` | [sdk/eas/src/types.ts:8](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L8) |
-| <a id="bytes"></a> `bytes` | `"bytes"` | `"bytes"` | [sdk/eas/src/types.ts:9](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L9) |
-| <a id="bytes32"></a> `bytes32` | `"bytes32"` | `"bytes32"` | [sdk/eas/src/types.ts:10](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L10) |
-| <a id="int256"></a> `int256` | `"int256"` | `"int256"` | [sdk/eas/src/types.ts:12](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L12) |
-| <a id="int8"></a> `int8` | `"int8"` | `"int8"` | [sdk/eas/src/types.ts:14](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L14) |
-| <a id="string"></a> `string` | `"string"` | `"string"` | [sdk/eas/src/types.ts:6](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L6) |
-| <a id="uint256"></a> `uint256` | `"uint256"` | `"uint256"` | [sdk/eas/src/types.ts:11](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L11) |
-| <a id="uint8"></a> `uint8` | `"uint8"` | `"uint8"` | [sdk/eas/src/types.ts:13](https://github.com/settlemint/sdk/blob/v2.3.4/sdk/eas/src/types.ts#L13) |
+| <a id="address"></a> `address` | `"address"` | `"address"` | [sdk/eas/src/types.ts:7](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L7) |
+| <a id="bool"></a> `bool` | `"bool"` | `"bool"` | [sdk/eas/src/types.ts:8](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L8) |
+| <a id="bytes"></a> `bytes` | `"bytes"` | `"bytes"` | [sdk/eas/src/types.ts:9](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L9) |
+| <a id="bytes32"></a> `bytes32` | `"bytes32"` | `"bytes32"` | [sdk/eas/src/types.ts:10](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L10) |
+| <a id="int256"></a> `int256` | `"int256"` | `"int256"` | [sdk/eas/src/types.ts:12](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L12) |
+| <a id="int8"></a> `int8` | `"int8"` | `"int8"` | [sdk/eas/src/types.ts:14](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L14) |
+| <a id="string"></a> `string` | `"string"` | `"string"` | [sdk/eas/src/types.ts:6](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L6) |
+| <a id="uint256"></a> `uint256` | `"uint256"` | `"uint256"` | [sdk/eas/src/types.ts:11](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L11) |
+| <a id="uint8"></a> `uint8` | `"uint8"` | `"uint8"` | [sdk/eas/src/types.ts:13](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L13) |
 
 ## Contributing
 
