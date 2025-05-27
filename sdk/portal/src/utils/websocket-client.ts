@@ -33,7 +33,9 @@ export function getWebsocketClient({ portalGraphqlEndpoint, accessToken }: Webso
   }
   const graphqlEndpoint = setWsProtocol(new URL(portalGraphqlEndpoint));
   return createClient({
-    url: `${graphqlEndpoint.protocol}//${graphqlEndpoint.host}/${accessToken}${graphqlEndpoint.pathname}${graphqlEndpoint.search}`,
+    url: accessToken
+      ? `${graphqlEndpoint.protocol}//${graphqlEndpoint.host}/${accessToken}${graphqlEndpoint.pathname}${graphqlEndpoint.search}`
+      : graphqlEndpoint.toString(),
   });
 }
 
