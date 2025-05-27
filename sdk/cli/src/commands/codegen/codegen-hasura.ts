@@ -58,7 +58,7 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   };
 }>({
   instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN ?? "",
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
 }, {
   fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
