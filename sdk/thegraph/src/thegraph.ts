@@ -1,3 +1,4 @@
+import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
@@ -14,7 +15,7 @@ export type RequestConfig = ConstructorParameters<typeof GraphQLClient>[1];
  */
 export const ClientOptionsSchema = z.object({
   instances: z.array(UrlOrPathSchema),
-  accessToken: ApplicationAccessTokenSchema,
+  accessToken: ApplicationAccessTokenSchema.optional(),
   subgraphName: z.string(),
   cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
 });
@@ -102,10 +103,7 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   return {
     client: new GraphQLClient(fullUrl, {
       ...clientOptions,
-      headers: {
-        ...(clientOptions?.headers ?? {}),
-        "x-auth-token": validatedOptions.accessToken,
-      },
+      headers: appendHeaders(clientOptions?.headers, { "x-auth-token": validatedOptions.accessToken }),
     }),
     graphql,
   };
