@@ -67,7 +67,7 @@
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
     "zod": "^3.25.0",
-    "drizzle-orm": "^0.43.0",
+    "drizzle-orm": "^0.44.0",
     "pg": "^8",
     "drizzle-kit": "^0.31.0"
   },
