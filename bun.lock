@@ -48,7 +48,7 @@
         "@inquirer/select": "4.2.3",
         "@settlemint/sdk-js": "workspace:*",
         "@settlemint/sdk-utils": "workspace:*",
-        "@types/node": "22.15.23",
+        "@types/node": "22.15.24",
         "@types/semver": "7.7.0",
         "@types/which": "3.0.4",
         "commander": "14.0.0",
@@ -769,7 +769,7 @@
 
     "@types/mustache": ["@types/mustache@4.2.6", "", {}, "sha512-t+8/QWTAhOFlrF1IVZqKnMRJi84EgkIK5Kh0p2JV4OLywUvCwJPFxbJAl7XAow7DVIHsF+xW9f1MVzg0L6Szjw=="],
 
-    "@types/node": ["@types/node@22.15.23", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-7Ec1zaFPF4RJ0eXu1YT/xgiebqwqoJz8rYPDi/O2BcZ++Wpt0Kq9cl0eg6NN6bYbPnR67ZLo7St5Q3UK0SnARw=="],
+    "@types/node": ["@types/node@22.15.24", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-w9CZGm9RDjzTh/D+hFwlBJ3ziUaVw7oufKA3vOFSOZlzmW9AkZnfjPb+DLnrV6qtgL/LNmP0/2zBNCFHL3F0ng=="],
 
     "@types/npmcli__package-json": ["@types/npmcli__package-json@4.0.4", "", {}, "sha512-6QjlFUSHBmZJWuC08bz1ZCx6tm4t+7+OJXAdvM6tL2pI7n6Bh5SIp/YxQvnOLFf8MzCXs2ijyFgrzaiu1UFBGA=="],
 
