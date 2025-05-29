@@ -51,10 +51,8 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "@ethereum-attestation-service/eas-sdk": "^2",
+    "@settlemint/sdk-portal": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@settlemint/sdk-viem": "workspace:*",
-    "ethers": "^6",
     "viem": "^2"
   },
   "peerDependencies": {},

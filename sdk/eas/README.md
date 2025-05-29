@@ -27,23 +27,133 @@
 ## Table of Contents
 
 - [About](#about)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [ABI Configuration](#abi-configuration)
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [createEASClient()](#createeasclient)
+  - [Classes](#classes)
+    - [EASPortalClient](#easportalclient)
   - [Interfaces](#interfaces)
-    - [RegisterSchemaOptions](#registerschemaoptions)
+    - [PortalClientOptions](#portalclientoptions)
     - [SchemaField](#schemafield)
   - [Type Aliases](#type-aliases)
-    - [ClientOptions](#clientoptions)
+    - [AbiSource](#abisource)
   - [Variables](#variables)
-    - [ClientOptionsSchema](#clientoptionsschema)
     - [EAS\_FIELD\_TYPES](#eas_field_types)
+- [Error Handling](#error-handling)
 - [Contributing](#contributing)
 - [License](#license)
 
 ## About
 
-The SettleMint EAS SDK provides a lightweight wrapper for the Ethereum Attestation Service (EAS), enabling developers to easily create, manage, and verify attestations within their applications. It simplifies the process of working with EAS by handling contract interactions, schema management, and The Graph integration, while ensuring proper integration with the SettleMint platform. This allows developers to quickly implement document verification, identity attestation, and other EAS-based features without manual setup.
+The SettleMint EAS SDK provides a Portal-based wrapper for the Ethereum Attestation Service (EAS), enabling developers to easily create, manage, and verify attestations within their applications. It leverages SettleMint's Portal infrastructure for enhanced features like real-time monitoring, flexible ABI support, and improved error handling.
+
+**Key Features:**
+- **Portal Integration**: Uses SettleMint's Portal GraphQL API for all contract interactions
+- **Flexible ABI Support**: Hardcoded, custom, and predeployed ABI options with clear priority
+- **Type Safety**: Full TypeScript support with proper type inference
+- **Error Handling**: EAS-specific error codes and detailed error information
+- **Real-time Monitoring**: Transaction status monitoring capabilities
+
+## Installation
+
+```bash
+npm install @settlemint/sdk-eas
+```
+
+## Quick Start
+
+```typescript
+import { createEASClient } from "@settlemint/sdk-eas";
+
+const client = createEASClient({
+  instance: "https://portal.settlemint.com",
+  accessToken: "your-access-token",
+  easContractAddress: "0x...", // Your EAS contract address
+  schemaRegistryContractAddress: "0x...", // Your Schema Registry address
+  // abiSource defaults to { type: "hardcoded" } - uses standard EAS ABIs
+});
+
+// Register a schema
+const result = await client.registerSchema({
+  schema: "address user, uint256 score",
+  resolver: "0x0000000000000000000000000000000000000000",
+  revocable: true,
+});
+
+console.log("Transaction Hash:", result.hash);
+
+// Create an attestation
+const attestation = await client.attest({
+  schema: "0x...", // Schema UID
+  data: {
+    recipient: "0x...",
+    expirationTime: 0n,
+    revocable: true,
+    refUID: "0x0000000000000000000000000000000000000000000000000000000000000000",
+    data: "0x...", // Encoded attestation data
+    value: 0n,
+  },
+});
+
+// Get an attestation
+const attestationData = await client.getAttestation("0x...");
+console.log("Attestation:", attestationData);
+```
+
+## ABI Configuration
+
+The EAS SDK supports three ABI sources with the following priority:
+
+### 1. Hardcoded ABIs (Default)
+Uses standard EAS ABIs built into the SDK:
+
+```typescript
+const client = createEASClient({
+  instance: "https://portal.settlemint.com",
+  accessToken: "your-token",
+  easContractAddress: "0x...",
+  schemaRegistryContractAddress: "0x...",
+  // abiSource defaults to { type: "hardcoded" }
+});
+```
+
+### 2. Custom ABIs (User Override)
+Override with your own ABIs:
+
+```typescript
+import { EAS_ABI, SCHEMA_REGISTRY_ABI } from "@settlemint/sdk-eas";
+
+const client = createEASClient({
+  instance: "https://portal.settlemint.com",
+  accessToken: "your-token",
+  easContractAddress: "0x...",
+  schemaRegistryContractAddress: "0x...",
+  abiSource: {
+    type: "custom",
+    easAbi: EAS_ABI, // or your custom ABI
+    schemaRegistryAbi: SCHEMA_REGISTRY_ABI, // or your custom ABI
+  },
+});
+```
+
+### 3. Predeployed ABIs (Portal's ABIs)
+Use Portal's predeployed ABIs:
+
+```typescript
+const client = createEASClient({
+  instance: "https://portal.settlemint.com",
+  accessToken: "your-token",
+  easContractAddress: "0x...",
+  schemaRegistryContractAddress: "0x...",
+  abiSource: {
+    type: "predeployed",
+    abiNames: ["eas"], // Optional, defaults to ["eas"]
+  },
+});
+```
 
 ## API Reference
 
@@ -51,38 +161,21 @@ The SettleMint EAS SDK provides a lightweight wrapper for the Ethereum Attestati
 
 #### createEASClient()
 
-> **createEASClient**(`options`): `object`
+> **createEASClient**(`options`): [`EASPortalClient`](#easportalclient)
 
-Defined in: [sdk/eas/src/eas.ts:36](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/eas.ts#L36)
-
-Creates an EAS client for interacting with the Ethereum Attestation Service.
+Creates a Portal-based EAS client for interacting with the Ethereum Attestation Service.
 
 ##### Parameters
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `attestationAddress`: `string`; `chainId`: `string`; `chainName`: `string`; `rpcUrl`: `string`; `schemaRegistryAddress`: `string`; \} | Configuration options for the client |
-| `options.accessToken` | `string` | Access token for the RPC provider (must start with 'sm_aat_' or 'sm_pat_') |
-| `options.attestationAddress` | `string` | The address of the EAS Attestation contract |
-| `options.chainId` | `string` | The chain ID to connect to |
-| `options.chainName` | `string` | The name of the chain to connect to |
-| `options.rpcUrl` | `string` | The RPC URL to connect to (must be a valid URL) |
-| `options.schemaRegistryAddress` | `string` | The address of the EAS Schema Registry contract |
+| `options` | [`PortalClientOptions`](#portalclientoptions) | Configuration options for the Portal-based client |
 
 ##### Returns
 
-`object`
+[`EASPortalClient`](#easportalclient)
 
-An object containing the EAS client instance
-
-| Name | Type | Defined in |
-| ------ | ------ | ------ |
-| `getSchema()` | (`uid`) => `Promise`\<`string`\> | [sdk/eas/src/eas.ts:96](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/eas.ts#L96) |
-| `registerSchema()` | (`options`) => `Promise`\<`string`\> | [sdk/eas/src/eas.ts:95](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/eas.ts#L95) |
-
-##### Throws
-
-Will throw an error if the options fail validation
+An EAS Portal client instance
 
 ##### Example
 
@@ -90,93 +183,137 @@ Will throw an error if the options fail validation
 import { createEASClient } from '@settlemint/sdk-eas';
 
 const client = createEASClient({
-  schemaRegistryAddress: "0x1234567890123456789012345678901234567890",
-  attestationAddress: "0x1234567890123456789012345678901234567890",
+  instance: "https://portal.settlemint.com",
   accessToken: "your-access-token",
-  chainId: "1",
-  chainName: "Ethereum",
-  rpcUrl: "http://localhost:8545"
+  easContractAddress: "0x...",
+  schemaRegistryContractAddress: "0x...",
 });
 ```
 
+### Classes
+
+#### EASPortalClient
+
+The main client class for interacting with EAS contracts via Portal.
+
+##### Methods
+
+- `registerSchema(request: SchemaRequest): Promise<TransactionResult>` - Register a new schema
+- `attest(request: AttestationRequest): Promise<TransactionResult>` - Create an attestation
+- `multiAttest(requests: AttestationRequest[]): Promise<TransactionResult>` - Create multiple attestations
+- `revoke(uid: Hex, value?: bigint): Promise<TransactionResult>` - Revoke an attestation
+- `getAttestation(uid: Hex): Promise<AttestationData>` - Retrieve attestation data
+- `getSchema(uid: Hex): Promise<SchemaData>` - Retrieve schema data
+- `isValidAttestation(uid: Hex): Promise<boolean>` - Check if attestation is valid
+- `getTimestamp(): Promise<bigint>` - Get current contract timestamp
+- `getPortalClient(): unknown` - Access underlying Portal client
+- `getOptions(): PortalClientOptions` - Get client configuration
+- `getAbis(): { easAbi: Abi; schemaRegistryAbi: Abi }` - Get current ABIs
+
 ### Interfaces
 
-#### RegisterSchemaOptions
+#### PortalClientOptions
 
-Defined in: [sdk/eas/src/types.ts:34](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L34)
-
-Options for registering a new schema in the EAS Schema Registry.
+Configuration options for the EAS Portal client.
 
 ##### Properties
 
-| Property | Type | Description | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="fields"></a> `fields` | [`SchemaField`](#schemafield)[] | Array of fields that make up the schema | [sdk/eas/src/types.ts:36](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L36) |
-| <a id="resolveraddress"></a> `resolverAddress` | `string` | Address of the resolver contract that will handle attestations | [sdk/eas/src/types.ts:38](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L38) |
-| <a id="revocable"></a> `revocable` | `boolean` | Whether attestations using this schema can be revoked | [sdk/eas/src/types.ts:40](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L40) |
-
-***
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `instance` | `string` | Portal instance URL or path |
+| `accessToken` | `string` | Access token for Portal authentication |
+| `easContractAddress` | `string` | The address of the EAS Attestation contract |
+| `schemaRegistryContractAddress` | `string` | The address of the EAS Schema Registry contract |
+| `abiSource?` | [`AbiSource`](#abisource) | ABI source configuration (defaults to hardcoded) |
+| `wsUrl?` | `string` | Optional WebSocket URL for real-time monitoring |
+| `timeout?` | `number` | Request timeout in milliseconds (default: 30000) |
+| `debug?` | `boolean` | Enable debug logging (default: false) |
+| `cache?` | `string` | Cache configuration for GraphQL requests |
 
 #### SchemaField
-
-Defined in: [sdk/eas/src/types.ts:22](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L22)
 
 Represents a single field in an EAS schema.
 
 ##### Properties
 
-| Property | Type | Description | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="description"></a> `description?` | `string` | Optional description of the field's purpose | [sdk/eas/src/types.ts:28](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L28) |
-| <a id="name"></a> `name` | `string` | The name of the field | [sdk/eas/src/types.ts:24](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L24) |
-| <a id="type"></a> `type` | `"string"` \| `"address"` \| `"bool"` \| `"bytes"` \| `"bytes32"` \| `"int8"` \| `"int256"` \| `"uint8"` \| `"uint256"` | The Solidity type of the field | [sdk/eas/src/types.ts:26](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L26) |
+| Property | Type | Description |
+| ------ | ------ | ------ |
+| `name` | `string` | The name of the field |
+| `type` | `EASFieldType` | The Solidity type of the field |
+| `description?` | `string` | Optional description of the field's purpose |
 
 ### Type Aliases
 
-#### ClientOptions
+#### AbiSource
 
-> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
+Configuration for ABI sources with priority system.
 
-Defined in: [sdk/eas/src/client-options.schema.ts:28](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/client-options.schema.ts#L28)
-
-Configuration options for creating an EAS client.
-Combines EAS-specific options with base Viem client options.
+```typescript
+type AbiSource =
+  | { type: "hardcoded" }
+  | { type: "custom"; easAbi: Abi; schemaRegistryAbi: Abi }
+  | { type: "predeployed"; abiNames?: string[] };
+```
 
 ### Variables
 
-#### ClientOptionsSchema
-
-> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodString`; `attestationAddress`: `ZodString`; `chainId`: `ZodString`; `chainName`: `ZodString`; `rpcUrl`: `ZodString`; `schemaRegistryAddress`: `ZodString`; \}, `$strip`\>
-
-Defined in: [sdk/eas/src/client-options.schema.ts:9](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/client-options.schema.ts#L9)
-
-Schema for validating EAS client configuration options.
-Extends the base Viem client options with EAS-specific requirements.
-
-***
-
 #### EAS\_FIELD\_TYPES
 
-> `const` **EAS\_FIELD\_TYPES**: `object`
+Supported field types for EAS schema fields. Maps to the Solidity types that can be used in EAS schemas.
 
-Defined in: [sdk/eas/src/types.ts:5](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L5)
+```typescript
+const EAS_FIELD_TYPES = {
+  string: "string",
+  address: "address",
+  bool: "bool",
+  bytes: "bytes",
+  bytes32: "bytes32",
+  uint256: "uint256",
+  int256: "int256",
+  uint8: "uint8",
+  int8: "int8",
+} as const;
+```
 
-Supported field types for EAS schema fields.
-Maps to the Solidity types that can be used in EAS schemas.
+## Error Handling
 
-##### Type declaration
+The SDK provides comprehensive error handling with EAS-specific error codes:
 
-| Name | Type | Default value | Defined in |
-| ------ | ------ | ------ | ------ |
-| <a id="address"></a> `address` | `"address"` | `"address"` | [sdk/eas/src/types.ts:7](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L7) |
-| <a id="bool"></a> `bool` | `"bool"` | `"bool"` | [sdk/eas/src/types.ts:8](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L8) |
-| <a id="bytes"></a> `bytes` | `"bytes"` | `"bytes"` | [sdk/eas/src/types.ts:9](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L9) |
-| <a id="bytes32"></a> `bytes32` | `"bytes32"` | `"bytes32"` | [sdk/eas/src/types.ts:10](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L10) |
-| <a id="int256"></a> `int256` | `"int256"` | `"int256"` | [sdk/eas/src/types.ts:12](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L12) |
-| <a id="int8"></a> `int8` | `"int8"` | `"int8"` | [sdk/eas/src/types.ts:14](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L14) |
-| <a id="string"></a> `string` | `"string"` | `"string"` | [sdk/eas/src/types.ts:6](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L6) |
-| <a id="uint256"></a> `uint256` | `"uint256"` | `"uint256"` | [sdk/eas/src/types.ts:11](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L11) |
-| <a id="uint8"></a> `uint8` | `"uint8"` | `"uint8"` | [sdk/eas/src/types.ts:13](https://github.com/settlemint/sdk/blob/v2.3.5/sdk/eas/src/types.ts#L13) |
+```typescript
+import { EASErrorCode, EASPortalError } from "@settlemint/sdk-eas";
+
+try {
+  await client.getAttestation("invalid-uid");
+} catch (error) {
+  if (error instanceof EASPortalError) {
+    switch (error.code) {
+      case EASErrorCode.ATTESTATION_NOT_FOUND:
+        console.log("Attestation not found");
+        break;
+      case EASErrorCode.TRANSACTION_FAILED:
+        console.log("Transaction failed");
+        break;
+      case EASErrorCode.SCHEMA_NOT_FOUND:
+        console.log("Schema not found");
+        break;
+      // ... other error codes
+    }
+  }
+}
+```
+
+### Available Error Codes
+
+- `INVALID_SCHEMA` - Schema validation failed
+- `SCHEMA_NOT_FOUND` - Schema not found
+- `ATTESTATION_NOT_FOUND` - Attestation not found
+- `UNAUTHORIZED` - Unauthorized access
+- `TRANSACTION_FAILED` - Transaction execution failed
+- `INVALID_SIGNATURE` - Invalid signature
+- `EXPIRED_ATTESTATION` - Attestation has expired
+- `NON_REVOCABLE` - Attestation cannot be revoked
+- `ALREADY_REVOKED` - Attestation already revoked
+- `PORTAL_ERROR` - Portal-specific error
 
 ## Contributing
 
