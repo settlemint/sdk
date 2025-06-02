@@ -64,9 +64,11 @@ export function createServerIpfsClient(options: ServerClientOptions): { client: 
   return {
     client: create({
       url: validatedOptions.instance,
-      headers: {
-        "x-auth-token": validatedOptions.accessToken,
-      },
+      headers: validatedOptions.accessToken
+        ? {
+            "x-auth-token": validatedOptions.accessToken,
+          }
+        : undefined,
     }),
   };
 }
