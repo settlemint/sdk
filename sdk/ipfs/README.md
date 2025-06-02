@@ -100,8 +100,8 @@ Creates an IPFS client for server-side use with authentication
 
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
-| `options` | \{ `accessToken`: `string`; `instance`: `string`; \} | Configuration options for the client including authentication |
-| `options.accessToken` | `string` | The access token used to authenticate with the SettleMint platform |
+| `options` | \{ `accessToken?`: `string`; `instance`: `string`; \} | Configuration options for the client including authentication |
+| `options.accessToken?` | `string` | The access token used to authenticate with the SettleMint platform |
 | `options.instance` | `string` | The URL of the IPFS instance to connect to |
 
 ##### Returns
