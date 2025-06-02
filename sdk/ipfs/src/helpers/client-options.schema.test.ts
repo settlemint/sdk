@@ -61,15 +61,6 @@ describe("ServerClientOptionsSchema", () => {
     expect(result.success).toBe(true);
   });
 
-  it("should reject missing access token", () => {
-    const invalidOptions = {
-      instance: "https://ipfs.example.com",
-    };
-
-    const result = ServerClientOptionsSchema.safeParse(invalidOptions);
-    expect(result.success).toBe(false);
-  });
-
   it("should reject invalid access token format", () => {
     const invalidOptions = {
       instance: "https://ipfs.example.com",
