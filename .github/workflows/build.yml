@@ -44,7 +44,7 @@ jobs:
           token: ${{ env.PAT_TOKEN }}
 
       - name: Setup caches
-        uses: namespacelabs/nscloud-cache-action@2f50e7d0f70475e6f59a55ba0f05eec9108e77cc # v1
+        uses: namespacelabs/nscloud-cache-action@449c929cd5138e6607e7e78458e88cc476e76f89 # v1
         with:
           path: |
             ./.turbo
