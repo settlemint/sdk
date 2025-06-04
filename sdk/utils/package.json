@@ -74,7 +74,7 @@
     "find-up": "^7",
     "nano-spawn": "^1.0.0",
     "package-manager-detector": "^1.0.0",
-    "yocto-spinner": "^0.2.0",
+    "yocto-spinner": "^1.0.0",
     "yoctocolors": "^2"
   },
   "peerDependencies": {},
