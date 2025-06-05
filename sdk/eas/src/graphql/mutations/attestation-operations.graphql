@@ -1,0 +1,17 @@
+mutation EASAttest($address: String!, $from: String!, $input: EASAttestInput!, $gasLimit: String!) {
+  EASAttest(address: $address, from: $from, input: $input, gasLimit: $gasLimit) {
+    transactionHash
+  }
+}
+
+mutation EASMultiAttest($address: String!, $from: String!, $input: EASMultiAttestInput!, $gasLimit: String!) {
+  EASMultiAttest(address: $address, from: $from, input: $input, gasLimit: $gasLimit) {
+    transactionHash
+  }
+}
+
+mutation EASRevoke($address: String!, $from: String!, $input: EASRevokeInput!, $gasLimit: String!) {
+  EASRevoke(address: $address, from: $from, input: $input, gasLimit: $gasLimit) {
+    transactionHash
+  }
+}

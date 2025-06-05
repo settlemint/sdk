@@ -1,0 +1,10 @@
+mutation EASSchemaRegistryRegister(
+  $address: String!
+  $from: String!
+  $input: EASSchemaRegistryRegisterInput!
+  $gasLimit: String!
+) {
+  EASSchemaRegistryRegister(address: $address, from: $from, input: $input, gasLimit: $gasLimit) {
+    transactionHash
+  }
+}

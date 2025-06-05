@@ -1,5 +1,6 @@
 import { createPortalClient } from "@settlemint/sdk-portal";
 import type { Address, Hex } from "viem";
+import { GraphQLOperations } from "./graphql/operations.js";
 import { ZERO_ADDRESS, ZERO_BYTES32 } from "./types.js";
 import type {
   AttestationInfo,
@@ -56,20 +57,7 @@ export class EASClient {
     const defaultGasLimit = gasLimit || "0x3d0900";
 
     try {
-      const deploySchemaRegistryMutation = `
-        mutation DeployEASSchemaRegistry($from: String!, $constructorArguments: DeployContractEASSchemaRegistryInput!, $gasLimit: String!) {
-          DeployContractEASSchemaRegistry(
-            from: $from
-            constructorArguments: $constructorArguments
-            gasLimit: $gasLimit
-          ) {
-            transactionHash
-            contractAddress
-          }
-        }
-      `;
-
-      const schemaRegistryResult = await this.portalClient.request(deploySchemaRegistryMutation, {
+      const schemaRegistryResult = await this.portalClient.request(GraphQLOperations.mutations.deploySchemaRegistry, {
         from: deployerAddress,
         constructorArguments: {
           forwarder: defaultForwarder,
@@ -87,20 +75,7 @@ export class EASClient {
 
       const schemaRegistryAddress = schemaRegistryResponse.DeployContractEASSchemaRegistry.contractAddress as Address;
 
-      const deployEASMutation = `
-        mutation DeployEAS($from: String!, $constructorArguments: DeployContractEASInput!, $gasLimit: String!) {
-          DeployContractEAS(
-            from: $from
-            constructorArguments: $constructorArguments
-            gasLimit: $gasLimit
-          ) {
-            transactionHash
-            contractAddress
-          }
-        }
-      `;
-
-      const easResult = await this.portalClient.request(deployEASMutation, {
+      const easResult = await this.portalClient.request(GraphQLOperations.mutations.deployEAS, {
         from: deployerAddress,
         constructorArguments: {
           registry: schemaRegistryAddress,
@@ -178,26 +153,8 @@ export class EASClient {
       throw new Error("Schema string is required. Provide either 'schema' or 'fields'.");
     }
 
-    const registerSchemaMutation = `
-      mutation EASSchemaRegistryRegister(
-        $address: String!
-        $from: String!
-        $input: EASSchemaRegistryRegisterInput!
-        $gasLimit: String!
-      ) {
-        EASSchemaRegistryRegister(
-          address: $address
-          from: $from
-          input: $input
-          gasLimit: $gasLimit
-        ) {
-          transactionHash
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(registerSchemaMutation, {
+      const result = await this.portalClient.request(GraphQLOperations.mutations.registerSchema, {
         address: schemaRegistryAddress,
         from: fromAddress,
         input: {
@@ -237,26 +194,8 @@ export class EASClient {
 
     const easAddress = this.getEASAddress();
 
-    const attestMutation = `
-      mutation EASAttest(
-        $address: String!
-        $from: String!
-        $input: EASAttestInput!
-        $gasLimit: String!
-      ) {
-        EASAttest(
-          address: $address
-          from: $from
-          input: $input
-          gasLimit: $gasLimit
-        ) {
-          transactionHash
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(attestMutation, {
+      const result = await this.portalClient.request(GraphQLOperations.mutations.attest, {
         address: easAddress,
         from: fromAddress,
         input: {
@@ -312,26 +251,8 @@ export class EASClient {
 
     const easAddress = this.getEASAddress();
 
-    const multiAttestMutation = `
-      mutation EASMultiAttest(
-        $address: String!
-        $from: String!
-        $input: EASMultiAttestInput!
-        $gasLimit: String!
-      ) {
-        EASMultiAttest(
-          address: $address
-          from: $from
-          input: $input
-          gasLimit: $gasLimit
-        ) {
-          transactionHash
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(multiAttestMutation, {
+      const result = await this.portalClient.request(GraphQLOperations.mutations.multiAttest, {
         address: easAddress,
         from: fromAddress,
         input: {
@@ -382,26 +303,8 @@ export class EASClient {
 
     const easAddress = this.getEASAddress();
 
-    const revokeMutation = `
-      mutation EASRevoke(
-        $address: String!
-        $from: String!
-        $input: EASRevokeInput!
-        $gasLimit: String!
-      ) {
-        EASRevoke(
-          address: $address
-          from: $from
-          input: $input
-          gasLimit: $gasLimit
-        ) {
-          transactionHash
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(revokeMutation, {
+      const result = await this.portalClient.request(GraphQLOperations.mutations.revoke, {
         address: easAddress,
         from: fromAddress,
         input: {
@@ -442,21 +345,8 @@ export class EASClient {
 
     const schemaRegistryAddress = this.getSchemaRegistryAddress();
 
-    const getSchemaQuery = `
-      query EASSchemaRegistry($address: String!, $uid: String!) {
-        EASSchemaRegistry(address: $address) {
-          getSchema(uid: $uid) {
-            uid
-            resolver
-            revocable
-            schema
-          }
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(getSchemaQuery, {
+      const result = await this.portalClient.request(GraphQLOperations.queries.getSchema, {
         address: schemaRegistryAddress,
         uid,
       });
@@ -487,21 +377,8 @@ export class EASClient {
       console.log("Retrieving schemas via Portal...", options);
     }
 
-    const getSchemasQuery = `
-      query GetContractsEASSchemaRegistry($page: Int, $pageSize: Int) {
-        getContractsEasSchemaRegistry(page: $page, pageSize: $pageSize) {
-          count
-          records {
-            address
-            abiName
-            createdAt
-          }
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(getSchemasQuery, {
+      const result = await this.portalClient.request(GraphQLOperations.queries.getSchemas, {
         page: Math.floor((options?.offset || 0) / (options?.limit || 100)),
         pageSize: options?.limit || 100,
       });
@@ -530,26 +407,8 @@ export class EASClient {
 
     const easAddress = this.getEASAddress();
 
-    const getAttestationQuery = `
-      query EAS($address: String!, $uid: String!) {
-        EAS(address: $address) {
-          getAttestation(uid: $uid) {
-            uid
-            schema
-            attester
-            recipient
-            time
-            expirationTime
-            revocable
-            refUID
-            data
-          }
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(getAttestationQuery, {
+      const result = await this.portalClient.request(GraphQLOperations.queries.getAttestation, {
         address: easAddress,
         uid,
       });
@@ -586,21 +445,8 @@ export class EASClient {
       console.log("Retrieving attestations via Portal...", options);
     }
 
-    const getAttestationsQuery = `
-      query GetContractsEAS($page: Int, $pageSize: Int) {
-        getContractsEas(page: $page, pageSize: $pageSize) {
-          count
-          records {
-            address
-            abiName
-            createdAt
-          }
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(getAttestationsQuery, {
+      const result = await this.portalClient.request(GraphQLOperations.queries.getAttestations, {
         page: Math.floor((options?.offset || 0) / (options?.limit || 100)),
         pageSize: options?.limit || 100,
       });
@@ -635,16 +481,8 @@ export class EASClient {
 
     const easAddress = this.getEASAddress();
 
-    const isValidQuery = `
-      query EAS($address: String!, $uid: String!) {
-        EAS(address: $address) {
-          isAttestationValid(uid: $uid)
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(isValidQuery, {
+      const result = await this.portalClient.request(GraphQLOperations.queries.isAttestationValid, {
         address: easAddress,
         uid,
       });
@@ -669,16 +507,8 @@ export class EASClient {
 
     const easAddress = this.getEASAddress();
 
-    const getTimestampQuery = `
-      query EAS($address: String!) {
-        EAS(address: $address) {
-          getTimestamp(data: "0x")
-        }
-      }
-    `;
-
     try {
-      const result = await this.portalClient.request(getTimestampQuery, {
+      const result = await this.portalClient.request(GraphQLOperations.queries.getTimestamp, {
         address: easAddress,
       });
 
@@ -756,3 +586,6 @@ export { EAS_FIELD_TYPES, ZERO_ADDRESS, ZERO_BYTES32 } from "./types.js";
 
 // Re-export validation utilities
 export { validateSchemaFields, buildSchemaString } from "./utils/validation.js";
+
+// Re-export GraphQL operations for advanced usage
+export { GraphQLOperations } from "./graphql/operations.js";

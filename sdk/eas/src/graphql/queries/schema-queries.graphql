@@ -1,0 +1,21 @@
+query EASSchemaRegistry($address: String!, $uid: String!) {
+  EASSchemaRegistry(address: $address) {
+    getSchema(uid: $uid) {
+      uid
+      resolver
+      revocable
+      schema
+    }
+  }
+}
+
+query GetContractsEASSchemaRegistry($page: Int, $pageSize: Int) {
+  getContractsEasSchemaRegistry(page: $page, pageSize: $pageSize) {
+    count
+    records {
+      address
+      abiName
+      createdAt
+    }
+  }
+}
