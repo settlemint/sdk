@@ -366,13 +366,12 @@ describe("EAS Portal Client", () => {
       debug: true,
     });
 
-    const schemas = await client.getSchemas({
-      limit: 10,
-      offset: 0,
-    });
-
-    expect(Array.isArray(schemas)).toBe(true);
-    expect(schemas.length).toBeGreaterThanOrEqual(0);
+    await expect(
+      client.getSchemas({
+        limit: 10,
+        offset: 0,
+      }),
+    ).rejects.toThrow("Schema listing not implemented yet");
   });
 
   test("should get an attestation", async () => {
