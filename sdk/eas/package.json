@@ -53,6 +53,7 @@
   "dependencies": {
     "@settlemint/sdk-portal": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
+    "gql.tada": "^1",
     "viem": "^2"
   },
   "peerDependencies": {},

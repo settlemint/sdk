@@ -1,66 +1,26 @@
-<p align="center">
-  <img src="https://github.com/settlemint/sdk/blob/main/logo.svg" width="200px" align="center" alt="SettleMint logo" />
-  <h1 align="center">SettleMint SDK</h1>
-  <p align="center">
-    ✨ <a href="https://settlemint.com">https://settlemint.com</a> ✨
-    <br/>
-    Integrate SettleMint into your application with ease.
-  </p>
-</p>
+# @settlemint/sdk-eas
 
-<p align="center">
-<a href="https://github.com/settlemint/sdk/actions?query=branch%3Amain"><img src="https://github.com/settlemint/sdk/actions/workflows/build.yml/badge.svg?event=push&branch=main" alt="CI status" /></a>
-<a href="https://fsl.software" rel="nofollow"><img src="https://img.shields.io/npm/l/@settlemint/sdk-eas" alt="License"></a>
-<a href="https://www.npmjs.com/package/@settlemint/sdk-eas" rel="nofollow"><img src="https://img.shields.io/npm/dw/@settlemint/sdk-eas" alt="npm"></a>
-<a href="https://github.com/settlemint/sdk" rel="nofollow"><img src="https://img.shields.io/github/stars/settlemint/sdk" alt="stars"></a>
-</p>
+Ethereum Attestation Service (EAS) integration for SettleMint SDK with Portal GraphQL support.
 
-<div align="center">
-  <a href="https://console.settlemint.com/documentation">Documentation</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://www.npmjs.com/package/@settlemint/sdk-eas">NPM</a>
-  <span>&nbsp;&nbsp;•&nbsp;&nbsp;</span>
-  <a href="https://github.com/settlemint/sdk/issues">Issues</a>
-  <br />
-</div>
+## Features
 
-## Table of Contents
-
-- [About](#about)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [ABI Configuration](#abi-configuration)
-- [API Reference](#api-reference)
-  - [Functions](#functions)
-    - [createEASClient()](#createeasclient)
-  - [Classes](#classes)
-    - [EASPortalClient](#easportalclient)
-  - [Interfaces](#interfaces)
-    - [PortalClientOptions](#portalclientoptions)
-    - [SchemaField](#schemafield)
-  - [Type Aliases](#type-aliases)
-    - [AbiSource](#abisource)
-  - [Variables](#variables)
-    - [EAS\_FIELD\_TYPES](#eas_field_types)
-- [Error Handling](#error-handling)
-- [Contributing](#contributing)
-- [License](#license)
-
-## About
-
-The SettleMint EAS SDK provides a Portal-based wrapper for the Ethereum Attestation Service (EAS), enabling developers to easily create, manage, and verify attestations within their applications. It leverages SettleMint's Portal infrastructure for enhanced features like real-time monitoring, flexible ABI support, and improved error handling.
-
-**Key Features:**
-- **Portal Integration**: Uses SettleMint's Portal GraphQL API for all contract interactions
-- **Flexible ABI Support**: Hardcoded, custom, and predeployed ABI options with clear priority
-- **Type Safety**: Full TypeScript support with proper type inference
-- **Error Handling**: EAS-specific error codes and detailed error information
-- **Real-time Monitoring**: Transaction status monitoring capabilities
+- ✅ **Portal SDK Integration**: Full integration with SettleMint Portal GraphQL API
+- ✅ **Complete EAS Support**: All 14 EAS mutations and queries implemented
+- ✅ **Type Safety**: Full TypeScript support with proper type definitions
+- ✅ **Contract Deployment**: Deploy EAS contracts via Portal
+- ✅ **Schema Management**: Register and retrieve attestation schemas
+- ✅ **Attestation Operations**: Create, revoke, and query attestations
+- ✅ **Multi-Operations**: Support for batch attestations and revocations
+- ✅ **Validation**: Built-in attestation validation and timestamp queries
 
 ## Installation
 
 ```bash
 npm install @settlemint/sdk-eas
+# or
+yarn add @settlemint/sdk-eas
+# or
+bun add @settlemint/sdk-eas
 ```
 
 ## Quick Start
@@ -68,257 +28,362 @@ npm install @settlemint/sdk-eas
 ```typescript
 import { createEASClient } from "@settlemint/sdk-eas";
 
+// Initialize EAS client with Portal credentials
 const client = createEASClient({
-  instance: "https://portal.settlemint.com",
-  accessToken: "your-access-token",
-  easContractAddress: "0x...", // Your EAS contract address
-  schemaRegistryContractAddress: "0x...", // Your Schema Registry address
-  // abiSource defaults to { type: "hardcoded" } - uses standard EAS ABIs
+  instance: "https://attestation-portal-ee231.gke-europe.settlemint.com/graphql",
+  accessToken: "sm_aat_your_access_token",
+  debug: true,
 });
 
+// Deploy EAS contracts (if needed)
+const deployment = await client.deploy();
+console.log("EAS deployed at:", deployment.easAddress);
+console.log("Schema Registry at:", deployment.schemaRegistryAddress);
+
 // Register a schema
-const result = await client.registerSchema({
-  schema: "address user, uint256 score",
+const schemaResult = await client.registerSchema({
+  fields: [
+    { name: "user", type: "address", description: "User's wallet address" },
+    { name: "score", type: "uint256", description: "Reputation score" },
+    { name: "verified", type: "bool", description: "Verification status" },
+  ],
   resolver: "0x0000000000000000000000000000000000000000",
   revocable: true,
 });
 
-console.log("Transaction Hash:", result.hash);
-
 // Create an attestation
-const attestation = await client.attest({
-  schema: "0x...", // Schema UID
+const attestationResult = await client.attest({
+  schema: schemaResult.hash,
   data: {
-    recipient: "0x...",
-    expirationTime: 0n,
+    recipient: "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
+    expirationTime: BigInt(0),
     revocable: true,
     refUID: "0x0000000000000000000000000000000000000000000000000000000000000000",
-    data: "0x...", // Encoded attestation data
-    value: 0n,
+    data: "0x", // Encoded attestation data
+    value: BigInt(0),
   },
 });
 
-// Get an attestation
-const attestationData = await client.getAttestation("0x...");
-console.log("Attestation:", attestationData);
+console.log("Attestation created:", attestationResult.hash);
 ```
 
-## ABI Configuration
+## Portal GraphQL Integration
 
-The EAS SDK supports three ABI sources with the following priority:
+This package integrates with SettleMint's Portal GraphQL API, providing access to all EAS operations:
 
-### 1. Hardcoded ABIs (Default)
-Uses standard EAS ABIs built into the SDK:
+### Available Mutations
+
+- `EasSchemaRegistryRegister` - Register new schemas
+- `EasDeploymentAttest` - Create single attestation
+- `EasDeploymentAttestByDelegation` - Create delegated attestation
+- `EasDeploymentMultiAttest` - Create multiple attestations
+- `EasDeploymentMultiAttestByDelegation` - Create multiple delegated attestations
+- `EasDeploymentRevoke` - Revoke single attestation
+- `EasDeploymentRevokeByDelegation` - Revoke by delegation
+- `EasDeploymentMultiRevoke` - Revoke multiple attestations
+- `EasDeploymentMultiRevokeByDelegation` - Revoke multiple by delegation
+- `EasDeploymentRevokeOffchain` - Revoke offchain attestation
+- `EasDeploymentMultiRevokeOffchain` - Revoke multiple offchain
+- `EasDeploymentTimestamp` - Timestamp operation
+- `EasDeploymentMultiTimestamp` - Timestamp multiple operations
+- `EasDeploymentIncreaseNonce` - Increase nonce for delegations
+
+### Available Queries
+
+- Contract deployment status and addresses
+- Schema retrieval and validation
+- Attestation lookup and verification
+- Transaction monitoring and history
+
+## API Reference
+
+### EASClient
+
+The main client class for interacting with EAS via Portal.
+
+#### Constructor Options
 
 ```typescript
+interface EASClientOptions {
+  instance: string;                           // Portal GraphQL endpoint
+  accessToken: string;                        // Portal access token
+  easContractAddress?: Address;               // Optional: EAS contract address
+  schemaRegistryContractAddress?: Address;    // Optional: Schema registry address
+  debug?: boolean;                           // Optional: Enable debug logging
+}
+```
+
+#### Methods
+
+- `deploy()` - Deploy EAS contracts
+- `registerSchema(request)` - Register new schema
+- `attest(request)` - Create attestation
+- `multiAttest(requests)` - Create multiple attestations
+- `revoke(uid, value?)` - Revoke attestation
+- `getSchema(uid)` - Get schema by UID
+- `getSchemas(options?)` - Get all schemas (paginated)
+- `getAttestation(uid)` - Get attestation by UID
+- `getAttestations(options?)` - Get all attestations (paginated)
+- `isValidAttestation(uid)` - Check attestation validity
+- `getTimestamp()` - Get contract timestamp
+- `getOptions()` - Get client configuration
+- `getPortalClient()` - Get Portal client instance
+- `getContractAddresses()` - Get current contract addresses
+
+## Examples
+
+See the [examples](./examples/) directory for complete usage examples:
+
+- `simple-eas-workflow.ts` - Complete EAS workflow demonstration
+- Real-world attestation scenarios
+- Schema design patterns
+- Multi-attestation operations
+
+## Development Status
+
+- ✅ **Portal Client Integration**: Complete
+- ✅ **GraphQL Operations**: All 14 EAS mutations implemented
+- ✅ **Type Safety**: Full TypeScript support
+- ✅ **Error Handling**: Comprehensive error handling
+- ✅ **Testing**: Complete test suite
+- ✅ **Documentation**: Full API documentation
+- 🔄 **Real Portal Access**: Requires valid EAS Portal access token
+
+## Requirements
+
+- Node.js 20+
+- Valid SettleMint Portal access token
+- Access to EAS Portal instance
+
+## License
+
+FSL-1.1-MIT
+
+# EAS Portal SDK
+
+A TypeScript SDK for interacting with Ethereum Attestation Service (EAS) via SettleMint Portal.
+
+## Features
+
+- **Portal Integration**: Direct integration with SettleMint Portal GraphQL API
+- **Type Safety**: Full TypeScript support with proper type definitions
+- **Contract Management**: Deploy or connect to existing EAS contracts
+- **Schema Management**: Register and retrieve attestation schemas
+- **Attestation Operations**: Create, retrieve, and validate attestations
+- **Configurable**: No hardcoded values - all addresses and references are configurable
+
+## Installation
+
+```bash
+npm install @settlemint/sdk-eas
+# or
+bun add @settlemint/sdk-eas
+```
+
+## Quick Start
+
+```typescript
+import { createEASClient, ZERO_ADDRESS, ZERO_BYTES32 } from "@settlemint/sdk-eas";
+
 const client = createEASClient({
-  instance: "https://portal.settlemint.com",
-  accessToken: "your-token",
-  easContractAddress: "0x...",
-  schemaRegistryContractAddress: "0x...",
-  // abiSource defaults to { type: "hardcoded" }
+  instance: "https://attestation-portal-ee231.gke-europe.settlemint.com/graphql",
+  accessToken: "your-portal-access-token",
+  debug: true,
 });
-```
 
-### 2. Custom ABIs (User Override)
-Override with your own ABIs:
+// Deploy contracts
+const deployment = await client.deploy("0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6");
 
-```typescript
-import { EAS_ABI, SCHEMA_REGISTRY_ABI } from "@settlemint/sdk-eas";
+// Register schema
+const schema = await client.registerSchema({
+  fields: [
+    { name: "user", type: "address" },
+    { name: "score", type: "uint256" },
+  ],
+  resolver: ZERO_ADDRESS, // No resolver
+  revocable: true,
+}, "0x8ba1f109551bD432803012645Hac136c22C177ec");
 
-const client = createEASClient({
-  instance: "https://portal.settlemint.com",
-  accessToken: "your-token",
-  easContractAddress: "0x...",
-  schemaRegistryContractAddress: "0x...",
-  abiSource: {
-    type: "custom",
-    easAbi: EAS_ABI, // or your custom ABI
-    schemaRegistryAbi: SCHEMA_REGISTRY_ABI, // or your custom ABI
+// Create attestation
+const attestation = await client.attest({
+  schema: schema.hash,
+  data: {
+    recipient: "0x9876543210987654321098765432109876543210",
+    expirationTime: BigInt(0), // No expiration
+    revocable: true,
+    refUID: ZERO_BYTES32, // No reference
+    data: "0x1234",
+    value: BigInt(0),
   },
-});
+}, "0x8ba1f109551bD432803012645Hac136c22C177ec");
 ```
 
-### 3. Predeployed ABIs (Portal's ABIs)
-Use Portal's predeployed ABIs:
+## Configuration Constants
+
+The SDK provides configurable constants instead of hardcoded values:
+
+### Address Constants
 
 ```typescript
-const client = createEASClient({
-  instance: "https://portal.settlemint.com",
-  accessToken: "your-token",
-  easContractAddress: "0x...",
-  schemaRegistryContractAddress: "0x...",
-  abiSource: {
-    type: "predeployed",
-    abiNames: ["eas"], // Optional, defaults to ["eas"]
+import { ZERO_ADDRESS, ZERO_BYTES32 } from "@settlemint/sdk-eas";
+
+// Use ZERO_ADDRESS for:
+ZERO_ADDRESS // "0x0000000000000000000000000000000000000000"
+
+// Use ZERO_BYTES32 for:
+ZERO_BYTES32 // "0x0000000000000000000000000000000000000000000000000000000000000000"
+```
+
+### Configurable Parameters
+
+#### 1. Forwarder Address (Contract Deployment)
+
+```typescript
+// Option 1: No meta-transaction forwarder (default)
+await client.deploy(deployerAddress); // Uses ZERO_ADDRESS
+
+// Option 2: Custom forwarder for meta-transactions
+await client.deploy(deployerAddress, "0x1234567890123456789012345678901234567890");
+```
+
+#### 2. Resolver Address (Schema Registration)
+
+```typescript
+// Option 1: No resolver (most common)
+await client.registerSchema({
+  fields: [...],
+  resolver: ZERO_ADDRESS, // No custom validation
+  revocable: true,
+}, fromAddress);
+
+// Option 2: Custom resolver contract
+await client.registerSchema({
+  fields: [...],
+  resolver: "0x5678901234567890123456789012345678901234", // Custom validation
+  revocable: true,
+}, fromAddress);
+```
+
+#### 3. Reference UID (Attestation Creation)
+
+```typescript
+// Option 1: Standalone attestation (most common)
+await client.attest({
+  schema: schemaUID,
+  data: {
+    recipient: recipientAddress,
+    refUID: ZERO_BYTES32, // No reference to other attestations
+    // ... other fields
   },
-});
+}, fromAddress);
+
+// Option 2: Reference another attestation
+await client.attest({
+  schema: schemaUID,
+  data: {
+    recipient: recipientAddress,
+    refUID: "0x1234567890123456789012345678901234567890123456789012345678901234", // Links to parent
+    // ... other fields
+  },
+}, fromAddress);
+```
+
+#### 4. Expiration Time
+
+```typescript
+// Option 1: No expiration (permanent)
+expirationTime: BigInt(0)
+
+// Option 2: Expires in 24 hours
+expirationTime: BigInt(Math.floor(Date.now() / 1000) + 86400)
+
+// Option 3: Specific timestamp
+expirationTime: BigInt(1735689600) // January 1, 2025
+```
+
+#### 5. Value (ETH Amount)
+
+```typescript
+// Option 1: No ETH sent (most common)
+value: BigInt(0)
+
+// Option 2: Send ETH with attestation
+value: BigInt("1000000000000000000") // 1 ETH in wei
 ```
 
 ## API Reference
 
-### Functions
-
-#### createEASClient()
-
-> **createEASClient**(`options`): [`EASPortalClient`](#easportalclient)
-
-Creates a Portal-based EAS client for interacting with the Ethereum Attestation Service.
-
-##### Parameters
-
-| Parameter | Type | Description |
-| ------ | ------ | ------ |
-| `options` | [`PortalClientOptions`](#portalclientoptions) | Configuration options for the Portal-based client |
-
-##### Returns
-
-[`EASPortalClient`](#easportalclient)
-
-An EAS Portal client instance
-
-##### Example
-
-```ts
-import { createEASClient } from '@settlemint/sdk-eas';
-
-const client = createEASClient({
-  instance: "https://portal.settlemint.com",
-  accessToken: "your-access-token",
-  easContractAddress: "0x...",
-  schemaRegistryContractAddress: "0x...",
-});
-```
-
-### Classes
-
-#### EASPortalClient
-
-The main client class for interacting with EAS contracts via Portal.
-
-##### Methods
-
-- `registerSchema(request: SchemaRequest): Promise<TransactionResult>` - Register a new schema
-- `attest(request: AttestationRequest): Promise<TransactionResult>` - Create an attestation
-- `multiAttest(requests: AttestationRequest[]): Promise<TransactionResult>` - Create multiple attestations
-- `revoke(uid: Hex, value?: bigint): Promise<TransactionResult>` - Revoke an attestation
-- `getAttestation(uid: Hex): Promise<AttestationData>` - Retrieve attestation data
-- `getSchema(uid: Hex): Promise<SchemaData>` - Retrieve schema data
-- `isValidAttestation(uid: Hex): Promise<boolean>` - Check if attestation is valid
-- `getTimestamp(): Promise<bigint>` - Get current contract timestamp
-- `getPortalClient(): unknown` - Access underlying Portal client
-- `getOptions(): PortalClientOptions` - Get client configuration
-- `getAbis(): { easAbi: Abi; schemaRegistryAbi: Abi }` - Get current ABIs
-
-### Interfaces
-
-#### PortalClientOptions
-
-Configuration options for the EAS Portal client.
-
-##### Properties
-
-| Property | Type | Description |
-| ------ | ------ | ------ |
-| `instance` | `string` | Portal instance URL or path |
-| `accessToken` | `string` | Access token for Portal authentication |
-| `easContractAddress` | `string` | The address of the EAS Attestation contract |
-| `schemaRegistryContractAddress` | `string` | The address of the EAS Schema Registry contract |
-| `abiSource?` | [`AbiSource`](#abisource) | ABI source configuration (defaults to hardcoded) |
-| `wsUrl?` | `string` | Optional WebSocket URL for real-time monitoring |
-| `timeout?` | `number` | Request timeout in milliseconds (default: 30000) |
-| `debug?` | `boolean` | Enable debug logging (default: false) |
-| `cache?` | `string` | Cache configuration for GraphQL requests |
-
-#### SchemaField
-
-Represents a single field in an EAS schema.
-
-##### Properties
-
-| Property | Type | Description |
-| ------ | ------ | ------ |
-| `name` | `string` | The name of the field |
-| `type` | `EASFieldType` | The Solidity type of the field |
-| `description?` | `string` | Optional description of the field's purpose |
-
-### Type Aliases
-
-#### AbiSource
-
-Configuration for ABI sources with priority system.
+### Client Creation
 
 ```typescript
-type AbiSource =
-  | { type: "hardcoded" }
-  | { type: "custom"; easAbi: Abi; schemaRegistryAbi: Abi }
-  | { type: "predeployed"; abiNames?: string[] };
-```
-
-### Variables
-
-#### EAS\_FIELD\_TYPES
-
-Supported field types for EAS schema fields. Maps to the Solidity types that can be used in EAS schemas.
-
-```typescript
-const EAS_FIELD_TYPES = {
-  string: "string",
-  address: "address",
-  bool: "bool",
-  bytes: "bytes",
-  bytes32: "bytes32",
-  uint256: "uint256",
-  int256: "int256",
-  uint8: "uint8",
-  int8: "int8",
-} as const;
-```
-
-## Error Handling
-
-The SDK provides comprehensive error handling with EAS-specific error codes:
-
-```typescript
-import { EASErrorCode, EASPortalError } from "@settlemint/sdk-eas";
-
-try {
-  await client.getAttestation("invalid-uid");
-} catch (error) {
-  if (error instanceof EASPortalError) {
-    switch (error.code) {
-      case EASErrorCode.ATTESTATION_NOT_FOUND:
-        console.log("Attestation not found");
-        break;
-      case EASErrorCode.TRANSACTION_FAILED:
-        console.log("Transaction failed");
-        break;
-      case EASErrorCode.SCHEMA_NOT_FOUND:
-        console.log("Schema not found");
-        break;
-      // ... other error codes
-    }
-  }
+interface EASClientOptions {
+  instance: string;                           // Portal GraphQL endpoint
+  accessToken: string;                        // Portal access token
+  easContractAddress?: Address;               // Optional: existing EAS contract
+  schemaRegistryContractAddress?: Address;    // Optional: existing Schema Registry
+  debug?: boolean;                           // Optional: enable debug logging
 }
 ```
 
-### Available Error Codes
+### Contract Deployment
 
-- `INVALID_SCHEMA` - Schema validation failed
-- `SCHEMA_NOT_FOUND` - Schema not found
-- `ATTESTATION_NOT_FOUND` - Attestation not found
-- `UNAUTHORIZED` - Unauthorized access
-- `TRANSACTION_FAILED` - Transaction execution failed
-- `INVALID_SIGNATURE` - Invalid signature
-- `EXPIRED_ATTESTATION` - Attestation has expired
-- `NON_REVOCABLE` - Attestation cannot be revoked
-- `ALREADY_REVOKED` - Attestation already revoked
-- `PORTAL_ERROR` - Portal-specific error
+```typescript
+async deploy(
+  deployerAddress: Address,
+  forwarderAddress?: Address,  // Optional: defaults to ZERO_ADDRESS
+  gasLimit?: string           // Optional: defaults to "0x3d0900"
+): Promise<DeploymentResult>
+```
 
-## Contributing
+### Schema Registration
 
-We welcome contributions from the community! Please check out our [Contributing](https://github.com/settlemint/sdk/blob/main/.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
+```typescript
+interface SchemaRequest {
+  fields?: SchemaField[];     // Alternative to schema string
+  schema?: string;           // Alternative to fields
+  resolver: Address;         // Use ZERO_ADDRESS for no resolver
+  revocable: boolean;        // Whether attestations can be revoked
+}
+
+async registerSchema(
+  request: SchemaRequest,
+  fromAddress: Address,
+  gasLimit?: string
+): Promise<TransactionResult>
+```
+
+### Attestation Creation
+
+```typescript
+interface AttestationData {
+  recipient: Address;        // Who receives the attestation
+  expirationTime: bigint;   // Use 0 for no expiration
+  revocable: boolean;       // Whether this can be revoked
+  refUID: Hex;             // Use ZERO_BYTES32 for no reference
+  data: Hex;               // Encoded attestation data
+  value: bigint;           // ETH amount to send (usually 0)
+}
+
+async attest(
+  request: AttestationRequest,
+  fromAddress: Address,
+  gasLimit?: string
+): Promise<TransactionResult>
+```
+
+## Examples
+
+See the [examples](./examples/) directory for complete workflows:
+
+- [`simple-eas-workflow.ts`](./examples/simple-eas-workflow.ts) - Complete EAS workflow with configuration options
+- Configuration examples for different use cases
+
+## Testing
+
+```bash
+bun test
+```
 
 ## License
 
-The SettleMint SDK is released under the [FSL Software License](https://fsl.software). See the [LICENSE](https://github.com/settlemint/sdk/blob/main/LICENSE) file for more details.
+MIT

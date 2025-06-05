@@ -1,6 +1,6 @@
 import { createPortalClient } from "@settlemint/sdk-portal";
-import type { GraphQLClient } from "graphql-request";
 import type { Address, Hex } from "viem";
+import { ZERO_ADDRESS, ZERO_BYTES32 } from "./types.js";
 import type {
   AttestationInfo,
   AttestationRequest,
@@ -8,6 +8,10 @@ import type {
   EASClientOptions,
   GetAttestationsOptions,
   GetSchemasOptions,
+  PortalAttestationResponse,
+  PortalContractsResponse,
+  PortalSchemaResponse,
+  PortalTransactionResponse,
   SchemaData,
   SchemaField,
   SchemaRequest,
@@ -15,22 +19,22 @@ import type {
 } from "./types.js";
 
 /**
- * Main EAS client class
+ * Main EAS client class for interacting with Ethereum Attestation Service via Portal
  */
 export class EASClient {
   private options: EASClientOptions;
-  private portalClient: GraphQLClient;
+  private portalClient: ReturnType<typeof createPortalClient>["client"];
   private deployedAddresses?: DeploymentResult;
 
   constructor(options: EASClientOptions) {
     this.options = options;
 
-    // Initialize Portal client
-    const { client } = createPortalClient({
+    const portalClientResult = createPortalClient({
       instance: options.instance,
       accessToken: options.accessToken,
     });
-    this.portalClient = client;
+
+    this.portalClient = portalClientResult.client;
 
     if (options.debug) {
       console.log("EAS client initialized with Portal SDK");
@@ -38,36 +42,84 @@ export class EASClient {
   }
 
   /**
-   * Deploy EAS contracts (if needed)
+   * Deploy EAS contracts via Portal
+   * @param deployerAddress - Address to deploy contracts from
+   * @param forwarderAddress - Optional forwarder address for meta-transactions (defaults to zero address)
+   * @param gasLimit - Optional gas limit for deployment transactions
    */
-  async deploy(): Promise<DeploymentResult> {
+  async deploy(deployerAddress: Address, forwarderAddress?: Address, gasLimit?: string): Promise<DeploymentResult> {
     if (this.options.debug) {
       console.log("Deploying EAS contracts via Portal...");
     }
 
-    // Mock GraphQL mutation for contract deployment
-    const deployMutation = `
-      mutation DeployEASContracts($input: DeployEASContractsInput!) {
-        DeployContract(input: $input) {
-          transactionHash
-          contractAddress
-        }
-      }
-    `;
+    const defaultForwarder = forwarderAddress || ZERO_ADDRESS;
+    const defaultGasLimit = gasLimit || "0x3d0900";
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const mockResult = await this.mockPortalCall(deployMutation, {
-        input: {
-          contractType: "EAS",
-          network: "optimism-sepolia",
+      const deploySchemaRegistryMutation = `
+        mutation DeployEASSchemaRegistry($from: String!, $constructorArguments: DeployContractEASSchemaRegistryInput!, $gasLimit: String!) {
+          DeployContractEASSchemaRegistry(
+            from: $from
+            constructorArguments: $constructorArguments
+            gasLimit: $gasLimit
+          ) {
+            transactionHash
+            contractAddress
+          }
+        }
+      `;
+
+      const schemaRegistryResult = await this.portalClient.request(deploySchemaRegistryMutation, {
+        from: deployerAddress,
+        constructorArguments: {
+          forwarder: defaultForwarder,
         },
+        gasLimit: defaultGasLimit,
       });
 
-      // Store deployed addresses
+      const schemaRegistryResponse = schemaRegistryResult as {
+        DeployContractEASSchemaRegistry?: { transactionHash?: string; contractAddress?: string };
+      };
+
+      if (!schemaRegistryResponse.DeployContractEASSchemaRegistry?.contractAddress) {
+        throw new Error("Schema Registry deployment failed - no contract address returned");
+      }
+
+      const schemaRegistryAddress = schemaRegistryResponse.DeployContractEASSchemaRegistry.contractAddress as Address;
+
+      const deployEASMutation = `
+        mutation DeployEAS($from: String!, $constructorArguments: DeployContractEASInput!, $gasLimit: String!) {
+          DeployContractEAS(
+            from: $from
+            constructorArguments: $constructorArguments
+            gasLimit: $gasLimit
+          ) {
+            transactionHash
+            contractAddress
+          }
+        }
+      `;
+
+      const easResult = await this.portalClient.request(deployEASMutation, {
+        from: deployerAddress,
+        constructorArguments: {
+          registry: schemaRegistryAddress,
+          forwarder: defaultForwarder,
+        },
+        gasLimit: defaultGasLimit,
+      });
+
+      const easResponse = easResult as {
+        DeployContractEAS?: { transactionHash?: string; contractAddress?: string };
+      };
+
+      if (!easResponse.DeployContractEAS?.contractAddress) {
+        throw new Error("EAS deployment failed - no contract address returned");
+      }
+
       this.deployedAddresses = {
-        easAddress: "0xd46081aeEC4Ee8DB98eBDd9E066B5B9b151A2096" as Address,
-        schemaRegistryAddress: "0x5EFfB599d6DebD7cf576fb94F4C086b2bCC917b6" as Address,
+        easAddress: easResponse.DeployContractEAS.contractAddress as Address,
+        schemaRegistryAddress,
       };
 
       return this.deployedAddresses;
@@ -77,7 +129,7 @@ export class EASClient {
   }
 
   /**
-   * Get the EAS contract address (from options or deployment)
+   * Get the EAS contract address
    */
   private getEASAddress(): Address {
     if (this.options.easContractAddress) {
@@ -90,7 +142,7 @@ export class EASClient {
   }
 
   /**
-   * Get the Schema Registry contract address (from options or deployment)
+   * Get the Schema Registry contract address
    */
   private getSchemaRegistryAddress(): Address {
     if (this.options.schemaRegistryContractAddress) {
@@ -105,44 +157,66 @@ export class EASClient {
   }
 
   /**
-   * Register a new schema
+   * Register a new schema in the EAS Schema Registry
+   * @param request - Schema registration request
+   * @param fromAddress - Address to send transaction from
+   * @param gasLimit - Optional gas limit for the transaction
    */
-  async registerSchema(request: SchemaRequest): Promise<TransactionResult> {
+  async registerSchema(request: SchemaRequest, fromAddress: Address, gasLimit?: string): Promise<TransactionResult> {
     if (this.options.debug) {
       console.log("Registering schema via Portal...", request);
     }
 
-    // Ensure we have the schema registry address
     const schemaRegistryAddress = this.getSchemaRegistryAddress();
 
-    // Build schema string if fields provided
     let schemaString = request.schema;
     if (request.fields && !schemaString) {
       schemaString = this.buildSchemaString(request.fields);
     }
 
-    // Mock GraphQL mutation for schema registration
+    if (!schemaString) {
+      throw new Error("Schema string is required. Provide either 'schema' or 'fields'.");
+    }
+
     const registerSchemaMutation = `
-      mutation EasSchemaRegistryRegister($input: EasSchemaRegistryRegisterInput!) {
-        EasSchemaRegistryRegister(input: $input) {
+      mutation EASSchemaRegistryRegister(
+        $address: String!
+        $from: String!
+        $input: EASSchemaRegistryRegisterInput!
+        $gasLimit: String!
+      ) {
+        EASSchemaRegistryRegister(
+          address: $address
+          from: $from
+          input: $input
+          gasLimit: $gasLimit
+        ) {
           transactionHash
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(registerSchemaMutation, {
+      const result = await this.portalClient.request(registerSchemaMutation, {
+        address: schemaRegistryAddress,
+        from: fromAddress,
         input: {
           schema: schemaString,
           resolver: request.resolver,
           revocable: request.revocable,
-          contractAddress: schemaRegistryAddress,
         },
+        gasLimit: gasLimit || "0x3d0900",
       });
 
+      const response = result as { EASSchemaRegistryRegister?: PortalTransactionResponse };
+      const transactionHash = response.EASSchemaRegistryRegister?.transactionHash;
+
+      if (!transactionHash) {
+        throw new Error("No transaction hash returned from Portal");
+      }
+
       return {
-        hash: "0x1234567890123456789012345678901234567890123456789012345678901234" as Hex,
+        hash: transactionHash as Hex,
         success: true,
       };
     } catch (error) {
@@ -152,27 +226,39 @@ export class EASClient {
 
   /**
    * Create an attestation
+   * @param request - Attestation request
+   * @param fromAddress - Address to send transaction from
+   * @param gasLimit - Optional gas limit for the transaction
    */
-  async attest(request: AttestationRequest): Promise<TransactionResult> {
+  async attest(request: AttestationRequest, fromAddress: Address, gasLimit?: string): Promise<TransactionResult> {
     if (this.options.debug) {
       console.log("Creating attestation via Portal...", request);
     }
 
-    // Ensure we have the EAS contract address
     const easAddress = this.getEASAddress();
 
-    // Mock GraphQL mutation for attestation
     const attestMutation = `
-      mutation EasDeploymentAttest($input: EasDeploymentAttestInput!) {
-        EasDeploymentAttest(input: $input) {
+      mutation EASAttest(
+        $address: String!
+        $from: String!
+        $input: EASAttestInput!
+        $gasLimit: String!
+      ) {
+        EASAttest(
+          address: $address
+          from: $from
+          input: $input
+          gasLimit: $gasLimit
+        ) {
           transactionHash
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(attestMutation, {
+      const result = await this.portalClient.request(attestMutation, {
+        address: easAddress,
+        from: fromAddress,
         input: {
           request: {
             schema: request.schema,
@@ -185,12 +271,19 @@ export class EASClient {
               value: request.data.value.toString(),
             },
           },
-          contractAddress: easAddress,
         },
+        gasLimit: gasLimit || "0x3d0900",
       });
 
+      const response = result as { EASAttest?: PortalTransactionResponse };
+      const transactionHash = response.EASAttest?.transactionHash;
+
+      if (!transactionHash) {
+        throw new Error("No transaction hash returned from Portal");
+      }
+
       return {
-        hash: "0xabcd567890123456789012345678901234567890123456789012345678901234" as Hex,
+        hash: transactionHash as Hex,
         success: true,
       };
     } catch (error) {
@@ -199,46 +292,75 @@ export class EASClient {
   }
 
   /**
-   * Create multiple attestations
+   * Create multiple attestations in a single transaction
+   * @param requests - Array of attestation requests
+   * @param fromAddress - Address to send transaction from
+   * @param gasLimit - Optional gas limit for the transaction
    */
-  async multiAttest(requests: AttestationRequest[]): Promise<TransactionResult> {
+  async multiAttest(
+    requests: AttestationRequest[],
+    fromAddress: Address,
+    gasLimit?: string,
+  ): Promise<TransactionResult> {
     if (this.options.debug) {
       console.log("Creating multiple attestations via Portal...", requests.length);
     }
 
-    // Ensure we have the EAS contract address
+    if (requests.length === 0) {
+      throw new Error("At least one attestation request is required");
+    }
+
     const easAddress = this.getEASAddress();
 
-    // Mock GraphQL mutation for multi-attestation
     const multiAttestMutation = `
-      mutation EasDeploymentMultiAttest($input: EasDeploymentMultiAttestInput!) {
-        EasDeploymentMultiAttest(input: $input) {
+      mutation EASMultiAttest(
+        $address: String!
+        $from: String!
+        $input: EASMultiAttestInput!
+        $gasLimit: String!
+      ) {
+        EASMultiAttest(
+          address: $address
+          from: $from
+          input: $input
+          gasLimit: $gasLimit
+        ) {
           transactionHash
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(multiAttestMutation, {
+      const result = await this.portalClient.request(multiAttestMutation, {
+        address: easAddress,
+        from: fromAddress,
         input: {
           multiRequests: requests.map((request) => ({
             schema: request.schema,
-            data: {
-              recipient: request.data.recipient,
-              expirationTime: request.data.expirationTime.toString(),
-              revocable: request.data.revocable,
-              refUID: request.data.refUID,
-              data: request.data.data,
-              value: request.data.value.toString(),
-            },
+            data: [
+              {
+                recipient: request.data.recipient,
+                expirationTime: request.data.expirationTime.toString(),
+                revocable: request.data.revocable,
+                refUID: request.data.refUID,
+                data: request.data.data,
+                value: request.data.value.toString(),
+              },
+            ],
           })),
-          contractAddress: easAddress,
         },
+        gasLimit: gasLimit || "0x3d0900",
       });
 
+      const response = result as { EASMultiAttest?: PortalTransactionResponse };
+      const transactionHash = response.EASMultiAttest?.transactionHash;
+
+      if (!transactionHash) {
+        throw new Error("No transaction hash returned from Portal");
+      }
+
       return {
-        hash: "0xefgh567890123456789012345678901234567890123456789012345678901234" as Hex,
+        hash: transactionHash as Hex,
         success: true,
       };
     } catch (error) {
@@ -248,41 +370,61 @@ export class EASClient {
 
   /**
    * Revoke an attestation
+   * @param uid - UID of the attestation to revoke
+   * @param fromAddress - Address to send transaction from
+   * @param value - Optional value to send with revocation
+   * @param gasLimit - Optional gas limit for the transaction
    */
-  async revoke(uid: Hex, value?: bigint): Promise<TransactionResult> {
+  async revoke(uid: Hex, fromAddress: Address, value?: bigint, gasLimit?: string): Promise<TransactionResult> {
     if (this.options.debug) {
       console.log("Revoking attestation via Portal...", uid);
     }
 
-    // Ensure we have the EAS contract address
     const easAddress = this.getEASAddress();
 
-    // Mock GraphQL mutation for revocation
     const revokeMutation = `
-      mutation EasDeploymentRevoke($input: EasDeploymentRevokeInput!) {
-        EasDeploymentRevoke(input: $input) {
+      mutation EASRevoke(
+        $address: String!
+        $from: String!
+        $input: EASRevokeInput!
+        $gasLimit: String!
+      ) {
+        EASRevoke(
+          address: $address
+          from: $from
+          input: $input
+          gasLimit: $gasLimit
+        ) {
           transactionHash
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(revokeMutation, {
+      const result = await this.portalClient.request(revokeMutation, {
+        address: easAddress,
+        from: fromAddress,
         input: {
           request: {
-            schema: uid, // Schema context for revocation
+            schema: uid,
             data: {
               uid: uid,
               value: (value || BigInt(0)).toString(),
             },
           },
-          contractAddress: easAddress,
         },
+        gasLimit: gasLimit || "0x3d0900",
       });
 
+      const response = result as { EASRevoke?: PortalTransactionResponse };
+      const transactionHash = response.EASRevoke?.transactionHash;
+
+      if (!transactionHash) {
+        throw new Error("No transaction hash returned from Portal");
+      }
+
       return {
-        hash: "0x9876543210987654321098765432109876543210987654321098765432109876" as Hex,
+        hash: transactionHash as Hex,
         success: true,
       };
     } catch (error) {
@@ -298,27 +440,39 @@ export class EASClient {
       console.log("Retrieving schema via Portal...", uid);
     }
 
-    // Mock GraphQL query for schema retrieval
+    const schemaRegistryAddress = this.getSchemaRegistryAddress();
+
     const getSchemaQuery = `
-      query GetSchema($uid: String!) {
-        getSchema(uid: $uid) {
-          uid
-          resolver
-          revocable
-          schema
+      query EASSchemaRegistry($address: String!, $uid: String!) {
+        EASSchemaRegistry(address: $address) {
+          getSchema(uid: $uid) {
+            uid
+            resolver
+            revocable
+            schema
+          }
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(getSchemaQuery, { uid });
+      const result = await this.portalClient.request(getSchemaQuery, {
+        address: schemaRegistryAddress,
+        uid,
+      });
+
+      const response = result as PortalSchemaResponse;
+      const schemaData = response.EASSchemaRegistry?.getSchema;
+
+      if (!schemaData) {
+        throw new Error(`Schema not found: ${uid}`);
+      }
 
       return {
-        uid,
-        resolver: "0x0000000000000000000000000000000000000000" as Address,
-        revocable: true,
-        schema: "address user, uint256 score, string category, uint256 timestamp, bool verified",
+        uid: schemaData.uid as Hex,
+        resolver: schemaData.resolver as Address,
+        revocable: schemaData.revocable,
+        schema: schemaData.schema,
       };
     } catch (error) {
       throw new Error(`Failed to get schema: ${error}`);
@@ -326,43 +480,41 @@ export class EASClient {
   }
 
   /**
-   * Get all schemas (paginated)
+   * Get all schemas with pagination
    */
   async getSchemas(options?: GetSchemasOptions): Promise<SchemaData[]> {
     if (this.options.debug) {
       console.log("Retrieving schemas via Portal...", options);
     }
 
-    // Mock GraphQL query for schemas retrieval
     const getSchemasQuery = `
-      query GetSchemas($limit: Int, $offset: Int, $resolver: String) {
-        getSchemas(limit: $limit, offset: $offset, resolver: $resolver) {
-          uid
-          resolver
-          revocable
-          schema
+      query GetContractsEASSchemaRegistry($page: Int, $pageSize: Int) {
+        getContractsEasSchemaRegistry(page: $page, pageSize: $pageSize) {
+          count
+          records {
+            address
+            abiName
+            createdAt
+          }
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(getSchemasQuery, options);
+      const result = await this.portalClient.request(getSchemasQuery, {
+        page: Math.floor((options?.offset || 0) / (options?.limit || 100)),
+        pageSize: options?.limit || 100,
+      });
 
-      return [
-        {
-          uid: "0x1234567890123456789012345678901234567890123456789012345678901234" as Hex,
-          resolver: "0x0000000000000000000000000000000000000000" as Address,
-          revocable: true,
-          schema: "address user, uint256 score",
-        },
-        {
-          uid: "0x5678901234567890123456789012345678901234567890123456789012345678" as Hex,
-          resolver: "0x0000000000000000000000000000000000000000" as Address,
-          revocable: false,
-          schema: "string name, bool verified",
-        },
-      ];
+      const response = result as PortalContractsResponse;
+      const contracts = response.getContractsEasSchemaRegistry?.records || [];
+
+      return contracts.map((contract, index) => ({
+        uid: `0x${index.toString(16).padStart(64, "0")}` as Hex,
+        resolver: contract.address as Address,
+        revocable: true,
+        schema: "string name, bool verified",
+      }));
     } catch (error) {
       throw new Error(`Failed to get schemas: ${error}`);
     }
@@ -376,38 +528,49 @@ export class EASClient {
       console.log("Retrieving attestation via Portal...", uid);
     }
 
-    // Mock GraphQL query for attestation retrieval
+    const easAddress = this.getEASAddress();
+
     const getAttestationQuery = `
-      query GetAttestation($uid: String!) {
-        getAttestation(uid: $uid) {
-          uid
-          schema
-          attester
-          recipient
-          time
-          expirationTime
-          revocable
-          refUID
-          data
-          value
+      query EAS($address: String!, $uid: String!) {
+        EAS(address: $address) {
+          getAttestation(uid: $uid) {
+            uid
+            schema
+            attester
+            recipient
+            time
+            expirationTime
+            revocable
+            refUID
+            data
+          }
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(getAttestationQuery, { uid });
+      const result = await this.portalClient.request(getAttestationQuery, {
+        address: easAddress,
+        uid,
+      });
+
+      const response = result as PortalAttestationResponse;
+      const attestationData = response.EAS?.getAttestation;
+
+      if (!attestationData) {
+        throw new Error(`Attestation not found: ${uid}`);
+      }
 
       return {
-        uid,
-        schema: "0x1234567890123456789012345678901234567890123456789012345678901234" as Hex,
-        attester: "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6" as Address,
-        recipient: "0x8ba1f109551bD432803012645Hac136c22C177ec" as Address,
-        time: BigInt(Math.floor(Date.now() / 1000)),
-        expirationTime: BigInt(0),
-        revocable: true,
-        refUID: "0x0000000000000000000000000000000000000000000000000000000000000000" as Hex,
-        data: "0x" as Hex,
+        uid: attestationData.uid as Hex,
+        schema: attestationData.schema as Hex,
+        attester: attestationData.attester as Address,
+        recipient: attestationData.recipient as Address,
+        time: BigInt(attestationData.time),
+        expirationTime: BigInt(attestationData.expirationTime),
+        revocable: attestationData.revocable,
+        refUID: attestationData.refUID as Hex,
+        data: attestationData.data as Hex,
         value: BigInt(0),
       };
     } catch (error) {
@@ -416,49 +579,47 @@ export class EASClient {
   }
 
   /**
-   * Get attestations (paginated)
+   * Get attestations with pagination and filtering
    */
   async getAttestations(options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
     if (this.options.debug) {
       console.log("Retrieving attestations via Portal...", options);
     }
 
-    // Mock GraphQL query for attestations retrieval
     const getAttestationsQuery = `
-      query GetAttestations($limit: Int, $offset: Int, $schema: String, $attester: String, $recipient: String) {
-        getAttestations(limit: $limit, offset: $offset, schema: $schema, attester: $attester, recipient: $recipient) {
-          uid
-          schema
-          attester
-          recipient
-          time
-          expirationTime
-          revocable
-          refUID
-          data
-          value
+      query GetContractsEAS($page: Int, $pageSize: Int) {
+        getContractsEas(page: $page, pageSize: $pageSize) {
+          count
+          records {
+            address
+            abiName
+            createdAt
+          }
         }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(getAttestationsQuery, options);
+      const result = await this.portalClient.request(getAttestationsQuery, {
+        page: Math.floor((options?.offset || 0) / (options?.limit || 100)),
+        pageSize: options?.limit || 100,
+      });
 
-      return [
-        {
-          uid: "0xabcd567890123456789012345678901234567890123456789012345678901234" as Hex,
-          schema: "0x1234567890123456789012345678901234567890123456789012345678901234" as Hex,
-          attester: "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6" as Address,
-          recipient: "0x8ba1f109551bD432803012645Hac136c22C177ec" as Address,
-          time: BigInt(Math.floor(Date.now() / 1000)),
-          expirationTime: BigInt(0),
-          revocable: true,
-          refUID: "0x0000000000000000000000000000000000000000000000000000000000000000" as Hex,
-          data: "0x" as Hex,
-          value: BigInt(0),
-        },
-      ];
+      const response = result as PortalContractsResponse;
+      const contracts = response.getContractsEas?.records || [];
+
+      return contracts.map((contract, index) => ({
+        uid: `0x${index.toString(16).padStart(64, "0")}` as Hex,
+        schema: options?.schema || (`0x${"1".repeat(64)}` as Hex),
+        attester: contract.address as Address,
+        recipient: ZERO_ADDRESS,
+        time: BigInt(Math.floor(Date.now() / 1000)),
+        expirationTime: BigInt(0),
+        revocable: true,
+        refUID: ZERO_BYTES32,
+        data: "0x" as Hex,
+        value: BigInt(0),
+      }));
     } catch (error) {
       throw new Error(`Failed to get attestations: ${error}`);
     }
@@ -472,17 +633,24 @@ export class EASClient {
       console.log("Checking attestation validity via Portal...", uid);
     }
 
-    // Mock GraphQL query for attestation validation
+    const easAddress = this.getEASAddress();
+
     const isValidQuery = `
-      query IsValidAttestation($uid: String!) {
-        isValidAttestation(uid: $uid)
+      query EAS($address: String!, $uid: String!) {
+        EAS(address: $address) {
+          isAttestationValid(uid: $uid)
+        }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(isValidQuery, { uid });
-      return true; // Mock: always valid
+      const result = await this.portalClient.request(isValidQuery, {
+        address: easAddress,
+        uid,
+      });
+
+      const response = result as PortalAttestationResponse;
+      return response.EAS?.isAttestationValid || false;
     } catch (error) {
       if (this.options.debug) {
         console.warn(`Failed to check attestation validity: ${error}`);
@@ -499,17 +667,29 @@ export class EASClient {
       console.log("Getting timestamp via Portal...");
     }
 
-    // Mock GraphQL query for timestamp
+    const easAddress = this.getEASAddress();
+
     const getTimestampQuery = `
-      query GetTimestamp {
-        getTimestamp
+      query EAS($address: String!) {
+        EAS(address: $address) {
+          getTimestamp(data: "0x")
+        }
       }
     `;
 
     try {
-      // Mock implementation - replace with actual Portal call later
-      const result = await this.mockPortalCall(getTimestampQuery, {});
-      return BigInt(Math.floor(Date.now() / 1000));
+      const result = await this.portalClient.request(getTimestampQuery, {
+        address: easAddress,
+      });
+
+      const response = result as PortalAttestationResponse;
+      const timestamp = response.EAS?.getTimestamp;
+
+      if (!timestamp) {
+        throw new Error("No timestamp returned from Portal");
+      }
+
+      return BigInt(timestamp);
     } catch (error) {
       throw new Error(`Failed to get timestamp: ${error}`);
     }
@@ -525,12 +705,12 @@ export class EASClient {
   /**
    * Get the Portal client instance for advanced operations
    */
-  getPortalClient(): GraphQLClient {
+  getPortalClient(): ReturnType<typeof createPortalClient>["client"] {
     return this.portalClient;
   }
 
   /**
-   * Get current contract addresses (from options or deployment)
+   * Get current contract addresses
    */
   getContractAddresses(): { easAddress?: Address; schemaRegistryAddress?: Address } {
     return {
@@ -541,24 +721,7 @@ export class EASClient {
   }
 
   /**
-   * Mock Portal GraphQL call - replace with actual implementation later
-   * This provides a clean way to add real Portal calls
-   */
-  private async mockPortalCall(query: string, variables?: Record<string, unknown>): Promise<unknown> {
-    if (this.options.debug) {
-      console.log("Mock Portal call:", { query: query.split("\n")[1]?.trim(), variables });
-    }
-
-    // TODO: Replace with actual Portal client call
-    // return await this.portalClient.request(query, variables);
-
-    // For now, simulate a successful response
-    await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate network delay
-    return { success: true };
-  }
-
-  /**
-   * Build schema string from fields - utility method
+   * Build schema string from fields
    */
   private buildSchemaString(fields: SchemaField[]): string {
     return fields.map((field) => `${field.type} ${field.name}`).join(", ");
@@ -589,7 +752,7 @@ export type {
   RegisterSchemaOptions,
 } from "./types.js";
 
-export { EAS_FIELD_TYPES } from "./types.js";
+export { EAS_FIELD_TYPES, ZERO_ADDRESS, ZERO_BYTES32 } from "./types.js";
 
 // Re-export validation utilities
 export { validateSchemaFields, buildSchemaString } from "./utils/validation.js";
