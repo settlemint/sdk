@@ -20,7 +20,7 @@ const CONFIG = {
   instance:
     process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT ||
     "https://attestation-portal-ee231.gke-europe.settlemint.com/graphql",
-  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN || "your-eas-portal-token",
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN || "sm_aat_example_token_for_testing",
   // Contract addresses are optional - can be deployed via client
   // easContractAddress: "0xd46081aeEC4Ee8DB98eBDd9E066B5B9b151A2096" as Address,
   // schemaRegistryContractAddress: "0x5EFfB599d6DebD7cf576fb94F4C086b2bCC917b6" as Address,
