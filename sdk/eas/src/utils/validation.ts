@@ -1,4 +1,4 @@
-import { type EASFieldType, EAS_FIELD_TYPES, type SchemaField } from "../schema.js";
+import { type EASFieldType, EAS_FIELD_TYPES, type SchemaField } from "../types.js";
 
 export function validateFieldName(name: string): void {
   if (!name) {
