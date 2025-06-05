@@ -1,7 +1,7 @@
 import { createPortalClient } from "@settlemint/sdk-portal";
 import type { Address, Hex } from "viem";
 import { GraphQLOperations } from "./graphql/operations.js";
-import { ZERO_ADDRESS, ZERO_BYTES32 } from "./types.js";
+import { ZERO_ADDRESS } from "./types.js";
 import type {
   AttestationInfo,
   AttestationRequest,
@@ -9,9 +9,6 @@ import type {
   EASClientOptions,
   GetAttestationsOptions,
   GetSchemasOptions,
-  PortalAttestationResponse,
-  PortalContractsResponse,
-  PortalSchemaResponse,
   PortalTransactionResponse,
   SchemaData,
   SchemaField,
@@ -36,27 +33,17 @@ export class EASClient {
     });
 
     this.portalClient = portalClientResult.client;
-
-    if (options.debug) {
-      console.log("EAS client initialized with Portal SDK");
-    }
   }
 
   /**
    * Deploy EAS contracts via Portal
-   * @param deployerAddress - Address to deploy contracts from
-   * @param forwarderAddress - Optional forwarder address for meta-transactions (defaults to zero address)
-   * @param gasLimit - Optional gas limit for deployment transactions
    */
   async deploy(deployerAddress: Address, forwarderAddress?: Address, gasLimit?: string): Promise<DeploymentResult> {
-    if (this.options.debug) {
-      console.log("Deploying EAS contracts via Portal...");
-    }
-
     const defaultForwarder = forwarderAddress || ZERO_ADDRESS;
-    const defaultGasLimit = gasLimit || "0x3d0900";
+    const defaultGasLimit = gasLimit || "0x7a1200";
 
     try {
+      // Deploy Schema Registry first
       const schemaRegistryResult = await this.portalClient.request(GraphQLOperations.mutations.deploySchemaRegistry, {
         from: deployerAddress,
         constructorArguments: {
@@ -66,15 +53,48 @@ export class EASClient {
       });
 
       const schemaRegistryResponse = schemaRegistryResult as {
-        DeployContractEASSchemaRegistry?: { transactionHash?: string; contractAddress?: string };
+        DeployContractEASSchemaRegistry?: { transactionHash?: string };
       };
 
-      if (!schemaRegistryResponse.DeployContractEASSchemaRegistry?.contractAddress) {
-        throw new Error("Schema Registry deployment failed - no contract address returned");
+      if (!schemaRegistryResponse.DeployContractEASSchemaRegistry?.transactionHash) {
+        throw new Error("Schema Registry deployment failed - no transaction hash returned");
       }
 
-      const schemaRegistryAddress = schemaRegistryResponse.DeployContractEASSchemaRegistry.contractAddress as Address;
+      const schemaRegistryTxHash = schemaRegistryResponse.DeployContractEASSchemaRegistry.transactionHash;
 
+      // Wait for Schema Registry deployment and get contract address
+      let schemaRegistryAddress: Address | null = null;
+      let attempts = 0;
+      const maxAttempts = 30;
+
+      while (!schemaRegistryAddress && attempts < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        attempts++;
+
+        try {
+          const contractsResult = await this.portalClient.request(
+            "query GetSchemaRegistryContracts { getContractsEasSchemaRegistry { records { address } } }",
+          );
+
+          const contractsResponse = contractsResult as {
+            getContractsEasSchemaRegistry?: { records: Array<{ address: string }> };
+          };
+
+          const contracts = contractsResponse.getContractsEasSchemaRegistry?.records || [];
+          if (contracts.length > 0) {
+            schemaRegistryAddress = contracts[contracts.length - 1]?.address as Address;
+            break;
+          }
+        } catch (error) {
+          // Continue waiting
+        }
+      }
+
+      if (!schemaRegistryAddress) {
+        throw new Error("Schema Registry deployment timed out - could not get contract address");
+      }
+
+      // Deploy EAS contract with correct Schema Registry address
       const easResult = await this.portalClient.request(GraphQLOperations.mutations.deployEAS, {
         from: deployerAddress,
         constructorArguments: {
@@ -85,16 +105,51 @@ export class EASClient {
       });
 
       const easResponse = easResult as {
-        DeployContractEAS?: { transactionHash?: string; contractAddress?: string };
+        DeployContractEAS?: { transactionHash?: string };
       };
 
-      if (!easResponse.DeployContractEAS?.contractAddress) {
-        throw new Error("EAS deployment failed - no contract address returned");
+      if (!easResponse.DeployContractEAS?.transactionHash) {
+        throw new Error("EAS deployment failed - no transaction hash returned");
+      }
+
+      const easTxHash = easResponse.DeployContractEAS.transactionHash;
+
+      // Wait for EAS deployment and get contract address
+      let easAddress: Address | null = null;
+      attempts = 0;
+
+      while (!easAddress && attempts < maxAttempts) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        attempts++;
+
+        try {
+          const contractsResult = await this.portalClient.request(
+            "query GetEASContracts { getContractsEas { records { address } } }",
+          );
+
+          const contractsResponse = contractsResult as {
+            getContractsEas?: { records: Array<{ address: string }> };
+          };
+
+          const contracts = contractsResponse.getContractsEas?.records || [];
+          if (contracts.length > 0) {
+            easAddress = contracts[contracts.length - 1]?.address as Address;
+            break;
+          }
+        } catch (error) {
+          // Continue waiting
+        }
+      }
+
+      if (!easAddress) {
+        throw new Error("EAS deployment timed out - could not get contract address");
       }
 
       this.deployedAddresses = {
-        easAddress: easResponse.DeployContractEAS.contractAddress as Address,
+        easAddress,
         schemaRegistryAddress,
+        easTransactionHash: easTxHash as Hex,
+        schemaRegistryTransactionHash: schemaRegistryTxHash as Hex,
       };
 
       return this.deployedAddresses;
@@ -104,44 +159,9 @@ export class EASClient {
   }
 
   /**
-   * Get the EAS contract address
-   */
-  private getEASAddress(): Address {
-    if (this.options.easContractAddress) {
-      return this.options.easContractAddress;
-    }
-    if (this.deployedAddresses?.easAddress) {
-      return this.deployedAddresses.easAddress;
-    }
-    throw new Error("EAS contract address not available. Please provide it in options or deploy contracts first.");
-  }
-
-  /**
-   * Get the Schema Registry contract address
-   */
-  private getSchemaRegistryAddress(): Address {
-    if (this.options.schemaRegistryContractAddress) {
-      return this.options.schemaRegistryContractAddress;
-    }
-    if (this.deployedAddresses?.schemaRegistryAddress) {
-      return this.deployedAddresses.schemaRegistryAddress;
-    }
-    throw new Error(
-      "Schema Registry contract address not available. Please provide it in options or deploy contracts first.",
-    );
-  }
-
-  /**
    * Register a new schema in the EAS Schema Registry
-   * @param request - Schema registration request
-   * @param fromAddress - Address to send transaction from
-   * @param gasLimit - Optional gas limit for the transaction
    */
   async registerSchema(request: SchemaRequest, fromAddress: Address, gasLimit?: string): Promise<TransactionResult> {
-    if (this.options.debug) {
-      console.log("Registering schema via Portal...", request);
-    }
-
     const schemaRegistryAddress = this.getSchemaRegistryAddress();
 
     let schemaString = request.schema;
@@ -183,15 +203,8 @@ export class EASClient {
 
   /**
    * Create an attestation
-   * @param request - Attestation request
-   * @param fromAddress - Address to send transaction from
-   * @param gasLimit - Optional gas limit for the transaction
    */
   async attest(request: AttestationRequest, fromAddress: Address, gasLimit?: string): Promise<TransactionResult> {
-    if (this.options.debug) {
-      console.log("Creating attestation via Portal...", request);
-    }
-
     const easAddress = this.getEASAddress();
 
     try {
@@ -232,19 +245,12 @@ export class EASClient {
 
   /**
    * Create multiple attestations in a single transaction
-   * @param requests - Array of attestation requests
-   * @param fromAddress - Address to send transaction from
-   * @param gasLimit - Optional gas limit for the transaction
    */
   async multiAttest(
     requests: AttestationRequest[],
     fromAddress: Address,
     gasLimit?: string,
   ): Promise<TransactionResult> {
-    if (this.options.debug) {
-      console.log("Creating multiple attestations via Portal...", requests.length);
-    }
-
     if (requests.length === 0) {
       throw new Error("At least one attestation request is required");
     }
@@ -291,16 +297,8 @@ export class EASClient {
 
   /**
    * Revoke an attestation
-   * @param uid - UID of the attestation to revoke
-   * @param fromAddress - Address to send transaction from
-   * @param value - Optional value to send with revocation
-   * @param gasLimit - Optional gas limit for the transaction
    */
   async revoke(uid: Hex, fromAddress: Address, value?: bigint, gasLimit?: string): Promise<TransactionResult> {
-    if (this.options.debug) {
-      console.log("Revoking attestation via Portal...", uid);
-    }
-
     const easAddress = this.getEASAddress();
 
     try {
@@ -337,192 +335,60 @@ export class EASClient {
 
   /**
    * Get a schema by UID
+   *
+   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   async getSchema(uid: Hex): Promise<SchemaData> {
-    if (this.options.debug) {
-      console.log("Retrieving schema via Portal...", uid);
-    }
-
-    const schemaRegistryAddress = this.getSchemaRegistryAddress();
-
-    try {
-      const result = await this.portalClient.request(GraphQLOperations.queries.getSchema, {
-        address: schemaRegistryAddress,
-        uid,
-      });
-
-      const response = result as PortalSchemaResponse;
-      const schemaData = response.EASSchemaRegistry?.getSchema;
-
-      if (!schemaData) {
-        throw new Error(`Schema not found: ${uid}`);
-      }
-
-      return {
-        uid: schemaData.uid as Hex,
-        resolver: schemaData.resolver as Address,
-        revocable: schemaData.revocable,
-        schema: schemaData.schema,
-      };
-    } catch (error) {
-      throw new Error(`Failed to get schema: ${error}`);
-    }
+    throw new Error(
+      `Schema queries not implemented yet. Use The Graph subgraph for reading schema data. Schema UID: ${uid}`,
+    );
   }
 
   /**
    * Get all schemas with pagination
+   *
+   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   async getSchemas(options?: GetSchemasOptions): Promise<SchemaData[]> {
-    if (this.options.debug) {
-      console.log("Retrieving schemas via Portal...", options);
-    }
-
-    try {
-      const result = await this.portalClient.request(GraphQLOperations.queries.getSchemas, {
-        page: Math.floor((options?.offset || 0) / (options?.limit || 100)),
-        pageSize: options?.limit || 100,
-      });
-
-      const response = result as PortalContractsResponse;
-      const contracts = response.getContractsEasSchemaRegistry?.records || [];
-
-      return contracts.map((contract, index) => ({
-        uid: `0x${index.toString(16).padStart(64, "0")}` as Hex,
-        resolver: contract.address as Address,
-        revocable: true,
-        schema: "string name, bool verified",
-      }));
-    } catch (error) {
-      throw new Error(`Failed to get schemas: ${error}`);
-    }
+    throw new Error("Schema listing not implemented yet. Use The Graph subgraph for reading schema data.");
   }
 
   /**
    * Get an attestation by UID
+   *
+   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   async getAttestation(uid: Hex): Promise<AttestationInfo> {
-    if (this.options.debug) {
-      console.log("Retrieving attestation via Portal...", uid);
-    }
-
-    const easAddress = this.getEASAddress();
-
-    try {
-      const result = await this.portalClient.request(GraphQLOperations.queries.getAttestation, {
-        address: easAddress,
-        uid,
-      });
-
-      const response = result as PortalAttestationResponse;
-      const attestationData = response.EAS?.getAttestation;
-
-      if (!attestationData) {
-        throw new Error(`Attestation not found: ${uid}`);
-      }
-
-      return {
-        uid: attestationData.uid as Hex,
-        schema: attestationData.schema as Hex,
-        attester: attestationData.attester as Address,
-        recipient: attestationData.recipient as Address,
-        time: BigInt(attestationData.time),
-        expirationTime: BigInt(attestationData.expirationTime),
-        revocable: attestationData.revocable,
-        refUID: attestationData.refUID as Hex,
-        data: attestationData.data as Hex,
-        value: BigInt(0),
-      };
-    } catch (error) {
-      throw new Error(`Failed to get attestation: ${error}`);
-    }
+    throw new Error(
+      `Attestation queries not implemented yet. Use The Graph subgraph for reading attestation data. Attestation UID: ${uid}`,
+    );
   }
 
   /**
    * Get attestations with pagination and filtering
+   *
+   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   async getAttestations(options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
-    if (this.options.debug) {
-      console.log("Retrieving attestations via Portal...", options);
-    }
-
-    try {
-      const result = await this.portalClient.request(GraphQLOperations.queries.getAttestations, {
-        page: Math.floor((options?.offset || 0) / (options?.limit || 100)),
-        pageSize: options?.limit || 100,
-      });
-
-      const response = result as PortalContractsResponse;
-      const contracts = response.getContractsEas?.records || [];
-
-      return contracts.map((contract, index) => ({
-        uid: `0x${index.toString(16).padStart(64, "0")}` as Hex,
-        schema: options?.schema || (`0x${"1".repeat(64)}` as Hex),
-        attester: contract.address as Address,
-        recipient: ZERO_ADDRESS,
-        time: BigInt(Math.floor(Date.now() / 1000)),
-        expirationTime: BigInt(0),
-        revocable: true,
-        refUID: ZERO_BYTES32,
-        data: "0x" as Hex,
-        value: BigInt(0),
-      }));
-    } catch (error) {
-      throw new Error(`Failed to get attestations: ${error}`);
-    }
+    throw new Error("Attestation listing not implemented yet. Use The Graph subgraph for reading attestation data.");
   }
 
   /**
    * Check if an attestation is valid
+   *
+   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   async isValidAttestation(uid: Hex): Promise<boolean> {
-    if (this.options.debug) {
-      console.log("Checking attestation validity via Portal...", uid);
-    }
-
-    const easAddress = this.getEASAddress();
-
-    try {
-      const result = await this.portalClient.request(GraphQLOperations.queries.isAttestationValid, {
-        address: easAddress,
-        uid,
-      });
-
-      const response = result as PortalAttestationResponse;
-      return response.EAS?.isAttestationValid || false;
-    } catch (error) {
-      if (this.options.debug) {
-        console.warn(`Failed to check attestation validity: ${error}`);
-      }
-      return false;
-    }
+    return false;
   }
 
   /**
    * Get the current timestamp from the contract
+   *
+   * TODO: Fix Portal GraphQL query parameter encoding or use The Graph subgraph
    */
   async getTimestamp(): Promise<bigint> {
-    if (this.options.debug) {
-      console.log("Getting timestamp via Portal...");
-    }
-
-    const easAddress = this.getEASAddress();
-
-    try {
-      const result = await this.portalClient.request(GraphQLOperations.queries.getTimestamp, {
-        address: easAddress,
-      });
-
-      const response = result as PortalAttestationResponse;
-      const timestamp = response.EAS?.getTimestamp;
-
-      if (!timestamp) {
-        throw new Error("No timestamp returned from Portal");
-      }
-
-      return BigInt(timestamp);
-    } catch (error) {
-      throw new Error(`Failed to get timestamp: ${error}`);
-    }
+    throw new Error("Timestamp query not implemented yet. Fix Portal query parameters or use The Graph subgraph.");
   }
 
   /**
@@ -550,9 +416,28 @@ export class EASClient {
     };
   }
 
-  /**
-   * Build schema string from fields
-   */
+  private getEASAddress(): Address {
+    if (this.options.easContractAddress) {
+      return this.options.easContractAddress;
+    }
+    if (this.deployedAddresses?.easAddress) {
+      return this.deployedAddresses.easAddress;
+    }
+    throw new Error("EAS contract address not available. Please provide it in options or deploy contracts first.");
+  }
+
+  private getSchemaRegistryAddress(): Address {
+    if (this.options.schemaRegistryContractAddress) {
+      return this.options.schemaRegistryContractAddress;
+    }
+    if (this.deployedAddresses?.schemaRegistryAddress) {
+      return this.deployedAddresses.schemaRegistryAddress;
+    }
+    throw new Error(
+      "Schema Registry contract address not available. Please provide it in options or deploy contracts first.",
+    );
+  }
+
   private buildSchemaString(fields: SchemaField[]): string {
     return fields.map((field) => `${field.type} ${field.name}`).join(", ");
   }

@@ -5,13 +5,12 @@ mutation DeployEASSchemaRegistry(
 ) {
   DeployContractEASSchemaRegistry(from: $from, constructorArguments: $constructorArguments, gasLimit: $gasLimit) {
     transactionHash
-    contractAddress
   }
 }
 
 mutation DeployEAS($from: String!, $constructorArguments: DeployContractEASInput!, $gasLimit: String!) {
   DeployContractEAS(from: $from, constructorArguments: $constructorArguments, gasLimit: $gasLimit) {
     transactionHash
-    contractAddress
   }
 }
+ 

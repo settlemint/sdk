@@ -178,6 +178,10 @@ export interface DeploymentResult {
   easAddress: Address;
   /** Deployed Schema Registry contract address */
   schemaRegistryAddress: Address;
+  /** EAS deployment transaction hash (when address not immediately available) */
+  easTransactionHash?: Hex;
+  /** Schema Registry deployment transaction hash (when address not immediately available) */
+  schemaRegistryTransactionHash?: Hex;
 }
 
 /**
