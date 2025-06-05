@@ -23,7 +23,7 @@ const CONFIG = {
   referenceUID: ZERO_BYTES32,
 };
 
-const NOTARY_ADDRESS = getAddress("0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6");
+const NOTARY_ADDRESS = getAddress("0x00c637560274d2648CC4Fb69e07B57A410a84b92");
 
 interface DigitalNotarySchema {
   documentHash: string;

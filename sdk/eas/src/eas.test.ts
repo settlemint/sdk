@@ -325,6 +325,7 @@ describe("EAS Portal Client", () => {
     try {
       const result = await client.revoke(
         "0x1234567890123456789012345678901234567890123456789012345678901234" as Hex,
+        "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890" as Hex,
         TEST_FROM_ADDRESS,
       );
       expect(result).toBeDefined();

@@ -298,7 +298,13 @@ export class EASClient {
   /**
    * Revoke an attestation
    */
-  async revoke(uid: Hex, fromAddress: Address, value?: bigint, gasLimit?: string): Promise<TransactionResult> {
+  async revoke(
+    schemaUID: Hex,
+    attestationUID: Hex,
+    fromAddress: Address,
+    value?: bigint,
+    gasLimit?: string,
+  ): Promise<TransactionResult> {
     const easAddress = this.getEASAddress();
 
     try {
@@ -307,9 +313,9 @@ export class EASClient {
         from: fromAddress,
         input: {
           request: {
-            schema: uid,
+            schema: schemaUID,
             data: {
-              uid: uid,
+              uid: attestationUID,
               value: (value || BigInt(0)).toString(),
             },
           },
