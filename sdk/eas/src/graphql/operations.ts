@@ -1,15 +1,18 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { fileURLToPath } from "node:url";
 
-const __dirname = fileURLToPath(new URL(".", import.meta.url));
+// Use a simple relative path approach that works across module targets
+const getGraphQLPath = (filePath: string): string => {
+  // Construct path relative to this file's location
+  return join(__dirname || ".", filePath);
+};
 
 /**
  * Load a GraphQL operation from a .graphql file
  */
 function loadGraphQL(filePath: string): string {
   try {
-    const fullPath = join(__dirname, filePath);
+    const fullPath = getGraphQLPath(filePath);
     const content = readFileSync(fullPath, "utf-8").trim();
     if (!content) {
       throw new Error(`Empty GraphQL file: ${filePath}`);
