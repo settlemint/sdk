@@ -62,7 +62,8 @@ async function runDigitalNotaryWorkflow() {
       easAddress: deployment.easAddress,
       schemaRegistryAddress: deployment.schemaRegistryAddress,
     };
-  } catch (error) {
+  } catch (err) {
+    const error = err as Error;
     console.log(`❌ Deployment failed: ${error.message}`);
 
     const addresses = client.getContractAddresses();
