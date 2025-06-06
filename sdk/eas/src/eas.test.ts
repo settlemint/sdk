@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, mock, test } from "bun:test";
-import type { Address, Hex } from "viem";
+import { type Hex, getAddress } from "viem";
 import { ModuleMocker } from "../../cli/src/utils/test/module-mocker.js";
 import { ZERO_ADDRESS, ZERO_BYTES32, createEASClient } from "./eas.js";
 
@@ -24,17 +24,17 @@ afterAll(() => {
 });
 
 // Test constants
-const TEST_DEPLOYER_ADDRESS = "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6" as Address;
-const TEST_FROM_ADDRESS = "0x8ba1f109551bD432803012645Hac136c22C177ec" as Address;
-const TEST_EAS_ADDRESS = "0xd46081aeEC4Ee8DB98eBDd9E066B5B9b151A2096" as Address;
-const TEST_SCHEMA_REGISTRY_ADDRESS = "0x5EFfB599d6DebD7cf576fb94F4C086b2bCC917b6" as Address;
+const TEST_DEPLOYER_ADDRESS = getAddress("0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6");
+const TEST_FROM_ADDRESS = getAddress("0x8ba1f109551bD432803012645ac136c22C177ec0");
+const TEST_EAS_ADDRESS = getAddress("0xd46081aeEC4Ee8DB98eBDd9E066B5B9b151A2096");
+const TEST_SCHEMA_REGISTRY_ADDRESS = getAddress("0x5EFfB599d6DebD7cf576fb94F4C086b2bCC917b6");
 
 describe("EAS Portal Client", () => {
   const optionsWithAddresses = {
     instance: "https://portal.settlemint.com",
     accessToken: "sm_aat_test_access_token",
-    easContractAddress: "0x1234567890123456789012345678901234567890" as Address,
-    schemaRegistryContractAddress: "0x5678901234567890123456789012345678901234" as Address,
+    easContractAddress: getAddress("0x1234567890123456789012345678901234567890"),
+    schemaRegistryContractAddress: getAddress("0x5678901234567890123456789012345678901234"),
     debug: false,
   };
 

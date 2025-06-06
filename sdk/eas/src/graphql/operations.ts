@@ -1,5 +1,6 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import type { PortalClient } from "../portal/portal-client.ts";
 
 // Use a simple relative path approach that works across module targets
 const getGraphQLPath = (filePath: string): string => {
@@ -18,8 +19,9 @@ function loadGraphQL(filePath: string): string {
       throw new Error(`Empty GraphQL file: ${filePath}`);
     }
     return content;
-  } catch (error) {
-    throw new Error(`Failed to load GraphQL file ${filePath}: ${error}`);
+  } catch (err) {
+    const error = err as Error;
+    throw new Error(`Failed to load GraphQL file ${filePath}: ${error.message}`);
   }
 }
 
@@ -35,9 +37,24 @@ function splitGraphQLOperations(content: string, expectedCount: number): string[
 }
 
 // Contract Deployment Mutations
-const deploymentMutations = splitGraphQLOperations(loadGraphQL("mutations/deploy-contracts.graphql"), 2);
-export const DEPLOY_SCHEMA_REGISTRY_MUTATION: string = deploymentMutations[0]!;
-export const DEPLOY_EAS_MUTATION: string = deploymentMutations[1]!;
+export const getDeploySchemaRegistoryMutation = (graphql: PortalClient["graphql"]) =>
+  graphql(`
+    mutation DeployEASSchemaRegistry(
+      $from: String!
+      $constructorArguments: DeployContractEASSchemaRegistryInput!
+      $gasLimit: String!
+    ) {
+      DeployContractEASSchemaRegistry(from: $from, constructorArguments: $constructorArguments, gasLimit: $gasLimit) {
+        transactionHash
+      }
+    }`);
+export const getDeployEASMutation = (graphql: PortalClient["graphql"]) =>
+  graphql(`
+    mutation DeployEAS($from: String!, $constructorArguments: DeployContractEASInput!, $gasLimit: String!) {
+      DeployContractEAS(from: $from, constructorArguments: $constructorArguments, gasLimit: $gasLimit) {
+        transactionHash
+      }
+    }`);
 
 // Schema Operations
 export const REGISTER_SCHEMA_MUTATION: string = loadGraphQL("mutations/schema-operations.graphql");
@@ -65,8 +82,8 @@ export const GET_ATTESTATIONS_QUERY: string = attestationQueries[3]!;
  */
 export const GraphQLOperations = {
   mutations: {
-    deploySchemaRegistry: DEPLOY_SCHEMA_REGISTRY_MUTATION,
-    deployEAS: DEPLOY_EAS_MUTATION,
+    deploySchemaRegistry: getDeploySchemaRegistoryMutation,
+    deployEAS: getDeployEASMutation,
     registerSchema: REGISTER_SCHEMA_MUTATION,
     attest: ATTEST_MUTATION,
     multiAttest: MULTI_ATTEST_MUTATION,

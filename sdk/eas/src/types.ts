@@ -1,9 +1,9 @@
-import type { Address, Hex } from "viem";
+import { type Address, type Hex, zeroAddress } from "viem";
 
 /**
  * Common address constants
  */
-export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000" as Address;
+export const ZERO_ADDRESS = zeroAddress;
 export const ZERO_BYTES32 = "0x0000000000000000000000000000000000000000000000000000000000000000" as Hex;
 
 /**

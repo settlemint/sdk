@@ -1,6 +1,9 @@
 import { createPortalClient } from "@settlemint/sdk-portal";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import type { Address, Hex } from "viem";
 import { GraphQLOperations } from "./graphql/operations.js";
+import type { PortalClient } from "./portal/portal-client.js";
+import type { introspection } from "./portal/portal-env.d.ts";
 import { ZERO_ADDRESS } from "./types.js";
 import type {
   AttestationInfo,
@@ -16,23 +19,39 @@ import type {
   TransactionResult,
 } from "./types.js";
 
+const LOGGER = createLogger();
+
 /**
  * Main EAS client class for interacting with Ethereum Attestation Service via Portal
  */
 export class EASClient {
-  private options: EASClientOptions;
-  private portalClient: ReturnType<typeof createPortalClient>["client"];
+  private readonly options: EASClientOptions;
+  private readonly portalClient: PortalClient["client"];
+  private readonly portalGraphql: PortalClient["graphql"];
   private deployedAddresses?: DeploymentResult;
 
   constructor(options: EASClientOptions) {
     this.options = options;
 
-    const portalClientResult = createPortalClient({
-      instance: options.instance,
-      accessToken: options.accessToken,
-    });
+    const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+      introspection: introspection;
+      disableMasking: true;
+      scalars: {
+        // Change unknown to the type you are using to store metadata
+        JSON: unknown;
+      };
+    }>(
+      {
+        instance: options.instance,
+        accessToken: options.accessToken,
+      },
+      {
+        fetch: requestLogger(LOGGER, "portal", fetch) as typeof fetch,
+      },
+    );
 
-    this.portalClient = portalClientResult.client;
+    this.portalClient = portalClient;
+    this.portalGraphql = portalGraphql;
   }
 
   /**
@@ -44,13 +63,16 @@ export class EASClient {
 
     try {
       // Deploy Schema Registry first
-      const schemaRegistryResult = await this.portalClient.request(GraphQLOperations.mutations.deploySchemaRegistry, {
-        from: deployerAddress,
-        constructorArguments: {
-          forwarder: defaultForwarder,
+      const schemaRegistryResult = await this.portalClient.request(
+        GraphQLOperations.mutations.deploySchemaRegistry(this.portalGraphql),
+        {
+          from: deployerAddress,
+          constructorArguments: {
+            forwarder: defaultForwarder,
+          },
+          gasLimit: defaultGasLimit,
         },
-        gasLimit: defaultGasLimit,
-      });
+      );
 
       const schemaRegistryResponse = schemaRegistryResult as {
         DeployContractEASSchemaRegistry?: { transactionHash?: string };
@@ -95,7 +117,7 @@ export class EASClient {
       }
 
       // Deploy EAS contract with correct Schema Registry address
-      const easResult = await this.portalClient.request(GraphQLOperations.mutations.deployEAS, {
+      const easResponse = await this.portalClient.request(GraphQLOperations.mutations.deployEAS(this.portalGraphql), {
         from: deployerAddress,
         constructorArguments: {
           registry: schemaRegistryAddress,
@@ -103,10 +125,6 @@ export class EASClient {
         },
         gasLimit: defaultGasLimit,
       });
-
-      const easResponse = easResult as {
-        DeployContractEAS?: { transactionHash?: string };
-      };
 
       if (!easResponse.DeployContractEAS?.transactionHash) {
         throw new Error("EAS deployment failed - no transaction hash returned");
@@ -123,13 +141,9 @@ export class EASClient {
         attempts++;
 
         try {
-          const contractsResult = await this.portalClient.request(
-            "query GetEASContracts { getContractsEas { records { address } } }",
+          const contractsResponse = await this.portalClient.request(
+            this.portalGraphql("query GetEASContracts { getContractsEas { records { address } } }"),
           );
-
-          const contractsResponse = contractsResult as {
-            getContractsEas?: { records: Array<{ address: string }> };
-          };
 
           const contracts = contractsResponse.getContractsEas?.records || [];
           if (contracts.length > 0) {
@@ -153,8 +167,9 @@ export class EASClient {
       };
 
       return this.deployedAddresses;
-    } catch (error) {
-      throw new Error(`Failed to deploy EAS contracts: ${error}`);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to deploy EAS contracts: ${error.message}`);
     }
   }
 
@@ -196,8 +211,9 @@ export class EASClient {
         hash: transactionHash as Hex,
         success: true,
       };
-    } catch (error) {
-      throw new Error(`Failed to register schema: ${error}`);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to register schema: ${error.message}`);
     }
   }
 
@@ -238,8 +254,9 @@ export class EASClient {
         hash: transactionHash as Hex,
         success: true,
       };
-    } catch (error) {
-      throw new Error(`Failed to create attestation: ${error}`);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to create attestation: ${error.message}`);
     }
   }
 
@@ -290,8 +307,9 @@ export class EASClient {
         hash: transactionHash as Hex,
         success: true,
       };
-    } catch (error) {
-      throw new Error(`Failed to create multiple attestations: ${error}`);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to create multiple attestations: ${error.message}`);
     }
   }
 
@@ -334,8 +352,9 @@ export class EASClient {
         hash: transactionHash as Hex,
         success: true,
       };
-    } catch (error) {
-      throw new Error(`Failed to revoke attestation: ${error}`);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to revoke attestation: ${error.message}`);
     }
   }
 
