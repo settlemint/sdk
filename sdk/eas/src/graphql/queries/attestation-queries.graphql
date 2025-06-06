@@ -1,0 +1,38 @@
+query EASGetAttestation($address: String!, $uid: String!) {
+  EAS(address: $address) {
+    getAttestation(uid: $uid) {
+      uid
+      schema
+      attester
+      recipient
+      time
+      expirationTime
+      revocable
+      refUID
+      data
+    }
+  }
+}
+
+query EASIsAttestationValid($address: String!, $uid: String!) {
+  EAS(address: $address) {
+    isAttestationValid(uid: $uid)
+  }
+}
+
+query EASGetTimestamp($address: String!) {
+  EAS(address: $address) {
+    getTimestamp(data: "0x")
+  }
+}
+
+query GetContractsEAS($page: Int, $pageSize: Int) {
+  getContractsEas(page: $page, pageSize: $pageSize) {
+    count
+    records {
+      address
+      abiName
+      createdAt
+    }
+  }
+}

@@ -47,14 +47,14 @@
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE .",
+    "codegen": "gql-tada generate-output && gql-tada turbo",
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/eas.ts --out ./docs"
   },
   "devDependencies": {},
   "dependencies": {
-    "@ethereum-attestation-service/eas-sdk": "^2",
+    "@settlemint/sdk-portal": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@settlemint/sdk-viem": "workspace:*",
-    "ethers": "^6",
+    "gql.tada": "^1",
     "viem": "^2"
   },
   "peerDependencies": {},
