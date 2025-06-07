@@ -307,6 +307,7 @@ async function connectToPlatform(
     ...getCustomDeploymentEnv(cDeployment),
     SETTLEMINT_BLOCKSCOUT: blockscout?.uniqueName,
     ...getBlockscoutEnv(blockscout),
+    NODE_TLS_REJECT_UNAUTHORIZED: "1",
   });
 }
 
@@ -498,5 +499,6 @@ async function connectToStandalone(
     SETTLEMINT_MINIO_SECRET_KEY: selectedServices.minioSecretKey?.result,
     SETTLEMINT_IPFS_API_ENDPOINT: selectedServices.ipfsApiEndpoint?.result,
     SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: selectedServices.blockscoutGraphqlEndpoint?.result,
+    NODE_TLS_REJECT_UNAUTHORIZED: "0",
   });
 }

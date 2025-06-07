@@ -98,6 +98,8 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
   /** The log level to use */
   SETTLEMINT_LOG_LEVEL: z.enum(["debug", "info", "warn", "error", "none"]).default("warn"),
+  /** Controls whether Node.js rejects unauthorized TLS certificates (0 = allow, 1 = reject) */
+  NODE_TLS_REJECT_UNAUTHORIZED: z.enum(["0", "1"]).optional(),
 });
 
 /**
