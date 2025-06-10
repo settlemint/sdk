@@ -19,9 +19,10 @@ export function getUpdatedSubgraphEndpoints({
     if (!middlewareAdminUrl) {
       throw new Error("Middleware admin URL is required to add a new subgraph");
     }
-    const baseUrl = extractBaseUrlBeforeSegment(middlewareAdminUrl, "/admin");
+    // Extract base URL by removing /admin from the end
+    const baseUrl = middlewareAdminUrl.replace(/\/admin\/?$/, "");
     if (baseUrl) {
-      const endpoint = `${getTheGraphSubgraphUrl(baseUrl, newSubgraphName)}`;
+      const endpoint = getTheGraphSubgraphUrl(baseUrl, newSubgraphName);
       if (!existingEndpointsWithoutRemoved.includes(endpoint)) {
         existingEndpointsWithoutRemoved.push(endpoint);
       }
@@ -45,7 +46,16 @@ export function getTheGraphSubgraphNames(subgraphUrls?: string[]) {
 }
 
 export function getTheGraphSubgraphUrl(theGraphUrl: string, subgraphName: string) {
-  // Use URL constructor with relative path to automatically handle slashes correctly
-  const url = new URL(`subgraphs/name/${subgraphName}`, theGraphUrl);
+  // Parse the base URL
+  const url = new URL(theGraphUrl);
+
+  // Ensure pathname ends with a slash to prevent replacing the last segment
+  if (!url.pathname.endsWith("/")) {
+    url.pathname += "/";
+  }
+
+  // Append the subgraph path
+  url.pathname += `subgraphs/name/${subgraphName}`;
+
   return url.toString();
 }
