@@ -62,14 +62,15 @@ jobs:
           WR_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
           WR_HAS_PRS: ${{ github.event.workflow_run.pull_requests[0].number != null }}
           WR_PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
-          WR_PR_TITLE: ${{ github.event.workflow_run.pull_requests[0].title }}
-          WR_PR_USER: ${{ github.event.workflow_run.pull_requests[0].user.login }}
+          WR_PR_TITLE: ${{ github.event.workflow_run.pull_requests[0].title || github.event.workflow_run.head_commit.message }}
+          WR_PR_USER: ${{ github.event.workflow_run.pull_requests[0].user.login || github.event.workflow_run.actor.login }}
           WR_PR_HTML_URL: ${{ github.event.workflow_run.pull_requests[0].html_url }}
           WR_PR_STATE: ${{ github.event.workflow_run.pull_requests[0].state }}
           WR_PR_MERGED: ${{ github.event.workflow_run.pull_requests[0].merged }}
           WR_PR_UPDATED_AT: ${{ github.event.workflow_run.pull_requests[0].updated_at }}
           WR_PR_DRAFT: ${{ github.event.workflow_run.pull_requests[0].draft }}
           WR_PR_REVIEWERS: ${{ toJson(github.event.workflow_run.pull_requests[0].requested_reviewers) }}
+          WR_HEAD_BRANCH: ${{ github.event.workflow_run.head_branch }}
           # Pull request context
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PR_TITLE: ${{ github.event.pull_request.title }}
@@ -105,14 +106,21 @@ jobs:
 
             echo "build_result=$WR_CONCLUSION" >> $GITHUB_OUTPUT
             echo "pr_number=$WR_PR_NUMBER" >> $GITHUB_OUTPUT
-            echo "pr_title=$WR_PR_TITLE" >> $GITHUB_OUTPUT
-            echo "pr_user=$WR_PR_USER" >> $GITHUB_OUTPUT
-            echo "pr_html_url=$WR_PR_HTML_URL" >> $GITHUB_OUTPUT
-            echo "pr_state=$WR_PR_STATE" >> $GITHUB_OUTPUT
-            echo "pr_merged=$WR_PR_MERGED" >> $GITHUB_OUTPUT
+            echo "pr_title=${WR_PR_TITLE:-PR #$WR_PR_NUMBER}" >> $GITHUB_OUTPUT
+            echo "pr_user=${WR_PR_USER:-unknown}" >> $GITHUB_OUTPUT
+
+            # Construct PR URL if not provided
+            if [[ -n "$WR_PR_HTML_URL" ]]; then
+              echo "pr_html_url=$WR_PR_HTML_URL" >> $GITHUB_OUTPUT
+            else
+              echo "pr_html_url=https://github.com/${{ github.repository }}/pull/$WR_PR_NUMBER" >> $GITHUB_OUTPUT
+            fi
+
+            echo "pr_state=${WR_PR_STATE:-open}" >> $GITHUB_OUTPUT
+            echo "pr_merged=${WR_PR_MERGED:-false}" >> $GITHUB_OUTPUT
             echo "pr_updated_at=$WR_PR_UPDATED_AT" >> $GITHUB_OUTPUT
-            echo "pr_draft=$WR_PR_DRAFT" >> $GITHUB_OUTPUT
-            echo "pr_reviewers=$(echo "$WR_PR_REVIEWERS" | jq -r '.[].login' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+            echo "pr_draft=${WR_PR_DRAFT:-false}" >> $GITHUB_OUTPUT
+            echo "pr_reviewers=$(echo "$WR_PR_REVIEWERS" | jq -r '.[].login' 2>/dev/null | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
             echo "skip_notification=false" >> $GITHUB_OUTPUT
           else
             echo "Debug: Processing pull_request event"
