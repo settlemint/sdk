@@ -40,34 +40,76 @@ jobs:
 
       - name: Get build workflow status and PR info
         id: build_status
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          # Workflow run context
+          WR_CONCLUSION: ${{ github.event.workflow_run.conclusion }}
+          WR_HAS_PRS: ${{ github.event.workflow_run.pull_requests[0].number != null }}
+          WR_PR_NUMBER: ${{ github.event.workflow_run.pull_requests[0].number }}
+          WR_PR_TITLE: ${{ github.event.workflow_run.pull_requests[0].title }}
+          WR_PR_USER: ${{ github.event.workflow_run.pull_requests[0].user.login }}
+          WR_PR_HTML_URL: ${{ github.event.workflow_run.pull_requests[0].html_url }}
+          WR_PR_STATE: ${{ github.event.workflow_run.pull_requests[0].state }}
+          WR_PR_MERGED: ${{ github.event.workflow_run.pull_requests[0].merged }}
+          WR_PR_UPDATED_AT: ${{ github.event.workflow_run.pull_requests[0].updated_at }}
+          WR_PR_DRAFT: ${{ github.event.workflow_run.pull_requests[0].draft }}
+          WR_PR_REVIEWERS: ${{ toJson(github.event.workflow_run.pull_requests[0].requested_reviewers) }}
+          # Pull request context
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_USER: ${{ github.event.pull_request.user.login }}
+          PR_HTML_URL: ${{ github.event.pull_request.html_url }}
+          PR_STATE: ${{ github.event.pull_request.state }}
+          PR_MERGED: ${{ github.event.pull_request.merged }}
+          PR_UPDATED_AT: ${{ github.event.pull_request.updated_at }}
+          PR_DRAFT: ${{ github.event.pull_request.draft }}
+          PR_REVIEWERS: ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
-            echo "build_result=${{ github.event.workflow_run.conclusion }}" >> $GITHUB_OUTPUT
-            echo "pr_number=${{ github.event.workflow_run.pull_requests[0].number }}" >> $GITHUB_OUTPUT
-            echo "pr_title=${{ github.event.workflow_run.pull_requests[0].title }}" >> $GITHUB_OUTPUT
-            echo "pr_user=${{ github.event.workflow_run.pull_requests[0].user.login }}" >> $GITHUB_OUTPUT
-            echo "pr_html_url=${{ github.event.workflow_run.pull_requests[0].html_url }}" >> $GITHUB_OUTPUT
-            echo "pr_state=${{ github.event.workflow_run.pull_requests[0].state }}" >> $GITHUB_OUTPUT
-            echo "pr_merged=${{ github.event.workflow_run.pull_requests[0].merged }}" >> $GITHUB_OUTPUT
-            echo "pr_updated_at=${{ github.event.workflow_run.pull_requests[0].updated_at }}" >> $GITHUB_OUTPUT
-            echo "pr_draft=${{ github.event.workflow_run.pull_requests[0].draft }}" >> $GITHUB_OUTPUT
-            echo "pr_reviewers=$(echo '${{ toJson(github.event.workflow_run.pull_requests[0].requested_reviewers) }}' | jq -r '.[].login' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+          echo "Debug: Event name is $EVENT_NAME"
+
+          if [[ "$EVENT_NAME" == "workflow_run" ]]; then
+            echo "Debug: Processing workflow_run event"
+            echo "Debug: Workflow conclusion: $WR_CONCLUSION"
+            echo "Debug: Has PRs: $WR_HAS_PRS"
+            echo "Debug: PR number: $WR_PR_NUMBER"
+
+            if [[ "$WR_HAS_PRS" != "true" || -z "$WR_PR_NUMBER" ]]; then
+              echo "Debug: No PR associated with workflow run, skipping"
+              echo "skip_notification=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
+
+            echo "build_result=$WR_CONCLUSION" >> $GITHUB_OUTPUT
+            echo "pr_number=$WR_PR_NUMBER" >> $GITHUB_OUTPUT
+            echo "pr_title=$WR_PR_TITLE" >> $GITHUB_OUTPUT
+            echo "pr_user=$WR_PR_USER" >> $GITHUB_OUTPUT
+            echo "pr_html_url=$WR_PR_HTML_URL" >> $GITHUB_OUTPUT
+            echo "pr_state=$WR_PR_STATE" >> $GITHUB_OUTPUT
+            echo "pr_merged=$WR_PR_MERGED" >> $GITHUB_OUTPUT
+            echo "pr_updated_at=$WR_PR_UPDATED_AT" >> $GITHUB_OUTPUT
+            echo "pr_draft=$WR_PR_DRAFT" >> $GITHUB_OUTPUT
+            echo "pr_reviewers=$(echo "$WR_PR_REVIEWERS" | jq -r '.[].login' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+            echo "skip_notification=false" >> $GITHUB_OUTPUT
           else
+            echo "Debug: Processing pull_request event"
             echo "build_result=running" >> $GITHUB_OUTPUT
-            echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
-            echo "pr_title=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
-            echo "pr_user=${{ github.event.pull_request.user.login }}" >> $GITHUB_OUTPUT
-            echo "pr_html_url=${{ github.event.pull_request.html_url }}" >> $GITHUB_OUTPUT
-            echo "pr_state=${{ github.event.pull_request.state }}" >> $GITHUB_OUTPUT
-            echo "pr_merged=${{ github.event.pull_request.merged }}" >> $GITHUB_OUTPUT
-            echo "pr_updated_at=${{ github.event.pull_request.updated_at }}" >> $GITHUB_OUTPUT
-            echo "pr_draft=${{ github.event.pull_request.draft }}" >> $GITHUB_OUTPUT
-            echo "pr_reviewers=${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}" >> $GITHUB_OUTPUT
+            echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
+            echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
+            echo "pr_user=$PR_USER" >> $GITHUB_OUTPUT
+            echo "pr_html_url=$PR_HTML_URL" >> $GITHUB_OUTPUT
+            echo "pr_state=$PR_STATE" >> $GITHUB_OUTPUT
+            echo "pr_merged=$PR_MERGED" >> $GITHUB_OUTPUT
+            echo "pr_updated_at=$PR_UPDATED_AT" >> $GITHUB_OUTPUT
+            echo "pr_draft=$PR_DRAFT" >> $GITHUB_OUTPUT
+            echo "pr_reviewers=$PR_REVIEWERS" >> $GITHUB_OUTPUT
+            echo "skip_notification=false" >> $GITHUB_OUTPUT
           fi
 
       - name: Check for existing Slack message
         id: check_message
-        if: steps.build_status.outputs.pr_draft != 'true'
+        if: |
+          steps.build_status.outputs.skip_notification != 'true' &&
+          steps.build_status.outputs.pr_draft != 'true'
         run: |
           # Check if there's an existing comment with Slack message timestamp
           COMMENT=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -84,7 +126,9 @@ jobs:
 
       - name: Send or update Slack message
         id: slack_message
-        if: steps.build_status.outputs.pr_draft != 'true'
+        if: |
+          steps.build_status.outputs.skip_notification != 'true' &&
+          steps.build_status.outputs.pr_draft != 'true'
         uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
         with:
           method: |
@@ -117,6 +161,7 @@ jobs:
 
       - name: Store Slack message timestamp
         if: |
+          steps.build_status.outputs.skip_notification != 'true' &&
           steps.build_status.outputs.pr_draft != 'true' &&
           steps.slack_message.outcome == 'success' &&
           steps.check_message.outputs.message_exists == 'false' &&
