@@ -1,10 +1,9 @@
-name: Build, test and publish
+name: build
 
 on:
   pull_request:
     branches:
       - main
-    types: [opened, synchronize, reopened, closed]
   push:
     branches:
       - main
@@ -22,15 +21,17 @@ jobs:
   packages:
     name: Turbo Flow
     runs-on: namespace-profile-sdk
-    if:
-      github.event_name == 'push' || github.event.action == 'opened' ||
-      github.event.action == 'synchronize'
     permissions:
-      contents: write
+      contents: read
+      issues: write
+      pull-requests: write
+      statuses: write
+      checks: write
       packages: write
       id-token: write
-      pull-requests: write
     steps:
+      - uses: fuxingloh/multi-labeler@v4
+
       - name: Setup 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
         with:
@@ -47,11 +48,13 @@ jobs:
         with:
           token: ${{ env.PAT_TOKEN }}
 
+      - name: Set up turbo caching
+        uses: namespace-actions/setup-turbocache@v0
+
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@449c929cd5138e6607e7e78458e88cc476e76f89 # v1
         with:
           path: |
-            ./.turbo
             ~/.bun/install/cache
 
       - name: Setup Bun
@@ -180,169 +183,3 @@ jobs:
           branch: main
           file_pattern: 'package.json **/schema.graphql sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
-  labels:
-    name: PR Labels
-    runs-on: namespace-profile-sdk
-    if: github.event_name == 'pull_request'
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: write
-      statuses: write
-      checks: write
-    steps:
-      - uses: fuxingloh/multi-labeler@v4
-
-  slack:
-    name: Slack
-    runs-on: namespace-profile-sdk
-    needs: packages
-    if: |
-      github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]' &&
-      github.event_name == 'pull_request' && always()
-    steps:
-      - name: Configure 1Password
-        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-
-      - name: Load secrets
-        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
-        env:
-          SLACK_BOT_TOKEN: op://platform/slack-bot/SLACK_BOT_TOKEN
-          SLACK_CHANNEL_ID: op://platform/slack-bot/SLACK_CHANNEL_ID
-
-      - name: Check for existing Slack message
-        id: check_message
-        if:
-          ${{ github.event_name == 'pull_request' && github.event.pull_request
-          != null && !github.event.pull_request.draft }}
-        run: |
-          # Check if there's an existing comment with Slack message timestamp
-          COMMENT=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
-            | jq -r '.[] | select(.body | startswith("<!-- slack-ts:")) | .body' | head -1)
-
-          if [ -n "$COMMENT" ]; then
-            SLACK_TS=$(echo "$COMMENT" | sed -n 's/<!-- slack-ts:\(.*\) -->.*/\1/p')
-            echo "slack_ts=$SLACK_TS" >> $GITHUB_OUTPUT
-            echo "message_exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "message_exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Send or update Slack message
-        id: slack_message
-        if:
-          ${{ github.event_name == 'pull_request' && github.event.pull_request
-          != null && !github.event.pull_request.draft }}
-        uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
-        with:
-          method:
-            ${{ steps.check_message.outputs.message_exists == 'true' &&
-            'chat.update' || 'chat.postMessage' }}
-          token: ${{ env.SLACK_BOT_TOKEN }}
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHANNEL_ID }}",
-              ${{ steps.check_message.outputs.message_exists == 'true' && format('"ts": "{0}",', steps.check_message.outputs.slack_ts) || '' }}
-              "blocks": [
-                {
-                  "type": "header",
-                  "text": {
-                    "type": "plain_text",
-                    "text": "${{ github.event.pull_request.merged == true && '🎉 Pull Request Merged' || (steps.check_message.outputs.message_exists == 'true' && '🔄 Pull Request Updated') || '🔍 New Pull Request Ready for Review' }}"
-                  }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Title:*\n${{ github.event.pull_request.title }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Author:*\n👤 ${{ github.event.pull_request.user.login }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Repository:*\n${{ github.repository }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Reviewers:*\n👥 ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*PR Status:*\n${{ github.event.pull_request.state == 'open' && '🟢 Open' || (github.event.pull_request.merged == true && '🎉 Merged') || '🔴 Closed' }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*QA Status:*\n${{ needs.packages.result == 'success' && '✅ Passed' || needs.packages.result == 'failure' && '❌ Failed' || needs.packages.result == 'cancelled' && '🚫 Cancelled' || needs.packages.result == 'skipped' && '⏭️ Skipped' || '⏳ Running' }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Last Updated:*\n⏰ ${{ github.event.pull_request.updated_at }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Workflow:*\n🔗 <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
-                    }
-                  ]
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "📖 View Pull Request"
-                      },
-                      "url": "${{ github.event.pull_request.html_url }}",
-                      "style": "primary"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "📁 View Files Changed"
-                      },
-                      "url": "${{ github.event.pull_request.html_url }}/files"
-                    }
-                  ]
-                }
-                              ]
-              }
-
-      - name: Store Slack message timestamp
-        if: |
-          steps.slack_message.outcome == 'success' &&
-          steps.check_message.outputs.message_exists == 'false' &&
-          steps.slack_message.outputs.ts != ''
-        run: |
-          # Create a comment with the Slack message timestamp for future updates
-          curl -s -X POST \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
-            -d "{\"body\": \"<!-- slack-ts:${{ steps.slack_message.outputs.ts }} -->\\n🤖 Slack notification sent for this PR\"}"
