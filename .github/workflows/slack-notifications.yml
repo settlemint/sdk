@@ -106,7 +106,9 @@ jobs:
 
             echo "build_result=$WR_CONCLUSION" >> $GITHUB_OUTPUT
             echo "pr_number=$WR_PR_NUMBER" >> $GITHUB_OUTPUT
-            echo "pr_title=${WR_PR_TITLE:-PR #$WR_PR_NUMBER}" >> $GITHUB_OUTPUT
+            # Escape special characters in PR title to prevent GitHub Actions from interpreting them as commands
+            ESCAPED_TITLE=$(echo "${WR_PR_TITLE:-PR #$WR_PR_NUMBER}" | sed 's/--/%2D%2D/g')
+            echo "pr_title=$ESCAPED_TITLE" >> $GITHUB_OUTPUT
             echo "pr_user=${WR_PR_USER:-unknown}" >> $GITHUB_OUTPUT
 
             # Construct PR URL if not provided
@@ -126,7 +128,9 @@ jobs:
             echo "Debug: Processing pull_request event"
             echo "build_result=running" >> $GITHUB_OUTPUT
             echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
-            echo "pr_title=$PR_TITLE" >> $GITHUB_OUTPUT
+            # Escape special characters in PR title to prevent GitHub Actions from interpreting them as commands
+            ESCAPED_TITLE=$(echo "$PR_TITLE" | sed 's/--/%2D%2D/g')
+            echo "pr_title=$ESCAPED_TITLE" >> $GITHUB_OUTPUT
             echo "pr_user=$PR_USER" >> $GITHUB_OUTPUT
             echo "pr_html_url=$PR_HTML_URL" >> $GITHUB_OUTPUT
             echo "pr_state=$PR_STATE" >> $GITHUB_OUTPUT
