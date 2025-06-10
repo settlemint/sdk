@@ -1,4 +1,6 @@
-import { type EASFieldType, EAS_FIELD_TYPES, type SchemaField } from "./types.js";
+import type { Address } from "viem";
+import { z } from "zod";
+import { type EASFieldType, EAS_FIELD_TYPES, type SchemaField } from "../schema.js";
 
 export function validateFieldName(name: string): void {
   if (!name) {
@@ -41,3 +43,19 @@ export function buildSchemaString(fields: SchemaField[]): string {
   validateSchemaFields(fields);
   return fields.map((field) => `${field.type} ${field.name}`).join(", ");
 }
+
+const ethAddressRegex = /^0x[a-fA-F0-9]{40}$/;
+const ethAddressSchema = z.custom<Address>((val) => {
+  return typeof val === "string" && ethAddressRegex.test(val);
+}, "Invalid Ethereum address");
+
+/**
+ * @description Zod schema for EASClientOptions.
+ */
+export const EASClientOptionsSchema = z.object({
+  instance: z.string().url("Invalid instance URL"),
+  accessToken: z.string().optional(),
+  easContractAddress: ethAddressSchema.optional(),
+  schemaRegistryContractAddress: ethAddressSchema.optional(),
+  debug: z.boolean().optional(),
+});
