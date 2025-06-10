@@ -8,7 +8,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
-import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 export function hardhatScriptRemoteCommand() {
@@ -52,7 +52,7 @@ export function hardhatScriptRemoteCommand() {
       env,
       accept: true,
     });
-    if (instance === STANDALONE_INSTANCE) {
+    if (instance === STANDALONE_INSTANCE || instance === LOCAL_INSTANCE) {
       envHardhatConfig.BTP_RPC_URL = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT ?? "";
     } else {
       const accessToken = await getApplicationOrPersonalAccessToken({

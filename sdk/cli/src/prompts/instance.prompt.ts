@@ -3,7 +3,13 @@ import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
 import { note } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE, UrlSchema, validate } from "@settlemint/sdk-utils/validation";
+import {
+  type DotEnv,
+  LOCAL_INSTANCE,
+  STANDALONE_INSTANCE,
+  UrlSchema,
+  validate,
+} from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 /**
@@ -76,6 +82,10 @@ export async function instancePrompt({
       {
         name: "Standalone (services run independently of SettleMint platform)",
         value: STANDALONE_INSTANCE,
+      },
+      {
+        name: "Local (for local development mode)",
+        value: LOCAL_INSTANCE,
       },
     ],
     default: sanitizeInstanceUrl(knownInstances.length > 0 ? defaultPromptInstance : STANDALONE_INSTANCE),

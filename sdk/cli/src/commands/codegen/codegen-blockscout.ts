@@ -7,7 +7,7 @@ import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { appendHeaders, graphqlFetchWithRetry } from "@settlemint/sdk-utils/http";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-blockscout";
 
@@ -19,7 +19,7 @@ export async function codegenBlockscout(env: DotEnv) {
 
   const instance = env.SETTLEMINT_INSTANCE;
   const accessToken =
-    instance === STANDALONE_INSTANCE
+    instance === STANDALONE_INSTANCE || instance === LOCAL_INSTANCE
       ? undefined
       : await getApplicationOrPersonalAccessToken({
           env,
