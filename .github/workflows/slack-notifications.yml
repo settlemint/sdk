@@ -127,8 +127,11 @@ jobs:
             echo "build_result=$WR_CONCLUSION" >> $GITHUB_OUTPUT
             echo "pr_number=$WR_PR_NUMBER" >> $GITHUB_OUTPUT
             # Escape special characters in PR title to prevent GitHub Actions from interpreting them as commands
-            ESCAPED_TITLE=$(echo "${WR_PR_TITLE:-PR #$WR_PR_NUMBER}" | sed 's/--/%2D%2D/g')
-            echo "pr_title=$ESCAPED_TITLE" >> $GITHUB_OUTPUT
+            # Replace ::, --, and other special sequences that GitHub Actions might interpret
+            ESCAPED_TITLE=$(echo "${WR_PR_TITLE:-PR #$WR_PR_NUMBER}" | sed -e 's/::/: :/g' -e 's/--/- -/g' -e 's/\r//g' -e 's/\n/ /g')
+            echo "pr_title<<EOF" >> $GITHUB_OUTPUT
+            echo "$ESCAPED_TITLE" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
             echo "pr_user=${WR_PR_USER:-unknown}" >> $GITHUB_OUTPUT
 
             # Construct PR URL if not provided
@@ -149,8 +152,11 @@ jobs:
             echo "build_result=running" >> $GITHUB_OUTPUT
             echo "pr_number=$PR_NUMBER" >> $GITHUB_OUTPUT
             # Escape special characters in PR title to prevent GitHub Actions from interpreting them as commands
-            ESCAPED_TITLE=$(echo "$PR_TITLE" | sed 's/--/%2D%2D/g')
-            echo "pr_title=$ESCAPED_TITLE" >> $GITHUB_OUTPUT
+            # Replace ::, --, and other special sequences that GitHub Actions might interpret
+            ESCAPED_TITLE=$(echo "$PR_TITLE" | sed -e 's/::/: :/g' -e 's/--/- -/g' -e 's/\r//g' -e 's/\n/ /g')
+            echo "pr_title<<EOF" >> $GITHUB_OUTPUT
+            echo "$ESCAPED_TITLE" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
             echo "pr_user=$PR_USER" >> $GITHUB_OUTPUT
             echo "pr_html_url=$PR_HTML_URL" >> $GITHUB_OUTPUT
             echo "pr_state=$PR_STATE" >> $GITHUB_OUTPUT
