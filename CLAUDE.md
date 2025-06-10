@@ -165,3 +165,6 @@ Understanding the dependency hierarchy:
 3. Specialized packages - Domain-specific functionality (depend on js/utils)
 4. `@settlemint/sdk-cli` - Development tools (depends on multiple packages)
 5. Integration packages - Framework adapters (depend on core packages)
+
+## Git Workflow Memories
+- never push to main
