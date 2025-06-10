@@ -175,6 +175,7 @@ jobs:
             {
               "channel": "${{ env.SLACK_CHANNEL_ID }}",
               ${{ steps.check_message.outputs.message_exists == 'true' && format('"ts": "{0}",', steps.check_message.outputs.slack_ts) || '' }}
+              "text": "PR: ${{ steps.build_status.outputs.pr_title }} - ${{ steps.build_status.outputs.pr_state }} - Build ${{ steps.build_status.outputs.build_result }}",
               "blocks": [
                 {
                   "type": "section",
