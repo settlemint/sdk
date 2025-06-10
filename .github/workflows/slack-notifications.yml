@@ -2,7 +2,7 @@ name: Slack Notifications
 
 on:
   workflow_run:
-    workflows: ["Build, test and publish"]
+    workflows: ["build"]
     types: [completed]
   pull_request:
     branches:
@@ -25,7 +25,7 @@ jobs:
     if: |
       github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]' &&
       (github.event_name == 'pull_request' ||
-       (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request'))
+       github.event_name == 'workflow_run')
     steps:
       - name: Configure 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
@@ -66,12 +66,20 @@ jobs:
           PR_REVIEWERS: ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}
         run: |
           echo "Debug: Event name is $EVENT_NAME"
+          echo "Debug: Workflow run event type: ${{ github.event.workflow_run.event }}"
 
           if [[ "$EVENT_NAME" == "workflow_run" ]]; then
             echo "Debug: Processing workflow_run event"
             echo "Debug: Workflow conclusion: $WR_CONCLUSION"
             echo "Debug: Has PRs: $WR_HAS_PRS"
             echo "Debug: PR number: $WR_PR_NUMBER"
+
+            # Only process workflow runs triggered by pull requests
+            if [[ "${{ github.event.workflow_run.event }}" != "pull_request" ]]; then
+              echo "Debug: Workflow run not triggered by pull_request, skipping"
+              echo "skip_notification=true" >> $GITHUB_OUTPUT
+              exit 0
+            fi
 
             if [[ "$WR_HAS_PRS" != "true" || -z "$WR_PR_NUMBER" ]]; then
               echo "Debug: No PR associated with workflow run, skipping"
