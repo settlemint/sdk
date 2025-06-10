@@ -50,6 +50,7 @@ jobs:
             echo "pr_state=${{ github.event.workflow_run.pull_requests[0].state }}" >> $GITHUB_OUTPUT
             echo "pr_merged=${{ github.event.workflow_run.pull_requests[0].merged }}" >> $GITHUB_OUTPUT
             echo "pr_updated_at=${{ github.event.workflow_run.pull_requests[0].updated_at }}" >> $GITHUB_OUTPUT
+            echo "pr_draft=${{ github.event.workflow_run.pull_requests[0].draft }}" >> $GITHUB_OUTPUT
             echo "pr_reviewers=$(echo '${{ toJson(github.event.workflow_run.pull_requests[0].requested_reviewers) }}' | jq -r '.[].login' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
           else
             echo "build_result=running" >> $GITHUB_OUTPUT
@@ -60,11 +61,13 @@ jobs:
             echo "pr_state=${{ github.event.pull_request.state }}" >> $GITHUB_OUTPUT
             echo "pr_merged=${{ github.event.pull_request.merged }}" >> $GITHUB_OUTPUT
             echo "pr_updated_at=${{ github.event.pull_request.updated_at }}" >> $GITHUB_OUTPUT
+            echo "pr_draft=${{ github.event.pull_request.draft }}" >> $GITHUB_OUTPUT
             echo "pr_reviewers=${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}" >> $GITHUB_OUTPUT
           fi
 
       - name: Check for existing Slack message
         id: check_message
+        if: steps.build_status.outputs.pr_draft != 'true'
         run: |
           # Check if there's an existing comment with Slack message timestamp
           COMMENT=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
@@ -81,6 +84,7 @@ jobs:
 
       - name: Send or update Slack message
         id: slack_message
+        if: steps.build_status.outputs.pr_draft != 'true'
         uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
         with:
           method: |
@@ -93,94 +97,27 @@ jobs:
               ${{ steps.check_message.outputs.message_exists == 'true' && format('"ts": "{0}",', steps.check_message.outputs.slack_ts) || '' }}
               "blocks": [
                 {
-                  "type": "header",
+                  "type": "section",
                   "text": {
-                    "type": "plain_text",
-                    "text": "${{ steps.build_status.outputs.pr_merged == 'true' && '🎉 Pull Request Merged' || (steps.check_message.outputs.message_exists == 'true' && '🔄 Pull Request Updated') || '🔍 New Pull Request Ready for Review' }}"
+                    "type": "mrkdwn",
+                    "text": "${{ steps.build_status.outputs.pr_merged == 'true' && '🎉' || steps.build_status.outputs.pr_draft == 'true' && '📝' || (steps.check_message.outputs.message_exists == 'true' && '🔄') || '🔍' }} *${{ steps.build_status.outputs.pr_title }}* by ${{ steps.build_status.outputs.pr_user }}\n${{ steps.build_status.outputs.pr_draft == 'true' && '📝 Draft' || steps.build_status.outputs.pr_state == 'open' && '🟢 Open' || (steps.build_status.outputs.pr_merged == 'true' && '🎉 Merged') || '🔴 Closed' }} • ${{ steps.build_status.outputs.build_result == 'success' && '✅ Passed' || steps.build_status.outputs.build_result == 'failure' && '❌ Failed' || steps.build_status.outputs.build_result == 'cancelled' && '🚫 Cancelled' || steps.build_status.outputs.build_result == 'skipped' && '⏭️ Skipped' || '⏳ Running' }}${{ steps.build_status.outputs.pr_reviewers != '' && format(' • 👥 {0}', steps.build_status.outputs.pr_reviewers) || '' }}"
+                  },
+                  "accessory": {
+                    "type": "button",
+                    "text": {
+                      "type": "plain_text",
+                      "text": "View PR"
+                    },
+                    "url": "${{ steps.build_status.outputs.pr_html_url }}",
+                    "action_id": "view_pr"
                   }
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Title:*\n${{ steps.build_status.outputs.pr_title }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Author:*\n👤 ${{ steps.build_status.outputs.pr_user }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Repository:*\n${{ github.repository }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Reviewers:*\n👥 ${{ steps.build_status.outputs.pr_reviewers }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*PR Status:*\n${{ steps.build_status.outputs.pr_state == 'open' && '🟢 Open' || (steps.build_status.outputs.pr_merged == 'true' && '🎉 Merged') || '🔴 Closed' }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*QA Status:*\n${{ steps.build_status.outputs.build_result == 'success' && '✅ Passed' || steps.build_status.outputs.build_result == 'failure' && '❌ Failed' || steps.build_status.outputs.build_result == 'cancelled' && '🚫 Cancelled' || steps.build_status.outputs.build_result == 'skipped' && '⏭️ Skipped' || '⏳ Running' }}"
-                    }
-                  ]
-                },
-                {
-                  "type": "section",
-                  "fields": [
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Last Updated:*\n⏰ ${{ steps.build_status.outputs.pr_updated_at }}"
-                    },
-                    {
-                      "type": "mrkdwn",
-                      "text": "*Workflow:*\n🔗 <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Run>"
-                    }
-                  ]
-                },
-                {
-                  "type": "divider"
-                },
-                {
-                  "type": "actions",
-                  "elements": [
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "📖 View Pull Request"
-                      },
-                      "url": "${{ steps.build_status.outputs.pr_html_url }}",
-                      "style": "primary"
-                    },
-                    {
-                      "type": "button",
-                      "text": {
-                        "type": "plain_text",
-                        "text": "📁 View Files Changed"
-                      },
-                      "url": "${{ steps.build_status.outputs.pr_html_url }}/files"
-                    }
-                  ]
                 }
               ]
             }
 
       - name: Store Slack message timestamp
         if: |
+          steps.build_status.outputs.pr_draft != 'true' &&
           steps.slack_message.outcome == 'success' &&
           steps.check_message.outputs.message_exists == 'false' &&
           steps.slack_message.outputs.ts != ''
