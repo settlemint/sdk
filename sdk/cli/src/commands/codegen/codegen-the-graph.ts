@@ -7,7 +7,7 @@ import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 const PACKAGE_NAME = "@settlemint/sdk-thegraph";
 
@@ -19,7 +19,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
 
   const instance = env.SETTLEMINT_INSTANCE;
   const accessToken =
-    instance === STANDALONE_INSTANCE
+    instance === STANDALONE_INSTANCE || instance === LOCAL_INSTANCE
       ? undefined
       : await getApplicationOrPersonalAccessToken({
           env,

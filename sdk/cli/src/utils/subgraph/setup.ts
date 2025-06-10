@@ -6,7 +6,7 @@ import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
 import { executeFoundryCommand } from "../smart-contract-set/execute-foundry-command";
 import { sanitizeName } from "./sanitize-name";
@@ -113,7 +113,7 @@ export async function getTheGraphNetwork({
   instance,
   accessToken = "",
 }: { theGraphMiddleware?: Middleware; env: Partial<DotEnv>; instance: string; accessToken?: string }) {
-  if (instance === STANDALONE_INSTANCE) {
+  if (instance === STANDALONE_INSTANCE || instance === LOCAL_INSTANCE) {
     return SETTLEMINT_NETWORK;
   }
   const isFixedNetwork = (theGraphMiddleware?.entityVersion ?? 4) >= 4;

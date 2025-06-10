@@ -24,7 +24,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 import { cancel } from "@settlemint/sdk-utils/terminal";
-import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
 
 export function subgraphDeployCommand() {
@@ -63,7 +63,7 @@ export function subgraphDeployCommand() {
 
       let theGraphMiddleware: Middleware | undefined;
       let accessToken: string | undefined;
-      if (instance !== STANDALONE_INSTANCE) {
+      if (instance !== STANDALONE_INSTANCE && instance !== LOCAL_INSTANCE) {
         accessToken = await getApplicationOrPersonalAccessToken({
           env,
           instance,

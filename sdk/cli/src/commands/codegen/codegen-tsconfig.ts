@@ -3,7 +3,7 @@ import { testGqlEndpoint } from "@/commands/codegen/utils/test-gql-endpoint";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { note } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
 
 export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: string[]) {
@@ -19,7 +19,7 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
   }
 
   let accessToken: string | undefined;
-  if (env.SETTLEMINT_INSTANCE !== STANDALONE_INSTANCE) {
+  if (env.SETTLEMINT_INSTANCE !== STANDALONE_INSTANCE && env.SETTLEMINT_INSTANCE !== LOCAL_INSTANCE) {
     accessToken = await getApplicationOrPersonalAccessToken({
       env,
       instance: env.SETTLEMINT_INSTANCE,
