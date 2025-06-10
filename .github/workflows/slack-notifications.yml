@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+    types: [assigned, unassigned, labeled, unlabeled, opened, edited, closed, reopened, synchronize, converted_to_draft, ready_for_review, locked, unlocked, review_requested, review_request_removed, auto_merge_enabled, auto_merge_disabled]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -23,7 +24,8 @@ jobs:
     runs-on: namespace-profile-sdk
     if: |
       github.actor != 'dependabot[bot]' && github.actor != 'renovate[bot]' &&
-      github.event_name == 'pull_request'
+      (github.event_name == 'pull_request' ||
+       (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'pull_request'))
     steps:
       - name: Configure 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
@@ -36,22 +38,37 @@ jobs:
           SLACK_BOT_TOKEN: op://platform/slack-bot/SLACK_BOT_TOKEN
           SLACK_CHANNEL_ID: op://platform/slack-bot/SLACK_CHANNEL_ID
 
-      - name: Get build workflow status
+      - name: Get build workflow status and PR info
         id: build_status
-        if: github.event_name == 'workflow_run'
         run: |
-          echo "build_result=${{ github.event.workflow_run.conclusion }}" >> $GITHUB_OUTPUT
+          if [[ "${{ github.event_name }}" == "workflow_run" ]]; then
+            echo "build_result=${{ github.event.workflow_run.conclusion }}" >> $GITHUB_OUTPUT
+            echo "pr_number=${{ github.event.workflow_run.pull_requests[0].number }}" >> $GITHUB_OUTPUT
+            echo "pr_title=${{ github.event.workflow_run.pull_requests[0].title }}" >> $GITHUB_OUTPUT
+            echo "pr_user=${{ github.event.workflow_run.pull_requests[0].user.login }}" >> $GITHUB_OUTPUT
+            echo "pr_html_url=${{ github.event.workflow_run.pull_requests[0].html_url }}" >> $GITHUB_OUTPUT
+            echo "pr_state=${{ github.event.workflow_run.pull_requests[0].state }}" >> $GITHUB_OUTPUT
+            echo "pr_merged=${{ github.event.workflow_run.pull_requests[0].merged }}" >> $GITHUB_OUTPUT
+            echo "pr_updated_at=${{ github.event.workflow_run.pull_requests[0].updated_at }}" >> $GITHUB_OUTPUT
+            echo "pr_reviewers=$(echo '${{ toJson(github.event.workflow_run.pull_requests[0].requested_reviewers) }}' | jq -r '.[].login' | tr '\n' ',' | sed 's/,$//')" >> $GITHUB_OUTPUT
+          else
+            echo "build_result=running" >> $GITHUB_OUTPUT
+            echo "pr_number=${{ github.event.pull_request.number }}" >> $GITHUB_OUTPUT
+            echo "pr_title=${{ github.event.pull_request.title }}" >> $GITHUB_OUTPUT
+            echo "pr_user=${{ github.event.pull_request.user.login }}" >> $GITHUB_OUTPUT
+            echo "pr_html_url=${{ github.event.pull_request.html_url }}" >> $GITHUB_OUTPUT
+            echo "pr_state=${{ github.event.pull_request.state }}" >> $GITHUB_OUTPUT
+            echo "pr_merged=${{ github.event.pull_request.merged }}" >> $GITHUB_OUTPUT
+            echo "pr_updated_at=${{ github.event.pull_request.updated_at }}" >> $GITHUB_OUTPUT
+            echo "pr_reviewers=${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}" >> $GITHUB_OUTPUT
+          fi
 
       - name: Check for existing Slack message
         id: check_message
-        if: |
-          github.event_name == 'pull_request' &&
-          github.event.pull_request != null &&
-          !github.event.pull_request.draft
         run: |
           # Check if there's an existing comment with Slack message timestamp
           COMMENT=$(curl -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ steps.build_status.outputs.pr_number }}/comments" \
             | jq -r '.[] | select(.body | startswith("<!-- slack-ts:")) | .body' | head -1)
 
           if [ -n "$COMMENT" ]; then
@@ -64,10 +81,6 @@ jobs:
 
       - name: Send or update Slack message
         id: slack_message
-        if: |
-          github.event_name == 'pull_request' &&
-          github.event.pull_request != null &&
-          !github.event.pull_request.draft
         uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
         with:
           method: |
@@ -83,7 +96,7 @@ jobs:
                   "type": "header",
                   "text": {
                     "type": "plain_text",
-                    "text": "${{ github.event.pull_request.merged == true && '🎉 Pull Request Merged' || (steps.check_message.outputs.message_exists == 'true' && '🔄 Pull Request Updated') || '🔍 New Pull Request Ready for Review' }}"
+                    "text": "${{ steps.build_status.outputs.pr_merged == 'true' && '🎉 Pull Request Merged' || (steps.check_message.outputs.message_exists == 'true' && '🔄 Pull Request Updated') || '🔍 New Pull Request Ready for Review' }}"
                   }
                 },
                 {
@@ -91,11 +104,11 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Title:*\n${{ github.event.pull_request.title }}"
+                      "text": "*Title:*\n${{ steps.build_status.outputs.pr_title }}"
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Author:*\n👤 ${{ github.event.pull_request.user.login }}"
+                      "text": "*Author:*\n👤 ${{ steps.build_status.outputs.pr_user }}"
                     }
                   ]
                 },
@@ -108,7 +121,7 @@ jobs:
                     },
                     {
                       "type": "mrkdwn",
-                      "text": "*Reviewers:*\n👥 ${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}"
+                      "text": "*Reviewers:*\n👥 ${{ steps.build_status.outputs.pr_reviewers }}"
                     }
                   ]
                 },
@@ -117,7 +130,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*PR Status:*\n${{ github.event.pull_request.state == 'open' && '🟢 Open' || (github.event.pull_request.merged == true && '🎉 Merged') || '🔴 Closed' }}"
+                      "text": "*PR Status:*\n${{ steps.build_status.outputs.pr_state == 'open' && '🟢 Open' || (steps.build_status.outputs.pr_merged == 'true' && '🎉 Merged') || '🔴 Closed' }}"
                     },
                     {
                       "type": "mrkdwn",
@@ -130,7 +143,7 @@ jobs:
                   "fields": [
                     {
                       "type": "mrkdwn",
-                      "text": "*Last Updated:*\n⏰ ${{ github.event.pull_request.updated_at }}"
+                      "text": "*Last Updated:*\n⏰ ${{ steps.build_status.outputs.pr_updated_at }}"
                     },
                     {
                       "type": "mrkdwn",
@@ -150,7 +163,7 @@ jobs:
                         "type": "plain_text",
                         "text": "📖 View Pull Request"
                       },
-                      "url": "${{ github.event.pull_request.html_url }}",
+                      "url": "${{ steps.build_status.outputs.pr_html_url }}",
                       "style": "primary"
                     },
                     {
@@ -159,7 +172,7 @@ jobs:
                         "type": "plain_text",
                         "text": "📁 View Files Changed"
                       },
-                      "url": "${{ github.event.pull_request.html_url }}/files"
+                      "url": "${{ steps.build_status.outputs.pr_html_url }}/files"
                     }
                   ]
                 }
@@ -176,5 +189,5 @@ jobs:
           curl -s -X POST \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -H "Accept: application/vnd.github.v3+json" \
-            "https://api.github.com/repos/${{ github.repository }}/issues/${{ github.event.pull_request.number }}/comments" \
+            "https://api.github.com/repos/${{ github.repository }}/issues/${{ steps.build_status.outputs.pr_number }}/comments" \
             -d "{\"body\": \"<!-- slack-ts:${{ steps.slack_message.outputs.ts }} -->\\n🤖 Slack notification sent for this PR\"}"
