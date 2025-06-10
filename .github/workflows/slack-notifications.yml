@@ -176,7 +176,7 @@ jobs:
                       "type": "plain_text",
                       "text": "View PR"
                     },
-                    "url": "${{ steps.build_status.outputs.pr_html_url }}",
+                    "url": "${{ steps.build_status.outputs.pr_html_url || format('https://github.com/{0}/pull/{1}', github.repository, steps.build_status.outputs.pr_number) }}",
                     "action_id": "view_pr"
                   }
                 }
