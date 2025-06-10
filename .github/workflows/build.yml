@@ -31,6 +31,7 @@ jobs:
       id-token: write
     steps:
       - uses: fuxingloh/multi-labeler@v4
+        if: ${{ github.event_name == 'pull_request' }}
 
       - name: Setup 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
