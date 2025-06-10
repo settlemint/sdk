@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "2.3.8",
+  "version": "2.3.11",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -62,7 +62,10 @@
     "node": ">=20"
   },
   "packageManager": "bun@1.1.43",
-  "workspaces": ["sdk/*", "apps/*"],
+  "workspaces": [
+    "sdk/*",
+    "apps/*"
+  ],
   "trustedDependencies": [
     "@biomejs/biome",
     "bufferutil",
