@@ -1,5 +1,7 @@
 name: Slack Notifications
 
+# Note: workflow_run triggers only work for workflows that are already on the default branch (main).
+# If this workflow file is being added in a PR, the workflow_run trigger won't work until merged.
 on:
   workflow_run:
     workflows: ["build"]
@@ -17,6 +19,7 @@ permissions:
   contents: read
   issues: write
   pull-requests: write
+  actions: read
 
 jobs:
   slack-notification:
@@ -27,6 +30,19 @@ jobs:
       (github.event_name == 'pull_request' ||
        github.event_name == 'workflow_run')
     steps:
+      - name: Debug workflow_run context
+        if: github.event_name == 'workflow_run'
+        run: |
+          echo "Workflow run triggered!"
+          echo "Triggering workflow: ${{ github.event.workflow_run.name }}"
+          echo "Workflow ID: ${{ github.event.workflow_run.id }}"
+          echo "Workflow conclusion: ${{ github.event.workflow_run.conclusion }}"
+          echo "Workflow event: ${{ github.event.workflow_run.event }}"
+          echo "Has pull_requests: ${{ github.event.workflow_run.pull_requests != null }}"
+          echo "PR count: ${{ github.event.workflow_run.pull_requests && 'has PRs' || 'no PRs' }}"
+          echo "Full context:"
+          echo '${{ toJson(github.event.workflow_run) }}' | jq '.'
+
       - name: Configure 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
         with:
