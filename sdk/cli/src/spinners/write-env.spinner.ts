@@ -73,7 +73,6 @@ export async function writeEnvSpinner(prod: boolean, env: Partial<DotEnv>): Prom
         SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT: env.SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT,
         SETTLEMINT_NEW_PROJECT_NAME: env.SETTLEMINT_NEW_PROJECT_NAME,
         SETTLEMINT_LOG_LEVEL: env.SETTLEMINT_LOG_LEVEL,
-        NODE_TLS_REJECT_UNAUTHORIZED: env.NODE_TLS_REJECT_UNAUTHORIZED,
       };
       await writeEnv({
         prod,

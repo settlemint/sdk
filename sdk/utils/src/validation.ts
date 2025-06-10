@@ -13,6 +13,7 @@ export {
   type DotEnv,
   type DotEnvPartial,
   STANDALONE_INSTANCE,
+  LOCAL_INSTANCE,
 } from "./validation/dot-env.schema.js";
 export { IdSchema, type Id } from "./validation/id.schema.js";
 export { UniqueNameSchema } from "./validation/unique-name.schema.js";

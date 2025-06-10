@@ -3,7 +3,6 @@ import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { $ } from "bun";
 import isInCi from "is-in-ci";
-import { isLocalEnv } from "./is-local-env";
 
 const commandsRunning: Record<string, ChildProcessWithoutNullStreams[]> = {};
 
@@ -18,11 +17,6 @@ const DEFAULT_ENV: Record<string, string> = {
 
 const CLI_DEV_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.mjs");
 const CLI_PROD_ENTRY_POINT = resolve(__dirname, "../../sdk/cli/dist/cli.js");
-
-if (isLocalEnv()) {
-  // Disable warnings for self signed certificates
-  DEFAULT_ENV.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-}
 
 export type CommandResult = { output: string; cwd: string };
 

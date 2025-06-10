@@ -42,7 +42,7 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { maskTokens } from "@settlemint/sdk-utils/logging";
 import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { serviceValuePrompt } from "../prompts/standalone/service-value.prompt";
 
 /**
@@ -82,6 +82,10 @@ export function connectCommand(): Command {
             description: "Connect to a standalone environment (when not using the SettleMint platform)",
             command: "connect --instance standalone",
           },
+          {
+            description: "Connect to a local development environment",
+            command: "connect --instance local",
+          },
         ]),
       )
       // Define the action to be executed when the command is run
@@ -97,6 +101,8 @@ export function connectCommand(): Command {
 
         if (selectedInstance === STANDALONE_INSTANCE) {
           await connectToStandalone(env, acceptDefaults, prod);
+        } else if (selectedInstance === LOCAL_INSTANCE) {
+          await connectToLocal();
         } else {
           await connectToPlatform(env, selectedInstance, acceptDefaults, prod);
         }
@@ -307,7 +313,25 @@ async function connectToPlatform(
     ...getCustomDeploymentEnv(cDeployment),
     SETTLEMINT_BLOCKSCOUT: blockscout?.uniqueName,
     ...getBlockscoutEnv(blockscout),
-    NODE_TLS_REJECT_UNAUTHORIZED: "0",
+  });
+}
+
+async function connectToLocal() {
+  await writeEnvSpinner(false, {
+    SETTLEMINT_INSTANCE: LOCAL_INSTANCE,
+    SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: "http://localhost:8547/",
+    SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT: "http://localhost:8547/",
+    SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: "http://localhost:4000/api/v1/graphql",
+    SETTLEMINT_HASURA_ENDPOINT: "http://localhost:8080/v1/graphql",
+    SETTLEMINT_IPFS_API_ENDPOINT: "https://ipfs.console.settlemint.com/",
+    SETTLEMINT_MINIO_ACCESS_KEY: "atk-service",
+    SETTLEMINT_MINIO_ENDPOINT: "s3://localhost:9000",
+    SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: "http://localhost:7701/graphql",
+    SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "kit",
+    SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["http://localhost:8000/subgraphs/name/kit"],
+    SETTLEMINT_HASURA_ADMIN_SECRET: "hasura",
+    SETTLEMINT_HASURA_DATABASE_URL: "postgresql://hasura:hasura@localhost:5432/hasura",
+    SETTLEMINT_MINIO_SECRET_KEY: "atk-service-secret",
   });
 }
 
@@ -499,6 +523,5 @@ async function connectToStandalone(
     SETTLEMINT_MINIO_SECRET_KEY: selectedServices.minioSecretKey?.result,
     SETTLEMINT_IPFS_API_ENDPOINT: selectedServices.ipfsApiEndpoint?.result,
     SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: selectedServices.blockscoutGraphqlEndpoint?.result,
-    NODE_TLS_REJECT_UNAUTHORIZED: "0",
   });
 }

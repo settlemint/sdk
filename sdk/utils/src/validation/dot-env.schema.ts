@@ -8,6 +8,10 @@ import { UrlSchema } from "./url.schema.js";
  * Use this value to indicate that the resources are not part of the SettleMint platform.
  */
 export const STANDALONE_INSTANCE = "standalone";
+/**
+ * Use this value to indicate that the resources are not part of the SettleMint platform.
+ */
+export const LOCAL_INSTANCE = "local";
 
 /**
  * Schema for validating environment variables used by the SettleMint SDK.
@@ -16,7 +20,9 @@ export const STANDALONE_INSTANCE = "standalone";
  */
 export const DotEnvSchema = z.object({
   /** Base URL of the SettleMint platform instance, set to standalone if your resources are not part of the SettleMint platform */
-  SETTLEMINT_INSTANCE: z.union([UrlSchema, z.literal(STANDALONE_INSTANCE)]).default("https://console.settlemint.com"),
+  SETTLEMINT_INSTANCE: z
+    .union([UrlSchema, z.literal(STANDALONE_INSTANCE), z.literal(LOCAL_INSTANCE)])
+    .default("https://console.settlemint.com"),
   /** Application access token for authenticating with SettleMint services */
   SETTLEMINT_ACCESS_TOKEN: ApplicationAccessTokenSchema.optional(),
   /** @internal */
@@ -98,8 +104,6 @@ export const DotEnvSchema = z.object({
   SETTLEMINT_NEW_PROJECT_NAME: z.string().optional(),
   /** The log level to use */
   SETTLEMINT_LOG_LEVEL: z.enum(["debug", "info", "warn", "error", "none"]).default("warn"),
-  /** Controls whether Node.js rejects unauthorized TLS certificates (0 = allow, 1 = reject) */
-  NODE_TLS_REJECT_UNAUTHORIZED: z.enum(["0", "1"]).optional(),
 });
 
 /**
