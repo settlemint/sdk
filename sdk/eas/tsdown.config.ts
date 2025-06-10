@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory";
+import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 const configs = createWebOptimizedPackage(["src/eas.ts"], {
   external: ["@settlemint/sdk-portal", "@settlemint/sdk-utils", "viem"],
