@@ -45,5 +45,7 @@ export function getTheGraphSubgraphNames(subgraphUrls?: string[]) {
 }
 
 export function getTheGraphSubgraphUrl(theGraphUrl: string, subgraphName: string) {
-  return `${theGraphUrl}/subgraphs/name/${subgraphName}`;
+  // Use URL constructor with relative path to automatically handle slashes correctly
+  const url = new URL(`subgraphs/name/${subgraphName}`, theGraphUrl);
+  return url.toString();
 }

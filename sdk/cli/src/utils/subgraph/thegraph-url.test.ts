@@ -127,6 +127,34 @@ describe("getTheGraphSubgraphUrl", () => {
       "https://thegraph.example.com/subgraphs/name/subgraph1",
     );
   });
+
+  it("should handle URLs with trailing slash without creating double slashes", () => {
+    const theGraphUrl = "https://thegraph.example.com/";
+    const subgraphName = "subgraph1";
+    expect(getTheGraphSubgraphUrl(theGraphUrl, subgraphName)).toBe(
+      "https://thegraph.example.com/subgraphs/name/subgraph1",
+    );
+  });
+
+  it("should handle localhost URLs with trailing slash", () => {
+    const theGraphUrl = "http://localhost:8000/";
+    const subgraphName = "kit";
+    expect(getTheGraphSubgraphUrl(theGraphUrl, subgraphName)).toBe("http://localhost:8000/subgraphs/name/kit");
+  });
+
+  it("should handle URLs with existing path segments", () => {
+    const theGraphUrl = "https://thegraph.example.com/api/v1";
+    const subgraphName = "subgraph1";
+    expect(getTheGraphSubgraphUrl(theGraphUrl, subgraphName)).toBe(
+      "https://thegraph.example.com/api/v1/subgraphs/name/subgraph1",
+    );
+  });
+
+  it("should handle URLs with port numbers", () => {
+    const theGraphUrl = "http://localhost:8000";
+    const subgraphName = "kit";
+    expect(getTheGraphSubgraphUrl(theGraphUrl, subgraphName)).toBe("http://localhost:8000/subgraphs/name/kit");
+  });
 });
 
 describe("getTheGraphSubgraphNames", () => {
