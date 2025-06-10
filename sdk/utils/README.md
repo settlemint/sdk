@@ -113,7 +113,7 @@ The SettleMint Utils SDK provides a collection of shared utilities and helper fu
 
 > **ascii**(): `void`
 
-Defined in: [sdk/utils/src/terminal/ascii.ts:14](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/ascii.ts#L14)
+Defined in: [sdk/utils/src/terminal/ascii.ts:14](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/ascii.ts#L14)
 
 Prints the SettleMint ASCII art logo to the console in magenta color.
 Used for CLI branding and visual identification.
@@ -137,7 +137,7 @@ ascii();
 
 > **camelCaseToWords**(`s`): `string`
 
-Defined in: [sdk/utils/src/string.ts:29](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/string.ts#L29)
+Defined in: [sdk/utils/src/string.ts:29](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/string.ts#L29)
 
 Converts a camelCase string to a human-readable string.
 
@@ -168,7 +168,7 @@ const words = camelCaseToWords("camelCaseString");
 
 > **cancel**(`msg`): `never`
 
-Defined in: [sdk/utils/src/terminal/cancel.ts:23](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/cancel.ts#L23)
+Defined in: [sdk/utils/src/terminal/cancel.ts:23](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/cancel.ts#L23)
 
 Displays an error message in red inverse text and throws a CancelError.
 Used to terminate execution with a visible error message.
@@ -201,7 +201,7 @@ cancel("An error occurred");
 
 > **capitalizeFirstLetter**(`val`): `string`
 
-Defined in: [sdk/utils/src/string.ts:13](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/string.ts#L13)
+Defined in: [sdk/utils/src/string.ts:13](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/string.ts#L13)
 
 Capitalizes the first letter of a string.
 
@@ -232,7 +232,7 @@ const capitalized = capitalizeFirstLetter("hello");
 
 > **createLogger**(`options`): [`Logger`](#logger)
 
-Defined in: [sdk/utils/src/logging/logger.ts:50](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L50)
+Defined in: [sdk/utils/src/logging/logger.ts:50](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L50)
 
 Creates a simple logger with configurable log level
 
@@ -265,7 +265,7 @@ logger.error('Operation failed', new Error('Connection timeout'));
 
 > **emptyDir**(`dir`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:45](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/download-and-extract.ts#L45)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:45](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/download-and-extract.ts#L45)
 
 Removes all contents of a directory except the .git folder
 
@@ -293,7 +293,7 @@ await emptyDir("/path/to/dir"); // Removes all contents except .git
 
 > **ensureBrowser**(): `void`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:31](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/runtime/ensure-server.ts#L31)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:31](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/runtime/ensure-server.ts#L31)
 
 Ensures that code is running in a browser environment and not on the server.
 
@@ -320,7 +320,7 @@ ensureBrowser();
 
 > **ensureServer**(): `void`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:13](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/runtime/ensure-server.ts#L13)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:13](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/runtime/ensure-server.ts#L13)
 
 Ensures that code is running on the server and not in a browser environment.
 
@@ -347,7 +347,7 @@ ensureServer();
 
 > **executeCommand**(`command`, `args`, `options?`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:51](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L51)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:51](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L51)
 
 Executes a command with the given arguments in a child process.
 Pipes stdin to the child process and captures stdout/stderr output.
@@ -389,7 +389,7 @@ await executeCommand("npm", ["install"], { silent: true });
 
 > **exists**(`path`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/filesystem/exists.ts:17](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/filesystem/exists.ts#L17)
+Defined in: [sdk/utils/src/filesystem/exists.ts:17](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/filesystem/exists.ts#L17)
 
 Checks if a file or directory exists at the given path
 
@@ -422,7 +422,7 @@ if (await exists('/path/to/file.txt')) {
 
 > **extractBaseUrlBeforeSegment**(`baseUrl`, `pathSegment`): `string`
 
-Defined in: [sdk/utils/src/url.ts:15](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/url.ts#L15)
+Defined in: [sdk/utils/src/url.ts:15](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/url.ts#L15)
 
 Extracts the base URL before a specific segment in a URL.
 
@@ -454,7 +454,7 @@ const baseUrl = extractBaseUrlBeforeSegment("https://example.com/api/v1/subgraph
 
 > **extractJsonObject**\<`T`\>(`value`): `null` \| `T`
 
-Defined in: [sdk/utils/src/json.ts:50](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/json.ts#L50)
+Defined in: [sdk/utils/src/json.ts:50](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/json.ts#L50)
 
 Extracts a JSON object from a string.
 
@@ -497,7 +497,7 @@ const json = extractJsonObject<{ port: number }>(
 
 > **fetchWithRetry**(`input`, `init?`, `maxRetries?`, `initialSleepTime?`): `Promise`\<`Response`\>
 
-Defined in: [sdk/utils/src/http/fetch-with-retry.ts:18](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/http/fetch-with-retry.ts#L18)
+Defined in: [sdk/utils/src/http/fetch-with-retry.ts:18](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/http/fetch-with-retry.ts#L18)
 
 Retry an HTTP request with exponential backoff and jitter.
 Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
@@ -535,7 +535,7 @@ const response = await fetchWithRetry("https://api.example.com/data");
 
 > **findMonoRepoPackages**(`projectDir`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/filesystem/mono-repo.ts:59](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/filesystem/mono-repo.ts#L59)
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:59](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/filesystem/mono-repo.ts#L59)
 
 Finds all packages in a monorepo
 
@@ -566,7 +566,7 @@ console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path
 
 > **findMonoRepoRoot**(`startDir`): `Promise`\<`null` \| `string`\>
 
-Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/filesystem/mono-repo.ts#L19)
+Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/filesystem/mono-repo.ts#L19)
 
 Finds the root directory of a monorepo
 
@@ -597,7 +597,7 @@ console.log(root); // Output: /path/to/your/project/packages/core
 
 > **formatTargetDir**(`targetDir`): `string`
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:15](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/download-and-extract.ts#L15)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:15](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/download-and-extract.ts#L15)
 
 Formats a directory path by removing trailing slashes and whitespace
 
@@ -627,7 +627,7 @@ const formatted = formatTargetDir("/path/to/dir/ "); // "/path/to/dir"
 
 > **getPackageManager**(`targetDir?`): `Promise`\<`AgentName`\>
 
-Defined in: [sdk/utils/src/package-manager/get-package-manager.ts:15](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/get-package-manager.ts#L15)
+Defined in: [sdk/utils/src/package-manager/get-package-manager.ts:15](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/get-package-manager.ts#L15)
 
 Detects the package manager used in the current project
 
@@ -658,7 +658,7 @@ console.log(`Using ${packageManager}`);
 
 > **getPackageManagerExecutable**(`targetDir?`): `Promise`\<\{ `args`: `string`[]; `command`: `string`; \}\>
 
-Defined in: [sdk/utils/src/package-manager/get-package-manager-executable.ts:14](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/get-package-manager-executable.ts#L14)
+Defined in: [sdk/utils/src/package-manager/get-package-manager-executable.ts:14](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/get-package-manager-executable.ts#L14)
 
 Retrieves the executable command and arguments for the package manager
 
@@ -689,7 +689,7 @@ console.log(`Using ${command} with args: ${args.join(" ")}`);
 
 > **graphqlFetchWithRetry**\<`Data`\>(`input`, `init?`, `maxRetries?`, `initialSleepTime?`): `Promise`\<`Data`\>
 
-Defined in: [sdk/utils/src/http/graphql-fetch-with-retry.ts:34](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/http/graphql-fetch-with-retry.ts#L34)
+Defined in: [sdk/utils/src/http/graphql-fetch-with-retry.ts:34](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/http/graphql-fetch-with-retry.ts#L34)
 
 Executes a GraphQL request with automatic retries using exponential backoff and jitter.
 Only retries on server errors (5xx), rate limits (429), timeouts (408), and network errors.
@@ -748,7 +748,7 @@ const data = await graphqlFetchWithRetry<{ user: { id: string } }>(
 
 > **installDependencies**(`pkgs`, `cwd?`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:20](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/install-dependencies.ts#L20)
+Defined in: [sdk/utils/src/package-manager/install-dependencies.ts:20](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/install-dependencies.ts#L20)
 
 Installs one or more packages as dependencies using the detected package manager
 
@@ -787,7 +787,7 @@ await installDependencies(["express", "cors"]);
 
 > **intro**(`msg`): `void`
 
-Defined in: [sdk/utils/src/terminal/intro.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/intro.ts#L16)
+Defined in: [sdk/utils/src/terminal/intro.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/intro.ts#L16)
 
 Displays an introductory message in magenta text with padding.
 Any sensitive tokens in the message are masked before display.
@@ -817,7 +817,7 @@ intro("Starting deployment...");
 
 > **isEmpty**(`path`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:31](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/download-and-extract.ts#L31)
+Defined in: [sdk/utils/src/package-manager/download-and-extract.ts:31](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/download-and-extract.ts#L31)
 
 Checks if a directory is empty or contains only a .git folder
 
@@ -849,7 +849,7 @@ if (await isEmpty("/path/to/dir")) {
 
 > **isPackageInstalled**(`name`, `path?`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:17](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/is-package-installed.ts#L17)
+Defined in: [sdk/utils/src/package-manager/is-package-installed.ts:17](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/is-package-installed.ts#L17)
 
 Checks if a package is installed in the project's dependencies, devDependencies, or peerDependencies.
 
@@ -885,7 +885,7 @@ console.log(`@settlemint/sdk-utils is installed: ${isInstalled}`);
 
 > **list**(`title`, `items`): `void`
 
-Defined in: [sdk/utils/src/terminal/list.ts:23](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/list.ts#L23)
+Defined in: [sdk/utils/src/terminal/list.ts:23](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/list.ts#L23)
 
 Displays a list of items in a formatted manner, supporting nested items.
 
@@ -925,7 +925,7 @@ list("Providers", [
 
 > **loadEnv**\<`T`\>(`validateEnv`, `prod`, `path`): `Promise`\<`T` *extends* `true` ? `object` : `object`\>
 
-Defined in: [sdk/utils/src/environment/load-env.ts:25](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/environment/load-env.ts#L25)
+Defined in: [sdk/utils/src/environment/load-env.ts:25](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/environment/load-env.ts#L25)
 
 Loads environment variables from .env files.
 To enable encryption with dotenvx (https://www.dotenvx.com/docs) run `bunx dotenvx encrypt`
@@ -973,7 +973,7 @@ const rawEnv = await loadEnv(false, false);
 
 > **makeJsonStringifiable**\<`T`\>(`value`): `T`
 
-Defined in: [sdk/utils/src/json.ts:73](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/json.ts#L73)
+Defined in: [sdk/utils/src/json.ts:73](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/json.ts#L73)
 
 Converts a value to a JSON stringifiable format.
 
@@ -1010,7 +1010,7 @@ const json = makeJsonStringifiable<{ amount: bigint }>({ amount: BigInt(1000) })
 
 > **maskTokens**(`output`): `string`
 
-Defined in: [sdk/utils/src/logging/mask-tokens.ts:13](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/mask-tokens.ts#L13)
+Defined in: [sdk/utils/src/logging/mask-tokens.ts:13](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/mask-tokens.ts#L13)
 
 Masks sensitive SettleMint tokens in output text by replacing them with asterisks.
 Handles personal access tokens (PAT), application access tokens (AAT), and service account tokens (SAT).
@@ -1042,7 +1042,7 @@ const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
 
 > **note**(`message`, `level`): `void`
 
-Defined in: [sdk/utils/src/terminal/note.ts:21](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/note.ts#L21)
+Defined in: [sdk/utils/src/terminal/note.ts:21](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/note.ts#L21)
 
 Displays a note message with optional warning level formatting.
 Regular notes are displayed in normal text, while warnings are shown in yellow.
@@ -1077,7 +1077,7 @@ note("Low disk space remaining", "warn");
 
 > **outro**(`msg`): `void`
 
-Defined in: [sdk/utils/src/terminal/outro.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/outro.ts#L16)
+Defined in: [sdk/utils/src/terminal/outro.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/outro.ts#L16)
 
 Displays a closing message in green inverted text with padding.
 Any sensitive tokens in the message are masked before display.
@@ -1107,7 +1107,7 @@ outro("Deployment completed successfully!");
 
 > **projectRoot**(`fallbackToCwd`, `cwd?`): `Promise`\<`string`\>
 
-Defined in: [sdk/utils/src/filesystem/project-root.ts:18](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/filesystem/project-root.ts#L18)
+Defined in: [sdk/utils/src/filesystem/project-root.ts:18](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/filesystem/project-root.ts#L18)
 
 Finds the root directory of the current project by locating the nearest package.json file
 
@@ -1144,7 +1144,7 @@ console.log(`Project root is at: ${rootDir}`);
 
 > **replaceUnderscoresAndHyphensWithSpaces**(`s`): `string`
 
-Defined in: [sdk/utils/src/string.ts:48](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/string.ts#L48)
+Defined in: [sdk/utils/src/string.ts:48](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/string.ts#L48)
 
 Replaces underscores and hyphens with spaces.
 
@@ -1175,7 +1175,7 @@ const result = replaceUnderscoresAndHyphensWithSpaces("Already_Spaced-Second");
 
 > **requestLogger**(`logger`, `name`, `fn`): (...`args`) => `Promise`\<`Response`\>
 
-Defined in: [sdk/utils/src/logging/request-logger.ts:14](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/request-logger.ts#L14)
+Defined in: [sdk/utils/src/logging/request-logger.ts:14](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/request-logger.ts#L14)
 
 Logs the request and duration of a fetch call (> 500ms is logged as warn, otherwise info)
 
@@ -1209,7 +1209,7 @@ The fetch function
 
 > **retryWhenFailed**\<`T`\>(`fn`, `maxRetries`, `initialSleepTime`, `stopOnError?`): `Promise`\<`T`\>
 
-Defined in: [sdk/utils/src/retry.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/retry.ts#L16)
+Defined in: [sdk/utils/src/retry.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/retry.ts#L16)
 
 Retry a function when it fails.
 
@@ -1249,7 +1249,7 @@ const result = await retryWhenFailed(() => readFile("/path/to/file.txt"), 3, 1_0
 
 > **setName**(`name`, `path?`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/package-manager/set-name.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/package-manager/set-name.ts#L16)
+Defined in: [sdk/utils/src/package-manager/set-name.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/package-manager/set-name.ts#L16)
 
 Sets the name field in the package.json file
 
@@ -1284,7 +1284,7 @@ await setName("my-new-project-name");
 
 > **spinner**\<`R`\>(`options`): `Promise`\<`R`\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:55](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/spinner.ts#L55)
+Defined in: [sdk/utils/src/terminal/spinner.ts:55](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/spinner.ts#L55)
 
 Displays a loading spinner while executing an async task.
 Shows progress with start/stop messages and handles errors.
@@ -1334,7 +1334,7 @@ const result = await spinner({
 
 > **table**(`title`, `data`): `void`
 
-Defined in: [sdk/utils/src/terminal/table.ts:21](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/table.ts#L21)
+Defined in: [sdk/utils/src/terminal/table.ts:21](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/table.ts#L21)
 
 Displays data in a formatted table in the terminal.
 
@@ -1368,7 +1368,7 @@ table("My Table", data);
 
 > **truncate**(`value`, `maxLength`): `string`
 
-Defined in: [sdk/utils/src/string.ts:65](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/string.ts#L65)
+Defined in: [sdk/utils/src/string.ts:65](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/string.ts#L65)
 
 Truncates a string to a maximum length and appends "..." if it is longer.
 
@@ -1400,7 +1400,7 @@ const truncated = truncate("Hello, world!", 10);
 
 > **tryParseJson**\<`T`\>(`value`, `defaultValue`): `null` \| `T`
 
-Defined in: [sdk/utils/src/json.ts:23](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/json.ts#L23)
+Defined in: [sdk/utils/src/json.ts:23](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/json.ts#L23)
 
 Attempts to parse a JSON string into a typed value, returning a default value if parsing fails.
 
@@ -1447,7 +1447,7 @@ const invalid = tryParseJson<string[]>(
 
 > **validate**\<`T`\>(`schema`, `value`): `T`\[`"_output"`\]
 
-Defined in: [sdk/utils/src/validation/validate.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/validate.ts#L16)
+Defined in: [sdk/utils/src/validation/validate.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/validate.ts#L16)
 
 Validates a value against a given Zod schema.
 
@@ -1488,7 +1488,7 @@ const validatedId = validate(IdSchema, "550e8400-e29b-41d4-a716-446655440000");
 
 > **writeEnv**(`options`): `Promise`\<`void`\>
 
-Defined in: [sdk/utils/src/environment/write-env.ts:41](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/environment/write-env.ts#L41)
+Defined in: [sdk/utils/src/environment/write-env.ts:41](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/environment/write-env.ts#L41)
 
 Writes environment variables to .env files across a project or monorepo
 
@@ -1540,7 +1540,7 @@ await writeEnv({
 
 #### CancelError
 
-Defined in: [sdk/utils/src/terminal/cancel.ts:8](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/cancel.ts#L8)
+Defined in: [sdk/utils/src/terminal/cancel.ts:8](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/cancel.ts#L8)
 
 Error class used to indicate that the operation was cancelled.
 This error is used to signal that the operation should be aborted.
@@ -1553,7 +1553,7 @@ This error is used to signal that the operation should be aborted.
 
 #### CommandError
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L16)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L16)
 
 Error class for command execution errors
 
@@ -1567,7 +1567,7 @@ Error class for command execution errors
 
 > **new CommandError**(`message`, `code`, `output`): [`CommandError`](#commanderror)
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:23](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L23)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:23](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L23)
 
 Constructs a new CommandError
 
@@ -1593,7 +1593,7 @@ Constructs a new CommandError
 
 > `readonly` **code**: `number`
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:25](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L25)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:25](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L25)
 
 The exit code of the command
 
@@ -1601,7 +1601,7 @@ The exit code of the command
 
 > `readonly` **output**: `string`[]
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:26](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L26)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:26](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L26)
 
 The output of the command
 
@@ -1609,7 +1609,7 @@ The output of the command
 
 #### SpinnerError
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/spinner.ts#L12)
+Defined in: [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/spinner.ts#L12)
 
 Error class used to indicate that the spinner operation failed.
 This error is used to signal that the operation should be aborted.
@@ -1622,7 +1622,7 @@ This error is used to signal that the operation should be aborted.
 
 #### ExecuteCommandOptions
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:7](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L7)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:7](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L7)
 
 Options for executing a command, extending SpawnOptionsWithoutStdio
 
@@ -1634,13 +1634,13 @@ Options for executing a command, extending SpawnOptionsWithoutStdio
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="silent"></a> `silent?` | `boolean` | Whether to suppress output to stdout/stderr | [sdk/utils/src/terminal/execute-command.ts:9](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/execute-command.ts#L9) |
+| <a id="silent"></a> `silent?` | `boolean` | Whether to suppress output to stdout/stderr | [sdk/utils/src/terminal/execute-command.ts:9](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/execute-command.ts#L9) |
 
 ***
 
 #### Logger
 
-Defined in: [sdk/utils/src/logging/logger.ts:23](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L23)
+Defined in: [sdk/utils/src/logging/logger.ts:23](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L23)
 
 Simple logger interface with basic logging methods
  Logger
@@ -1649,16 +1649,16 @@ Simple logger interface with basic logging methods
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="debug"></a> `debug` | (`message`, ...`args`) => `void` | Log debug information | [sdk/utils/src/logging/logger.ts:25](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L25) |
-| <a id="error"></a> `error` | (`message`, ...`args`) => `void` | Log errors | [sdk/utils/src/logging/logger.ts:31](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L31) |
-| <a id="info"></a> `info` | (`message`, ...`args`) => `void` | Log general information | [sdk/utils/src/logging/logger.ts:27](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L27) |
-| <a id="warn"></a> `warn` | (`message`, ...`args`) => `void` | Log warnings | [sdk/utils/src/logging/logger.ts:29](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L29) |
+| <a id="debug"></a> `debug` | (`message`, ...`args`) => `void` | Log debug information | [sdk/utils/src/logging/logger.ts:25](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L25) |
+| <a id="error"></a> `error` | (`message`, ...`args`) => `void` | Log errors | [sdk/utils/src/logging/logger.ts:31](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L31) |
+| <a id="info"></a> `info` | (`message`, ...`args`) => `void` | Log general information | [sdk/utils/src/logging/logger.ts:27](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L27) |
+| <a id="warn"></a> `warn` | (`message`, ...`args`) => `void` | Log warnings | [sdk/utils/src/logging/logger.ts:29](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L29) |
 
 ***
 
 #### LoggerOptions
 
-Defined in: [sdk/utils/src/logging/logger.ts:12](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L12)
+Defined in: [sdk/utils/src/logging/logger.ts:12](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L12)
 
 Configuration options for the logger
  LoggerOptions
@@ -1667,14 +1667,14 @@ Configuration options for the logger
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="level"></a> `level?` | [`LogLevel`](#loglevel) | The minimum log level to output | [sdk/utils/src/logging/logger.ts:14](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L14) |
-| <a id="prefix"></a> `prefix?` | `string` | The prefix to add to the log message | [sdk/utils/src/logging/logger.ts:16](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L16) |
+| <a id="level"></a> `level?` | [`LogLevel`](#loglevel) | The minimum log level to output | [sdk/utils/src/logging/logger.ts:14](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L14) |
+| <a id="prefix"></a> `prefix?` | `string` | The prefix to add to the log message | [sdk/utils/src/logging/logger.ts:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L16) |
 
 ***
 
 #### SpinnerOptions\<R\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/spinner.ts#L25)
+Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/spinner.ts#L25)
 
 Options for configuring the spinner behavior
 
@@ -1688,9 +1688,9 @@ Options for configuring the spinner behavior
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:27](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/spinner.ts#L27) |
-| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:31](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/spinner.ts#L31) |
-| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:29](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/terminal/spinner.ts#L29) |
+| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:27](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/spinner.ts#L27) |
+| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:31](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/spinner.ts#L31) |
+| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:29](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/terminal/spinner.ts#L29) |
 
 ### Type Aliases
 
@@ -1698,7 +1698,7 @@ Options for configuring the spinner behavior
 
 > **DotEnv** = `z.infer`\<*typeof* [`DotEnvSchema`](#dotenvschema)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:112](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/dot-env.schema.ts#L112)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:112](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/dot-env.schema.ts#L112)
 
 Type definition for the environment variables schema.
 
@@ -1708,7 +1708,7 @@ Type definition for the environment variables schema.
 
 > **DotEnvPartial** = `z.infer`\<*typeof* [`DotEnvSchemaPartial`](#dotenvschemapartial)\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:123](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/dot-env.schema.ts#L123)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:123](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/dot-env.schema.ts#L123)
 
 Type definition for the partial environment variables schema.
 
@@ -1718,7 +1718,7 @@ Type definition for the partial environment variables schema.
 
 > **Id** = `z.infer`\<*typeof* [`IdSchema`](#idschema)\>
 
-Defined in: [sdk/utils/src/validation/id.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/id.schema.ts#L30)
+Defined in: [sdk/utils/src/validation/id.schema.ts:30](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/id.schema.ts#L30)
 
 Type definition for database IDs, inferred from IdSchema.
 Can be either a PostgreSQL UUID string or MongoDB ObjectID string.
@@ -1729,7 +1729,7 @@ Can be either a PostgreSQL UUID string or MongoDB ObjectID string.
 
 > **LogLevel** = `"debug"` \| `"info"` \| `"warn"` \| `"error"` \| `"none"`
 
-Defined in: [sdk/utils/src/logging/logger.ts:6](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/logging/logger.ts#L6)
+Defined in: [sdk/utils/src/logging/logger.ts:6](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/logging/logger.ts#L6)
 
 Log levels supported by the logger
 
@@ -1739,7 +1739,7 @@ Log levels supported by the logger
 
 > `const` **AccessTokenSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:21](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/access-token.schema.ts#L21)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:21](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/access-token.schema.ts#L21)
 
 Schema for validating both application and personal access tokens.
 Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
@@ -1750,7 +1750,7 @@ Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
 
 > `const` **ApplicationAccessTokenSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:7](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/access-token.schema.ts#L7)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:7](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/access-token.schema.ts#L7)
 
 Schema for validating application access tokens.
 Application access tokens start with 'sm_aat_' prefix.
@@ -1761,7 +1761,7 @@ Application access tokens start with 'sm_aat_' prefix.
 
 > `const` **DotEnvSchema**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_INSTANCE`: `ZodDefault`\<`ZodUnion`\<readonly \[`ZodString`, `ZodLiteral`\<`"standalone"`\>, `ZodLiteral`\<`"local"`\>\]\>\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_LOG_LEVEL`: `ZodDefault`\<`ZodEnum`\<\{ `debug`: `"debug"`; `error`: `"error"`; `info`: `"info"`; `none`: `"none"`; `warn`: `"warn"`; \}\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_PORTAL_WS_ENDPOINT`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `ZodOptional`\<`ZodString`\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodPipe`\<`ZodTransform`\<`null` \| `never`[], `unknown`\>, `ZodOptional`\<`ZodArray`\<`ZodString`\>\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodString`\>; \}, `$strip`\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:21](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/dot-env.schema.ts#L21)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:21](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/dot-env.schema.ts#L21)
 
 Schema for validating environment variables used by the SettleMint SDK.
 Defines validation rules and types for configuration values like URLs,
@@ -1773,7 +1773,7 @@ access tokens, workspace names, and service endpoints.
 
 > `const` **DotEnvSchemaPartial**: `ZodObject`\<\{ `SETTLEMINT_ACCESS_TOKEN`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_ACCESSIBLE_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_APPLICATION`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_BLOCKSCOUT_UI_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_CUSTOM_DEPLOYMENT_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ADMIN_SECRET`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_DATABASE_URL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HASURA_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_HD_PRIVATE_KEY_FORWARDER_ADDRESS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_INSTANCE`: `ZodOptional`\<`ZodDefault`\<`ZodUnion`\<readonly \[`ZodString`, `ZodLiteral`\<`"standalone"`\>, `ZodLiteral`\<`"local"`\>\]\>\>\>; `SETTLEMINT_IPFS`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_API_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_GATEWAY_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_IPFS_PINNING_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_LOG_LEVEL`: `ZodOptional`\<`ZodDefault`\<`ZodEnum`\<\{ `debug`: `"debug"`; `error`: `"error"`; `info`: `"info"`; `none`: `"none"`; `warn`: `"warn"`; \}\>\>\>; `SETTLEMINT_MINIO`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ACCESS_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_MINIO_SECRET_KEY`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_NEW_PROJECT_NAME`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_REST_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_PORTAL_WS_ENDPOINT`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; `SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS`: `ZodOptional`\<`ZodPipe`\<`ZodTransform`\<`null` \| `never`[], `unknown`\>, `ZodOptional`\<`ZodArray`\<`ZodString`\>\>\>\>; `SETTLEMINT_WORKSPACE`: `ZodOptional`\<`ZodOptional`\<`ZodString`\>\>; \}, `$strip`\>
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:118](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/dot-env.schema.ts#L118)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:118](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/dot-env.schema.ts#L118)
 
 Partial version of the environment variables schema where all fields are optional.
 Useful for validating incomplete configurations during development or build time.
@@ -1784,7 +1784,7 @@ Useful for validating incomplete configurations during development or build time
 
 > `const` **IdSchema**: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>
 
-Defined in: [sdk/utils/src/validation/id.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/id.schema.ts#L17)
+Defined in: [sdk/utils/src/validation/id.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/id.schema.ts#L17)
 
 Schema for validating database IDs. Accepts both PostgreSQL UUIDs and MongoDB ObjectIDs.
 PostgreSQL UUIDs are 32 hexadecimal characters with hyphens (e.g. 123e4567-e89b-12d3-a456-426614174000).
@@ -1808,7 +1808,7 @@ const isValidObjectId = IdSchema.safeParse("507f1f77bcf86cd799439011").success;
 
 > `const` **LOCAL\_INSTANCE**: `"local"` = `"local"`
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/dot-env.schema.ts#L14)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/dot-env.schema.ts#L14)
 
 Use this value to indicate that the resources are not part of the SettleMint platform.
 
@@ -1818,7 +1818,7 @@ Use this value to indicate that the resources are not part of the SettleMint pla
 
 > `const` **PersonalAccessTokenSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/access-token.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/access-token.schema.ts#L14)
+Defined in: [sdk/utils/src/validation/access-token.schema.ts:14](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/access-token.schema.ts#L14)
 
 Schema for validating personal access tokens.
 Personal access tokens start with 'sm_pat_' prefix.
@@ -1829,7 +1829,7 @@ Personal access tokens start with 'sm_pat_' prefix.
 
 > `const` **runsInBrowser**: `boolean` = `isBrowser`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:40](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/runtime/ensure-server.ts#L40)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:40](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/runtime/ensure-server.ts#L40)
 
 Boolean indicating if code is currently running in a browser environment
 
@@ -1839,7 +1839,7 @@ Boolean indicating if code is currently running in a browser environment
 
 > `const` **runsOnServer**: `boolean` = `!isBrowser`
 
-Defined in: [sdk/utils/src/runtime/ensure-server.ts:45](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/runtime/ensure-server.ts#L45)
+Defined in: [sdk/utils/src/runtime/ensure-server.ts:45](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/runtime/ensure-server.ts#L45)
 
 Boolean indicating if code is currently running in a server environment
 
@@ -1849,7 +1849,7 @@ Boolean indicating if code is currently running in a server environment
 
 > `const` **STANDALONE\_INSTANCE**: `"standalone"` = `"standalone"`
 
-Defined in: [sdk/utils/src/validation/dot-env.schema.ts:10](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/dot-env.schema.ts#L10)
+Defined in: [sdk/utils/src/validation/dot-env.schema.ts:10](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/dot-env.schema.ts#L10)
 
 Use this value to indicate that the resources are not part of the SettleMint platform.
 
@@ -1859,7 +1859,7 @@ Use this value to indicate that the resources are not part of the SettleMint pla
 
 > `const` **UniqueNameSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/unique-name.schema.ts:19](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/unique-name.schema.ts#L19)
+Defined in: [sdk/utils/src/validation/unique-name.schema.ts:19](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/unique-name.schema.ts#L19)
 
 Schema for validating unique names used across the SettleMint platform.
 Only accepts lowercase alphanumeric characters and hyphens.
@@ -1885,7 +1885,7 @@ const isInvalidName = UniqueNameSchema.safeParse("My Workspace!").success;
 
 > `const` **UrlOrPathSchema**: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:54](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/url.schema.ts#L54)
+Defined in: [sdk/utils/src/validation/url.schema.ts:54](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/url.schema.ts#L54)
 
 Schema that accepts either a full URL or a URL path.
 
@@ -1909,7 +1909,7 @@ const isValidPath = UrlOrPathSchema.safeParse("/api/v1/users").success;
 
 > `const` **UrlPathSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/url.schema.ts#L34)
+Defined in: [sdk/utils/src/validation/url.schema.ts:34](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/url.schema.ts#L34)
 
 Schema for validating URL paths.
 
@@ -1933,7 +1933,7 @@ const isInvalidPath = UrlPathSchema.safeParse("not-a-path").success;
 
 > `const` **UrlSchema**: `ZodString`
 
-Defined in: [sdk/utils/src/validation/url.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.3.12/sdk/utils/src/validation/url.schema.ts#L17)
+Defined in: [sdk/utils/src/validation/url.schema.ts:17](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/utils/src/validation/url.schema.ts#L17)
 
 Schema for validating URLs.
 
