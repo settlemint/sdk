@@ -12,7 +12,7 @@ import password from "@inquirer/password";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { cancel, intro, note, outro } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 export function pincodeVerificationResponseCommand() {
   return new Command("pincode-verification-response")
@@ -51,8 +51,8 @@ export function pincodeVerificationResponseCommand() {
             accept: true,
           });
 
-      if (selectedInstance === STANDALONE_INSTANCE) {
-        return cancel("This command does not support standalone instances");
+      if (selectedInstance === STANDALONE_INSTANCE || selectedInstance === LOCAL_INSTANCE) {
+        return cancel("This command does not support standalone or local instances");
       }
 
       const applicationUniqueName = env.SETTLEMINT_APPLICATION;
