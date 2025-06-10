@@ -12,7 +12,7 @@ import { extractBaseUrlBeforeSegment } from "@settlemint/sdk-utils";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 export function hasuraTrackCommand() {
   return new Command("track")
@@ -46,7 +46,7 @@ export function hasuraTrackCommand() {
       let hasuraAdminSecret: string | undefined;
       let accessToken: string | undefined;
 
-      if (selectedInstance === STANDALONE_INSTANCE) {
+      if (selectedInstance === STANDALONE_INSTANCE || selectedInstance === LOCAL_INSTANCE) {
         hasuraGraphqlEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
         hasuraAdminSecret = env.SETTLEMINT_HASURA_ADMIN_SECRET;
       } else {
