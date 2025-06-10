@@ -49,7 +49,7 @@ The SettleMint Next.js SDK provides a seamless integration layer between Next.js
 
 > **HelloWorld**(`props`): `ReactElement`
 
-Defined in: [components/test.tsx:16](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/next/src/components/test.tsx#L16)
+Defined in: [components/test.tsx:16](https://github.com/settlemint/sdk/blob/v2.3.14/sdk/next/src/components/test.tsx#L16)
 
 A simple Hello World component that greets the user.
 
@@ -71,7 +71,7 @@ A React element that displays a greeting to the user.
 
 > **withSettleMint**\<`C`\>(`nextConfig`, `options`): `Promise`\<`C`\>
 
-Defined in: [config/with-settlemint.ts:21](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/next/src/config/with-settlemint.ts#L21)
+Defined in: [config/with-settlemint.ts:21](https://github.com/settlemint/sdk/blob/v2.3.14/sdk/next/src/config/with-settlemint.ts#L21)
 
 Modifies the passed in Next.js configuration with SettleMint-specific settings.
 
@@ -102,7 +102,7 @@ If the SettleMint configuration cannot be read or processed
 
 #### HelloWorldProps
 
-Defined in: [components/test.tsx:6](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/next/src/components/test.tsx#L6)
+Defined in: [components/test.tsx:6](https://github.com/settlemint/sdk/blob/v2.3.14/sdk/next/src/components/test.tsx#L6)
 
 The props for the HelloWorld component.
 
@@ -110,7 +110,7 @@ The props for the HelloWorld component.
 
 #### WithSettleMintOptions
 
-Defined in: [config/with-settlemint.ts:6](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/next/src/config/with-settlemint.ts#L6)
+Defined in: [config/with-settlemint.ts:6](https://github.com/settlemint/sdk/blob/v2.3.14/sdk/next/src/config/with-settlemint.ts#L6)
 
 Options for configuring the SettleMint configuration.
 
@@ -118,7 +118,7 @@ Options for configuring the SettleMint configuration.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:10](https://github.com/settlemint/sdk/blob/v2.3.13/sdk/next/src/config/with-settlemint.ts#L10) |
+| <a id="disabled"></a> `disabled?` | `boolean` | Whether to disable the SettleMint configuration. | [config/with-settlemint.ts:10](https://github.com/settlemint/sdk/blob/v2.3.14/sdk/next/src/config/with-settlemint.ts#L10) |
 
 ## Contributing
 
