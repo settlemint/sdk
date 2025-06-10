@@ -15,6 +15,9 @@ Examples:
   # Connect to a standalone environment (when not using the SettleMint platform)
   $ settlemint connect --instance standalone
 
+  # Connect to a local development environment
+  $ settlemint connect --instance local
+
 Connects your dApp to your application
 
 Options:
