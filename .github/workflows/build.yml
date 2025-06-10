@@ -48,11 +48,13 @@ jobs:
         with:
           token: ${{ env.PAT_TOKEN }}
 
+      - name: Set up turbo caching
+        uses: namespace-actions/setup-turbocache@v0
+
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@449c929cd5138e6607e7e78458e88cc476e76f89 # v1
         with:
           path: |
-            ./.turbo
             ~/.bun/install/cache
 
       - name: Setup Bun
