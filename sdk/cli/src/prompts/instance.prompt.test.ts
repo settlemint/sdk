@@ -4,7 +4,7 @@ import { homedir } from "node:os";
 import { join } from "node:path";
 import { removeCredentials, storeCredentials } from "@/utils/config";
 import { ModuleMocker } from "@/utils/test/module-mocker";
-import { STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { instancePrompt } from "./instance.prompt";
 
 const TEST_INSTANCE = "https://test.settlemint.com";
@@ -83,6 +83,10 @@ describe("instancePrompt", () => {
         {
           name: "Standalone (services run independently of SettleMint platform)",
           value: STANDALONE_INSTANCE,
+        },
+        {
+          name: "Local (for local development mode)",
+          value: LOCAL_INSTANCE,
         },
       ],
       default: SECOND_INSTANCE,
