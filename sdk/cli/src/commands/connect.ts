@@ -307,7 +307,7 @@ async function connectToPlatform(
     ...getCustomDeploymentEnv(cDeployment),
     SETTLEMINT_BLOCKSCOUT: blockscout?.uniqueName,
     ...getBlockscoutEnv(blockscout),
-    NODE_TLS_REJECT_UNAUTHORIZED: "1",
+    NODE_TLS_REJECT_UNAUTHORIZED: "0",
   });
 }
 
