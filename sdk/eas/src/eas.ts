@@ -1,5 +1,6 @@
 import { createPortalClient, waitForTransactionReceipt } from "@settlemint/sdk-portal";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+import { validate } from "@settlemint/sdk-utils/validation";
 import type { Address, Hex } from "viem";
 import { GraphQLOperations } from "./portal/operations.js";
 import type { PortalClient } from "./portal/portal-client.js";
@@ -45,7 +46,7 @@ export class EASClient {
   private deployedAddresses?: DeploymentResult;
 
   constructor(options: EASClientOptions) {
-    this.options = EASClientOptionsSchema.parse(options);
+    this.options = validate(EASClientOptionsSchema, options);
 
     const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
       introspection: introspection;
@@ -660,7 +661,7 @@ export type {
 export { EAS_FIELD_TYPES, ZERO_ADDRESS, ZERO_BYTES32 } from "./schema.js";
 
 // Re-export validation utilities
-export { validateSchemaFields, buildSchemaString } from "./utils/validation.js";
+export { EASClientOptionsSchema } from "./utils/validation.js";
 
 // Re-export GraphQL operations for advanced usage
 export { GraphQLOperations } from "./portal/operations.js";

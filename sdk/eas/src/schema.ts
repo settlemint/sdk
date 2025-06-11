@@ -1,4 +1,6 @@
 import { type Address, type Hex, zeroAddress } from "viem";
+import type { z } from "zod";
+import type { EASClientOptionsSchema } from "./utils/validation.js";
 
 /**
  * Common address constants
@@ -39,18 +41,7 @@ export interface SchemaField {
 /**
  * Configuration options for the EAS client
  */
-export interface EASClientOptions {
-  /** Portal GraphQL endpoint URL */
-  instance: string;
-  /** Portal access token */
-  accessToken?: string;
-  /** Optional EAS contract address (if already deployed) */
-  easContractAddress?: Address;
-  /** Optional Schema Registry contract address (if already deployed) */
-  schemaRegistryContractAddress?: Address;
-  /** Enable debug logging */
-  debug?: boolean;
-}
+export type EASClientOptions = z.infer<typeof EASClientOptionsSchema>;
 
 /**
  * Schema registration request
@@ -188,74 +179,3 @@ export interface DeploymentResult {
  * @deprecated Use SchemaRequest instead
  */
 export interface RegisterSchemaOptions extends SchemaRequest {}
-
-// Internal Portal response types (not exported to users)
-
-/**
- * @internal
- * Portal transaction response structure
- */
-export interface PortalTransactionResponse {
-  transactionHash?: string;
-  contractAddress?: string;
-}
-
-/**
- * @internal
- * Portal schema response structure
- */
-export interface PortalSchemaResponse {
-  EASSchemaRegistry?: {
-    getSchema?: {
-      uid: string;
-      resolver: string;
-      revocable: boolean;
-      schema: string;
-    };
-  };
-}
-
-/**
- * @internal
- * Portal attestation response structure
- */
-export interface PortalAttestationResponse {
-  EAS?: {
-    getAttestation?: {
-      uid: string;
-      schema: string;
-      attester: string;
-      recipient: string;
-      time: string;
-      expirationTime: string;
-      revocable: boolean;
-      refUID: string;
-      data: string;
-    };
-    isAttestationValid?: boolean;
-    getTimestamp?: string;
-  };
-}
-
-/**
- * @internal
- * Portal contracts response structure
- */
-export interface PortalContractsResponse {
-  getContractsEasSchemaRegistry?: {
-    count: number;
-    records: Array<{
-      address: string;
-      abiName: string;
-      createdAt: string;
-    }>;
-  };
-  getContractsEas?: {
-    count: number;
-    records: Array<{
-      address: string;
-      abiName: string;
-      createdAt: string;
-    }>;
-  };
-}
