@@ -30,7 +30,7 @@ jobs:
       packages: write
       id-token: write
     steps:
-      - uses: fuxingloh/multi-labeler@v4
+      - uses: fuxingloh/multi-labeler@b15a54460c38f54043fa75f7b08a0e2aa5b94b5b # v4
         if: ${{ github.event_name == 'pull_request' }}
 
       - name: Setup 1Password
@@ -50,7 +50,7 @@ jobs:
           token: ${{ env.PAT_TOKEN }}
 
       - name: Set up turbo caching
-        uses: namespace-actions/setup-turbocache@v0
+        uses: namespace-actions/setup-turbocache@626a71c08010c1a15a090371d6b9375b50493a39 # v0
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@449c929cd5138e6607e7e78458e88cc476e76f89 # v1
