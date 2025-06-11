@@ -30,9 +30,6 @@ jobs:
       packages: write
       id-token: write
     steps:
-      - uses: fuxingloh/multi-labeler@b15a54460c38f54043fa75f7b08a0e2aa5b94b5b # v4
-        if: ${{ github.event_name == 'pull_request' }}
-
       - name: Setup 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
         with:
@@ -48,6 +45,7 @@ jobs:
         uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
         with:
           token: ${{ env.PAT_TOKEN }}
+          fetch-depth: 2
 
       - name: Set up turbo caching
         uses: namespace-actions/setup-turbocache@626a71c08010c1a15a090371d6b9375b50493a39 # v0
@@ -184,3 +182,43 @@ jobs:
           branch: main
           file_pattern: 'package.json **/schema.graphql sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
 
+  pr-labels:
+    name: PR Labels
+    if: github.event_name == 'pull_request'
+    uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-pr-labels.yml@main
+
+  secret-scanning:
+    name: Secret Scanning
+    uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-secret-scanning.yml@main
+    with:
+      trivy-config: trivy-secret.yaml
+      severity: "HIGH,CRITICAL"
+
+  codeql:
+    name: CodeQL
+    uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-codeql.yml@main
+    with:
+      language: "javascript-typescript"
+      build-mode: "none"
+
+  slack-notification-start:
+    name: Slack Notification (Start)
+    if: github.event_name == 'pull_request'
+    uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-slack-notification.yml@main
+    with:
+      workflow_conclusion: "running"
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+  slack-notification-end:
+    name: Slack Notification (End)
+    needs: [packages, secret-scanning, codeql, pr-labels]
+    if: always() && github.event_name == 'pull_request'
+    uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-slack-notification.yml@main
+    with:
+      workflow_conclusion:
+        ${{ needs.packages.result == 'success' && needs.secret-scanning.result !=
+        'failure' && needs.codeql.result != 'failure' && needs.pr-labels.result
+        != 'failure' && 'success' || 'failure' }}
+    secrets:
+      OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
