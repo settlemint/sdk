@@ -185,6 +185,11 @@ jobs:
   pr-labels:
     name: PR Labels
     if: github.event_name == 'pull_request'
+    permissions:
+      checks: write
+      issues: write
+      pull-requests: write
+      statuses: write
     uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-pr-labels.yml@main
 
   secret-scanning:
