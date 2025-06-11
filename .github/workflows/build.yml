@@ -195,6 +195,9 @@ jobs:
 
   secret-scanning:
     name: Secret Scanning
+    permissions:
+      security-events: write
+      contents: read
     uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-secret-scanning.yml@main
     with:
       trivy-config: trivy-secret.yaml
@@ -202,6 +205,10 @@ jobs:
 
   codeql:
     name: CodeQL
+    permissions:
+      security-events: write
+      contents: read
+      actions: read
     uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-codeql.yml@main
     with:
       language: "javascript-typescript"
