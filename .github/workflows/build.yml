@@ -209,6 +209,7 @@ jobs:
       security-events: write
       contents: read
       actions: read
+      packages: read
     uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-codeql.yml@main
     with:
       language: "javascript-typescript"
