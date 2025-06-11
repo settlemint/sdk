@@ -218,6 +218,11 @@ jobs:
   slack-notification-start:
     name: Slack Notification (Start)
     if: github.event_name == 'pull_request'
+    permissions:
+      actions: read
+      issues: write
+      pull-requests: write
+      contents: read
     uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-slack-notification.yml@main
     with:
       workflow_conclusion: "running"
@@ -228,6 +233,11 @@ jobs:
     name: Slack Notification (End)
     needs: [packages, secret-scanning, codeql, pr-labels]
     if: always() && github.event_name == 'pull_request'
+    permissions:
+      actions: read
+      issues: write
+      pull-requests: write
+      contents: read
     uses: settlemint/asset-tokenization-kit/.github/workflows/reusable-slack-notification.yml@main
     with:
       workflow_conclusion:
