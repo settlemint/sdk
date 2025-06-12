@@ -2,12 +2,12 @@ import { defineConfig } from "tsdown";
 import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 const configs = createWebOptimizedPackage(["src/eas.ts"], {
-  external: ["@ethereum-attestation-service/eas-sdk", "ethers", "viem", "@settlemint/sdk-js"],
+  external: ["@settlemint/sdk-portal", "@settlemint/sdk-utils", "viem"],
   banner: {
-    js: "/* SettleMint EAS SDK - Attestation Optimized */",
+    js: "/* SettleMint EAS SDK - Portal Optimized */",
   },
   define: {
-    __EAS_PACKAGE__: "true",
+    __EAS_PORTAL_PACKAGE__: "true",
   },
 });
 

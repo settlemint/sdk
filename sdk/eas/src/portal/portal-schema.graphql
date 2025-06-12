@@ -1,0 +1,2640 @@
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar ConstructorArguments
+
+type Contract {
+  abiName: String
+  address: String
+
+  """
+  Created at
+  """
+  createdAt: String
+  transaction: TransactionOutput
+  transactionHash: String
+}
+
+type ContractDeployStatus {
+  abiName: String
+  address: String
+
+  """
+  Created at
+  """
+  createdAt: String
+
+  """
+  Deployed at
+  """
+  deployedAt: String
+
+  """
+  Reverted at
+  """
+  revertedAt: String
+  transaction: TransactionOutput
+  transactionHash: String
+}
+
+"""
+Returns the transaction hash
+"""
+type ContractDeploymentTransactionOutput {
+  transactionHash: String
+}
+
+"""
+ContractsDeployStatus paginated output
+"""
+type ContractsDeployStatusPaginatedOutput {
+  """
+  Total number of results
+  """
+  count: Int!
+  records: [ContractDeployStatus!]!
+}
+
+"""
+Contracts paginated output
+"""
+type ContractsPaginatedOutput {
+  """
+  Total number of results
+  """
+  count: Int!
+  records: [Contract!]!
+}
+
+input CreateWalletInfoInput {
+  """
+  The name of the wallet
+  """
+  name: String!
+}
+
+"""
+Details of the created wallet
+"""
+type CreateWalletOutput {
+  """
+  The Ethereum address of the created wallet
+  """
+  address: String
+
+  """
+  The derivation path used to generate the wallet
+  """
+  derivationPath: String
+
+  """
+  The unique identifier of the created wallet
+  """
+  id: String
+
+  """
+  The name of the created wallet
+  """
+  name: String
+}
+
+input CreateWalletVerificationInput {
+  """
+  OTP verification settings. Provide this for OTP verification.
+  """
+  otp: OTPSettingsInput
+
+  """
+  PINCODE verification settings. Provide this for PINCODE verification.
+  """
+  pincode: PincodeSettingsInput
+
+  """
+  Secret codes verification settings. Provide this for secret codes verification.
+  """
+  secretCodes: SecretCodesSettingsInput
+}
+
+"""
+Output for creating a wallet verification
+"""
+type CreateWalletVerificationOutput {
+  """
+  Unique identifier of the created wallet verification
+  """
+  id: String
+
+  """
+  Name of the created wallet verification
+  """
+  name: String
+
+  """
+  Additional parameters of the created wallet verification
+  """
+  parameters: JSON
+
+  """
+  Type of the created wallet verification
+  """
+  verificationType: WalletVerificationType
+}
+
+"""
+Output for deleting a wallet verification
+"""
+type DeleteWalletVerificationOutput {
+  """
+  Indicates whether the wallet verification was successfully deleted
+  """
+  success: Boolean
+}
+
+input DeployContractEASInput {
+  forwarder: String!
+  registry: String!
+}
+
+input DeployContractEASSchemaRegistryInput {
+  forwarder: String!
+}
+
+type EAS {
+  """
+  See {IERC-5267}.
+  """
+  eip712Domain: EASEip712DomainOutput
+
+  """
+  Returns the EIP712 type hash for the attest function.
+  The EIP712 type hash for the attest function.
+  """
+  getAttestTypeHash: String
+
+  """
+  Returns an existing attestation by UID.
+  The attestation data members.
+  """
+  getAttestation(uid: String!): EASTuple0GetAttestationOutput
+
+  """
+  Returns the domain separator used in the encoding of the signatures for attest, and revoke.
+  The domain separator used in the encoding of the signatures for attest, and revoke.
+  """
+  getDomainSeparator: String
+
+  """
+  Returns the EIP712 name.
+  The EIP712 name.
+  """
+  getName: String
+
+  """
+  Returns the current nonce per-account.
+  The current nonce.
+  """
+  getNonce(account: String!): String
+
+  """
+  Returns the timestamp that the specified data was timestamped with.
+  The timestamp the data was timestamped with.
+  """
+  getRevokeOffchain(data: String!, revoker: String!): String
+
+  """
+  Returns the EIP712 type hash for the revoke function.
+  The EIP712 type hash for the revoke function.
+  """
+  getRevokeTypeHash: String
+
+  """
+  Returns the address of the global schema registry.
+  The address of the global schema registry.
+  """
+  getSchemaRegistry: String
+
+  """
+  Returns the timestamp that the specified data was timestamped with.
+  The timestamp the data was timestamped with.
+  """
+  getTimestamp(data: String!): String
+  id: ID
+
+  """
+  Checks whether an attestation exists.
+  Whether an attestation exists.
+  """
+  isAttestationValid(uid: String!): Boolean
+
+  """
+  Indicates whether any particular address is the trusted forwarder.
+  """
+  isTrustedForwarder(forwarder: String!): Boolean
+
+  """
+  Returns the address of the trusted forwarder.
+  """
+  trustedForwarder: String
+
+  """
+  Returns the full semver contract version.
+  Semver contract version as a string.
+  """
+  version: String
+}
+
+input EASAttestByDelegationInput {
+  delegatedRequest: EASEASAttestByDelegationDelegatedRequestInput!
+}
+
+input EASAttestInput {
+  request: EASEASAttestRequestInput!
+}
+
+input EASEASAttestByDelegationDelegatedRequestInput {
+  attester: String!
+  data: EASEASEASAttestByDelegationDelegatedRequestDataInput!
+  deadline: String!
+  schema: String!
+  signature: EASEASEASAttestByDelegationDelegatedRequestSignatureInput!
+}
+
+input EASEASAttestRequestInput {
+  data: EASEASEASAttestRequestDataInput!
+  schema: String!
+}
+
+input EASEASEASAttestByDelegationDelegatedRequestDataInput {
+  data: String!
+  expirationTime: String!
+  recipient: String!
+  refUID: String!
+  revocable: Boolean!
+  value: String!
+}
+
+input EASEASEASAttestByDelegationDelegatedRequestSignatureInput {
+  r: String!
+  s: String!
+  v: Int!
+}
+
+input EASEASEASAttestRequestDataInput {
+  data: String!
+  expirationTime: String!
+  recipient: String!
+  refUID: String!
+  revocable: Boolean!
+  value: String!
+}
+
+input EASEASEASMultiAttestByDelegationMultiDelegatedRequestsDataInput {
+  data: String!
+  expirationTime: String!
+  recipient: String!
+  refUID: String!
+  revocable: Boolean!
+  value: String!
+}
+
+input EASEASEASMultiAttestByDelegationMultiDelegatedRequestsSignaturesInput {
+  r: String!
+  s: String!
+  v: Int!
+}
+
+input EASEASEASMultiAttestMultiRequestsDataInput {
+  data: String!
+  expirationTime: String!
+  recipient: String!
+  refUID: String!
+  revocable: Boolean!
+  value: String!
+}
+
+input EASEASEASMultiRevokeByDelegationMultiDelegatedRequestsDataInput {
+  uid: String!
+  value: String!
+}
+
+input EASEASEASMultiRevokeByDelegationMultiDelegatedRequestsSignaturesInput {
+  r: String!
+  s: String!
+  v: Int!
+}
+
+input EASEASEASMultiRevokeMultiRequestsDataInput {
+  uid: String!
+  value: String!
+}
+
+input EASEASEASRevokeByDelegationDelegatedRequestDataInput {
+  uid: String!
+  value: String!
+}
+
+input EASEASEASRevokeByDelegationDelegatedRequestSignatureInput {
+  r: String!
+  s: String!
+  v: Int!
+}
+
+input EASEASEASRevokeRequestDataInput {
+  uid: String!
+  value: String!
+}
+
+input EASEASMultiAttestByDelegationMultiDelegatedRequestsInput {
+  attester: String!
+  data: [EASEASEASMultiAttestByDelegationMultiDelegatedRequestsDataInput!]!
+  deadline: String!
+  schema: String!
+  signatures: [EASEASEASMultiAttestByDelegationMultiDelegatedRequestsSignaturesInput!]!
+}
+
+input EASEASMultiAttestMultiRequestsInput {
+  data: [EASEASEASMultiAttestMultiRequestsDataInput!]!
+  schema: String!
+}
+
+input EASEASMultiRevokeByDelegationMultiDelegatedRequestsInput {
+  data: [EASEASEASMultiRevokeByDelegationMultiDelegatedRequestsDataInput!]!
+  deadline: String!
+  revoker: String!
+  schema: String!
+  signatures: [EASEASEASMultiRevokeByDelegationMultiDelegatedRequestsSignaturesInput!]!
+}
+
+input EASEASMultiRevokeMultiRequestsInput {
+  data: [EASEASEASMultiRevokeMultiRequestsDataInput!]!
+  schema: String!
+}
+
+input EASEASRevokeByDelegationDelegatedRequestInput {
+  data: EASEASEASRevokeByDelegationDelegatedRequestDataInput!
+  deadline: String!
+  revoker: String!
+  schema: String!
+  signature: EASEASEASRevokeByDelegationDelegatedRequestSignatureInput!
+}
+
+input EASEASRevokeRequestInput {
+  data: EASEASEASRevokeRequestDataInput!
+  schema: String!
+}
+
+type EASEip712DomainOutput {
+  chainId: String
+  extensions: [String!]
+  fields: String
+  name: String
+  salt: String
+  verifyingContract: String
+  version: String
+}
+
+input EASIncreaseNonceInput {
+  """
+  The (higher) new value.
+  """
+  newNonce: String!
+}
+
+input EASMultiAttestByDelegationInput {
+  multiDelegatedRequests: [EASEASMultiAttestByDelegationMultiDelegatedRequestsInput!]!
+}
+
+input EASMultiAttestInput {
+  multiRequests: [EASEASMultiAttestMultiRequestsInput!]!
+}
+
+input EASMultiRevokeByDelegationInput {
+  multiDelegatedRequests: [EASEASMultiRevokeByDelegationMultiDelegatedRequestsInput!]!
+}
+
+input EASMultiRevokeInput {
+  multiRequests: [EASEASMultiRevokeMultiRequestsInput!]!
+}
+
+input EASMultiRevokeOffchainInput {
+  """
+  The data to timestamp.
+  """
+  data: [String!]!
+}
+
+input EASMultiTimestampInput {
+  """
+  The data to timestamp.
+  """
+  data: [String!]!
+}
+
+input EASRevokeByDelegationInput {
+  delegatedRequest: EASEASRevokeByDelegationDelegatedRequestInput!
+}
+
+input EASRevokeInput {
+  request: EASEASRevokeRequestInput!
+}
+
+input EASRevokeOffchainInput {
+  """
+  The data to timestamp.
+  """
+  data: String!
+}
+
+type EASSchemaRegistry {
+  """
+  Returns an existing schema by UID.
+  The schema data members.
+  """
+  getSchema(uid: String!): EASSchemaRegistryTuple0GetSchemaOutput
+  id: ID
+
+  """
+  Indicates whether any particular address is the trusted forwarder.
+  """
+  isTrustedForwarder(forwarder: String!): Boolean
+
+  """
+  Returns the address of the trusted forwarder.
+  """
+  trustedForwarder: String
+
+  """
+  Returns the full semver contract version.
+  Semver contract version as a string.
+  """
+  version: String
+}
+
+input EASSchemaRegistryRegisterInput {
+  """
+  An optional schema resolver.
+  """
+  resolver: String!
+
+  """
+  Whether the schema allows revocations explicitly.
+  """
+  revocable: Boolean!
+
+  """
+  The schema data schema.
+  """
+  schema: String!
+}
+
+"""
+Returns the transaction hash
+"""
+type EASSchemaRegistryTransactionOutput {
+  transactionHash: String
+}
+
+"""
+Returns the transaction receipt
+"""
+type EASSchemaRegistryTransactionReceiptOutput {
+  """
+  Blob Gas Price
+  """
+  blobGasPrice: String
+
+  """
+  Blob Gas Used
+  """
+  blobGasUsed: String
+
+  """
+  Block Hash
+  """
+  blockHash: String!
+
+  """
+  Block Number
+  """
+  blockNumber: String!
+
+  """
+  Contract Address
+  """
+  contractAddress: String
+
+  """
+  Cumulative Gas Used
+  """
+  cumulativeGasUsed: String!
+
+  """
+  Effective Gas Price
+  """
+  effectiveGasPrice: String!
+
+  """
+  Events (decoded from the logs)
+  """
+  events: JSON!
+
+  """
+  From
+  """
+  from: String!
+
+  """
+  Gas Used
+  """
+  gasUsed: String!
+
+  """
+  Logs
+  """
+  logs: JSON!
+
+  """
+  Logs Bloom
+  """
+  logsBloom: String!
+
+  """
+  ABI-encoded string containing the revert reason
+  """
+  revertReason: String
+
+  """
+  Decoded revert reason
+  """
+  revertReasonDecoded: String
+
+  """
+  Root
+  """
+  root: String
+
+  """
+  Status
+  """
+  status: TransactionReceiptStatus!
+
+  """
+  To
+  """
+  to: String
+
+  """
+  Transaction Hash
+  """
+  transactionHash: String!
+
+  """
+  Transaction Index
+  """
+  transactionIndex: Int!
+
+  """
+  Type
+  """
+  type: String!
+
+  """
+  List of user operation receipts associated with this transaction
+  """
+  userOperationReceipts: [UserOperationReceipt!]
+}
+
+"""
+Returns an existing schema by UID.
+The schema data members.
+"""
+type EASSchemaRegistryTuple0GetSchemaOutput {
+  resolver: String
+  revocable: Boolean
+  schema: String
+  uid: String
+}
+
+input EASTimestampInput {
+  """
+  The data to timestamp.
+  """
+  data: String!
+}
+
+"""
+Returns the transaction hash
+"""
+type EASTransactionOutput {
+  transactionHash: String
+}
+
+"""
+Returns the transaction receipt
+"""
+type EASTransactionReceiptOutput {
+  """
+  Blob Gas Price
+  """
+  blobGasPrice: String
+
+  """
+  Blob Gas Used
+  """
+  blobGasUsed: String
+
+  """
+  Block Hash
+  """
+  blockHash: String!
+
+  """
+  Block Number
+  """
+  blockNumber: String!
+
+  """
+  Contract Address
+  """
+  contractAddress: String
+
+  """
+  Cumulative Gas Used
+  """
+  cumulativeGasUsed: String!
+
+  """
+  Effective Gas Price
+  """
+  effectiveGasPrice: String!
+
+  """
+  Events (decoded from the logs)
+  """
+  events: JSON!
+
+  """
+  From
+  """
+  from: String!
+
+  """
+  Gas Used
+  """
+  gasUsed: String!
+
+  """
+  Logs
+  """
+  logs: JSON!
+
+  """
+  Logs Bloom
+  """
+  logsBloom: String!
+
+  """
+  ABI-encoded string containing the revert reason
+  """
+  revertReason: String
+
+  """
+  Decoded revert reason
+  """
+  revertReasonDecoded: String
+
+  """
+  Root
+  """
+  root: String
+
+  """
+  Status
+  """
+  status: TransactionReceiptStatus!
+
+  """
+  To
+  """
+  to: String
+
+  """
+  Transaction Hash
+  """
+  transactionHash: String!
+
+  """
+  Transaction Index
+  """
+  transactionIndex: Int!
+
+  """
+  Type
+  """
+  type: String!
+
+  """
+  List of user operation receipts associated with this transaction
+  """
+  userOperationReceipts: [UserOperationReceipt!]
+}
+
+"""
+Returns an existing attestation by UID.
+The attestation data members.
+"""
+type EASTuple0GetAttestationOutput {
+  attester: String
+  data: String
+  expirationTime: String
+  recipient: String
+  refUID: String
+  revocable: Boolean
+  revocationTime: String
+  schema: String
+  time: String
+  uid: String
+}
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
+type Mutation {
+  """
+  Deploy a contract
+  """
+  DeployContract(
+    """
+    The ABI of the contract
+    """
+    abi: JSON!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The constructor arguments (must be an array)
+    """
+    constructorArguments: ConstructorArguments
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+
+    """
+    The name of the contract
+    """
+    name: String!
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): ContractDeploymentTransactionOutput
+
+  """
+  Deploy a EAS contract
+  """
+  DeployContractEAS(
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+    constructorArguments: DeployContractEASInput!
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): ContractDeploymentTransactionOutput
+
+  """
+  Deploy a EASSchemaRegistry contract
+  """
+  DeployContractEASSchemaRegistry(
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+    constructorArguments: DeployContractEASSchemaRegistryInput!
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): ContractDeploymentTransactionOutput
+  EASAttest(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASAttestInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASAttestByDelegation(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASAttestByDelegationInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+
+  """
+  Provides users an option to invalidate nonces by increasing their nonces to (higher) new values.
+  """
+  EASIncreaseNonce(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASIncreaseNonceInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASMultiAttest(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASMultiAttestInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASMultiAttestByDelegation(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASMultiAttestByDelegationInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASMultiRevoke(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASMultiRevokeInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASMultiRevokeByDelegation(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASMultiRevokeByDelegationInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+
+  """
+  Revokes the specified multiple bytes32 data.
+  The timestamp the data was revoked with.
+  """
+  EASMultiRevokeOffchain(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASMultiRevokeOffchainInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+
+  """
+  Timestamps the specified multiple bytes32 data.
+  The timestamp the data was timestamped with.
+  """
+  EASMultiTimestamp(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASMultiTimestampInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASRevoke(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASRevokeInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  EASRevokeByDelegation(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASRevokeByDelegationInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+
+  """
+  Revokes the specified bytes32 data.
+  The timestamp the data was revoked with.
+  """
+  EASRevokeOffchain(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASRevokeOffchainInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+
+  """
+  Submits and reserves a new schema.
+  The UID of the new schema.
+  """
+  EASSchemaRegistryRegister(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASSchemaRegistryRegisterInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASSchemaRegistryTransactionOutput
+
+  """
+  Timestamps the specified bytes32 data.
+  The timestamp the data was timestamped with.
+  """
+  EASTimestamp(
+    """
+    The address of the contract
+    """
+    address: String!
+
+    """
+    Challenge response that is used to verify access to the private key of the from address
+    """
+    challengeResponse: String
+
+    """
+    The address of the sender
+    """
+    from: String!
+
+    """
+    Gas limit
+    """
+    gasLimit: String
+
+    """
+    Gas price
+    """
+    gasPrice: String
+    input: EASTimestampInput!
+
+    """
+    Metadata (store custom metadata from your application)
+    """
+    metadata: JSON
+
+    """
+    Simulate the transaction before sending it
+    """
+    simulate: Boolean
+
+    """
+    Payable value (wei)
+    """
+    value: String
+
+    """
+    Verification ID that is used to verify access to the private key of the from address
+    """
+    verificationId: String
+  ): EASTransactionOutput
+  createWallet(
+    """
+    The ID of the key vault where the wallet will be created
+    """
+    keyVaultId: String!
+
+    """
+    Information about the wallet to be created
+    """
+    walletInfo: CreateWalletInfoInput!
+  ): CreateWalletOutput
+
+  """
+  Create a new verification for a specific user wallet
+  """
+  createWalletVerification(
+    """
+    The Ethereum address of the user wallet
+    """
+    userWalletAddress: String!
+    verificationInfo: CreateWalletVerificationInput!
+  ): CreateWalletVerificationOutput
+
+  """
+  Generates and returns challenges for all or specific verification methods of a user's wallet
+  """
+  createWalletVerificationChallenges(
+    """
+    Ethereum address of the user's wallet
+    """
+    userWalletAddress: String!
+
+    """
+    Optional unique identifier of the verification to create challenges for
+    """
+    verificationId: String
+  ): [WalletVerificationChallenge!]
+
+  """
+  Removes a specific verification method from a user's wallet
+  """
+  deleteWalletVerification(
+    """
+    Ethereum address of the user's wallet
+    """
+    userWalletAddress: String!
+
+    """
+    Unique identifier of the verification to delete
+    """
+    verificationId: String!
+  ): DeleteWalletVerificationOutput
+
+  """
+  Verifies the response to a wallet verification challenge
+  """
+  verifyWalletVerificationChallenge(
+    """
+    The response to the verification challenge
+    """
+    challengeResponse: String!
+
+    """
+    Ethereum address of the user's wallet
+    """
+    userWalletAddress: String!
+
+    """
+    Optional unique identifier of the specific verification to verify
+    """
+    verificationId: String
+  ): VerifyWalletVerificationChallengeOutput
+}
+
+"""
+Algorithm used for OTP verification
+"""
+enum OTPAlgorithm {
+  SHA1
+  SHA3_224
+  SHA3_256
+  SHA3_384
+  SHA3_512
+  SHA224
+  SHA256
+  SHA384
+  SHA512
+}
+
+input OTPSettingsInput {
+  """
+  The algorithm for OTP verification
+  """
+  algorithm: OTPAlgorithm
+
+  """
+  The number of digits for OTP verification
+  """
+  digits: Int
+
+  """
+  The issuer for OTP verification
+  """
+  issuer: String
+
+  """
+  The name of the OTP verification
+  """
+  name: String!
+
+  """
+  The period (in seconds) for OTP verification
+  """
+  period: Int
+}
+
+input PincodeSettingsInput {
+  """
+  The name of the PINCODE verification
+  """
+  name: String!
+
+  """
+  The pincode for PINCODE verification
+  """
+  pincode: String!
+}
+
+type Query {
+  EAS(
+    """
+    The address of the contract
+    """
+    address: String!
+  ): EAS
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASAttestByDelegationReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASAttestReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASIncreaseNonceReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASMultiAttestByDelegationReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASMultiAttestReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASMultiRevokeByDelegationReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASMultiRevokeOffchainReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASMultiRevokeReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASMultiTimestampReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASRevokeByDelegationReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASRevokeOffchainReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASRevokeReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+  EASSchemaRegistry(
+    """
+    The address of the contract
+    """
+    address: String!
+  ): EASSchemaRegistry
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASSchemaRegistryRegisterReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASSchemaRegistryTransactionReceiptOutput
+
+  """
+  Fetches the receipt for the given transaction hash
+  """
+  EASTimestampReceipt(
+    """
+    The transaction hash
+    """
+    transactionHash: String!
+  ): EASTransactionReceiptOutput
+
+  """
+  Get all contracts
+  """
+  getContracts(
+    """
+    The name of the ABIs to filter by
+    """
+    abiNames: [String!]
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsPaginatedOutput
+
+  """
+  Get all contracts with their deployment status
+  """
+  getContractsDeployStatus(
+    """
+    The name of the ABIs to filter by
+    """
+    abiNames: [String!]
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsDeployStatusPaginatedOutput
+
+  """
+  Get all contracts with their deployment status for the EAS ABI
+  """
+  getContractsDeployStatusEas(
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsDeployStatusPaginatedOutput
+
+  """
+  Get all contracts with their deployment status for the EASSchemaRegistry ABI
+  """
+  getContractsDeployStatusEasSchemaRegistry(
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsDeployStatusPaginatedOutput
+
+  """
+  Get all contracts for the EAS ABI
+  """
+  getContractsEas(
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsPaginatedOutput
+
+  """
+  Get all contracts for the EASSchemaRegistry ABI
+  """
+  getContractsEasSchemaRegistry(
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsPaginatedOutput
+
+  """
+  Get the list of pending and recently processed transactions
+  """
+  getPendingAndRecentlyProcessedTransactions(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Processed after date, use json like date format (eg 2025-06-05T07:18:00.439Z) (defaults to 15 min ago)
+    """
+    processedAfter: String
+  ): TransactionsPaginatedOutput
+
+  """
+  Get the list of pending transactions
+  """
+  getPendingTransactions(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+  ): TransactionsPaginatedOutput
+
+  """
+  Get the list of processed transactions
+  """
+  getProcessedTransactions(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Processed after date, use json like date format (eg 2025-06-05T07:18:00.440Z)
+    """
+    processedAfter: String
+  ): TransactionsPaginatedOutput
+
+  """
+  Get a transaction
+  """
+  getTransaction(
+    """
+    Transaction hash
+    """
+    transactionHash: String!
+  ): TransactionOutput
+
+  """
+  Get transaction counts over time
+  """
+  getTransactionsTimeline(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Granularity of the timeline
+    """
+    granularity: TransactionTimelineGranularity!
+
+    """
+    Processed after date, use json like date format (eg 2025-06-05T07:18:00.440Z)
+    """
+    processedAfter: String
+
+    """
+    Timeline end date, use json like date format(eg 2025-06-05T07:18:00.440Z) (for month and year interval the last day of the month or year is used). Defaults to the current date.
+    """
+    timelineEndDate: String
+
+    """
+    Timeline start date, use json like date format (eg 2025-06-05T07:18:00.440Z) (for month and year interval the first day of the month or year is used)
+    """
+    timelineStartDate: String!
+  ): [TransactionTimelineOutput!]
+
+  """
+  Retrieves all active verification methods for a user's wallet
+  """
+  getWalletVerifications(
+    """
+    Ethereum address of the user's wallet
+    """
+    userWalletAddress: String!
+  ): [WalletVerification!]
+}
+
+input SecretCodesSettingsInput {
+  """
+  The name of the secret codes verification
+  """
+  name: String!
+}
+
+type Subscription {
+  """
+  Get all contracts with their deployment status
+  """
+  getContractsDeployStatus(
+    """
+    The name of the ABIs to filter by
+    """
+    abiNames: [String!]
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsDeployStatusPaginatedOutput
+
+  """
+  Get all contracts with their deployment status for the EAS ABI
+  """
+  getContractsDeployStatusEas(
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsDeployStatusPaginatedOutput
+
+  """
+  Get all contracts with their deployment status for the EASSchemaRegistry ABI
+  """
+  getContractsDeployStatusEasSchemaRegistry(
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Transaction hash filter
+    """
+    transactionHash: String
+  ): ContractsDeployStatusPaginatedOutput
+
+  """
+  Get the list of pending and recently processed transactions
+  """
+  getPendingAndRecentlyProcessedTransactions(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Processed after date, use json like date format (eg 2025-06-05T07:18:00.439Z) (defaults to 15 min ago)
+    """
+    processedAfter: String
+  ): TransactionsPaginatedOutput
+
+  """
+  Get the list of pending transactions
+  """
+  getPendingTransactions(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+  ): TransactionsPaginatedOutput
+
+  """
+  Get the list of processed transactions
+  """
+  getProcessedTransactions(
+    """
+    Address of the contract
+    """
+    address: String
+
+    """
+    Address of the sender
+    """
+    from: String
+
+    """
+    Function name
+    """
+    functionName: String
+
+    """
+    Page number, starts from 0
+    """
+    page: Int = 0
+
+    """
+    Number of items per page
+    """
+    pageSize: Int = 100
+
+    """
+    Processed after date, use json like date format (eg 2025-06-05T07:18:00.440Z)
+    """
+    processedAfter: String
+  ): TransactionsPaginatedOutput
+
+  """
+  Get a transaction
+  """
+  getTransaction(
+    """
+    Transaction hash
+    """
+    transactionHash: String!
+  ): TransactionOutput
+}
+
+"""
+Returns the transaction
+"""
+type TransactionOutput {
+  """
+  Contract address
+  """
+  address: String!
+
+  """
+  Created at
+  """
+  createdAt: String
+
+  """
+  From address
+  """
+  from: String!
+
+  """
+  Function name
+  """
+  functionName: String!
+
+  """
+  Whether the transaction is a smart contract deployment
+  """
+  isContract: Boolean!
+
+  """
+  Metadata
+  """
+  metadata: JSON
+
+  """
+  Receipt
+  """
+  receipt: TransactionReceiptOutput
+
+  """
+  Transaction Hash
+  """
+  transactionHash: String!
+
+  """
+  Created at
+  """
+  updatedAt: String
+}
+
+"""
+The transaction receipt
+"""
+type TransactionReceiptOutput {
+  """
+  Blob Gas Price
+  """
+  blobGasPrice: String
+
+  """
+  Blob Gas Used
+  """
+  blobGasUsed: String
+
+  """
+  Block Hash
+  """
+  blockHash: String!
+
+  """
+  Block Number
+  """
+  blockNumber: String!
+
+  """
+  Contract Address
+  """
+  contractAddress: String
+
+  """
+  Cumulative Gas Used
+  """
+  cumulativeGasUsed: String!
+
+  """
+  Effective Gas Price
+  """
+  effectiveGasPrice: String!
+
+  """
+  Events (decoded from the logs)
+  """
+  events: JSON!
+
+  """
+  From
+  """
+  from: String!
+
+  """
+  Gas Used
+  """
+  gasUsed: String!
+
+  """
+  Logs
+  """
+  logs: JSON!
+
+  """
+  Logs Bloom
+  """
+  logsBloom: String!
+
+  """
+  ABI-encoded string containing the revert reason
+  """
+  revertReason: String
+
+  """
+  Decoded revert reason
+  """
+  revertReasonDecoded: String
+
+  """
+  Root
+  """
+  root: String
+
+  """
+  Status
+  """
+  status: TransactionReceiptStatus!
+
+  """
+  To
+  """
+  to: String
+
+  """
+  Transaction Hash
+  """
+  transactionHash: String!
+
+  """
+  Transaction Index
+  """
+  transactionIndex: Int!
+
+  """
+  Type
+  """
+  type: String!
+
+  """
+  List of user operation receipts associated with this transaction
+  """
+  userOperationReceipts: [UserOperationReceipt!]
+}
+
+enum TransactionReceiptStatus {
+  Reverted
+  Success
+}
+
+"""
+Granularity
+"""
+enum TransactionTimelineGranularity {
+  DAY
+  HOUR
+  MONTH
+  YEAR
+}
+
+type TransactionTimelineOutput {
+  """
+  Count of transactions
+  """
+  count: Int
+
+  """
+  End date
+  """
+  end: String
+
+  """
+  Start date
+  """
+  start: String
+}
+
+"""
+Transactions paginated output
+"""
+type TransactionsPaginatedOutput {
+  """
+  Total number of results
+  """
+  count: Int!
+  records: [TransactionOutput!]!
+}
+
+"""
+User operation receipt
+"""
+type UserOperationReceipt {
+  """
+  Actual gas cost
+  """
+  actualGasCost: String
+
+  """
+  Actual gas used
+  """
+  actualGasUsed: String
+
+  """
+  Entry point address
+  """
+  entryPoint: String
+
+  """
+  Operation logs
+  """
+  logs: [String!]
+
+  """
+  Nonce
+  """
+  nonce: String
+
+  """
+  Sender address
+  """
+  sender: String
+
+  """
+  Whether the operation was successful
+  """
+  success: Boolean
+
+  """
+  User operation hash
+  """
+  userOpHash: String
+}
+
+"""
+Result of verifying a wallet verification challenge
+"""
+type VerifyWalletVerificationChallengeOutput {
+  """
+  Indicates whether the verification challenge was successful
+  """
+  verified: Boolean
+}
+
+"""
+Wallet verification details
+"""
+type WalletVerification {
+  """
+  Unique identifier of the verification
+  """
+  id: String
+
+  """
+  Name of the verification
+  """
+  name: String
+
+  """
+  Type of the created wallet verification
+  """
+  verificationType: WalletVerificationType
+}
+
+"""
+Wallet verification challenge
+"""
+type WalletVerificationChallenge {
+  """
+  Challenge object
+  """
+  challenge: JSON
+
+  """
+  Unique identifier of the verification
+  """
+  id: String
+
+  """
+  Name of the verification
+  """
+  name: String
+
+  """
+  Type of the created wallet verification
+  """
+  verificationType: WalletVerificationType
+}
+
+"""
+Verification type
+"""
+enum WalletVerificationType {
+  OTP
+  PINCODE
+  SECRET_CODES
+}
