@@ -9,6 +9,7 @@ import { hardhatDeployCommand } from "./smart-contract-set/hardhat/deploy";
 import { hardhatNetworkCommand } from "./smart-contract-set/hardhat/network";
 import { hardhatScriptCommand } from "./smart-contract-set/hardhat/script";
 import { hardhatTestCommand } from "./smart-contract-set/hardhat/test";
+import { subgraphAddCommand } from "./smart-contract-set/subgraph/add";
 import { subgraphBuildCommand } from "./smart-contract-set/subgraph/build";
 import { subgraphCodegenCommand } from "./smart-contract-set/subgraph/codegen";
 import { subgraphDeployCommand } from "./smart-contract-set/subgraph/deploy";
@@ -45,6 +46,7 @@ export function smartContractSetCommand(): Command {
     .alias("sg")
     .enablePositionalOptions()
     .description("Commands for managing TheGraph subgraphs for smart contract indexing");
+  subgraph.addCommand(subgraphAddCommand());
   subgraph.addCommand(subgraphBuildCommand());
   subgraph.addCommand(subgraphCodegenCommand());
   subgraph.addCommand(subgraphDeployCommand());

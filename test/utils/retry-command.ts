@@ -11,6 +11,9 @@ import { retryWhenFailed } from "@settlemint/sdk-utils";
  */
 export function retryCommand<T>(command: () => Promise<T>, maxRetries = 3, retryDelay = 60_000) {
   return retryWhenFailed(command, maxRetries, retryDelay, (error) => {
-    return error.message.includes("Access token found in output");
+    return (
+      error.message.includes("Access token found in output") ||
+      error.message.includes("Standalone and local instances cannot connect to the SettleMint platform")
+    );
   });
 }
