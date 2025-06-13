@@ -10,7 +10,13 @@
     },
     "codegen": {
       "inputs": ["graphql/**"],
-      "outputs": [".settlemint/**", "schema.graphql", "src/examples/schemas/**"]
+      "outputs": [
+        ".settlemint/**",
+        "schema.graphql",
+        "src/examples/schemas/**",
+        "src/portal/portal-cache.d.ts",
+        "src/portal/portal-env.d.ts"
+      ]
     },
     "publish-npm": {
       "dependsOn": ["build"],
