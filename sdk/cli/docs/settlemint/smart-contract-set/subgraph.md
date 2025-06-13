@@ -8,11 +8,32 @@ Options:
   -h, --help                        display help for command
 
 Commands:
+  <a href="#subgraph-add">add</a> [options]                     Add a contract to the subgraph
   <a href="#subgraph-build">build</a>                             Build the subgraph
   <a href="#subgraph-codegen">codegen</a>                           Codegen the subgraph types
   <a href="#subgraph-deploy">deploy</a> [options] [subgraph-name]  Deploy the subgraph
   <a href="#subgraph-remove">remove</a> [options] [subgraph-name]  Remove a subgraph
   help [command]                    display help for command
+</pre>
+
+<h2 id="subgraph-add"><a href="#home">Subgraph</a> > Add</h2>
+
+<pre>Usage: settlemint smart-contract-set subgraph add 
+Examples:
+
+  # Add a contract to the subgraph
+  $ settlemint scs subgraph add --abi=./abis/bond.json --contract-name=bond
+
+Add a contract to the subgraph
+
+Options:
+  --abi &lt;abi&gt;                      Path to the contract ABI.
+  --contract-name &lt;contract-name&gt;  Name of the contract.
+  --address &lt;contract-address&gt;     Address of the contract (defaults to
+                                   0x0000000000000000000000000000000000000000).
+  --start-block &lt;start-block&gt;      Start block of the contract (defaults to 0).
+  --network &lt;network&gt;              Network name (defaults to settlemint).
+  -h, --help                       display help for command
 </pre>
 
 <h2 id="subgraph-build"><a href="#home">Subgraph</a> > Build</h2>
