@@ -61,7 +61,6 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "bun@1.1.43",
   "workspaces": ["sdk/*", "apps/*"],
   "trustedDependencies": [
     "@biomejs/biome",
