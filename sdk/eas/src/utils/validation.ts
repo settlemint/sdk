@@ -1,4 +1,4 @@
-import { ApplicationAccessTokenSchema } from "@settlemint/sdk-utils/validation";
+import { ApplicationAccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import { type Address, isAddress } from "viem";
 import { z } from "zod/v4";
 
@@ -8,12 +8,27 @@ const ethAddressSchema = z.custom<Address>(
 );
 
 /**
- * @description Zod schema for EASClientOptions.
+ * Zod schema for EASClientOptions.
  */
 export const EASClientOptionsSchema = z.object({
-  instance: z.string().url("Invalid instance URL"),
+  /**
+   * The EAS instance URL
+   */
+  instance: UrlSchema,
+  /**
+   * The application access token
+   */
   accessToken: ApplicationAccessTokenSchema.optional(),
+  /**
+   * The EAS contract address
+   */
   easContractAddress: ethAddressSchema.optional(),
+  /**
+   * The schema registry contract address
+   */
   schemaRegistryContractAddress: ethAddressSchema.optional(),
+  /**
+   * Whether to enable debug mode
+   */
   debug: z.boolean().optional(),
 });
