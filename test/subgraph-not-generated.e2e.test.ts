@@ -12,7 +12,6 @@ const PROJECT_NAME = "contracts-subgraphs-not-generated";
 const COMMAND_TEST_SCOPE = __filename;
 const TEMPLATE_NAME = "asset-tokenization";
 const TEMPLATE_VERSION = "1.1.1";
-const SUBGRAPH_NAME = "kit";
 
 const projectDir = join(__dirname, PROJECT_NAME);
 const contractsDir = join(projectDir, "kit", "contracts");
