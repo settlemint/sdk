@@ -66,7 +66,7 @@
     "yoctocolors": "2.1.1"
   },
   "peerDependencies": {
-    "hardhat": "2.24.2"
+    "hardhat": "2.24.3"
   },
   "peerDependenciesMeta": {
     "hardhat": {
