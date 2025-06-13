@@ -177,5 +177,6 @@ export interface DeploymentResult {
 
 /**
  * @deprecated Use SchemaRequest instead
+ * @internal
  */
 export interface RegisterSchemaOptions extends SchemaRequest {}

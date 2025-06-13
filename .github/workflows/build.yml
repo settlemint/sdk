@@ -136,6 +136,7 @@ jobs:
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Update docs and README
+        if: ${{ github.event_name != 'pull_request' }}
         run: bun docs
 
       - name: Auto-commit changes to docs and README
