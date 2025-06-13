@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { exists } from "@settlemint/sdk-utils/filesystem";
@@ -31,7 +31,7 @@ async function cleanup() {
 }
 
 beforeAll(cleanup);
-//afterAll(cleanup);
+afterAll(cleanup);
 
 afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
@@ -97,15 +97,15 @@ describe("Add a subgraph to a subgraph which is using a manually maintained subg
       },
     ).result;
 
-    expect(output).toInclude(`Subgraph ${SUBGRAPH_NAME} removed successfully`);
+    expect(output).toInclude(`Subgraph config for contract ${contractName} added successfully`);
 
     const subgraphYaml = await getSubgraphYamlConfig(subgraphDir);
 
-    const erc20 = subgraphYaml.dataSources.find((ds) => ds.name === contractName);
-    expect(erc20).toBeDefined();
-    expect(erc20?.network).toBe("settlemint");
-    expect(erc20?.source.address).toBe("0x0000000000000000000000000000000000000000");
-    expect(erc20?.mapping.abis).toEqual([
+    const datasource = subgraphYaml.dataSources.find((ds) => ds.name === contractName);
+    expect(datasource).toBeDefined();
+    expect(datasource?.network).toBe("settlemint");
+    expect(datasource?.source.address).toBe("0x0000000000000000000000000000000000000000");
+    expect(datasource?.mapping.abis).toEqual([
       {
         name: "IERC20",
         file: "../contracts/artifacts/@openzeppelin/contracts/token/ERC20/IERC20.sol/IERC20.json",

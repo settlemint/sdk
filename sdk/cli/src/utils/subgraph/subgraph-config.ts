@@ -66,16 +66,9 @@ export type SubgraphConfig = {
   chain: string;
   datasources: {
     name: string;
-    network: string;
     address: string;
     startBlock: number;
     module: string[];
-    mapping: {
-      abis: {
-        name: string;
-        file: string;
-      }[];
-    };
   }[];
 };
 

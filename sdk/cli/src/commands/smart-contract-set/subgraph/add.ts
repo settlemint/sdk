@@ -32,7 +32,7 @@ export function subgraphAddCommand() {
     .option("--start-block <start-block>", "Start block of the contract (defaults to 0).")
     .option("--network <network>", "Network name (defaults to settlemint).")
     .action(async ({ abi, contractName, address, startBlock, network }) => {
-      intro("Adding subgraph");
+      intro(`Adding subgraph config for contract ${contractName}`);
 
       const abiPath = isAbsolute(abi) ? abi : join(process.cwd(), abi);
       if (!(await exists(abiPath))) {
@@ -56,8 +56,8 @@ export function subgraphAddCommand() {
 
       try {
         const root = await projectRoot();
-        const monoRepoRoot = await findMonoRepoRoot(root);
         await fixPackageJson(root);
+        const monoRepoRoot = await findMonoRepoRoot(root);
         if (monoRepoRoot) {
           await fixPackageJson(monoRepoRoot, false);
         }
@@ -76,7 +76,7 @@ export function subgraphAddCommand() {
         ]);
 
         // Update subgraph.yaml with the correct abi path and update the network name
-        const subgraphYamlConfig = await getSubgraphYamlConfig(subgraphYamlFile);
+        const subgraphYamlConfig = await getSubgraphYamlConfig();
         if (subgraphYamlConfig) {
           const updatedDataSources = subgraphYamlConfig?.dataSources.map((dataSource) => {
             if (dataSource.name === contractName) {
@@ -98,11 +98,16 @@ export function subgraphAddCommand() {
       } finally {
         await unlink(localAbiPath);
       }
-      outro("Subgraph added successfully");
+      outro(`Subgraph config for contract ${contractName} added successfully`);
     });
 }
 
-async function fixPackageJson(packageJsonPath: string, requiresCodegenScript = true) {
+async function fixPackageJson(packageJsonDir: string, requiresCodegenScript = true) {
+  const packageJsonPath = join(packageJsonDir, "package.json");
+  if (!(await exists(packageJsonPath))) {
+    return;
+  }
+
   let hasPackageJsonChanged = false;
 
   const subgraphPackageJson = await readFile(packageJsonPath);
