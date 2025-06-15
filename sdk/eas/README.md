@@ -1136,11 +1136,21 @@ Transaction result
 
 #### EASClientOptions
 
-> **EASClientOptions** = `z.infer`\<*typeof* [`EASClientOptionsSchema`](#easclientoptionsschema)\>
+> **EASClientOptions** = `object`
 
 Defined in: [sdk/eas/src/schema.ts:44](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/schema.ts#L44)
 
 Configuration options for the EAS client
+
+##### Type declaration
+
+| Name | Type | Default value | Description | Defined in |
+| ------ | ------ | ------ | ------ | ------ |
+| <a id="accesstoken"></a> `accessToken?` | `string` | - | The application access token | [sdk/eas/src/utils/validation.ts:21](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/utils/validation.ts#L21) |
+| <a id="debug"></a> `debug?` | `boolean` | - | Whether to enable debug mode | [sdk/eas/src/utils/validation.ts:33](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/utils/validation.ts#L33) |
+| <a id="eascontractaddress"></a> `easContractAddress?` | `` `0x${string}` `` | - | The EAS contract address | [sdk/eas/src/utils/validation.ts:25](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/utils/validation.ts#L25) |
+| <a id="instance"></a> `instance` | `string` | `UrlSchema` | The EAS instance URL | [sdk/eas/src/utils/validation.ts:17](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/utils/validation.ts#L17) |
+| <a id="schemaregistrycontractaddress"></a> `schemaRegistryContractAddress?` | `` `0x${string}` `` | - | The schema registry contract address | [sdk/eas/src/utils/validation.ts:29](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/utils/validation.ts#L29) |
 
 ### Variables
 
@@ -1171,7 +1181,7 @@ Maps to the Solidity types that can be used in EAS schemas.
 
 #### EASClientOptionsSchema
 
-> `const` **EASClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `debug`: `ZodOptional`\<`ZodBoolean`\>; `easContractAddress`: `ZodOptional`\<`ZodCustom`\<`` `0x${string}` ``, `` `0x${string}` ``\>\>; `instance`: `ZodString`; `schemaRegistryContractAddress`: `ZodOptional`\<`ZodCustom`\<`` `0x${string}` ``, `` `0x${string}` ``\>\>; \}, `$strip`\>
+> `const` **EASClientOptionsSchema**: `ZodObject`\<[`EASClientOptions`](#easclientoptions)\>
 
 Defined in: [sdk/eas/src/utils/validation.ts:13](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/utils/validation.ts#L13)
 

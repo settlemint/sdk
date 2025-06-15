@@ -134,11 +134,18 @@ const result = await client.request(query, {
 
 #### ClientOptions
 
-> **ClientOptions** = `z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>
+> **ClientOptions** = `object`
 
 Defined in: [sdk/blockscout/src/blockscout.ts:24](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/blockscout/src/blockscout.ts#L24)
 
 Type definition for client options derived from the ClientOptionsSchema
+
+##### Type declaration
+
+| Name | Type | Default value | Defined in |
+| ------ | ------ | ------ | ------ |
+| <a id="accesstoken"></a> `accessToken?` | `string` | - | [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/blockscout/src/blockscout.ts#L18) |
+| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/blockscout/src/blockscout.ts:17](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/blockscout/src/blockscout.ts#L17) |
 
 ***
 
@@ -154,7 +161,7 @@ Type definition for GraphQL client configuration options
 
 #### ClientOptionsSchema
 
-> `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `instance`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
+> `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
 Defined in: [sdk/blockscout/src/blockscout.ts:16](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/blockscout/src/blockscout.ts#L16)
 
