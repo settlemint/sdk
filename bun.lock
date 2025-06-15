@@ -17,7 +17,7 @@
         "typedoc": "0.28.5",
         "typedoc-plugin-markdown": "4.6.4",
         "typedoc-plugin-merge-modules": "7.0.0",
-        "typedoc-plugin-zod": "1.4.1",
+        "typedoc-plugin-zod": "1.4.2",
         "typescript": "5.8.3",
       },
     },
@@ -1467,7 +1467,7 @@
 
     "typedoc-plugin-merge-modules": ["typedoc-plugin-merge-modules@7.0.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-DQyfbbPNBElhpdpGrlkS+CrhGD3iooDjp/PHT8O1D/jumLCB+7XAY3jHiqob7d01o25EfwEOJWVwJK+9J6WlBg=="],
 
-    "typedoc-plugin-zod": ["typedoc-plugin-zod@1.4.1", "", { "peerDependencies": { "typedoc": "0.23.x || 0.24.x || 0.25.x || 0.26.x || 0.27.x || 0.28.x" } }, "sha512-D7+uhPFCyKMcKnUSZip/BldE08Jo/yykvbxlIcY11fI8dKyCe23/igOiZ7rPW2mXD5N9kHEA2he9LkCoU+6HtA=="],
+    "typedoc-plugin-zod": ["typedoc-plugin-zod@1.4.2", "", { "peerDependencies": { "typedoc": "0.23.x || 0.24.x || 0.25.x || 0.26.x || 0.27.x || 0.28.x" } }, "sha512-DERrqbKyW1DAWgs+L3sgCTxrVJQuHg4whj0FZcXWIVdwtoYYSnxK2XSS9gepBwyRwlojjVux1ZjSPwDsWz9ulg=="],
 
     "typescript": ["typescript@5.8.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ=="],
 
