@@ -2,10 +2,12 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { IntegrationTool } from "@settlemint/sdk-js";
 
-export type Hasura = Extract<IntegrationTool, { __typename: "Hasura" }>;
+export type Hasura =
+  | Extract<IntegrationTool, { __typename: "Hasura" }>
+  | Extract<IntegrationTool, { __typename: "HAHasura" }>;
 
 export function isHasura(integration: IntegrationTool): integration is Hasura {
-  return integration.__typename === "Hasura";
+  return integration.__typename === "Hasura" || integration.__typename === "HAHasura";
 }
 
 export interface HasuraPromptArgs extends BaseServicePromptArgs {
