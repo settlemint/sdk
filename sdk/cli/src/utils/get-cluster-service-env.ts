@@ -85,7 +85,7 @@ export function getPortalEnv(service: Middleware | undefined): Partial<DotEnv> {
 }
 
 export function getHasuraEnv(service: IntegrationTool | undefined): Partial<DotEnv> {
-  if (!service || service.__typename !== "Hasura") {
+  if (!service || (service.__typename !== "Hasura" && service.__typename !== "HAHasura")) {
     return {};
   }
 

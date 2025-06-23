@@ -37,7 +37,9 @@ export const platformIntegrationToolCreate = (server: McpServer, env: Partial<Do
       size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the integration tool"),
       provider: z.string().describe("Provider for the integration tool"),
       region: z.string().describe("Region for the integration tool"),
-      integrationType: z.enum(["CHAINLINK", "HASURA", "INTEGRATION_STUDIO"]).describe("Type of integration"),
+      integrationType: z
+        .enum(["CHAINLINK", "HASURA", "HA_HASURA", "INTEGRATION_STUDIO"])
+        .describe("Type of integration"),
     },
     async (params) => {
       const integrationTool = await client.integrationTool.create({
