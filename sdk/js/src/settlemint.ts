@@ -29,8 +29,10 @@ import {
   type CreateBlockchainNodeArgs,
   blockchainNodeCreate,
   blockchainNodeList,
+  blockchainNodePause,
   blockchainNodeRead,
   blockchainNodeRestart,
+  blockchainNodeResume,
 } from "./graphql/blockchain-node.js";
 import {
   type CreateCustomDeploymentArgs,
@@ -150,6 +152,8 @@ export interface SettlemintClient {
     read: (blockchainNodeUniqueName: string) => Promise<BlockchainNode>;
     create: (args: CreateBlockchainNodeArgs) => Promise<BlockchainNode>;
     restart: (nodeUniqueName: string) => Promise<BlockchainNode>;
+    pause: (nodeUniqueName: string) => Promise<BlockchainNode>;
+    resume: (nodeUniqueName: string) => Promise<BlockchainNode>;
   };
   loadBalancer: {
     list: (applicationUniqueName: string) => Promise<LoadBalancer[]>;
@@ -305,6 +309,8 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       read: blockchainNodeRead(gqlClient),
       create: blockchainNodeCreate(gqlClient),
       restart: blockchainNodeRestart(gqlClient),
+      pause: blockchainNodePause(gqlClient),
+      resume: blockchainNodeResume(gqlClient),
     },
     loadBalancer: {
       list: loadBalancerList(gqlClient),
