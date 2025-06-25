@@ -4,7 +4,7 @@ import { note, SpinnerError, spinner } from "@settlemint/sdk-utils/terminal";
 import type { ResourceType } from "@/constants/resource-type";
 import { SETTLEMINT_CLIENT_MAP } from "@/constants/resource-type";
 
-type Action = "deploy" | "destroy" | "restart";
+type Action = "deploy" | "destroy" | "restart" | "pause" | "resume";
 
 class TimeoutError extends Error {}
 
@@ -62,7 +62,28 @@ export async function waitForCompletion({
           try {
             const resource = await service.read(uniqueName);
 
-            if (resource.status === "COMPLETED") {
+            if (action === "pause" && (resource.status === "PAUSED" || resource.status === "AUTO_PAUSED")) {
+              if (spinner) {
+                spinner.text = `${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`;
+              } else {
+                note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
+              }
+              return true;
+            }
+
+            if (action === "resume" && resource.status === "COMPLETED") {
+              if (spinner) {
+                spinner.text = `${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`;
+              } else {
+                note(`${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`);
+              }
+              return true;
+            }
+
+            if (
+              (action === "deploy" || action === "destroy" || action === "restart") &&
+              resource.status === "COMPLETED"
+            ) {
               if (spinner) {
                 spinner.text = `${capitalizeFirstLetter(type)} is ${getActionLabel(action)}`;
               } else {
@@ -123,6 +144,12 @@ function getActionLabel(action: Action): string {
   }
   if (action === "destroy") {
     return "destroyed";
+  }
+  if (action === "pause") {
+    return "paused";
+  }
+  if (action === "resume") {
+    return "resumed";
   }
   return "deployed";
 }
