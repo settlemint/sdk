@@ -1,9 +1,9 @@
-import { Command } from "@commander-js/extra-typings";
-import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
+import { Command } from "@commander-js/extra-typings";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand, intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function hardhatNetworkCommand() {
   return new Command("network")

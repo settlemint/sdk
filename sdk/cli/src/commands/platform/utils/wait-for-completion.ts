@@ -1,8 +1,8 @@
-import type { SettlemintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { note, SpinnerError, spinner } from "@settlemint/sdk-utils/terminal";
 import type { ResourceType } from "@/constants/resource-type";
 import { SETTLEMINT_CLIENT_MAP } from "@/constants/resource-type";
+import type { SettlemintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { SpinnerError, note, spinner } from "@settlemint/sdk-utils/terminal";
 
 type Action = "deploy" | "destroy" | "restart" | "pause" | "resume";
 

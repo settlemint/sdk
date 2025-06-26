@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { $ } from "bun";
 import { exists } from "@/filesystem.js";
+import { $ } from "bun";
 import { writeEnv } from "./write-env.js";
 
 const TEST_DIR = join(__dirname, ".test-env");

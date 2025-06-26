@@ -1,10 +1,3 @@
-import { Command } from "@commander-js/extra-typings";
-import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { cancel, executeCommand, intro, note, outro } from "@settlemint/sdk-utils/terminal";
-import { LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
-import isInCi from "is-in-ci";
 import { selectTargetNode } from "@/commands/smart-contract-set/hardhat/utils/select-target-node";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
@@ -13,6 +6,13 @@ import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHardhatConfigData } from "@/utils/smart-contract-set/hardhat-config";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
+import { Command } from "@commander-js/extra-typings";
+import { type BlockchainNode, createSettleMintClient } from "@settlemint/sdk-js";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { cancel, executeCommand, intro, note, outro } from "@settlemint/sdk-utils/terminal";
+import { LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import isInCi from "is-in-ci";
 
 export function hardhatDeployRemoteCommand() {
   const cmd = new Command("remote")

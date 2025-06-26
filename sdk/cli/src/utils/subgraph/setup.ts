@@ -1,13 +1,13 @@
 import { rm } from "node:fs/promises";
-import { createSettleMintClient, type Middleware } from "@settlemint/sdk-js";
+import { missingApplication } from "@/error/missing-config-error";
+import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
+import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
-import { missingApplication } from "@/error/missing-config-error";
-import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
-import { serviceSpinner } from "@/spinners/service.spinner";
 import { executeFoundryCommand } from "../smart-contract-set/execute-foundry-command";
 import { sanitizeName } from "./sanitize-name";
 import { getSubgraphYamlConfig, isGenerated, updateSubgraphYamlConfig } from "./subgraph-config";

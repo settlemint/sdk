@@ -1,9 +1,3 @@
-import { Command, Option } from "@commander-js/extra-typings";
-import { createSettleMintClient, type SettlemintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { formatServiceSubType } from "@/commands/platform/utils/formatting/format-service-sub-type";
 import { LABELS_MAP } from "@/constants/resource-type";
 import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
@@ -19,6 +13,12 @@ import { getInstanceCredentials } from "@/utils/config";
 import { getApplicationUrl, getClusterServicePlatformUrl, getWorkspaceUrl } from "@/utils/get-platform-url";
 import { jsonOutput } from "@/utils/output/json-output";
 import { yamlOutput } from "@/utils/output/yaml-output";
+import { Command, Option } from "@commander-js/extra-typings";
+import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { formatHealthStatus } from "../utils/formatting/format-health-status";
 import { formatStatus } from "../utils/formatting/format-status";
 

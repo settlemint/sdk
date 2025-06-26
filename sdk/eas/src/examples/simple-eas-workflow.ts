@@ -10,7 +10,7 @@
 
 import type { Address, Hex } from "viem";
 import { decodeAbiParameters, encodeAbiParameters, parseAbiParameters } from "viem";
-import { createEASClient, ZERO_ADDRESS, ZERO_BYTES32 } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
+import { ZERO_ADDRESS, ZERO_BYTES32, createEASClient } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
 
 const CONFIG = {
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,

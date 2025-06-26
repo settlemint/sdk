@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { Command } from "@commander-js/extra-typings";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
+import { Command } from "@commander-js/extra-typings";
 import { hardhatNetworkCommand } from "./network";
 
 describe("hardhatNetworkCommand", () => {
