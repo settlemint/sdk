@@ -138,6 +138,34 @@ const restartPrivateKey = graphql(
 );
 
 /**
+ * Mutation to pause a private key.
+ */
+const pausePrivateKey = graphql(
+  `
+    mutation PausePrivateKey($uniqueName: String!) {
+      pausePrivateKeyByUniqueName(uniqueName: $uniqueName) {
+        ...PrivateKey
+      }
+    }
+  `,
+  [PrivateKeyFragment],
+);
+
+/**
+ * Mutation to resume a private key.
+ */
+const resumePrivateKey = graphql(
+  `
+    mutation ResumePrivateKey($uniqueName: String!) {
+      resumePrivateKeyByUniqueName(uniqueName: $uniqueName) {
+        ...PrivateKey
+      }
+    }
+  `,
+  [PrivateKeyFragment],
+);
+
+/**
  * Creates a function to list private keys for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -216,6 +244,38 @@ export const privateKeyRestart =
   (gqlClient: GraphQLClient) =>
   async (privateKeyUniqueName: string): Promise<PrivateKey> => {
     const { restartPrivateKeyByUniqueName: privateKey } = await gqlClient.request(restartPrivateKey, {
+      uniqueName: privateKeyUniqueName,
+    });
+    return privateKey as PrivateKey;
+  };
+
+/**
+ * Creates a function to pause a private key.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses private key by unique name
+ * @throws If the private key cannot be found or the pause fails
+ */
+export const privateKeyPause =
+  (gqlClient: GraphQLClient) =>
+  async (privateKeyUniqueName: string): Promise<PrivateKey> => {
+    const { pausePrivateKeyByUniqueName: privateKey } = await gqlClient.request(pausePrivateKey, {
+      uniqueName: privateKeyUniqueName,
+    });
+    return privateKey as PrivateKey;
+  };
+
+/**
+ * Creates a function to resume a private key.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes private key by unique name
+ * @throws If the private key cannot be found or the resume fails
+ */
+export const privateKeyResume =
+  (gqlClient: GraphQLClient) =>
+  async (privateKeyUniqueName: string): Promise<PrivateKey> => {
+    const { resumePrivateKeyByUniqueName: privateKey } = await gqlClient.request(resumePrivateKey, {
       uniqueName: privateKeyUniqueName,
     });
     return privateKey as PrivateKey;

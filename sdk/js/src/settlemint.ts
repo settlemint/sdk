@@ -21,8 +21,10 @@ import {
   blockchainNetworkCreate,
   blockchainNetworkDelete,
   blockchainNetworkList,
+  blockchainNetworkPause,
   blockchainNetworkRead,
   blockchainNetworkRestart,
+  blockchainNetworkResume,
 } from "./graphql/blockchain-network.js";
 import {
   type BlockchainNode,
@@ -37,7 +39,9 @@ import {
 import {
   type CreateCustomDeploymentArgs,
   type CustomDeployment,
+  customDeploymentPause,
   customDeploymentRestart,
+  customDeploymentResume,
   customdeploymentCreate,
   customdeploymentList,
   customdeploymentRead,
@@ -49,24 +53,30 @@ import {
   type Insights,
   insightsCreate,
   insightsList,
+  insightsPause,
   insightsRead,
   insightsRestart,
+  insightsResume,
 } from "./graphql/insights.js";
 import {
   type CreateIntegrationToolArgs,
   type IntegrationTool,
   integrationToolCreate,
   integrationToolList,
+  integrationToolPause,
   integrationToolRead,
   integrationToolRestart,
+  integrationToolResume,
 } from "./graphql/integration-tool.js";
 import {
   type CreateLoadBalancerArgs,
   type LoadBalancer,
   loadBalancerCreate,
   loadBalancerList,
+  loadBalancerPause,
   loadBalancerRead,
   loadBalancerRestart,
+  loadBalancerResume,
 } from "./graphql/load-balancer.js";
 import {
   type CreateMiddlewareArgs,
@@ -75,8 +85,10 @@ import {
   graphMiddlewareSubgraphs,
   middlewareCreate,
   middlewareList,
+  middlewarePause,
   middlewareRead,
   middlewareRestart,
+  middlewareResume,
 } from "./graphql/middleware.js";
 import { type PlatformConfig, getPlatformConfig } from "./graphql/platform.js";
 import {
@@ -84,7 +96,9 @@ import {
   type PrivateKey,
   privateKeyCreate,
   privateKeyList,
+  privateKeyPause,
   privateKeyRestart,
+  privateKeyResume,
   privatekeyRead,
 } from "./graphql/private-key.js";
 import {
@@ -92,8 +106,10 @@ import {
   type Storage,
   storageCreate,
   storageList,
+  storagePause,
   storageRead,
   storageRestart,
+  storageResume,
 } from "./graphql/storage.js";
 import {
   type CreateWorkspaceArgs,
@@ -146,6 +162,8 @@ export interface SettlemintClient {
     create: (args: CreateBlockchainNetworkArgs) => Promise<BlockchainNetwork>;
     delete: (networkUniqueName: string) => Promise<BlockchainNetwork>;
     restart: (networkUniqueName: string) => Promise<BlockchainNetwork>;
+    pause: (networkUniqueName: string) => Promise<BlockchainNetwork>;
+    resume: (networkUniqueName: string) => Promise<BlockchainNetwork>;
   };
   blockchainNode: {
     list: (applicationUniqueName: string) => Promise<BlockchainNode[]>;
@@ -160,6 +178,8 @@ export interface SettlemintClient {
     read: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
     create: (args: CreateLoadBalancerArgs) => Promise<LoadBalancer>;
     restart: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
+    pause: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
+    resume: (loadBalancerUniqueName: string) => Promise<LoadBalancer>;
   };
   middleware: {
     list: (applicationUniqueName: string) => Promise<Middleware[]>;
@@ -167,30 +187,40 @@ export interface SettlemintClient {
     graphSubgraphs: (middlewareUniqueName: string, noCache?: boolean) => Promise<MiddlewareWithSubgraphs>;
     create: (args: CreateMiddlewareArgs) => Promise<Middleware>;
     restart: (middlewareUniqueName: string) => Promise<Middleware>;
+    pause: (middlewareUniqueName: string) => Promise<Middleware>;
+    resume: (middlewareUniqueName: string) => Promise<Middleware>;
   };
   integrationTool: {
     list: (applicationUniqueName: string) => Promise<IntegrationTool[]>;
     read: (integrationToolUniqueName: string) => Promise<IntegrationTool>;
     create: (args: CreateIntegrationToolArgs) => Promise<IntegrationTool>;
     restart: (integrationToolUniqueName: string) => Promise<IntegrationTool>;
+    pause: (integrationToolUniqueName: string) => Promise<IntegrationTool>;
+    resume: (integrationToolUniqueName: string) => Promise<IntegrationTool>;
   };
   storage: {
     list: (applicationUniqueName: string) => Promise<Storage[]>;
     read: (storageUniqueName: string) => Promise<Storage>;
     create: (args: CreateStorageArgs) => Promise<Storage>;
     restart: (storageUniqueName: string) => Promise<Storage>;
+    pause: (storageUniqueName: string) => Promise<Storage>;
+    resume: (storageUniqueName: string) => Promise<Storage>;
   };
   privateKey: {
     list: (applicationUniqueName: string) => Promise<PrivateKey[]>;
     read: (privateKeyUniqueName: string) => Promise<PrivateKey>;
     create: (args: CreatePrivateKeyArgs) => Promise<PrivateKey>;
     restart: (privateKeyUniqueName: string) => Promise<PrivateKey>;
+    pause: (privateKeyUniqueName: string) => Promise<PrivateKey>;
+    resume: (privateKeyUniqueName: string) => Promise<PrivateKey>;
   };
   insights: {
     list: (applicationUniqueName: string) => Promise<Insights[]>;
     read: (insightsUniqueName: string) => Promise<Insights>;
     create: (args: CreateInsightsArgs) => Promise<Insights>;
     restart: (insightsUniqueName: string) => Promise<Insights>;
+    pause: (insightsUniqueName: string) => Promise<Insights>;
+    resume: (insightsUniqueName: string) => Promise<Insights>;
   };
   customDeployment: {
     list: (applicationUniqueName: string) => Promise<CustomDeployment[]>;
@@ -198,6 +228,8 @@ export interface SettlemintClient {
     create: (args: CreateCustomDeploymentArgs) => Promise<CustomDeployment>;
     update: (customDeploymentUniqueName: string, imageTag: string) => Promise<CustomDeployment>;
     restart: (customDeploymentUniqueName: string) => Promise<CustomDeployment>;
+    pause: (customDeploymentUniqueName: string) => Promise<CustomDeployment>;
+    resume: (customDeploymentUniqueName: string) => Promise<CustomDeployment>;
   };
   foundry: {
     env: (blockchainNodeUniqueName: string) => Promise<Record<string, string>>;
@@ -303,6 +335,8 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       create: blockchainNetworkCreate(gqlClient),
       delete: blockchainNetworkDelete(gqlClient),
       restart: blockchainNetworkRestart(gqlClient),
+      pause: blockchainNetworkPause(gqlClient),
+      resume: blockchainNetworkResume(gqlClient),
     },
     blockchainNode: {
       list: blockchainNodeList(gqlClient),
@@ -317,6 +351,8 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       read: loadBalancerRead(gqlClient),
       create: loadBalancerCreate(gqlClient),
       restart: loadBalancerRestart(gqlClient),
+      pause: loadBalancerPause(gqlClient),
+      resume: loadBalancerResume(gqlClient),
     },
     middleware: {
       list: middlewareList(gqlClient),
@@ -324,30 +360,40 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       graphSubgraphs: graphMiddlewareSubgraphs(gqlClient),
       create: middlewareCreate(gqlClient),
       restart: middlewareRestart(gqlClient),
+      pause: middlewarePause(gqlClient),
+      resume: middlewareResume(gqlClient),
     },
     integrationTool: {
       list: integrationToolList(gqlClient),
       read: integrationToolRead(gqlClient),
       create: integrationToolCreate(gqlClient),
       restart: integrationToolRestart(gqlClient),
+      pause: integrationToolPause(gqlClient),
+      resume: integrationToolResume(gqlClient),
     },
     storage: {
       list: storageList(gqlClient),
       read: storageRead(gqlClient),
       create: storageCreate(gqlClient),
       restart: storageRestart(gqlClient),
+      pause: storagePause(gqlClient),
+      resume: storageResume(gqlClient),
     },
     privateKey: {
       list: privateKeyList(gqlClient),
       read: privatekeyRead(gqlClient),
       create: privateKeyCreate(gqlClient),
       restart: privateKeyRestart(gqlClient),
+      pause: privateKeyPause(gqlClient),
+      resume: privateKeyResume(gqlClient),
     },
     insights: {
       list: insightsList(gqlClient),
       read: insightsRead(gqlClient),
       create: insightsCreate(gqlClient),
       restart: insightsRestart(gqlClient),
+      pause: insightsPause(gqlClient),
+      resume: insightsResume(gqlClient),
     },
     customDeployment: {
       list: customdeploymentList(gqlClient),
@@ -355,6 +401,8 @@ export function createSettleMintClient(options: SettlemintClientOptions): Settle
       create: customdeploymentCreate(gqlClient),
       update: customdeploymentUpdate(gqlClient),
       restart: customDeploymentRestart(gqlClient),
+      pause: customDeploymentPause(gqlClient),
+      resume: customDeploymentResume(gqlClient),
     },
     foundry: {
       env: getEnv(gqlClient),
