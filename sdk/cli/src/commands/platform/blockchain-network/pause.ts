@@ -8,7 +8,7 @@ export function blockchainNetworkPauseCommand() {
   return getPauseCommand({
     name: "blockchain-network",
     type: "blockchain network",
-    alias: "bnet",
+    alias: "bnw",
     envKey: "SETTLEMINT_BLOCKCHAIN_NETWORK",
     pauseFunction: async (settlemint, id) => {
       return settlemint.blockchainNetwork.pause(id);
