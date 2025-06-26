@@ -8,7 +8,7 @@ export function blockchainNetworkResumeCommand() {
   return getResumeCommand({
     name: "blockchain-network",
     type: "blockchain network",
-    alias: "bn",
+    alias: "bnet",
     envKey: "SETTLEMINT_BLOCKCHAIN_NETWORK",
     resumeFunction: async (settlemint, id) => {
       return settlemint.blockchainNetwork.resume(id);
