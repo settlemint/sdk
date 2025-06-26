@@ -1,10 +1,10 @@
 import { exists, mkdir, readdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { registerCommands } from "@/commands/index";
 import { type Command, type CommandUnknownOpts, Help } from "@commander-js/extra-typings";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { registerCommands } from "@/commands/index";
 
-const exitOverride = () => {
+const _exitOverride = () => {
   console.log("finished");
 };
 const sdkCli = registerCommands();

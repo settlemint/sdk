@@ -516,7 +516,7 @@ export class EASClient {
    *
    * TODO: Implement using The Graph subgraph for EAS data queries
    */
-  public async getSchemas(options?: GetSchemasOptions): Promise<SchemaData[]> {
+  public async getSchemas(_options?: GetSchemasOptions): Promise<SchemaData[]> {
     throw new Error("Schema listing not implemented yet. Use The Graph subgraph for reading schema data.");
   }
 
@@ -536,7 +536,7 @@ export class EASClient {
    *
    * TODO: Implement using The Graph subgraph for EAS data queries
    */
-  public async getAttestations(options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
+  public async getAttestations(_options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
     throw new Error("Attestation listing not implemented yet. Use The Graph subgraph for reading attestation data.");
   }
 
@@ -545,7 +545,7 @@ export class EASClient {
    *
    * TODO: Implement using The Graph subgraph for EAS data queries
    */
-  public async isValidAttestation(uid: Hex): Promise<boolean> {
+  public async isValidAttestation(_uid: Hex): Promise<boolean> {
     return false;
   }
 
@@ -633,27 +633,24 @@ export function createEASClient(options: EASClientOptions): EASClient {
   return new EASClient(options);
 }
 
-// Re-export types and constants
-export type {
-  SchemaField,
-  EASFieldType,
-  EASClientOptions,
-  SchemaRequest,
-  AttestationData,
-  AttestationRequest,
-  TransactionResult,
-  SchemaData,
-  AttestationInfo,
-  GetSchemasOptions,
-  GetAttestationsOptions,
-  DeploymentResult,
-  RegisterSchemaOptions,
-} from "./schema.js";
-
-export { EAS_FIELD_TYPES, ZERO_ADDRESS, ZERO_BYTES32 } from "./schema.js";
-
-// Re-export validation utilities
-export { EASClientOptionsSchema } from "./utils/validation.js";
-
 // Re-export GraphQL operations for advanced usage
 export { GraphQLOperations } from "./portal/operations.js";
+// Re-export types and constants
+export type {
+  AttestationData,
+  AttestationInfo,
+  AttestationRequest,
+  DeploymentResult,
+  EASClientOptions,
+  EASFieldType,
+  GetAttestationsOptions,
+  GetSchemasOptions,
+  RegisterSchemaOptions,
+  SchemaData,
+  SchemaField,
+  SchemaRequest,
+  TransactionResult,
+} from "./schema.js";
+export { EAS_FIELD_TYPES, ZERO_ADDRESS, ZERO_BYTES32 } from "./schema.js";
+// Re-export validation utilities
+export { EASClientOptionsSchema } from "./utils/validation.js";

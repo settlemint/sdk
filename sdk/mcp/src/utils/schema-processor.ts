@@ -163,7 +163,7 @@ const createSchemaDescription = (schema: GraphQLSchema): string => {
  * @param type - The GraphQL type
  * @returns The type name as a string
  */
-const getTypeName = (type: GraphQLType): string => {
+const _getTypeName = (type: GraphQLType): string => {
   const typeName = type.toString();
   return typeName.replace(/[[\]!]/g, "");
 };

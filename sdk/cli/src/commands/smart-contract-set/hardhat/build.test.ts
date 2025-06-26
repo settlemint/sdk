@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
+import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { hardhatBuildCommand } from "./build";
 
 describe("hardhatBuildCommand", () => {
@@ -12,7 +12,7 @@ describe("hardhatBuildCommand", () => {
 
     const cmdToTest = hardhatBuildCommand();
 
-    cmdToTest.action(async (operands, options, cmd) => {
+    cmdToTest.action(async (operands, options, _cmd) => {
       capturedHardhatOptions = mapPassthroughOptions(options, { args: operands } as Command);
     });
 

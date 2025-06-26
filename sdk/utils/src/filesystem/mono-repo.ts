@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { exists } from "@/filesystem.js";
-import { tryParseJson } from "@/json.js";
 import { findUp } from "find-up";
 import { glob } from "glob";
+import { exists } from "@/filesystem.js";
+import { tryParseJson } from "@/json.js";
 
 /**
  * Finds the root directory of a monorepo
@@ -77,7 +77,7 @@ export async function findMonoRepoPackages(projectDir: string): Promise<string[]
     const allPaths = packagePaths.flat();
     // If no packages found in workspaces, treat as non-monorepo
     return allPaths.length === 0 ? [projectDir] : [monoRepoRoot, ...allPaths];
-  } catch (error) {
+  } catch (_error) {
     // If any error occurs, treat as non-monorepo
     return [projectDir];
   }

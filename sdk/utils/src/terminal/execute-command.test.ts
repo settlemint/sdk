@@ -28,7 +28,7 @@ describe("executeCommand", () => {
     let stdoutWritten = false;
 
     // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    process.stdout.write = mock((chunk: any) => {
+    process.stdout.write = mock((_chunk: any) => {
       stdoutWritten = true;
       return true;
     });
@@ -54,7 +54,7 @@ describe("executeCommand", () => {
     let unpipeCalled = false;
 
     // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    process.stdin.unpipe = mock((destination?: any) => {
+    process.stdin.unpipe = mock((_destination?: any) => {
       unpipeCalled = true;
       return process.stdin;
     });
@@ -72,7 +72,7 @@ describe("executeCommand", () => {
     let unpipeCalled = false;
 
     // biome-ignore lint/suspicious/noExplicitAny: Test mocking requires any
-    process.stdin.unpipe = mock((destination?: any) => {
+    process.stdin.unpipe = mock((_destination?: any) => {
       unpipeCalled = true;
       return process.stdin;
     });

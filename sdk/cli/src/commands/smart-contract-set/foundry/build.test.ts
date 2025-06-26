@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
+import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { foundryBuildCommand } from "./build";
 
 describe("foundryBuildCommand", () => {
@@ -12,7 +12,7 @@ describe("foundryBuildCommand", () => {
 
     const cmdToTest = foundryBuildCommand();
 
-    cmdToTest.action(async (operands, options, cmd) => {
+    cmdToTest.action(async (operands, options, _cmd) => {
       capturedForgeOptions = mapPassthroughOptions(options, { args: operands } as Command);
     });
 

@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/settlemint.cjs",
   "module": "./dist/settlemint.js",
   "types": "./dist/settlemint.d.ts",

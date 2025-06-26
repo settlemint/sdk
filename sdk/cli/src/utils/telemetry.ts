@@ -42,7 +42,7 @@ export async function telemetry(data: {
     });
 
     clearTimeout(timeout);
-  } catch (error) {
+  } catch (_error) {
     // Swallow any other errors
   }
 }

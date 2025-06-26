@@ -1,13 +1,13 @@
 import { rm } from "node:fs/promises";
-import { missingApplication } from "@/error/missing-config-error";
-import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
-import { serviceSpinner } from "@/spinners/service.spinner";
-import { type Middleware, createSettleMintClient } from "@settlemint/sdk-js";
+import { createSettleMintClient, type Middleware } from "@settlemint/sdk-js";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
 import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
+import { missingApplication } from "@/error/missing-config-error";
+import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
+import { serviceSpinner } from "@/spinners/service.spinner";
 import { executeFoundryCommand } from "../smart-contract-set/execute-foundry-command";
 import { sanitizeName } from "./sanitize-name";
 import { getSubgraphYamlConfig, isGenerated, updateSubgraphYamlConfig } from "./subgraph-config";
@@ -82,7 +82,12 @@ export async function getTheGraphMiddleware({
   instance,
   accessToken,
   autoAccept,
-}: { env: Partial<DotEnv>; instance: string; accessToken: string; autoAccept: boolean }) {
+}: {
+  env: Partial<DotEnv>;
+  instance: string;
+  accessToken: string;
+  autoAccept: boolean;
+}) {
   const settlemintClient = createSettleMintClient({
     accessToken,
     instance,
@@ -112,7 +117,12 @@ export async function getTheGraphNetwork({
   env,
   instance,
   accessToken = "",
-}: { theGraphMiddleware?: Middleware; env: Partial<DotEnv>; instance: string; accessToken?: string }) {
+}: {
+  theGraphMiddleware?: Middleware;
+  env: Partial<DotEnv>;
+  instance: string;
+  accessToken?: string;
+}) {
   if (instance === STANDALONE_INSTANCE || instance === LOCAL_INSTANCE) {
     return SETTLEMINT_NETWORK;
   }
@@ -124,7 +134,11 @@ async function getNodeName({
   env,
   instance,
   accessToken,
-}: { env: Partial<DotEnv>; instance: string; accessToken: string }) {
+}: {
+  env: Partial<DotEnv>;
+  instance: string;
+  accessToken: string;
+}) {
   if (!env.SETTLEMINT_BLOCKCHAIN_NODE) {
     return "localhost";
   }

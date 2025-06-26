@@ -1,8 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { exists } from "@/filesystem.js";
 import { $ } from "bun";
+import { exists } from "@/filesystem.js";
 import { writeEnv } from "./write-env.js";
 
 const TEST_DIR = join(__dirname, ".test-env");
@@ -138,7 +138,7 @@ describe("writeEnv", () => {
     expect(initialContent).toContain("SETTLEMINT_CUSTOM_DEPLOYMENT=test-custom-deployment");
     expect(initialContent).toContain("SETTLEMINT_WORKSPACE=test-workspace");
     expect(initialContent).toContain("MY_VAR=my-value");
-    const { SETTLEMINT_CUSTOM_DEPLOYMENT, ...existingEnv } = initialEnv;
+    const { SETTLEMINT_CUSTOM_DEPLOYMENT: _SETTLEMINT_CUSTOM_DEPLOYMENT, ...existingEnv } = initialEnv;
 
     await writeEnv({
       prod: false,

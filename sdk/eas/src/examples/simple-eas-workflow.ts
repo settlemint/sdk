@@ -10,7 +10,7 @@
 
 import type { Address, Hex } from "viem";
 import { decodeAbiParameters, encodeAbiParameters, parseAbiParameters } from "viem";
-import { ZERO_ADDRESS, ZERO_BYTES32, createEASClient } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
+import { createEASClient, ZERO_ADDRESS, ZERO_BYTES32 } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
 
 const CONFIG = {
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
@@ -59,7 +59,7 @@ async function runEASWorkflow() {
   console.log("🚀 Simple EAS SDK Workflow");
   console.log("===========================\n");
 
-  let deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
+  let _deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
 
   // Step 1: Initialize EAS Client
   console.log("📋 Step 1: Initialize EAS Client");
@@ -81,7 +81,7 @@ async function runEASWorkflow() {
     console.log(`   EAS: ${deployment.easAddress}`);
     console.log(`   Schema Registry: ${deployment.schemaRegistryAddress}\n`);
 
-    deployedAddresses = {
+    _deployedAddresses = {
       easAddress: deployment.easAddress,
       schemaRegistryAddress: deployment.schemaRegistryAddress,
     };
