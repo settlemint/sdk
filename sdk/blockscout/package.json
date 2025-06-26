@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/blockscout.cjs",
   "module": "./dist/blockscout.js",
   "types": "./dist/blockscout.d.ts",

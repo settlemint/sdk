@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
+import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { foundryNetworkCommand } from "./network";
 
 describe("foundryNetworkCommand", () => {
@@ -12,7 +12,7 @@ describe("foundryNetworkCommand", () => {
 
     const cmdToTest = foundryNetworkCommand();
 
-    cmdToTest.action(async (operands, options, cmd) => {
+    cmdToTest.action(async (operands, options, _cmd) => {
       capturedAnvilOptions = mapPassthroughOptions(options, { args: operands } as Command);
     });
 

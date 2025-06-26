@@ -38,7 +38,7 @@ const collectCustomTypes = (
   collectedTypes: Set<string> = new Set(),
 ): Set<string> => {
   // Remove any [] and ! from the type name
-  const typeName = type.toString().replace(/[\[\]!]/g, "");
+  const typeName = type.toString().replace(/[[\]!]/g, "");
 
   // Skip if we've already collected this type or if it's a built-in scalar
   if (collectedTypes.has(typeName) || ["String", "Int", "Float", "Boolean", "ID"].includes(typeName)) {

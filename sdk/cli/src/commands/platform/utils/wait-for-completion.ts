@@ -1,8 +1,8 @@
-import { SETTLEMINT_CLIENT_MAP } from "@/constants/resource-type";
-import type { ResourceType } from "@/constants/resource-type";
 import type { SettlemintClient } from "@settlemint/sdk-js";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { SpinnerError, note, spinner } from "@settlemint/sdk-utils/terminal";
+import { note, SpinnerError, spinner } from "@settlemint/sdk-utils/terminal";
+import type { ResourceType } from "@/constants/resource-type";
+import { SETTLEMINT_CLIENT_MAP } from "@/constants/resource-type";
 
 type Action = "deploy" | "destroy" | "restart";
 
@@ -85,7 +85,7 @@ export async function waitForCompletion({
             } else {
               note(`${capitalizeFirstLetter(type)} is not ready yet (status: ${resource.status})`);
             }
-          } catch (error) {
+          } catch (_error) {
             if (spinner) {
               spinner.text = `${capitalizeFirstLetter(type)} is not ready yet (status: UNKNOWN)`;
             } else {

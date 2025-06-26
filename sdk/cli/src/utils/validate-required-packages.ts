@@ -7,7 +7,7 @@ export const validateIfRequiredPackagesAreInstalled = async (packages: string[],
       try {
         const isInstalled = await isPackageInstalled(pkg, cwd);
         return { packageName: pkg, isInstalled };
-      } catch (err) {
+      } catch (_err) {
         return { packageName: pkg, isInstalled: false };
       }
     }),

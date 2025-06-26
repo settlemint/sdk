@@ -27,7 +27,7 @@ export function tryParseJson<T>(value: string, defaultValue: T | null = null): T
       return defaultValue;
     }
     return parsed;
-  } catch (err) {
+  } catch (_err) {
     // Invalid json
     return defaultValue;
   }

@@ -36,7 +36,7 @@ export async function readConfig(): Promise<Config> {
   try {
     const content = await readFile(CONFIG_FILE, "utf-8");
     return tryParseJson<Config>(content, { instances: {} })!;
-  } catch (error) {
+  } catch (_error) {
     return { instances: {} };
   }
 }
