@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.5",
     "@types/bun": "1.2.17",
     "@types/mustache": "4.2.6",
     "knip": "5.61.2",
@@ -61,7 +61,10 @@
   "engines": {
     "node": ">=20"
   },
-  "workspaces": ["sdk/*", "apps/*"],
+  "workspaces": [
+    "sdk/*",
+    "apps/*"
+  ],
   "trustedDependencies": [
     "@biomejs/biome",
     "bufferutil",

@@ -3,9 +3,7 @@ import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
-import {} from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { getSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
-import {} from "./utils/link-dependencies";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs-not-generated";

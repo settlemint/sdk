@@ -1,8 +1,8 @@
+import { Command } from "@commander-js/extra-typings";
+import { intro, outro } from "@settlemint/sdk-utils/terminal";
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
-import { Command } from "@commander-js/extra-typings";
-import { intro, outro } from "@settlemint/sdk-utils/terminal";
 
 export function foundryTestCommand() {
   return new Command("test")
@@ -28,7 +28,7 @@ export function foundryTestCommand() {
     .passThroughOptions()
     .allowUnknownOption(true)
     .arguments("[operands...]")
-    .action(async (operands, options, cmd) => {
+    .action(async (operands, options, _cmd) => {
       intro("Running smart contract tests using Foundry");
       const forgeOptions = mapPassthroughOptions(options, { args: operands } as Command);
       await executeFoundryCommand("forge", ["test", ...forgeOptions]);

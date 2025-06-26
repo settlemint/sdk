@@ -75,7 +75,7 @@ describe("requestLogger", () => {
 
     expect(infoSpy).toHaveBeenCalledTimes(1);
     expect(infoSpy.mock.calls[0]?.[0]).toMatch(
-      /ArgFunction path: https:\/\/example\.com, took \d+ms, args: {\"a\":42,\"b\":\"test\"}/,
+      /ArgFunction path: https:\/\/example\.com, took \d+ms, args: {"a":42,"b":"test"}/,
     );
   });
 
@@ -102,7 +102,7 @@ describe("requestLogger", () => {
     expect(await result.text()).toBe("graphql-test");
     expect(infoSpy).toHaveBeenCalledTimes(1);
     expect(infoSpy.mock.calls[0]?.[0]).toMatch(
-      /GraphqlFunction path: https:\/\/example\.com, took \d+ms, args: {"query":"query GetTransactionDetails\(\$hash: String!, \$block...","variables":"\{\\\"hash\\\":\\\"0x123abc123abc123abc123abc123abc123abc123...","operationName":"GetTransactionDetails"}/,
+      /GraphqlFunction path: https:\/\/example\.com, took \d+ms, args: {"query":"query GetTransactionDetails\(\$hash: String!, \$block...","variables":"\{\\"hash\\":\\"0x123abc123abc123abc123abc123abc123abc123...","operationName":"GetTransactionDetails"}/,
     );
   });
 });

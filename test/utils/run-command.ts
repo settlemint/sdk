@@ -95,7 +95,7 @@ export function forceExitAllCommands(testScope: string) {
       `[forceExitAllCommands] Killing all commands for test scope ${testScope} (count: ${commandsRunning[testScope].length})`,
     );
   }
-  // biome-ignore lint/complexity/noForEach: <explanation>
+  // biome-ignore lint/complexity/noForEach: Iterating over array to kill processes
   commandsRunning[testScope]?.forEach((command) => command.pid && killProcess(command.pid));
   commandsRunning[testScope] = [];
 }

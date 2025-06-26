@@ -58,7 +58,7 @@ describe("servicePrompt", () => {
   });
 
   it("prompts if service is optional and only one service is available", async () => {
-    const mockDefaultHandler = mock(({ choices }) => Promise.resolve(undefined));
+    const mockDefaultHandler = mock(({ choices: _choices }) => Promise.resolve(undefined));
     const singleService = [MOCK_SERVICES[0]];
 
     const result = await servicePrompt({
@@ -84,7 +84,7 @@ describe("servicePrompt", () => {
   });
 
   it("prompts if service is required and multiple services are available", async () => {
-    const mockDefaultHandler = mock(({ choices }) => Promise.resolve(undefined));
+    const mockDefaultHandler = mock(({ choices: _choices }) => Promise.resolve(undefined));
 
     const result = await servicePrompt({
       env: {},

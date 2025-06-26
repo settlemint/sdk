@@ -61,7 +61,7 @@ export async function applicationAccessTokenPrompt(
         try {
           validate(z.string(), value);
           return true;
-        } catch (error) {
+        } catch (_error) {
           return "Invalid token name";
         }
       },
@@ -116,7 +116,7 @@ export async function applicationAccessTokenPrompt(
     try {
       validate(ApplicationAccessTokenSchema, aat);
       return aat;
-    } catch (error) {
+    } catch (_error) {
       // invalid, ask for it
     }
   }
@@ -127,7 +127,7 @@ export async function applicationAccessTokenPrompt(
       try {
         validate(ApplicationAccessTokenSchema, value);
         return true;
-      } catch (error) {
+      } catch (_error) {
         return "Invalid application access token, it should start with sm_aat_...";
       }
     },

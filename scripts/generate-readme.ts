@@ -1,4 +1,4 @@
-import { exists, readFile, readdir, writeFile } from "node:fs/promises";
+import { exists, readdir, readFile, writeFile } from "node:fs/promises";
 import { basename, join } from "node:path";
 import { tryParseJson } from "@settlemint/sdk-utils";
 import * as mustache from "mustache";
@@ -159,7 +159,7 @@ async function processApiReference(content: string): Promise<string> {
       .replace(/^###\s+/gm, "#### ")
       .replace(/^##\s+/gm, "### ")
       // Convert relative links to absolute GitHub links
-      .replace(/\[([^\]]+)\]\((\.\/[^)]+)\)/g, (match, linkText, relativePath) => {
+      .replace(/\[([^\]]+)\]\((\.\/[^)]+)\)/g, (_match, linkText, relativePath) => {
         // Remove leading ./ from the path
         const cleanPath = relativePath.replace(/^\.\//, "");
         return `[${linkText}](https://github.com/settlemint/sdk/tree/v${version}/sdk/cli/${cleanPath})`;

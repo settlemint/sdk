@@ -32,7 +32,7 @@ export async function projectNamePrompt(env: Partial<DotEnv>, argument?: string)
       try {
         validate(z.string(), value);
         return true;
-      } catch (error) {
+      } catch (_error) {
         return "Invalid projectname";
       }
     },
