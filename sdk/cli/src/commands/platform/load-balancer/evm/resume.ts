@@ -9,7 +9,7 @@ export function evmLoadBalancerResumeCommand() {
     name: "evm",
     type: "load balancer",
     subType: "evm",
-    alias: "evm",
+    alias: "lb",
     envKey: "SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER",
     resumeFunction: async (settlemint, id) => {
       return settlemint.loadBalancer.resume(id);

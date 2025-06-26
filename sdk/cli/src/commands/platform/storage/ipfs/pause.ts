@@ -9,7 +9,7 @@ export function ipfsStoragePauseCommand() {
     name: "ipfs",
     type: "storage",
     subType: "ipfs",
-    alias: "ipfs",
+    alias: "ip",
     envKey: "SETTLEMINT_IPFS",
     pauseFunction: async (settlemint, id) => {
       return settlemint.storage.pause(id);
