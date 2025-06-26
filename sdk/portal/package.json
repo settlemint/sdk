@@ -20,9 +20,7 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "./dist/portal.cjs",
   "module": "./dist/portal.js",
   "types": "./dist/portal.d.ts",

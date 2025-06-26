@@ -4,14 +4,14 @@
     "enabled": true
   },
   "files": {
-    "include": [
-      "**",
-      "!**/.vscode/launch.json",
-      "!.settlemint",
-      "!contracts/artifacts",
-      "!**/graphql-env.d.ts",
-      "!**/graphql-cache.d.ts",
-      "!**/sdk/js/schema.graphql"
+    "include": ["**"],
+    "ignore": [
+      "**/.vscode/launch.json",
+      ".settlemint",
+      "contracts/artifacts",
+      "**/graphql-env.d.ts",
+      "**/graphql-cache.d.ts",
+      "**/sdk/js/schema.graphql"
     ]
   },
   "linter": {

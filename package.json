@@ -61,10 +61,7 @@
   "engines": {
     "node": ">=20"
   },
-  "workspaces": [
-    "sdk/*",
-    "apps/*"
-  ],
+  "workspaces": ["sdk/*", "apps/*"],
   "trustedDependencies": [
     "@biomejs/biome",
     "bufferutil",
