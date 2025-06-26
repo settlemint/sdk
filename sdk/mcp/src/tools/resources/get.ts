@@ -27,24 +27,7 @@ export const resourcesGet = (server: McpServer, _env: Partial<DotEnv>) => {
         const resourcesDir = path.resolve(__dirname, "../../resources");
         const resourcePath = path.join(resourcesDir, `${name}.ts`);
 
-        // Check if the file exists
-        try {
-          await fs.access(resourcePath);
-        } catch (error) {
-          return {
-            content: [
-              {
-                type: "text",
-                name: "Resource Not Found",
-                description: `Resource '${name}' not found`,
-                mimeType: "text/plain",
-                text: `Resource '${name}' does not exist. Use the resources-list tool to see available resources.`,
-              },
-            ],
-          };
-        }
-
-        // Read the file content
+        // Read the file content directly without separate access check
         const fileContent = await fs.readFile(resourcePath, "utf-8");
 
         return {
@@ -59,6 +42,20 @@ export const resourcesGet = (server: McpServer, _env: Partial<DotEnv>) => {
           ],
         };
       } catch (error) {
+        // Handle file not found error specifically
+        if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+          return {
+            content: [
+              {
+                type: "text",
+                name: "Resource Not Found",
+                description: `Resource '${name}' not found`,
+                mimeType: "text/plain",
+                text: `Resource '${name}' does not exist. Use the resources-list tool to see available resources.`,
+              },
+            ],
+          };
+        }
         return {
           content: [
             {
