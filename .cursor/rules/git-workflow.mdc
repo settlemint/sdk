@@ -1,0 +1,53 @@
+---
+description: Git workflow and branching rules
+globs: 
+alwaysApply: true
+---
+# Git Workflow and Branching Rules
+
+## CRITICAL: Branch Management
+
+**DO NOT create a new branch if you're already on a feature branch!**
+
+### When handling PR requests or /pr command:
+
+1. **ALWAYS** check current branch first:
+   ```bash
+   git branch --show-current
+   ```
+
+2. **Decision logic**:
+   - If on `main` or `master` → Create a new feature branch
+   - If already on a feature branch → Use the current branch
+   - NEVER create nested feature branches
+
+3. **Workflow**:
+   ```bash
+   # First, always check where you are
+   current_branch=$(git branch --show-current)
+   
+   # Only create new branch if on main/master
+   if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
+     git checkout -b feature/new-feature
+   else
+     # Already on feature branch - just commit and push here
+     echo "Already on feature branch: $current_branch"
+   fi
+   ```
+
+## PR Updates
+
+When updating an existing PR:
+- Add new commits to the same branch
+- Push to the existing remote branch
+- The PR will automatically update
+
+## Common Mistakes to Avoid
+
+❌ Creating a new branch when already on a feature branch
+❌ Creating multiple PRs for the same feature
+❌ Abandoning branches with uncommitted changes
+
+✅ Check branch status before any git operations
+✅ Commit to the current feature branch
+✅ Keep related changes in the same PR

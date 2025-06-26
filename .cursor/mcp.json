@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "context7": {
+      "command": "bunx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "mcp-deepwiki": {
+      "command": "bunx",
+      "args": ["-y", "mcp-deepwiki@latest"]
+    },
+    "Linear": {
+      "url": "https://mcp.linear.app/sse"
+    },
+    "Sentry": {
+      "url": "https://mcp.sentry.dev/sse"
+    },
+    "shadcn-ui": {
+      "command": "bunx",
+      "args": ["-y", "shadcn-ui-mcp-server"]
+    }
+  }
+}
