@@ -4,85 +4,102 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-The Smart Contract Set Portal (btp-scs-portal) is a blockchain middleware service that provides a unified REST and GraphQL API gateway for interacting with smart contracts across multiple blockchain networks. It handles contract deployments, transaction management, and provides real-time updates for blockchain events.
+The SettleMint SDK is a comprehensive blockchain development toolkit and platform integration suite. It provides developers with tools to build, deploy, and manage blockchain applications using the SettleMint platform's infrastructure and services.
 
 ### Technology Stack
 
 **Core Technologies**
 - Runtime: Bun (fast JavaScript runtime)
-- Web Framework: Elysia (performant web framework for Bun)
-- GraphQL: Yoga with Pothos schema builder
-- Database: PostgreSQL with Drizzle ORM
-- Blockchain: Viem for Ethereum interactions
-- Queue: BullMQ for job processing
-- Caching: Redis for pub/sub and caching
-- API Documentation: Scalar (OpenAPI)
+- Package Manager: Bun workspaces with Turbo
+- Language: TypeScript (strict mode)
+- Code Quality: Biome for linting and formatting
+- Testing: Vitest for unit/integration tests
+- Documentation: TypeDoc
+- GraphQL: Apollo Client, GraphQL Code Generator
+- Blockchain: Viem, Ethers, Foundry, Hardhat support
 
-**Project Structure**
-- src/services/ - Domain services (contract, transaction, wallet, etc.)
-- src/schemas/ - GraphQL and validation schemas
-- src/queue/ - Job queue processors
-- src/db/ - Database migrations and schema
-- src/lib/ - Shared utilities and helpers
-- tests/ - Unit and integration tests
+**Monorepo Structure**
+- sdk/ - All SDK packages (13 packages total)
+- test/ - End-to-end tests
+- docs/ - Documentation
+- scripts/ - Build and utility scripts
+- fixtures/ - Test fixtures
+
+**SDK Packages**
+- @settlemint/sdk-cli - Command-line interface
+- @settlemint/sdk-js - Core JavaScript SDK
+- @settlemint/sdk-portal - Smart contract portal API
+- @settlemint/sdk-viem - Ethereum interface (Viem)
+- @settlemint/sdk-blockscout - Blockchain explorer
+- @settlemint/sdk-eas - Ethereum Attestation Service
+- @settlemint/sdk-hasura - GraphQL/PostgreSQL
+- @settlemint/sdk-ipfs - Decentralized storage
+- @settlemint/sdk-minio - S3-compatible storage
+- @settlemint/sdk-thegraph - Blockchain indexing
+- @settlemint/sdk-next - Next.js components
+- @settlemint/sdk-mcp - Model Context Protocol
+- @settlemint/sdk-utils - Shared utilities
 
 **Key Features**
 - Multi-chain blockchain support
-- Smart contract deployment and management
-- Transaction tracking with receipt monitoring
-- Account abstraction (ERC-4337) support
-- WebSocket and GraphQL subscriptions for real-time updates
-- Webhook notifications with reliable delivery
-- Type-safe contract interactions
-- Comprehensive API documentation
+- Smart contract deployment and verification
+- Platform service integration
+- Developer tooling and scaffolding
+- GraphQL API generation
+- TypeScript type generation
+- Comprehensive CLI tools
+- Example applications
 
 ## Essential Commands
 
 ### Development Workflow
 ```bash
 # Setup
-bun install                  # Install dependencies
-cp .env.example .env         # Create environment file
-bun run db:migrate          # Run database migrations
+bun install                  # Install dependencies (root)
+bun install --frozen-lockfile # CI-safe install
 
 # Development
-bun run dev                  # Start development server
-bun run dev:queue           # Start queue worker
-bun run dev:webhook         # Start webhook server
+bun run dev                  # Start development (turbo)
+bun run dev:cli             # Develop CLI package
+bun run dev:portal          # Develop portal package
+
+# Building
+bun run build               # Build all packages
+bun run build:cli          # Build CLI package
+bun run build:sdk          # Build SDK packages
 
 # Testing
 bun test                    # Run all tests
 bun test:unit              # Run unit tests
-bun test:integration       # Run integration tests
+bun test:e2e               # Run e2e tests
 bun test:coverage          # Generate coverage report
 
 # Code Quality
-bun run lint               # Run ESLint
+bun run lint               # Run Biome linter
 bun run lint:fix          # Fix linting issues
-bun run format            # Format with Prettier
-bun run typecheck         # Run TypeScript type checker
+bun run format            # Format with Biome
+bun run typecheck         # Run TypeScript checks
 
-# Database
-bun run db:migrate        # Run migrations
-bun run db:push          # Push schema changes
-bun run db:generate      # Generate migration files
-bun run db:studio        # Open Drizzle Studio
+# Documentation
+bun run docs              # Generate TypeDoc docs
+bun run docs:build       # Build documentation
 
-# Production
-bun run build            # Build for production
-bun run start            # Start production server
+# Publishing
+bun run changeset         # Create changeset
+bun run version          # Version packages
+bun run release          # Release packages
 ```
 
-### API Testing
+### Package Development
 ```bash
-# Access API documentation
-open http://localhost:5174/reference
+# Work on specific packages
+cd sdk/cli && bun run dev    # CLI development
+cd sdk/js && bun test        # Test JS SDK
+cd sdk/portal && bun build   # Build portal
 
-# GraphQL playground
-open http://localhost:5174/graphql
-
-# Health check
-curl http://localhost:5174/health
+# Run package scripts
+turbo run build --filter=@settlemint/sdk-cli
+turbo run test --filter=@settlemint/sdk-*
 ```
 
 ## Architecture & Code Organization
@@ -90,56 +107,54 @@ curl http://localhost:5174/health
 ### Repository Structure
 ```
 /
-├── src/
-│   ├── index.ts              # Main application entry
-│   ├── router.ts             # Route definitions
-│   ├── services/             # Domain services
-│   │   ├── contract/         # Contract deployment & management
-│   │   ├── transaction/      # Transaction processing
-│   │   ├── wallet/           # Wallet management
-│   │   ├── webhook/          # Webhook delivery
-│   │   ├── chain/            # Blockchain interactions
-│   │   └── storage/          # File storage
-│   ├── schemas/              # Validation & GraphQL schemas
-│   │   ├── graphql/          # GraphQL type definitions
-│   │   └── validation/       # Request validation schemas
-│   ├── queue/                # Job processors
-│   │   ├── processors/       # Queue job handlers
-│   │   └── jobs/             # Job definitions
-│   ├── db/                   # Database layer
-│   │   ├── schema/           # Drizzle schema definitions
-│   │   └── migrations/       # Database migrations
-│   ├── lib/                  # Shared utilities
-│   │   ├── auth/             # Authentication helpers
-│   │   ├── errors/           # Error handling
-│   │   └── utils/            # General utilities
-│   └── types/                # TypeScript type definitions
-├── tests/                    # Test files
-├── scripts/                  # Utility scripts
-└── config files              # Various configs
+├── sdk/                      # SDK packages (monorepo)
+│   ├── cli/                  # CLI tool (@settlemint/sdk-cli)
+│   ├── js/                   # Core SDK (@settlemint/sdk-js)
+│   ├── portal/               # Portal API (@settlemint/sdk-portal)
+│   ├── viem/                 # Viem integration (@settlemint/sdk-viem)
+│   ├── blockscout/           # Explorer integration
+│   ├── eas/                  # Attestation service
+│   ├── hasura/               # GraphQL/PostgreSQL
+│   ├── ipfs/                 # IPFS integration
+│   ├── minio/                # S3 storage
+│   ├── thegraph/             # Subgraph integration
+│   ├── next/                 # Next.js components
+│   ├── mcp/                  # MCP interface
+│   └── utils/                # Shared utilities
+├── test/                     # E2E tests
+├── docs/                     # Documentation
+├── scripts/                  # Build scripts
+├── fixtures/                 # Test fixtures
+├── turbo.json               # Turbo config
+├── biome.json               # Biome config
+└── package.json             # Root package
 ```
 
 ### Key Architecture Patterns
 
-1. **Service-Oriented Architecture**
-   - Domain-driven services (contract, transaction, wallet, etc.)
-   - Clear separation of concerns
-   - Dependency injection for testability
+1. **Monorepo Structure**
+   - Bun workspaces for package management
+   - Turbo for build orchestration
+   - Shared dependencies and tooling
+   - Independent package versioning
 
-2. **Queue-Based Processing**
-   - BullMQ for asynchronous job processing
-   - Reliable transaction monitoring
-   - Webhook delivery with retries
+2. **TypeScript-First Development**
+   - Strict TypeScript configuration
+   - Type generation for GraphQL
+   - Shared type definitions in utils
+   - Runtime validation with Zod
 
-3. **Type-Safe APIs**
-   - Elysia for type-safe REST endpoints
-   - Pothos for code-first GraphQL schema
-   - Zod for runtime validation
+3. **SDK Design Principles**
+   - Each package is independently usable
+   - Minimal dependencies between packages
+   - Consistent API design across packages
+   - Comprehensive TypeScript types
 
-4. **Blockchain Abstraction**
-   - Viem for Ethereum interactions
-   - Multi-chain support architecture
-   - Account abstraction (ERC-4337) ready
+4. **Platform Integration**
+   - GraphQL for API communication
+   - RESTful endpoints where appropriate
+   - WebSocket support for real-time data
+   - Authentication and authorization built-in
 
 ## Development Guidelines
 
@@ -194,65 +209,66 @@ curl http://localhost:5174/health
 - Use queue jobs for long-running operations
 - Implement proper retry logic for external calls
 
-## Service-Specific Guidelines
+## Package-Specific Guidelines
 
-### Contract Service
-- Validate contract bytecode before deployment
-- Store contract metadata properly
-- Handle deployment failures gracefully
-- Track deployment transactions
+### SDK CLI (@settlemint/sdk-cli)
+- Main entry point for developers
+- Provides project scaffolding
+- Handles authentication flows
+- Manages deployments and configurations
 
-### Transaction Service
-- Monitor transaction receipts
-- Implement proper retry logic
-- Handle chain reorganizations
-- Update transaction status accurately
+### SDK JS (@settlemint/sdk-js)
+- Core platform integration
+- API client for SettleMint services
+- Authentication and authorization
+- Resource management (nodes, networks, etc.)
 
-### Webhook Service
-- Ensure reliable delivery with retries
-- Sign webhook payloads for security
-- Handle webhook failures gracefully
-- Provide webhook event history
+### SDK Portal (@settlemint/sdk-portal)
+- Smart contract portal integration
+- Contract deployment and verification
+- Transaction management
+- Event monitoring
 
-### Wallet Service
-- Never store private keys
-- Support multiple wallet types
-- Implement proper access controls
-- Validate all signatures
+### SDK Viem (@settlemint/sdk-viem)
+- Viem-based blockchain interactions
+- Multi-chain support
+- Type-safe contract calls
+- Transaction helpers
 
 ## Testing Guidelines
 
-- Write unit tests for all services
-- Integration tests for API endpoints
-- Mock external dependencies properly
+- Write unit tests using Vitest
+- E2E tests for CLI commands
+- Mock external API calls
 - Test error scenarios
-- Ensure proper test isolation
-- Use meaningful test descriptions
+- Use test fixtures for consistency
+- Follow AAA pattern (Arrange, Act, Assert)
 
 ## Environment Configuration
 
-Required environment variables:
-- `DATABASE_URL` - PostgreSQL connection
-- `REDIS_URL` - Redis connection
-- `VIEM_RPC_URL_*` - RPC endpoints for each chain
-- `PORT` - Server port (default: 5174)
-- `WEBHOOK_PORT` - Webhook server port
+Key environment variables:
+- `SETTLEMINT_API_URL` - Platform API endpoint
+- `SETTLEMINT_AUTH_TOKEN` - Authentication token
+- `NODE_ENV` - Environment (development/production)
 
-See `.env.example` for complete list.
+Package-specific configs:
+- Each SDK package may have its own configuration
+- Check individual package README files
+- Use `.env` files for local development
 
 ## Troubleshooting
 
 ### Common Issues
-1. **Database connection errors**: Check DATABASE_URL and PostgreSQL status
-2. **Redis connection errors**: Verify REDIS_URL and Redis server
-3. **RPC errors**: Ensure valid RPC endpoints for each chain
-4. **Type errors**: Run `bun run typecheck`
+1. **Build errors**: Run `bun install` and `bun run build`
+2. **Type errors**: Check with `bun run typecheck`
+3. **Linting issues**: Fix with `bun run lint:fix`
+4. **Test failures**: Check test output and mocks
 
 ### Development Tips
-- Use `bun run db:studio` to inspect database
-- Check queue dashboard for job status
-- Monitor logs for detailed error information
-- Use API documentation for testing endpoints
+- Use Turbo's cache for faster builds
+- Run specific package tests with filters
+- Check individual package README files
+- Use `--verbose` flag for detailed output
 
 ## Before Creating a PR
 
@@ -265,11 +281,11 @@ See `.env.example` for complete list.
 
 ## Project-Specific Notes
 
-- This is a blockchain middleware service, not a dApp
-- Supports multiple blockchain networks
-- Designed for high-throughput operations
-- Security is paramount - validate everything
-- Performance matters - use queues for heavy operations
+- This is a developer SDK, not an application
+- Supports the SettleMint blockchain platform
+- Each package can be used independently
+- Follow semantic versioning for releases
+- Documentation is essential for all public APIs
 
 ## Command Reference
 

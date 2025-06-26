@@ -28,24 +28,7 @@ export const promptsGet = (server: McpServer, _env: Partial<DotEnv>) => {
         const promptsDir = path.resolve(__dirname, "../../prompts");
         const promptPath = path.join(promptsDir, category, `${name}.ts`);
 
-        // Check if the file exists
-        try {
-          await fs.access(promptPath);
-        } catch (error) {
-          return {
-            content: [
-              {
-                type: "text",
-                name: "Prompt Not Found",
-                description: `Prompt '${name}' in category '${category}' not found`,
-                mimeType: "text/plain",
-                text: `Prompt '${name}' in category '${category}' does not exist. Use the prompts-list tool to see available prompts.`,
-              },
-            ],
-          };
-        }
-
-        // Read the file content
+        // Read the file content directly without separate access check
         const fileContent = await fs.readFile(promptPath, "utf-8");
 
         return {
@@ -60,6 +43,20 @@ export const promptsGet = (server: McpServer, _env: Partial<DotEnv>) => {
           ],
         };
       } catch (error) {
+        // Handle file not found error specifically
+        if (error instanceof Error && "code" in error && error.code === "ENOENT") {
+          return {
+            content: [
+              {
+                type: "text",
+                name: "Prompt Not Found",
+                description: `Prompt '${name}' in category '${category}' not found`,
+                mimeType: "text/plain",
+                text: `Prompt '${name}' in category '${category}' does not exist. Use the prompts-list tool to see available prompts.`,
+              },
+            ],
+          };
+        }
         return {
           content: [
             {
