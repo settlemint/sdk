@@ -50,11 +50,11 @@ export function getResumeCommand({
       createExamples([
         {
           description: `Resumes the specified ${type} by id`,
-          command: `platform resume ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
+          command: `platform resume ${commandName} <${type}-id>`,
         },
         {
           description: `Resumes the default ${type} in the production environment`,
-          command: `platform resume ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
+          command: `platform resume ${commandName} default --prod`,
         },
       ]),
     )
