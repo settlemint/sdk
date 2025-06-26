@@ -9,7 +9,7 @@ export function minioStorageResumeCommand() {
     name: "minio",
     type: "storage",
     subType: "minio",
-    alias: "mi",
+    alias: "m",
     envKey: "SETTLEMINT_MINIO",
     resumeFunction: async (settlemint, id) => {
       return settlemint.storage.resume(id);
