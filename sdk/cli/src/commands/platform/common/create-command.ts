@@ -1,9 +1,3 @@
-import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient, type SettlemintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import type { ResourceType } from "@/constants/resource-type";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
@@ -16,6 +10,12 @@ import { type CommandExample, createExamples } from "@/utils/commands/create-exa
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getBlockchainNodeEnv } from "@/utils/get-cluster-service-env";
+import { Command } from "@commander-js/extra-typings";
+import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 type DefaultArgs = {
   acceptDefaults?: true | undefined;

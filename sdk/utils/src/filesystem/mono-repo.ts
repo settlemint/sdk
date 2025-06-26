@@ -1,9 +1,9 @@
 import { readFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { findUp } from "find-up";
-import { glob } from "glob";
 import { exists } from "@/filesystem.js";
 import { tryParseJson } from "@/json.js";
+import { findUp } from "find-up";
+import { glob } from "glob";
 
 /**
  * Finds the root directory of a monorepo

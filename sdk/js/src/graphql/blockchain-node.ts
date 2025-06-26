@@ -185,6 +185,34 @@ const restartBlockchainNode = graphql(
 );
 
 /**
+ * Mutation to pause a blockchain node.
+ */
+const pauseBlockchainNode = graphql(
+  `
+    mutation PauseBlockchainNode($uniqueName: String!) {
+      pauseBlockchainNodeByUniqueName(uniqueName: $uniqueName) {
+        ...BlockchainNode
+      }
+    }
+  `,
+  [BlockchainNodeFragment],
+);
+
+/**
+ * Mutation to resume a blockchain node.
+ */
+const resumeBlockchainNode = graphql(
+  `
+    mutation ResumeBlockchainNode($uniqueName: String!) {
+      resumeBlockchainNodeByUniqueName(uniqueName: $uniqueName) {
+        ...BlockchainNode
+      }
+    }
+  `,
+  [BlockchainNodeFragment],
+);
+
+/**
  * Creates a function to list blockchain nodes for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -250,6 +278,38 @@ export const blockchainNodeRestart =
   (gqlClient: GraphQLClient) =>
   async (blockchainNodeUniqueName: string): Promise<BlockchainNode> => {
     const { restartBlockchainNodeByUniqueName: blockchainNode } = await gqlClient.request(restartBlockchainNode, {
+      uniqueName: blockchainNodeUniqueName,
+    });
+    return blockchainNode;
+  };
+
+/**
+ * Creates a function to pause a blockchain node.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses a blockchain node by unique name
+ * @throws If the blockchain node cannot be found or the pause fails
+ */
+export const blockchainNodePause =
+  (gqlClient: GraphQLClient) =>
+  async (blockchainNodeUniqueName: string): Promise<BlockchainNode> => {
+    const { pauseBlockchainNodeByUniqueName: blockchainNode } = await gqlClient.request(pauseBlockchainNode, {
+      uniqueName: blockchainNodeUniqueName,
+    });
+    return blockchainNode;
+  };
+
+/**
+ * Creates a function to resume a blockchain node.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes a blockchain node by unique name
+ * @throws If the blockchain node cannot be found or the resume fails
+ */
+export const blockchainNodeResume =
+  (gqlClient: GraphQLClient) =>
+  async (blockchainNodeUniqueName: string): Promise<BlockchainNode> => {
+    const { resumeBlockchainNodeByUniqueName: blockchainNode } = await gqlClient.request(resumeBlockchainNode, {
       uniqueName: blockchainNodeUniqueName,
     });
     return blockchainNode;

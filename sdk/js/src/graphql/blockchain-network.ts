@@ -215,6 +215,34 @@ const restartBlockchainNetwork = graphql(
 );
 
 /**
+ * Mutation to pause a blockchain network.
+ */
+const pauseBlockchainNetwork = graphql(
+  `
+  mutation PauseBlockchainNetwork($uniqueName: String!) {
+    pauseBlockchainNetworkByUniqueName(uniqueName: $uniqueName) {
+      ...BlockchainNetwork
+    }
+  }
+  `,
+  [BlockchainNetworkFragment],
+);
+
+/**
+ * Mutation to resume a blockchain network.
+ */
+const resumeBlockchainNetwork = graphql(
+  `
+  mutation ResumeBlockchainNetwork($uniqueName: String!) {
+    resumeBlockchainNetworkByUniqueName(uniqueName: $uniqueName) {
+      ...BlockchainNetwork
+    }
+  }
+  `,
+  [BlockchainNetworkFragment],
+);
+
+/**
  * Creates a function to list blockchain networks for a given application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -299,6 +327,39 @@ export const blockchainNetworkRestart =
   async (blockchainNetworkUniqueName: string): Promise<BlockchainNetwork> => {
     const { restartBlockchainNetworkByUniqueName: blockchainNetwork } = await gqlClient.request(
       restartBlockchainNetwork,
+      { uniqueName: blockchainNetworkUniqueName },
+    );
+    return blockchainNetwork;
+  };
+
+/**
+ * Creates a function to pause a blockchain network.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses a network by unique name
+ * @throws If the network cannot be found or the pause fails
+ */
+export const blockchainNetworkPause =
+  (gqlClient: GraphQLClient) =>
+  async (blockchainNetworkUniqueName: string): Promise<BlockchainNetwork> => {
+    const { pauseBlockchainNetworkByUniqueName: blockchainNetwork } = await gqlClient.request(pauseBlockchainNetwork, {
+      uniqueName: blockchainNetworkUniqueName,
+    });
+    return blockchainNetwork;
+  };
+
+/**
+ * Creates a function to resume a blockchain network.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes a network by unique name
+ * @throws If the network cannot be found or the resume fails
+ */
+export const blockchainNetworkResume =
+  (gqlClient: GraphQLClient) =>
+  async (blockchainNetworkUniqueName: string): Promise<BlockchainNetwork> => {
+    const { resumeBlockchainNetworkByUniqueName: blockchainNetwork } = await gqlClient.request(
+      resumeBlockchainNetwork,
       { uniqueName: blockchainNetworkUniqueName },
     );
     return blockchainNetwork;

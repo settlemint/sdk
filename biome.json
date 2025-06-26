@@ -1,15 +1,17 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "organizeImports": {
+    "enabled": true
+  },
   "files": {
-    "includes": [
-      "**",
-      "!**/.vscode/launch.json",
-      "!.settlemint",
-      "!contracts/artifacts",
-      "!**/graphql-env.d.ts",
-      "!**/graphql-cache.d.ts",
-      "!**/sdk/js/schema.graphql"
+    "include": ["**"],
+    "ignore": [
+      "**/.vscode/launch.json",
+      ".settlemint",
+      "contracts/artifacts",
+      "**/graphql-env.d.ts",
+      "**/graphql-cache.d.ts",
+      "**/sdk/js/schema.graphql"
     ]
   },
   "linter": {

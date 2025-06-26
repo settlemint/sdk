@@ -1,7 +1,7 @@
-import { Command } from "@commander-js/extra-typings";
 import { createExamples } from "@/utils/commands/create-examples";
 import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { executeFoundryCommand } from "@/utils/smart-contract-set/execute-foundry-command";
+import { Command } from "@commander-js/extra-typings";
 
 export function foundryNetworkCommand() {
   return new Command("network")

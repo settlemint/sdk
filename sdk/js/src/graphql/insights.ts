@@ -127,6 +127,34 @@ const restartInsights = graphql(
 );
 
 /**
+ * Mutation to pause insights.
+ */
+const pauseInsights = graphql(
+  `
+    mutation PauseInsights($uniqueName: String!) {
+      pauseInsightsByUniqueName(uniqueName: $uniqueName) {
+        ...Insights
+      }
+    }
+  `,
+  [InsightsFragment],
+);
+
+/**
+ * Mutation to resume insights.
+ */
+const resumeInsights = graphql(
+  `
+    mutation ResumeInsights($uniqueName: String!) {
+      resumeInsightsByUniqueName(uniqueName: $uniqueName) {
+        ...Insights
+      }
+    }
+  `,
+  [InsightsFragment],
+);
+
+/**
  * Creates a function to list insights for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -192,6 +220,38 @@ export const insightsRestart =
   (gqlClient: GraphQLClient) =>
   async (insightsUniqueName: string): Promise<Insights> => {
     const { restartInsightsByUniqueName: insights } = await gqlClient.request(restartInsights, {
+      uniqueName: insightsUniqueName,
+    });
+    return insights;
+  };
+
+/**
+ * Creates a function to pause insights.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses insights by unique name
+ * @throws If the insights cannot be found or the pause fails
+ */
+export const insightsPause =
+  (gqlClient: GraphQLClient) =>
+  async (insightsUniqueName: string): Promise<Insights> => {
+    const { pauseInsightsByUniqueName: insights } = await gqlClient.request(pauseInsights, {
+      uniqueName: insightsUniqueName,
+    });
+    return insights;
+  };
+
+/**
+ * Creates a function to resume insights.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes insights by unique name
+ * @throws If the insights cannot be found or the resume fails
+ */
+export const insightsResume =
+  (gqlClient: GraphQLClient) =>
+  async (insightsUniqueName: string): Promise<Insights> => {
+    const { resumeInsightsByUniqueName: insights } = await gqlClient.request(resumeInsights, {
       uniqueName: insightsUniqueName,
     });
     return insights;

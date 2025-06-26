@@ -136,6 +136,34 @@ const restartCustomDeployment = graphql(
 );
 
 /**
+ * Mutation to pause a custom deployment.
+ */
+const pauseCustomDeployment = graphql(
+  `
+    mutation PauseCustomDeployment($uniqueName: String!) {
+      pauseCustomDeploymentByUniqueName(uniqueName: $uniqueName) {
+        ...CustomDeployment
+      }
+    }
+  `,
+  [CustomDeploymentFragment],
+);
+
+/**
+ * Mutation to resume a custom deployment.
+ */
+const resumeCustomDeployment = graphql(
+  `
+    mutation ResumeCustomDeployment($uniqueName: String!) {
+      resumeCustomDeploymentByUniqueName(uniqueName: $uniqueName) {
+        ...CustomDeployment
+      }
+    }
+  `,
+  [CustomDeploymentFragment],
+);
+
+/**
  * Creates a function to list custom deployments for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -222,6 +250,38 @@ export const customDeploymentRestart =
   (gqlClient: GraphQLClient) =>
   async (customDeploymentUniqueName: string): Promise<CustomDeployment> => {
     const { restartCustomDeploymentByUniqueName: customDeployment } = await gqlClient.request(restartCustomDeployment, {
+      uniqueName: customDeploymentUniqueName,
+    });
+    return customDeployment;
+  };
+
+/**
+ * Creates a function to pause a custom deployment.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses a custom deployment by unique name
+ * @throws If the custom deployment cannot be found or the pause fails
+ */
+export const customDeploymentPause =
+  (gqlClient: GraphQLClient) =>
+  async (customDeploymentUniqueName: string): Promise<CustomDeployment> => {
+    const { pauseCustomDeploymentByUniqueName: customDeployment } = await gqlClient.request(pauseCustomDeployment, {
+      uniqueName: customDeploymentUniqueName,
+    });
+    return customDeployment;
+  };
+
+/**
+ * Creates a function to resume a custom deployment.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes a custom deployment by unique name
+ * @throws If the custom deployment cannot be found or the resume fails
+ */
+export const customDeploymentResume =
+  (gqlClient: GraphQLClient) =>
+  async (customDeploymentUniqueName: string): Promise<CustomDeployment> => {
+    const { resumeCustomDeploymentByUniqueName: customDeployment } = await gqlClient.request(resumeCustomDeployment, {
       uniqueName: customDeploymentUniqueName,
     });
     return customDeployment;
