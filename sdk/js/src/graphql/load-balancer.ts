@@ -119,6 +119,34 @@ const restartLoadBalancer = graphql(
 );
 
 /**
+ * Mutation to pause a load balancer.
+ */
+const pauseLoadBalancer = graphql(
+  `
+    mutation PauseLoadBalancer($uniqueName: String!) {
+      pauseLoadBalancerByUniqueName(uniqueName: $uniqueName) {
+        ...LoadBalancer
+      }
+    }
+  `,
+  [LoadBalancerFragment],
+);
+
+/**
+ * Mutation to resume a load balancer.
+ */
+const resumeLoadBalancer = graphql(
+  `
+    mutation ResumeLoadBalancer($uniqueName: String!) {
+      resumeLoadBalancerByUniqueName(uniqueName: $uniqueName) {
+        ...LoadBalancer
+      }
+    }
+  `,
+  [LoadBalancerFragment],
+);
+
+/**
  * Creates a function to fetch a specific load balancer.
  *
  * @param gqlClient - The GraphQL client instance
@@ -188,6 +216,38 @@ export const loadBalancerRestart =
   (gqlClient: GraphQLClient) =>
   async (loadBalancerUniqueName: string): Promise<LoadBalancer> => {
     const { restartLoadBalancerByUniqueName: loadBalancer } = await gqlClient.request(restartLoadBalancer, {
+      uniqueName: loadBalancerUniqueName,
+    });
+    return loadBalancer as LoadBalancer;
+  };
+
+/**
+ * Creates a function to pause a load balancer.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses a load balancer
+ * @throws If the load balancer cannot be paused or the request fails
+ */
+export const loadBalancerPause =
+  (gqlClient: GraphQLClient) =>
+  async (loadBalancerUniqueName: string): Promise<LoadBalancer> => {
+    const { pauseLoadBalancerByUniqueName: loadBalancer } = await gqlClient.request(pauseLoadBalancer, {
+      uniqueName: loadBalancerUniqueName,
+    });
+    return loadBalancer as LoadBalancer;
+  };
+
+/**
+ * Creates a function to resume a load balancer.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes a load balancer
+ * @throws If the load balancer cannot be resumed or the request fails
+ */
+export const loadBalancerResume =
+  (gqlClient: GraphQLClient) =>
+  async (loadBalancerUniqueName: string): Promise<LoadBalancer> => {
+    const { resumeLoadBalancerByUniqueName: loadBalancer } = await gqlClient.request(resumeLoadBalancer, {
       uniqueName: loadBalancerUniqueName,
     });
     return loadBalancer as LoadBalancer;
