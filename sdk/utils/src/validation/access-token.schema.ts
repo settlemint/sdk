@@ -18,5 +18,5 @@ export type PersonalAccessToken = z.infer<typeof PersonalAccessTokenSchema>;
  * Schema for validating both application and personal access tokens.
  * Accepts tokens starting with either 'sm_pat_' or 'sm_aat_' prefix.
  */
-export const AccessTokenSchema: ZodString = z.string().regex(/^sm_pat_.*|sm_aat_.*$/);
+export const AccessTokenSchema: ZodString = z.string().regex(/^(sm_pat_.*|sm_aat_.*)$/);
 export type AccessToken = z.infer<typeof AccessTokenSchema>;
