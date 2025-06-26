@@ -50,11 +50,11 @@ export function getPauseCommand({
       createExamples([
         {
           description: `Pauses the specified ${type} by id`,
-          command: `platform pause ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
+          command: `platform pause ${commandName} <${type}-id>`,
         },
         {
           description: `Pauses the default ${type} in the production environment`,
-          command: `platform pause ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
+          command: `platform pause ${commandName} default --prod`,
         },
       ]),
     )
