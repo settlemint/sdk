@@ -111,7 +111,7 @@ export function getResumeCommand({
           action: "resume",
         });
         if (!isResumed) {
-          throw new Error(`Failed to resume ${type} ${uniqueName}`);
+          throw new Error(`Failed to resume ${type} ${serviceUniqueName}`);
         }
       }
 

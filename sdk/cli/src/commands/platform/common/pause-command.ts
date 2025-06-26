@@ -111,7 +111,7 @@ export function getPauseCommand({
           action: "pause",
         });
         if (!isPaused) {
-          throw new Error(`Failed to pause ${type} ${uniqueName}`);
+          throw new Error(`Failed to pause ${type} ${serviceUniqueName}`);
         }
       }
 
