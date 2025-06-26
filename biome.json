@@ -1,8 +1,10 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
+  "organizeImports": {
+    "enabled": true
+  },
   "files": {
-    "includes": [
+    "include": [
       "**",
       "!**/.vscode/launch.json",
       "!.settlemint",
