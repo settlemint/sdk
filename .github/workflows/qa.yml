@@ -122,6 +122,16 @@ jobs:
           slack_channel_id: ${{ env.SLACK_CHANNEL_ID }}
 
       # Setup dependencies for QA (skip for draft PRs)
+      - name: Install Bun
+        if: |
+          github.event_name == 'push' ||
+          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+          github.event_name == 'pull_request_review'
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.bun/bin:$PATH"
+
       - name: Setup dependencies
         if: |
           github.event_name == 'push' ||
@@ -132,15 +142,6 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
-
-      - name: Ensure Bun is in PATH
-        if: |
-          github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
-          github.event_name == 'pull_request_review'
-        run: |
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.bun/bin:$PATH"
 
       # Login to Docker registries (only when running QA)
       - name: Login to GitHub Container Registry
