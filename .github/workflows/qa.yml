@@ -133,15 +133,14 @@ jobs:
           npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
 
-      - name: Verify Bun after setup-dependencies
+      - name: Ensure Bun is in PATH
         if: |
           github.event_name == 'push' ||
           (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
           github.event_name == 'pull_request_review'
         run: |
-          echo "PATH after setup-dependencies: $PATH"
-          echo "Bun location: $(which bun || echo 'not found')"
-          bun --version
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+          export PATH="$HOME/.bun/bin:$PATH"
 
       # Login to Docker registries (only when running QA)
       - name: Login to GitHub Container Registry
