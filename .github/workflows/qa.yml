@@ -122,6 +122,24 @@ jobs:
           slack_channel_id: ${{ env.SLACK_CHANNEL_ID }}
 
       # Setup dependencies for QA (skip for draft PRs)
+      - name: Setup Bun
+        if: |
+          github.event_name == 'push' ||
+          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+          github.event_name == 'pull_request_review'
+        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
+        with:
+          bun-version: "1.2.17"
+
+      - name: Verify Bun installation
+        if: |
+          github.event_name == 'push' ||
+          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+          github.event_name == 'pull_request_review'
+        run: |
+          bun --version
+          which bun
+
       - name: Setup dependencies
         if: |
           github.event_name == 'push' ||
