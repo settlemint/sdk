@@ -122,16 +122,6 @@ jobs:
           slack_channel_id: ${{ env.SLACK_CHANNEL_ID }}
 
       # Setup dependencies for QA (skip for draft PRs)
-      - name: Install Bun
-        if: |
-          github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
-          github.event_name == 'pull_request_review'
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
-          export PATH="$HOME/.bun/bin:$PATH"
-
       - name: Setup dependencies
         if: |
           github.event_name == 'push' ||
@@ -245,37 +235,6 @@ jobs:
           commit_message: "chore: update docs [skip ci]"
           branch: main
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
-
-      - name: Debug environment before tests
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
-        run: |
-          echo "=== Environment Debug ==="
-          echo "Current directory: $(pwd)"
-          echo "PATH: $PATH"
-          echo "Node version: $(node --version || echo 'Node not found')"
-          echo "Bun version: $(bun --version || echo 'Bun not found')"
-          echo "NPM version: $(npm --version || echo 'NPM not found')"
-          echo ""
-          echo "=== Package.json contents ==="
-          cat package.json | head -20
-          echo ""
-          echo "=== Dependencies status ==="
-          ls -la node_modules/ | head -10 || echo "No node_modules found"
-          echo ""
-          echo "=== Turbo availability ==="
-          which turbo || echo "Turbo not in PATH"
-          bunx turbo --version || echo "Turbo via bunx failed"
-          echo ""
-          echo "=== Workspace packages ==="
-          ls -la sdk/ | head -10
-
-      - name: Install dependencies explicitly
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
-        run: |
-          echo "Installing dependencies with bun..."
-          bun install
-          echo "Verifying turbo installation..."
-          bunx turbo --version
 
       - name: Run tests and checks
         if: github.event_name == 'pull_request' || github.event_name == 'push'
