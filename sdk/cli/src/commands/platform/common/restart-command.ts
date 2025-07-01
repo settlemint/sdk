@@ -26,7 +26,6 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 export function getRestartCommand({
   name,
   type,
-  subType,
   alias,
   envKey,
   restartFunction,
@@ -34,13 +33,14 @@ export function getRestartCommand({
 }: {
   name: string;
   type: ResourceType;
-  subType?: string;
   alias: string;
   envKey: keyof DotEnv;
-  restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  restartFunction: (settlemintClient: SettlemintClient, uniqueName: string) => Promise<{ name: string }>;
   usePersonalAccessToken?: boolean;
 }) {
   const commandName = sanitizeCommandName(name);
+  const typeCommandName = sanitizeCommandName(type);
+  const exampleCommandPrefix = `platform restart ${typeCommandName !== commandName ? `${typeCommandName} ` : ""}${commandName}`;
   return new Command(commandName)
     .alias(alias)
     .description(
@@ -50,11 +50,11 @@ export function getRestartCommand({
       createExamples([
         {
           description: `Restarts the specified ${type} by unique name`,
-          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
+          command: `${exampleCommandPrefix} <unique-name>`,
         },
         {
           description: `Restarts the default ${type} in the production environment`,
-          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
+          command: `${exampleCommandPrefix} default --prod`,
         },
       ]),
     )

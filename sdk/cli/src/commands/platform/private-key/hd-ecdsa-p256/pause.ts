@@ -8,7 +8,6 @@ export function hdEcdsaP256PrivateKeyPauseCommand() {
   return getPauseCommand({
     name: "hd-ecdsa-p256",
     type: "private key",
-    subType: "hd-ecdsa-p256",
     alias: "hd",
     envKey: "SETTLEMINT_HD_PRIVATE_KEY",
     pauseFunction: async (settlemint, id) => {

@@ -8,7 +8,6 @@ export function graphMiddlewareResumeCommand() {
   return getResumeCommand({
     name: "graph",
     type: "middleware",
-    subType: "graph",
     alias: "gr",
     envKey: "SETTLEMINT_THEGRAPH",
     resumeFunction: async (settlemint, id) => {

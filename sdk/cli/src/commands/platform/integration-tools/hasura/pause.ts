@@ -8,7 +8,6 @@ export function hasuraPauseCommand() {
   return getPauseCommand({
     name: "hasura",
     type: "integration tool",
-    subType: "hasura",
     alias: "ha",
     envKey: "SETTLEMINT_HASURA",
     pauseFunction: async (settlemint, id) => {

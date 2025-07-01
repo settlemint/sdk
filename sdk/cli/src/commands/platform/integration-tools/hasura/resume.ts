@@ -8,7 +8,6 @@ export function hasuraResumeCommand() {
   return getResumeCommand({
     name: "hasura",
     type: "integration tool",
-    subType: "hasura",
     alias: "ha",
     envKey: "SETTLEMINT_HASURA",
     resumeFunction: async (settlemint, id) => {

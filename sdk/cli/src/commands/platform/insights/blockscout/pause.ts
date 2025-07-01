@@ -8,7 +8,6 @@ export function blockscoutPauseCommand() {
   return getPauseCommand({
     name: "blockscout",
     type: "insights",
-    subType: "blockscout",
     alias: "bs",
     envKey: "SETTLEMINT_BLOCKSCOUT",
     pauseFunction: async (settlemint, id) => {
