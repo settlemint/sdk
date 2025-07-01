@@ -1,6 +1,6 @@
-import { applicationRead } from "@/graphql/application.js";
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
+import { applicationRead } from "@/graphql/application.js";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 import { blockchainNodeRead } from "./blockchain-node.js";
 import { loadBalancerRead } from "./load-balancer.js";
 import { storageRead } from "./storage.js";
@@ -168,6 +168,34 @@ const restartMiddleware = graphql(
 );
 
 /**
+ * Mutation to pause a middleware.
+ */
+const pauseMiddleware = graphql(
+  `
+    mutation PauseMiddleware($uniqueName: String!) {
+      pauseMiddlewareByUniqueName(uniqueName: $uniqueName) {
+        ...Middleware
+      }
+    }
+  `,
+  [MiddlewareFragment],
+);
+
+/**
+ * Mutation to resume a middleware.
+ */
+const resumeMiddleware = graphql(
+  `
+    mutation ResumeMiddleware($uniqueName: String!) {
+      resumeMiddlewareByUniqueName(uniqueName: $uniqueName) {
+        ...Middleware
+      }
+    }
+  `,
+  [MiddlewareFragment],
+);
+
+/**
  * Creates a function to list middlewares for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -259,6 +287,38 @@ export const middlewareRestart =
   (gqlClient: GraphQLClient) =>
   async (middlewareUniqueName: string): Promise<Middleware> => {
     const { restartMiddlewareByUniqueName: middleware } = await gqlClient.request(restartMiddleware, {
+      uniqueName: middlewareUniqueName,
+    });
+    return middleware;
+  };
+
+/**
+ * Creates a function to pause a middleware.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses middleware by unique name
+ * @throws If the middleware cannot be found or the pause fails
+ */
+export const middlewarePause =
+  (gqlClient: GraphQLClient) =>
+  async (middlewareUniqueName: string): Promise<Middleware> => {
+    const { pauseMiddlewareByUniqueName: middleware } = await gqlClient.request(pauseMiddleware, {
+      uniqueName: middlewareUniqueName,
+    });
+    return middleware;
+  };
+
+/**
+ * Creates a function to resume a middleware.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes middleware by unique name
+ * @throws If the middleware cannot be found or the resume fails
+ */
+export const middlewareResume =
+  (gqlClient: GraphQLClient) =>
+  async (middlewareUniqueName: string): Promise<Middleware> => {
+    const { resumeMiddlewareByUniqueName: middleware } = await gqlClient.request(resumeMiddleware, {
       uniqueName: middlewareUniqueName,
     });
     return middleware;

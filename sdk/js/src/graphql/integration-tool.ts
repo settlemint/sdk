@@ -1,6 +1,6 @@
-import { applicationRead } from "@/graphql/application.js";
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
+import { applicationRead } from "@/graphql/application.js";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 
 /**
  * GraphQL fragment containing core integration fields.
@@ -116,6 +116,34 @@ const restartIntegrationTool = graphql(
 );
 
 /**
+ * Mutation to pause an integration.
+ */
+const pauseIntegrationTool = graphql(
+  `
+    mutation PauseIntegrationTool($uniqueName: String!) {
+      pauseIntegrationByUniqueName(uniqueName: $uniqueName) {
+        ...Integration
+      }
+    }
+  `,
+  [IntegrationFragment],
+);
+
+/**
+ * Mutation to resume an integration.
+ */
+const resumeIntegrationTool = graphql(
+  `
+    mutation ResumeIntegrationTool($uniqueName: String!) {
+      resumeIntegrationByUniqueName(uniqueName: $uniqueName) {
+        ...Integration
+      }
+    }
+  `,
+  [IntegrationFragment],
+);
+
+/**
  * Creates a function to list integration tools for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -181,6 +209,38 @@ export const integrationToolRestart =
   (gqlClient: GraphQLClient) =>
   async (integrationUniqueName: string): Promise<IntegrationTool> => {
     const { restartIntegrationByUniqueName: integration } = await gqlClient.request(restartIntegrationTool, {
+      uniqueName: integrationUniqueName,
+    });
+    return integration;
+  };
+
+/**
+ * Creates a function to pause an integration tool.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses integration tool by unique name
+ * @throws If the integration tool cannot be found or the pause fails
+ */
+export const integrationToolPause =
+  (gqlClient: GraphQLClient) =>
+  async (integrationUniqueName: string): Promise<IntegrationTool> => {
+    const { pauseIntegrationByUniqueName: integration } = await gqlClient.request(pauseIntegrationTool, {
+      uniqueName: integrationUniqueName,
+    });
+    return integration;
+  };
+
+/**
+ * Creates a function to resume an integration tool.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes integration tool by unique name
+ * @throws If the integration tool cannot be found or the resume fails
+ */
+export const integrationToolResume =
+  (gqlClient: GraphQLClient) =>
+  async (integrationUniqueName: string): Promise<IntegrationTool> => {
+    const { resumeIntegrationByUniqueName: integration } = await gqlClient.request(resumeIntegrationTool, {
       uniqueName: integrationUniqueName,
     });
     return integration;

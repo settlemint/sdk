@@ -1,8 +1,8 @@
+import type { GraphQLClient } from "graphql-request";
 import { applicationRead } from "@/graphql/application.js";
 import { blockchainNodeRead } from "@/graphql/blockchain-node.js";
 import { loadBalancerRead } from "@/graphql/load-balancer.js";
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import type { GraphQLClient } from "graphql-request";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 
 /**
  * GraphQL fragment containing core insights fields.
@@ -127,6 +127,34 @@ const restartInsights = graphql(
 );
 
 /**
+ * Mutation to pause insights.
+ */
+const pauseInsights = graphql(
+  `
+    mutation PauseInsights($uniqueName: String!) {
+      pauseInsightsByUniqueName(uniqueName: $uniqueName) {
+        ...Insights
+      }
+    }
+  `,
+  [InsightsFragment],
+);
+
+/**
+ * Mutation to resume insights.
+ */
+const resumeInsights = graphql(
+  `
+    mutation ResumeInsights($uniqueName: String!) {
+      resumeInsightsByUniqueName(uniqueName: $uniqueName) {
+        ...Insights
+      }
+    }
+  `,
+  [InsightsFragment],
+);
+
+/**
  * Creates a function to list insights for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -192,6 +220,38 @@ export const insightsRestart =
   (gqlClient: GraphQLClient) =>
   async (insightsUniqueName: string): Promise<Insights> => {
     const { restartInsightsByUniqueName: insights } = await gqlClient.request(restartInsights, {
+      uniqueName: insightsUniqueName,
+    });
+    return insights;
+  };
+
+/**
+ * Creates a function to pause insights.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses insights by unique name
+ * @throws If the insights cannot be found or the pause fails
+ */
+export const insightsPause =
+  (gqlClient: GraphQLClient) =>
+  async (insightsUniqueName: string): Promise<Insights> => {
+    const { pauseInsightsByUniqueName: insights } = await gqlClient.request(pauseInsights, {
+      uniqueName: insightsUniqueName,
+    });
+    return insights;
+  };
+
+/**
+ * Creates a function to resume insights.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes insights by unique name
+ * @throws If the insights cannot be found or the resume fails
+ */
+export const insightsResume =
+  (gqlClient: GraphQLClient) =>
+  async (insightsUniqueName: string): Promise<Insights> => {
+    const { resumeInsightsByUniqueName: insights } = await gqlClient.request(resumeInsights, {
       uniqueName: insightsUniqueName,
     });
     return insights;

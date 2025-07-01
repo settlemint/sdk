@@ -12,24 +12,24 @@ import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 
 /**
- * Creates a command for restarting resources in the SettleMint platform.
+ * Creates a command for resuming resources in the SettleMint platform.
  *
- * @param options - Configuration options for the restart command
+ * @param options - Configuration options for the resume command
  * @param options.name - The name of the command
- * @param options.type - The type of resource to restart
+ * @param options.type - The type of resource to resume
  * @param options.alias - Command alias (shorthand)
  * @param options.envKey - Environment variable key for the resource unique name
- * @param options.restartFunction - Function that performs the actual restart operation on the platform
+ * @param options.resumeFunction - Function that performs the actual resume operation on the platform
  * @param options.usePersonalAccessToken - Whether to use personal access token for auth (defaults to true)
- * @returns A configured Commander command for restarting the specified resource type
+ * @returns A configured Commander command for resuming the specified resource type
  */
-export function getRestartCommand({
+export function getResumeCommand({
   name,
   type,
   subType,
   alias,
   envKey,
-  restartFunction,
+  resumeFunction,
   usePersonalAccessToken = true,
 }: {
   name: string;
@@ -37,36 +37,36 @@ export function getRestartCommand({
   subType?: string;
   alias: string;
   envKey: keyof DotEnv;
-  restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  resumeFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
   usePersonalAccessToken?: boolean;
 }) {
   const commandName = sanitizeCommandName(name);
   return new Command(commandName)
     .alias(alias)
     .description(
-      `Restart a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to restart the default ${type} from your .env file.`,
+      `Resume a ${type} in the SettleMint platform. Provide the ${type} unique name or use 'default' to resume the default ${type} from your .env file.`,
     )
     .usage(
       createExamples([
         {
-          description: `Restarts the specified ${type} by unique name`,
-          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
+          description: `Resumes the specified ${type} by unique name`,
+          command: `platform resume ${commandName} <${type}-id>`,
         },
         {
-          description: `Restarts the default ${type} in the production environment`,
-          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
+          description: `Resumes the default ${type} in the production environment`,
+          command: `platform resume ${commandName} default --prod`,
         },
       ]),
     )
     .argument(
       "<unique-name>",
-      `The unique name of the ${type}, use 'default' to restart the default one from your .env file`,
+      `The unique name of the ${type}, use 'default' to resume the default one from your .env file`,
     )
     .option("-a, --accept-defaults", "Accept the default and previously set values")
     .option("--prod", "Connect to your production environment")
-    .option("-w, --wait", "Wait until restarted")
+    .option("-w, --wait", "Wait until resumed")
     .action(async (uniqueName, { acceptDefaults, prod, wait }) => {
-      intro(`Restarting ${type} in the SettleMint platform`);
+      intro(`Resuming ${type} in the SettleMint platform`);
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
 
@@ -96,25 +96,25 @@ export function getRestartCommand({
       }
 
       const result = await spinner({
-        startMessage: `Restarting ${type}`,
+        startMessage: `Resuming ${type}`,
         task: async () => {
-          return restartFunction(settlemint, serviceUniqueName);
+          return resumeFunction(settlemint, serviceUniqueName);
         },
-        stopMessage: `${capitalizeFirstLetter(type)} restart initiated`,
+        stopMessage: `${capitalizeFirstLetter(type)} resume initiated`,
       });
 
       if (wait) {
-        const isRestarted = await waitForCompletion({
+        const isResumed = await waitForCompletion({
           settlemint,
           type,
           uniqueName: serviceUniqueName,
-          action: "restart",
+          action: "resume",
         });
-        if (!isRestarted) {
-          throw new Error(`Failed to restart ${type} ${uniqueName}`);
+        if (!isResumed) {
+          throw new Error(`Failed to resume ${type} ${serviceUniqueName}`);
         }
       }
 
-      outro(`${capitalizeFirstLetter(type)} ${result.name} restart initiated successfully`);
+      outro(`${capitalizeFirstLetter(type)} ${result.name} resume initiated successfully`);
     });
 }
