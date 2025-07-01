@@ -33,28 +33,11 @@ concurrency:
 jobs:
   qa:
     name: QA
-    services:
-      db:
-        image: postgres:17-alpine
-        env:
-          POSTGRES_USER: portal
-          POSTGRES_PASSWORD: portal
-          POSTGRES_DB: portal
-        ports:
-          - "5432:5432"
-      redis:
-        image: redis:8-alpine
-        ports:
-          - "6379:6379"
-      foundry:
-        image: ghcr.io/settlemint/btp-anvil-test-node:latest
-        ports:
-          - "8545:8545"
     if: |
       github.event_name == 'push' ||
       (github.event_name == 'pull_request' && github.event.action != 'closed') ||
       github.event_name == 'pull_request_review'
-    runs-on: namespace-profile-btp-scs-portal
+    runs-on: namespace-profile-sdk
     timeout-minutes: 30
     permissions:
       contents: read
@@ -125,35 +108,13 @@ jobs:
       - name: Setup dependencies
         if: |
           github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+          github.event_name == 'pull_request' ||
           github.event_name == 'pull_request_review'
         uses: settlemint/asset-tokenization-kit/.github/actions/setup-dependencies@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
-
-      # Login to Docker registries (only when running QA)
-      - name: Login to GitHub Container Registry
-        if: |
-          github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Harbor
-        if: |
-          github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false)
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
-        with:
-          registry: harbor.settlemint.com
-          username: ${{ env.HARBOR_USER }}
-          password: ${{ env.HARBOR_PASS }}
-
       - name: Update package versions
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         id: package-version
@@ -211,12 +172,6 @@ jobs:
           done
 
           echo "Updated version to $VERSION"
-
-      - name: Setup git user
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
-        run: |
-          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
 
       - name: Login to npm
         if: github.event_name == 'pull_request' || github.event_name == 'push'

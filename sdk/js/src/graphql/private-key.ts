@@ -1,6 +1,6 @@
-import { applicationRead } from "@/graphql/application.js";
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
+import { applicationRead } from "@/graphql/application.js";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 import { blockchainNodeRead } from "./blockchain-node.js";
 import { getPlatformConfig } from "./platform.js";
 

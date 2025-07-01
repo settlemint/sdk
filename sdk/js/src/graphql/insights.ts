@@ -1,8 +1,8 @@
+import type { GraphQLClient } from "graphql-request";
 import { applicationRead } from "@/graphql/application.js";
 import { blockchainNodeRead } from "@/graphql/blockchain-node.js";
 import { loadBalancerRead } from "@/graphql/load-balancer.js";
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
-import type { GraphQLClient } from "graphql-request";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 
 /**
  * GraphQL fragment containing core insights fields.

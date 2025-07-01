@@ -8,7 +8,6 @@ export function smartContractPortalMiddlewarePauseCommand() {
   return getPauseCommand({
     name: "smart-contract-portal",
     type: "middleware",
-    subType: "smart-contract-portal",
     alias: "scp",
     envKey: "SETTLEMINT_PORTAL",
     pauseFunction: async (settlemint, id) => {

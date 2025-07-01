@@ -1,6 +1,7 @@
-import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
+import { NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
+import { findBlockchainNodeByName } from "./utils/test-resources";
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -11,10 +12,15 @@ afterEach(() => {
 });
 
 describe("Pause and resume blockchain node operations using the SDK", () => {
-  test("Pause and resume a blockchain node", async () => {
-    const env = await loadEnv(false, false);
-    const blockchainNodeUniqueName = env.SETTLEMINT_BLOCKCHAIN_NODE!;
+  let blockchainNodeUniqueName: string;
 
+  beforeAll(async () => {
+    const blockchainNode = await findBlockchainNodeByName(NODE_NAME_3_WITHOUT_PK);
+    blockchainNodeUniqueName = blockchainNode?.uniqueName!;
+    expect(blockchainNodeUniqueName).toBeString();
+  });
+
+  test("Pause and resume a blockchain node", async () => {
     // Pause the blockchain node
     const { output: pauseOutput } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -41,9 +47,6 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
   });
 
   test("Pause blockchain node without waiting", async () => {
-    const env = await loadEnv(false, false);
-    const blockchainNodeUniqueName = env.SETTLEMINT_BLOCKCHAIN_NODE!;
-
     // Pause without waiting
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -68,9 +71,6 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
   });
 
   test("Resume blockchain node without waiting", async () => {
-    const env = await loadEnv(false, false);
-    const blockchainNodeUniqueName = env.SETTLEMINT_BLOCKCHAIN_NODE!;
-
     // First pause the node
     await runCommand(COMMAND_TEST_SCOPE, [
       "platform",

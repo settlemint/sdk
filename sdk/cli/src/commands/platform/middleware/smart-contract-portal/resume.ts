@@ -8,7 +8,6 @@ export function smartContractPortalMiddlewareResumeCommand() {
   return getResumeCommand({
     name: "smart-contract-portal",
     type: "middleware",
-    subType: "smart-contract-portal",
     alias: "scp",
     envKey: "SETTLEMINT_PORTAL",
     resumeFunction: async (settlemint, id) => {

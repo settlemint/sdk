@@ -8,7 +8,6 @@ export function minioStoragePauseCommand() {
   return getPauseCommand({
     name: "minio",
     type: "storage",
-    subType: "minio",
     alias: "m",
     envKey: "SETTLEMINT_MINIO",
     pauseFunction: async (settlemint, id) => {

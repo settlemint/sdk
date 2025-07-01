@@ -26,7 +26,6 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 export function getResumeCommand({
   name,
   type,
-  subType,
   alias,
   envKey,
   resumeFunction,
@@ -34,13 +33,14 @@ export function getResumeCommand({
 }: {
   name: string;
   type: ResourceType;
-  subType?: string;
   alias: string;
   envKey: keyof DotEnv;
-  resumeFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  resumeFunction: (settlemintClient: SettlemintClient, uniqueName: string) => Promise<{ name: string }>;
   usePersonalAccessToken?: boolean;
 }) {
   const commandName = sanitizeCommandName(name);
+  const typeCommandName = sanitizeCommandName(type);
+  const exampleCommandPrefix = `platform resume ${typeCommandName !== commandName ? `${typeCommandName} ` : ""}${commandName}`;
   return new Command(commandName)
     .alias(alias)
     .description(
@@ -50,11 +50,11 @@ export function getResumeCommand({
       createExamples([
         {
           description: `Resumes the specified ${type} by unique name`,
-          command: `platform resume ${commandName} <${type}-id>`,
+          command: `${exampleCommandPrefix} <unique-name>`,
         },
         {
           description: `Resumes the default ${type} in the production environment`,
-          command: `platform resume ${commandName} default --prod`,
+          command: `${exampleCommandPrefix} default --prod`,
         },
       ]),
     )

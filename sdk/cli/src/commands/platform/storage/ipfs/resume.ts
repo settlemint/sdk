@@ -8,7 +8,6 @@ export function ipfsStorageResumeCommand() {
   return getResumeCommand({
     name: "ipfs",
     type: "storage",
-    subType: "ipfs",
     alias: "ip",
     envKey: "SETTLEMINT_IPFS",
     resumeFunction: async (settlemint, id) => {

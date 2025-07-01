@@ -8,7 +8,6 @@ export function graphMiddlewarePauseCommand() {
   return getPauseCommand({
     name: "graph",
     type: "middleware",
-    subType: "graph",
     alias: "gr",
     envKey: "SETTLEMINT_THEGRAPH",
     pauseFunction: async (settlemint, id) => {

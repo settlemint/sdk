@@ -4,20 +4,19 @@ import { type Id, LOCAL_INSTANCE, STANDALONE_INSTANCE, validate } from "@settlem
 import { GraphQLClient } from "graphql-request";
 import { z } from "zod/v4";
 import {
-  type CreateApplicationAccessTokenArgs,
-  applicationAccessTokenCreate,
-} from "./graphql/application-access-tokens.js";
-import {
   type Application,
-  type CreateApplicationArgs,
   applicationCreate,
   applicationDelete,
   applicationList,
   applicationRead,
+  type CreateApplicationArgs,
 } from "./graphql/application.js";
 import {
+  applicationAccessTokenCreate,
+  type CreateApplicationAccessTokenArgs,
+} from "./graphql/application-access-tokens.js";
+import {
   type BlockchainNetwork,
-  type CreateBlockchainNetworkArgs,
   blockchainNetworkCreate,
   blockchainNetworkDelete,
   blockchainNetworkList,
@@ -25,16 +24,17 @@ import {
   blockchainNetworkRead,
   blockchainNetworkRestart,
   blockchainNetworkResume,
+  type CreateBlockchainNetworkArgs,
 } from "./graphql/blockchain-network.js";
 import {
   type BlockchainNode,
-  type CreateBlockchainNodeArgs,
   blockchainNodeCreate,
   blockchainNodeList,
   blockchainNodePause,
   blockchainNodeRead,
   blockchainNodeRestart,
   blockchainNodeResume,
+  type CreateBlockchainNodeArgs,
 } from "./graphql/blockchain-node.js";
 import {
   type CreateCustomDeploymentArgs,
@@ -80,9 +80,9 @@ import {
 } from "./graphql/load-balancer.js";
 import {
   type CreateMiddlewareArgs,
+  graphMiddlewareSubgraphs,
   type Middleware,
   type MiddlewareWithSubgraphs,
-  graphMiddlewareSubgraphs,
   middlewareCreate,
   middlewareList,
   middlewarePause,
@@ -90,7 +90,7 @@ import {
   middlewareRestart,
   middlewareResume,
 } from "./graphql/middleware.js";
-import { type PlatformConfig, getPlatformConfig } from "./graphql/platform.js";
+import { getPlatformConfig, type PlatformConfig } from "./graphql/platform.js";
 import {
   type CreatePrivateKeyArgs,
   type PrivateKey,
@@ -122,11 +122,11 @@ import {
 } from "./graphql/workspace.js";
 import { type ClientOptions, ClientOptionsSchema } from "./helpers/client-options.schema.js";
 import {
+  getPincodeVerificationChallengeResponse,
+  getPincodeVerificationChallenges,
   type PincodeVerificationChallengeResponseArgs,
   type PincodeVerificationChallengesArgs,
   type VerificationChallenge,
-  getPincodeVerificationChallengeResponse,
-  getPincodeVerificationChallenges,
 } from "./pincode-verification.js";
 
 /**
@@ -433,8 +433,8 @@ export type { Insights } from "./graphql/insights.js";
 export type { IntegrationTool } from "./graphql/integration-tool.js";
 export type { LoadBalancer } from "./graphql/load-balancer.js";
 export type { Middleware, MiddlewareWithSubgraphs } from "./graphql/middleware.js";
+export type { PlatformConfig } from "./graphql/platform.js";
 export type { PrivateKey } from "./graphql/private-key.js";
 export type { Storage } from "./graphql/storage.js";
 export type { Workspace } from "./graphql/workspace.js";
-export type { PlatformConfig } from "./graphql/platform.js";
 export type { VerificationChallenge } from "./pincode-verification.js";

@@ -8,7 +8,6 @@ export function accessibleEcdsaP256PrivateKeyResumeCommand() {
   return getResumeCommand({
     name: "accessible-ecdsa-p256",
     type: "private key",
-    subType: "accessible-ecdsa-p256",
     alias: "acc",
     envKey: "SETTLEMINT_ACCESSIBLE_PRIVATE_KEY",
     resumeFunction: async (settlemint, id) => {

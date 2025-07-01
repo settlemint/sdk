@@ -8,7 +8,6 @@ export function hdEcdsaP256PrivateKeyResumeCommand() {
   return getResumeCommand({
     name: "hd-ecdsa-p256",
     type: "private key",
-    subType: "hd-ecdsa-p256",
     alias: "hd",
     envKey: "SETTLEMINT_HD_PRIVATE_KEY",
     resumeFunction: async (settlemint, id) => {

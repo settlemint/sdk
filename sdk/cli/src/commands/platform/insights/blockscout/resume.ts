@@ -8,7 +8,6 @@ export function blockscoutResumeCommand() {
   return getResumeCommand({
     name: "blockscout",
     type: "insights",
-    subType: "blockscout",
     alias: "bs",
     envKey: "SETTLEMINT_BLOCKSCOUT",
     resumeFunction: async (settlemint, id) => {

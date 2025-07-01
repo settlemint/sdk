@@ -26,7 +26,6 @@ import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal
 export function getPauseCommand({
   name,
   type,
-  subType,
   alias,
   envKey,
   pauseFunction,
@@ -34,13 +33,14 @@ export function getPauseCommand({
 }: {
   name: string;
   type: ResourceType;
-  subType?: string;
   alias: string;
   envKey: keyof DotEnv;
-  pauseFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  pauseFunction: (settlemintClient: SettlemintClient, uniqueName: string) => Promise<{ name: string }>;
   usePersonalAccessToken?: boolean;
 }) {
   const commandName = sanitizeCommandName(name);
+  const typeCommandName = sanitizeCommandName(type);
+  const exampleCommandPrefix = `platform pause ${typeCommandName !== commandName ? `${typeCommandName} ` : ""}${commandName}`;
   return new Command(commandName)
     .alias(alias)
     .description(
@@ -50,11 +50,11 @@ export function getPauseCommand({
       createExamples([
         {
           description: `Pauses the specified ${type} by unique name`,
-          command: `platform pause ${commandName} <${type}-id>`,
+          command: `${exampleCommandPrefix} <unique-name>`,
         },
         {
           description: `Pauses the default ${type} in the production environment`,
-          command: `platform pause ${commandName} default --prod`,
+          command: `${exampleCommandPrefix} default --prod`,
         },
       ]),
     )

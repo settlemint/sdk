@@ -8,7 +8,6 @@ export function hasuraRestartCommand() {
   return getRestartCommand({
     name: "hasura",
     type: "integration tool",
-    subType: "hasura",
     alias: "ha",
     envKey: "SETTLEMINT_HASURA",
     restartFunction: async (settlemint, uniqueName) => {
