@@ -118,7 +118,8 @@ Options:
   -d, --default                       Save as default blockchain network
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
-  -r, --restart-if-timeout            Restart if wait time is exceeded
+  --restart-if-timeout                Restart if wait time is exceeded
+  --restart-on-error                  Restart if deployment fails
   --provider &lt;provider&gt;               Network provider (run `settlemint platform
                                       config` to see available providers)
   --region &lt;region&gt;                   Deployment region (run `settlemint
@@ -179,7 +180,8 @@ Options:
   -d, --default                             Save as default blockchain node
   --prod                                    Connect to production environment
   -w, --wait                                Wait until deployed
-  -r, --restart-if-timeout                  Restart if wait time is exceeded
+  --restart-if-timeout                      Restart if wait time is exceeded
+  --restart-on-error                        Restart if deployment fails
   --provider &lt;provider&gt;                     Network provider (run `settlemint platform config` to see available providers)
   --region &lt;region&gt;                         Deployment region (run `settlemint platform config` to see available regions)
   --size &lt;size&gt;                             Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
@@ -233,7 +235,8 @@ Options:
   -d, --default                       Save as default insights
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
-  -r, --restart-if-timeout            Restart if wait time is exceeded
+  --restart-if-timeout                Restart if wait time is exceeded
+  --restart-on-error                  Restart if deployment fails
   --provider &lt;provider&gt;               Network provider (run `settlemint platform
                                       config` to see available providers)
   --region &lt;region&gt;                   Deployment region (run `settlemint
@@ -286,7 +289,8 @@ Options:
   -d, --default                Save as default integration tool
   --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
-  -r, --restart-if-timeout     Restart if wait time is exceeded
+  --restart-if-timeout         Restart if wait time is exceeded
+  --restart-on-error           Restart if deployment fails
   --provider &lt;provider&gt;        Network provider (run `settlemint platform
                                config` to see available providers)
   --region &lt;region&gt;            Deployment region (run `settlemint platform
@@ -338,7 +342,8 @@ Options:
   -d, --default                             Save as default load balancer
   --prod                                    Connect to production environment
   -w, --wait                                Wait until deployed
-  -r, --restart-if-timeout                  Restart if wait time is exceeded
+  --restart-if-timeout                      Restart if wait time is exceeded
+  --restart-on-error                        Restart if deployment fails
   --provider &lt;provider&gt;                     Network provider (run `settlemint platform config` to see available providers)
   --region &lt;region&gt;                         Deployment region (run `settlemint platform config` to see available regions)
   --size &lt;size&gt;                             Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
@@ -391,7 +396,8 @@ Options:
   -d, --default                       Save as default middleware
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
-  -r, --restart-if-timeout            Restart if wait time is exceeded
+  --restart-if-timeout                Restart if wait time is exceeded
+  --restart-on-error                  Restart if deployment fails
   --provider &lt;provider&gt;               Network provider (run `settlemint platform
                                       config` to see available providers)
   --region &lt;region&gt;                   Deployment region (run `settlemint
@@ -435,7 +441,8 @@ Options:
   -d, --default                                           Save as default middleware
   --prod                                                  Connect to production environment
   -w, --wait                                              Wait until deployed
-  -r, --restart-if-timeout                                Restart if wait time is exceeded
+  --restart-if-timeout                                    Restart if wait time is exceeded
+  --restart-on-error                                      Restart if deployment fails
   --provider &lt;provider&gt;                                   Network provider (run `settlemint platform config` to see available providers)
   --region &lt;region&gt;                                       Deployment region (run `settlemint platform config` to see available regions)
   --size &lt;size&gt;                                           Network size (choices: &quot;LARGE&quot;, &quot;MEDIUM&quot;, &quot;SMALL&quot;, default: &quot;SMALL&quot;)
@@ -488,7 +495,8 @@ Options:
   -d, --default                                          Save as default private key
   --prod                                                 Connect to production environment
   -w, --wait                                             Wait until deployed
-  -r, --restart-if-timeout                               Restart if wait time is exceeded
+  --restart-if-timeout                                   Restart if wait time is exceeded
+  --restart-on-error                                     Restart if deployment fails
   --application &lt;application&gt;                            Application unique name
   --blockchain-node &lt;blockchainNode&gt;                     Blockchain Node unique name
   --trusted-forwarder-address &lt;trustedForwarderAddress&gt;  The address of the trusted forwarder contract. Must inherit from OpenZeppelin&#039;s ERC2771Forwarder contract
@@ -521,7 +529,8 @@ Options:
   -d, --default                       Save as default private key
   --prod                              Connect to production environment
   -w, --wait                          Wait until deployed
-  -r, --restart-if-timeout            Restart if wait time is exceeded
+  --restart-if-timeout                Restart if wait time is exceeded
+  --restart-on-error                  Restart if deployment fails
   --application &lt;application&gt;         Application unique name
   --blockchain-node &lt;blockchainNode&gt;  Blockchain Node unique name
   -h, --help                          display help for command
@@ -551,7 +560,8 @@ Options:
   -d, --default                                          Save as default private key
   --prod                                                 Connect to production environment
   -w, --wait                                             Wait until deployed
-  -r, --restart-if-timeout                               Restart if wait time is exceeded
+  --restart-if-timeout                                   Restart if wait time is exceeded
+  --restart-on-error                                     Restart if deployment fails
   --application &lt;application&gt;                            Application unique name
   --blockchain-node &lt;blockchainNode&gt;                     Blockchain Node unique name
   --trusted-forwarder-address &lt;trustedForwarderAddress&gt;  The address of the trusted forwarder contract. Must inherit from OpenZeppelin&#039;s ERC2771Forwarder contract
@@ -598,7 +608,8 @@ Options:
   -d, --default                Save as default storage
   --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
-  -r, --restart-if-timeout     Restart if wait time is exceeded
+  --restart-if-timeout         Restart if wait time is exceeded
+  --restart-on-error           Restart if deployment fails
   --provider &lt;provider&gt;        Network provider (run `settlemint platform
                                config` to see available providers)
   --region &lt;region&gt;            Deployment region (run `settlemint platform
@@ -632,7 +643,8 @@ Options:
   -d, --default                Save as default storage
   --prod                       Connect to production environment
   -w, --wait                   Wait until deployed
-  -r, --restart-if-timeout     Restart if wait time is exceeded
+  --restart-if-timeout         Restart if wait time is exceeded
+  --restart-on-error           Restart if deployment fails
   --provider &lt;provider&gt;        Network provider (run `settlemint platform
                                config` to see available providers)
   --region &lt;region&gt;            Deployment region (run `settlemint platform

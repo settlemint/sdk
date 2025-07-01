@@ -9,7 +9,7 @@ Options:
 
 Commands:
   <a href="#subgraph-add">add</a> [options]                     Add a contract to the subgraph
-  <a href="#subgraph-build">build</a>                             Build the subgraph
+  <a href="#subgraph-build">build</a> [options]                   Build the subgraph
   <a href="#subgraph-codegen">codegen</a>                           Codegen the subgraph types
   <a href="#subgraph-deploy">deploy</a> [options] [subgraph-name]  Deploy the subgraph
   <a href="#subgraph-remove">remove</a> [options] [subgraph-name]  Remove a subgraph
@@ -47,7 +47,8 @@ Examples:
 Build the subgraph
 
 Options:
-  -h, --help  display help for command
+  --ipfs &lt;ipfs-url&gt;  The IPFS URL to use for the subgraph deployment
+  -h, --help         display help for command
 </pre>
 
 <h2 id="subgraph-codegen"><a href="#home">Subgraph</a> > Codegen</h2>
