@@ -33,7 +33,7 @@ export function hasuraIntegrationCreateCommand() {
                 settlemint.integrationTool.create({
                   name,
                   applicationUniqueName,
-                  integrationType: "HASURA",
+                  integrationType: "HA_HASURA",
                   provider,
                   region,
                   size,
