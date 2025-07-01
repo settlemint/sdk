@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { NODE_NAME } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const COMMAND_TEST_SCOPE = __filename;
@@ -26,7 +25,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(pauseOutput).toInclude(`Blockchain node ${NODE_NAME} pause initiated successfully`);
+    expect(pauseOutput).toInclude(`Blockchain node ${blockchainNodeUniqueName} pause initiated successfully`);
 
     // Resume the blockchain node
     const { output: resumeOutput } = await runCommand(COMMAND_TEST_SCOPE, [
@@ -38,7 +37,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(resumeOutput).toInclude(`Blockchain node ${NODE_NAME} resume initiated successfully`);
+    expect(resumeOutput).toInclude(`Blockchain node ${blockchainNodeUniqueName} resume initiated successfully`);
   });
 
   test("Pause blockchain node without waiting", async () => {
@@ -54,7 +53,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(output).toInclude(`Blockchain node ${NODE_NAME} pause initiated successfully`);
+    expect(output).toInclude(`Blockchain node ${blockchainNodeUniqueName} pause initiated successfully`);
     expect(output).not.toInclude("Waiting for blockchain node to be paused");
 
     // Resume to clean up state
@@ -91,7 +90,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(output).toInclude(`Blockchain node ${NODE_NAME} resume initiated successfully`);
+    expect(output).toInclude(`Blockchain node ${blockchainNodeUniqueName} resume initiated successfully`);
     expect(output).not.toInclude("Waiting for blockchain node to be resumed");
 
     // Wait for completion to ensure cleanup
