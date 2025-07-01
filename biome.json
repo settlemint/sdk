@@ -1,18 +1,9 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "organizeImports": {
-    "enabled": true
-  },
   "files": {
-    "include": ["**"],
-    "ignore": [
-      "**/.vscode/launch.json",
-      ".settlemint",
-      "contracts/artifacts",
-      "**/graphql-env.d.ts",
-      "**/graphql-cache.d.ts",
-      "**/sdk/js/schema.graphql"
-    ]
+    "includes": ["**"],
+    "ignoreUnknown": true,
+    "maxSize": 1048576
   },
   "linter": {
     "enabled": true,
@@ -58,9 +49,30 @@
     "lineEnding": "lf",
     "lineWidth": 120
   },
+  "javascript": {
+    "globals": []
+  },
   "vcs": {
     "enabled": true,
     "clientKind": "git",
     "useIgnoreFile": true
-  }
+  },
+  "overrides": [
+    {
+      "includes": [
+        "**/.vscode/launch.json",
+        ".settlemint/**",
+        "contracts/artifacts/**",
+        "**/graphql-env.d.ts",
+        "**/graphql-cache.d.ts",
+        "**/sdk/js/schema.graphql"
+      ],
+      "formatter": {
+        "enabled": false
+      },
+      "linter": {
+        "enabled": false
+      }
+    }
+  ]
 }
