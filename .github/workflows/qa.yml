@@ -173,12 +173,6 @@ jobs:
 
           echo "Updated version to $VERSION"
 
-      - name: Setup git user
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
-        run: |
-          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
-
       - name: Login to npm
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         run: |
