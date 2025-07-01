@@ -122,54 +122,6 @@ jobs:
           slack_channel_id: ${{ env.SLACK_CHANNEL_ID }}
 
       # Setup dependencies for QA (skip for draft PRs)
-      - name: Setup Bun
-        if: |
-          github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
-          github.event_name == 'pull_request_review'
-        uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: "1.2.17"
-
-      - name: Verify Bun installation
-        if: |
-          github.event_name == 'push' ||
-          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
-          github.event_name == 'pull_request_review'
-        run: |
-          echo "=== Bun Installation Check ==="
-          echo "PATH: $PATH"
-          echo "HOME: $HOME"
-          echo "Checking if bun is available..."
-          if command -v bun >/dev/null 2>&1; then
-            echo "✅ Bun found in PATH"
-            bun --version
-            which bun
-          else
-            echo "❌ Bun not found in PATH"
-            echo "Checking common locations..."
-            ls -la ~/.bun/bin/ 2>/dev/null || echo "~/.bun/bin/ not found"
-            ls -la /home/runner/.bun/bin/ 2>/dev/null || echo "/home/runner/.bun/bin/ not found"
-            # Try to add bun to PATH if it exists
-            if [ -f ~/.bun/bin/bun ]; then
-              echo "Adding ~/.bun/bin to PATH"
-              echo "$HOME/.bun/bin" >> $GITHUB_PATH
-              export PATH="$HOME/.bun/bin:$PATH"
-            elif [ -f /home/runner/.bun/bin/bun ]; then
-              echo "Adding /home/runner/.bun/bin to PATH"
-              echo "/home/runner/.bun/bin" >> $GITHUB_PATH
-              export PATH="/home/runner/.bun/bin:$PATH"
-            fi
-            # Check again
-            if command -v bun >/dev/null 2>&1; then
-              echo "✅ Bun now available"
-              bun --version
-            else
-              echo "❌ Still cannot find bun"
-              exit 1
-            fi
-          fi
-
       - name: Setup dependencies
         if: |
           github.event_name == 'push' ||
@@ -180,6 +132,16 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
+
+      - name: Verify Bun after setup-dependencies
+        if: |
+          github.event_name == 'push' ||
+          (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
+          github.event_name == 'pull_request_review'
+        run: |
+          echo "PATH after setup-dependencies: $PATH"
+          echo "Bun location: $(which bun || echo 'not found')"
+          bun --version
 
       # Login to Docker registries (only when running QA)
       - name: Login to GitHub Container Registry
