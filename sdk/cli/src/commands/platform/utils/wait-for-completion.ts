@@ -8,6 +8,7 @@ import { SETTLEMINT_CLIENT_MAP } from "@/constants/resource-type";
 type Action = "deploy" | "destroy" | "restart" | "pause" | "resume";
 
 class TimeoutError extends Error {}
+class DeploymentFailedError extends Error {}
 
 /**
  * Waits for a resource to complete an action or fails after a specified timeout.
@@ -55,6 +56,8 @@ export async function waitForCompletion({
     throw new Error(`Service ${serviceType} does not support status checking`);
   }
 
+  let hasRestarted = false;
+
   function showSpinner() {
     return spinner({
       startMessage: `Waiting for ${type} to be ${getActionLabel(action)}`,
@@ -70,8 +73,7 @@ export async function waitForCompletion({
             if (resource.status === "FAILED") {
               updateStatus(spinner, `${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
               if (restartOnError) {
-                note(`Restarting ${capitalizeFirstLetter(type)}`);
-                await service.restart(uniqueName);
+                throw new DeploymentFailedError();
               }
               return false;
             }
@@ -104,14 +106,26 @@ export async function waitForCompletion({
   try {
     return await showSpinner();
   } catch (error) {
-    const isTimeoutError = error instanceof SpinnerError && error.originalError instanceof TimeoutError;
-    if (restartIfTimeout && isTimeoutError) {
+    if (!hasRestarted && shouldRestart(error, restartIfTimeout)) {
       note(`Restarting ${capitalizeFirstLetter(type)}`);
+      hasRestarted = true;
       await service.restart(uniqueName);
       return showSpinner();
     }
     throw error;
   }
+}
+
+function shouldRestart(error: unknown, restartIfTimeout: boolean): boolean {
+  const isSpinnerError = error instanceof SpinnerError;
+  const isDeploymentFailedError =
+    error instanceof DeploymentFailedError || (isSpinnerError && error.originalError instanceof DeploymentFailedError);
+  if (isDeploymentFailedError) {
+    return true;
+  }
+  const isTimeoutError =
+    error instanceof TimeoutError || (isSpinnerError && error.originalError instanceof TimeoutError);
+  return restartIfTimeout && isTimeoutError;
 }
 
 // Helper function to update spinner or show note
