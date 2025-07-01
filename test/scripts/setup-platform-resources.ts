@@ -177,6 +177,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
           ]).result,
     () =>
       hasHasuraIntegration
@@ -194,6 +195,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             HASURA_NAME,
           ]).result,
     () =>
@@ -212,6 +214,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             MINIO_NAME,
           ]).result,
     () =>
@@ -230,6 +233,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             IPFS_NAME,
           ]).result,
   ]);
@@ -280,6 +284,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             privateKeyName,
           ]).result;
           expect(privateKeyHsmCreateCommandOutput).toInclude(`Private key ${privateKeyName} created successfully`);
@@ -305,6 +310,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
       "--default",
       "--wait",
       "--restart-if-timeout",
+      "--restart-on-error",
       RELAYER_PRIVATE_KEY_NAME,
     ]).result;
     expect(privateKeyRelayerCommandOutput).toInclude(`Private key ${RELAYER_PRIVATE_KEY_NAME} created successfully`);
@@ -334,6 +340,7 @@ async function createBlockchainNodes() {
             "--accept-defaults",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             NODE_NAME_2_WITH_PK,
           ]).result,
     () =>
@@ -353,6 +360,7 @@ async function createBlockchainNodes() {
             "--accept-defaults",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             NODE_NAME_3_WITHOUT_PK,
           ]).result,
   ]);
@@ -402,6 +410,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             HD_PRIVATE_KEY_NAME,
           ]).result,
     () =>
@@ -421,6 +430,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             "--include-predeployed-abis",
             "asset-tokenization",
           ]).result,
@@ -440,6 +450,7 @@ async function createPrivateKeySmartcontractSetPortalAndBlockscout() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             BLOCKSCOUT_NAME,
           ]).result,
   ]);
@@ -493,6 +504,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--default",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             GRAPH_NAME,
           ]).result,
     () =>
@@ -508,6 +520,7 @@ async function createGraphMiddlewareAndActivatedPrivateKey() {
             "--accept-defaults",
             "--wait",
             "--restart-if-timeout",
+            "--restart-on-error",
             PRIVATE_KEY_NODE_2_NAME,
           ]).result,
   ]);
@@ -546,6 +559,7 @@ async function createLoadBalancer() {
       "--default",
       "--wait",
       "--restart-if-timeout",
+      "--restart-on-error",
       LOAD_BALANCER_NAME,
     ]).result;
     expect(loadBalancerCreateCommandOutput).toInclude(`Load balancer ${LOAD_BALANCER_NAME} created successfully`);

@@ -16,6 +16,7 @@ class TimeoutError extends Error {}
  * @param action - The action being performed ('deploy' or 'destroy')
  * @param maxTimeout - Maximum time to wait in milliseconds before timing out (defaults to 10 minutes)
  * @param restartIfTimeout - Whether to restart the resource if it times out
+ * @param restartOnError - Whether to restart the resource if it fails
  * @returns A promise that resolves to true if the resource completes successfully
  * @throws Error if the operation times out after the specified maxTimeout
  */
@@ -26,6 +27,7 @@ export async function waitForCompletion({
   action,
   maxTimeout = 10 * 60 * 1000, // 10 minutes in milliseconds
   restartIfTimeout = false,
+  restartOnError = false,
 }: {
   settlemint: SettlemintClient;
   type: ResourceType;
@@ -33,6 +35,7 @@ export async function waitForCompletion({
   action: Action;
   maxTimeout?: number;
   restartIfTimeout?: boolean;
+  restartOnError?: boolean;
 }): Promise<boolean> {
   const serviceType = SETTLEMINT_CLIENT_MAP[type];
   if (
@@ -76,6 +79,10 @@ export async function waitForCompletion({
                 spinner.text = `${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`;
               } else {
                 note(`${capitalizeFirstLetter(type)} failed to ${getActionLabel(action)}`);
+              }
+              if (restartOnError) {
+                note(`Restarting ${capitalizeFirstLetter(type)}`);
+                await service.restart(uniqueName);
               }
               return false;
             }

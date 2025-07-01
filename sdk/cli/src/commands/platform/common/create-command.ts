@@ -23,6 +23,7 @@ type DefaultArgs = {
   prod?: true | undefined;
   wait?: true | undefined;
   restartIfTimeout?: true | undefined;
+  restartOnError?: true | undefined;
   provider?: string | undefined;
   region?: string | undefined;
 };
@@ -94,12 +95,16 @@ export function getCreateCommand({
   if (requiresDeployment) {
     cmd
       .option("-w, --wait", "Wait until deployed")
-      .option("-r, --restart-if-timeout", "Restart if wait time is exceeded");
+      .option("--restart-if-timeout", "Restart if wait time is exceeded")
+      .option("--restart-on-error", "Restart if deployment fails");
   }
 
   execute(
     cmd,
-    async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout, provider, region }, createFunction) => {
+    async (
+      { acceptDefaults, prod, default: isDefault, wait, restartIfTimeout, restartOnError, provider, region },
+      createFunction,
+    ) => {
       intro(`Creating ${type} in the SettleMint platform`);
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
@@ -152,6 +157,7 @@ export function getCreateCommand({
           uniqueName: waitFor?.uniqueName ?? result.uniqueName,
           action: "deploy",
           restartIfTimeout,
+          restartOnError,
         });
         if (!isDeployed) {
           throw new Error(
