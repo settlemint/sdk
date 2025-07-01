@@ -1,15 +1,15 @@
+import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient, type SettlemintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import type { ResourceType } from "@/constants/resource-type";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { createExamples } from "@/utils/commands/create-examples";
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { Command } from "@commander-js/extra-typings";
-import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates a command for pausing resources in the SettleMint platform.
@@ -49,7 +49,7 @@ export function getPauseCommand({
     .usage(
       createExamples([
         {
-          description: `Pauses the specified ${type} by id`,
+          description: `Pauses the specified ${type} by unique name`,
           command: `platform pause ${commandName} <${type}-id>`,
         },
         {
