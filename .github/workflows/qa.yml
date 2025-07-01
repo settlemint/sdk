@@ -127,7 +127,7 @@ jobs:
           github.event_name == 'push' ||
           (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
           github.event_name == 'pull_request_review'
-        uses: oven-sh/setup-bun@735343b667d3e6f658f44d0eca948eb6282f2b76 # v2
+        uses: oven-sh/setup-bun@v2
         with:
           bun-version: "1.2.17"
 
@@ -137,8 +137,38 @@ jobs:
           (github.event_name == 'pull_request' && github.event.pull_request.draft == false) ||
           github.event_name == 'pull_request_review'
         run: |
-          bun --version
-          which bun
+          echo "=== Bun Installation Check ==="
+          echo "PATH: $PATH"
+          echo "HOME: $HOME"
+          echo "Checking if bun is available..."
+          if command -v bun >/dev/null 2>&1; then
+            echo "✅ Bun found in PATH"
+            bun --version
+            which bun
+          else
+            echo "❌ Bun not found in PATH"
+            echo "Checking common locations..."
+            ls -la ~/.bun/bin/ 2>/dev/null || echo "~/.bun/bin/ not found"
+            ls -la /home/runner/.bun/bin/ 2>/dev/null || echo "/home/runner/.bun/bin/ not found"
+            # Try to add bun to PATH if it exists
+            if [ -f ~/.bun/bin/bun ]; then
+              echo "Adding ~/.bun/bin to PATH"
+              echo "$HOME/.bun/bin" >> $GITHUB_PATH
+              export PATH="$HOME/.bun/bin:$PATH"
+            elif [ -f /home/runner/.bun/bin/bun ]; then
+              echo "Adding /home/runner/.bun/bin to PATH"
+              echo "/home/runner/.bun/bin" >> $GITHUB_PATH
+              export PATH="/home/runner/.bun/bin:$PATH"
+            fi
+            # Check again
+            if command -v bun >/dev/null 2>&1; then
+              echo "✅ Bun now available"
+              bun --version
+            else
+              echo "❌ Still cannot find bun"
+              exit 1
+            fi
+          fi
 
       - name: Setup dependencies
         if: |
