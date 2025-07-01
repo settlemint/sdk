@@ -56,6 +56,8 @@ export async function waitForCompletion({
     throw new Error(`Service ${serviceType} does not support status checking`);
   }
 
+  let hasRestarted = false;
+
   function showSpinner() {
     return spinner({
       startMessage: `Waiting for ${type} to be ${getActionLabel(action)}`,
@@ -104,8 +106,9 @@ export async function waitForCompletion({
   try {
     return await showSpinner();
   } catch (error) {
-    if (shouldRestart(error, restartIfTimeout)) {
+    if (!hasRestarted && shouldRestart(error, restartIfTimeout)) {
       note(`Restarting ${capitalizeFirstLetter(type)}`);
+      hasRestarted = true;
       await service.restart(uniqueName);
       return showSpinner();
     }
