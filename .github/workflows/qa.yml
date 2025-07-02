@@ -40,9 +40,7 @@ jobs:
     runs-on: namespace-profile-sdk
     timeout-minutes: 30
     permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
+      contents: read
       pull-requests: write
       issues: write
       security-events: write
@@ -186,12 +184,13 @@ jobs:
         run: bun docs
 
       - name: Auto-commit changes to docs and README
-        if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' && github.ref == 'refs/heads/main' && env.TAG == 'main' }}
-        uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6
-        with:
-          commit_message: "chore: update docs [skip ci]"
-          branch: main
-          file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
+        #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' && github.ref == 'refs/heads/main' && env.TAG == 'main' }}
+        env:
+          PAT_TOKEN: ${{ env.PAT_TOKEN }}
+        run: |
+          git add sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md
+          git commit -m "chore: update docs [skip ci]"
+          git push https://github-username:$PAT_TOKEN@github.com/settlemint/sdk.git
 
       - name: Run tests and checks
         if: github.event_name == 'pull_request' || github.event_name == 'push'
