@@ -179,9 +179,11 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
-      - name: Update git remote to use PAT
+      - name: Setup git user
         run: |
-          git remote set-url origin https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+          git config --global user.password $PAT_TOKEN
         env:
           PAT_TOKEN: ${{ env.PAT_TOKEN }}
 
