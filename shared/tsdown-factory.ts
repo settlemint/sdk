@@ -1,10 +1,9 @@
-import { type Options, defineConfig } from "tsdown";
+import type { Options } from "tsdown";
 
 export interface ConfigOptions {
   entry: string[];
   format?: ("cjs" | "esm")[];
   platform?: "node" | "browser" | "neutral";
-  bundle?: boolean;
   external?: string[] | ((id: string) => boolean);
   target?: string;
   outDir?: string;
@@ -15,7 +14,6 @@ export interface ConfigOptions {
 }
 
 const isProd = process.env.NODE_ENV === "production";
-const shouldAnalyze = process.env.ANALYZE_BUNDLE === "true";
 
 export const createConfig = (options: ConfigOptions): Options => {
   const config: Options = {
@@ -23,8 +21,6 @@ export const createConfig = (options: ConfigOptions): Options => {
     format: options.format || ["cjs", "esm"],
     dts: true,
     sourcemap: !isProd || "inline",
-    splitting: !options.bundle && options.format?.includes("esm"),
-    bundle: options.bundle,
     treeshake: isProd,
     minify: options.minifyOverride ?? isProd,
     target: options.target || (options.platform === "browser" ? "es2022" : "node20"),
@@ -32,16 +28,17 @@ export const createConfig = (options: ConfigOptions): Options => {
     external: options.external,
     outDir: options.outDir,
     shims: options.shims,
-    banner: options.banner,
     define: {
       __DEV__: JSON.stringify(!isProd),
       __PROD__: JSON.stringify(isProd),
       __VERSION__: JSON.stringify(process.env.npm_package_version || "dev"),
       ...options.define,
     },
-    metafile: shouldAnalyze,
-    outExtension: ({ format }) => ({
-      js: format === "esm" ? ".mjs" : ".cjs",
+    outputOptions: {
+      banner: options.banner?.js,
+    },
+    outExtensions: ({ format }) => ({
+      js: format === "cjs" ? ".cjs" : ".js",
     }),
   };
 
@@ -49,7 +46,7 @@ export const createConfig = (options: ConfigOptions): Options => {
 };
 
 export const createMultiConfig = (configs: ConfigOptions[]) => {
-  return defineConfig(configs.map(createConfig));
+  return configs.map(createConfig);
 };
 
 export const createNodePackage = (entry: string[], options: Partial<ConfigOptions> = {}) =>
@@ -77,7 +74,6 @@ export const createCLIPackage = (entry: string[], options: Partial<ConfigOptions
     entry,
     format: ["esm"],
     platform: "node",
-    bundle: true,
     shims: true,
     target: "node20",
     banner: {
@@ -100,12 +96,14 @@ export const createUtilsPackage = (modules: string[], options: Partial<ConfigOpt
       ...options,
     },
     // Individual modules for tree shaking
-    ...modules.map((module) => ({
-      entry: [`src/${module}.ts`],
-      format: ["cjs", "esm"] as const,
-      platform: "node" as const,
-      ...options,
-    })),
+    ...modules.map(
+      (module): ConfigOptions => ({
+        entry: [`src/${module}.ts`],
+        format: ["cjs", "esm"],
+        platform: "node",
+        ...options,
+      }),
+    ),
   ];
 
   return configs.map(createConfig);
@@ -138,25 +136,17 @@ export const createWebOptimizedPackage = (entry: string[], options: Partial<Conf
 };
 
 // Performance monitoring helpers
-let buildStartTime: number;
-
-export const withPerformanceMonitoring = (config: Options): Options => ({
+export const withPerformanceMonitoring = (config: Options & { buildStartTime?: number }): Options => ({
   ...config,
-  onStart: () => {
-    buildStartTime = Date.now();
-    console.log("🏗️  Building...");
-  },
-  onEnd: (result) => {
-    const duration = Date.now() - buildStartTime;
-    console.log(`✅ Built in ${duration}ms`);
-
-    if (result.metafile && shouldAnalyze) {
-      console.log("📊 Bundle Analysis:");
-      for (const [file, output] of Object.entries(result.metafile.outputs)) {
-        const sizeKb = (output.bytes / 1024).toFixed(2);
-        console.log(`📦 ${file}: ${sizeKb}kb`);
-      }
-    }
+  hooks(hooks) {
+    hooks.hook("build:prepare", (context) => {
+      config.buildStartTime = Date.now();
+      console.log(`🏗️  Building ${context.options.pkg.name}...`);
+    });
+    hooks.hook("build:done", (context) => {
+      const duration = Date.now() - config.buildStartTime;
+      console.log(`✅ Built ${context.options.pkg.name} in ${duration}ms`);
+    });
   },
 });
 

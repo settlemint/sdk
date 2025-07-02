@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { createConfig, createSmartExternal, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
+import { createConfig, createSmartExternal, withPerformanceMonitoring } from "../../shared/tsdown-factory";
 
 export default defineConfig(
   withPerformanceMonitoring(

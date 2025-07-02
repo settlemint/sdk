@@ -31,6 +31,7 @@ async function build() {
 
     console.log(`📦 Bundle: ${formatSize(build.outputs[0].size)}`);
   } catch (error) {
+    console.error(error);
     throw new Error(`Bundle build failed: ${error.message}`);
   }
 
