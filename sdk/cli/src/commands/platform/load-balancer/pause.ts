@@ -1,10 +1,10 @@
 import { getPauseCommand } from "@/commands/platform/common/pause-command";
 
 /**
- * Creates and returns the 'evm pause' command for the SettleMint SDK.
- * This command pauses an EVM load balancer in the SettleMint platform.
+ * Creates and returns the 'load-balancer pause' command for the SettleMint SDK.
+ * This command pauses a load balancer in the SettleMint platform.
  */
-export function evmLoadBalancerPauseCommand() {
+export function loadBalancerPauseCommand() {
   return getPauseCommand({
     name: "evm",
     type: "load balancer",

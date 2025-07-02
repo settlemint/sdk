@@ -31,7 +31,8 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(pauseOutput).toInclude(`Blockchain node ${blockchainNodeUniqueName} pause initiated successfully`);
+    expect(pauseOutput).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} pause initiated successfully`);
+    expect(pauseOutput).toInclude("Blockchain node is paused");
 
     // Resume the blockchain node
     const { output: resumeOutput } = await runCommand(COMMAND_TEST_SCOPE, [
@@ -43,7 +44,8 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(resumeOutput).toInclude(`Blockchain node ${blockchainNodeUniqueName} resume initiated successfully`);
+    expect(resumeOutput).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} resume initiated successfully`);
+    expect(resumeOutput).toInclude("Blockchain node is resumed");
   });
 
   test("Pause blockchain node without waiting", async () => {
@@ -56,7 +58,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(output).toInclude(`Blockchain node ${blockchainNodeUniqueName} pause initiated successfully`);
+    expect(output).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} pause initiated successfully`);
     expect(output).not.toInclude("Waiting for blockchain node to be paused");
 
     // Resume to clean up state
