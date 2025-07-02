@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { createCLIPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
+import { createCLIPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory";
 
 export default defineConfig(
   withPerformanceMonitoring(
