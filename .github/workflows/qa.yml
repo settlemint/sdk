@@ -179,6 +179,11 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
+      - name: Setup git user
+        run: |
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+
       - name: Update docs and README
         if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' }}
         run: bun docs
@@ -190,7 +195,7 @@ jobs:
         run: |
           git add sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md
           git commit -m "chore: update docs [skip ci]"
-          git push https://github-username:$PAT_TOKEN@github.com/settlemint/sdk.git
+          git push https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
 
       - name: Run tests and checks
         if: github.event_name == 'pull_request' || github.event_name == 'push'
