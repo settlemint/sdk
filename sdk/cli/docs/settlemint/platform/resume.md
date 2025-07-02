@@ -5,22 +5,19 @@
 Resume a resource in the SettleMint platform
 
 Options:
-  -h, --help                                         display help for command
+  -h, --help                                      display help for command
 
 Commands:
-  <a href="#resume-blockchain-node">blockchain-node|bn</a> [options] &lt;unique-name&gt;         Resume a blockchain node in the SettleMint platform. Provide the blockchain node unique name or use &#039;default&#039; to resume the default blockchain node from your .env file.
-  <a href="#resume-blockchain-network">blockchain-network|bnw</a> [options] &lt;unique-name&gt;     Resume a blockchain network in the SettleMint platform. Provide the blockchain network unique name or use &#039;default&#039; to resume the default blockchain network from your .env file.
-  <a href="#resume-custom-deployment">custom-deployment|cd</a> [options] &lt;unique-name&gt;       Resume a custom deployment in the SettleMint platform. Provide the custom deployment unique name or use &#039;default&#039; to resume the default custom deployment from your .env file.
-  <a href="#resume-blockscout">blockscout|bs</a> [options] &lt;unique-name&gt;              Resume a insights in the SettleMint platform. Provide the insights unique name or use &#039;default&#039; to resume the default insights from your .env file.
-  <a href="#resume-hasura">hasura|ha</a> [options] &lt;unique-name&gt;                  Resume a integration tool in the SettleMint platform. Provide the integration tool unique name or use &#039;default&#039; to resume the default integration tool from your .env file.
-  <a href="#resume-evm">evm|lb</a> [options] &lt;unique-name&gt;                     Resume a load balancer in the SettleMint platform. Provide the load balancer unique name or use &#039;default&#039; to resume the default load balancer from your .env file.
-  <a href="#resume-graph">graph|gr</a> [options] &lt;unique-name&gt;                   Resume a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to resume the default middleware from your .env file.
-  <a href="#resume-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;unique-name&gt;  Resume a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to resume the default middleware from your .env file.
-  <a href="#resume-accessible-ecdsa-p256">accessible-ecdsa-p256|acc</a> [options] &lt;unique-name&gt;  Resume a private key in the SettleMint platform. Provide the private key unique name or use &#039;default&#039; to resume the default private key from your .env file.
-  <a href="#resume-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;unique-name&gt;           Resume a private key in the SettleMint platform. Provide the private key unique name or use &#039;default&#039; to resume the default private key from your .env file.
-  <a href="#resume-ipfs">ipfs|ip</a> [options] &lt;unique-name&gt;                    Resume a storage in the SettleMint platform. Provide the storage unique name or use &#039;default&#039; to resume the default storage from your .env file.
-  <a href="#resume-minio">minio|m</a> [options] &lt;unique-name&gt;                    Resume a storage in the SettleMint platform. Provide the storage unique name or use &#039;default&#039; to resume the default storage from your .env file.
-  help [command]                                     display help for command
+  <a href="#resume-blockchain-node">blockchain-node|bn</a> [options] &lt;unique-name&gt;      Resume a blockchain node in the SettleMint platform. Provide the blockchain node unique name or use &#039;default&#039; to resume the default blockchain node from your .env file.
+  <a href="#resume-blockchain-network">blockchain-network|bnw</a> [options] &lt;unique-name&gt;  Resume a blockchain network in the SettleMint platform. Provide the blockchain network unique name or use &#039;default&#039; to resume the default blockchain network from your .env file.
+  <a href="#resume-custom-deployment">custom-deployment|cd</a> [options] &lt;unique-name&gt;    Resume a custom deployment in the SettleMint platform. Provide the custom deployment unique name or use &#039;default&#039; to resume the default custom deployment from your .env file.
+  <a href="#resume-insights">insights|in</a>                                     Resume an insights service in the SettleMint platform
+  <a href="#resume-integration-tool">integration-tool|it</a>                             Resume an integration tool service in the SettleMint platform
+  <a href="#resume-load-balancer">load-balancer|lb</a> [options] &lt;unique-name&gt;        Resume a load balancer in the SettleMint platform. Provide the load balancer unique name or use &#039;default&#039; to resume the default load balancer from your .env file.
+  <a href="#resume-middleware">middleware|mw</a>                                   Resume a middleware service in the SettleMint platform
+  <a href="#resume-private-key">private-key|pk</a> [options] &lt;unique-name&gt;          Resume a private key in the SettleMint platform. Provide the private key unique name or use &#039;default&#039; to resume the default private key from your .env file.
+  <a href="#resume-storage">storage|st</a>                                      Resume a storage service in the SettleMint platform
+  help [command]                                  display help for command
 </pre>
 
 <h2 id="resume-blockchain-node"><a href="#home">Resume</a> > Blockchain node</h2>
@@ -101,9 +98,23 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-blockscout"><a href="#home">Resume</a> > Blockscout</h2>
+<h2 id="resume-insights"><a href="#home">Resume</a> > Insights</h2>
 
-<pre>Usage: settlemint platform resume blockscout|bs 
+<pre>Usage: settlemint platform resume insights|in [options] [command]
+
+Resume an insights service in the SettleMint platform
+
+Options:
+  -h, --help                             display help for command
+
+Commands:
+  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;unique-name&gt;  Resume a insights in the SettleMint platform. Provide the insights unique name or use &#039;default&#039; to resume the default insights from your .env file.
+  help [command]                         display help for command
+</pre>
+
+<h3 id="insights-blockscout"><a href="#home">Resume</a> > <a href="#resume-insights">Insights</a> > Blockscout</h3>
+
+<pre>Usage: settlemint platform resume insights blockscout|bs 
 Examples:
 
   # Resumes the specified insights by unique name
@@ -126,9 +137,27 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-hasura"><a href="#home">Resume</a> > Hasura</h2>
+<h2 id="resume-integration-tool"><a href="#home">Resume</a> > Integration tool</h2>
 
-<pre>Usage: settlemint platform resume hasura|ha 
+<pre>Usage: settlemint platform resume integration-tool|it [options] [command]
+
+Resume an integration tool service in the SettleMint platform
+
+Options:
+  -h, --help                         display help for command
+
+Commands:
+  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;unique-name&gt;  Resume a integration tool in the SettleMint
+                                     platform. Provide the integration tool
+                                     unique name or use &#039;default&#039; to resume the
+                                     default integration tool from your .env
+                                     file.
+  help [command]                     display help for command
+</pre>
+
+<h3 id="integration-tool-hasura"><a href="#home">Resume</a> > <a href="#resume-integration-tool">Integration tool</a> > Hasura</h3>
+
+<pre>Usage: settlemint platform resume integration-tool hasura|ha 
 Examples:
 
   # Resumes the specified integration tool by unique name
@@ -152,16 +181,16 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-evm"><a href="#home">Resume</a> > Evm</h2>
+<h2 id="resume-load-balancer"><a href="#home">Resume</a> > Load balancer</h2>
 
-<pre>Usage: settlemint platform resume evm|lb 
+<pre>Usage: settlemint platform resume load-balancer|lb 
 Examples:
 
   # Resumes the specified load balancer by unique name
-  $ settlemint platform resume load-balancer evm &lt;unique-name&gt;
+  $ settlemint platform resume load-balancer &lt;unique-name&gt;
 
   # Resumes the default load balancer in the production environment
-  $ settlemint platform resume load-balancer evm default --prod
+  $ settlemint platform resume load-balancer default --prod
 
 Resume a load balancer in the SettleMint platform. Provide the load balancer
 unique name or use &#039;default&#039; to resume the default load balancer from your .env
@@ -178,9 +207,24 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-graph"><a href="#home">Resume</a> > Graph</h2>
+<h2 id="resume-middleware"><a href="#home">Resume</a> > Middleware</h2>
 
-<pre>Usage: settlemint platform resume graph|gr 
+<pre>Usage: settlemint platform resume middleware|mw [options] [command]
+
+Resume a middleware service in the SettleMint platform
+
+Options:
+  -h, --help                                         display help for command
+
+Commands:
+  <a href="#middleware-graph">graph|gr</a> [options] &lt;unique-name&gt;                   Resume a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to resume the default middleware from your .env file.
+  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;unique-name&gt;  Resume a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to resume the default middleware from your .env file.
+  help [command]                                     display help for command
+</pre>
+
+<h3 id="middleware-graph"><a href="#home">Resume</a> > <a href="#resume-middleware">Middleware</a> > Graph</h3>
+
+<pre>Usage: settlemint platform resume middleware graph|gr 
 Examples:
 
   # Resumes the specified middleware by unique name
@@ -203,9 +247,9 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-smart-contract-portal"><a href="#home">Resume</a> > Smart contract portal</h2>
+<h3 id="middleware-smart-contract-portal"><a href="#home">Resume</a> > <a href="#resume-middleware">Middleware</a> > Smart contract portal</h3>
 
-<pre>Usage: settlemint platform resume smart-contract-portal|scp 
+<pre>Usage: settlemint platform resume middleware smart-contract-portal|scp 
 Examples:
 
   # Resumes the specified middleware by unique name
@@ -228,16 +272,16 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-accessible-ecdsa-p256"><a href="#home">Resume</a> > Accessible ecdsa p256</h2>
+<h2 id="resume-private-key"><a href="#home">Resume</a> > Private key</h2>
 
-<pre>Usage: settlemint platform resume accessible-ecdsa-p256|acc 
+<pre>Usage: settlemint platform resume private-key|pk 
 Examples:
 
   # Resumes the specified private key by unique name
-  $ settlemint platform resume private-key accessible-ecdsa-p256 &lt;unique-name&gt;
+  $ settlemint platform resume private-key &lt;unique-name&gt;
 
   # Resumes the default private key in the production environment
-  $ settlemint platform resume private-key accessible-ecdsa-p256 default --prod
+  $ settlemint platform resume private-key default --prod
 
 Resume a private key in the SettleMint platform. Provide the private key unique
 name or use &#039;default&#039; to resume the default private key from your .env file.
@@ -253,34 +297,30 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-hd-ecdsa-p256"><a href="#home">Resume</a> > Hd ecdsa p256</h2>
+<h2 id="resume-storage"><a href="#home">Resume</a> > Storage</h2>
 
-<pre>Usage: settlemint platform resume hd-ecdsa-p256|hd 
-Examples:
+<pre>Usage: settlemint platform resume storage|st [options] [command]
 
-  # Resumes the specified private key by unique name
-  $ settlemint platform resume private-key hd-ecdsa-p256 &lt;unique-name&gt;
-
-  # Resumes the default private key in the production environment
-  $ settlemint platform resume private-key hd-ecdsa-p256 default --prod
-
-Resume a private key in the SettleMint platform. Provide the private key unique
-name or use &#039;default&#039; to resume the default private key from your .env file.
-
-Arguments:
-  unique-name            The unique name of the private key, use &#039;default&#039; to
-                         resume the default one from your .env file
+Resume a storage service in the SettleMint platform
 
 Options:
-  -a, --accept-defaults  Accept the default and previously set values
-  --prod                 Connect to your production environment
-  -w, --wait             Wait until resumed
-  -h, --help             display help for command
+  -h, --help                       display help for command
+
+Commands:
+  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;unique-name&gt;  Resume a storage in the SettleMint platform.
+                                   Provide the storage unique name or use
+                                   &#039;default&#039; to resume the default storage from
+                                   your .env file.
+  <a href="#storage-minio">minio|m</a> [options] &lt;unique-name&gt;  Resume a storage in the SettleMint platform.
+                                   Provide the storage unique name or use
+                                   &#039;default&#039; to resume the default storage from
+                                   your .env file.
+  help [command]                   display help for command
 </pre>
 
-<h2 id="resume-ipfs"><a href="#home">Resume</a> > Ipfs</h2>
+<h3 id="storage-ipfs"><a href="#home">Resume</a> > <a href="#resume-storage">Storage</a> > Ipfs</h3>
 
-<pre>Usage: settlemint platform resume ipfs|ip 
+<pre>Usage: settlemint platform resume storage ipfs|ip 
 Examples:
 
   # Resumes the specified storage by unique name
@@ -303,9 +343,9 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="resume-minio"><a href="#home">Resume</a> > Minio</h2>
+<h3 id="storage-minio"><a href="#home">Resume</a> > <a href="#resume-storage">Storage</a> > Minio</h3>
 
-<pre>Usage: settlemint platform resume minio|m 
+<pre>Usage: settlemint platform resume storage minio|m 
 Examples:
 
   # Resumes the specified storage by unique name

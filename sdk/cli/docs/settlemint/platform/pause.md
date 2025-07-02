@@ -5,22 +5,19 @@
 Pause a resource in the SettleMint platform
 
 Options:
-  -h, --help                                         display help for command
+  -h, --help                                      display help for command
 
 Commands:
-  <a href="#pause-blockchain-node">blockchain-node|bn</a> [options] &lt;unique-name&gt;         Pause a blockchain node in the SettleMint platform. Provide the blockchain node unique name or use &#039;default&#039; to pause the default blockchain node from your .env file.
-  <a href="#pause-blockchain-network">blockchain-network|bnw</a> [options] &lt;unique-name&gt;     Pause a blockchain network in the SettleMint platform. Provide the blockchain network unique name or use &#039;default&#039; to pause the default blockchain network from your .env file.
-  <a href="#pause-custom-deployment">custom-deployment|cd</a> [options] &lt;unique-name&gt;       Pause a custom deployment in the SettleMint platform. Provide the custom deployment unique name or use &#039;default&#039; to pause the default custom deployment from your .env file.
-  <a href="#pause-blockscout">blockscout|bs</a> [options] &lt;unique-name&gt;              Pause a insights in the SettleMint platform. Provide the insights unique name or use &#039;default&#039; to pause the default insights from your .env file.
-  <a href="#pause-hasura">hasura|ha</a> [options] &lt;unique-name&gt;                  Pause a integration tool in the SettleMint platform. Provide the integration tool unique name or use &#039;default&#039; to pause the default integration tool from your .env file.
-  <a href="#pause-evm">evm|lb</a> [options] &lt;unique-name&gt;                     Pause a load balancer in the SettleMint platform. Provide the load balancer unique name or use &#039;default&#039; to pause the default load balancer from your .env file.
-  <a href="#pause-graph">graph|gr</a> [options] &lt;unique-name&gt;                   Pause a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to pause the default middleware from your .env file.
-  <a href="#pause-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;unique-name&gt;  Pause a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to pause the default middleware from your .env file.
-  <a href="#pause-accessible-ecdsa-p256">accessible-ecdsa-p256|acc</a> [options] &lt;unique-name&gt;  Pause a private key in the SettleMint platform. Provide the private key unique name or use &#039;default&#039; to pause the default private key from your .env file.
-  <a href="#pause-hd-ecdsa-p256">hd-ecdsa-p256|hd</a> [options] &lt;unique-name&gt;           Pause a private key in the SettleMint platform. Provide the private key unique name or use &#039;default&#039; to pause the default private key from your .env file.
-  <a href="#pause-ipfs">ipfs|ip</a> [options] &lt;unique-name&gt;                    Pause a storage in the SettleMint platform. Provide the storage unique name or use &#039;default&#039; to pause the default storage from your .env file.
-  <a href="#pause-minio">minio|m</a> [options] &lt;unique-name&gt;                    Pause a storage in the SettleMint platform. Provide the storage unique name or use &#039;default&#039; to pause the default storage from your .env file.
-  help [command]                                     display help for command
+  <a href="#pause-blockchain-node">blockchain-node|bn</a> [options] &lt;unique-name&gt;      Pause a blockchain node in the SettleMint platform. Provide the blockchain node unique name or use &#039;default&#039; to pause the default blockchain node from your .env file.
+  <a href="#pause-blockchain-network">blockchain-network|bnw</a> [options] &lt;unique-name&gt;  Pause a blockchain network in the SettleMint platform. Provide the blockchain network unique name or use &#039;default&#039; to pause the default blockchain network from your .env file.
+  <a href="#pause-custom-deployment">custom-deployment|cd</a> [options] &lt;unique-name&gt;    Pause a custom deployment in the SettleMint platform. Provide the custom deployment unique name or use &#039;default&#039; to pause the default custom deployment from your .env file.
+  <a href="#pause-insights">insights|in</a>                                     Pause an insights service in the SettleMint platform
+  <a href="#pause-integration-tool">integration-tool|it</a>                             Pause an integration tool service in the SettleMint platform
+  <a href="#pause-evm">evm|lb</a> [options] &lt;unique-name&gt;                  Pause a load balancer in the SettleMint platform. Provide the load balancer unique name or use &#039;default&#039; to pause the default load balancer from your .env file.
+  <a href="#pause-middleware">middleware|mw</a>                                   Pause a middleware service in the SettleMint platform
+  <a href="#pause-private-key">private-key|pk</a> [options] &lt;unique-name&gt;          Pause a private key in the SettleMint platform. Provide the private key unique name or use &#039;default&#039; to pause the default private key from your .env file.
+  <a href="#pause-storage">storage|st</a>                                      Pause a storage service in the SettleMint platform
+  help [command]                                  display help for command
 </pre>
 
 <h2 id="pause-blockchain-node"><a href="#home">Pause</a> > Blockchain node</h2>
@@ -101,9 +98,23 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-blockscout"><a href="#home">Pause</a> > Blockscout</h2>
+<h2 id="pause-insights"><a href="#home">Pause</a> > Insights</h2>
 
-<pre>Usage: settlemint platform pause blockscout|bs 
+<pre>Usage: settlemint platform pause insights|in [options] [command]
+
+Pause an insights service in the SettleMint platform
+
+Options:
+  -h, --help                             display help for command
+
+Commands:
+  <a href="#insights-blockscout">blockscout|bs</a> [options] &lt;unique-name&gt;  Pause a insights in the SettleMint platform. Provide the insights unique name or use &#039;default&#039; to pause the default insights from your .env file.
+  help [command]                         display help for command
+</pre>
+
+<h3 id="insights-blockscout"><a href="#home">Pause</a> > <a href="#pause-insights">Insights</a> > Blockscout</h3>
+
+<pre>Usage: settlemint platform pause insights blockscout|bs 
 Examples:
 
   # Pauses the specified insights by unique name
@@ -126,9 +137,27 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-hasura"><a href="#home">Pause</a> > Hasura</h2>
+<h2 id="pause-integration-tool"><a href="#home">Pause</a> > Integration tool</h2>
 
-<pre>Usage: settlemint platform pause hasura|ha 
+<pre>Usage: settlemint platform pause integration-tool|it [options] [command]
+
+Pause an integration tool service in the SettleMint platform
+
+Options:
+  -h, --help                         display help for command
+
+Commands:
+  <a href="#integration-tool-hasura">hasura|ha</a> [options] &lt;unique-name&gt;  Pause a integration tool in the SettleMint
+                                     platform. Provide the integration tool
+                                     unique name or use &#039;default&#039; to pause the
+                                     default integration tool from your .env
+                                     file.
+  help [command]                     display help for command
+</pre>
+
+<h3 id="integration-tool-hasura"><a href="#home">Pause</a> > <a href="#pause-integration-tool">Integration tool</a> > Hasura</h3>
+
+<pre>Usage: settlemint platform pause integration-tool hasura|ha 
 Examples:
 
   # Pauses the specified integration tool by unique name
@@ -178,9 +207,24 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-graph"><a href="#home">Pause</a> > Graph</h2>
+<h2 id="pause-middleware"><a href="#home">Pause</a> > Middleware</h2>
 
-<pre>Usage: settlemint platform pause graph|gr 
+<pre>Usage: settlemint platform pause middleware|mw [options] [command]
+
+Pause a middleware service in the SettleMint platform
+
+Options:
+  -h, --help                                         display help for command
+
+Commands:
+  <a href="#middleware-graph">graph|gr</a> [options] &lt;unique-name&gt;                   Pause a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to pause the default middleware from your .env file.
+  <a href="#middleware-smart-contract-portal">smart-contract-portal|scp</a> [options] &lt;unique-name&gt;  Pause a middleware in the SettleMint platform. Provide the middleware unique name or use &#039;default&#039; to pause the default middleware from your .env file.
+  help [command]                                     display help for command
+</pre>
+
+<h3 id="middleware-graph"><a href="#home">Pause</a> > <a href="#pause-middleware">Middleware</a> > Graph</h3>
+
+<pre>Usage: settlemint platform pause middleware graph|gr 
 Examples:
 
   # Pauses the specified middleware by unique name
@@ -203,9 +247,9 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-smart-contract-portal"><a href="#home">Pause</a> > Smart contract portal</h2>
+<h3 id="middleware-smart-contract-portal"><a href="#home">Pause</a> > <a href="#pause-middleware">Middleware</a> > Smart contract portal</h3>
 
-<pre>Usage: settlemint platform pause smart-contract-portal|scp 
+<pre>Usage: settlemint platform pause middleware smart-contract-portal|scp 
 Examples:
 
   # Pauses the specified middleware by unique name
@@ -228,16 +272,16 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-accessible-ecdsa-p256"><a href="#home">Pause</a> > Accessible ecdsa p256</h2>
+<h2 id="pause-private-key"><a href="#home">Pause</a> > Private key</h2>
 
-<pre>Usage: settlemint platform pause accessible-ecdsa-p256|acc 
+<pre>Usage: settlemint platform pause private-key|pk 
 Examples:
 
   # Pauses the specified private key by unique name
-  $ settlemint platform pause private-key accessible-ecdsa-p256 &lt;unique-name&gt;
+  $ settlemint platform pause private-key &lt;unique-name&gt;
 
   # Pauses the default private key in the production environment
-  $ settlemint platform pause private-key accessible-ecdsa-p256 default --prod
+  $ settlemint platform pause private-key default --prod
 
 Pause a private key in the SettleMint platform. Provide the private key unique
 name or use &#039;default&#039; to pause the default private key from your .env file.
@@ -253,34 +297,30 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-hd-ecdsa-p256"><a href="#home">Pause</a> > Hd ecdsa p256</h2>
+<h2 id="pause-storage"><a href="#home">Pause</a> > Storage</h2>
 
-<pre>Usage: settlemint platform pause hd-ecdsa-p256|hd 
-Examples:
+<pre>Usage: settlemint platform pause storage|st [options] [command]
 
-  # Pauses the specified private key by unique name
-  $ settlemint platform pause private-key hd-ecdsa-p256 &lt;unique-name&gt;
-
-  # Pauses the default private key in the production environment
-  $ settlemint platform pause private-key hd-ecdsa-p256 default --prod
-
-Pause a private key in the SettleMint platform. Provide the private key unique
-name or use &#039;default&#039; to pause the default private key from your .env file.
-
-Arguments:
-  unique-name            The unique name of the private key, use &#039;default&#039; to
-                         pause the default one from your .env file
+Pause a storage service in the SettleMint platform
 
 Options:
-  -a, --accept-defaults  Accept the default and previously set values
-  --prod                 Connect to your production environment
-  -w, --wait             Wait until paused
-  -h, --help             display help for command
+  -h, --help                       display help for command
+
+Commands:
+  <a href="#storage-ipfs">ipfs|ip</a> [options] &lt;unique-name&gt;  Pause a storage in the SettleMint platform.
+                                   Provide the storage unique name or use
+                                   &#039;default&#039; to pause the default storage from
+                                   your .env file.
+  <a href="#storage-minio">minio|m</a> [options] &lt;unique-name&gt;  Pause a storage in the SettleMint platform.
+                                   Provide the storage unique name or use
+                                   &#039;default&#039; to pause the default storage from
+                                   your .env file.
+  help [command]                   display help for command
 </pre>
 
-<h2 id="pause-ipfs"><a href="#home">Pause</a> > Ipfs</h2>
+<h3 id="storage-ipfs"><a href="#home">Pause</a> > <a href="#pause-storage">Storage</a> > Ipfs</h3>
 
-<pre>Usage: settlemint platform pause ipfs|ip 
+<pre>Usage: settlemint platform pause storage ipfs|ip 
 Examples:
 
   # Pauses the specified storage by unique name
@@ -303,9 +343,9 @@ Options:
   -h, --help             display help for command
 </pre>
 
-<h2 id="pause-minio"><a href="#home">Pause</a> > Minio</h2>
+<h3 id="storage-minio"><a href="#home">Pause</a> > <a href="#pause-storage">Storage</a> > Minio</h3>
 
-<pre>Usage: settlemint platform pause minio|m 
+<pre>Usage: settlemint platform pause storage minio|m 
 Examples:
 
   # Pauses the specified storage by unique name
