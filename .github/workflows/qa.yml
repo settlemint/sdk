@@ -184,7 +184,7 @@ jobs:
         run: |
           git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
-          git remote set-url origin https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
+          git remote set-url origin https://$PAT_TOKEN@github.com/settlemint/sdk.git
         env:
           PAT_TOKEN: ${{ env.PAT_TOKEN }}
 
