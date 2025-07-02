@@ -5,7 +5,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build", "codegen"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*", "tsdown.config.ts", "../../shared/tsdown-factory.ts"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
     },
     "codegen": {

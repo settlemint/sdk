@@ -1,5 +1,5 @@
 import { defineConfig } from "tsdown";
-import { createMultiConfig, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
+import { createMultiConfig, withPerformanceMonitoring } from "../../shared/tsdown-factory";
 
 const configs = createMultiConfig([
   {
