@@ -1,5 +1,6 @@
 import { defineConfig } from "tsdown";
-import { createMultiConfig, withPerformanceMonitoring } from "../../shared/tsdown-factory";
+// @ts-expect-error - tsdown-factory.ts is a .ts file
+import { createMultiConfig, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 export default createMultiConfig([
   {
