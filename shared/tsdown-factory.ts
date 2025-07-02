@@ -136,15 +136,16 @@ export const createWebOptimizedPackage = (entry: string[], options: Partial<Conf
 };
 
 // Performance monitoring helpers
-export const withPerformanceMonitoring = (config: Options & { buildStartTime?: number }): Options => ({
+let buildStartTime: number;
+export const withPerformanceMonitoring = (config: Options): Options => ({
   ...config,
   hooks(hooks) {
     hooks.hook("build:prepare", (context) => {
-      config.buildStartTime = Date.now();
+      buildStartTime = Date.now();
       console.log(`🏗️  Building ${context.options.pkg.name}...`);
     });
     hooks.hook("build:done", (context) => {
-      const duration = Date.now() - config.buildStartTime;
+      const duration = Date.now() - buildStartTime;
       console.log(`✅ Built ${context.options.pkg.name} in ${duration}ms`);
     });
   },

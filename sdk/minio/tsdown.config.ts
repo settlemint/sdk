@@ -1,5 +1,6 @@
 import { defineConfig } from "tsdown";
-import { createNodePackage, withPerformanceMonitoring } from "../../shared/tsdown-factory";
+// @ts-expect-error - tsdown-factory.ts is a .ts file
+import { createNodePackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 export default defineConfig(
   withPerformanceMonitoring(
