@@ -74,7 +74,7 @@ The SettleMint EAS SDK provides a lightweight wrapper for the Ethereum Attestati
 
 import type { Address, Hex } from "viem";
 import { decodeAbiParameters, encodeAbiParameters, parseAbiParameters } from "viem";
-import { ZERO_ADDRESS, ZERO_BYTES32, createEASClient } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
+import { createEASClient, ZERO_ADDRESS, ZERO_BYTES32 } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
 
 const CONFIG = {
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
@@ -123,7 +123,7 @@ async function runEASWorkflow() {
   console.log("🚀 Simple EAS SDK Workflow");
   console.log("===========================\n");
 
-  let deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
+  let _deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
 
   // Step 1: Initialize EAS Client
   console.log("📋 Step 1: Initialize EAS Client");
@@ -145,7 +145,7 @@ async function runEASWorkflow() {
     console.log(`   EAS: ${deployment.easAddress}`);
     console.log(`   Schema Registry: ${deployment.schemaRegistryAddress}\n`);
 
-    deployedAddresses = {
+    _deployedAddresses = {
       easAddress: deployment.easAddress,
       schemaRegistryAddress: deployment.schemaRegistryAddress,
     };
@@ -670,7 +670,7 @@ TODO: Implement using The Graph subgraph for EAS data queries
 
 ###### getAttestations()
 
-> **getAttestations**(`options?`): `Promise`\<[`AttestationInfo`](#attestationinfo)[]\>
+> **getAttestations**(`_options?`): `Promise`\<[`AttestationInfo`](#attestationinfo)[]\>
 
 Defined in: [sdk/eas/src/eas.ts:539](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/eas.ts#L539)
 
@@ -682,7 +682,7 @@ TODO: Implement using The Graph subgraph for EAS data queries
 
 | Parameter | Type |
 | ------ | ------ |
-| `options?` | [`GetAttestationsOptions`](#getattestationsoptions) |
+| `_options?` | [`GetAttestationsOptions`](#getattestationsoptions) |
 
 ###### Returns
 
@@ -757,7 +757,7 @@ TODO: Implement using The Graph subgraph for EAS data queries
 
 ###### getSchemas()
 
-> **getSchemas**(`options?`): `Promise`\<[`SchemaData`](#schemadata)[]\>
+> **getSchemas**(`_options?`): `Promise`\<[`SchemaData`](#schemadata)[]\>
 
 Defined in: [sdk/eas/src/eas.ts:519](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/eas.ts#L519)
 
@@ -769,7 +769,7 @@ TODO: Implement using The Graph subgraph for EAS data queries
 
 | Parameter | Type |
 | ------ | ------ |
-| `options?` | [`GetSchemasOptions`](#getschemasoptions) |
+| `_options?` | [`GetSchemasOptions`](#getschemasoptions) |
 
 ###### Returns
 
@@ -791,7 +791,7 @@ TODO: Fix Portal GraphQL query parameter encoding or use The Graph subgraph
 
 ###### isValidAttestation()
 
-> **isValidAttestation**(`uid`): `Promise`\<`boolean`\>
+> **isValidAttestation**(`_uid`): `Promise`\<`boolean`\>
 
 Defined in: [sdk/eas/src/eas.ts:548](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/eas/src/eas.ts#L548)
 
@@ -803,7 +803,7 @@ TODO: Implement using The Graph subgraph for EAS data queries
 
 | Parameter | Type |
 | ------ | ------ |
-| `uid` | `` `0x${string}` `` |
+| `_uid` | `` `0x${string}` `` |
 
 ###### Returns
 

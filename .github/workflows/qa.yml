@@ -40,9 +40,7 @@ jobs:
     runs-on: namespace-profile-sdk
     timeout-minutes: 30
     permissions:
-      # Give the default GITHUB_TOKEN write permission to commit and push the
-      # added or changed files to the repository.
-      contents: write
+      contents: read
       pull-requests: write
       issues: write
       security-events: write
@@ -63,6 +61,7 @@ jobs:
         uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
+          persist-credentials: false
 
       - name: Setup 1Password
         uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
@@ -181,6 +180,14 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
+      - name: Setup git user
+        run: |
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+          git remote set-url origin https://$PAT_TOKEN@github.com/settlemint/sdk.git
+        env:
+          PAT_TOKEN: ${{ env.PAT_TOKEN }}
+
       - name: Update docs and README
         if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' }}
         run: bun docs
@@ -191,7 +198,7 @@ jobs:
         with:
           commit_message: "chore: update docs [skip ci]"
           branch: main
-          file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md'
+          file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md'
 
       - name: Run tests and checks
         if: github.event_name == 'pull_request' || github.event_name == 'push'

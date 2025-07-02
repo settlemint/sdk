@@ -62,7 +62,7 @@ The SettleMint JavaScript SDK provides a type-safe wrapper around the SettleMint
 
 > **createSettleMintClient**(`options`): [`SettlemintClient`](#settlemintclient)
 
-Defined in: [settlemint.ts:239](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L239)
+Defined in: [settlemint.ts:275](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L275)
 
 Creates a SettleMint client with the provided options. The client provides methods to interact with
 various SettleMint resources like workspaces, applications, blockchain networks, blockchain nodes, middleware,
@@ -109,7 +109,7 @@ const workspace = await client.workspace.read('workspace-unique-name');
 
 #### SettlemintClient
 
-Defined in: [settlemint.ts:127](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L127)
+Defined in: [settlemint.ts:145](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L145)
 
 Client interface for interacting with the SettleMint platform.
 
@@ -117,7 +117,7 @@ Client interface for interacting with the SettleMint platform.
 
 #### SettlemintClientOptions
 
-Defined in: [settlemint.ts:117](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L117)
+Defined in: [settlemint.ts:135](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L135)
 
 Options for the Settlemint client.
 
@@ -129,8 +129,8 @@ Options for the Settlemint client.
 
 | Property | Type | Default value | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken?` | `string` | `undefined` | The access token used to authenticate with the SettleMint platform | - | [settlemint.ts:119](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L119) |
-| <a id="anonymous"></a> `anonymous?` | `boolean` | `undefined` | Whether to allow anonymous access (no access token required) | - | [settlemint.ts:121](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L121) |
+| <a id="accesstoken"></a> `accessToken?` | `string` | `undefined` | The access token used to authenticate with the SettleMint platform | - | [settlemint.ts:137](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L137) |
+| <a id="anonymous"></a> `anonymous?` | `boolean` | `undefined` | Whether to allow anonymous access (no access token required) | - | [settlemint.ts:139](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/settlemint.ts#L139) |
 | <a id="instance"></a> `instance` | `string` | `UrlSchema` | The URL of the SettleMint instance to connect to | `Omit.instance` | [helpers/client-options.schema.ts:11](https://github.com/settlemint/sdk/blob/v2.4.0/sdk/js/src/helpers/client-options.schema.ts#L11) |
 
 ### Type Aliases
