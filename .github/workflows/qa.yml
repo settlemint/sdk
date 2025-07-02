@@ -179,10 +179,11 @@ jobs:
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
-      - name: Setup git user
+      - name: Update git remote to use PAT
         run: |
-          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
-          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+          git remote set-url origin https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
+        env:
+          PAT_TOKEN: ${{ env.PAT_TOKEN }}
 
       - name: Update docs and README
         #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' }}
@@ -190,16 +191,11 @@ jobs:
 
       - name: Auto-commit changes to docs and README
         #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' && github.ref == 'refs/heads/main' && env.TAG == 'main' }}
-        env:
-          PAT_TOKEN: ${{ env.PAT_TOKEN }}
-        run: |
-          git add sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md
-          if ! git diff --staged --quiet; then
-            git commit -m "chore: update docs [skip ci]"
-            git push https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
-          else
-            echo "No changes to commit - everything is up to date"
-          fi
+        uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6
+        with:
+          commit_message: "chore: update docs [skip ci]"
+          branch: main
+          file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md'
 
       - name: Run tests and checks
         if: github.event_name == 'pull_request' || github.event_name == 'push'
