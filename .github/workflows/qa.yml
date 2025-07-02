@@ -185,7 +185,7 @@ jobs:
           git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
 
       - name: Update docs and README
-        if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' }}
+        #if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' }}
         run: bun docs
 
       - name: Auto-commit changes to docs and README
@@ -194,8 +194,12 @@ jobs:
           PAT_TOKEN: ${{ env.PAT_TOKEN }}
         run: |
           git add sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md
-          git commit -m "chore: update docs [skip ci]"
-          git push https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
+          if ! git diff --staged --quiet; then
+            git commit -m "chore: update docs [skip ci]"
+            git push https://"$(git --no-pager log --format=format:'%an' -n 1)":$PAT_TOKEN@github.com/settlemint/sdk.git
+          else
+            echo "No changes to commit - everything is up to date"
+          fi
 
       - name: Run tests and checks
         if: github.event_name == 'pull_request' || github.event_name == 'push'
