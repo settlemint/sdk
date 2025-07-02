@@ -92,7 +92,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]).result;
 
-    expect(output).toInclude(`Blockchain node ${blockchainNodeUniqueName} resume initiated successfully`);
+    expect(output).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} resume initiated successfully`);
     expect(output).not.toInclude("Waiting for blockchain node to be resumed");
 
     // Wait for completion to ensure cleanup
