@@ -18,6 +18,7 @@ export default defineConfig(
         "@inquirer/input",
         "@inquirer/password",
         "@inquirer/select",
+        "@gql.tada/cli-utils",
       ],
       define: {
         __CLI_NAME__: '"settlemint"',
