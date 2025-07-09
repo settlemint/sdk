@@ -10,6 +10,13 @@ export default defineConfig(
         "@settlemint/sdk-hasura",
         "@settlemint/sdk-js",
         "@settlemint/sdk-utils",
+        "@settlemint/sdk-utils/environment",
+        "@settlemint/sdk-utils/filesystem",
+        "@settlemint/sdk-utils/http",
+        "@settlemint/sdk-utils/logging",
+        "@settlemint/sdk-utils/package-manager",
+        "@settlemint/sdk-utils/terminal",
+        "@settlemint/sdk-utils/validation",
         "node-fetch-native",
         // CLI-specific externals
         "commander",

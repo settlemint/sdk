@@ -77,9 +77,6 @@ export const createCLIPackage = (entry: string[], options: Partial<ConfigOptions
     platform: "node",
     shims: true,
     target: "node20",
-    banner: {
-      js: "#!/usr/bin/env node\n/* SettleMint CLI */",
-    },
     external: ["node:*"],
     define: {
       __CLI_VERSION__: JSON.stringify(process.env.npm_package_version || "dev"),
