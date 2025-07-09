@@ -7,6 +7,7 @@ export default defineConfig(
     createCLIPackage(["src/cli.ts"], {
       external: [
         "node:*",
+        "@settlemint/sdk-hasura",
         "@settlemint/sdk-js",
         "@settlemint/sdk-utils",
         "node-fetch-native",
@@ -17,6 +18,7 @@ export default defineConfig(
         "@inquirer/input",
         "@inquirer/password",
         "@inquirer/select",
+        "@gql.tada/cli-utils",
       ],
       define: {
         __CLI_NAME__: '"settlemint"',

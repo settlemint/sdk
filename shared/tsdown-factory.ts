@@ -11,6 +11,7 @@ export interface ConfigOptions {
   banner?: { js?: string };
   define?: Record<string, string>;
   minifyOverride?: boolean;
+  dts?: boolean;
 }
 
 const isProd = process.env.NODE_ENV === "production";
@@ -19,7 +20,7 @@ export const createConfig = (options: ConfigOptions): Options => {
   const config: Options = {
     entry: options.entry,
     format: options.format || ["cjs", "esm"],
-    dts: true,
+    dts: options.dts ?? true,
     sourcemap: !isProd || "inline",
     treeshake: isProd,
     minify: options.minifyOverride ?? isProd,
@@ -83,6 +84,7 @@ export const createCLIPackage = (entry: string[], options: Partial<ConfigOptions
     define: {
       __CLI_VERSION__: JSON.stringify(process.env.npm_package_version || "dev"),
     },
+    dts: false,
     ...options,
   });
 
