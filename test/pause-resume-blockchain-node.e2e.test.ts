@@ -60,9 +60,29 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
 
     expect(output).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} pause initiated successfully`);
     expect(output).not.toInclude("Waiting for blockchain node to be paused");
+
+    // Resume to clean up state
+    await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "resume",
+      "blockchain-node",
+      blockchainNodeUniqueName,
+      "--wait",
+      "--accept-defaults",
+    ]).result;
   });
 
   test("Resume blockchain node without waiting", async () => {
+    // First pause the node
+    await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "pause",
+      "blockchain-node",
+      blockchainNodeUniqueName,
+      "--wait",
+      "--accept-defaults",
+    ]).result;
+
     // Resume without waiting
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
@@ -74,6 +94,16 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
 
     expect(output).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} resume initiated successfully`);
     expect(output).not.toInclude("Waiting for blockchain node to be resumed");
+
+    // Wait for completion to ensure cleanup
+    await runCommand(COMMAND_TEST_SCOPE, [
+      "platform",
+      "resume",
+      "blockchain-node",
+      blockchainNodeUniqueName,
+      "--wait",
+      "--accept-defaults",
+    ]).result;
   });
 
   test("Handle invalid blockchain node unique name", async () => {
@@ -88,7 +118,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]);
 
-    expect(pauseCommand.result).rejects.toThrow();
+    await expect(pauseCommand.result).rejects.toThrow();
 
     // Test resume with invalid name
     const resumeCommand = runCommand(COMMAND_TEST_SCOPE, [
@@ -99,6 +129,6 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
       "--accept-defaults",
     ]);
 
-    expect(resumeCommand.result).rejects.toThrow();
+    await expect(resumeCommand.result).rejects.toThrow();
   });
 });
