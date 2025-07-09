@@ -49,6 +49,7 @@ test/contracts-subgraphs
 test/contracts-subgraphs-not-generated
 test/test-app
 !test/test-app/portal-env.d.ts
+!test/test-app/hasura-env.d.ts
 .temp-mono-repo-test
 
 # Docs
