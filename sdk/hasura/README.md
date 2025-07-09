@@ -30,7 +30,9 @@
 - [API Reference](#api-reference)
   - [Functions](#functions)
     - [createHasuraClient()](#createhasuraclient)
+    - [createHasuraMetadataClient()](#createhasurametadataclient)
     - [createPostgresPool()](#createpostgrespool)
+    - [trackAllTables()](#trackalltables)
   - [Type Aliases](#type-aliases)
     - [ClientOptions](#clientoptions)
     - [RequestConfig](#requestconfig)
@@ -51,7 +53,7 @@ The SettleMint Hasura SDK provides a seamless way to interact with Hasura GraphQ
 
 > **createHasuraClient**\<`Setup`\>(`options`, `clientOptions?`, `logger?`): `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:82](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L82)
+Defined in: [sdk/hasura/src/hasura.ts:83](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L83)
 
 Creates a Hasura GraphQL client with proper type safety using gql.tada
 
@@ -83,8 +85,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:87](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L87) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:88](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L88) |
+| `client` | `GraphQLClient` | [sdk/hasura/src/hasura.ts:88](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L88) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/hasura/src/hasura.ts:89](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L89) |
 
 ##### Throws
 
@@ -138,6 +140,72 @@ const result = await client.request(query);
 
 ***
 
+#### createHasuraMetadataClient()
+
+> **createHasuraMetadataClient**(`options`, `logger?`): \<`T`\>(`query`) => `Promise`\<\{ `data`: `T`; `ok`: `boolean`; \}\>
+
+Defined in: [sdk/hasura/src/hasura.ts:132](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L132)
+
+Creates a Hasura Metadata client
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `options` | \{ `accessToken?`: `string`; `adminSecret`: `string`; `cache?`: `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"`; `instance`: `string`; \} | Configuration options for the client |
+| `options.accessToken?` | `string` | - |
+| `options.adminSecret?` | `string` | - |
+| `options.cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - |
+| `options.instance?` | `string` | - |
+| `logger?` | `Logger` | Optional logger to use for logging the requests |
+
+##### Returns
+
+A function that can be used to make requests to the Hasura Metadata API
+
+> \<`T`\>(`query`): `Promise`\<\{ `data`: `T`; `ok`: `boolean`; \}\>
+
+###### Type Parameters
+
+| Type Parameter |
+| ------ |
+| `T` |
+
+###### Parameters
+
+| Parameter | Type |
+| ------ | ------ |
+| `query` | `object` |
+
+###### Returns
+
+`Promise`\<\{ `data`: `T`; `ok`: `boolean`; \}\>
+
+##### Throws
+
+Will throw an error if the options fail validation against ClientOptionsSchema
+
+##### Example
+
+```ts
+import { createHasuraMetadataClient } from '@settlemint/sdk-hasura';
+
+const client = createHasuraMetadataClient({
+  instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+});
+
+const result = await client({
+  type: "pg_get_source_tables",
+  args: {
+    source: "default",
+  },
+});
+```
+
+***
+
 #### createPostgresPool()
 
 > **createPostgresPool**(`databaseUrl`): `Pool`
@@ -179,13 +247,55 @@ try {
 }
 ```
 
+***
+
+#### trackAllTables()
+
+> **trackAllTables**(`databaseName`, `client`): `Promise`\<\{ `messages`: `string`[]; `result`: `"success"` \| `"no-tables"`; \}\>
+
+Defined in: [sdk/hasura/src/utils/track-all-tables.ts:25](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/utils/track-all-tables.ts#L25)
+
+Track all tables in a database
+
+##### Parameters
+
+| Parameter | Type | Description |
+| ------ | ------ | ------ |
+| `databaseName` | `string` | The name of the database to track tables for |
+| `client` | \<`T`\>(`query`) => `Promise`\<\{ `data`: `T`; `ok`: `boolean`; \}\> | - |
+
+##### Returns
+
+`Promise`\<\{ `messages`: `string`[]; `result`: `"success"` \| `"no-tables"`; \}\>
+
+A promise that resolves to an object with a result property indicating success or failure
+
+##### Example
+
+```ts
+import { trackAllTables } from "@settlemint/sdk-hasura/utils/track-all-tables";
+
+const client = createHasuraMetadataClient({
+  instance: "http://localhost:8080",
+  accessToken: "test",
+  adminSecret: "test",
+});
+
+const result = await trackAllTables("default", client);
+if (result.result === "success") {
+  console.log("Tables tracked successfully");
+} else {
+  console.error("Failed to track tables");
+}
+```
+
 ### Type Aliases
 
 #### ClientOptions
 
 > **ClientOptions** = `object`
 
-Defined in: [sdk/hasura/src/hasura.ts:27](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L27)
+Defined in: [sdk/hasura/src/hasura.ts:28](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L28)
 
 Type definition for client options derived from the ClientOptionsSchema.
 
@@ -193,10 +303,10 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken?` | `string` | - | [sdk/hasura/src/hasura.ts:19](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L19) |
-| <a id="adminsecret"></a> `adminSecret` | `string` | - | [sdk/hasura/src/hasura.ts:20](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L20) |
-| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/hasura/src/hasura.ts:21](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L21) |
-| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L18) |
+| <a id="accesstoken"></a> `accessToken?` | `string` | - | [sdk/hasura/src/hasura.ts:20](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L20) |
+| <a id="adminsecret"></a> `adminSecret` | `string` | - | [sdk/hasura/src/hasura.ts:21](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L21) |
+| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/hasura/src/hasura.ts:22](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L22) |
+| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/hasura/src/hasura.ts:19](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L19) |
 
 ***
 
@@ -204,7 +314,7 @@ Type definition for client options derived from the ClientOptionsSchema.
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/hasura/src/hasura.ts:12](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L12)
+Defined in: [sdk/hasura/src/hasura.ts:13](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L13)
 
 Type definition for GraphQL client configuration options
 
@@ -214,7 +324,7 @@ Type definition for GraphQL client configuration options
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
-Defined in: [sdk/hasura/src/hasura.ts:17](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L17)
+Defined in: [sdk/hasura/src/hasura.ts:18](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/hasura.ts#L18)
 
 Schema for validating client options for the Hasura client.
 
