@@ -1,3 +1,4 @@
+import { extractBaseUrlBeforeSegment } from "@settlemint/sdk-utils";
 import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { type Logger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
@@ -105,5 +106,57 @@ export function createHasuraClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
-export { readFragment } from "gql.tada";
+/**
+ * Creates a Hasura Metadata client
+ *
+ * @param options - Configuration options for the client
+ * @param logger - Optional logger to use for logging the requests
+ * @returns A function that can be used to make requests to the Hasura Metadata API
+ * @throws Will throw an error if the options fail validation against ClientOptionsSchema
+ * @example
+ * import { createHasuraMetadataClient } from '@settlemint/sdk-hasura';
+ *
+ * const client = createHasuraMetadataClient({
+ *   instance: process.env.SETTLEMINT_HASURA_ENDPOINT,
+ *   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+ *   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET,
+ * });
+ *
+ * const result = await client({
+ *   type: "pg_get_source_tables",
+ *   args: {
+ *     source: "default",
+ *   },
+ * });
+ */
+export function createHasuraMetadataClient(options: ClientOptions, logger?: Logger) {
+  ensureServer();
+  const validatedOptions = validate(ClientOptionsSchema, options);
+  const baseUrl = extractBaseUrlBeforeSegment(options.instance, "/v1/graphql");
+  const queryEndpoint = new URL(`${baseUrl}/v1/metadata`).toString();
+  const fetchInstance = logger ? requestLogger(logger, "hasura", fetch) : fetch;
+
+  return async <T>(query: object): Promise<{ ok: boolean; data: T }> => {
+    const response = await fetchInstance(queryEndpoint, {
+      method: "POST",
+      headers: appendHeaders(
+        { "Content-Type": "application/json" },
+        {
+          "x-auth-token": validatedOptions.accessToken,
+          "x-hasura-admin-secret": validatedOptions.adminSecret,
+        },
+      ),
+      body: JSON.stringify(query),
+    });
+
+    if (!response.ok) {
+      return { ok: false, data: (await response.json()) as T };
+    }
+
+    return { ok: true, data: (await response.json()) as T };
+  };
+}
+
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+export { readFragment } from "gql.tada";
+export { trackAllTables } from "./utils/track-all-tables.js";

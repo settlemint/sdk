@@ -1,9 +1,9 @@
-import { writeTemplate } from "@/commands/codegen/utils/write-template";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 
 const PACKAGE_NAME = "@settlemint/sdk-portal";
 export async function codegenPortal(env: DotEnv) {
@@ -53,7 +53,7 @@ export const { client: portalClient, graphql: portalGraphql } = createPortalClie
   fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
 });
 
-export const getPortalWebsocketClient = getWebsocketClient({
+export const portalWebsocketClient = getWebsocketClient({
   portalGraphqlEndpoint: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
   accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
 });

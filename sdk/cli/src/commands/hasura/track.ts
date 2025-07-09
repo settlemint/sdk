@@ -1,3 +1,9 @@
+import { Command } from "@commander-js/extra-typings";
+import { trackAllTables } from "@settlemint/sdk-hasura";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { hasuraPrompt } from "@/prompts/cluster-service/hasura.prompt";
@@ -6,13 +12,6 @@ import { serviceSpinner } from "@/spinners/service.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHasuraEnv } from "@/utils/get-cluster-service-env";
-import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
-import { extractBaseUrlBeforeSegment } from "@settlemint/sdk-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { appendHeaders } from "@settlemint/sdk-utils/http";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 
 export function hasuraTrackCommand() {
   return new Command("track")
@@ -89,93 +88,10 @@ export function hasuraTrackCommand() {
         return note("Could not retrieve Hasura endpoint or admin secret. Please check your configuration.");
       }
 
-      // Convert GraphQL endpoint to Query endpoint
-      const baseUrl = extractBaseUrlBeforeSegment(hasuraGraphqlEndpoint, "/v1/graphql");
-      const queryEndpoint = new URL(`${baseUrl}/v1/metadata`).toString();
-
-      const messages: string[] = [];
-
-      const { result } = await spinner({
-        startMessage: `Tracking all tables in Hasura from database "${database}"`,
-        stopMessage: "Successfully tracked all tables in Hasura",
-        task: async () => {
-          const executeHasuraQuery = async <T>(query: object): Promise<{ ok: boolean; data: T }> => {
-            const response = await fetch(queryEndpoint, {
-              method: "POST",
-              headers: appendHeaders(
-                {
-                  "Content-Type": "application/json",
-                  "X-Hasura-Admin-Secret": hasuraAdminSecret,
-                },
-                {
-                  "x-auth-token": accessToken,
-                },
-              ),
-              body: JSON.stringify(query),
-            });
-
-            if (!response.ok) {
-              return { ok: false, data: (await response.json()) as T };
-            }
-
-            return { ok: true, data: (await response.json()) as T };
-          };
-
-          // Get all tables using pg_get_source_tables
-          const getTablesResult = await executeHasuraQuery<
-            Array<{
-              name: string;
-              schema: string;
-            }>
-          >({
-            type: "pg_get_source_tables",
-            args: {
-              source: database,
-            },
-          });
-
-          if (!getTablesResult.ok) {
-            throw new Error(`Failed to get tables: ${JSON.stringify(getTablesResult.data)}`);
-          }
-
-          const tables = getTablesResult.data;
-
-          if (tables.length === 0) {
-            return { result: "no-tables" as const };
-          }
-
-          messages.push(`Found ${tables.length} tables in database "${database}"`);
-
-          // Incase a table is already tracked, untrack it first
-          await executeHasuraQuery<{ code?: string }>({
-            type: "pg_untrack_tables",
-            args: {
-              tables: tables.map((table) => ({
-                table: table.name,
-              })),
-              allow_warnings: true,
-            },
-          });
-
-          // Track all tables
-          const trackResult = await executeHasuraQuery<{ code?: string }>({
-            type: "pg_track_tables",
-            args: {
-              tables: tables.map((table) => ({
-                table: table.name,
-              })),
-              allow_warnings: true,
-            },
-          });
-
-          if (!trackResult.ok) {
-            throw new Error(`Failed to track tables: ${JSON.stringify(trackResult.data)}`);
-          }
-
-          messages.push(`Successfully tracked ${tables.length} tables`);
-
-          return { result: "success" as const };
-        },
+      const { result, messages } = await trackAllTables(database, {
+        instance: hasuraGraphqlEndpoint,
+        accessToken,
+        adminSecret: hasuraAdminSecret,
       });
 
       // Display collected messages after spinner completes
