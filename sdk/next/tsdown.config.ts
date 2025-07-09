@@ -29,7 +29,7 @@ export default createMultiConfig([
     },
   },
   {
-    entry: ["src/config/*.ts"],
+    entry: ["src/config/with-settlemint.ts"],
     format: ["cjs", "esm"],
     platform: "neutral",
     outDir: "dist/config",
