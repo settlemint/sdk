@@ -1,5 +1,5 @@
 import { Command } from "@commander-js/extra-typings";
-import { trackAllTables } from "@settlemint/sdk-hasura";
+import { createHasuraMetadataClient, trackAllTables } from "@settlemint/sdk-hasura";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
@@ -88,11 +88,12 @@ export function hasuraTrackCommand() {
         return note("Could not retrieve Hasura endpoint or admin secret. Please check your configuration.");
       }
 
-      const { result, messages } = await trackAllTables(database, {
+      const hasuraMetadataClient = createHasuraMetadataClient({
         instance: hasuraGraphqlEndpoint,
         accessToken,
         adminSecret: hasuraAdminSecret,
       });
+      const { result, messages } = await trackAllTables(database, hasuraMetadataClient);
 
       // Display collected messages after spinner completes
       for (const message of messages) {

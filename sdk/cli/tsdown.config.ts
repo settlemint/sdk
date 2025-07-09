@@ -7,6 +7,7 @@ export default defineConfig(
     createCLIPackage(["src/cli.ts"], {
       external: [
         "node:*",
+        "@settlemint/sdk-hasura",
         "@settlemint/sdk-js",
         "@settlemint/sdk-utils",
         "node-fetch-native",
