@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
+import { getTheGraphMiddleware } from "../sdk/cli/src/utils/subgraph/setup";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { PRIVATE_KEY_SMART_CONTRACTS_NAMES } from "./constants/test-resources";
 import {
@@ -90,6 +91,23 @@ describe("Setup a project on a standalone environment using the SDK", () => {
       },
       env as Record<string, unknown>,
     );
+    if (
+      !Array.isArray(envWithAccessTokenInUrl.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS) ||
+      envWithAccessTokenInUrl.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS.length === 0
+    ) {
+      // Add a default url to the env file
+      const theGraphMiddleware = await getTheGraphMiddleware({
+        env,
+        instance: env.SETTLEMINT_INSTANCE!,
+        accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+        autoAccept: true,
+      });
+      if (theGraphMiddleware?.serviceUrl) {
+        envWithAccessTokenInUrl.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS = [
+          `${theGraphMiddleware.serviceUrl}${encodeURIComponent(env.SETTLEMINT_ACCESS_TOKEN!)}/subgraphs/name/kit`,
+        ];
+      }
+    }
     await writeFile(
       join(projectDir, ".env"),
       Object.entries(envWithAccessTokenInUrl)
