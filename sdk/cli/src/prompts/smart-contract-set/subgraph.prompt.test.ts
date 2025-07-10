@@ -288,7 +288,11 @@ describe("subgraphPrompt", () => {
 
   it("should ignore subgraphs that are not valid URLs", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraphs/subgraph1", "invalid-url"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/invalid-subgraph",
+        "invalid-url",
+      ],
     };
 
     const result = await subgraphPrompt({
