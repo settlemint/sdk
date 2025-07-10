@@ -4,8 +4,8 @@ on:
   push:
     branches:
       - main
-    tags:
-      - "v*"
+  release:
+    types: [published]
   pull_request:
     types:
       [
@@ -110,14 +110,15 @@ jobs:
         if: |
           github.event_name == 'push' ||
           github.event_name == 'pull_request' ||
-          github.event_name == 'pull_request_review'
+          github.event_name == 'pull_request_review' ||
+          github.event_name == 'release'
         uses: settlemint/asset-tokenization-kit/.github/actions/setup-dependencies@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
       - name: Update package versions
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
         id: package-version
         run: |
           OLD_VERSION=$(jq -r '.version' package.json)
@@ -175,7 +176,7 @@ jobs:
           echo "Updated version to $VERSION"
 
       - name: Login to npm
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
         run: |
           echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
           echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
@@ -201,12 +202,12 @@ jobs:
           file_pattern: 'sdk/cli/docs/settlemint.md sdk/cli/docs/**/*.md sdk/**/README.md README.md'
 
       - name: Run tests and checks
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
         id: qa-tests
         run: bunx turbo lint typecheck build attw publint test:coverage publish-npm --env-mode=loose
 
       - name: Check typings of E2E tests
-        if: github.event_name == 'pull_request' || github.event_name == 'push'
+        if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
         run: bun test:typecheck
 
       - name: Create or update PR comment
