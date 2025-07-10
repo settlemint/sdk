@@ -251,9 +251,9 @@ try {
 
 #### trackAllTables()
 
-> **trackAllTables**(`databaseName`, `client`): `Promise`\<\{ `messages`: `string`[]; `result`: `"success"` \| `"no-tables"`; \}\>
+> **trackAllTables**(`databaseName`, `client`, `tableOptions`): `Promise`\<\{ `messages`: `string`[]; `result`: `"success"` \| `"no-tables"`; \}\>
 
-Defined in: [sdk/hasura/src/utils/track-all-tables.ts:25](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/utils/track-all-tables.ts#L25)
+Defined in: [sdk/hasura/src/utils/track-all-tables.ts:30](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/hasura/src/utils/track-all-tables.ts#L30)
 
 Track all tables in a database
 
@@ -262,7 +262,10 @@ Track all tables in a database
 | Parameter | Type | Description |
 | ------ | ------ | ------ |
 | `databaseName` | `string` | The name of the database to track tables for |
-| `client` | \<`T`\>(`query`) => `Promise`\<\{ `data`: `T`; `ok`: `boolean`; \}\> | - |
+| `client` | \<`T`\>(`query`) => `Promise`\<\{ `data`: `T`; `ok`: `boolean`; \}\> | The client options to use for the Hasura client |
+| `tableOptions` | \{ `excludeSchemas?`: `string`[]; `includeSchemas?`: `string`[]; \} | The options to use for the table tracking |
+| `tableOptions.excludeSchemas?` | `string`[] | The schemas to exclude from the tracking |
+| `tableOptions.includeSchemas?` | `string`[] | The schemas to include in the tracking |
 
 ##### Returns
 
@@ -281,7 +284,9 @@ const client = createHasuraMetadataClient({
   adminSecret: "test",
 });
 
-const result = await trackAllTables("default", client);
+const result = await trackAllTables("default", client, {
+  excludeSchemas: ["drizzle"],
+});
 if (result.result === "success") {
   console.log("Tables tracked successfully");
 } else {
