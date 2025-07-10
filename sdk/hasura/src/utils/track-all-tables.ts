@@ -4,7 +4,10 @@ import type { createHasuraMetadataClient } from "../hasura.js";
  * Track all tables in a database
  *
  * @param databaseName - The name of the database to track tables for
- * @param options - The client options to use for the Hasura client
+ * @param client - The client options to use for the Hasura client
+ * @param tableOptions - The options to use for the table tracking
+ * @param tableOptions.includeSchemas - The schemas to include in the tracking
+ * @param tableOptions.excludeSchemas - The schemas to exclude from the tracking
  * @returns A promise that resolves to an object with a result property indicating success or failure
  * @example
  * import { trackAllTables } from "@settlemint/sdk-hasura/utils/track-all-tables";
@@ -15,7 +18,9 @@ import type { createHasuraMetadataClient } from "../hasura.js";
  *   adminSecret: "test",
  * });
  *
- * const result = await trackAllTables("default", client);
+ * const result = await trackAllTables("default", client, {
+ *   excludeSchemas: ["drizzle"],
+ * });
  * if (result.result === "success") {
  *   console.log("Tables tracked successfully");
  * } else {
@@ -25,8 +30,17 @@ import type { createHasuraMetadataClient } from "../hasura.js";
 export async function trackAllTables(
   databaseName: string,
   client: ReturnType<typeof createHasuraMetadataClient>,
+  tableOptions: {
+    includeSchemas?: string[];
+    excludeSchemas?: string[];
+  } = {
+    includeSchemas: undefined,
+    excludeSchemas: undefined,
+  },
 ): Promise<{ result: "success" | "no-tables"; messages: string[] }> {
   const messages: string[] = [];
+
+  const { includeSchemas, excludeSchemas } = tableOptions;
 
   // Get all tables using pg_get_source_tables
   const getTablesResult = await client<
@@ -58,18 +72,28 @@ export async function trackAllTables(
     type: "pg_untrack_tables",
     args: {
       tables: tables.map((table) => ({
-        table: table.name,
+        table: table,
       })),
       allow_warnings: true,
     },
+  });
+
+  const tablesToTrack = tables.filter((table) => {
+    if (Array.isArray(includeSchemas)) {
+      return includeSchemas.includes(table.schema);
+    }
+    if (Array.isArray(excludeSchemas)) {
+      return !excludeSchemas.includes(table.schema);
+    }
+    return true;
   });
 
   // Track all tables
   const trackResult = await client<{ code?: string }>({
     type: "pg_track_tables",
     args: {
-      tables: tables.map((table) => ({
-        table: table.name,
+      tables: tablesToTrack.map((table) => ({
+        table: table,
       })),
       allow_warnings: true,
     },
@@ -79,7 +103,7 @@ export async function trackAllTables(
     throw new Error(`Failed to track tables: ${JSON.stringify(trackResult.data)}`);
   }
 
-  messages.push(`Successfully tracked ${tables.length} tables`);
+  messages.push(`Successfully tracked ${tablesToTrack.length} tables`);
 
   return { result: "success" as const, messages };
 }
