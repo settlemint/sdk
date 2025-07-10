@@ -38,7 +38,10 @@ describe("subgraphPrompt", () => {
 
   it("should return all subgraphs when accept is true and allow all is true", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
     };
 
     const result = await subgraphPrompt({
@@ -55,7 +58,10 @@ describe("subgraphPrompt", () => {
 
   it("should return the default subgraph when accept is true, allow all is false and a default subgraph is set", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
       SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph2",
     };
 
@@ -72,7 +78,10 @@ describe("subgraphPrompt", () => {
 
   it("should return no subgraph when accept is true, allow all is false and no default subgraph is set", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
       SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: undefined,
     };
 
@@ -105,7 +114,7 @@ describe("subgraphPrompt", () => {
 
   it("should return the only subgraph when there is only one", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/single-subgraph"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraphs/single-subgraph"],
     };
 
     const result = await subgraphPrompt({
@@ -121,9 +130,9 @@ describe("subgraphPrompt", () => {
   it("should prompt user to select a subgraph when multiple are available and select the correct default", async () => {
     const env = {
       SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
-        "https://example.com/subgraph1",
-        "https://example.com/subgraph2",
-        "https://example.com/subgraph3",
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+        "https://example.com/subgraphs/subgraph3",
       ],
       SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph3",
     };
@@ -145,7 +154,10 @@ describe("subgraphPrompt", () => {
 
   it("should handle 'All' selection when allowAll is true", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
     };
 
     mockSelect.mockImplementationOnce(() => Promise.resolve("All"));
@@ -162,7 +174,10 @@ describe("subgraphPrompt", () => {
 
   it("should handle 'New' selection when allowNew is true", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
     };
 
     mockSelect.mockImplementationOnce(() => Promise.resolve("New subgraph"));
@@ -180,7 +195,10 @@ describe("subgraphPrompt", () => {
 
   it("should cancel when no subgraph is selected", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
     };
 
     mockSelect.mockImplementationOnce(() => Promise.resolve(undefined));
@@ -198,7 +216,10 @@ describe("subgraphPrompt", () => {
 
   it("should auto accept when in CI", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1", "https://example.com/subgraph2"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://example.com/subgraphs/subgraph1",
+        "https://example.com/subgraphs/subgraph2",
+      ],
       SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph1",
     };
 
@@ -242,7 +263,7 @@ describe("subgraphPrompt", () => {
 
   it("should always prompt for a subgraph when allowNew is true and accept is false", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraph1"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraphs/subgraph1"],
       SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "subgraph1",
     };
 
@@ -263,5 +284,19 @@ describe("subgraphPrompt", () => {
     expect(result).toEqual(["My subgraph"]);
     expect(mockSelect).toHaveBeenCalled();
     expect(mockSubgraphNamePrompt).toHaveBeenCalled();
+  });
+
+  it("should ignore subgraphs that are not valid URLs", async () => {
+    const env = {
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://example.com/subgraphs/subgraph1", "invalid-url"],
+    };
+
+    const result = await subgraphPrompt({
+      env,
+      message: "Select a subgraph",
+      isCi: false,
+    });
+
+    expect(result).toEqual(["subgraph1"]);
   });
 });
