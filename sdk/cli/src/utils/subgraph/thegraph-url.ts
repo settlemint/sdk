@@ -1,5 +1,5 @@
-import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { extractBaseUrlBeforeSegment } from "@settlemint/sdk-utils/url";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 
 export function getUpdatedSubgraphEndpoints({
   existingEndpoints,
@@ -40,7 +40,7 @@ export function getTheGraphUrl(subgraphUrls?: string[]) {
 
 export function getTheGraphSubgraphNames(subgraphUrls?: string[]) {
   if (Array.isArray(subgraphUrls) && subgraphUrls.length > 0) {
-    return subgraphUrls.map((url) => getSubgraphName(url));
+    return subgraphUrls.map((url) => getSubgraphName(url)).filter((name) => name !== undefined);
   }
   return [];
 }

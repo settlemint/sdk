@@ -2724,6 +2724,9 @@ interface BaseBesuGenesisConfig {
   """The block number for the Cancun hard fork"""
   cancunBlock: Float
 
+  """The timestamp for the Cancun hard fork"""
+  cancunTime: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -2761,10 +2764,21 @@ interface BaseBesuGenesisConfig {
   londonBlock: Float
 
   """The block number for the Muir Glacier hard fork"""
-  muirglacierblock: Float
+  muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
+
+  """The timestamp for the Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -2865,6 +2879,9 @@ input BesuIbft2GenesisConfigInput {
   """The block number for the Cancun hard fork"""
   cancunBlock: Float
 
+  """The timestamp for the Cancun hard fork"""
+  cancunTime: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -2905,10 +2922,21 @@ input BesuIbft2GenesisConfigInput {
   londonBlock: Float
 
   """The block number for the Muir Glacier hard fork"""
+  muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
   muirglacierblock: Float
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
+
+  """The timestamp for the Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -2923,6 +2951,9 @@ type BesuIbft2GenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Cancun hard fork"""
   cancunBlock: Float
+
+  """The timestamp for the Cancun hard fork"""
+  cancunTime: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -2964,10 +2995,21 @@ type BesuIbft2GenesisConfigType implements BaseBesuGenesisConfig {
   londonBlock: Float
 
   """The block number for the Muir Glacier hard fork"""
-  muirglacierblock: Float
+  muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
+
+  """The timestamp for the Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -3815,6 +3857,9 @@ input BesuQbftGenesisConfigInput {
   """The block number for the Cancun hard fork"""
   cancunBlock: Float
 
+  """The timestamp for the Cancun hard fork"""
+  cancunTime: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -3852,6 +3897,14 @@ input BesuQbftGenesisConfigInput {
   londonBlock: Float
 
   """The block number for the Muir Glacier hard fork"""
+  muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
   muirglacierblock: Float
 
   """The block number for the Petersburg hard fork"""
@@ -3859,6 +3912,9 @@ input BesuQbftGenesisConfigInput {
 
   """The QBFT genesis configuration data"""
   qbft: BesuBftGenesisConfigDataInput!
+
+  """The timestamp for the Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -3873,6 +3929,9 @@ type BesuQbftGenesisConfigType implements BaseBesuGenesisConfig {
 
   """The block number for the Cancun hard fork"""
   cancunBlock: Float
+
+  """The timestamp for the Cancun hard fork"""
+  cancunTime: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -3911,13 +3970,24 @@ type BesuQbftGenesisConfigType implements BaseBesuGenesisConfig {
   londonBlock: Float
 
   """The block number for the Muir Glacier hard fork"""
-  muirglacierblock: Float
+  muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
 
   """The QBFT genesis configuration data"""
   qbft: BesuBftGenesisConfigDataType!
+
+  """The timestamp for the Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -3962,6 +4032,9 @@ type BesusCliqueGenesisConfigType implements BaseBesuGenesisConfig {
   """The block number for the Cancun hard fork"""
   cancunBlock: Float
 
+  """The timestamp for the Cancun hard fork"""
+  cancunTime: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -4002,10 +4075,21 @@ type BesusCliqueGenesisConfigType implements BaseBesuGenesisConfig {
   londonBlock: Float
 
   """The block number for the Muir Glacier hard fork"""
-  muirglacierblock: Float
+  muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
+
+  """The timestamp for the Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Whether to use zero base fee"""
   zeroBaseFee: Boolean
@@ -5478,6 +5562,7 @@ enum ClusterServiceDeploymentStatus {
   RESUMING
   RETRYING
   SCALING
+  SKIPPED
   WAITING
 }
 
@@ -6428,6 +6513,9 @@ input CreateMultiServiceMiddlewareArgs {
   """Advanced deployment configuration"""
   advancedDeploymentConfig: AdvancedDeploymentConfigInput
   blockchainNodeRef: String
+
+  """Default subgraph for HA Graph middleware"""
+  defaultSubgraph: String
 
   """Disk space in MiB"""
   diskSpace: Int
@@ -7809,6 +7897,7 @@ enum FeatureFlag {
   ALL
   APPLICATION_ACCESS_TOKENS
   APPLICATION_FIRST_WIZARD
+  ASSET_TOKENIZATION_ERC3643
   AUDIT_LOGS
   BUYCREDITS
   CUSTOMDEPLOYMENTS
@@ -8504,6 +8593,14 @@ input GethGenesisConfigInput {
   """The block number for the Muir Glacier hard fork"""
   muirGlacierBlock: Float
 
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
+  muirglacierblock: Float
+
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
 }
@@ -8550,6 +8647,14 @@ type GethGenesisConfigType {
 
   """The block number for the Muir Glacier hard fork"""
   muirGlacierBlock: Float
+
+  """The block number for the Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
+
+  """
+  The block number for the Muir Glacier hard fork (all lowercase - deprecated)
+  """
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
@@ -12728,6 +12833,22 @@ input LoadBalancerScopeInputType {
 
 union LoadBalancerType = EVMLoadBalancer | FabricLoadBalancer
 
+input MaxCodeSizeConfigInput {
+  """Block number"""
+  block: Float!
+
+  """Maximum code size"""
+  size: Float!
+}
+
+type MaxCodeSizeConfigType {
+  """Block number"""
+  block: Float!
+
+  """Maximum code size"""
+  size: Float!
+}
+
 type Metric {
   """Unique identifier for the metric"""
   id: ID!
@@ -13672,6 +13793,9 @@ type Mutation {
     """ID of the blockchain node"""
     blockchainNodeId: ID
 
+    """Default subgraph for HA Graph middleware"""
+    defaultSubgraph: String
+
     """Disk space in MiB"""
     diskSpace: Int
 
@@ -14347,6 +14471,9 @@ type Mutation {
     """ID of the blockchain node"""
     blockchainNodeId: ID
 
+    """Default subgraph for HA Graph middleware"""
+    defaultSubgraph: String
+
     """The unique identifier of the entity"""
     entityId: ID!
 
@@ -14468,7 +14595,7 @@ type Mutation {
     entityId: ID!
   ): BlockchainNetworkType!
 
-  """Pause BlockchainNetwork service by unique name"""
+  """Pause a BlockchainNetwork service by unique name"""
   pauseBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
 
   """Pause a BlockchainNode service"""
@@ -14477,7 +14604,7 @@ type Mutation {
     entityId: ID!
   ): BlockchainNodeType!
 
-  """Pause BlockchainNode service by unique name"""
+  """Pause a BlockchainNode service by unique name"""
   pauseBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
 
   """Pause a CustomDeployment service"""
@@ -14486,7 +14613,7 @@ type Mutation {
     entityId: ID!
   ): CustomDeployment!
 
-  """Pause CustomDeployment service by unique name"""
+  """Pause a CustomDeployment service by unique name"""
   pauseCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
 
   """Pause a Insights service"""
@@ -14495,7 +14622,7 @@ type Mutation {
     entityId: ID!
   ): InsightsTypeUnion!
 
-  """Pause Insights service by unique name"""
+  """Pause a Insights service by unique name"""
   pauseInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
 
   """Pause a Integration service"""
@@ -14504,7 +14631,7 @@ type Mutation {
     entityId: ID!
   ): IntegrationTypeUnion!
 
-  """Pause Integration service by unique name"""
+  """Pause a Integration service by unique name"""
   pauseIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
 
   """Pause a LoadBalancer service"""
@@ -14513,7 +14640,7 @@ type Mutation {
     entityId: ID!
   ): LoadBalancerType!
 
-  """Pause LoadBalancer service by unique name"""
+  """Pause a LoadBalancer service by unique name"""
   pauseLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
 
   """Pause a Middleware service"""
@@ -14522,7 +14649,7 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
-  """Pause Middleware service by unique name"""
+  """Pause a Middleware service by unique name"""
   pauseMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
 
   """Pause a private key service"""
@@ -14531,7 +14658,7 @@ type Mutation {
     entityId: ID!
   ): PrivateKeyUnionType!
 
-  """Pause PrivateKey service by unique name"""
+  """Pause a PrivateKey service by unique name"""
   pausePrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
 
   """Pause a SmartContractSet service"""
@@ -14540,7 +14667,7 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
-  """Pause SmartContractSet service by unique name"""
+  """Pause a SmartContractSet service by unique name"""
   pauseSmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
 
   """Pause a Storage service"""
@@ -14549,7 +14676,7 @@ type Mutation {
     entityId: ID!
   ): StorageType!
 
-  """Pause Storage service by unique name"""
+  """Pause a Storage service by unique name"""
   pauseStorageByUniqueName(uniqueName: String!): StorageType!
 
   """Restart BlockchainNetwork service"""
@@ -14648,7 +14775,7 @@ type Mutation {
     entityId: ID!
   ): BlockchainNetworkType!
 
-  """Resume BlockchainNetwork service by unique name"""
+  """Resume a BlockchainNetwork service by unique name"""
   resumeBlockchainNetworkByUniqueName(uniqueName: String!): BlockchainNetworkType!
 
   """Resume a BlockchainNode service"""
@@ -14657,7 +14784,7 @@ type Mutation {
     entityId: ID!
   ): BlockchainNodeType!
 
-  """Resume BlockchainNode service by unique name"""
+  """Resume a BlockchainNode service by unique name"""
   resumeBlockchainNodeByUniqueName(uniqueName: String!): BlockchainNodeType!
 
   """Resume a CustomDeployment service"""
@@ -14666,7 +14793,7 @@ type Mutation {
     entityId: ID!
   ): CustomDeployment!
 
-  """Resume CustomDeployment service by unique name"""
+  """Resume a CustomDeployment service by unique name"""
   resumeCustomDeploymentByUniqueName(uniqueName: String!): CustomDeployment!
 
   """Resume a Insights service"""
@@ -14675,7 +14802,7 @@ type Mutation {
     entityId: ID!
   ): InsightsTypeUnion!
 
-  """Resume Insights service by unique name"""
+  """Resume a Insights service by unique name"""
   resumeInsightsByUniqueName(uniqueName: String!): InsightsTypeUnion!
 
   """Resume a Integration service"""
@@ -14684,7 +14811,7 @@ type Mutation {
     entityId: ID!
   ): IntegrationTypeUnion!
 
-  """Resume Integration service by unique name"""
+  """Resume a Integration service by unique name"""
   resumeIntegrationByUniqueName(uniqueName: String!): IntegrationTypeUnion!
 
   """Resume a LoadBalancer service"""
@@ -14693,7 +14820,7 @@ type Mutation {
     entityId: ID!
   ): LoadBalancerType!
 
-  """Resume LoadBalancer service by unique name"""
+  """Resume a LoadBalancer service by unique name"""
   resumeLoadBalancerByUniqueName(uniqueName: String!): LoadBalancerType!
 
   """Resume a Middleware service"""
@@ -14702,7 +14829,7 @@ type Mutation {
     entityId: ID!
   ): MiddlewareUnionType!
 
-  """Resume Middleware service by unique name"""
+  """Resume a Middleware service by unique name"""
   resumeMiddlewareByUniqueName(uniqueName: String!): MiddlewareUnionType!
 
   """Resume a private key service"""
@@ -14711,7 +14838,7 @@ type Mutation {
     entityId: ID!
   ): PrivateKeyUnionType!
 
-  """Resume PrivateKey service by unique name"""
+  """Resume a PrivateKey service by unique name"""
   resumePrivateKeyByUniqueName(uniqueName: String!): PrivateKeyUnionType!
 
   """Resume a SmartContractSet service"""
@@ -14720,7 +14847,7 @@ type Mutation {
     entityId: ID!
   ): SmartContractSetType!
 
-  """Resume SmartContractSet service by unique name"""
+  """Resume a SmartContractSet service by unique name"""
   resumeSmartContractSetByUniqueName(uniqueName: String!): SmartContractSetType!
 
   """Resume a Storage service"""
@@ -14729,7 +14856,7 @@ type Mutation {
     entityId: ID!
   ): StorageType!
 
-  """Resume Storage service by unique name"""
+  """Resume a Storage service by unique name"""
   resumeStorageByUniqueName(uniqueName: String!): StorageType!
 
   """Retry deployment of BlockchainNetwork service"""
@@ -14822,7 +14949,7 @@ type Mutation {
   """Retry deployment of Storage service by unique name"""
   retryStorageByUniqueName(uniqueName: String!): StorageType!
 
-  """Scale a BlockchainNetwork service"""
+  """Scale BlockchainNetwork service"""
   scaleBlockchainNetwork(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -14849,7 +14976,7 @@ type Mutation {
     type: ClusterServiceType
   ): BlockchainNetworkType!
 
-  """Scale a BlockchainNode service"""
+  """Scale BlockchainNode service"""
   scaleBlockchainNode(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -14876,7 +15003,7 @@ type Mutation {
     type: ClusterServiceType
   ): BlockchainNodeType!
 
-  """Scale a CustomDeployment service"""
+  """Scale CustomDeployment service"""
   scaleCustomDeployment(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -14903,7 +15030,7 @@ type Mutation {
     type: ClusterServiceType
   ): CustomDeployment!
 
-  """Scale a Insights service"""
+  """Scale Insights service"""
   scaleInsights(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -14930,7 +15057,7 @@ type Mutation {
     type: ClusterServiceType
   ): InsightsTypeUnion!
 
-  """Scale a Integration service"""
+  """Scale Integration service"""
   scaleIntegration(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -14957,7 +15084,7 @@ type Mutation {
     type: ClusterServiceType
   ): IntegrationTypeUnion!
 
-  """Scale a LoadBalancer service"""
+  """Scale LoadBalancer service"""
   scaleLoadBalancer(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -14984,7 +15111,7 @@ type Mutation {
     type: ClusterServiceType
   ): LoadBalancerType!
 
-  """Scale a Middleware service"""
+  """Scale Middleware service"""
   scaleMiddleware(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -15011,7 +15138,7 @@ type Mutation {
     type: ClusterServiceType
   ): MiddlewareUnionType!
 
-  """Scale a PrivateKey service"""
+  """Scale PrivateKey service"""
   scalePrivateKey(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -15038,7 +15165,7 @@ type Mutation {
     type: ClusterServiceType
   ): PrivateKeyUnionType!
 
-  """Scale a SmartContractSet service"""
+  """Scale SmartContractSet service"""
   scaleSmartContractSet(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -15065,7 +15192,7 @@ type Mutation {
     type: ClusterServiceType
   ): SmartContractSetType!
 
-  """Scale a Storage service"""
+  """Scale Storage service"""
   scaleStorage(
     """The new disk space in mebibytes (Mi)"""
     diskSpace: Int
@@ -19942,6 +20069,9 @@ input QuorumGenesisConfigInput {
   """Block number for Cancun hard fork"""
   cancunBlock: Float
 
+  """Timestamp for Cancun hard fork"""
+  cancunTime: Float
+
   """The chain ID of the network"""
   chainId: Float!
 
@@ -19970,7 +20100,7 @@ input QuorumGenesisConfigInput {
   ibft: QuorumGenesisIBFTInput
 
   """Indicates if this is a Quorum network"""
-  isQuorum: Boolean!
+  isQuorum: Boolean
 
   """Block number for Istanbul hard fork"""
   istanbulBlock: Float
@@ -19979,9 +20109,15 @@ input QuorumGenesisConfigInput {
   londonBlock: Float
 
   """Configuration for maximum code size"""
-  maxCodeSizeConfig: [JSON!]!
+  maxCodeSizeConfig: [MaxCodeSizeConfigInput!]
 
   """Block number for Muir Glacier hard fork"""
+  muirGlacierBlock: Float
+
+  """Block number for Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float
+
+  """Block number for Muir Glacier hard fork (all lowercase - deprecated)"""
   muirglacierblock: Float
 
   """Block number for Petersburg hard fork"""
@@ -19989,6 +20125,9 @@ input QuorumGenesisConfigInput {
 
   """QBFT consensus configuration"""
   qbft: QuorumGenesisQBFTInput
+
+  """Timestamp for Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Transaction size limit"""
   txnSizeLimit: Float!
@@ -20003,6 +20142,9 @@ type QuorumGenesisConfigType {
 
   """Block number for Cancun hard fork"""
   cancunBlock: Float
+
+  """Timestamp for Cancun hard fork"""
+  cancunTime: Float
 
   """The chain ID of the network"""
   chainId: Float!
@@ -20032,7 +20174,7 @@ type QuorumGenesisConfigType {
   ibft: QuorumGenesisIBFTType
 
   """Indicates if this is a Quorum network"""
-  isQuorum: Boolean!
+  isQuorum: Boolean
 
   """Block number for Istanbul hard fork"""
   istanbulBlock: Float
@@ -20041,16 +20183,25 @@ type QuorumGenesisConfigType {
   londonBlock: Float
 
   """Configuration for maximum code size"""
-  maxCodeSizeConfig: [JSON!]!
+  maxCodeSizeConfig: [MaxCodeSizeConfigType!]
 
   """Block number for Muir Glacier hard fork"""
-  muirglacierblock: Float
+  muirGlacierBlock: Float
+
+  """Block number for Muir Glacier hard fork (deprecated)"""
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
+
+  """Block number for Muir Glacier hard fork (all lowercase - deprecated)"""
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """Block number for Petersburg hard fork"""
   petersburgBlock: Float
 
   """QBFT consensus configuration"""
   qbft: QuorumGenesisQBFTType
+
+  """Timestamp for Shanghai hard fork"""
+  shanghaiTime: Float
 
   """Transaction size limit"""
   txnSizeLimit: Float!

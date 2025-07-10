@@ -14,6 +14,9 @@
  */
 export function extractBaseUrlBeforeSegment(baseUrl: string, pathSegment: string) {
   const url = new URL(baseUrl);
+  if (pathSegment.trim() === "") {
+    return url.toString();
+  }
   const segmentIndex = url.pathname.indexOf(pathSegment);
   return url.origin + (segmentIndex >= 0 ? url.pathname.substring(0, segmentIndex) : url.pathname);
 }

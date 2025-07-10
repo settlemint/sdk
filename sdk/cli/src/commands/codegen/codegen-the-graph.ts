@@ -1,13 +1,13 @@
-import { getVariableName } from "@/commands/codegen/utils/get-variable-name";
-import { writeTemplate } from "@/commands/codegen/utils/write-template";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { getVariableName } from "@/commands/codegen/utils/get-variable-name";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 
 const PACKAGE_NAME = "@settlemint/sdk-thegraph";
 
@@ -50,6 +50,9 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
 
   for (const gqlEndpoint of toGenerate) {
     const name = getSubgraphName(gqlEndpoint)!;
+    if (!name) {
+      continue;
+    }
     const introspectionVariable = getVariableName(`${name}Introspection`);
     note(`Generating TheGraph subgraph ${name}`);
     await generateSchema({

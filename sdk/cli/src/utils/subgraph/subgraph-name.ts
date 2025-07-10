@@ -1,3 +1,6 @@
 export function getSubgraphName(endpoint: string) {
-  return endpoint.split("/").pop();
+  if (endpoint.toLowerCase().includes("/subgraphs/")) {
+    return endpoint.split("/").pop();
+  }
+  return undefined;
 }
