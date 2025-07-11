@@ -36,7 +36,8 @@ jobs:
     if: |
       github.event_name == 'push' ||
       (github.event_name == 'pull_request' && github.event.action != 'closed') ||
-      github.event_name == 'pull_request_review'
+      github.event_name == 'pull_request_review' ||
+      github.event_name == 'release'
     runs-on: namespace-profile-sdk
     timeout-minutes: 30
     permissions:
