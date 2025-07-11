@@ -54,7 +54,7 @@ The SettleMint MinIO SDK provides a simple way to interact with MinIO object sto
 
 > **createPresignedUploadUrl**(`client`, `fileName`, `path`, `bucket`, `expirySeconds`): `Promise`\<`string`\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:261](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/functions.ts#L261)
+Defined in: [sdk/minio/src/helpers/functions.ts:261](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/functions.ts#L261)
 
 Creates a presigned upload URL for direct browser uploads
 
@@ -111,7 +111,7 @@ await fetch(uploadUrl, {
 
 > **createServerMinioClient**(`options`): `object`
 
-Defined in: [sdk/minio/src/minio.ts:23](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/minio.ts#L23)
+Defined in: [sdk/minio/src/minio.ts:23](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/minio.ts#L23)
 
 Creates a MinIO client for server-side use with authentication.
 
@@ -132,7 +132,7 @@ An object containing the initialized MinIO client
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `Client` | [sdk/minio/src/minio.ts:23](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/minio.ts#L23) |
+| `client` | `Client` | [sdk/minio/src/minio.ts:23](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/minio.ts#L23) |
 
 ##### Throws
 
@@ -157,7 +157,7 @@ client.listBuckets();
 
 > **deleteFile**(`client`, `fileId`, `bucket`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:214](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/functions.ts#L214)
+Defined in: [sdk/minio/src/helpers/functions.ts:214](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/functions.ts#L214)
 
 Deletes a file from storage
 
@@ -199,7 +199,7 @@ await deleteFile(client, "documents/report.pdf");
 
 > **getFileById**(`client`, `fileId`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:141](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/functions.ts#L141)
+Defined in: [sdk/minio/src/helpers/functions.ts:141](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/functions.ts#L141)
 
 Gets a single file by its object name
 
@@ -241,7 +241,7 @@ const file = await getFileByObjectName(client, "documents/report.pdf");
 
 > **getFilesList**(`client`, `prefix`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)[]\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:62](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/functions.ts#L62)
+Defined in: [sdk/minio/src/helpers/functions.ts:62](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/functions.ts#L62)
 
 Gets a list of files with optional prefix filter
 
@@ -283,7 +283,7 @@ const files = await getFilesList(client, "documents/");
 
 > **uploadFile**(`client`, `buffer`, `objectName`, `contentType`, `bucket`): `Promise`\<[`FileMetadata`](#filemetadata)\>
 
-Defined in: [sdk/minio/src/helpers/functions.ts:311](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/functions.ts#L311)
+Defined in: [sdk/minio/src/helpers/functions.ts:311](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/functions.ts#L311)
 
 Uploads a buffer directly to storage
 
@@ -326,7 +326,7 @@ const uploadedFile = await uploadFile(client, buffer, "documents/hello.txt", "te
 
 #### FileMetadata
 
-Defined in: [sdk/minio/src/helpers/schema.ts:29](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L29)
+Defined in: [sdk/minio/src/helpers/schema.ts:29](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L29)
 
 Type representing file metadata after validation.
 
@@ -334,13 +334,13 @@ Type representing file metadata after validation.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="contenttype"></a> `contentType` | `string` | The content type of the file. | [sdk/minio/src/helpers/schema.ts:41](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L41) |
-| <a id="etag"></a> `etag` | `string` | The ETag of the file. | [sdk/minio/src/helpers/schema.ts:56](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L56) |
-| <a id="id"></a> `id` | `string` | The unique identifier for the file. | [sdk/minio/src/helpers/schema.ts:33](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L33) |
-| <a id="name"></a> `name` | `string` | The name of the file. | [sdk/minio/src/helpers/schema.ts:37](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L37) |
-| <a id="size"></a> `size` | `number` | The size of the file in bytes. | [sdk/minio/src/helpers/schema.ts:46](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L46) |
-| <a id="uploadedat"></a> `uploadedAt` | `string` | The date and time the file was uploaded. | [sdk/minio/src/helpers/schema.ts:51](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L51) |
-| <a id="url"></a> `url?` | `string` | The URL of the file. | [sdk/minio/src/helpers/schema.ts:61](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L61) |
+| <a id="contenttype"></a> `contentType` | `string` | The content type of the file. | [sdk/minio/src/helpers/schema.ts:41](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L41) |
+| <a id="etag"></a> `etag` | `string` | The ETag of the file. | [sdk/minio/src/helpers/schema.ts:56](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L56) |
+| <a id="id"></a> `id` | `string` | The unique identifier for the file. | [sdk/minio/src/helpers/schema.ts:33](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L33) |
+| <a id="name"></a> `name` | `string` | The name of the file. | [sdk/minio/src/helpers/schema.ts:37](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L37) |
+| <a id="size"></a> `size` | `number` | The size of the file in bytes. | [sdk/minio/src/helpers/schema.ts:46](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L46) |
+| <a id="uploadedat"></a> `uploadedAt` | `string` | The date and time the file was uploaded. | [sdk/minio/src/helpers/schema.ts:51](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L51) |
+| <a id="url"></a> `url?` | `string` | The URL of the file. | [sdk/minio/src/helpers/schema.ts:61](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L61) |
 
 ### Variables
 
@@ -348,7 +348,7 @@ Type representing file metadata after validation.
 
 > `const` **DEFAULT\_BUCKET**: `"uploads"` = `"uploads"`
 
-Defined in: [sdk/minio/src/helpers/schema.ts:67](https://github.com/settlemint/sdk/blob/v2.4.1/sdk/minio/src/helpers/schema.ts#L67)
+Defined in: [sdk/minio/src/helpers/schema.ts:67](https://github.com/settlemint/sdk/blob/v2.5.1/sdk/minio/src/helpers/schema.ts#L67)
 
 Default bucket name to use for file storage when none is specified.
 
