@@ -39,7 +39,7 @@ jobs:
         uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
 
       - name: Setup caches
-        uses: namespacelabs/nscloud-cache-action@0ac1550c04676e19d39872be6216ccbf9c6bab43 # v1
+        uses: namespacelabs/nscloud-cache-action@cc5cafe4a62dde5ddfc225c4f851182626449a31 # v1
         with:
           path: |
             ./.turbo
