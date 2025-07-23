@@ -1,7 +1,6 @@
 [install]
 exact = true
 saveTextLockfile = true
-linker = isolated
 
 [test]
 coverage = true

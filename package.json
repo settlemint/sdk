@@ -33,8 +33,7 @@
     "deploy": "turbo deploy",
     "translate": "turbo translate",
     "typecheck": "turbo typecheck",
-    "ci:local": "bunx turbo format:biome lint build attw publint test:coverage --concurrency=14 --summarize",
-    "postinstall": "lefthook install",
+    "ci:local": "bunx turbo format:biome codegen typecheck lint build attw publint test:coverage --concurrency=14 --summarize",
     "test:typecheck": "cd test && bunx tsc",
     "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setup-platform-resources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done",
@@ -47,7 +46,6 @@
     "@types/bun": "1.2.19",
     "@types/mustache": "4.2.6",
     "knip": "5.62.0",
-    "lefthook": "1.12.2",
     "mustache": "4.2.0",
     "publint": "0.3.12",
     "tsdown": "^0.13.0",
@@ -83,5 +81,6 @@
     "adm-zip": "0.5.16",
     "react-is": "19.1.0",
     "undici": "7.12.0"
-  }
+  },
+  "dependencies": {}
 }
