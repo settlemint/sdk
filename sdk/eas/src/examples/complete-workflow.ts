@@ -74,8 +74,15 @@ async function completeWorkflow() {
       : Object.values(schemaReceipt.receipt.events);
 
     for (const event of events) {
-      if (typeof event === "object" && event && "args" in event && "uid" in event.args) {
-        realSchemaUID = event.args.uid as Hex;
+      if (
+        typeof event === "object" &&
+        event &&
+        "args" in event &&
+        event.args &&
+        typeof event.args === "object" &&
+        "uid" in event.args
+      ) {
+        realSchemaUID = (event.args as { uid: string }).uid as Hex;
         break;
       }
     }
@@ -121,8 +128,15 @@ async function completeWorkflow() {
       : Object.values(attestationReceipt.receipt.events);
 
     for (const event of events) {
-      if (typeof event === "object" && event && "args" in event && "uid" in event.args) {
-        realAttestationUID = event.args.uid as Hex;
+      if (
+        typeof event === "object" &&
+        event &&
+        "args" in event &&
+        event.args &&
+        typeof event.args === "object" &&
+        "uid" in event.args
+      ) {
+        realAttestationUID = (event.args as { uid: string }).uid as Hex;
         break;
       }
     }
@@ -135,32 +149,32 @@ async function completeWorkflow() {
 
   console.log("🔍 Step 4: Validate Data Existence");
 
-  // Test schema retrieval (method works, Portal returns null)
+  // Test schema retrieval
   console.log("📖 Testing Schema Retrieval:");
   try {
     const schema = await client.getSchema(realSchemaUID!);
-    console.log(`   Schema Query: ${schema.uid ? "✅ SUCCESS" : "⚠️  NULL VALUES (Portal behavior)"}`);
-    console.log("   Implementation: ✅ WORKING (query executes successfully)");
+    console.log(`   Schema Query: ${schema.uid ? "✅ SUCCESS" : "⚠️  No data returned"}`);
+    console.log("   Implementation: ✅ Query executes successfully");
   } catch (error) {
     console.log(`   ❌ Schema query failed: ${error}`);
   }
 
-  // Test attestation retrieval (method works, Portal returns null)
+  // Test attestation retrieval
   console.log("📋 Testing Attestation Retrieval:");
   try {
     const attestationData = await client.getAttestation(realAttestationUID!);
-    console.log(`   Attestation Query: ${attestationData.uid ? "✅ SUCCESS" : "⚠️  NULL VALUES (Portal behavior)"}`);
-    console.log("   Implementation: ✅ WORKING (query executes successfully)");
+    console.log(`   Attestation Query: ${attestationData.uid ? "✅ SUCCESS" : "⚠️  No data returned"}`);
+    console.log("   Implementation: ✅ Query executes successfully");
   } catch (error) {
     console.log(`   ❌ Attestation query failed: ${error}`);
   }
 
-  // Test validation (this actually works!)
+  // Test validation
   console.log("✔️  Testing Attestation Validation:");
   try {
     const isValid = await client.isValidAttestation(realAttestationUID!);
     console.log(`   Validation Result: ${isValid ? "✅ VALID" : "❌ INVALID"}`);
-    console.log("   Implementation: ✅ WORKING (proves attestation exists)");
+    console.log("   Implementation: ✅ Working - proves attestation exists");
   } catch (error) {
     console.log(`   ❌ Validation failed: ${error}`);
   }
@@ -168,13 +182,13 @@ async function completeWorkflow() {
 
   console.log("🎉 EAS Implementation Status Report");
   console.log("===================================");
-  console.log("✅ Contract Deployment: FULLY WORKING");
-  console.log("✅ Schema Registration: FULLY WORKING");
-  console.log("✅ Attestation Creation: FULLY WORKING");
-  console.log("✅ UID Extraction: FULLY WORKING");
-  console.log("✅ Attestation Validation: FULLY WORKING");
-  console.log("⚠️  Schema Queries: IMPLEMENTED (Portal returns null)");
-  console.log("⚠️  Attestation Queries: IMPLEMENTED (Portal returns null)");
+  console.log("✅ Contract Deployment: Working");
+  console.log("✅ Schema Registration: Working");
+  console.log("✅ Attestation Creation: Working");
+  console.log("✅ UID Extraction: Working");
+  console.log("✅ Attestation Validation: Working");
+  console.log("⚠️  Schema Queries: Implemented (Portal returns null)");
+  console.log("⚠️  Attestation Queries: Implemented (Portal returns null)");
   console.log();
 
   console.log("📊 Real Data Summary:");
@@ -185,16 +199,16 @@ async function completeWorkflow() {
   console.log();
 
   console.log("📋 Key Insights:");
-  console.log("• All write operations work perfectly");
+  console.log("• All write operations work correctly");
   console.log("• All read method implementations are correct");
-  console.log("• Portal contract state queries return null (not an SDK bug)");
+  console.log("• Portal contract state queries return null (not an SDK issue)");
   console.log("• Attestation validation proves data exists on-chain");
   console.log("• UID extraction from transaction events works reliably");
   console.log();
 
   console.log("🔧 For Production Use:");
-  console.log("• Use transaction receipts to extract real UIDs");
-  console.log("• Consider implementing The Graph subgraph for bulk queries");
+  console.log("• Use transaction receipts to extract UIDs");
+  console.log("• Consider The Graph subgraph for bulk queries");
   console.log("• Validation methods can confirm attestation existence");
 }
 

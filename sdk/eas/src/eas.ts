@@ -521,8 +521,8 @@ export class EASClient {
       return {
         uid: schemaResult.uid as Hex,
         resolver: schemaResult.resolver as Address,
-        revocable: schemaResult.revocable,
-        schema: schemaResult.schema,
+        revocable: Boolean(schemaResult.revocable),
+        schema: schemaResult.schema || "",
       };
     } catch (err) {
       const error = err as Error;
@@ -568,7 +568,7 @@ export class EASClient {
         recipient: attestationResult.recipient as Address,
         time: attestationResult.time ? BigInt(attestationResult.time) : BigInt(0),
         expirationTime: attestationResult.expirationTime ? BigInt(attestationResult.expirationTime) : BigInt(0),
-        revocable: attestationResult.revocable,
+        revocable: Boolean(attestationResult.revocable),
         refUID: attestationResult.refUID as Hex,
         data: attestationResult.data as Hex,
         value: BigInt(0), // Note: Portal schema doesn't include value, defaulting to 0
