@@ -56,7 +56,7 @@
     "gql.tada": "^1",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
-    "zod": "^3.25.0"
+    "zod": "^4.0.0"
   },
   "peerDependencies": {},
   "engines": {
