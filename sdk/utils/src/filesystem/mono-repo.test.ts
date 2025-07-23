@@ -46,6 +46,7 @@ describe("mono-repo utilities", () => {
       "minio",
       "next",
       "portal",
+      "scripts",
       "sdk",
       "test",
       "thegraph",
