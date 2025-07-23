@@ -55,7 +55,7 @@
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
     "minio": "^8",
-    "zod": "^3.25.0"
+    "zod": "^4.0.5"
   },
   "peerDependencies": {},
   "engines": {

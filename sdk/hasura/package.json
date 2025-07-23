@@ -68,7 +68,7 @@
     "gql.tada": "^1",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
-    "zod": "^3.25.0",
+    "zod": "^4.0.5",
     "drizzle-orm": "^0.44.0",
     "pg": "^8",
     "drizzle-kit": "^0.31.0"
