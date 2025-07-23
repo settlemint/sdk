@@ -1,4 +1,4 @@
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * Helper type to extract the inferred type from a Zod schema.

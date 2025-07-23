@@ -3,7 +3,7 @@ import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
@@ -90,17 +90,17 @@ export function createPortalClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
-export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+export { readFragment } from "gql.tada";
 export {
-  waitForTransactionReceipt,
   type Transaction,
   type TransactionEvent,
   type TransactionReceipt,
   type WaitForTransactionReceiptOptions,
+  waitForTransactionReceipt,
 } from "./utils/wait-for-transaction-receipt.js";
 export {
-  handleWalletVerificationChallenge,
   type HandleWalletVerificationChallengeOptions,
+  handleWalletVerificationChallenge,
 } from "./utils/wallet-verification-challenge.js";
 export { getWebsocketClient, type WebsocketClientOptions } from "./utils/websocket-client.js";

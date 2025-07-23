@@ -1,6 +1,6 @@
-import { camelCaseToWords } from "@/string.js";
 import { Table } from "console-table-printer";
 import { whiteBright } from "yoctocolors";
+import { camelCaseToWords } from "@/string.js";
 import { note } from "./note.js";
 import { shouldPrint } from "./should-print.js";
 /**
@@ -38,6 +38,6 @@ export function table(title: string, data: unknown[]): void {
       alignment: "left",
     })),
   });
-  table.addRows(data);
+  table.addRows(data as Array<Record<string, any>>);
   table.printTable();
 }

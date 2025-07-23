@@ -47,6 +47,7 @@ describe("mono-repo utilities", () => {
       "next",
       "portal",
       "sdk",
+      "test",
       "thegraph",
       "utils",
       "viem",

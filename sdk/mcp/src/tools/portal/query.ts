@@ -1,9 +1,9 @@
-import { fetchProcessedSchema } from "@/utils/schema-processor";
-import { generateFieldSDL } from "@/utils/sdl";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import type { GraphQLField } from "graphql";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { fetchProcessedSchema } from "@/utils/schema-processor";
+import { generateFieldSDL } from "@/utils/sdl";
 
 export const portalQuery = (server: McpServer, env: Partial<DotEnv>) => {
   // Check if portal GraphQL endpoint exists in environment variables

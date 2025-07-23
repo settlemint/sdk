@@ -115,7 +115,6 @@ async function fixPackageJson(packageJsonDir: string, requiresCodegenScript = tr
 
   if (subgraphPackageJsonData.packageManager?.includes("bun")) {
     note("Removing package manager from package.json (bun is not an official package manager)");
-    // biome-ignore lint/performance/noDelete: packageManager field needs to be removed from the object
     delete subgraphPackageJsonData.packageManager;
     hasPackageJsonChanged = true;
   }

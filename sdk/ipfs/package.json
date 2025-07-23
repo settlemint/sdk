@@ -55,7 +55,7 @@
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
     "kubo-rpc-client": "^5",
-    "zod": "^4.0.0"
+    "zod": "^4"
   },
   "peerDependencies": {},
   "engines": {

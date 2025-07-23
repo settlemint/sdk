@@ -43,7 +43,10 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "node-fetch-native": "1.6.6"
+    "@gql.tada/cli-utils": "1.7.0",
+    "@inquirer/core": "10.1.15",
+    "node-fetch-native": "1.6.6",
+    "zod": "^4"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "14.0.0",
@@ -67,10 +70,12 @@
     "viem": "2.33.0",
     "which": "5.0.0",
     "yaml": "2.8.0",
-    "yoctocolors": "2.1.1"
+    "yoctocolors": "2.1.1",
+    "yocto-spinner": "^1.0.0"
   },
   "peerDependencies": {
-    "hardhat": "2.26.1"
+    "hardhat": "2.26.1",
+    "@settlemint/sdk-js": "workspace:*"
   },
   "peerDependenciesMeta": {
     "hardhat": {
