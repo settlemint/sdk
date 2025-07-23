@@ -222,6 +222,26 @@
         "zod": "^4",
       },
     },
+    "test": {
+      "name": "test",
+      "devDependencies": {
+        "@settlemint/sdk-cli": "workspace:*",
+        "@settlemint/sdk-eas": "workspace:*",
+        "@settlemint/sdk-hasura": "workspace:*",
+        "@settlemint/sdk-js": "workspace:*",
+        "@settlemint/sdk-mcp": "workspace:*",
+        "@settlemint/sdk-minio": "workspace:*",
+        "@settlemint/sdk-portal": "workspace:*",
+        "@settlemint/sdk-utils": "workspace:*",
+        "@settlemint/sdk-viem": "workspace:*",
+        "@types/bun": "latest",
+        "viem": "2.33.0",
+        "yaml": "2.8.0",
+      },
+      "peerDependencies": {
+        "typescript": "^5",
+      },
+    },
   },
   "trustedDependencies": [
     "esbuild",
@@ -1450,6 +1470,8 @@
     "supports-hyperlinks": ["supports-hyperlinks@3.2.0", "", { "dependencies": { "has-flag": "^4.0.0", "supports-color": "^7.0.0" } }, "sha512-zFObLMyZeEwzAoKCyu1B91U79K2t7ApXuQfo8OuxwXLDgcKxuwM+YvcbIhm6QWqz7mHUH1TVytR1PwVVjEuMig=="],
 
     "sync-fetch": ["sync-fetch@0.6.0-2", "", { "dependencies": { "node-fetch": "^3.3.2", "timeout-signal": "^2.0.0", "whatwg-mimetype": "^4.0.0" } }, "sha512-c7AfkZ9udatCuAy9RSfiGPpeOKKUAUK5e1cXadLOGUjasdxqYqAK0jTNkM/FSEyJ3a5Ra27j/tw/PS0qLmaF/A=="],
+
+    "test": ["test@workspace:test"],
 
     "thenify": ["thenify@3.3.1", "", { "dependencies": { "any-promise": "^1.0.0" } }, "sha512-RVZSIV5IG10Hk3enotrhvz0T9em6cyHBLkH/YAZuKqd8hRkKhSfCGIcP2KUY0EPxndzANBmNllzWPwak+bheSw=="],
 

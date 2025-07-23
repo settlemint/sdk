@@ -63,7 +63,7 @@
   },
   "workspaces": [
     "sdk/*",
-    "apps/*"
+    "test"
   ],
   "trustedDependencies": [
     "@biomejs/biome",

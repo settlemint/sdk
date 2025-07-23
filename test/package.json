@@ -1,0 +1,21 @@
+{
+  "name": "test",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "viem": "2.33.0",
+    "yaml": "2.8.0",
+    "@settlemint/sdk-viem": "workspace:*",
+    "@settlemint/sdk-js": "workspace:*",
+    "@settlemint/sdk-utils": "workspace:*",
+    "@settlemint/sdk-portal": "workspace:*",
+    "@settlemint/sdk-hasura": "workspace:*",
+    "@settlemint/sdk-eas": "workspace:*",
+    "@settlemint/sdk-mcp": "workspace:*",
+    "@settlemint/sdk-minio": "workspace:*",
+    "@settlemint/sdk-cli": "workspace:*"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
