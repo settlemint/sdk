@@ -74,7 +74,7 @@ The SettleMint EAS SDK provides a lightweight wrapper for the Ethereum Attestati
 
 import type { Address, Hex } from "viem";
 import { decodeAbiParameters, encodeAbiParameters, parseAbiParameters } from "viem";
-import { createEASClient, ZERO_ADDRESS, ZERO_BYTES32 } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
+import { ZERO_ADDRESS, ZERO_BYTES32, createEASClient } from "@settlemint/sdk-eas";
 
 const CONFIG = {
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
@@ -234,25 +234,19 @@ async function runEASWorkflow() {
     console.log("⚠️  Schema registration failed:", error);
   }
 
-  /*
-    The following steps for retrieving schemas and attestations are commented out
-    because the underlying SDK functions are not yet fully implemented and depend on
-    a configured The Graph subgraph, which is not available in this example.
-  */
-
-  // // Step 5: Retrieve Schema
-  // console.log("📖 Step 5: Retrieve Schema");
-  // try {
-  //   const schema = await client.getSchema("0x1234567890123456789012345678901234567890123456789012345678901234");
-  //   console.log("✅ Schema retrieved successfully");
-  //   console.log(`   UID: ${schema.uid}`);
-  //   console.log(`   Resolver: ${schema.resolver}`);
-  //   console.log(`   Revocable: ${schema.revocable}`);
-  //   console.log(`   Schema: ${schema.schema}\n`);
-  // } catch (error) {
-  //   console.log("⚠️  Schema retrieval failed (Portal access required)");
-  //   console.log("   Would retrieve schema: 0x1234567890123456789012345678901234567890123456789012345678901234\n");
-  // }
+  // Step 5: Retrieve Schema (Now fully implemented!)
+  console.log("📖 Step 5: Retrieve Schema");
+  try {
+    const schema = await client.getSchema(schemaResult.hash);
+    console.log("✅ Schema retrieved successfully");
+    console.log(`   UID: ${schema.uid}`);
+    console.log(`   Resolver: ${schema.resolver}`);
+    console.log(`   Revocable: ${schema.revocable}`);
+    console.log(`   Schema: ${schema.schema}\n`);
+  } catch (error) {
+    console.log("⚠️  Schema retrieval failed:");
+    console.log(`   ${error}\n`);
+  }
 
   // // Step 6: Retrieve All Schemas
   // console.log("📚 Step 6: Retrieve All Schemas");
@@ -656,8 +650,6 @@ Defined in: [sdk/eas/src/eas.ts:528](https://github.com/settlemint/sdk/blob/v2.5
 
 Get an attestation by UID
 
-TODO: Implement using The Graph subgraph for EAS data queries
-
 ###### Parameters
 
 | Parameter | Type |
@@ -676,7 +668,9 @@ Defined in: [sdk/eas/src/eas.ts:539](https://github.com/settlemint/sdk/blob/v2.5
 
 Get attestations with pagination and filtering
 
-TODO: Implement using The Graph subgraph for EAS data queries
+Note: This method requires The Graph subgraph or additional indexing infrastructure
+as Portal's direct contract queries don't support listing all attestations.
+Consider using getAttestation() for individual attestation lookups.
 
 ###### Parameters
 
@@ -743,8 +737,6 @@ Defined in: [sdk/eas/src/eas.ts:508](https://github.com/settlemint/sdk/blob/v2.5
 
 Get a schema by UID
 
-TODO: Implement using The Graph subgraph for EAS data queries
-
 ###### Parameters
 
 | Parameter | Type |
@@ -763,7 +755,9 @@ Defined in: [sdk/eas/src/eas.ts:519](https://github.com/settlemint/sdk/blob/v2.5
 
 Get all schemas with pagination
 
-TODO: Implement using The Graph subgraph for EAS data queries
+Note: This method requires The Graph subgraph or additional indexing infrastructure
+as Portal's direct contract queries don't support listing all schemas.
+Consider using getSchema() for individual schema lookups.
 
 ###### Parameters
 
@@ -781,9 +775,9 @@ TODO: Implement using The Graph subgraph for EAS data queries
 
 Defined in: [sdk/eas/src/eas.ts:557](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/eas/src/eas.ts#L557)
 
-Get the current timestamp from the contract
+Get the timestamp for specific data
 
-TODO: Fix Portal GraphQL query parameter encoding or use The Graph subgraph
+The data parameter must be a bytes32 value (64 hex characters with 0x prefix)
 
 ###### Returns
 
@@ -796,8 +790,6 @@ TODO: Fix Portal GraphQL query parameter encoding or use The Graph subgraph
 Defined in: [sdk/eas/src/eas.ts:548](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/eas/src/eas.ts#L548)
 
 Check if an attestation is valid
-
-TODO: Implement using The Graph subgraph for EAS data queries
 
 ###### Parameters
 

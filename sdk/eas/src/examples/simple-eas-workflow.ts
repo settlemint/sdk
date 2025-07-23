@@ -10,7 +10,7 @@
 
 import type { Address, Hex } from "viem";
 import { decodeAbiParameters, encodeAbiParameters, parseAbiParameters } from "viem";
-import { createEASClient, ZERO_ADDRESS, ZERO_BYTES32 } from "../eas.ts"; // Replace this path with "@settlemint/sdk-eas";
+import { ZERO_ADDRESS, ZERO_BYTES32, createEASClient } from "../eas.js";
 
 const CONFIG = {
   instance: process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
@@ -59,7 +59,8 @@ async function runEASWorkflow() {
   console.log("🚀 Simple EAS SDK Workflow");
   console.log("===========================\n");
 
-  let _deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
+  let deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
+  let schemaResult: { hash: Hex } | undefined;
 
   // Step 1: Initialize EAS Client
   console.log("📋 Step 1: Initialize EAS Client");
@@ -99,7 +100,7 @@ async function runEASWorkflow() {
   // Step 3: Register Schema
   console.log("📝 Step 3: Register Schema");
   try {
-    const schemaResult = await client.registerSchema(
+    schemaResult = await client.registerSchema(
       {
         fields: [
           { name: "user", type: "address", description: "User's wallet address" },
@@ -170,76 +171,57 @@ async function runEASWorkflow() {
     console.log("⚠️  Schema registration failed:", error);
   }
 
-  /*
-    The following steps for retrieving schemas and attestations are commented out
-    because the underlying SDK functions are not yet fully implemented and depend on
-    a configured The Graph subgraph, which is not available in this example.
-  */
+  // Step 5: Retrieve Schema (Now fully implemented!)
+  console.log("📖 Step 5: Retrieve Schema");
+  if (!schemaResult) {
+    console.log("⚠️  No schema registered, skipping retrieval test\n");
+  } else {
+    try {
+      const schema = await client.getSchema(schemaResult.hash);
+      console.log("✅ Schema retrieved successfully");
+      console.log(`   UID: ${schema.uid}`);
+      console.log(`   Resolver: ${schema.resolver}`);
+      console.log(`   Revocable: ${schema.revocable}`);
+      console.log(`   Schema: ${schema.schema}\n`);
+    } catch (error) {
+      console.log("⚠️  Schema retrieval failed:");
+      console.log(`   ${error}\n`);
+    }
+  }
 
-  // // Step 5: Retrieve Schema
-  // console.log("📖 Step 5: Retrieve Schema");
-  // try {
-  //   const schema = await client.getSchema("0x1234567890123456789012345678901234567890123456789012345678901234");
-  //   console.log("✅ Schema retrieved successfully");
-  //   console.log(`   UID: ${schema.uid}`);
-  //   console.log(`   Resolver: ${schema.resolver}`);
-  //   console.log(`   Revocable: ${schema.revocable}`);
-  //   console.log(`   Schema: ${schema.schema}\n`);
-  // } catch (error) {
-  //   console.log("⚠️  Schema retrieval failed (Portal access required)");
-  //   console.log("   Would retrieve schema: 0x1234567890123456789012345678901234567890123456789012345678901234\n");
-  // }
+  // Step 6: Check Attestation Validity
+  console.log("🔍 Step 6: Check Attestation Validity");
+  try {
+    // We'll create an example attestation UID to check
+    const exampleAttestationUID = "0xabcd567890123456789012345678901234567890123456789012345678901234" as Hex;
+    const isValid = await client.isValidAttestation(exampleAttestationUID);
+    console.log("✅ Attestation validity checked");
+    console.log(`   UID: ${exampleAttestationUID}`);
+    console.log(`   Is Valid: ${isValid}\n`);
+  } catch (error) {
+    console.log("⚠️  Attestation validity check failed:");
+    console.log(`   ${error}\n`);
+  }
 
-  // // Step 6: Retrieve All Schemas
-  // console.log("📚 Step 6: Retrieve All Schemas");
-  // try {
-  //   const schemas = await client.getSchemas({ limit: 10 });
-  //   console.log("✅ Schemas retrieved successfully");
-  //   console.log(`   Found ${schemas.length} schemas`);
-  //   schemas.forEach((schema, index) => {
-  //     console.log(`   ${index + 1}. ${schema.uid} - ${schema.schema}`);
-  //   });
-  //   console.log();
-  // } catch (error) {
-  //   console.log("⚠️  Schemas retrieval failed (Portal access required)");
-  //   console.log("   Would retrieve paginated schemas\n");
-  // }
+  // Step 7: Get Timestamp for Data
+  console.log("⏰ Step 7: Get Timestamp for Data");
+  try {
+    // Data must be padded to 32 bytes (64 hex chars) for bytes32
+    const sampleData = "0x1234567890abcdef000000000000000000000000000000000000000000000000" as Hex;
+    const timestamp = await client.getTimestamp(sampleData);
+    console.log("✅ Timestamp retrieved successfully");
+    console.log(`   Data: ${sampleData}`);
+    console.log(`   Timestamp: ${timestamp} (${new Date(Number(timestamp) * 1000).toISOString()})\n`);
+  } catch (error) {
+    console.log("⚠️  Timestamp retrieval failed:");
+    console.log(`   ${error}\n`);
+  }
 
-  // // Step 7: Retrieve Attestations
-  // console.log("📋 Step 7: Retrieve Attestations");
-  // try {
-  //   const attestation1 = await client.getAttestation(
-  //     "0xabcd567890123456789012345678901234567890123456789012345678901234",
-  //   );
-  //   console.log("✅ Attestation retrieved successfully");
-  //   console.log(`   UID: ${attestation1.uid}`);
-  //   console.log(`   Attester: ${attestation1.attester}`);
-  //   console.log(`   Recipient: ${attestation1.recipient}`);
-  //   console.log(`   Schema: ${attestation1.schema}\n`);
-  // } catch (error) {
-  //   console.log("⚠️  Attestation retrieval failed (Portal access required)");
-  //   console.log(
-  //     "   Would retrieve attestations: 0xabcd567890123456789012345678901234567890123456789012345678901234, 0xefgh567890123456789012345678901234567890123456789012345678901234\n",
-  //   );
-  // }
-
-  // // Step 8: Retrieve All Attestations
-  // console.log("📋 Step 8: Retrieve All Attestations");
-  // try {
-  //   const attestations = await client.getAttestations({
-  //     limit: 10,
-  //     schema: "0x1234567890123456789012345678901234567890123456789012345678901234",
-  //   });
-  //   console.log("✅ Attestations retrieved successfully");
-  //   console.log(`   Found ${attestations.length} attestations`);
-  //   attestations.forEach((attestation, index) => {
-  //     console.log(`   ${index + 1}. ${attestation.uid} by ${attestation.attester}`);
-  //   });
-  //   console.log();
-  // } catch (error) {
-  //   console.log("⚠️  Attestations retrieval failed (Portal access required)");
-  //   console.log("   Would retrieve paginated attestations\n");
-  // }
+  // Note: Bulk query operations require The Graph integration
+  console.log("📝 Note about Bulk Operations:");
+  console.log("   • getSchemas() and getAttestations() require The Graph subgraph integration");
+  console.log("   • Individual lookups (getSchema, getAttestation) are fully functional via Portal");
+  console.log("   • Consider implementing The Graph integration for bulk data operations\n");
 
   // Final Summary
   console.log("🎉 Workflow Complete!");
@@ -248,21 +230,38 @@ async function runEASWorkflow() {
   console.log("✅ Contract deployment ready");
   console.log("✅ Schema registration ready");
   console.log("✅ Attestation creation ready");
-  console.log("✅ Schema retrieval ready");
-  console.log("✅ Attestation retrieval ready");
+  console.log("✅ Individual schema retrieval implemented");
+  console.log("✅ Individual attestation retrieval implemented");
+  console.log("✅ Attestation validation implemented");
+  console.log("✅ Data timestamp retrieval implemented");
 
   console.log("\n💡 Production ready!");
-  console.log("- All EAS operations implemented");
-  console.log("- Full Portal GraphQL integration");
-  console.log("- Comprehensive error handling");
-  console.log("- Type-safe TypeScript API");
+  console.log("- Core EAS operations fully implemented");
+  console.log("- Portal GraphQL integration for all individual queries");
+  console.log("- Comprehensive error handling with specific error messages");
+  console.log("- Type-safe TypeScript API with full type inference");
   console.log("- No hardcoded values - fully configurable");
+
+  console.log("\n🔑 Fully Implemented Features:");
+  console.log("- ✅ Contract deployment (EAS + Schema Registry)");
+  console.log("- ✅ Schema registration with field validation");
+  console.log("- ✅ Single and multi-attestation creation");
+  console.log("- ✅ Attestation revocation");
+  console.log("- ✅ Schema lookup by UID");
+  console.log("- ✅ Attestation lookup by UID");
+  console.log("- ✅ Attestation validity checking");
+  console.log("- ✅ Data timestamp queries");
+
+  console.log("\n🚧 Future Enhancements (requiring The Graph):");
+  console.log("- ⏳ Bulk schema listings (getSchemas)");
+  console.log("- ⏳ Bulk attestation listings (getAttestations)");
+  console.log("- ⏳ Advanced filtering and pagination");
 
   console.log("\n🔑 To use with real Portal:");
   console.log("- Obtain valid EAS Portal access token");
   console.log("- Provide deployer and transaction sender addresses");
   console.log("- Deploy or configure contract addresses");
-  console.log("- Start creating attestations!");
+  console.log("- Start creating and querying attestations!");
 }
 
 export const DigitalNotarySchemaHelpers = {
