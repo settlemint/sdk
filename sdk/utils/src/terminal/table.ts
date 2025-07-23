@@ -1,4 +1,5 @@
 import { Table } from "console-table-printer";
+import type { Dictionary } from "console-table-printer/dist/src/models/common.js";
 import { whiteBright } from "yoctocolors";
 import { camelCaseToWords } from "@/string.js";
 import { note } from "./note.js";
@@ -18,7 +19,7 @@ import { shouldPrint } from "./should-print.js";
  *
  * table("My Table", data);
  */
-export function table(title: string, data: unknown[]): void {
+export function table(title: string, data: Dictionary[]): void {
   if (!shouldPrint()) {
     return;
   }

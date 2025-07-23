@@ -40,14 +40,15 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
+    "@commander-js/extra-typings": "14.0.0",
     "@graphql-tools/load": "8.1.2",
     "@graphql-tools/url-loader": "8.0.33",
     "@modelcontextprotocol/sdk": "1.16.0",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@commander-js/extra-typings": "14.0.0",
     "commander": "14.0.0",
-    "zod": "^4.0.5"
+    "graphql": "16.11.0",
+    "zod": "^4"
   },
   "devDependencies": {},
   "peerDependencies": {},

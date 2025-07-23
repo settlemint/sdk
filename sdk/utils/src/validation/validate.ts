@@ -1,4 +1,4 @@
-import { ZodError, type ZodType } from "zod/v4";
+import { ZodError, type ZodType } from "zod";
 
 /**
  * Validates a value against a given Zod schema.

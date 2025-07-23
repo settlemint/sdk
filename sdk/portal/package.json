@@ -53,6 +53,7 @@
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/portal.ts --out ./docs"
   },
   "devDependencies": {
+    "graphql": "16.11.0",
     "viem": "^2"
   },
   "dependencies": {
@@ -60,7 +61,7 @@
     "graphql-ws": "^6",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
-    "zod": "^4.0.5"
+    "zod": "^4"
   },
   "peerDependencies": {},
   "engines": {

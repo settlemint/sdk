@@ -1,6 +1,6 @@
 import { ApplicationAccessTokenSchema, UrlSchema } from "@settlemint/sdk-utils/validation";
 import { type Address, isAddress } from "viem";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 const ethAddressSchema = z.custom<Address>(
   (val) => typeof val === "string" && isAddress(val),

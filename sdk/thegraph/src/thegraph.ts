@@ -3,7 +3,7 @@ import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * Type definition for GraphQL client configuration options
@@ -109,5 +109,5 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   };
 }
 
-export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+export { readFragment } from "gql.tada";

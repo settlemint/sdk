@@ -2,19 +2,19 @@ import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import {
-  http,
-  type HttpTransportConfig,
-  type Chain as ViemChain,
   createPublicClient,
   createWalletClient,
   defineChain,
+  type HttpTransportConfig,
+  http,
   publicActions,
+  type Chain as ViemChain,
 } from "viem";
 import * as chains from "viem/chains";
-import { z } from "zod/v4";
-import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
-import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
+import { z } from "zod";
 import { createWallet } from "./custom-actions/create-wallet.action.js";
+import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
+import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
 import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
 import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
@@ -253,13 +253,11 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
   );
 }
 
-export { OTPAlgorithm, WalletVerificationType } from "./custom-actions/types/wallet-verification.enum.js";
-
 export type {
-  CreateWalletVerificationChallengesParameters,
-  CreateWalletVerificationChallengesResponse,
-  WalletVerificationChallenge,
-} from "./custom-actions/create-wallet-verification-challenges.action.js";
+  CreateWalletParameters,
+  CreateWalletResponse,
+  WalletInfo,
+} from "./custom-actions/create-wallet.action.js";
 export type {
   CreateWalletVerificationParameters,
   CreateWalletVerificationResponse,
@@ -269,10 +267,10 @@ export type {
   WalletVerificationInfo,
 } from "./custom-actions/create-wallet-verification.action.js";
 export type {
-  CreateWalletParameters,
-  CreateWalletResponse,
-  WalletInfo,
-} from "./custom-actions/create-wallet.action.js";
+  CreateWalletVerificationChallengesParameters,
+  CreateWalletVerificationChallengesResponse,
+  WalletVerificationChallenge,
+} from "./custom-actions/create-wallet-verification-challenges.action.js";
 export type {
   DeleteWalletVerificationParameters,
   DeleteWalletVerificationResponse,
@@ -282,6 +280,7 @@ export type {
   GetWalletVerificationsResponse,
   WalletVerification,
 } from "./custom-actions/get-wallet-verifications.action.js";
+export { OTPAlgorithm, WalletVerificationType } from "./custom-actions/types/wallet-verification.enum.js";
 export type {
   AddressOrObject,
   VerificationResult,

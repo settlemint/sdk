@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { portalQueries } from "@/tools/portal/queries";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { type DotEnv, PersonalAccessTokenSchema } from "@settlemint/sdk-utils/validation";
 import { Command } from "commander";
+import { portalQueries } from "@/tools/portal/queries";
 import pkg from "../package.json";
 import { hasuraPrompt } from "./prompts/hasura/hasura";
 import { portalPrompt } from "./prompts/portal/portal";

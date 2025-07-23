@@ -5,7 +5,7 @@ import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * Type definition for GraphQL client configuration options

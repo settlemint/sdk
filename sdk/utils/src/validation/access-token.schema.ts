@@ -1,4 +1,4 @@
-import { type ZodString, z } from "zod/v4";
+import { type ZodString, z } from "zod";
 
 /**
  * Schema for validating application access tokens.

@@ -2,7 +2,7 @@ import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { type Id, LOCAL_INSTANCE, STANDALONE_INSTANCE, validate } from "@settlemint/sdk-utils/validation";
 import { GraphQLClient } from "graphql-request";
-import { z } from "zod/v4";
+import { z } from "zod";
 import {
   type Application,
   applicationCreate,
