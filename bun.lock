@@ -235,6 +235,8 @@
         "@settlemint/sdk-utils": "workspace:*",
         "@settlemint/sdk-viem": "workspace:*",
         "@types/bun": "latest",
+        "is-in-ci": "^1",
+        "minio": "^8",
         "viem": "2.33.0",
         "yaml": "2.8.0",
       },

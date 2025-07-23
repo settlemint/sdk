@@ -13,7 +13,9 @@
     "@settlemint/sdk-eas": "workspace:*",
     "@settlemint/sdk-mcp": "workspace:*",
     "@settlemint/sdk-minio": "workspace:*",
-    "@settlemint/sdk-cli": "workspace:*"
+    "@settlemint/sdk-cli": "workspace:*",
+    "minio": "^8",
+    "is-in-ci": "^1"
   },
   "peerDependencies": {
     "typescript": "^5"
