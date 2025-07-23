@@ -10,20 +10,72 @@ beforeAll(async () => {
   await moduleMocker.mock("@settlemint/sdk-portal", () => ({
     createPortalClient: () => ({
       client: {
-        request: async () => ({
-          DeployContractEASSchemaRegistry: {
-            transactionHash: "0x123",
-            contractAddress: "0x456",
-          },
-          DeployContractEAS: {
-            transactionHash: "0xabc",
-            contractAddress: "0xdef",
-          },
-          EASSchemaRegistryRegister: { transactionHash: "0x789" },
-          EASAttest: { transactionHash: "0xghi" },
-          EASMultiAttest: { transactionHash: "0x मल्टी" },
-          EASRevoke: { transactionHash: "0x-rev" },
-        }),
+        request: async (query: string) => {
+          // Mock responses based on query type
+          if (query.includes("EASSchemaRegistryGetSchema")) {
+            return {
+              EASSchemaRegistry: {
+                getSchema: {
+                  uid: "0x1234567890123456789012345678901234567890123456789012345678901234",
+                  resolver: "0x0000000000000000000000000000000000000000",
+                  revocable: true,
+                  schema: "uint256 score, address user",
+                },
+              },
+            };
+          }
+
+          if (query.includes("EASGetAttestation")) {
+            return {
+              EAS: {
+                getAttestation: {
+                  uid: "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+                  schema: "0x1234567890123456789012345678901234567890123456789012345678901234",
+                  attester: "0x1111111111111111111111111111111111111111",
+                  recipient: "0x2222222222222222222222222222222222222222",
+                  time: "1640995200",
+                  expirationTime: "0",
+                  revocable: true,
+                  refUID: "0x0000000000000000000000000000000000000000000000000000000000000000",
+                  data: "0x1234",
+                  revocationTime: "0",
+                },
+              },
+            };
+          }
+
+          if (query.includes("EASIsAttestationValid")) {
+            return {
+              EAS: {
+                isAttestationValid: true,
+              },
+            };
+          }
+
+          if (query.includes("EASGetTimestamp")) {
+            return {
+              EAS: {
+                getTimestamp: "1640995200",
+              },
+            };
+          }
+
+          // Default mutation responses
+          return {
+            DeployContractEASSchemaRegistry: {
+              transactionHash: "0x123",
+              contractAddress: "0x456",
+            },
+            DeployContractEAS: {
+              transactionHash: "0xabc",
+              contractAddress: "0xdef",
+            },
+            EASSchemaRegistryRegister: { transactionHash: "0x789" },
+            EASAttest: { transactionHash: "0xghi" },
+            EASMultiAttest: { transactionHash: "0x मल्टी" },
+            EASRevoke: { transactionHash: "0x-rev" },
+          };
+        },
       },
       graphql: (query: string) => query,
     }),
@@ -264,15 +316,68 @@ describe("EAS Portal Client", () => {
     expect(result.success).toBe(true);
   });
 
-  test("should throw error on unimplemented methods", async () => {
+  test("should get a schema by UID", async () => {
     const client = createEASClient(optionsWithAddresses);
 
-    await expect(client.getSchema(TEST_SCHEMA_UID)).rejects.toThrow("Schema queries not implemented yet");
-    await expect(client.getSchemas()).rejects.toThrow("Schema listing not implemented yet");
-    await expect(client.getAttestation(TEST_ATTESTATION_UID)).rejects.toThrow(
-      "Attestation queries not implemented yet",
+    const schema = await client.getSchema(TEST_SCHEMA_UID);
+
+    expect(schema).toBeDefined();
+    expect(schema.uid).toBe("0x1234567890123456789012345678901234567890123456789012345678901234");
+    expect(schema.resolver).toBe("0x0000000000000000000000000000000000000000");
+    expect(schema.revocable).toBe(true);
+    expect(schema.schema).toBe("uint256 score, address user");
+  });
+
+  test("should get an attestation by UID", async () => {
+    const client = createEASClient(optionsWithAddresses);
+
+    const attestation = await client.getAttestation(TEST_ATTESTATION_UID);
+
+    expect(attestation).toBeDefined();
+    expect(attestation.uid).toBe("0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890");
+    expect(attestation.schema).toBe("0x1234567890123456789012345678901234567890123456789012345678901234");
+    expect(attestation.attester).toBe("0x1111111111111111111111111111111111111111");
+    expect(attestation.recipient).toBe("0x2222222222222222222222222222222222222222");
+    expect(attestation.time).toBe(BigInt(1640995200));
+    expect(attestation.expirationTime).toBe(BigInt(0));
+    expect(attestation.revocable).toBe(true);
+    expect(attestation.refUID).toBe("0x0000000000000000000000000000000000000000000000000000000000000000");
+    expect(attestation.data).toBe("0x1234");
+  });
+
+  test("should check if attestation is valid", async () => {
+    const client = createEASClient(optionsWithAddresses);
+
+    const isValid = await client.isValidAttestation(TEST_ATTESTATION_UID);
+
+    expect(isValid).toBe(true);
+  });
+
+  test("should get timestamp for data", async () => {
+    const client = createEASClient(optionsWithAddresses);
+
+    const timestamp = await client.getTimestamp("0x1234" as Hex);
+
+    expect(timestamp).toBe(BigInt(1640995200));
+  });
+
+  test("should throw error on bulk query methods", async () => {
+    const client = createEASClient(optionsWithAddresses);
+
+    await expect(client.getSchemas()).rejects.toThrow(
+      "Schema listing not implemented yet. Portal's direct contract queries don't support listing all schemas",
     );
-    await expect(client.getAttestations()).rejects.toThrow("Attestation listing not implemented yet");
-    await expect(client.getTimestamp()).rejects.toThrow("Timestamp query not implemented yet");
+    await expect(client.getAttestations()).rejects.toThrow(
+      "Attestation listing not implemented yet. Portal's direct contract queries don't support listing all attestations",
+    );
+  });
+
+  test("should throw error when trying to query without contract addresses", async () => {
+    const client = createEASClient(optionsWithoutAddresses);
+
+    await expect(client.getSchema(TEST_SCHEMA_UID)).rejects.toThrow("Schema Registry contract address not available");
+    await expect(client.getAttestation(TEST_ATTESTATION_UID)).rejects.toThrow("EAS contract address not available");
+    await expect(client.isValidAttestation(TEST_ATTESTATION_UID)).rejects.toThrow("EAS contract address not available");
+    await expect(client.getTimestamp("0x1234" as Hex)).rejects.toThrow("EAS contract address not available");
   });
 });
