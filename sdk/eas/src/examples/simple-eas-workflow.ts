@@ -171,7 +171,7 @@ async function runEASWorkflow() {
     console.log("⚠️  Schema registration failed:", error);
   }
 
-  // Step 5: Retrieve Schema (Now fully implemented!)
+  // Step 5: Retrieve Schema
   console.log("📖 Step 5: Retrieve Schema");
   if (!schemaResult) {
     console.log("⚠️  No schema registered, skipping retrieval test\n");

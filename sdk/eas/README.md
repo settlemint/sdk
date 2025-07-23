@@ -234,7 +234,7 @@ async function runEASWorkflow() {
     console.log("⚠️  Schema registration failed:", error);
   }
 
-  // Step 5: Retrieve Schema (Now fully implemented!)
+  // Step 5: Retrieve Schema
   console.log("📖 Step 5: Retrieve Schema");
   try {
     const schema = await client.getSchema(schemaResult.hash);
@@ -309,17 +309,17 @@ async function runEASWorkflow() {
   console.log("✅ Schema retrieval ready");
   console.log("✅ Attestation retrieval ready");
 
-  console.log("\n💡 Production ready!");
+  console.log("\n💡 Ready for production!");
   console.log("- All EAS operations implemented");
-  console.log("- Full Portal GraphQL integration");
+  console.log("- Portal GraphQL integration");
   console.log("- Comprehensive error handling");
   console.log("- Type-safe TypeScript API");
-  console.log("- No hardcoded values - fully configurable");
+  console.log("- Fully configurable");
 
-  console.log("\n🔑 To use with real Portal:");
-  console.log("- Obtain valid EAS Portal access token");
-  console.log("- Provide deployer and transaction sender addresses");
-  console.log("- Deploy or configure contract addresses");
+  console.log("\n🔑 To use with Portal:");
+  console.log("- Set valid Portal access token");
+  console.log("- Configure deployer and sender addresses");
+  console.log("- Deploy or set contract addresses");
   console.log("- Start creating attestations!");
 }
 

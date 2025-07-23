@@ -133,7 +133,6 @@ async function runDemo() {
     });
 
     console.log("\nBesu raw response:");
-    console.log("- Status:", besuSchemaResult.status);
     console.log("- Data length:", besuSchemaResult.data?.length || 0, "bytes");
     console.log("- Raw data (first 200 chars):", besuSchemaResult.data?.slice(0, 200) || "No data");
   } catch (error) {
@@ -185,15 +184,13 @@ async function runDemo() {
     });
 
     console.log("\nBesu raw response:");
-    console.log("- Status:", besuAttestationResult.status);
     console.log("- Data length:", besuAttestationResult.data?.length || 0, "bytes");
     console.log("- Raw data (first 200 chars):", besuAttestationResult.data?.slice(0, 200) || "No data");
   } catch (error) {
     console.error("Error in attestation test:", error);
   }
 
-  // End of tests
-  console.log("\n\n=== END OF TESTS ===");
+  console.log("\n\nComparison complete");
 }
 
 // Run the demo
