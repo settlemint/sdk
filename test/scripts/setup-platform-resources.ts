@@ -3,7 +3,6 @@ import { copyFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
-import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import {
   AAT_NAME,
@@ -629,13 +628,6 @@ export async function prepareTestApp() {
   try {
     const testAppDir = join(__dirname, "../test-app");
     await mkdir(testAppDir, { recursive: true });
-    console.log("Initializing npm project in", testAppDir);
-    process.chdir(testAppDir);
-    await executeCommand("npm", ["init", "-y"]);
-    console.log("Initializing tsconfig in", testAppDir);
-    if (!(await exists(join(testAppDir, "tsconfig.json")))) {
-      await executeCommand("npx", ["tsc", "--init"]);
-    }
     console.log("Copying .env in", testAppDir);
     if (await exists(join(__dirname, "../../.env"))) {
       await copyFile(join(__dirname, "../../.env"), join(testAppDir, ".env"));

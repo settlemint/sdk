@@ -50,6 +50,8 @@ test/contracts-subgraphs-not-generated
 test/test-app/*
 !test/test-app/portal-env.d.ts
 !test/test-app/hasura-env.d.ts
+!test/test-app/package.json
+!test/test-app/tsconfig.json
 .temp-mono-repo-test
 
 # Docs
