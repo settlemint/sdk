@@ -628,7 +628,6 @@ export async function prepareTestApp() {
   try {
     const testAppDir = join(__dirname, "../test-app");
     await mkdir(testAppDir, { recursive: true });
-    process.chdir(testAppDir);
     console.log("Copying .env in", testAppDir);
     if (await exists(join(__dirname, "../../.env"))) {
       await copyFile(join(__dirname, "../../.env"), join(testAppDir, ".env"));
