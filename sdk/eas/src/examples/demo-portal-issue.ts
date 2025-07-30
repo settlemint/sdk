@@ -34,9 +34,9 @@ async function runDemo() {
   }
 
   // Use environment variables for RPC endpoint
-  const rpcUrl = env.BESU_RPC_ENDPOINT || env.SETTLEMINT_RPC_ENDPOINT;
+  const rpcUrl = env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT || env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT;
   if (!rpcUrl) {
-    console.error("❌ Please set BESU_RPC_ENDPOINT or SETTLEMINT_RPC_ENDPOINT environment variable");
+    console.error("❌ Please set SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT or SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT environment variable");
     return;
   }
 
