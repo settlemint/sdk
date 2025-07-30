@@ -537,7 +537,7 @@ export class EASClient {
    * as Portal's direct contract queries don't support listing all schemas.
    * Consider using getSchema() for individual schema lookups.
    */
-  public async getSchemas(options?: GetSchemasOptions): Promise<SchemaData[]> {
+  public async getSchemas(_options?: GetSchemasOptions): Promise<SchemaData[]> {
     throw new Error(
       "Schema listing not implemented yet. Portal's direct contract queries don't support listing all schemas. Use getSchema() for individual schema lookups or implement The Graph subgraph integration for bulk queries.",
     );
@@ -586,7 +586,7 @@ export class EASClient {
    * as Portal's direct contract queries don't support listing all attestations.
    * Consider using getAttestation() for individual attestation lookups.
    */
-  public async getAttestations(options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
+  public async getAttestations(_options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
     throw new Error(
       "Attestation listing not implemented yet. Portal's direct contract queries don't support listing all attestations. Use getAttestation() for individual attestation lookups or implement The Graph subgraph integration for bulk queries.",
     );

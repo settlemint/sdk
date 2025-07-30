@@ -3,8 +3,11 @@
  * Run this to demonstrate the issue with Portal GraphQL queries
  */
 
-import { GraphQLClient } from "graphql-request";
-import { http, type Address, type Hex, createPublicClient } from "viem";
+import { createPortalClient } from "@settlemint/sdk-portal";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
+import { type Address, createPublicClient, type Hex, http } from "viem";
+import type { introspection } from "../portal/portal-env.js";
 
 // Test data from our deployment
 const EAS_ADDRESS = "0x8da4813fe48efdb7fc7dd1bfee40fe20f01e53d5" as Address;
@@ -16,31 +19,54 @@ async function runDemo() {
   console.log("Portal vs Besu RPC Comparison");
   console.log("=============================\n");
 
-  const accessToken = process.env.SETTLEMINT_ACCESS_TOKEN;
-  if (!accessToken) {
+  // Load environment variables using SDK utilities
+  const env = await loadEnv(true, false);
+  const logger = createLogger();
+
+  if (!env.SETTLEMINT_ACCESS_TOKEN) {
     console.error("❌ Please set SETTLEMINT_ACCESS_TOKEN environment variable");
     return;
   }
 
-  // Setup clients
-  const portalUrl =
-    process.env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT || "https://eas-portal-bddb6.gke-europe.settlemint.com/graphql";
-  const rpcUrl = process.env.BESU_RPC_ENDPOINT || "https://poc-validator-1-552b8.eks-europe.settlemint.com/";
+  if (!env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT) {
+    console.error("❌ Please set SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT environment variable");
+    return;
+  }
 
-  const portalClient = new GraphQLClient(portalUrl, {
-    headers: { "x-auth-token": accessToken },
-  });
+  // Use environment variables for RPC endpoint
+  const rpcUrl = env.BESU_RPC_ENDPOINT || env.SETTLEMINT_RPC_ENDPOINT;
+  if (!rpcUrl) {
+    console.error("❌ Please set BESU_RPC_ENDPOINT or SETTLEMINT_RPC_ENDPOINT environment variable");
+    return;
+  }
+
+  // Create type-safe portal client using SDK
+  const { client: portalClient, graphql: portalGraphql } = createPortalClient<{
+    introspection: introspection;
+    disableMasking: true;
+    scalars: {
+      JSON: unknown;
+    };
+  }>(
+    {
+      instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+      accessToken: env.SETTLEMINT_ACCESS_TOKEN,
+    },
+    {
+      fetch: requestLogger(logger, "portal", fetch) as typeof fetch,
+    },
+  );
 
   const besuClient = createPublicClient({
     transport: http(rpcUrl, {
       fetchOptions: {
-        headers: { "x-auth-token": accessToken },
+        headers: { "x-auth-token": env.SETTLEMINT_ACCESS_TOKEN },
       },
     }),
   });
 
   console.log("Configuration:");
-  console.log(`Portal: ${portalUrl}`);
+  console.log(`Portal: ${env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT}`);
   console.log(`Besu RPC: ${rpcUrl}`);
   console.log(`Schema UID: ${SCHEMA_UID}`);
   console.log(`Attestation UID: ${ATTESTATION_UID}\n`);
@@ -50,18 +76,24 @@ async function runDemo() {
   console.log("============================\n");
 
   try {
-    // Portal call
+    // Portal call with type-safe GraphQL
     console.log("Portal GraphQL query:");
-    const validationQuery = `
-      query {
-        EAS(address: "${EAS_ADDRESS}") {
-          isAttestationValid(uid: "${ATTESTATION_UID}")
+    const validationQuery = portalGraphql(`
+      query IsAttestationValid($address: String!, $uid: String!) {
+        EAS(address: $address) {
+          isAttestationValid(uid: $uid)
         }
       }
-    `;
-    console.log(validationQuery);
+    `);
+    console.log("Query with variables:", {
+      address: EAS_ADDRESS,
+      uid: ATTESTATION_UID,
+    });
 
-    const portalValidResult = await portalClient.request(validationQuery);
+    const portalValidResult = await portalClient.request(validationQuery, {
+      address: EAS_ADDRESS,
+      uid: ATTESTATION_UID,
+    });
     console.log("\nPortal raw response:");
     console.log(JSON.stringify(portalValidResult, null, 2));
 
@@ -99,12 +131,12 @@ async function runDemo() {
   console.log("==================\n");
 
   try {
-    // Portal call
+    // Portal call with type-safe GraphQL
     console.log("Portal GraphQL query:");
-    const schemaQuery = `
-      query {
-        EASSchemaRegistry(address: "${SCHEMA_REGISTRY_ADDRESS}") {
-          getSchema(uid: "${SCHEMA_UID}") {
+    const schemaQuery = portalGraphql(`
+      query GetSchema($address: String!, $uid: String!) {
+        EASSchemaRegistry(address: $address) {
+          getSchema(uid: $uid) {
             uid
             resolver
             revocable
@@ -112,10 +144,16 @@ async function runDemo() {
           }
         }
       }
-    `;
-    console.log(schemaQuery);
+    `);
+    console.log("Query with variables:", {
+      address: SCHEMA_REGISTRY_ADDRESS,
+      uid: SCHEMA_UID,
+    });
 
-    const portalSchemaResult = await portalClient.request(schemaQuery);
+    const portalSchemaResult = await portalClient.request(schemaQuery, {
+      address: SCHEMA_REGISTRY_ADDRESS,
+      uid: SCHEMA_UID,
+    });
     console.log("\nPortal raw response:");
     console.log(JSON.stringify(portalSchemaResult, null, 2));
 
@@ -144,12 +182,12 @@ async function runDemo() {
   console.log("========================\n");
 
   try {
-    // Portal call
+    // Portal call with type-safe GraphQL
     console.log("Portal GraphQL query:");
-    const attestationQuery = `
-      query {
-        EAS(address: "${EAS_ADDRESS}") {
-          getAttestation(uid: "${ATTESTATION_UID}") {
+    const attestationQuery = portalGraphql(`
+      query GetAttestation($address: String!, $uid: String!) {
+        EAS(address: $address) {
+          getAttestation(uid: $uid) {
             uid
             schema
             attester
@@ -163,10 +201,16 @@ async function runDemo() {
           }
         }
       }
-    `;
-    console.log(attestationQuery);
+    `);
+    console.log("Query with variables:", {
+      address: EAS_ADDRESS,
+      uid: ATTESTATION_UID,
+    });
 
-    const portalAttestationResult = await portalClient.request(attestationQuery);
+    const portalAttestationResult = await portalClient.request(attestationQuery, {
+      address: EAS_ADDRESS,
+      uid: ATTESTATION_UID,
+    });
     console.log("\nPortal raw response:");
     console.log(JSON.stringify(portalAttestationResult, null, 2));
 
