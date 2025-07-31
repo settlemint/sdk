@@ -6,7 +6,7 @@ import { executeCommand } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import semver from "semver";
 import { missingApplication } from "@/error/missing-config-error";
-import { theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
+import { isHAGraphMiddleware, theGraphPrompt } from "@/prompts/cluster-service/thegraph.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { executeFoundryCommand } from "../smart-contract-set/execute-foundry-command";
 import { sanitizeName } from "./sanitize-name";
@@ -94,7 +94,7 @@ export async function getTheGraphMiddleware({
   });
   if (autoAccept && env.SETTLEMINT_THEGRAPH) {
     const defaultTheGraphMiddleware = await settlemintClient.middleware.read(env.SETTLEMINT_THEGRAPH);
-    if (defaultTheGraphMiddleware && defaultTheGraphMiddleware.__typename === "HAGraphMiddleware") {
+    if (defaultTheGraphMiddleware && isHAGraphMiddleware(defaultTheGraphMiddleware)) {
       return defaultTheGraphMiddleware;
     }
   }

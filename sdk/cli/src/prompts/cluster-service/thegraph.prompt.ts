@@ -1,18 +1,18 @@
-import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
-import { isRunning } from "@/utils/cluster-service";
 import select from "@inquirer/select";
 import type { Middleware } from "@settlemint/sdk-js";
+import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-service/service.prompt";
+import { isRunning } from "@/utils/cluster-service";
 
 /**
- * Extract HAGraphMiddleware type from the Middleware union type
+ * Extract HAGraphMiddleware or HAGraphPostgresMiddleware type from the Middleware union type
  */
-export type HAGraphMiddleware = Extract<Middleware, { __typename: "HAGraphMiddleware" }>;
+export type HAGraphMiddleware = Extract<Middleware, { __typename: "HAGraphMiddleware" | "HAGraphPostgresMiddleware" }>;
 
 /**
- * Type guard to check if a middleware is HAGraphMiddleware
+ * Type guard to check if a middleware is HAGraphMiddleware or HAGraphPostgresMiddleware
  */
 export function isHAGraphMiddleware(middleware: Middleware): middleware is HAGraphMiddleware {
-  return middleware.__typename === "HAGraphMiddleware";
+  return middleware.__typename === "HAGraphMiddleware" || middleware.__typename === "HAGraphPostgresMiddleware";
 }
 
 export interface TheGraphPromptArgs extends BaseServicePromptArgs {

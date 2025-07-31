@@ -1,4 +1,3 @@
-import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
 import type {
   BlockchainNode,
   CustomDeployment,
@@ -13,6 +12,8 @@ import type {
 import { retryWhenFailed } from "@settlemint/sdk-utils/retry";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
+import { isHAGraphMiddleware } from "@/prompts/cluster-service/thegraph.prompt";
 import { getSubgraphName } from "./subgraph/subgraph-name";
 
 export async function getGraphEnv(
@@ -20,7 +21,7 @@ export async function getGraphEnv(
   service: Middleware | undefined,
   graphName?: string,
 ): Promise<Partial<DotEnv>> {
-  if (!service || service.__typename !== "HAGraphMiddleware") {
+  if (!service || !isHAGraphMiddleware(service)) {
     return {};
   }
 
@@ -30,7 +31,7 @@ export async function getGraphEnv(
     task: () =>
       retryWhenFailed(async () => {
         const middleware = await settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName);
-        if (!middleware || middleware.__typename !== "HAGraphMiddleware") {
+        if (!middleware || !isHAGraphMiddleware(middleware)) {
           throw new Error(`Middleware '${service.uniqueName}' is not a graph middleware`);
         }
         if (
