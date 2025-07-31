@@ -502,60 +502,144 @@ export class EASClient {
 
   /**
    * Get a schema by UID
-   *
-   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   public async getSchema(uid: Hex): Promise<SchemaData> {
-    throw new Error(
-      `Schema queries not implemented yet. Use The Graph subgraph for reading schema data. Schema UID: ${uid}`,
-    );
+    const schemaRegistryAddress = this.getSchemaRegistryAddress();
+
+    try {
+      const response = await this.portalClient.request(GraphQLOperations.queries.getSchema(this.portalGraphql), {
+        address: schemaRegistryAddress,
+        uid: uid,
+      });
+
+      const schemaResult = response.EASSchemaRegistry?.getSchema;
+
+      if (!schemaResult) {
+        throw new Error(`Schema not found: ${uid}`);
+      }
+
+      return {
+        uid: schemaResult.uid as Hex,
+        resolver: schemaResult.resolver as Address,
+        revocable: Boolean(schemaResult.revocable),
+        schema: schemaResult.schema || "",
+      };
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to get schema: ${error.message}`);
+    }
   }
 
   /**
    * Get all schemas with pagination
    *
-   * TODO: Implement using The Graph subgraph for EAS data queries
+   * Note: This method requires The Graph subgraph or additional indexing infrastructure
+   * as Portal's direct contract queries don't support listing all schemas.
+   * Consider using getSchema() for individual schema lookups.
    */
   public async getSchemas(_options?: GetSchemasOptions): Promise<SchemaData[]> {
-    throw new Error("Schema listing not implemented yet. Use The Graph subgraph for reading schema data.");
+    throw new Error(
+      "Schema listing not implemented yet. Portal's direct contract queries don't support listing all schemas. Use getSchema() for individual schema lookups or implement The Graph subgraph integration for bulk queries.",
+    );
   }
 
   /**
    * Get an attestation by UID
-   *
-   * TODO: Implement using The Graph subgraph for EAS data queries
    */
   public async getAttestation(uid: Hex): Promise<AttestationInfo> {
-    throw new Error(
-      `Attestation queries not implemented yet. Use The Graph subgraph for reading attestation data. Attestation UID: ${uid}`,
-    );
+    const easAddress = this.getEASAddress();
+
+    try {
+      const response = await this.portalClient.request(GraphQLOperations.queries.getAttestation(this.portalGraphql), {
+        address: easAddress,
+        uid: uid,
+      });
+
+      const attestationResult = response.EAS?.getAttestation;
+
+      if (!attestationResult) {
+        throw new Error(`Attestation not found: ${uid}`);
+      }
+
+      return {
+        uid: attestationResult.uid as Hex,
+        schema: attestationResult.schema as Hex,
+        attester: attestationResult.attester as Address,
+        recipient: attestationResult.recipient as Address,
+        time: attestationResult.time ? BigInt(attestationResult.time) : BigInt(0),
+        expirationTime: attestationResult.expirationTime ? BigInt(attestationResult.expirationTime) : BigInt(0),
+        revocable: Boolean(attestationResult.revocable),
+        refUID: attestationResult.refUID as Hex,
+        data: attestationResult.data as Hex,
+        value: BigInt(0), // Note: Portal schema doesn't include value, defaulting to 0
+      };
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to get attestation: ${error.message}`);
+    }
   }
 
   /**
    * Get attestations with pagination and filtering
    *
-   * TODO: Implement using The Graph subgraph for EAS data queries
+   * Note: This method requires The Graph subgraph or additional indexing infrastructure
+   * as Portal's direct contract queries don't support listing all attestations.
+   * Consider using getAttestation() for individual attestation lookups.
    */
   public async getAttestations(_options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
-    throw new Error("Attestation listing not implemented yet. Use The Graph subgraph for reading attestation data.");
+    throw new Error(
+      "Attestation listing not implemented yet. Portal's direct contract queries don't support listing all attestations. Use getAttestation() for individual attestation lookups or implement The Graph subgraph integration for bulk queries.",
+    );
   }
 
   /**
    * Check if an attestation is valid
-   *
-   * TODO: Implement using The Graph subgraph for EAS data queries
    */
-  public async isValidAttestation(_uid: Hex): Promise<boolean> {
-    return false;
+  public async isValidAttestation(uid: Hex): Promise<boolean> {
+    const easAddress = this.getEASAddress();
+
+    try {
+      const response = await this.portalClient.request(
+        GraphQLOperations.queries.isAttestationValid(this.portalGraphql),
+        {
+          address: easAddress,
+          uid: uid,
+        },
+      );
+
+      return response.EAS?.isAttestationValid ?? false;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to check attestation validity: ${error.message}`);
+    }
   }
 
   /**
-   * Get the current timestamp from the contract
+   * Get the timestamp for specific data
    *
-   * TODO: Fix Portal GraphQL query parameter encoding or use The Graph subgraph
+   * @param data - The data to get timestamp for
+   * @returns The timestamp when the data was timestamped
    */
-  public async getTimestamp(): Promise<bigint> {
-    throw new Error("Timestamp query not implemented yet. Fix Portal query parameters or use The Graph subgraph.");
+  public async getTimestamp(data: Hex): Promise<bigint> {
+    const easAddress = this.getEASAddress();
+
+    try {
+      const response = await this.portalClient.request(GraphQLOperations.queries.getTimestamp(this.portalGraphql), {
+        address: easAddress,
+        data: data,
+      });
+
+      const timestampResult = response.EAS?.getTimestamp;
+
+      if (timestampResult === undefined || timestampResult === null) {
+        throw new Error(`No timestamp found for data: ${data}`);
+      }
+
+      return BigInt(timestampResult);
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to get timestamp: ${error.message}`);
+    }
   }
 
   /**
