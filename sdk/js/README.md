@@ -209,7 +209,7 @@ Type representing a load balancer entity.
 
 > **Middleware** = `ResultOf`\<*typeof* `MiddlewareFragment`\>
 
-Defined in: [sdk/js/src/graphql/middleware.ts:43](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/js/src/graphql/middleware.ts#L43)
+Defined in: [sdk/js/src/graphql/middleware.ts:56](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/js/src/graphql/middleware.ts#L56)
 
 Type representing a middleware entity.
 
@@ -219,7 +219,7 @@ Type representing a middleware entity.
 
 > **MiddlewareWithSubgraphs** = `ResultOf`\<*typeof* `getGraphMiddlewareSubgraphs`\>\[`"middlewareByUniqueName"`\]
 
-Defined in: [sdk/js/src/graphql/middleware.ts:101](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/js/src/graphql/middleware.ts#L101)
+Defined in: [sdk/js/src/graphql/middleware.ts:115](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/js/src/graphql/middleware.ts#L115)
 
 Type representing a middleware entity with subgraphs.
 
