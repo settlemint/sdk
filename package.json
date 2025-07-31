@@ -54,7 +54,7 @@
     "typedoc-plugin-markdown": "4.8.0",
     "typedoc-plugin-merge-modules": "7.0.0",
     "typedoc-plugin-zod": "1.4.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": ">=20"
