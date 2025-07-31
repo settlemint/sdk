@@ -6,7 +6,7 @@ import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
-import { hasValidPrivateKey } from "@/utils/cluster-service";
+import { hasValidPrivateKey, isRunning } from "@/utils/cluster-service";
 
 export async function selectTargetNode({
   env,
@@ -78,7 +78,7 @@ function validateNode(node: BlockchainNode, cancelOnError = true) {
     }
     return false;
   }
-  if (node.status !== "COMPLETED") {
+  if (!isRunning(node)) {
     if (cancelOnError) {
       serviceNotRunningError("blockchain node", node.status);
     }
