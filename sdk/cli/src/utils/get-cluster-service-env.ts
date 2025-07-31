@@ -13,7 +13,7 @@ import { retryWhenFailed } from "@settlemint/sdk-utils/retry";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
-import { isHAGraphMiddleware } from "@/prompts/cluster-service/thegraph.prompt";
+import { isAnyHAGraphMiddleware } from "@/prompts/cluster-service/thegraph.prompt";
 import { getSubgraphName } from "./subgraph/subgraph-name";
 
 export async function getGraphEnv(
@@ -21,7 +21,7 @@ export async function getGraphEnv(
   service: Middleware | undefined,
   graphName?: string,
 ): Promise<Partial<DotEnv>> {
-  if (!service || !isHAGraphMiddleware(service)) {
+  if (!service || !isAnyHAGraphMiddleware(service)) {
     return {};
   }
 
@@ -31,7 +31,7 @@ export async function getGraphEnv(
     task: () =>
       retryWhenFailed(async () => {
         const middleware = await settlemint.middleware.graphSubgraphs(service.uniqueName, !!graphName);
-        if (!middleware || !isHAGraphMiddleware(middleware)) {
+        if (!middleware || !isAnyHAGraphMiddleware(middleware)) {
           throw new Error(`Middleware '${service.uniqueName}' is not a graph middleware`);
         }
         if (
