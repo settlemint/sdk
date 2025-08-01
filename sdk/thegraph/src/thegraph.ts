@@ -111,3 +111,4 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
 
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
 export { readFragment } from "gql.tada";
+export { createTheGraphClientWithPagination } from "./utils/pagination.js";
