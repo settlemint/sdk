@@ -88,9 +88,9 @@ function customMerge(target: unknown, source: unknown): unknown {
   if (source == null) return target;
   if (target == null) return source;
 
-  // Preserve existing arrays (paginated data) - don't merge them
-  if (isArray(target) || isArray(source)) {
-    return target;
+  // If source is an array, return it, don't merge arrays
+  if (isArray(source)) {
+    return source;
   }
 
   if (typeof target !== "object" || typeof source !== "object") {
@@ -150,8 +150,7 @@ function extractFetchAllFields(
                 const varValue = (variables as Record<string, unknown>)[varName];
                 firstValue = typeof varValue === "number" ? varValue : undefined;
                 // If variable is defined in query but not passed in input, check if it's a standard pagination variable
-                if (firstValue === undefined && varName === "first") {
-                  hasFirstArg = true;
+                if (firstValue === undefined && varName === arg.value.name.value) {
                   firstValue = THE_GRAPH_LIMIT; // Default to THE_GRAPH_LIMIT
                   firstValueIsDefault = true; // Mark that this was defaulted
                 }
@@ -165,8 +164,7 @@ function extractFetchAllFields(
                 const varValue = (variables as Record<string, unknown>)[varName];
                 skipValue = typeof varValue === "number" ? varValue : undefined;
                 // If variable is defined in query but not passed in input, check if it's a standard pagination variable
-                if (skipValue === undefined && varName === "skip") {
-                  hasSkipArg = true;
+                if (skipValue === undefined && varName === arg.value.name.value) {
                   skipValue = 0; // Default to 0
                 }
               }
@@ -444,7 +442,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
         );
 
         // Merge results, preserving list data
-        const merged = customMerge(result, nonListResult);
+        const merged = customMerge(nonListResult, result);
         return merged as TResult;
       }
 

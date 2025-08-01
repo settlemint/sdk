@@ -289,6 +289,28 @@ describe("createTheGraphClientWithPagination", () => {
     );
   });
 
+  it("should use existing pagination variables if they are passed in", async () => {
+    const limit = 100;
+    const skip = 1;
+    const result = await client.query(
+      theGraphGraphql(`
+        query {
+          tokens(first: $limit, skip: $skip) @fetchAll {
+            name
+            symbol
+          }
+        }`),
+      {
+        limit,
+        skip,
+      },
+    );
+    expect(result.tokens).toHaveLength(TEST_TOKENS.length - skip);
+    expect(result.tokens).toEqual(TEST_TOKENS.slice(skip));
+    const expectedCalls = Math.ceil(TEST_TOKENS.length / 100);
+    expect(requestMock).toHaveBeenCalledTimes(expectedCalls);
+  });
+
   it("should return all token holders if @fetchAll is used", async () => {
     const result = await client.query(
       theGraphGraphql(`
