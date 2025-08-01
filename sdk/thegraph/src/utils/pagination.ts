@@ -1,8 +1,8 @@
 import { sortBy } from "es-toolkit";
 import { get, isArray, isEmpty, set } from "es-toolkit/compat";
 import type { TadaDocumentNode } from "gql.tada";
-import { type ArgumentNode, type DocumentNode, Kind, type SelectionNode, visit } from "graphql";
-import type { GraphQLClient, Variables } from "graphql-request";
+import { type ArgumentNode, type DocumentNode, Kind, parse, type SelectionNode, visit } from "graphql";
+import type { GraphQLClient, RequestDocument, RequestOptions, Variables } from "graphql-request";
 
 // Constants for TheGraph limits
 const THE_GRAPH_LIMIT = 500;
@@ -14,7 +14,6 @@ interface ListField {
   path: string[];
   fieldName: string;
   alias?: string;
-  hasFirstArg: boolean;
   firstValue?: number;
   skipValue?: number;
   otherArgs: ArgumentNode[];
@@ -35,13 +34,13 @@ interface ListField {
  * - Removes the directive from the AST (The Graph doesn't recognize it)
  * - Returns both the cleaned document and a list of fields to auto-paginate
  */
-function stripFetchAllDirective(document: DocumentNode): {
+function stripFetchAllDirective(document: DocumentNode | RequestDocument): {
   document: DocumentNode;
   fetchAllFields: Set<string>;
 } {
   const fetchAllFields = new Set<string>();
-
-  const strippedDocument = visit(document, {
+  const documentNode = typeof document === "string" ? parse(document) : document;
+  const strippedDocument = visit(documentNode, {
     Field(node) {
       // Check if this field has the @fetchAll directive
       if (node.directives && node.directives.length > 0) {
@@ -132,41 +131,27 @@ function extractFetchAllFields(
         }
 
         // Check if this field has pagination arguments (first or skip)
-        let hasFirstArg = false;
-        let hasSkipArg = false;
         let firstValue: number | undefined;
         let skipValue: number | undefined;
-        let firstValueIsDefault = false;
         const otherArgs: ArgumentNode[] = [];
 
         if (node.arguments) {
           for (const arg of node.arguments) {
             if (arg.name.value === FIRST_ARG) {
-              hasFirstArg = true;
               if (arg.value.kind === Kind.INT) {
                 firstValue = Number.parseInt(arg.value.value);
               } else if (arg.value.kind === Kind.VARIABLE && variables) {
                 const varName = arg.value.name.value;
                 const varValue = (variables as Record<string, unknown>)[varName];
                 firstValue = typeof varValue === "number" ? varValue : undefined;
-                // If variable is defined in query but not passed in input, check if it's a standard pagination variable
-                if (firstValue === undefined && varName === arg.value.name.value) {
-                  firstValue = THE_GRAPH_LIMIT; // Default to THE_GRAPH_LIMIT
-                  firstValueIsDefault = true; // Mark that this was defaulted
-                }
               }
             } else if (arg.name.value === SKIP_ARG) {
-              hasSkipArg = true;
               if (arg.value.kind === Kind.INT) {
                 skipValue = Number.parseInt(arg.value.value);
               } else if (arg.value.kind === Kind.VARIABLE && variables) {
                 const varName = arg.value.name.value;
                 const varValue = (variables as Record<string, unknown>)[varName];
                 skipValue = typeof varValue === "number" ? varValue : undefined;
-                // If variable is defined in query but not passed in input, check if it's a standard pagination variable
-                if (skipValue === undefined && varName === arg.value.name.value) {
-                  skipValue = 0; // Default to 0
-                }
               }
             } else {
               otherArgs.push(arg);
@@ -190,13 +175,12 @@ function extractFetchAllFields(
             path: [...pathStack],
             fieldName: node.name.value,
             alias: node.alias?.value,
-            hasFirstArg,
-            firstValue: hasFetchAllDirective && !hasFirstArg ? THE_GRAPH_LIMIT : firstValue,
-            skipValue: hasFetchAllDirective && !hasSkipArg ? 0 : skipValue,
+            firstValue: hasFetchAllDirective && (firstValue ?? THE_GRAPH_LIMIT),
+            skipValue: hasFetchAllDirective && (skipValue ?? 0),
             otherArgs,
             selections: node.selectionSet?.selections,
             hasFetchAllDirective,
-            firstValueIsDefault,
+            firstValueIsDefault: hasFetchAllDirective ? firstValue === undefined : false,
           });
         }
       },
@@ -398,9 +382,20 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 
   return {
     async query<TResult, TVariables extends Variables>(
-      document: TadaDocumentNode<TResult, TVariables>,
-      variables: Omit<TVariables, "skip" | "first">,
+      documentOrOptions: TadaDocumentNode<TResult, TVariables> | RequestDocument | RequestOptions<TVariables, TResult>,
+      variablesRaw?: Omit<TVariables, "skip" | "first">,
     ): Promise<TResult> {
+      let document: TadaDocumentNode<TResult, TVariables> | RequestDocument;
+      let variables: Omit<TVariables, "skip" | "first">;
+
+      if (isRequestOptions(documentOrOptions)) {
+        document = documentOrOptions.document;
+        variables = documentOrOptions.variables as TVariables;
+      } else {
+        document = documentOrOptions;
+        variables = variablesRaw ?? ({} as TVariables);
+      }
+
       // First, detect and strip @fetchAll directives
       const { document: processedDocument, fetchAllFields } = stripFetchAllDirective(document);
 
@@ -449,4 +444,8 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       return result as TResult;
     },
   } as const;
+}
+
+function isRequestOptions(args: unknown): args is RequestOptions<Variables, unknown> {
+  return typeof args === "object" && args !== null && "document" in args && "variables" in args;
 }
