@@ -4,6 +4,15 @@ import type { DocumentNode, FieldNode } from "graphql";
 import type { GraphQLClient } from "graphql-request";
 import { createTheGraphClientWithPagination } from "./pagination.js";
 
+const TEST_HOLDERS = Array.from({ length: 1_000 }, (_, i) => ({
+  name: `Holder ${i}`,
+}));
+const TEST_TOKENS = Array.from({ length: 1_000 }, (_, i) => ({
+  name: `Token ${i}`,
+  symbol: `TKN${i}`,
+}));
+const DEFAULT_PAGE_SIZE = 500;
+
 const theGraphGraphql = initGraphQLTada<{
   introspection: {
     __schema: {
@@ -254,15 +263,6 @@ const requestMock = mock(async (document: DocumentNode, variables: RequestVariab
 const client = createTheGraphClientWithPagination({
   request: requestMock as unknown as GraphQLClient["request"],
 });
-
-const TEST_HOLDERS = Array.from({ length: 1_000 }, (_, i) => ({
-  name: `Holder ${i}`,
-}));
-const TEST_TOKENS = Array.from({ length: 1_000 }, (_, i) => ({
-  name: `Token ${i}`,
-  symbol: `TKN${i}`,
-}));
-const DEFAULT_PAGE_SIZE = 500;
 
 describe("createTheGraphClientWithPagination", () => {
   beforeEach(() => {
