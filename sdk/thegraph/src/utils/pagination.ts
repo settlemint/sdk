@@ -181,6 +181,13 @@ function extractListFields(document: DocumentNode, variables?: Variables, fetchA
         const shouldPaginate = hasPaginationArgs || hasFetchAllDirective;
 
         if (shouldPaginate) {
+          // Do not allow nesting @fetchAll fields
+          const parentFetchAllField = fields.find((field) => pathStack.join(",").startsWith(field.path.join(",")));
+          if (parentFetchAllField) {
+            throw new Error(
+              `Nesting of @fetchAll directive is not supported: ${pathStack.join(".")} is a child of ${parentFetchAllField.path.join(".")}`,
+            );
+          }
           fields.push({
             path: [...pathStack],
             fieldName: node.name.value,
@@ -344,6 +351,14 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 
       // Use array path format for es-toolkit's get function
       const data = get(response, field.path);
+
+      const parentPath = field.path.slice(0, -1);
+      const parentData = get(response, parentPath);
+      if (isArray(parentData) && parentData.length > 0) {
+        throw new Error(
+          `Response is an array, but expected a single object for field ${parentPath.join(".")}. The @fetchAll directive is not supported inside a query that returns a list of items.`,
+        );
+      }
 
       if (isArray(data) && data.length > 0) {
         results.push(...data);
