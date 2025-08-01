@@ -104,9 +104,7 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   const client = new GraphQLClient(fullUrl, {
     ...clientOptions,
     headers: appendHeaders(clientOptions?.headers, { "x-auth-token": validatedOptions.accessToken }),
-  }) as GraphQLClient & {
-    query: ReturnType<typeof createTheGraphClientWithPagination>;
-  };
+  });
   const paginatedClient = createTheGraphClientWithPagination(client);
   client.request = paginatedClient.query as typeof client.request;
   return {
