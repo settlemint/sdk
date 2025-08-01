@@ -350,7 +350,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       });
 
       // Use array path format for es-toolkit's get function
-      const data = get(response, field.path);
+      const data = get(response, field.path) ?? get(response, field.fieldName);
 
       const parentPath = field.path.slice(0, -1);
       const parentData = get(response, parentPath);

@@ -342,6 +342,27 @@ describe("createTheGraphClientWithPagination", () => {
     });
   });
 
+  it("should be able to use aliases for the same field", async () => {
+    const result = await client.query(
+      theGraphGraphql(`
+        query {
+          allTokens: tokens @fetchAll {
+            name
+            symbol
+          }
+          otherTokens: tokens @fetchAll {
+            name
+            symbol
+          }
+        }`),
+      {},
+    );
+    expect(result).toEqual({
+      allTokens: TEST_TOKENS,
+      otherTokens: TEST_TOKENS,
+    });
+  });
+
   it("should return the first page of tokens and holders if @fetchAll is not used", async () => {
     const result = await client.query(
       theGraphGraphql(`
