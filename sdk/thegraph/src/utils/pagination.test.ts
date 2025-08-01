@@ -189,7 +189,7 @@ interface RequestVariables {
   };
 }
 
-const requestMock = mock(async (document: DocumentNode, variables: RequestVariables) => {
+const requestMock = mock(async (document: DocumentNode, variables: RequestVariables, _requestHeaders?: HeadersInit) => {
   // Check if the "holders" field in the query has "skip" or "first" arguments set
   let shouldFetchHolders = false;
   let holdersFieldHasPagination = false;
@@ -278,8 +278,27 @@ describe("createTheGraphClientWithPagination", () => {
             symbol
           }
         }`),
-      {},
     );
+    expect(result.tokens).toHaveLength(TEST_TOKENS.length);
+    expect(result.tokens).toEqual(TEST_TOKENS);
+    const expectedCalls = Math.ceil(TEST_TOKENS.length / DEFAULT_PAGE_SIZE);
+    // If the number of tokens is an exact multiple of the page size, we expect one extra call
+    expect(requestMock).toHaveBeenCalledTimes(
+      TEST_TOKENS.length % DEFAULT_PAGE_SIZE === 0 ? expectedCalls + 1 : expectedCalls,
+    );
+  });
+
+  it("should return all tokens if @fetchAll is used with a request options object", async () => {
+    const result = await client.query({
+      document: theGraphGraphql(`
+        query {
+          tokens @fetchAll {
+            name
+            symbol
+          }
+        }`),
+      variables: {},
+    });
     expect(result.tokens).toHaveLength(TEST_TOKENS.length);
     expect(result.tokens).toEqual(TEST_TOKENS);
     const expectedCalls = Math.ceil(TEST_TOKENS.length / DEFAULT_PAGE_SIZE);
@@ -476,23 +495,54 @@ describe("createTheGraphClientWithPagination", () => {
         };
       }),
     );
-    expect(requestMock).toHaveBeenNthCalledWith(1, expect.anything(), {
-      orderBy: "name",
-      orderDirection: "asc",
-      where: {
-        name: "Token",
+    expect(requestMock).toHaveBeenNthCalledWith(
+      1,
+      expect.anything(),
+      {
+        orderBy: "name",
+        orderDirection: "asc",
+        where: {
+          name: "Token",
+        },
+        first: DEFAULT_PAGE_SIZE,
+        skip: 0,
       },
-      first: DEFAULT_PAGE_SIZE,
-      skip: 0,
-    });
-    expect(requestMock).toHaveBeenNthCalledWith(2, expect.anything(), {
-      orderBy: "name",
-      orderDirection: "asc",
-      where: {
-        name: "Token",
+      undefined,
+    );
+    expect(requestMock).toHaveBeenNthCalledWith(
+      2,
+      expect.anything(),
+      {
+        orderBy: "name",
+        orderDirection: "asc",
+        where: {
+          name: "Token",
+        },
+        first: DEFAULT_PAGE_SIZE,
+        skip: DEFAULT_PAGE_SIZE,
       },
-      first: DEFAULT_PAGE_SIZE,
-      skip: DEFAULT_PAGE_SIZE,
+      undefined,
+    );
+  });
+
+  it("should pass request headers to the request", async () => {
+    const result = await client.query(
+      theGraphGraphql(`
+        query {
+          tokens @fetchAll {
+            name
+            symbol
+          }
+        }`),
+      {},
+      {
+        "x-api-key": "test",
+      },
+    );
+    expect(result.tokens).toHaveLength(TEST_TOKENS.length);
+    expect(result.tokens).toEqual(TEST_TOKENS);
+    expect(requestMock).toHaveBeenNthCalledWith(1, expect.anything(), expect.anything(), {
+      "x-api-key": "test",
     });
   });
 });

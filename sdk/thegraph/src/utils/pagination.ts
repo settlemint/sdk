@@ -1,7 +1,7 @@
 import { sortBy } from "es-toolkit";
 import { get, isArray, isEmpty, set } from "es-toolkit/compat";
 import type { TadaDocumentNode } from "gql.tada";
-import { type ArgumentNode, type DocumentNode, Kind, parse, type SelectionNode, visit } from "graphql";
+import { type ArgumentNode, type DocumentNode, Kind, parse, visit } from "graphql";
 import type { GraphQLClient, RequestDocument, RequestOptions, Variables } from "graphql-request";
 
 // Constants for TheGraph limits
@@ -10,16 +10,12 @@ const FIRST_ARG = "first";
 const SKIP_ARG = "skip";
 const FETCH_ALL_DIRECTIVE = "fetchAll";
 
-interface ListField {
+interface ListFieldWithFetchAllDirective {
   path: string[];
   fieldName: string;
-  alias?: string;
   firstValue?: number;
   skipValue?: number;
   otherArgs: ArgumentNode[];
-  selections?: ReadonlyArray<SelectionNode>;
-  hasFetchAllDirective?: boolean;
-  firstValueIsDefault?: boolean; // Track if first value was defaulted
 }
 
 /**
@@ -115,8 +111,8 @@ function extractFetchAllFields(
   document: DocumentNode,
   variables?: Variables,
   fetchAllFields?: Set<string>,
-): ListField[] {
-  const fields: ListField[] = [];
+): ListFieldWithFetchAllDirective[] {
+  const fields: ListFieldWithFetchAllDirective[] = [];
   const pathStack: string[] = [];
 
   visit(document, {
@@ -174,13 +170,9 @@ function extractFetchAllFields(
           fields.push({
             path: [...pathStack],
             fieldName: node.name.value,
-            alias: node.alias?.value,
-            firstValue: hasFetchAllDirective && (firstValue ?? THE_GRAPH_LIMIT),
-            skipValue: hasFetchAllDirective && (skipValue ?? 0),
+            firstValue: firstValue ?? THE_GRAPH_LIMIT,
+            skipValue: skipValue ?? 0,
             otherArgs,
-            selections: node.selectionSet?.selections,
-            hasFetchAllDirective,
-            firstValueIsDefault: hasFetchAllDirective ? firstValue === undefined : false,
           });
         }
       },
@@ -196,7 +188,7 @@ function extractFetchAllFields(
 // Create a query for a single field with specific pagination
 function createSingleFieldQuery(
   document: DocumentNode,
-  targetField: ListField,
+  targetField: ListFieldWithFetchAllDirective,
   skip: number,
   first: number,
 ): DocumentNode {
@@ -251,7 +243,7 @@ function createSingleFieldQuery(
 }
 
 // Create query without list fields
-function createNonListQuery(document: DocumentNode, listFields: ListField[]): DocumentNode | null {
+function createNonListQuery(document: DocumentNode, listFields: ListFieldWithFetchAllDirective[]): DocumentNode | null {
   let hasFields = false;
   const pathStack: string[] = [];
 
@@ -319,7 +311,8 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
   async function executeListFieldPagination(
     document: DocumentNode,
     variables: Variables | undefined,
-    field: ListField,
+    field: ListFieldWithFetchAllDirective,
+    requestHeaders?: HeadersInit,
   ): Promise<unknown[]> {
     const results: unknown[] = [];
     let currentSkip = field.skipValue || 0;
@@ -332,11 +325,15 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
     while (hasMore) {
       const query = createSingleFieldQuery(document, field, currentSkip, batchSize);
       const existingVariables = filterVariables(variables, query) ?? {};
-      const response = await theGraphClient.request(query, {
-        ...existingVariables,
-        first: batchSize,
-        skip: currentSkip,
-      });
+      const response = await theGraphClient.request(
+        query,
+        {
+          ...existingVariables,
+          first: batchSize,
+          skip: currentSkip,
+        },
+        requestHeaders,
+      );
 
       // Use array path format for es-toolkit's get function
       const data = get(response, field.path) ?? get(response, field.fieldName);
@@ -352,24 +349,8 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       if (isArray(data) && data.length > 0) {
         results.push(...data);
 
-        // Continue fetching if:
-        // 1. We have @fetchAll directive (fetch everything)
-        // 2. We have an explicit first value > THE_GRAPH_LIMIT and haven't reached it
-        // 3. We have a defaulted first value and got a full batch (treating it as "no explicit value")
-        // 4. We have no first value and got a full batch
-        if (field.hasFetchAllDirective) {
-          // With @fetchAll, continue if we got a full batch
-          hasMore = data.length === batchSize;
-        } else if (field.firstValue && !field.firstValueIsDefault) {
-          // With explicit first value (not defaulted), only continue if:
-          // - We haven't reached the requested amount yet
-          // - We got a full batch (indicating more data might exist)
-          hasMore = data.length === batchSize && results.length < field.firstValue;
-        } else {
-          // When first is not specified or was defaulted (using default batch size),
-          // continue if we got a full batch (standard TheGraph pagination behavior)
-          hasMore = data.length === batchSize;
-        }
+        // With @fetchAll, continue if we got a full batch
+        hasMore = data.length === batchSize;
       } else {
         hasMore = false;
       }
@@ -384,16 +365,20 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
     async query<TResult, TVariables extends Variables>(
       documentOrOptions: TadaDocumentNode<TResult, TVariables> | RequestDocument | RequestOptions<TVariables, TResult>,
       variablesRaw?: Omit<TVariables, "skip" | "first">,
+      requestHeadersRaw?: HeadersInit,
     ): Promise<TResult> {
       let document: TadaDocumentNode<TResult, TVariables> | RequestDocument;
       let variables: Omit<TVariables, "skip" | "first">;
+      let requestHeaders: HeadersInit | undefined;
 
       if (isRequestOptions(documentOrOptions)) {
         document = documentOrOptions.document;
         variables = documentOrOptions.variables as TVariables;
+        requestHeaders = documentOrOptions.requestHeaders;
       } else {
         document = documentOrOptions;
         variables = variablesRaw ?? ({} as TVariables);
+        requestHeaders = requestHeadersRaw;
       }
 
       // First, detect and strip @fetchAll directives
@@ -404,7 +389,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 
       // If no list fields, execute normally
       if (listFields.length === 0) {
-        return theGraphClient.request(processedDocument, variables as Variables);
+        return theGraphClient.request(processedDocument, variables as Variables, requestHeaders);
       }
 
       // Execute paginated queries for all list fields
@@ -416,7 +401,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       // Process list fields in parallel for better performance
       const fieldDataPromises = sortedFields.map(async (field) => ({
         field,
-        data: await executeListFieldPagination(processedDocument, variables, field),
+        data: await executeListFieldPagination(processedDocument, variables, field, requestHeaders),
       }));
 
       const fieldResults = await Promise.all(fieldDataPromises);
@@ -434,6 +419,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
         const nonListResult = await theGraphClient.request(
           nonListQuery,
           filterVariables(variables, nonListQuery) ?? {},
+          requestHeaders,
         );
 
         // Merge results, preserving list data
@@ -447,5 +433,5 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 }
 
 function isRequestOptions(args: unknown): args is RequestOptions<Variables, unknown> {
-  return typeof args === "object" && args !== null && "document" in args && "variables" in args;
+  return typeof args === "object" && args !== null && "document" in args;
 }
