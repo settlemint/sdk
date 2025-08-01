@@ -370,7 +370,7 @@ describe("createTheGraphClientWithPagination", () => {
           tokens {
             name
             symbol
-            holders {
+            holders (first: 100) {
               name
             }
           }

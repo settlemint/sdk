@@ -111,8 +111,12 @@ function customMerge(target: unknown, source: unknown): unknown {
   return result;
 }
 
-// Extract all list fields (queries that have pagination arguments or @fetchAll)
-function extractListFields(document: DocumentNode, variables?: Variables, fetchAllFields?: Set<string>): ListField[] {
+// Extract all fields that have @fetchAll directive
+function extractFetchAllFields(
+  document: DocumentNode,
+  variables?: Variables,
+  fetchAllFields?: Set<string>,
+): ListField[] {
   const fields: ListField[] = [];
   const pathStack: string[] = [];
 
@@ -176,11 +180,7 @@ function extractListFields(document: DocumentNode, variables?: Variables, fetchA
         const fieldIdentifierForDirective = node.alias?.value || node.name.value;
         const hasFetchAllDirective = fetchAllFields?.has(fieldIdentifierForDirective);
 
-        // Consider it a list field if it has pagination arguments OR @fetchAll
-        const hasPaginationArgs = hasFirstArg || hasSkipArg;
-        const shouldPaginate = hasPaginationArgs || hasFetchAllDirective;
-
-        if (shouldPaginate) {
+        if (hasFetchAllDirective) {
           // Do not allow nesting @fetchAll fields
           const parentFetchAllField = fields.find((field) => pathStack.join(",").startsWith(field.path.join(",")));
           if (parentFetchAllField) {
@@ -325,6 +325,13 @@ function filterVariables(variables: Variables | undefined, document: DocumentNod
   return isEmpty(filtered) ? undefined : filtered;
 }
 
+/**
+ * Creates a TheGraph client that supports pagination for list fields
+ *
+ * @param theGraphClient - The GraphQL client to use for requests
+ * @returns A TheGraph client that supports pagination for list fields
+ * @internal Used internally by createTheGraphClient
+ */
 export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLClient, "request">) {
   // Execute pagination for a list field
   async function executeListFieldPagination(
@@ -400,7 +407,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       const { document: processedDocument, fetchAllFields } = stripFetchAllDirective(document);
 
       // Extract all list fields (including those with @fetchAll)
-      const listFields = extractListFields(processedDocument, variables, fetchAllFields);
+      const listFields = extractFetchAllFields(processedDocument, variables, fetchAllFields);
 
       // If no list fields, execute normally
       if (listFields.length === 0) {
