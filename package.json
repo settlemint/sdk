@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -54,7 +54,7 @@
     "typedoc-plugin-markdown": "4.8.0",
     "typedoc-plugin-merge-modules": "7.0.0",
     "typedoc-plugin-zod": "1.4.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": ">=20"
@@ -80,7 +80,7 @@
     "ws": "8.18.3",
     "adm-zip": "0.5.16",
     "react-is": "19.1.1",
-    "undici": "7.12.0"
+    "undici": "7.13.0"
   },
   "dependencies": {}
 }

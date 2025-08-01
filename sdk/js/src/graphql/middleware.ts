@@ -34,6 +34,19 @@ const MiddlewareFragment = graphql(`
     ... on HAGraphMiddleware {
       specVersion
     }
+    ... on HAGraphPostgresMiddleware {
+      specVersion
+    }
+  }
+`);
+
+const SubgraphFragment = graphql(`
+  fragment Subgraph on Subgraph {
+    name
+    graphqlQueryEndpoint {
+      displayValue
+      id
+    }
   }
 `);
 
@@ -82,17 +95,18 @@ const getGraphMiddlewareSubgraphs = graphql(
         ...Middleware
         ... on HAGraphMiddleware {
           subgraphs(noCache: $noCache) {
-            name
-            graphqlQueryEndpoint {
-              displayValue
-              id
-            }
+            ...Subgraph
+          }
+        }
+        ... on HAGraphPostgresMiddleware {
+          subgraphs(noCache: $noCache) {
+            ...Subgraph
           }
         }
       }
     }
   `,
-  [MiddlewareFragment],
+  [MiddlewareFragment, SubgraphFragment],
 );
 
 /**
