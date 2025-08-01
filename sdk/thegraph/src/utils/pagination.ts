@@ -373,7 +373,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 
       if (isRequestOptions(documentOrOptions)) {
         document = documentOrOptions.document;
-        variables = documentOrOptions.variables as TVariables;
+        variables = (documentOrOptions.variables ?? {}) as TVariables;
         requestHeaders = documentOrOptions.requestHeaders;
       } else {
         document = documentOrOptions;
