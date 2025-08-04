@@ -53,8 +53,10 @@
   },
   "devDependencies": {},
   "dependencies": {
-    "gql.tada": "^1",
     "@settlemint/sdk-utils": "workspace:*",
+    "es-toolkit": "^1",
+    "gql.tada": "^1",
+    "graphql": "^16",
     "graphql-request": "^7",
     "zod": "^4"
   },

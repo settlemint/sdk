@@ -50,7 +50,7 @@ The SettleMint Blockscout SDK provides a seamless way to interact with Blockscou
 
 > **createBlockscoutClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:76](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L76)
+Defined in: [sdk/blockscout/src/blockscout.ts:76](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L76)
 
 Creates a Blockscout GraphQL client with proper type safety using gql.tada
 
@@ -77,8 +77,8 @@ An object containing the GraphQL client and initialized gql.tada function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:80](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L80) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:81](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L81) |
+| `client` | `GraphQLClient` | [sdk/blockscout/src/blockscout.ts:80](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L80) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/blockscout/src/blockscout.ts:81](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L81) |
 
 ##### Throws
 
@@ -136,7 +136,7 @@ const result = await client.request(query, {
 
 > **ClientOptions** = `object`
 
-Defined in: [sdk/blockscout/src/blockscout.ts:24](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L24)
+Defined in: [sdk/blockscout/src/blockscout.ts:24](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L24)
 
 Type definition for client options derived from the ClientOptionsSchema
 
@@ -144,8 +144,8 @@ Type definition for client options derived from the ClientOptionsSchema
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken?` | `string` | - | [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L18) |
-| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/blockscout/src/blockscout.ts:17](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L17) |
+| <a id="accesstoken"></a> `accessToken?` | `string` | - | [sdk/blockscout/src/blockscout.ts:18](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L18) |
+| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/blockscout/src/blockscout.ts:17](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L17) |
 
 ***
 
@@ -153,7 +153,7 @@ Type definition for client options derived from the ClientOptionsSchema
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/blockscout/src/blockscout.ts:11](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L11)
+Defined in: [sdk/blockscout/src/blockscout.ts:11](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L11)
 
 Type definition for GraphQL client configuration options
 
@@ -163,7 +163,7 @@ Type definition for GraphQL client configuration options
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
-Defined in: [sdk/blockscout/src/blockscout.ts:16](https://github.com/settlemint/sdk/blob/v2.5.2/sdk/blockscout/src/blockscout.ts#L16)
+Defined in: [sdk/blockscout/src/blockscout.ts:16](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/blockscout/src/blockscout.ts#L16)
 
 Schema for validating client options for the Blockscout client.
 
