@@ -43,7 +43,7 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "@gql.tada/cli-utils": "1.7.0",
+    "@gql.tada/cli-utils": "1.7.1",
     "@inquirer/core": "10.1.15",
     "node-fetch-native": "1.6.7",
     "zod": "^4"
