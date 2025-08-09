@@ -59,7 +59,7 @@ async function runEASWorkflow() {
   console.log("🚀 Simple EAS SDK Workflow");
   console.log("===========================\n");
 
-  let deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
+  let _deployedAddresses: { easAddress: Address; schemaRegistryAddress: Address };
   let schemaResult: { hash: Hex } | undefined;
 
   // Step 1: Initialize EAS Client
@@ -82,7 +82,7 @@ async function runEASWorkflow() {
     console.log(`   EAS: ${deployment.easAddress}`);
     console.log(`   Schema Registry: ${deployment.schemaRegistryAddress}\n`);
 
-    deployedAddresses = {
+    _deployedAddresses = {
       easAddress: deployment.easAddress,
       schemaRegistryAddress: deployment.schemaRegistryAddress,
     };

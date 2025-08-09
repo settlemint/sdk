@@ -12,6 +12,7 @@ Commands:
   <a href="#foundry-format">format</a> [options] [operands...]   Format the smart contracts using
                                    Foundry/forge
   <a href="#foundry-network">network</a> [options] [operands...]  Start a development network Foundry/anvil
+  <a href="#foundry-coverage">coverage</a> [options] [operands...] Generate coverage report using Foundry/forge
   <a href="#foundry-test">test</a> [options] [operands...]     Test the smart contracts using Foundry/forge
   help [command]                   display help for command
 </pre>
@@ -91,6 +92,26 @@ Examples:
   $ settlemint scs foundry test --match-test testToken
 
 Test the smart contracts using Foundry/forge
+
+Options:
+  -h, --help  Get list of possible forge options
+</pre>
+
+<h2 id="foundry-coverage"><a href="#home">Foundry</a> > Coverage</h2>
+
+<pre>Usage: settlemint smart-contract-set foundry coverage 
+Examples:
+
+  # Run coverage using Foundry
+  $ settlemint scs foundry coverage
+
+  # Get list of possible Forge coverage options
+  $ settlemint scs foundry coverage --help
+
+  # Generate lcov report with additional Forge options
+  $ settlemint scs foundry coverage --report lcov
+
+Generate coverage report using Foundry/forge
 
 Options:
   -h, --help  Get list of possible forge options
