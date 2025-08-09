@@ -52,7 +52,7 @@ The SDK offers a type-safe interface for all TheGraph operations, with comprehen
 
 > **createTheGraphClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:92](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L92)
+Defined in: [sdk/thegraph/src/thegraph.ts:92](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L92)
 
 Creates a TheGraph GraphQL client with proper type safety using gql.tada
 
@@ -83,8 +83,8 @@ An object containing:
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:96](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L96) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:97](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L97) |
+| `client` | `GraphQLClient` | [sdk/thegraph/src/thegraph.ts:96](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L96) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/thegraph/src/thegraph.ts:97](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L97) |
 
 ##### Throws
 
@@ -137,7 +137,7 @@ const result = await client.request(query);
 
 > **ClientOptions** = `object`
 
-Defined in: [sdk/thegraph/src/thegraph.ts:27](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L27)
+Defined in: [sdk/thegraph/src/thegraph.ts:27](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L27)
 
 Type definition for client options derived from the ClientOptionsSchema
 
@@ -145,10 +145,10 @@ Type definition for client options derived from the ClientOptionsSchema
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken?` | `string` | [sdk/thegraph/src/thegraph.ts:19](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L19) |
-| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | [sdk/thegraph/src/thegraph.ts:21](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L21) |
-| <a id="instances"></a> `instances` | `string`[] | [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L18) |
-| <a id="subgraphname"></a> `subgraphName` | `string` | [sdk/thegraph/src/thegraph.ts:20](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L20) |
+| <a id="accesstoken"></a> `accessToken?` | `string` | [sdk/thegraph/src/thegraph.ts:19](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L19) |
+| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | [sdk/thegraph/src/thegraph.ts:21](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L21) |
+| <a id="instances"></a> `instances` | `string`[] | [sdk/thegraph/src/thegraph.ts:18](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L18) |
+| <a id="subgraphname"></a> `subgraphName` | `string` | [sdk/thegraph/src/thegraph.ts:20](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L20) |
 
 ***
 
@@ -156,7 +156,7 @@ Type definition for client options derived from the ClientOptionsSchema
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/thegraph/src/thegraph.ts:12](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L12)
+Defined in: [sdk/thegraph/src/thegraph.ts:12](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L12)
 
 Type definition for GraphQL client configuration options
 
@@ -166,7 +166,7 @@ Type definition for GraphQL client configuration options
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
-Defined in: [sdk/thegraph/src/thegraph.ts:17](https://github.com/settlemint/sdk/blob/v2.5.5/sdk/thegraph/src/thegraph.ts#L17)
+Defined in: [sdk/thegraph/src/thegraph.ts:17](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/thegraph/src/thegraph.ts#L17)
 
 Schema for validating client options for the TheGraph client.
 
