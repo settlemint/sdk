@@ -81,6 +81,7 @@ export const getPublicClient = (options: ClientOptions) => {
       chainName: validatedOptions.chainName,
       rpcUrl: validatedOptions.rpcUrl,
     }),
+    pollingInterval: 500,
     transport: http(validatedOptions.rpcUrl, {
       batch: true,
       timeout: 60_000,
@@ -151,6 +152,7 @@ export const getWalletClient = (options: ClientOptions) => {
   return (verificationOptions?: WalletVerificationOptions) =>
     createWalletClient({
       chain: chain,
+      pollingInterval: 500,
       transport: http(validatedOptions.rpcUrl, {
         batch: true,
         timeout: 60_000,
