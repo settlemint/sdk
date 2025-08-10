@@ -45,17 +45,6 @@ function createCacheKey(options: Partial<ClientOptions>): string {
   });
 }
 
-// Skip validation in production for performance
-const isProduction = process.env.NODE_ENV === "production";
-
-// Helper for conditional validation
-function validateOptions<T>(schema: z.ZodSchema<T>, options: unknown): T {
-  if (isProduction) {
-    // In production, assume options are valid (trust the caller)
-    return options as T;
-  }
-  return validate(schema, options);
-}
 
 /**
  * Schema for the viem client options.
@@ -112,7 +101,7 @@ export type ClientOptions = Omit<z.infer<typeof ClientOptionsSchema>, "httpTrans
  */
 export const getPublicClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions: ClientOptions = validateOptions(ClientOptionsSchema, options);
+  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
 
   // Check cache first
   const cacheKey = createCacheKey(validatedOptions);
@@ -197,7 +186,7 @@ export interface WalletVerificationOptions {
  */
 export const getWalletClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions: ClientOptions = validateOptions(ClientOptionsSchema, options);
+  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
 
   // Check cache first for the factory function
   const cacheKey = createCacheKey(validatedOptions);
@@ -291,7 +280,7 @@ export type GetChainIdOptions = Omit<z.infer<typeof GetChainIdOptionsSchema>, "h
  */
 export async function getChainId(options: GetChainIdOptions): Promise<number> {
   ensureServer();
-  const validatedOptions: GetChainIdOptions = validateOptions(GetChainIdOptionsSchema, options);
+  const validatedOptions: GetChainIdOptions = validate(GetChainIdOptionsSchema, options);
 
   // Pre-compute headers
   const headers = appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
