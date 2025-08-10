@@ -9,6 +9,8 @@ import {
   http,
   publicActions,
   type Chain as ViemChain,
+  type PublicClient,
+  type Transport,
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
@@ -18,6 +20,98 @@ import { createWalletVerificationChallenges } from "./custom-actions/create-wall
 import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
 import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
+
+// Simple LRU cache implementation
+class LRUCache<K, V> {
+  private cache = new Map<K, V>();
+  private readonly maxSize: number;
+
+  constructor(maxSize: number) {
+    this.maxSize = maxSize;
+  }
+
+  get(key: K): V | undefined {
+    const value = this.cache.get(key);
+    if (value !== undefined) {
+      // Move to end (most recently used)
+      this.cache.delete(key);
+      this.cache.set(key, value);
+    }
+    return value;
+  }
+
+  set(key: K, value: V): void {
+    // Remove key if it exists (to update position)
+    this.cache.delete(key);
+
+    // Check size limit
+    if (this.cache.size >= this.maxSize) {
+      // Remove least recently used (first item)
+      const firstKey = this.cache.keys().next().value;
+      if (firstKey !== undefined) {
+        this.cache.delete(firstKey);
+      }
+    }
+
+    this.cache.set(key, value);
+  }
+
+  clear(): void {
+    this.cache.clear();
+  }
+}
+
+// Cache for chain definitions with size limit
+const chainCache = new LRUCache<string, ViemChain>(100);
+
+// Cache for public clients with size limit
+const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain>>(50);
+
+// Cache for wallet client factories with size limit
+// Type will be inferred from usage
+const walletClientFactoryCache = new LRUCache<string, any>(50);
+
+// Helper to create robust cache key from options
+function createCacheKey(options: Partial<ClientOptions>): string {
+  // Create a deterministic key by sorting properties
+  const keyObject: Record<string, unknown> = {};
+
+  // Add properties in sorted order to ensure consistency
+  const keys = ["chainId", "chainName", "rpcUrl", "accessToken"] as const;
+  for (const key of keys) {
+    const value = options[key as keyof ClientOptions];
+    // Only include defined values
+    if (value !== undefined) {
+      keyObject[key] = value;
+    }
+  }
+
+  // Include serializable parts of httpTransportConfig if present
+  if (options.httpTransportConfig) {
+    const { onFetchRequest, onFetchResponse, ...serializableConfig } = options.httpTransportConfig;
+    if (Object.keys(serializableConfig).length > 0) {
+      keyObject.httpTransportConfig = serializableConfig;
+    }
+  }
+
+  // Use sorted keys for consistent stringification
+  return JSON.stringify(keyObject, Object.keys(keyObject).sort());
+}
+
+// Shared utility for building headers
+function buildHeaders(
+  baseHeaders: HeadersInit | undefined,
+  authHeaders: Record<string, string | undefined>,
+): HeadersInit {
+  // Only include headers with actual values
+  const filteredHeaders: Record<string, string> = {};
+  for (const [key, value] of Object.entries(authHeaders)) {
+    if (value !== undefined) {
+      filteredHeaders[key] = value;
+    }
+  }
+  return appendHeaders(baseHeaders, filteredHeaders);
+}
 
 /**
  * Schema for the viem client options.
@@ -75,7 +169,21 @@ export type ClientOptions = Omit<z.infer<typeof ClientOptionsSchema>, "httpTrans
 export const getPublicClient = (options: ClientOptions) => {
   ensureServer();
   const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
-  return createPublicClient({
+
+  // Check cache first
+  const cacheKey = createCacheKey(validatedOptions);
+  const cachedClient = publicClientCache.get(cacheKey);
+  if (cachedClient) {
+    return cachedClient;
+  }
+
+  // Build headers using shared utility
+  const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+    "x-auth-token": validatedOptions.accessToken,
+  });
+
+  // Create new client
+  const client = createPublicClient({
     chain: getChain({
       chainId: validatedOptions.chainId,
       chainName: validatedOptions.chainName,
@@ -88,12 +196,15 @@ export const getPublicClient = (options: ClientOptions) => {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {
         ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-          "x-auth-token": validatedOptions.accessToken,
-        }),
+        headers,
       },
     }),
   });
+
+  // Cache the client
+  publicClientCache.set(cacheKey, client);
+
+  return client;
 };
 
 /**
@@ -144,12 +255,24 @@ export interface WalletVerificationOptions {
 export const getWalletClient = (options: ClientOptions) => {
   ensureServer();
   const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
+
+  // Check cache first for the factory function
+  const cacheKey = createCacheKey(validatedOptions);
+  const cachedFactory = walletClientFactoryCache.get(cacheKey);
+  if (cachedFactory) {
+    return cachedFactory;
+  }
+
+  // Get chain (will be cached internally)
   const chain = getChain({
     chainId: validatedOptions.chainId,
     chainName: validatedOptions.chainName,
     rpcUrl: validatedOptions.rpcUrl,
   });
-  return (verificationOptions?: WalletVerificationOptions) =>
+
+  // Create and cache the factory function
+  // Using the same pattern as the original to preserve type inference
+  const walletClientFactory = (verificationOptions?: WalletVerificationOptions) =>
     createWalletClient({
       chain: chain,
       pollingInterval: 500,
@@ -159,7 +282,7 @@ export const getWalletClient = (options: ClientOptions) => {
         ...validatedOptions.httpTransportConfig,
         fetchOptions: {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
-          headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+          headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
             "x-auth-token": validatedOptions.accessToken,
             "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
             "x-auth-verification-id": verificationOptions?.verificationId ?? "",
@@ -174,6 +297,11 @@ export const getWalletClient = (options: ClientOptions) => {
       .extend(deleteWalletVerification)
       .extend(createWalletVerificationChallenges)
       .extend(verifyWalletVerificationChallenge);
+
+  // Cache the factory
+  walletClientFactoryCache.set(cacheKey, walletClientFactory);
+
+  return walletClientFactory;
 };
 
 /**
@@ -219,14 +347,18 @@ export type GetChainIdOptions = Omit<z.infer<typeof GetChainIdOptionsSchema>, "h
 export async function getChainId(options: GetChainIdOptions): Promise<number> {
   ensureServer();
   const validatedOptions: GetChainIdOptions = validate(GetChainIdOptionsSchema, options);
+
+  // Build headers using shared utility
+  const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+    "x-auth-token": validatedOptions.accessToken,
+  });
+
   const client = createPublicClient({
     transport: http(validatedOptions.rpcUrl, {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {
         ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-          "x-auth-token": validatedOptions.accessToken,
-        }),
+        headers,
       },
     }),
   });
@@ -234,25 +366,45 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
   return client.getChainId();
 }
 
+// Create a Map for O(1) chain lookups
+const knownChainsMap = new Map<string, ViemChain>(Object.values(chains).map((chain) => [chain.id.toString(), chain]));
+
 function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
-  const knownChain = Object.values(chains).find((chain) => chain.id.toString() === chainId);
-  return (
-    knownChain ??
-    defineChain({
-      id: Number(chainId),
-      name: chainName,
-      rpcUrls: {
-        default: {
-          http: [rpcUrl],
-        },
+  // First check for known chains - O(1) lookup
+  // Known chains ignore chainName and rpcUrl, so no need to cache them separately
+  const knownChain = knownChainsMap.get(chainId);
+  if (knownChain) {
+    return knownChain;
+  }
+
+  // For custom chains, create a cache key using all parameters
+  const cacheKey = JSON.stringify({ chainId, chainName, rpcUrl }, ["chainId", "chainName", "rpcUrl"]);
+
+  // Check if custom chain is already cached
+  const cachedChain = chainCache.get(cacheKey);
+  if (cachedChain) {
+    return cachedChain;
+  }
+
+  // Create custom chain definition
+  const customChain = defineChain({
+    id: Number(chainId),
+    name: chainName,
+    rpcUrls: {
+      default: {
+        http: [rpcUrl],
       },
-      nativeCurrency: {
-        decimals: 18,
-        name: "Ether",
-        symbol: "ETH",
-      },
-    })
-  );
+    },
+    nativeCurrency: {
+      decimals: 18,
+      name: "Ether",
+      symbol: "ETH",
+    },
+  });
+
+  // Cache only custom chains
+  chainCache.set(cacheKey, customChain);
+  return customChain;
 }
 
 export type {
