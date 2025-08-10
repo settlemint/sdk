@@ -79,7 +79,7 @@ The SettleMint Viem SDK provides a lightweight wrapper that automatically config
 
 > **getChainId**(`options`): `Promise`\<`number`\>
 
-Defined in: [sdk/viem/src/viem.ts:217](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L217)
+Defined in: [sdk/viem/src/viem.ts:219](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L219)
 
 Get the chain id of a blockchain network.
 
@@ -152,7 +152,7 @@ console.log(block);
 
 > **getWalletClient**(`options`): (`verificationOptions?`) => `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `WalletRpcSchema`, `object` & `object` & `object` & `object` & `object` & `object` & `object` & `WalletActions`\<`Chain`, `undefined`\>\>
 
-Defined in: [sdk/viem/src/viem.ts:143](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L143)
+Defined in: [sdk/viem/src/viem.ts:144](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L144)
 
 Get a wallet client. Use this if you need to write to the blockchain.
 
@@ -509,7 +509,7 @@ Represents a wallet verification challenge.
 
 #### WalletVerificationOptions
 
-Defined in: [sdk/viem/src/viem.ts:101](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L101)
+Defined in: [sdk/viem/src/viem.ts:102](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L102)
 
 The options for the wallet client.
 
@@ -517,8 +517,8 @@ The options for the wallet client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:109](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L109) |
-| <a id="verificationid-1"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:105](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L105) |
+| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:110](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L110) |
+| <a id="verificationid-1"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:106](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L106) |
 
 ### Type Aliases
 
@@ -562,7 +562,7 @@ Response from creating wallet verification challenges.
 
 > **GetChainIdOptions** = `Omit`\<`z.infer`\<*typeof* [`GetChainIdOptionsSchema`](#getchainidoptionsschema)\>, `"httpTransportConfig"`\> & `object`
 
-Defined in: [sdk/viem/src/viem.ts:198](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L198)
+Defined in: [sdk/viem/src/viem.ts:200](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L200)
 
 Type representing the validated get chain id options.
 
@@ -570,7 +570,7 @@ Type representing the validated get chain id options.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:199](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L199) |
+| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:201](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L201) |
 
 ***
 
@@ -618,7 +618,7 @@ Schema for the viem client options.
 
 > `const` **GetChainIdOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `httpTransportConfig`: `ZodOptional`\<`ZodAny`\>; `rpcUrl`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
 
-Defined in: [sdk/viem/src/viem.ts:180](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L180)
+Defined in: [sdk/viem/src/viem.ts:182](https://github.com/settlemint/sdk/blob/v2.5.6/sdk/viem/src/viem.ts#L182)
 
 Schema for the viem client options.
 
