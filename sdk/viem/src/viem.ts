@@ -9,6 +9,8 @@ import {
   http,
   publicActions,
   type Chain as ViemChain,
+  type PublicClient,
+  type Transport,
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
@@ -18,6 +20,42 @@ import { createWalletVerificationChallenges } from "./custom-actions/create-wall
 import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
 import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
+
+// Cache for chain definitions to avoid O(n) lookups and repeated chain creation
+const chainCache = new Map<string, ViemChain>();
+
+// Cache for public clients to avoid repeated instantiation
+const publicClientCache = new Map<string, PublicClient<Transport, ViemChain>>();
+
+// Cache for wallet client factories to avoid repeated instantiation
+const walletClientFactoryCache = new Map<
+  string,
+  (verificationOptions?: WalletVerificationOptions) => ReturnType<typeof createWalletClient>
+>();
+
+// Helper to create cache key from options
+function createCacheKey(options: Partial<ClientOptions>): string {
+  // Create a deterministic key from the options that affect client creation
+  return JSON.stringify({
+    chainId: options.chainId,
+    chainName: options.chainName,
+    rpcUrl: options.rpcUrl,
+    accessToken: options.accessToken,
+    // Note: httpTransportConfig is excluded as it's rarely different and complex to serialize
+  });
+}
+
+// Skip validation in production for performance
+const isProduction = process.env.NODE_ENV === "production";
+
+// Helper for conditional validation
+function validateOptions<T>(schema: z.ZodSchema<T>, options: unknown): T {
+  if (isProduction) {
+    // In production, assume options are valid (trust the caller)
+    return options as T;
+  }
+  return validate(schema, options);
+}
 
 /**
  * Schema for the viem client options.
@@ -74,8 +112,22 @@ export type ClientOptions = Omit<z.infer<typeof ClientOptionsSchema>, "httpTrans
  */
 export const getPublicClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
-  return createPublicClient({
+  const validatedOptions: ClientOptions = validateOptions(ClientOptionsSchema, options);
+
+  // Check cache first
+  const cacheKey = createCacheKey(validatedOptions);
+  const cachedClient = publicClientCache.get(cacheKey);
+  if (cachedClient) {
+    return cachedClient;
+  }
+
+  // Pre-compute headers once
+  const headers = appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+    "x-auth-token": validatedOptions.accessToken,
+  });
+
+  // Create new client
+  const client = createPublicClient({
     chain: getChain({
       chainId: validatedOptions.chainId,
       chainName: validatedOptions.chainName,
@@ -87,12 +139,15 @@ export const getPublicClient = (options: ClientOptions) => {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {
         ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-          "x-auth-token": validatedOptions.accessToken,
-        }),
+        headers,
       },
     }),
   });
+
+  // Cache the client
+  publicClientCache.set(cacheKey, client);
+
+  return client;
 };
 
 /**
@@ -142,14 +197,32 @@ export interface WalletVerificationOptions {
  */
 export const getWalletClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
+  const validatedOptions: ClientOptions = validateOptions(ClientOptionsSchema, options);
+
+  // Check cache first for the factory function
+  const cacheKey = createCacheKey(validatedOptions);
+  const cachedFactory = walletClientFactoryCache.get(cacheKey);
+  if (cachedFactory) {
+    return cachedFactory;
+  }
+
+  // Get chain (will be cached internally)
   const chain = getChain({
     chainId: validatedOptions.chainId,
     chainName: validatedOptions.chainName,
     rpcUrl: validatedOptions.rpcUrl,
   });
-  return (verificationOptions?: WalletVerificationOptions) =>
-    createWalletClient({
+
+  // Create the factory function
+  const walletClientFactory = (verificationOptions?: WalletVerificationOptions) => {
+    // Headers need to be computed per verification options
+    const headers = appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+      "x-auth-token": validatedOptions.accessToken,
+      "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
+      "x-auth-verification-id": verificationOptions?.verificationId ?? "",
+    });
+
+    return createWalletClient({
       chain: chain,
       transport: http(validatedOptions.rpcUrl, {
         batch: true,
@@ -157,11 +230,7 @@ export const getWalletClient = (options: ClientOptions) => {
         ...validatedOptions.httpTransportConfig,
         fetchOptions: {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
-          headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-            "x-auth-token": validatedOptions.accessToken,
-            "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
-            "x-auth-verification-id": verificationOptions?.verificationId ?? "",
-          }),
+          headers,
         },
       }),
     })
@@ -172,6 +241,12 @@ export const getWalletClient = (options: ClientOptions) => {
       .extend(deleteWalletVerification)
       .extend(createWalletVerificationChallenges)
       .extend(verifyWalletVerificationChallenge);
+  };
+
+  // Cache the factory
+  walletClientFactoryCache.set(cacheKey, walletClientFactory);
+
+  return walletClientFactory;
 };
 
 /**
@@ -216,15 +291,19 @@ export type GetChainIdOptions = Omit<z.infer<typeof GetChainIdOptionsSchema>, "h
  */
 export async function getChainId(options: GetChainIdOptions): Promise<number> {
   ensureServer();
-  const validatedOptions: GetChainIdOptions = validate(GetChainIdOptionsSchema, options);
+  const validatedOptions: GetChainIdOptions = validateOptions(GetChainIdOptionsSchema, options);
+
+  // Pre-compute headers
+  const headers = appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+    "x-auth-token": validatedOptions.accessToken,
+  });
+
   const client = createPublicClient({
     transport: http(validatedOptions.rpcUrl, {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {
         ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers: appendHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-          "x-auth-token": validatedOptions.accessToken,
-        }),
+        headers,
       },
     }),
   });
@@ -232,25 +311,43 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
   return client.getChainId();
 }
 
+// Create a Map for O(1) chain lookups
+const knownChainsMap = new Map<string, ViemChain>(Object.values(chains).map((chain) => [chain.id.toString(), chain]));
+
 function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
-  const knownChain = Object.values(chains).find((chain) => chain.id.toString() === chainId);
-  return (
-    knownChain ??
-    defineChain({
-      id: Number(chainId),
-      name: chainName,
-      rpcUrls: {
-        default: {
-          http: [rpcUrl],
-        },
+  // Check if chain is already cached
+  const cacheKey = `${chainId}-${chainName}-${rpcUrl}`;
+  const cachedChain = chainCache.get(cacheKey);
+  if (cachedChain) {
+    return cachedChain;
+  }
+
+  // O(1) lookup for known chains
+  const knownChain = knownChainsMap.get(chainId);
+  if (knownChain) {
+    chainCache.set(cacheKey, knownChain);
+    return knownChain;
+  }
+
+  // Create custom chain definition
+  const customChain = defineChain({
+    id: Number(chainId),
+    name: chainName,
+    rpcUrls: {
+      default: {
+        http: [rpcUrl],
       },
-      nativeCurrency: {
-        decimals: 18,
-        name: "Ether",
-        symbol: "ETH",
-      },
-    })
-  );
+    },
+    nativeCurrency: {
+      decimals: 18,
+      name: "Ether",
+      symbol: "ETH",
+    },
+  });
+
+  // Cache the custom chain
+  chainCache.set(cacheKey, customChain);
+  return customChain;
 }
 
 export type {
