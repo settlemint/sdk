@@ -93,9 +93,16 @@ function createCacheKey(options: Partial<ClientOptions>): string {
 // Shared utility for building headers
 function buildHeaders(
   baseHeaders: HeadersInit | undefined,
-  authHeaders: Record<string, string>
+  authHeaders: Record<string, string | undefined>
 ): HeadersInit {
-  return appendHeaders(baseHeaders, authHeaders);
+  // Filter out undefined values to avoid sending empty string headers
+  const filteredHeaders: Record<string, string> = {};
+  for (const [key, value] of Object.entries(authHeaders)) {
+    if (value !== undefined && value !== "") {
+      filteredHeaders[key] = value;
+    }
+  }
+  return appendHeaders(baseHeaders, filteredHeaders);
 }
 
 
@@ -165,7 +172,7 @@ export const getPublicClient = (options: ClientOptions) => {
 
   // Build headers using shared utility
   const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-    "x-auth-token": validatedOptions.accessToken || "",
+    "x-auth-token": validatedOptions.accessToken,
   });
 
   // Create new client
@@ -267,9 +274,9 @@ export const getWalletClient = (options: ClientOptions) => {
         fetchOptions: {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
           headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-            "x-auth-token": validatedOptions.accessToken || "",
-            "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
-            "x-auth-verification-id": verificationOptions?.verificationId ?? "",
+            "x-auth-token": validatedOptions.accessToken,
+            "x-auth-challenge-response": verificationOptions?.challengeResponse,
+            "x-auth-verification-id": verificationOptions?.verificationId,
           }),
         },
       }),
@@ -334,7 +341,7 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
 
   // Build headers using shared utility
   const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-    "x-auth-token": validatedOptions.accessToken || "",
+    "x-auth-token": validatedOptions.accessToken,
   });
 
   const client = createPublicClient({
@@ -354,20 +361,20 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
 const knownChainsMap = new Map<string, ViemChain>(Object.values(chains).map((chain) => [chain.id.toString(), chain]));
 
 function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
-  // Create deterministic cache key
+  // First check for known chains - O(1) lookup
+  // Known chains ignore chainName and rpcUrl, so no need to cache them separately
+  const knownChain = knownChainsMap.get(chainId);
+  if (knownChain) {
+    return knownChain;
+  }
+
+  // For custom chains, create a cache key using all parameters
   const cacheKey = JSON.stringify({ chainId, chainName, rpcUrl }, ["chainId", "chainName", "rpcUrl"]);
   
-  // Check if chain is already cached
+  // Check if custom chain is already cached
   const cachedChain = chainCache.get(cacheKey);
   if (cachedChain) {
     return cachedChain;
-  }
-
-  // O(1) lookup for known chains
-  const knownChain = knownChainsMap.get(chainId);
-  if (knownChain) {
-    chainCache.set(cacheKey, knownChain);
-    return knownChain;
   }
 
   // Create custom chain definition
@@ -386,7 +393,7 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
     },
   });
 
-  // Cache the custom chain
+  // Cache only custom chains
   chainCache.set(cacheKey, customChain);
   return customChain;
 }
