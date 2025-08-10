@@ -50,7 +50,7 @@
     "publint": "0.3.12",
     "tsdown": "^0.14.0",
     "turbo": "2.5.5",
-    "typedoc": "0.28.9",
+    "typedoc": "0.28.10",
     "typedoc-plugin-markdown": "4.8.0",
     "typedoc-plugin-merge-modules": "7.0.0",
     "typedoc-plugin-zod": "1.4.2",
