@@ -67,11 +67,9 @@ const chainCache = new LRUCache<string, ViemChain>(100);
 // Cache for public clients with size limit
 const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain>>(50);
 
-// Cache for wallet client factories with size limit
-const walletClientFactoryCache = new LRUCache<
-  string,
-  (verificationOptions?: WalletVerificationOptions) => ReturnType<typeof createWalletClient>
->(50);
+// Cache for wallet client factories with size limit  
+// Type will be inferred from usage
+const walletClientFactoryCache = new LRUCache<string, any>(50);
 
 // Helper to create robust cache key from options
 function createCacheKey(options: Partial<ClientOptions>): string {
@@ -257,16 +255,10 @@ export const getWalletClient = (options: ClientOptions) => {
     rpcUrl: validatedOptions.rpcUrl,
   });
 
-  // Create the factory function
-  const walletClientFactory = (verificationOptions?: WalletVerificationOptions) => {
-    // Build headers using shared utility
-    const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-      "x-auth-token": validatedOptions.accessToken || "",
-      "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
-      "x-auth-verification-id": verificationOptions?.verificationId ?? "",
-    });
-
-    return createWalletClient({
+  // Create and cache the factory function
+  // Using the same pattern as the original to preserve type inference
+  const walletClientFactory = (verificationOptions?: WalletVerificationOptions) =>
+    createWalletClient({
       chain: chain,
       transport: http(validatedOptions.rpcUrl, {
         batch: true,
@@ -274,7 +266,11 @@ export const getWalletClient = (options: ClientOptions) => {
         ...validatedOptions.httpTransportConfig,
         fetchOptions: {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
-          headers,
+          headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+            "x-auth-token": validatedOptions.accessToken || "",
+            "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
+            "x-auth-verification-id": verificationOptions?.verificationId ?? "",
+          }),
         },
       }),
     })
@@ -285,7 +281,6 @@ export const getWalletClient = (options: ClientOptions) => {
       .extend(deleteWalletVerification)
       .extend(createWalletVerificationChallenges)
       .extend(verifyWalletVerificationChallenge);
-  };
 
   // Cache the factory
   walletClientFactoryCache.set(cacheKey, walletClientFactory);
