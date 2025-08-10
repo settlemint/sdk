@@ -43,7 +43,7 @@ class LRUCache<K, V> {
   set(key: K, value: V): void {
     // Remove key if it exists (to update position)
     this.cache.delete(key);
-    
+
     // Check size limit
     if (this.cache.size >= this.maxSize) {
       // Remove least recently used (first item)
@@ -52,7 +52,7 @@ class LRUCache<K, V> {
         this.cache.delete(firstKey);
       }
     }
-    
+
     this.cache.set(key, value);
   }
 
@@ -67,7 +67,7 @@ const chainCache = new LRUCache<string, ViemChain>(100);
 // Cache for public clients with size limit
 const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain>>(50);
 
-// Cache for wallet client factories with size limit  
+// Cache for wallet client factories with size limit
 // Type will be inferred from usage
 const walletClientFactoryCache = new LRUCache<string, any>(50);
 
@@ -75,7 +75,7 @@ const walletClientFactoryCache = new LRUCache<string, any>(50);
 function createCacheKey(options: Partial<ClientOptions>): string {
   // Create a deterministic key by sorting properties
   const keyObject: Record<string, unknown> = {};
-  
+
   // Add properties in sorted order to ensure consistency
   const keys = ["chainId", "chainName", "rpcUrl", "accessToken"] as const;
   for (const key of keys) {
@@ -85,7 +85,15 @@ function createCacheKey(options: Partial<ClientOptions>): string {
       keyObject[key] = value;
     }
   }
-  
+
+  // Include serializable parts of httpTransportConfig if present
+  if (options.httpTransportConfig) {
+    const { onFetchRequest, onFetchResponse, ...serializableConfig } = options.httpTransportConfig;
+    if (Object.keys(serializableConfig).length > 0) {
+      keyObject.httpTransportConfig = serializableConfig;
+    }
+  }
+
   // Use sorted keys for consistent stringification
   return JSON.stringify(keyObject, Object.keys(keyObject).sort());
 }
@@ -93,18 +101,17 @@ function createCacheKey(options: Partial<ClientOptions>): string {
 // Shared utility for building headers
 function buildHeaders(
   baseHeaders: HeadersInit | undefined,
-  authHeaders: Record<string, string | undefined>
+  authHeaders: Record<string, string | undefined>,
 ): HeadersInit {
-  // Filter out undefined values to avoid sending empty string headers
+  // Only include headers with actual values
   const filteredHeaders: Record<string, string> = {};
   for (const [key, value] of Object.entries(authHeaders)) {
-    if (value !== undefined && value !== "") {
+    if (value !== undefined) {
       filteredHeaders[key] = value;
     }
   }
   return appendHeaders(baseHeaders, filteredHeaders);
 }
-
 
 /**
  * Schema for the viem client options.
@@ -275,8 +282,8 @@ export const getWalletClient = (options: ClientOptions) => {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
           headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
             "x-auth-token": validatedOptions.accessToken,
-            "x-auth-challenge-response": verificationOptions?.challengeResponse,
-            "x-auth-verification-id": verificationOptions?.verificationId,
+            "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
+            "x-auth-verification-id": verificationOptions?.verificationId ?? "",
           }),
         },
       }),
@@ -370,7 +377,7 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
 
   // For custom chains, create a cache key using all parameters
   const cacheKey = JSON.stringify({ chainId, chainName, rpcUrl }, ["chainId", "chainName", "rpcUrl"]);
-  
+
   // Check if custom chain is already cached
   const cachedChain = chainCache.get(cacheKey);
   if (cachedChain) {
