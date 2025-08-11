@@ -361,15 +361,11 @@ describe("EAS Portal Client", () => {
     expect(timestamp).toBe(BigInt(1640995200));
   });
 
-  test("should throw error on bulk query methods", async () => {
+  test("should throw error on bulk query methods when The Graph not configured", async () => {
     const client = createEASClient(optionsWithAddresses);
 
-    await expect(client.getSchemas()).rejects.toThrow(
-      "Schema listing not implemented yet. Portal's direct contract queries don't support listing all schemas",
-    );
-    await expect(client.getAttestations()).rejects.toThrow(
-      "Attestation listing not implemented yet. Portal's direct contract queries don't support listing all attestations",
-    );
+    await expect(client.getSchemas()).rejects.toThrow("Schema listing requires The Graph configuration");
+    await expect(client.getAttestations()).rejects.toThrow("Attestation listing requires The Graph configuration");
   });
 
   test("should throw error when trying to query without contract addresses", async () => {

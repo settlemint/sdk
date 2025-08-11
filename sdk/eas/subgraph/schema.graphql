@@ -1,0 +1,24 @@
+# EAS Subgraph Schema (MVP)
+
+type Schema @entity {
+  id: Bytes! # uid
+  resolver: Bytes!
+  revocable: Boolean!
+  schema: String!
+  createdAt: BigInt!
+  txHash: Bytes!
+}
+
+type Attestation @entity {
+  id: Bytes! # uid
+  schema: Schema!
+  attester: Bytes!
+  recipient: Bytes!
+  time: BigInt!
+  expirationTime: BigInt!
+  revocable: Boolean!
+  refUID: Bytes!
+  data: Bytes!
+  revokedAt: BigInt
+  txHash: Bytes!
+}
