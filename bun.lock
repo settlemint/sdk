@@ -79,7 +79,7 @@
       },
       "peerDependencies": {
         "@settlemint/sdk-js": "workspace:*",
-        "hardhat": "2.26.2",
+        "hardhat": "2.26.3",
       },
       "optionalPeers": [
         "hardhat",
