@@ -74,7 +74,7 @@
     "yocto-spinner": "^1.0.0"
   },
   "peerDependencies": {
-    "hardhat": "2.26.3",
+    "hardhat": "3.0.0",
     "@settlemint/sdk-js": "workspace:*"
   },
   "peerDependenciesMeta": {
