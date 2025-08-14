@@ -65,13 +65,13 @@ jobs:
           persist-credentials: false
 
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action/configure@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load all secrets
         id: secrets
-        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         env:
           SLACK_BOT_TOKEN: op://platform/slack-bot/SLACK_BOT_TOKEN
           SLACK_CHANNEL_ID: op://platform/slack-bot/SLACK_CHANNEL_ID
@@ -374,12 +374,12 @@ jobs:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action/configure@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load Slack secrets
-        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         env:
           SLACK_BOT_TOKEN: op://platform/slack-bot/SLACK_BOT_TOKEN
           SLACK_CHANNEL_ID: op://platform/slack-bot/SLACK_CHANNEL_ID
@@ -426,12 +426,12 @@ jobs:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action/configure@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load Slack secrets
-        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         env:
           SLACK_BOT_TOKEN: op://platform/slack-bot/SLACK_BOT_TOKEN
           SLACK_CHANNEL_ID: op://platform/slack-bot/SLACK_CHANNEL_ID
