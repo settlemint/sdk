@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import type { GraphQLField } from "graphql";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 import { fetchProcessedSchema } from "@/utils/schema-processor";
 import { generateFieldSDL } from "@/utils/sdl";
 
@@ -27,8 +28,16 @@ export const hasuraMutation = (server: McpServer, env: Partial<DotEnv>) => {
     throw new Error("Access token not found in environment variables. Please set SETTLEMINT_ACCESS_TOKEN.");
   }
 
+  const schema = z.object({
+    mutationName: z.string(),
+  });
+
   // Tool for GraphQL mutations
-  server.tool("hasura-mutation", { mutationName: z.string() }, async ({ mutationName }) => {
+  server.tool(
+    "hasura-mutation",
+    { inputSchema: zodToJsonSchema(schema) },
+    async (params) => {
+      const { mutationName } = schema.parse(params);
     try {
       if (!mutationName) {
         return {
@@ -89,5 +98,6 @@ export const hasuraMutation = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-  });
+    },
+  );
 };

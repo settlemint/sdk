@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting an integration tool
@@ -28,19 +29,26 @@ export const platformIntegrationToolRestart = (server: McpServer, env: Partial<D
     instance: instance,
   });
 
+  const schema = z.object({
+    integrationToolUniqueName: z
+      .string()
+      .describe("Unique name of the integration tool to restart"),
+  });
+
   server.tool(
     "platform-integration-tool-restart",
-    {
-      integrationToolUniqueName: z.string().describe("Unique name of the integration tool to restart"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const integrationTool = await client.integrationTool.restart(params.integrationToolUniqueName);
+      const { integrationToolUniqueName } = schema.parse(params);
+      const integrationTool = await client.integrationTool.restart(
+        integrationToolUniqueName,
+      );
       return {
         content: [
           {
             type: "text",
             name: "Integration Tool Restarted",
-            description: `Restarted integration tool: ${params.integrationToolUniqueName}`,
+            description: `Restarted integration tool: ${integrationToolUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(integrationTool, null, 2),
           },

@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a load balancer by ID
@@ -28,19 +29,24 @@ export const platformLoadBalancerRead = (server: McpServer, env: Partial<DotEnv>
     instance: instance,
   });
 
+  const schema = z.object({
+    loadBalancerUniqueName: z
+      .string()
+      .describe("Unique name of the load balancer to read"),
+  });
+
   server.tool(
     "platform-load-balancer-read",
-    {
-      loadBalancerUniqueName: z.string().describe("Unique name of the load balancer to read"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const loadBalancer = await client.loadBalancer.read(params.loadBalancerUniqueName);
+      const { loadBalancerUniqueName } = schema.parse(params);
+      const loadBalancer = await client.loadBalancer.read(loadBalancerUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Load Balancer Details",
-            description: `Details for load balancer: ${params.loadBalancerUniqueName}`,
+            description: `Details for load balancer: ${loadBalancerUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(loadBalancer, null, 2),
           },

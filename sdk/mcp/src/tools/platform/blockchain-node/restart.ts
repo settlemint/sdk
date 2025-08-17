@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting a blockchain node
@@ -28,19 +29,22 @@ export const platformBlockchainNodeRestart = (server: McpServer, env: Partial<Do
     instance: instance,
   });
 
+  const schema = z.object({
+    nodeUniqueName: z.string().describe("Unique name of the blockchain node to restart"),
+  });
+
   server.tool(
     "platform-blockchain-node-restart",
-    {
-      nodeUniqueName: z.string().describe("Unique name of the blockchain node to restart"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const node = await client.blockchainNode.restart(params.nodeUniqueName);
+      const { nodeUniqueName } = schema.parse(params);
+      const node = await client.blockchainNode.restart(nodeUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Blockchain Node Restarted",
-            description: `Restarted blockchain node: ${params.nodeUniqueName}`,
+            description: `Restarted blockchain node: ${nodeUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(node, null, 2),
           },

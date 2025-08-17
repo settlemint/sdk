@@ -3,6 +3,7 @@ import path from "node:path";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Registers a tool to get a specific prompt from the SDK
@@ -16,13 +17,16 @@ import { z } from "zod";
  * promptsGet(server, env);
  */
 export const promptsGet = (server: McpServer, _env: Partial<DotEnv>) => {
+  const schema = z.object({
+    category: z.string().describe("The prompt category (e.g., hasura, portal, thegraph, tool-usage)"),
+    name: z.string().describe("The name of the prompt file without extension"),
+  });
+
   server.tool(
     "prompts-get",
-    {
-      category: z.string().describe("The prompt category (e.g., hasura, portal, thegraph, tool-usage)"),
-      name: z.string().describe("The name of the prompt file without extension"),
-    },
-    async ({ category, name }) => {
+    { inputSchema: zodToJsonSchema(schema) },
+    async (params) => {
+      const { category, name } = schema.parse(params);
       try {
         // Get the prompts directory path
         const promptsDir = path.resolve(__dirname, "../../prompts");

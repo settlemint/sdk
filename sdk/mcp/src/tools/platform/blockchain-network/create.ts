@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for creating a new blockchain network
@@ -28,35 +29,43 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
     instance: instance,
   });
 
+  const schema = z.object({
+    applicationUniqueName: z
+      .string()
+      .describe("Unique name of the application to create the network in")
+      .optional(),
+    name: z.string().describe("Name of the blockchain network"),
+    type: z.enum(["DEDICATED", "SHARED"]).describe(
+      "Type of the blockchain network (DEDICATED or SHARED)",
+    ),
+    size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the blockchain network"),
+    provider: z.string().describe("Provider for the blockchain network"),
+    region: z.string().describe("Region for the blockchain network"),
+    nodeName: z.string().describe("Name for the initial node"),
+    consensusAlgorithm: z
+      .enum([
+        "ARBITRUM",
+        "ARBITRUM_GOERLI",
+        "ARBITRUM_SEPOLIA",
+        "AVALANCHE",
+        "AVALANCHE_FUJI",
+        "BESU_IBFTv2",
+        "BESU_QBFT",
+        "BSC_POW",
+        "BSC_POW_TESTNET",
+        "CORDA",
+        "FABRIC_RAFT",
+      ])
+      .describe("Consensus algorithm for the blockchain network"),
+  });
+
   server.tool(
     "platform-blockchain-network-create",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to create the network in").optional(),
-      name: z.string().describe("Name of the blockchain network"),
-      type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the blockchain network (DEDICATED or SHARED)"),
-      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the blockchain network"),
-      provider: z.string().describe("Provider for the blockchain network"),
-      region: z.string().describe("Region for the blockchain network"),
-      nodeName: z.string().describe("Name for the initial node"),
-      consensusAlgorithm: z
-        .enum([
-          "ARBITRUM",
-          "ARBITRUM_GOERLI",
-          "ARBITRUM_SEPOLIA",
-          "AVALANCHE",
-          "AVALANCHE_FUJI",
-          "BESU_IBFTv2",
-          "BESU_QBFT",
-          "BSC_POW",
-          "BSC_POW_TESTNET",
-          "CORDA",
-          "FABRIC_RAFT",
-        ])
-        .describe("Consensus algorithm for the blockchain network"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
+      const parsed = schema.parse(params);
       // Prioritize environment variable over LLM-provided parameter for application
-      const applicationUniqueName = env.SETTLEMINT_APPLICATION || params.applicationUniqueName;
+      const applicationUniqueName = env.SETTLEMINT_APPLICATION || parsed.applicationUniqueName;
 
       if (!applicationUniqueName) {
         throw new Error(
@@ -69,13 +78,13 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
 
       const network = await client.blockchainNetwork.create({
         applicationUniqueName,
-        name: params.name,
-        type: params.type,
-        size: params.size,
-        provider: params.provider,
-        region: params.region,
-        nodeName: params.nodeName,
-        consensusAlgorithm: params.consensusAlgorithm,
+        name: parsed.name,
+        type: parsed.type,
+        size: parsed.size,
+        provider: parsed.provider,
+        region: parsed.region,
+        nodeName: parsed.nodeName,
+        consensusAlgorithm: parsed.consensusAlgorithm,
       });
 
       return {
@@ -83,7 +92,7 @@ export const platformBlockchainNetworkCreate = (server: McpServer, env: Partial<
           {
             type: "text",
             name: "Blockchain Network Created",
-            description: `Created blockchain network: ${params.name} in application: ${applicationUniqueName}`,
+            description: `Created blockchain network: ${parsed.name} in application: ${applicationUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(network, null, 2),
           },

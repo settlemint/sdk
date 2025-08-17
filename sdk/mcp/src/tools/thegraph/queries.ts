@@ -1,6 +1,8 @@
 import { fetchProcessedSchema } from "@/utils/schema-processor";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const thegraphQueries = (server: McpServer, env: Partial<DotEnv>) => {
   // Get the default subgraph name and endpoints array
@@ -25,8 +27,14 @@ export const thegraphQueries = (server: McpServer, env: Partial<DotEnv>) => {
     throw new Error("Access token not found in environment variables. Please set SETTLEMINT_ACCESS_TOKEN.");
   }
 
+  const schema = z.object({});
+
   // Tool for GraphQL queries
-  server.tool("thegraph-queries", async () => {
+  server.tool(
+    "thegraph-queries",
+    { inputSchema: zodToJsonSchema(schema) },
+    async (params) => {
+      schema.parse(params);
     try {
       const { queryNames } = await fetchProcessedSchema(thegraphGraphqlEndpoint, accessToken);
 
@@ -52,5 +60,6 @@ export const thegraphQueries = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-  });
+    },
+  );
 };
