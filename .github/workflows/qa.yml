@@ -120,6 +120,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
+
+      - name: Inject slug/short variables
+        uses: rlespinasse/github-slug-action@v5
+
       - name: Update package versions
         if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
         id: package-version
