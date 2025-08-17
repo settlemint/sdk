@@ -1,8 +1,8 @@
+import { exists } from "@/filesystem.js";
+import { $ } from "bun";
 import { afterAll, beforeAll, describe, expect, it } from "bun:test";
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { $ } from "bun";
-import { exists } from "@/filesystem.js";
 import { writeEnv } from "./write-env.js";
 
 const TEST_DIR = join(__dirname, ".test-env");
@@ -11,7 +11,6 @@ const ENV_PROD_FILE = join(TEST_DIR, ".env.production");
 const ENV_LOCAL_FILE = join(TEST_DIR, ".env.local");
 
 // Needed so it loads the correct environment variables
-// @ts-expect-error
 process.env.NODE_ENV = "development";
 
 describe("writeEnv", () => {
@@ -81,7 +80,8 @@ describe("writeEnv", () => {
   });
 
   it("should merge with existing environment variables", async () => {
-    const existingEnv = "EXISTING_VAR=existing\nSETTLEMINT_INSTANCE=https://old.example.com";
+    const existingEnv =
+      "EXISTING_VAR=existing\nSETTLEMINT_INSTANCE=https://old.example.com";
     await writeFile(ENV_FILE, existingEnv);
 
     const newEnv = {
@@ -104,7 +104,10 @@ describe("writeEnv", () => {
 
   it("should handle arrays and objects", async () => {
     const env = {
-      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["https://graph1.example.com", "https://graph2.example.com"],
+      SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: [
+        "https://graph1.example.com",
+        "https://graph2.example.com",
+      ],
     };
 
     await writeEnv({
@@ -134,11 +137,18 @@ describe("writeEnv", () => {
       cwd: TEST_DIR,
     });
     const initialContent = await Bun.file(ENV_FILE).text();
-    expect(initialContent).toContain("SETTLEMINT_INSTANCE=https://dev.example.com");
-    expect(initialContent).toContain("SETTLEMINT_CUSTOM_DEPLOYMENT=test-custom-deployment");
+    expect(initialContent).toContain(
+      "SETTLEMINT_INSTANCE=https://dev.example.com",
+    );
+    expect(initialContent).toContain(
+      "SETTLEMINT_CUSTOM_DEPLOYMENT=test-custom-deployment",
+    );
     expect(initialContent).toContain("SETTLEMINT_WORKSPACE=test-workspace");
     expect(initialContent).toContain("MY_VAR=my-value");
-    const { SETTLEMINT_CUSTOM_DEPLOYMENT: _SETTLEMINT_CUSTOM_DEPLOYMENT, ...existingEnv } = initialEnv;
+    const {
+      SETTLEMINT_CUSTOM_DEPLOYMENT: _SETTLEMINT_CUSTOM_DEPLOYMENT,
+      ...existingEnv
+    } = initialEnv;
 
     await writeEnv({
       prod: false,
@@ -149,8 +159,12 @@ describe("writeEnv", () => {
 
     const updatedContent = await Bun.file(ENV_FILE).text();
     expect(updatedContent).toContain("SETTLEMINT_WORKSPACE=test-workspace");
-    expect(updatedContent).toContain("SETTLEMINT_INSTANCE=https://dev.example.com");
-    expect(updatedContent).not.toContain("SETTLEMINT_CUSTOM_DEPLOYMENT=test-custom-deployment");
+    expect(updatedContent).toContain(
+      "SETTLEMINT_INSTANCE=https://dev.example.com",
+    );
+    expect(updatedContent).not.toContain(
+      "SETTLEMINT_CUSTOM_DEPLOYMENT=test-custom-deployment",
+    );
     expect(updatedContent).toContain("MY_VAR=my-value");
   });
 });
