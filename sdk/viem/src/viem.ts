@@ -7,10 +7,10 @@ import {
   defineChain,
   type HttpTransportConfig,
   http,
-  publicActions,
-  type Chain as ViemChain,
   type PublicClient,
+  publicActions,
   type Transport,
+  type Chain as ViemChain,
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
@@ -215,6 +215,11 @@ export interface WalletVerificationOptions {
    * The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications.
    */
   verificationId?: string;
+
+  /**
+   * The challenge id (used for HD wallets)
+   */
+  challengeId?: string;
   /**
    * The challenge response (used for HD wallets)
    */
@@ -284,8 +289,21 @@ export const getWalletClient = (options: ClientOptions) => {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
           headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
             "x-auth-token": validatedOptions.accessToken,
-            "x-auth-challenge-response": verificationOptions?.challengeResponse ?? "",
-            "x-auth-verification-id": verificationOptions?.verificationId ?? "",
+            ...(verificationOptions?.challengeResponse
+              ? {
+                  "x-auth-challenge-response": verificationOptions.challengeResponse,
+                }
+              : {}),
+            ...(verificationOptions?.challengeId
+              ? {
+                  "x-auth-challenge-id": verificationOptions.challengeId,
+                }
+              : {}),
+            ...(verificationOptions?.verificationId
+              ? {
+                  "x-auth-verification-id": verificationOptions.verificationId,
+                }
+              : {}),
           }),
         },
       }),
