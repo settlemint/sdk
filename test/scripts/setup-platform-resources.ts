@@ -1,9 +1,9 @@
-import { afterAll, beforeAll, expect } from "bun:test";
-import { copyFile, mkdir } from "node:fs/promises";
-import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { afterAll, beforeAll, expect } from "bun:test";
+import { copyFile, mkdir } from "node:fs/promises";
+import { join } from "node:path";
 import {
   AAT_NAME,
   APPLICATION_NAME,
@@ -39,7 +39,6 @@ import {
 } from "../utils/test-resources";
 
 // Needed so it loads the correct environment variables
-// @ts-expect-error
 process.env.NODE_ENV = "development";
 
 const COMMAND_TEST_SCOPE = __filename;
