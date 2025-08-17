@@ -134,7 +134,7 @@ flowchart LR
 - MCP SDK / Client Library: To simplify usage, MCP provides SDKs in different programming languages. Developers include these in their AI agent code. The SDK handles the communication details with the MCP server, so a developer can simply call functions or methods (like mcp.getData(...)) without manually constructing network calls. The SDK ensures requests are properly formatted and sends them to the MCP server, then receives the response and hands it to the AI program.
 - Connectors / Adapters: These are modules or plugins within the MCP server that know how to talk to specific types of external systems. One connector might handle blockchain interactions (with sub-modules for Ethereum, Hyperledger, etc.), another might handle web APIs (performing HTTP calls), another might manage local OS operations (file system access, running shell commands). Each connector understands a set of actions and data formats for its domain. Connectors make MCP extensible - new connectors can be added to support new systems or protocols.
 - Configuration Files: MCP often uses configuration (like JSON or YAML) to know which connectors to activate and how to reach external services. For example, you might configure an MCP instance with the URL of your blockchain node, API keys for external services, or file path permissions. The configuration ensures that at runtime the MCP server has the info it needs to carry out requests safely and correctly.
-- Security Layer: Since MCP can access sensitive data and perform actions, it includes a security layer. This may involve API keys (like the --pat personal access token in the example) or authentication for connecting to blockchains and databases. The security layer also enforces permissions: it can restrict what an AI agent is allowed to do via MCP, preventing misuse. For instance, you might allow read-only access to some data but not allow any write or state-changing operations without additional approval.
+- Security Layer: Since MCP can access sensitive data and perform actions, it includes a security layer. This may involve API keys (like the `SETTLEMINT_PAT` personal access token environment variable or the `--pat` flag) or authentication for connecting to blockchains and databases. The security layer also enforces permissions: it can restrict what an AI agent is allowed to do via MCP, preventing misuse. For instance, you might allow read-only access to some data but not allow any write or state-changing operations without additional approval.
 
 These components together make MCP robust and flexible. The separation of concerns (AI vs MCP vs Connectors) means each part can evolve or be maintained independently. For example, if a new blockchain is introduced, you can add a connector for it without changing how the AI asks for data. Or if the AI model is updated, it can still use the same MCP server and connectors as before.
 
@@ -208,14 +208,14 @@ Suppose you are a developer working on a blockchain project, and you want to use
 For instance, you might use a command (via a CLI or an npm script) to start an MCP server that is pointed at your project directory and connected to the SettleMint platform. An example command could be:
 
 ```sh
-npx -y @settlemint/sdk-mcp@latest --path=/Users/llm/asset-tokenization-kit/ --pat=sm_pat_xxx
+SETTLEMINT_PAT=sm_pat_xxx npx -y @settlemint/sdk-mcp@latest --path=/Users/llm/asset-tokenization-kit/
 ```
 
 Here's what this command does:
 
-- npx is used to execute the latest version of the @settlemint/sdk-mcp package without needing a separate install.
-- --path=/Users/llm/asset-tokenization-kit/ specifies the local project directory that the MCP server will have context about. This could allow the AI to query files or code in that directory through MCP and have access to the environment settings from `settlemint connect`
-- --pat=sm_pat_xxx provides a Personal Access Token (PAT) for authenticating with SettleMint's services. This token (masked here as xxx) is required for the MCP server to connect to the SettleMint platform on your behalf.
+- `SETTLEMINT_PAT=sm_pat_xxx` sets a Personal Access Token (PAT) as an environment variable for authenticating with SettleMint's services. You can also store this token in a `.env` file.
+- `--path=/Users/llm/asset-tokenization-kit/` specifies the local project directory that the MCP server will have context about. This could allow the AI to query files or code in that directory through MCP and have access to the environment settings from `settlemint connect`
+- `npx` is used to execute the latest version of the `@settlemint/sdk-mcp` package without needing a separate install.
 
 After running this command, you would have a local MCP server up and running, connected to both your local project and the SettleMint platform. Your AI assistant (say a specialized Claude Sonnet-based agent) could then do things like:
 
@@ -228,7 +228,7 @@ This greatly enhances a development workflow by making the AI an active particip
 
 #### Using the SettleMint MPC in Cursor
 
-Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can configure the SettleMint MCP server. Point the path to the folder of your program, and set your personal access token.
+Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can configure the SettleMint MCP server. Point the path to the folder of your program, and provide your personal access token via the `env` section or a `.env` file.
 
 > The reason we use the global MCP configuration file is that your personal access token should never, ever, ever be committed into hits and putting it in the project folder, which is also possible in cursor opens up that possibility.
 
@@ -240,9 +240,11 @@ Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can
       "args": [
         "-y",
         "@settlemint/sdk-mcp@latest",
-        "--path=/Users/llm/asset-tokenization-kit/",
-        "--pat=sm_pat_xxx"
-      ]
+        "--path=/Users/llm/asset-tokenization-kit/"
+      ],
+      "env": {
+        "SETTLEMINT_PAT": "sm_pat_xxx"
+      }
     }
   }
 }
@@ -262,9 +264,11 @@ Open Claude desktop and navigate to Settings. Under the Developer tab, tap Edit 
       "args": [
         "-y",
         "@settlemint/sdk-mcp@latest",
-        "--path=/Users/llm/asset-tokenization-kit/",
-        "--pat=sm_pat_xxx"
-      ]
+        "--path=/Users/llm/asset-tokenization-kit/"
+      ],
+      "env": {
+        "SETTLEMINT_PAT": "sm_pat_xxx"
+      }
     }
   }
 }
@@ -284,9 +288,11 @@ Open the Cline extension in VS Code and tap the MCP Servers icon. Tap Configure 
       "args": [
         "-y",
         "@settlemint/sdk-mcp@latest",
-        "--path=/Users/llm/asset-tokenization-kit/",
-        "--pat=sm_pat_xxx"
-      ]
+        "--path=/Users/llm/asset-tokenization-kit/"
+      ],
+      "env": {
+        "SETTLEMINT_PAT": "sm_pat_xxx"
+      }
     }
   }
 }
@@ -307,9 +313,11 @@ Open Windsurf and navigate to the Cascade assistant. Tap on the hammer (MCP) ico
       "args": [
         "-y",
         "@settlemint/sdk-mcp@latest",
-        "--path=/Users/llm/asset-tokenization-kit/",
-        "--pat=sm_pat_xxx"
-      ]
+        "--path=/Users/llm/asset-tokenization-kit/"
+      ],
+      "env": {
+        "SETTLEMINT_PAT": "sm_pat_xxx"
+      }
     }
   }
 }

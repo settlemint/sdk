@@ -73,7 +73,7 @@ import { registerResourcesTools } from "./tools/resources/index.js";
  *
  * const args = parseArguments();
  * console.log(args.path); // Path to the directory containing .env files
- * console.log(args.pat); // Personal Access Token
+ * console.log(args.pat); // Personal Access Token from CLI (optional)
  */
 function parseArguments() {
   const program = new Command();
@@ -103,10 +103,12 @@ async function main() {
     // Parse command line arguments
     const args = parseArguments();
     const envPath = args.path || process.cwd();
-    const pat = PersonalAccessTokenSchema.parse(args.pat);
 
     // Load environment variables
     const env: Partial<DotEnv> = await loadEnv(true, false, envPath);
+
+    // Personal access token from environment or CLI
+    const pat = PersonalAccessTokenSchema.parse(env.SETTLEMINT_PAT ?? args.pat);
 
     // Register Portal tools
     portalPrompt(server);
