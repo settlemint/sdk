@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing insights instances
@@ -28,19 +29,24 @@ export const platformInsightsList = (server: McpServer, env: Partial<DotEnv>, pa
     instance: instance,
   });
 
+  const schema = z.object({
+    applicationUniqueName: z
+      .string()
+      .describe("Unique name of the application to list insights from"),
+  });
+
   server.tool(
     "platform-insights-list",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to list insights from"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const insightsList = await client.insights.list(params.applicationUniqueName);
+      const { applicationUniqueName } = schema.parse(params);
+      const insightsList = await client.insights.list(applicationUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Insights List",
-            description: `List of insights in application: ${params.applicationUniqueName}`,
+            description: `List of insights in application: ${applicationUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(insightsList, null, 2),
           },

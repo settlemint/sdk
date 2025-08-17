@@ -2,6 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Registers a tool to list available resources in the SDK
@@ -15,7 +17,13 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  * resourcesList(server, env);
  */
 export const resourcesList = (server: McpServer, _env: Partial<DotEnv>) => {
-  server.tool("resources-list", {}, async () => {
+  const schema = z.object({});
+
+  server.tool(
+    "resources-list",
+    { inputSchema: zodToJsonSchema(schema) },
+    async (params) => {
+      schema.parse(params);
     try {
       // Get the resources directory path
       const resourcesDir = path.resolve(__dirname, "../../resources");
@@ -59,5 +67,6 @@ export const resourcesList = (server: McpServer, _env: Partial<DotEnv>) => {
         ],
       };
     }
-  });
+    },
+  );
 };

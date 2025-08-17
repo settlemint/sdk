@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting a middleware
@@ -28,19 +29,24 @@ export const platformMiddlewareRestart = (server: McpServer, env: Partial<DotEnv
     instance: instance,
   });
 
+  const schema = z.object({
+    middlewareUniqueName: z.string().describe(
+      "Unique name of the middleware to restart",
+    ),
+  });
+
   server.tool(
     "platform-middleware-restart",
-    {
-      middlewareUniqueName: z.string().describe("Unique name of the middleware to restart"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const middleware = await client.middleware.restart(params.middlewareUniqueName);
+      const { middlewareUniqueName } = schema.parse(params);
+      const middleware = await client.middleware.restart(middlewareUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Middleware Restarted",
-            description: `Restarted middleware: ${params.middlewareUniqueName}`,
+            description: `Restarted middleware: ${middlewareUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(middleware, null, 2),
           },

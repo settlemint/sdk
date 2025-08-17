@@ -48,7 +48,8 @@
     "@settlemint/sdk-utils": "workspace:*",
     "commander": "14.0.0",
     "graphql": "16.11.0",
-    "zod": "^4"
+    "zod": "^4",
+    "zod-to-json-schema": "^3.23.0"
   },
   "devDependencies": {},
   "peerDependencies": {},

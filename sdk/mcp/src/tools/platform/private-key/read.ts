@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a private key by ID
@@ -28,19 +29,22 @@ export const platformPrivateKeyRead = (server: McpServer, env: Partial<DotEnv>, 
     instance: instance,
   });
 
+  const schema = z.object({
+    privateKeyUniqueName: z.string().describe("Unique name of the private key to read"),
+  });
+
   server.tool(
     "platform-private-key-read",
-    {
-      privateKeyUniqueName: z.string().describe("Unique name of the private key to read"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const privateKey = await client.privateKey.read(params.privateKeyUniqueName);
+      const { privateKeyUniqueName } = schema.parse(params);
+      const privateKey = await client.privateKey.read(privateKeyUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Private Key Details",
-            description: `Details for private key: ${params.privateKeyUniqueName}`,
+            description: `Details for private key: ${privateKeyUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(privateKey, null, 2),
           },

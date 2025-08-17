@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing load balancers in an application
@@ -28,19 +29,24 @@ export const platformLoadBalancerList = (server: McpServer, env: Partial<DotEnv>
     instance: instance,
   });
 
+  const schema = z.object({
+    applicationUniqueName: z
+      .string()
+      .describe("Unique name of the application to list load balancers from"),
+  });
+
   server.tool(
     "platform-load-balancer-list",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to list load balancers from"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const loadBalancers = await client.loadBalancer.list(params.applicationUniqueName);
+      const { applicationUniqueName } = schema.parse(params);
+      const loadBalancers = await client.loadBalancer.list(applicationUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Load Balancer List",
-            description: `List of load balancers in application: ${params.applicationUniqueName}`,
+            description: `List of load balancers in application: ${applicationUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(loadBalancers, null, 2),
           },

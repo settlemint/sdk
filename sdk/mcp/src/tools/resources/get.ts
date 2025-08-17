@@ -3,6 +3,7 @@ import path from "node:path";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Registers a tool to get a specific resource from the SDK
@@ -16,12 +17,15 @@ import { z } from "zod";
  * resourcesGet(server, env);
  */
 export const resourcesGet = (server: McpServer, _env: Partial<DotEnv>) => {
+  const schema = z.object({
+    name: z.string().describe("The name of the resource file without extension"),
+  });
+
   server.tool(
     "resources-get",
-    {
-      name: z.string().describe("The name of the resource file without extension"),
-    },
-    async ({ name }) => {
+    { inputSchema: zodToJsonSchema(schema) },
+    async (params) => {
+      const { name } = schema.parse(params);
       try {
         // Get the resources directory path
         const resourcesDir = path.resolve(__dirname, "../../resources");

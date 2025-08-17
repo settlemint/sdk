@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing storage instances
@@ -28,19 +29,24 @@ export const platformStorageList = (server: McpServer, env: Partial<DotEnv>, pat
     instance: instance,
   });
 
+  const schema = z.object({
+    applicationUniqueName: z
+      .string()
+      .describe("Unique name of the application to list storage from"),
+  });
+
   server.tool(
     "platform-storage-list",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to list storage from"),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      const storageList = await client.storage.list(params.applicationUniqueName);
+      const { applicationUniqueName } = schema.parse(params);
+      const storageList = await client.storage.list(applicationUniqueName);
       return {
         content: [
           {
             type: "text",
             name: "Storage List",
-            description: `List of storage in application: ${params.applicationUniqueName}`,
+            description: `List of storage in application: ${applicationUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(storageList, null, 2),
           },

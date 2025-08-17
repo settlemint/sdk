@@ -2,6 +2,8 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Registers a tool to list available prompts in the SDK
@@ -15,7 +17,13 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
  * promptsList(server, env);
  */
 export const promptsList = (server: McpServer, _env: Partial<DotEnv>) => {
-  server.tool("prompts-list", {}, async () => {
+  const schema = z.object({});
+
+  server.tool(
+    "prompts-list",
+    { inputSchema: zodToJsonSchema(schema) },
+    async (params) => {
+      schema.parse(params);
     try {
       // Get the prompts directory path
       const promptsDir = path.resolve(__dirname, "../../prompts");
@@ -78,5 +86,6 @@ export const promptsList = (server: McpServer, _env: Partial<DotEnv>) => {
         ],
       };
     }
-  });
+    },
+  );
 };

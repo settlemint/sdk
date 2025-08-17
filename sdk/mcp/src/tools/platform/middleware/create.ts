@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for creating a new middleware
@@ -28,46 +29,53 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
     instance: instance,
   });
 
+  const schema = z.object({
+    applicationUniqueName: z
+      .string()
+      .describe("Unique name of the application to create the middleware in"),
+    name: z.string().describe("Name of the middleware"),
+    type: z.enum(["DEDICATED", "SHARED"]).describe(
+      "Type of the middleware (DEDICATED or SHARED)",
+    ),
+    size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the middleware"),
+    provider: z.string().describe("Provider for the middleware"),
+    region: z.string().describe("Region for the middleware"),
+    interface: z
+      .enum(["ATTESTATION_INDEXER", "BESU", "FIREFLY_FABCONNECT", "GRAPH", "HA_GRAPH", "SMART_CONTRACT_PORTAL"])
+      .describe("Interface type for the middleware"),
+    blockchainNodeUniqueName: z
+      .string()
+      .optional()
+      .describe(
+        "Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName), preferred option for interface SMART_CONTRACT_PORTAL",
+      ),
+    loadBalancerUniqueName: z
+      .string()
+      .optional()
+      .describe(
+        "Unique name of the load balancer to connect to (mutually exclusive with blockchainNodeUniqueName), preferred option for all other interfaces",
+      ),
+  });
+
   server.tool(
     "platform-middleware-create",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to create the middleware in"),
-      name: z.string().describe("Name of the middleware"),
-      type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the middleware (DEDICATED or SHARED)"),
-      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the middleware"),
-      provider: z.string().describe("Provider for the middleware"),
-      region: z.string().describe("Region for the middleware"),
-      interface: z
-        .enum(["ATTESTATION_INDEXER", "BESU", "FIREFLY_FABCONNECT", "GRAPH", "HA_GRAPH", "SMART_CONTRACT_PORTAL"])
-        .describe("Interface type for the middleware"),
-      blockchainNodeUniqueName: z
-        .string()
-        .optional()
-        .describe(
-          "Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName), preferred option for interface SMART_CONTRACT_PORTAL",
-        ),
-      loadBalancerUniqueName: z
-        .string()
-        .optional()
-        .describe(
-          "Unique name of the load balancer to connect to (mutually exclusive with blockchainNodeUniqueName), preferred option for all other interfaces",
-        ),
-    },
+    { inputSchema: zodToJsonSchema(schema) },
     async (params) => {
-      if (params.blockchainNodeUniqueName && params.loadBalancerUniqueName) {
+      const parsed = schema.parse(params);
+      if (parsed.blockchainNodeUniqueName && parsed.loadBalancerUniqueName) {
         throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
       }
 
       const middleware = await client.middleware.create({
-        applicationUniqueName: params.applicationUniqueName,
-        name: params.name,
-        type: params.type,
-        size: params.size,
-        provider: params.provider,
-        region: params.region,
-        interface: params.interface,
-        blockchainNodeUniqueName: params.blockchainNodeUniqueName,
-        loadBalancerUniqueName: params.loadBalancerUniqueName,
+        applicationUniqueName: parsed.applicationUniqueName,
+        name: parsed.name,
+        type: parsed.type,
+        size: parsed.size,
+        provider: parsed.provider,
+        region: parsed.region,
+        interface: parsed.interface,
+        blockchainNodeUniqueName: parsed.blockchainNodeUniqueName,
+        loadBalancerUniqueName: parsed.loadBalancerUniqueName,
       });
 
       return {
@@ -75,7 +83,7 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
           {
             type: "text",
             name: "Middleware Created",
-            description: `Created middleware: ${params.name} in application: ${params.applicationUniqueName}`,
+            description: `Created middleware: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
             mimeType: "application/json",
             text: JSON.stringify(middleware, null, 2),
           },
