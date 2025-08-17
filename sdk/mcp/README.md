@@ -230,7 +230,7 @@ This greatly enhances a development workflow by making the AI an active particip
 
 Cursor (0.47.0 and up) provides a global `~/.cursor/mcp.json` file where you can configure the SettleMint MCP server. Point the path to the folder of your program, and provide your personal access token via the `env` section or a `.env` file.
 
-> The reason we use the global MCP configuration file is that your personal access token should never, ever, ever be committed into hits and putting it in the project folder, which is also possible in cursor opens up that possibility.
+> The reason we use the global MCP configuration file is that your personal access token should never, ever, ever be committed into git and putting it in the project folder, which is also possible in cursor opens up that possibility.
 
 ```json
 {
