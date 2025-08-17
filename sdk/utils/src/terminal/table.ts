@@ -38,6 +38,7 @@ export function table(title: string, data: unknown[]): void {
       alignment: "left",
     })),
   });
+  // biome-ignore lint/suspicious/noExplicitAny: Data structure varies based on table content
   table.addRows(data as Array<Record<string, any>>);
   table.printTable();
 }

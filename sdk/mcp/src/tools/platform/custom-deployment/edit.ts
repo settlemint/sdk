@@ -30,33 +30,24 @@ export const platformCustomDeploymentEdit = (server: McpServer, env: Partial<Dot
   });
 
   const schema = z.object({
-    customDeploymentUniqueName: z.string().describe(
-      "Unique name of the custom deployment to edit",
-    ),
+    customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to edit"),
     imageTag: z.string().describe("The new tag of the Docker image"),
   });
 
-  server.tool(
-    "platform-custom-deployment-edit",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { customDeploymentUniqueName, imageTag } = schema.parse(params);
-      const customDeployment = await client.customDeployment.update(
-        customDeploymentUniqueName,
-        imageTag,
-      );
+  server.tool("platform-custom-deployment-edit", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { customDeploymentUniqueName, imageTag } = schema.parse(params);
+    const customDeployment = await client.customDeployment.update(customDeploymentUniqueName, imageTag);
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Custom Deployment Updated",
-            description: `Updated custom deployment: ${customDeploymentUniqueName} to tag: ${imageTag}`,
-            mimeType: "application/json",
-            text: JSON.stringify(customDeployment, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Custom Deployment Updated",
+          description: `Updated custom deployment: ${customDeploymentUniqueName} to tag: ${imageTag}`,
+          mimeType: "application/json",
+          text: JSON.stringify(customDeployment, null, 2),
+        },
+      ],
+    };
+  });
 };

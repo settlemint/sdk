@@ -30,28 +30,22 @@ export const platformIntegrationToolList = (server: McpServer, env: Partial<DotE
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to list integration tools from"),
+    applicationUniqueName: z.string().describe("Unique name of the application to list integration tools from"),
   });
 
-  server.tool(
-    "platform-integration-tool-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const integrationTools = await client.integrationTool.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Integration Tool List",
-            description: `List of integration tools in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(integrationTools, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-integration-tool-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const integrationTools = await client.integrationTool.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Integration Tool List",
+          description: `List of integration tools in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(integrationTools, null, 2),
+        },
+      ],
+    };
+  });
 };

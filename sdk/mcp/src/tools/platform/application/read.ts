@@ -33,23 +33,19 @@ export const platformApplicationRead = (server: McpServer, env: Partial<DotEnv>,
     applicationUniqueName: z.string().describe("Unique name of the application to read"),
   });
 
-  server.tool(
-    "platform-application-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const application = await client.application.read(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Application Details",
-            description: `Details for application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(application, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-application-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const application = await client.application.read(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Application Details",
+          description: `Details for application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(application, null, 2),
+        },
+      ],
+    };
+  });
 };

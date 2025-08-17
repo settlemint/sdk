@@ -30,9 +30,7 @@ export const platformPrivateKeyCreate = (server: McpServer, env: Partial<DotEnv>
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to create the private key in"),
+    applicationUniqueName: z.string().describe("Unique name of the application to create the private key in"),
     name: z.string().describe("Name of the private key"),
     privateKeyType: z
       .enum(["ACCESSIBLE_ECDSA_P256", "HD_ECDSA_P256", "HSM_ECDSA_P256"])
@@ -43,29 +41,25 @@ export const platformPrivateKeyCreate = (server: McpServer, env: Partial<DotEnv>
       .describe("Unique names of blockchain nodes to associate with the private key"),
   });
 
-  server.tool(
-    "platform-private-key-create",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const parsed = schema.parse(params);
-      const privateKey = await client.privateKey.create({
-        applicationUniqueName: parsed.applicationUniqueName,
-        name: parsed.name,
-        privateKeyType: parsed.privateKeyType,
-        blockchainNodeUniqueNames: parsed.blockchainNodeUniqueNames,
-      });
+  server.tool("platform-private-key-create", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const parsed = schema.parse(params);
+    const privateKey = await client.privateKey.create({
+      applicationUniqueName: parsed.applicationUniqueName,
+      name: parsed.name,
+      privateKeyType: parsed.privateKeyType,
+      blockchainNodeUniqueNames: parsed.blockchainNodeUniqueNames,
+    });
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Private Key Created",
-            description: `Created private key: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(privateKey, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Private Key Created",
+          description: `Created private key: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(privateKey, null, 2),
+        },
+      ],
+    };
+  });
 };

@@ -24,11 +24,8 @@ export const portalMutation = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({ mutationName: z.string() });
 
   // Tool for GraphQL mutations
-  server.tool(
-    "portal-mutation",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { mutationName } = schema.parse(params);
+  server.tool("portal-mutation", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { mutationName } = schema.parse(params);
     try {
       if (!mutationName) {
         return {
@@ -89,6 +86,5 @@ export const portalMutation = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

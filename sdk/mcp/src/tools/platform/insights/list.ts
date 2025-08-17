@@ -30,28 +30,22 @@ export const platformInsightsList = (server: McpServer, env: Partial<DotEnv>, pa
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to list insights from"),
+    applicationUniqueName: z.string().describe("Unique name of the application to list insights from"),
   });
 
-  server.tool(
-    "platform-insights-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const insightsList = await client.insights.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Insights List",
-            description: `List of insights in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(insightsList, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-insights-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const insightsList = await client.insights.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Insights List",
+          description: `List of insights in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(insightsList, null, 2),
+        },
+      ],
+    };
+  });
 };

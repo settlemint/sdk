@@ -30,28 +30,22 @@ export const platformLoadBalancerRestart = (server: McpServer, env: Partial<DotE
   });
 
   const schema = z.object({
-    loadBalancerUniqueName: z
-      .string()
-      .describe("Unique name of the load balancer to restart"),
+    loadBalancerUniqueName: z.string().describe("Unique name of the load balancer to restart"),
   });
 
-  server.tool(
-    "platform-load-balancer-restart",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { loadBalancerUniqueName } = schema.parse(params);
-      const loadBalancer = await client.loadBalancer.restart(loadBalancerUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Load Balancer Restarted",
-            description: `Restarted load balancer: ${loadBalancerUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(loadBalancer, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-load-balancer-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { loadBalancerUniqueName } = schema.parse(params);
+    const loadBalancer = await client.loadBalancer.restart(loadBalancerUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Load Balancer Restarted",
+          description: `Restarted load balancer: ${loadBalancerUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(loadBalancer, null, 2),
+        },
+      ],
+    };
+  });
 };

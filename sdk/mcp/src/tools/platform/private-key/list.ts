@@ -30,28 +30,22 @@ export const platformPrivateKeyList = (server: McpServer, env: Partial<DotEnv>, 
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to list private keys from"),
+    applicationUniqueName: z.string().describe("Unique name of the application to list private keys from"),
   });
 
-  server.tool(
-    "platform-private-key-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const privateKeys = await client.privateKey.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Private Key List",
-            description: `List of private keys in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(privateKeys, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-private-key-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const privateKeys = await client.privateKey.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Private Key List",
+          description: `List of private keys in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(privateKeys, null, 2),
+        },
+      ],
+    };
+  });
 };

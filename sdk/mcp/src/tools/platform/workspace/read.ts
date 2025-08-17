@@ -33,23 +33,19 @@ export const platformWorkspaceRead = (server: McpServer, env: Partial<DotEnv>, p
     workspaceUniqueName: z.string().describe("Unique name of the workspace to read"),
   });
 
-  server.tool(
-    "platform-workspace-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { workspaceUniqueName } = schema.parse(params);
-      const workspace = await client.workspace.read(workspaceUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Workspace Details",
-            description: `Details for workspace: ${workspaceUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(workspace, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-workspace-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { workspaceUniqueName } = schema.parse(params);
+    const workspace = await client.workspace.read(workspaceUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Workspace Details",
+          description: `Details for workspace: ${workspaceUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(workspace, null, 2),
+        },
+      ],
+    };
+  });
 };

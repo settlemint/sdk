@@ -31,23 +31,19 @@ export const platformWorkspaceList = (server: McpServer, env: Partial<DotEnv>, p
 
   const schema = z.object({});
 
-  server.tool(
-    "platform-workspace-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
-      const workspaces = await client.workspace.list();
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Workspace List",
-            description: "List of workspaces",
-            mimeType: "application/json",
-            text: JSON.stringify(workspaces, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-workspace-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
+    const workspaces = await client.workspace.list();
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Workspace List",
+          description: "List of workspaces",
+          mimeType: "application/json",
+          text: JSON.stringify(workspaces, null, 2),
+        },
+      ],
+    };
+  });
 };

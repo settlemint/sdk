@@ -135,7 +135,7 @@ function extractFetchAllFields(
           for (const arg of node.arguments) {
             if (arg.name.value === FIRST_ARG) {
               if (arg.value.kind === Kind.INT) {
-                firstValue = Number.parseInt(arg.value.value);
+                firstValue = Number.parseInt(arg.value.value, 10);
               } else if (arg.value.kind === Kind.VARIABLE && variables) {
                 const varName = arg.value.name.value;
                 const varValue = (variables as Record<string, unknown>)[varName];
@@ -143,7 +143,7 @@ function extractFetchAllFields(
               }
             } else if (arg.name.value === SKIP_ARG) {
               if (arg.value.kind === Kind.INT) {
-                skipValue = Number.parseInt(arg.value.value);
+                skipValue = Number.parseInt(arg.value.value, 10);
               } else if (arg.value.kind === Kind.VARIABLE && variables) {
                 const varName = arg.value.name.value;
                 const varValue = (variables as Record<string, unknown>)[varName];

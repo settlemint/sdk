@@ -33,23 +33,19 @@ export const platformPrivateKeyRead = (server: McpServer, env: Partial<DotEnv>, 
     privateKeyUniqueName: z.string().describe("Unique name of the private key to read"),
   });
 
-  server.tool(
-    "platform-private-key-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { privateKeyUniqueName } = schema.parse(params);
-      const privateKey = await client.privateKey.read(privateKeyUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Private Key Details",
-            description: `Details for private key: ${privateKeyUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(privateKey, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-private-key-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { privateKeyUniqueName } = schema.parse(params);
+    const privateKey = await client.privateKey.read(privateKeyUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Private Key Details",
+          description: `Details for private key: ${privateKeyUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(privateKey, null, 2),
+        },
+      ],
+    };
+  });
 };

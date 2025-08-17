@@ -30,28 +30,22 @@ export const platformCustomDeploymentList = (server: McpServer, env: Partial<Dot
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to list custom deployments from"),
+    applicationUniqueName: z.string().describe("Unique name of the application to list custom deployments from"),
   });
 
-  server.tool(
-    "platform-custom-deployment-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const customDeployments = await client.customDeployment.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Custom Deployment List",
-            description: `List of custom deployments in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(customDeployments, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-custom-deployment-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const customDeployments = await client.customDeployment.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Custom Deployment List",
+          description: `List of custom deployments in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(customDeployments, null, 2),
+        },
+      ],
+    };
+  });
 };

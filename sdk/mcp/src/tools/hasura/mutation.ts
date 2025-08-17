@@ -33,11 +33,8 @@ export const hasuraMutation = (server: McpServer, env: Partial<DotEnv>) => {
   });
 
   // Tool for GraphQL mutations
-  server.tool(
-    "hasura-mutation",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { mutationName } = schema.parse(params);
+  server.tool("hasura-mutation", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { mutationName } = schema.parse(params);
     try {
       if (!mutationName) {
         return {
@@ -98,6 +95,5 @@ export const hasuraMutation = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

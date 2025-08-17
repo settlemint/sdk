@@ -30,30 +30,22 @@ export const platformIntegrationToolRead = (server: McpServer, env: Partial<DotE
   });
 
   const schema = z.object({
-    integrationToolUniqueName: z
-      .string()
-      .describe("Unique name of the integration tool to read"),
+    integrationToolUniqueName: z.string().describe("Unique name of the integration tool to read"),
   });
 
-  server.tool(
-    "platform-integration-tool-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { integrationToolUniqueName } = schema.parse(params);
-      const integrationTool = await client.integrationTool.read(
-        integrationToolUniqueName,
-      );
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Integration Tool Details",
-            description: `Details for integration tool: ${integrationToolUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(integrationTool, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-integration-tool-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { integrationToolUniqueName } = schema.parse(params);
+    const integrationTool = await client.integrationTool.read(integrationToolUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Integration Tool Details",
+          description: `Details for integration tool: ${integrationToolUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(integrationTool, null, 2),
+        },
+      ],
+    };
+  });
 };

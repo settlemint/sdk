@@ -22,11 +22,8 @@ export const portalMutations = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({});
 
   // Tool for GraphQL mutations
-  server.tool(
-    "portal-mutations",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("portal-mutations", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       const { mutationNames } = await fetchProcessedSchema(portalGraphqlEndpoint, accessToken);
 
@@ -52,6 +49,5 @@ export const portalMutations = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

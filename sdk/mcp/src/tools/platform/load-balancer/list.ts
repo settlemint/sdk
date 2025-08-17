@@ -30,28 +30,22 @@ export const platformLoadBalancerList = (server: McpServer, env: Partial<DotEnv>
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to list load balancers from"),
+    applicationUniqueName: z.string().describe("Unique name of the application to list load balancers from"),
   });
 
-  server.tool(
-    "platform-load-balancer-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const loadBalancers = await client.loadBalancer.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Load Balancer List",
-            description: `List of load balancers in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(loadBalancers, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-load-balancer-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const loadBalancers = await client.loadBalancer.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Load Balancer List",
+          description: `List of load balancers in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(loadBalancers, null, 2),
+        },
+      ],
+    };
+  });
 };

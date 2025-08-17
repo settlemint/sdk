@@ -33,23 +33,19 @@ export const platformStorageRead = (server: McpServer, env: Partial<DotEnv>, pat
     storageUniqueName: z.string().describe("Unique name of the storage to read"),
   });
 
-  server.tool(
-    "platform-storage-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { storageUniqueName } = schema.parse(params);
-      const storage = await client.storage.read(storageUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Storage Details",
-            description: `Details for storage: ${storageUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(storage, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-storage-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { storageUniqueName } = schema.parse(params);
+    const storage = await client.storage.read(storageUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Storage Details",
+          description: `Details for storage: ${storageUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(storage, null, 2),
+        },
+      ],
+    };
+  });
 };

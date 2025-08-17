@@ -30,11 +30,8 @@ export const hasuraQuery = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({ queryName: z.string() });
 
   // Tool for GraphQL queries
-  server.tool(
-    "hasura-query",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { queryName } = schema.parse(params);
+  server.tool("hasura-query", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { queryName } = schema.parse(params);
     try {
       if (!queryName) {
         return {
@@ -95,6 +92,5 @@ export const hasuraQuery = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

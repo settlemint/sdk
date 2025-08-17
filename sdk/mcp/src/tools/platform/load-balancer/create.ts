@@ -30,51 +30,41 @@ export const platformLoadBalancerCreate = (server: McpServer, env: Partial<DotEn
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to create the load balancer in"),
+    applicationUniqueName: z.string().describe("Unique name of the application to create the load balancer in"),
     name: z.string().describe("Name of the load balancer"),
-    type: z.enum(["DEDICATED", "SHARED"]).describe(
-      "Type of the load balancer (DEDICATED or SHARED)",
-    ),
+    type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the load balancer (DEDICATED or SHARED)"),
     size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the load balancer"),
     provider: z.string().describe("Provider for the load balancer"),
     region: z.string().describe("Region for the load balancer"),
-    blockchainNetworkUniqueName: z
-      .string()
-      .describe("Unique name of the blockchain network for the load balancer"),
+    blockchainNetworkUniqueName: z.string().describe("Unique name of the blockchain network for the load balancer"),
     connectedNodesUniqueNames: z
       .array(z.string())
       .describe("Unique names of the nodes to connect to the load balancer"),
   });
 
-  server.tool(
-    "platform-load-balancer-create",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const parsed = schema.parse(params);
-      const loadBalancer = await client.loadBalancer.create({
-        applicationUniqueName: parsed.applicationUniqueName,
-        name: parsed.name,
-        type: parsed.type,
-        size: parsed.size,
-        provider: parsed.provider,
-        region: parsed.region,
-        blockchainNetworkUniqueName: parsed.blockchainNetworkUniqueName,
-        connectedNodesUniqueNames: parsed.connectedNodesUniqueNames,
-      });
+  server.tool("platform-load-balancer-create", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const parsed = schema.parse(params);
+    const loadBalancer = await client.loadBalancer.create({
+      applicationUniqueName: parsed.applicationUniqueName,
+      name: parsed.name,
+      type: parsed.type,
+      size: parsed.size,
+      provider: parsed.provider,
+      region: parsed.region,
+      blockchainNetworkUniqueName: parsed.blockchainNetworkUniqueName,
+      connectedNodesUniqueNames: parsed.connectedNodesUniqueNames,
+    });
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Load Balancer Created",
-            description: `Created load balancer: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(loadBalancer, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Load Balancer Created",
+          description: `Created load balancer: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(loadBalancer, null, 2),
+        },
+      ],
+    };
+  });
 };

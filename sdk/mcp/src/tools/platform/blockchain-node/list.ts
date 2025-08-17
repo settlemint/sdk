@@ -30,28 +30,22 @@ export const platformBlockchainNodeList = (server: McpServer, env: Partial<DotEn
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to list blockchain nodes from"),
+    applicationUniqueName: z.string().describe("Unique name of the application to list blockchain nodes from"),
   });
 
-  server.tool(
-    "platform-blockchain-node-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName } = schema.parse(params);
-      const nodes = await client.blockchainNode.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Blockchain Node List",
-            description: `List of blockchain nodes in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(nodes, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-blockchain-node-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const nodes = await client.blockchainNode.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Blockchain Node List",
+          description: `List of blockchain nodes in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(nodes, null, 2),
+        },
+      ],
+    };
+  });
 };
