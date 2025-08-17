@@ -28,6 +28,8 @@ jobs:
 
       - name: Load secrets
         uses: 1password/load-secrets-action@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
+        with:
+          export-env: true
         env:
           E2E_GITHUB_TOKEN: "op://platform/SDK E2E/github-token"
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
