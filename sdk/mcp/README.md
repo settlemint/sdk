@@ -357,7 +357,7 @@ Every MCP tool under `src/tools` registers a JSON Schema describing its expected
 | `thegraph-queries` | `{}` |
 | `thegraph-query` | `{ queryName: string }` |
 
-Platform tools (workspace, application, blockchain-network, etc.) follow the same pattern—each file in `src/tools/platform/**` defines a Zod schema that is converted to JSON Schema and passed to `server.tool` as `inputSchema`.
+Platform tools (e.g., `platform-workspace-list`, `platform-application-create`) also follow this pattern. Each tool in `src/tools/platform/**` defines a Zod schema that is converted to a JSON Schema and exposed as `inputSchema`. Due to their complexity and number, they are not all listed here, but you can find their definitions in the respective source files.
 
 ## Contributing
 
