@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing private keys
@@ -28,24 +29,23 @@ export const platformPrivateKeyList = (server: McpServer, env: Partial<DotEnv>, 
     instance: instance,
   });
 
-  server.tool(
-    "platform-private-key-list",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to list private keys from"),
-    },
-    async (params) => {
-      const privateKeys = await client.privateKey.list(params.applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Private Key List",
-            description: `List of private keys in application: ${params.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(privateKeys, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  const schema = z.object({
+    applicationUniqueName: z.string().describe("Unique name of the application to list private keys from"),
+  });
+
+  server.tool("platform-private-key-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const privateKeys = await client.privateKey.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Private Key List",
+          description: `List of private keys in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(privateKeys, null, 2),
+        },
+      ],
+    };
+  });
 };

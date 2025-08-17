@@ -2,6 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import type { GraphQLField } from "graphql";
 import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 import { fetchProcessedSchema } from "@/utils/schema-processor";
 import { generateFieldSDL } from "@/utils/sdl";
 
@@ -26,8 +27,11 @@ export const hasuraQuery = (server: McpServer, env: Partial<DotEnv>) => {
     throw new Error("Access token not found in environment variables. Please set SETTLEMINT_ACCESS_TOKEN.");
   }
 
+  const schema = z.object({ queryName: z.string() });
+
   // Tool for GraphQL queries
-  server.tool("hasura-query", { queryName: z.string() }, async ({ queryName }) => {
+  server.tool("hasura-query", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { queryName } = schema.parse(params);
     try {
       if (!queryName) {
         return {

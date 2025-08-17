@@ -43,12 +43,13 @@
     "@commander-js/extra-typings": "14.0.0",
     "@graphql-tools/load": "8.1.2",
     "@graphql-tools/url-loader": "8.0.33",
-    "@modelcontextprotocol/sdk": "1.17.2",
+    "@modelcontextprotocol/sdk": "1.17.3",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "commander": "14.0.0",
     "graphql": "16.11.0",
-    "zod": "^4"
+    "zod": "^4",
+    "zod-to-json-schema": "^3.23.0"
   },
   "devDependencies": {},
   "peerDependencies": {},

@@ -1,6 +1,8 @@
 import { fetchProcessedSchema } from "@/utils/schema-processor";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const hasuraQueries = (server: McpServer, env: Partial<DotEnv>) => {
   const hasuraEndpoint = env.SETTLEMINT_HASURA_ENDPOINT;
@@ -23,8 +25,11 @@ export const hasuraQueries = (server: McpServer, env: Partial<DotEnv>) => {
     throw new Error("Access token not found in environment variables. Please set SETTLEMINT_ACCESS_TOKEN.");
   }
 
+  const schema = z.object({});
+
   // Tool for GraphQL queries
-  server.tool("hasura-queries", async () => {
+  server.tool("hasura-queries", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       const { queryNames } = await fetchProcessedSchema(hasuraEndpoint, accessToken, hasuraAdminSecret);
 
