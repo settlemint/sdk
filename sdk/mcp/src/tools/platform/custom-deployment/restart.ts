@@ -30,28 +30,22 @@ export const platformCustomDeploymentRestart = (server: McpServer, env: Partial<
   });
 
   const schema = z.object({
-    customDeploymentUniqueName: z.string().describe(
-      "Unique name of the custom deployment to restart",
-    ),
+    customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to restart"),
   });
 
-  server.tool(
-    "platform-custom-deployment-restart",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { customDeploymentUniqueName } = schema.parse(params);
-      const customDeployment = await client.customDeployment.restart(customDeploymentUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Custom Deployment Restarted",
-            description: `Restarted custom deployment: ${customDeploymentUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(customDeployment, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-custom-deployment-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { customDeploymentUniqueName } = schema.parse(params);
+    const customDeployment = await client.customDeployment.restart(customDeploymentUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Custom Deployment Restarted",
+          description: `Restarted custom deployment: ${customDeploymentUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(customDeployment, null, 2),
+        },
+      ],
+    };
+  });
 };

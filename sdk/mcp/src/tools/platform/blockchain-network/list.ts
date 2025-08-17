@@ -36,32 +36,28 @@ export const platformBlockchainNetworkList = (server: McpServer, env: Partial<Do
       .optional(),
   });
 
-  server.tool(
-    "platform-blockchain-network-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { applicationUniqueName: provided } = schema.parse(params);
-      // Prioritize environment variable over LLM-provided parameter
-      const applicationUniqueName = env.SETTLEMINT_APPLICATION || provided;
+  server.tool("platform-blockchain-network-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName: provided } = schema.parse(params);
+    // Prioritize environment variable over LLM-provided parameter
+    const applicationUniqueName = env.SETTLEMINT_APPLICATION || provided;
 
-      if (!applicationUniqueName) {
-        throw new Error(
-          "Application unique name is required. Set SETTLEMINT_APPLICATION environment variable or provide applicationUniqueName parameter.",
-        );
-      }
+    if (!applicationUniqueName) {
+      throw new Error(
+        "Application unique name is required. Set SETTLEMINT_APPLICATION environment variable or provide applicationUniqueName parameter.",
+      );
+    }
 
-      const networks = await client.blockchainNetwork.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Blockchain Network List",
-            description: `List of blockchain networks in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(networks, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    const networks = await client.blockchainNetwork.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Blockchain Network List",
+          description: `List of blockchain networks in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(networks, null, 2),
+        },
+      ],
+    };
+  });
 };

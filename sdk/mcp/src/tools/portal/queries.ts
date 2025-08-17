@@ -22,11 +22,8 @@ export const portalQueries = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({});
 
   // Tool for GraphQL queries
-  server.tool(
-    "portal-queries",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("portal-queries", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       const { queryNames } = await fetchProcessedSchema(portalGraphqlEndpoint, accessToken);
 
@@ -52,6 +49,5 @@ export const portalQueries = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

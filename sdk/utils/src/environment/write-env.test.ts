@@ -11,7 +11,7 @@ const ENV_PROD_FILE = join(TEST_DIR, ".env.production");
 const ENV_LOCAL_FILE = join(TEST_DIR, ".env.local");
 
 // Needed so it loads the correct environment variables
-// @ts-ignore
+// @ts-expect-error
 process.env.NODE_ENV = "development";
 
 describe("writeEnv", () => {

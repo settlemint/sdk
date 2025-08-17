@@ -33,23 +33,19 @@ export const platformStorageRestart = (server: McpServer, env: Partial<DotEnv>, 
     storageUniqueName: z.string().describe("Unique name of the storage to restart"),
   });
 
-  server.tool(
-    "platform-storage-restart",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { storageUniqueName } = schema.parse(params);
-      const storage = await client.storage.restart(storageUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Storage Restarted",
-            description: `Restarted storage: ${storageUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(storage, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-storage-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { storageUniqueName } = schema.parse(params);
+    const storage = await client.storage.restart(storageUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Storage Restarted",
+          description: `Restarted storage: ${storageUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(storage, null, 2),
+        },
+      ],
+    };
+  });
 };

@@ -30,13 +30,9 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to create the insights in"),
+    applicationUniqueName: z.string().describe("Unique name of the application to create the insights in"),
     name: z.string().describe("Name of the insights"),
-    type: z.enum(["DEDICATED", "SHARED"]).describe(
-      "Type of the insights (DEDICATED or SHARED)",
-    ),
+    type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the insights (DEDICATED or SHARED)"),
     size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the insights"),
     provider: z.string().describe("Provider for the insights"),
     region: z.string().describe("Region for the insights"),
@@ -46,9 +42,7 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
     blockchainNodeUniqueName: z
       .string()
       .optional()
-      .describe(
-        "Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName)",
-      ),
+      .describe("Unique name of the blockchain node to connect to (mutually exclusive with loadBalancerUniqueName)"),
     loadBalancerUniqueName: z
       .string()
       .optional()
@@ -57,38 +51,34 @@ export const platformInsightsCreate = (server: McpServer, env: Partial<DotEnv>, 
       ),
   });
 
-  server.tool(
-    "platform-insights-create",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const parsed = schema.parse(params);
-      if (parsed.blockchainNodeUniqueName && parsed.loadBalancerUniqueName) {
-        throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
-      }
+  server.tool("platform-insights-create", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const parsed = schema.parse(params);
+    if (parsed.blockchainNodeUniqueName && parsed.loadBalancerUniqueName) {
+      throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
+    }
 
-      const insights = await client.insights.create({
-        applicationUniqueName: parsed.applicationUniqueName,
-        name: parsed.name,
-        type: parsed.type,
-        size: parsed.size,
-        provider: parsed.provider,
-        region: parsed.region,
-        insightsCategory: parsed.insightsCategory,
-        blockchainNodeUniqueName: parsed.blockchainNodeUniqueName,
-        loadBalancerUniqueName: parsed.loadBalancerUniqueName,
-      });
+    const insights = await client.insights.create({
+      applicationUniqueName: parsed.applicationUniqueName,
+      name: parsed.name,
+      type: parsed.type,
+      size: parsed.size,
+      provider: parsed.provider,
+      region: parsed.region,
+      insightsCategory: parsed.insightsCategory,
+      blockchainNodeUniqueName: parsed.blockchainNodeUniqueName,
+      loadBalancerUniqueName: parsed.loadBalancerUniqueName,
+    });
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Insights Created",
-            description: `Created insights: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(insights, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Insights Created",
+          description: `Created insights: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(insights, null, 2),
+        },
+      ],
+    };
+  });
 };

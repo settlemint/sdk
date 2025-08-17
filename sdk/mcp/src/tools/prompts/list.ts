@@ -19,11 +19,8 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 export const promptsList = (server: McpServer, _env: Partial<DotEnv>) => {
   const schema = z.object({});
 
-  server.tool(
-    "prompts-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("prompts-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       // Get the prompts directory path
       const promptsDir = path.resolve(__dirname, "../../prompts");
@@ -86,6 +83,5 @@ export const promptsList = (server: McpServer, _env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

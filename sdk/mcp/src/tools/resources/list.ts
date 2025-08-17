@@ -19,11 +19,8 @@ import { zodToJsonSchema } from "zod-to-json-schema";
 export const resourcesList = (server: McpServer, _env: Partial<DotEnv>) => {
   const schema = z.object({});
 
-  server.tool(
-    "resources-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("resources-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       // Get the resources directory path
       const resourcesDir = path.resolve(__dirname, "../../resources");
@@ -67,6 +64,5 @@ export const resourcesList = (server: McpServer, _env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

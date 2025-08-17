@@ -33,23 +33,19 @@ export const platformBlockchainNodeRestart = (server: McpServer, env: Partial<Do
     nodeUniqueName: z.string().describe("Unique name of the blockchain node to restart"),
   });
 
-  server.tool(
-    "platform-blockchain-node-restart",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { nodeUniqueName } = schema.parse(params);
-      const node = await client.blockchainNode.restart(nodeUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Blockchain Node Restarted",
-            description: `Restarted blockchain node: ${nodeUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(node, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-blockchain-node-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { nodeUniqueName } = schema.parse(params);
+    const node = await client.blockchainNode.restart(nodeUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Blockchain Node Restarted",
+          description: `Restarted blockchain node: ${nodeUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(node, null, 2),
+        },
+      ],
+    };
+  });
 };

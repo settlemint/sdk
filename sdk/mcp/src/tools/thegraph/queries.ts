@@ -30,11 +30,8 @@ export const thegraphQueries = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({});
 
   // Tool for GraphQL queries
-  server.tool(
-    "thegraph-queries",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("thegraph-queries", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       const { queryNames } = await fetchProcessedSchema(thegraphGraphqlEndpoint, accessToken);
 
@@ -60,6 +57,5 @@ export const thegraphQueries = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

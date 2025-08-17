@@ -28,11 +28,8 @@ export const hasuraQueries = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({});
 
   // Tool for GraphQL queries
-  server.tool(
-    "hasura-queries",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("hasura-queries", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       const { queryNames } = await fetchProcessedSchema(hasuraEndpoint, accessToken, hasuraAdminSecret);
 
@@ -58,6 +55,5 @@ export const hasuraQueries = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

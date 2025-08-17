@@ -30,13 +30,9 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
   });
 
   const schema = z.object({
-    applicationUniqueName: z
-      .string()
-      .describe("Unique name of the application to create the middleware in"),
+    applicationUniqueName: z.string().describe("Unique name of the application to create the middleware in"),
     name: z.string().describe("Name of the middleware"),
-    type: z.enum(["DEDICATED", "SHARED"]).describe(
-      "Type of the middleware (DEDICATED or SHARED)",
-    ),
+    type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the middleware (DEDICATED or SHARED)"),
     size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the middleware"),
     provider: z.string().describe("Provider for the middleware"),
     region: z.string().describe("Region for the middleware"),
@@ -57,38 +53,34 @@ export const platformMiddlewareCreate = (server: McpServer, env: Partial<DotEnv>
       ),
   });
 
-  server.tool(
-    "platform-middleware-create",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const parsed = schema.parse(params);
-      if (parsed.blockchainNodeUniqueName && parsed.loadBalancerUniqueName) {
-        throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
-      }
+  server.tool("platform-middleware-create", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const parsed = schema.parse(params);
+    if (parsed.blockchainNodeUniqueName && parsed.loadBalancerUniqueName) {
+      throw new Error("Only one of 'blockchainNodeUniqueName' and 'loadBalancerUniqueName' may be provided");
+    }
 
-      const middleware = await client.middleware.create({
-        applicationUniqueName: parsed.applicationUniqueName,
-        name: parsed.name,
-        type: parsed.type,
-        size: parsed.size,
-        provider: parsed.provider,
-        region: parsed.region,
-        interface: parsed.interface,
-        blockchainNodeUniqueName: parsed.blockchainNodeUniqueName,
-        loadBalancerUniqueName: parsed.loadBalancerUniqueName,
-      });
+    const middleware = await client.middleware.create({
+      applicationUniqueName: parsed.applicationUniqueName,
+      name: parsed.name,
+      type: parsed.type,
+      size: parsed.size,
+      provider: parsed.provider,
+      region: parsed.region,
+      interface: parsed.interface,
+      blockchainNodeUniqueName: parsed.blockchainNodeUniqueName,
+      loadBalancerUniqueName: parsed.loadBalancerUniqueName,
+    });
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Middleware Created",
-            description: `Created middleware: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(middleware, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Middleware Created",
+          description: `Created middleware: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(middleware, null, 2),
+        },
+      ],
+    };
+  });
 };

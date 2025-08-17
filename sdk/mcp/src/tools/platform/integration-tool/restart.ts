@@ -30,30 +30,22 @@ export const platformIntegrationToolRestart = (server: McpServer, env: Partial<D
   });
 
   const schema = z.object({
-    integrationToolUniqueName: z
-      .string()
-      .describe("Unique name of the integration tool to restart"),
+    integrationToolUniqueName: z.string().describe("Unique name of the integration tool to restart"),
   });
 
-  server.tool(
-    "platform-integration-tool-restart",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { integrationToolUniqueName } = schema.parse(params);
-      const integrationTool = await client.integrationTool.restart(
-        integrationToolUniqueName,
-      );
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Integration Tool Restarted",
-            description: `Restarted integration tool: ${integrationToolUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(integrationTool, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-integration-tool-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { integrationToolUniqueName } = schema.parse(params);
+    const integrationTool = await client.integrationTool.restart(integrationToolUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Integration Tool Restarted",
+          description: `Restarted integration tool: ${integrationToolUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(integrationTool, null, 2),
+        },
+      ],
+    };
+  });
 };

@@ -21,57 +21,53 @@ export const resourcesGet = (server: McpServer, _env: Partial<DotEnv>) => {
     name: z.string().describe("The name of the resource file without extension"),
   });
 
-  server.tool(
-    "resources-get",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { name } = schema.parse(params);
-      try {
-        // Get the resources directory path
-        const resourcesDir = path.resolve(__dirname, "../../resources");
-        const resourcePath = path.join(resourcesDir, `${name}.ts`);
+  server.tool("resources-get", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { name } = schema.parse(params);
+    try {
+      // Get the resources directory path
+      const resourcesDir = path.resolve(__dirname, "../../resources");
+      const resourcePath = path.join(resourcesDir, `${name}.ts`);
 
-        // Read the file content directly without separate access check
-        const fileContent = await fs.readFile(resourcePath, "utf-8");
+      // Read the file content directly without separate access check
+      const fileContent = await fs.readFile(resourcePath, "utf-8");
 
+      return {
+        content: [
+          {
+            type: "text",
+            name: `${name} Resource`,
+            description: `Content of the ${name} resource`,
+            mimeType: "text/typescript",
+            text: fileContent,
+          },
+        ],
+      };
+    } catch (error) {
+      // Handle file not found error specifically
+      if (error instanceof Error && "code" in error && error.code === "ENOENT") {
         return {
           content: [
             {
               type: "text",
-              name: `${name} Resource`,
-              description: `Content of the ${name} resource`,
-              mimeType: "text/typescript",
-              text: fileContent,
-            },
-          ],
-        };
-      } catch (error) {
-        // Handle file not found error specifically
-        if (error instanceof Error && "code" in error && error.code === "ENOENT") {
-          return {
-            content: [
-              {
-                type: "text",
-                name: "Resource Not Found",
-                description: `Resource '${name}' not found`,
-                mimeType: "text/plain",
-                text: `Resource '${name}' does not exist. Use the resources-list tool to see available resources.`,
-              },
-            ],
-          };
-        }
-        return {
-          content: [
-            {
-              type: "text",
-              name: "Error",
-              description: "Error getting resource",
+              name: "Resource Not Found",
+              description: `Resource '${name}' not found`,
               mimeType: "text/plain",
-              text: `Error: ${error instanceof Error ? error.message : String(error)}`,
+              text: `Resource '${name}' does not exist. Use the resources-list tool to see available resources.`,
             },
           ],
         };
       }
-    },
-  );
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Error",
+            description: "Error getting resource",
+            mimeType: "text/plain",
+            text: `Error: ${error instanceof Error ? error.message : String(error)}`,
+          },
+        ],
+      };
+    }
+  });
 };

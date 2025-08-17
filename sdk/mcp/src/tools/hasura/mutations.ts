@@ -28,11 +28,8 @@ export const hasuraMutations = (server: McpServer, env: Partial<DotEnv>) => {
   const schema = z.object({});
 
   // Tool for GraphQL mutations
-  server.tool(
-    "hasura-mutations",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      schema.parse(params);
+  server.tool("hasura-mutations", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     try {
       const { mutationNames } = await fetchProcessedSchema(hasuraEndpoint, accessToken, hasuraAdminSecret);
 
@@ -58,6 +55,5 @@ export const hasuraMutations = (server: McpServer, env: Partial<DotEnv>) => {
         ],
       };
     }
-    },
-  );
+  });
 };

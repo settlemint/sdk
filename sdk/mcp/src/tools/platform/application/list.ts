@@ -30,28 +30,22 @@ export const platformApplicationList = (server: McpServer, env: Partial<DotEnv>,
   });
 
   const schema = z.object({
-    workspaceUniqueName: z
-      .string()
-      .describe("Unique name of the workspace to list applications from"),
+    workspaceUniqueName: z.string().describe("Unique name of the workspace to list applications from"),
   });
 
-  server.tool(
-    "platform-application-list",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { workspaceUniqueName } = schema.parse(params);
-      const applications = await client.application.list(workspaceUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Application List",
-            description: `List of applications in workspace: ${workspaceUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(applications, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-application-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { workspaceUniqueName } = schema.parse(params);
+    const applications = await client.application.list(workspaceUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Application List",
+          description: `List of applications in workspace: ${workspaceUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(applications, null, 2),
+        },
+      ],
+    };
+  });
 };

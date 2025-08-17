@@ -33,23 +33,19 @@ export const platformBlockchainNodeRead = (server: McpServer, env: Partial<DotEn
     blockchainNodeUniqueName: z.string().describe("Unique name of the blockchain node to read"),
   });
 
-  server.tool(
-    "platform-blockchain-node-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { blockchainNodeUniqueName } = schema.parse(params);
-      const node = await client.blockchainNode.read(blockchainNodeUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Blockchain Node Details",
-            description: `Details for blockchain node: ${blockchainNodeUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(node, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-blockchain-node-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { blockchainNodeUniqueName } = schema.parse(params);
+    const node = await client.blockchainNode.read(blockchainNodeUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Blockchain Node Details",
+          description: `Details for blockchain node: ${blockchainNodeUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(node, null, 2),
+        },
+      ],
+    };
+  });
 };

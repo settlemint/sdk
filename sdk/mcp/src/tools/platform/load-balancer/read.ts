@@ -30,28 +30,22 @@ export const platformLoadBalancerRead = (server: McpServer, env: Partial<DotEnv>
   });
 
   const schema = z.object({
-    loadBalancerUniqueName: z
-      .string()
-      .describe("Unique name of the load balancer to read"),
+    loadBalancerUniqueName: z.string().describe("Unique name of the load balancer to read"),
   });
 
-  server.tool(
-    "platform-load-balancer-read",
-    { inputSchema: zodToJsonSchema(schema) },
-    async (params) => {
-      const { loadBalancerUniqueName } = schema.parse(params);
-      const loadBalancer = await client.loadBalancer.read(loadBalancerUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Load Balancer Details",
-            description: `Details for load balancer: ${loadBalancerUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(loadBalancer, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-load-balancer-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { loadBalancerUniqueName } = schema.parse(params);
+    const loadBalancer = await client.loadBalancer.read(loadBalancerUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Load Balancer Details",
+          description: `Details for load balancer: ${loadBalancerUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(loadBalancer, null, 2),
+        },
+      ],
+    };
+  });
 };
