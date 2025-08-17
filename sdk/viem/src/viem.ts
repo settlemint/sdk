@@ -11,11 +11,7 @@
 
 import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
-import {
-  ApplicationAccessTokenSchema,
-  UrlOrPathSchema,
-  validate,
-} from "@settlemint/sdk-utils/validation";
+import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import {
   createPublicClient,
   createWalletClient,
@@ -106,16 +102,14 @@ const chainCache = new LRUCache<string, ViemChain>(100);
  * SECURITY CONSIDERATION: Public clients contain auth tokens in transport config.
  * Cache key generation ensures tokens are not leaked between different access contexts.
  */
-const publicClientCache = new LRUCache<
-  string,
-  PublicClient<Transport, ViemChain>
->(50);
+const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain>>(50);
 
 /**
  * DESIGN PATTERN: Factory caching rather than client instance caching.
  * WHY: Wallet clients need runtime verification parameters that can't be pre-cached.
  * BENEFIT: Amortizes chain resolution and transport configuration setup costs.
  */
+// biome-ignore lint/suspicious/noExplicitAny: Factory function type varies based on wallet client extensions
 const walletClientFactoryCache = new LRUCache<string, any>(50);
 
 /**
@@ -148,8 +142,8 @@ function createCacheKey(options: Partial<ClientOptions>): string {
 
   // EDGE CASE: Serialize only the serializable parts of httpTransportConfig
   if (options.httpTransportConfig) {
-    const { onFetchRequest, onFetchResponse, ...serializableConfig } =
-      options.httpTransportConfig;
+    // biome-ignore lint/correctness/noUnusedVariables: Destructuring to exclude functions from serialization
+    const { onFetchRequest, onFetchResponse, ...serializableConfig } = options.httpTransportConfig;
     if (Object.keys(serializableConfig).length > 0) {
       keyObject.httpTransportConfig = serializableConfig;
     }
@@ -211,10 +205,7 @@ export const ClientOptionsSchema = z.object({
 /**
  * Type representing the validated client options.
  */
-export type ClientOptions = Omit<
-  z.infer<typeof ClientOptionsSchema>,
-  "httpTransportConfig"
-> & {
+export type ClientOptions = Omit<z.infer<typeof ClientOptionsSchema>, "httpTransportConfig"> & {
   httpTransportConfig?: HttpTransportConfig;
 };
 
@@ -254,10 +245,7 @@ export type ClientOptions = Omit<
  */
 export const getPublicClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions: ClientOptions = validate(
-    ClientOptionsSchema,
-    options,
-  );
+  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
 
   // PERFORMANCE: Check cache first to avoid expensive client creation
   const cacheKey = createCacheKey(validatedOptions);
@@ -267,12 +255,9 @@ export const getPublicClient = (options: ClientOptions) => {
   }
 
   // SECURITY: Build headers with undefined value filtering
-  const headers = buildHeaders(
-    validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
-    {
-      "x-auth-token": validatedOptions.accessToken,
-    },
-  );
+  const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+    "x-auth-token": validatedOptions.accessToken,
+  });
 
   // CONFIGURATION: Create new client with optimized settings
   const client = createPublicClient({
@@ -375,10 +360,7 @@ export interface WalletVerificationOptions {
  */
 export const getWalletClient = (options: ClientOptions) => {
   ensureServer();
-  const validatedOptions: ClientOptions = validate(
-    ClientOptionsSchema,
-    options,
-  );
+  const validatedOptions: ClientOptions = validate(ClientOptionsSchema, options);
 
   // PERFORMANCE: Check cache first for the factory function
   const cacheKey = createCacheKey(validatedOptions);
@@ -395,9 +377,7 @@ export const getWalletClient = (options: ClientOptions) => {
   });
 
   // DESIGN PATTERN: Create factory function that captures static config but allows runtime verification
-  const walletClientFactory = (
-    verificationOptions?: WalletVerificationOptions,
-  ) =>
+  const walletClientFactory = (verificationOptions?: WalletVerificationOptions) =>
     createWalletClient({
       chain: chain,
       // WHY 500ms: Same as public client for consistent behavior
@@ -411,30 +391,25 @@ export const getWalletClient = (options: ClientOptions) => {
         fetchOptions: {
           ...validatedOptions?.httpTransportConfig?.fetchOptions,
           // SECURITY: Runtime verification headers for HD wallet authentication
-          headers: buildHeaders(
-            validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
-            {
-              "x-auth-token": validatedOptions.accessToken,
-              // WHY conditional spreads: Only include headers when verification data is provided
-              ...(verificationOptions?.challengeResponse
-                ? {
-                    "x-auth-challenge-response":
-                      verificationOptions.challengeResponse,
-                  }
-                : {}),
-              ...(verificationOptions?.challengeId
-                ? {
-                    "x-auth-challenge-id": verificationOptions.challengeId,
-                  }
-                : {}),
-              ...(verificationOptions?.verificationId
-                ? {
-                    "x-auth-verification-id":
-                      verificationOptions.verificationId,
-                  }
-                : {}),
-            },
-          ),
+          headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+            "x-auth-token": validatedOptions.accessToken,
+            // WHY conditional spreads: Only include headers when verification data is provided
+            ...(verificationOptions?.challengeResponse
+              ? {
+                  "x-auth-challenge-response": verificationOptions.challengeResponse,
+                }
+              : {}),
+            ...(verificationOptions?.challengeId
+              ? {
+                  "x-auth-challenge-id": verificationOptions.challengeId,
+                }
+              : {}),
+            ...(verificationOptions?.verificationId
+              ? {
+                  "x-auth-verification-id": verificationOptions.verificationId,
+                }
+              : {}),
+          }),
         },
       }),
     })
@@ -474,10 +449,7 @@ export const GetChainIdOptionsSchema = z.object({
 /**
  * Type representing the validated get chain id options.
  */
-export type GetChainIdOptions = Omit<
-  z.infer<typeof GetChainIdOptionsSchema>,
-  "httpTransportConfig"
-> & {
+export type GetChainIdOptions = Omit<z.infer<typeof GetChainIdOptionsSchema>, "httpTransportConfig"> & {
   httpTransportConfig?: HttpTransportConfig;
 };
 
@@ -512,18 +484,12 @@ export type GetChainIdOptions = Omit<
  */
 export async function getChainId(options: GetChainIdOptions): Promise<number> {
   ensureServer();
-  const validatedOptions: GetChainIdOptions = validate(
-    GetChainIdOptionsSchema,
-    options,
-  );
+  const validatedOptions: GetChainIdOptions = validate(GetChainIdOptionsSchema, options);
 
   // SECURITY: Apply header filtering for undefined auth tokens
-  const headers = buildHeaders(
-    validatedOptions?.httpTransportConfig?.fetchOptions?.headers,
-    {
-      "x-auth-token": validatedOptions.accessToken,
-    },
-  );
+  const headers = buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+    "x-auth-token": validatedOptions.accessToken,
+  });
 
   // WHY no caching: Chain ID discovery is typically a one-time setup operation
   const client = createPublicClient({
@@ -544,9 +510,7 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
  * WHY Map over Object: Avoids prototype chain lookups and provides guaranteed O(1) access.
  * MEMORY: One-time initialization cost for ~100 known chains vs repeated lookups.
  */
-const knownChainsMap = new Map<string, ViemChain>(
-  Object.values(chains).map((chain) => [chain.id.toString(), chain]),
-);
+const knownChainsMap = new Map<string, ViemChain>(Object.values(chains).map((chain) => [chain.id.toString(), chain]));
 
 /**
  * CHAIN RESOLUTION STRATEGY: Two-tier lookup optimizes for both known and custom chains.
@@ -564,11 +528,7 @@ const knownChainsMap = new Map<string, ViemChain>(
  * TRADEOFF: Memory usage vs performance - separate strategies prevent cache pollution
  * of known chains with custom RPC configurations.
  */
-function getChain({
-  chainId,
-  chainName,
-  rpcUrl,
-}: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
+function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" | "chainName" | "rpcUrl">): ViemChain {
   // PERFORMANCE: O(1) lookup for known chains - no cache needed
   const knownChain = knownChainsMap.get(chainId);
   if (knownChain) {
@@ -577,11 +537,7 @@ function getChain({
   }
 
   // CACHING: Custom chains require full parameter consideration
-  const cacheKey = JSON.stringify({ chainId, chainName, rpcUrl }, [
-    "chainId",
-    "chainName",
-    "rpcUrl",
-  ]);
+  const cacheKey = JSON.stringify({ chainId, chainName, rpcUrl }, ["chainId", "chainName", "rpcUrl"]);
 
   const cachedChain = chainCache.get(cacheKey);
   if (cachedChain) {
