@@ -336,29 +336,6 @@ Using MCP in this scenario:
 In this use case, MCP enabled the AI to be a real-time guardian of the DeFi contract. Without MCP, the AI would not have access to the live on-chain state or the ability to execute a change. With MCP, the AI becomes a powerful autonomous agent that ensures the blockchain application adapts to current conditions.
 
 This is just one example. AI-driven blockchain applications could range from automatic NFT marketplace management, to AI moderators for DAO proposals, to intelligent supply chain contracts that react to sensor data. MCP provides the pathway for these AI agents to communicate and act where it matters - on the blockchain and connected systems.
-## Tool Input Schemas
-
-Every MCP tool under `src/tools` registers a JSON Schema describing its expected input. Clients can use these schemas for validation and auto-completion.
-
-| Tool | Input Schema |
-|------|--------------|
-| `prompts-list` | `{}` |
-| `prompts-get` | `{ category: string, name: string }` |
-| `resources-list` | `{}` |
-| `resources-get` | `{ name: string }` |
-| `portal-queries` | `{}` |
-| `portal-query` | `{ queryName: string }` |
-| `portal-mutations` | `{}` |
-| `portal-mutation` | `{ mutationName: string }` |
-| `hasura-queries` | `{}` |
-| `hasura-query` | `{ queryName: string }` |
-| `hasura-mutations` | `{}` |
-| `hasura-mutation` | `{ mutationName: string }` |
-| `thegraph-queries` | `{}` |
-| `thegraph-query` | `{ queryName: string }` |
-
-Platform tools (e.g., `platform-workspace-list`, `platform-application-create`) also follow this pattern. Each tool in `src/tools/platform/**` defines a Zod schema that is converted to a JSON Schema and exposed as `inputSchema`. Due to their complexity and number, they are not all listed here, but you can find their definitions in the respective source files.
-
 ## Contributing
 
 We welcome contributions from the community! Please check out our [Contributing](https://github.com/settlemint/sdk/blob/main/.github/CONTRIBUTING.md) guide to learn how you can help improve the SettleMint SDK through bug reports, feature requests, documentation updates, or code contributions.
