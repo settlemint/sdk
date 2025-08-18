@@ -144,7 +144,7 @@ const hasura = await platformIntegrationToolCreate({
   type: "DEDICATED",
   provider: "aws",
   region: "eu-west-1",
-  integrationType: "HASURA"
+  integrationType: "HA_HASURA"
 });
 \`\`\`
 
