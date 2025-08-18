@@ -40,7 +40,7 @@
     }
   },
   "scripts": {
-    "codegen": "gql-tada generate-schema ${CONSOLE_GRAPHQL:-https://console-release.settlemint.com/api/graphql} && gql-tada generate-output && gql-tada turbo",
+    "codegen": "gql-tada generate-schema ${CONSOLE_GRAPHQL:-https://console.settlemint.com/api/graphql} && gql-tada generate-output",
     "build": "tsdown",
     "dev": "tsdown --watch",
     "publint": "publint run --strict",

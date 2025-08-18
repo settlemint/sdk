@@ -13,6 +13,7 @@ import { retryWhenFailed } from "@settlemint/sdk-utils/retry";
 import { spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
+import { isAnyHasura } from "@/prompts/cluster-service/hasura.prompt";
 import { isAnyHAGraphMiddleware } from "@/prompts/cluster-service/thegraph.prompt";
 import { getSubgraphName } from "./subgraph/subgraph-name";
 
@@ -86,7 +87,7 @@ export function getPortalEnv(service: Middleware | undefined): Partial<DotEnv> {
 }
 
 export function getHasuraEnv(service: IntegrationTool | undefined): Partial<DotEnv> {
-  if (!service || (service.__typename !== "Hasura" && service.__typename !== "HAHasura")) {
+  if (!service || !isAnyHasura(service)) {
     return {};
   }
 
