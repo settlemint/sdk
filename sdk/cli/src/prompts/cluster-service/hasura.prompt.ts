@@ -2,11 +2,11 @@ import { type BaseServicePromptArgs, servicePrompt } from "@/prompts/cluster-ser
 import select from "@inquirer/select";
 import type { IntegrationTool } from "@settlemint/sdk-js";
 
-export type Hasura =
+export type AnyHasura =
   | Extract<IntegrationTool, { __typename: "Hasura" }>
   | Extract<IntegrationTool, { __typename: "HAHasura" }>;
 
-export function isHasura(integration: IntegrationTool): integration is Hasura {
+export function isAnyHasura(integration: IntegrationTool): integration is AnyHasura {
   return integration.__typename === "Hasura" || integration.__typename === "HAHasura";
 }
 
@@ -29,8 +29,8 @@ export async function hasuraPrompt({
   integrations,
   accept,
   isRequired = false,
-}: HasuraPromptArgs): Promise<Hasura | undefined> {
-  const hasuras = integrations.filter(isHasura);
+}: HasuraPromptArgs): Promise<AnyHasura | undefined> {
+  const hasuras = integrations.filter(isAnyHasura);
   return servicePrompt({
     env,
     services: hasuras,
