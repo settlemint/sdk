@@ -11,6 +11,15 @@ import { readConfig, setLastSdkVersionCheck } from "./config";
 const SDK_PACKAGE_NAME = "@settlemint/sdk-cli";
 
 /**
+ * Returns the installed SDK version
+ *
+ * @returns The installed SDK version
+ */
+export function getInstalledSdkVersion() {
+  return pkg.version;
+}
+
+/**
  * Validates the SDK version against the platform's supported version
  *
  * @param command - The command to validate the SDK version against

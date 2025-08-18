@@ -10,6 +10,7 @@ import isInCi from "is-in-ci";
  * @param options.message - Custom prompt message to display
  * @param options.accept - Whether to automatically accept the default value
  * @param options.isCi - Whether the code is running in a CI environment
+ * @param options.required - Whether the prompt is required
  * @returns A promise that resolves to the user-input or default service value
  */
 export async function serviceValuePrompt({
@@ -18,16 +19,18 @@ export async function serviceValuePrompt({
   message = "Enter service value:",
   accept = false,
   isCi = isInCi,
+  required = true,
 }: {
   defaultValue?: string;
   example?: string;
   message?: string;
   accept?: boolean;
   isCi?: boolean;
+  required?: boolean;
 }): Promise<string | undefined> {
   const autoAccept = !!accept || isCi;
 
-  if (autoAccept && defaultValue) {
+  if (autoAccept && (defaultValue || !required)) {
     return defaultValue;
   }
 

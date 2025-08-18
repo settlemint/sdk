@@ -1,0 +1,197 @@
+# Solidity Development Guidelines for Asset Tokenization Kit
+
+## General Principles
+
+- **Think first, code second**: Minimize the number of lines changed and consider ripple effects across the codebase.
+- **Prefer simplicity**: Fewer moving parts → fewer bugs and lower audit overhead.
+
+## Assembly Usage
+
+| Rule | Rationale |
+|------|-----------|
+| Use assembly only when essential. | Keeps code readable and auditable. |
+| Assembly is mandatory for low-level external calls. | Gives full control over call parameters & return data, and saves gas. |
+| Precede every assembly block with: • A brief justification (1-2 lines). • Equivalent Solidity pseudocode. | Documents intent for reviewers. |
+| Mark assembly blocks memory-safe when the Solidity docs' criteria are met. | Enables compiler optimizations. |
+
+## Gas Optimization
+
+- Keep a dedicated **Gas Optimization** section in the PR description; justify any measurable gas deltas.
+- Prefer `calldata` over `memory`.
+- Limit storage (`sstore`, `sload`) operations; cache in memory wherever possible.
+- Use forge snapshot and benchmarks:
+  ```bash
+  forge snapshot                # Create gas snapshot
+  forge test --gas-report       # Gas report for tests
+  forge test --match-test bench # Run benchmarks
+  ```
+- Large regressions must be explained.
+
+## Handling "Stack Too Deep"
+
+- **Struct hack (tests only)**: Bundle local variables into a temporary struct declared above the test.
+- **Scoped blocks**: Wrap code in `{ ... }` to drop unused vars from the stack.
+- **Internal helper functions**: Encapsulate logic to shorten call frames.
+- **Refactor / delete unnecessary variables before other tricks**.
+
+## Security Checklist
+
+- Review every change with an adversarial mindset.
+- Favor the simplest design that meets requirements.
+- After coding, ask: "What new attack surface did I introduce?"
+- Reject any change that raises security risk without strong justification.
+- Follow SMART protocol security patterns for ERC-3643 compliance.
+
+## Error Handling Style
+
+Always use custom errors with the revert pattern instead of require statements:
+
+```solidity
+// ❌ Don't use require with string messages
+require(amount > 0, "Amount must be positive");
+require(to != address(0), "Cannot transfer to zero address");
+
+// ✅ Do use custom errors with if/revert pattern
+error AmountMustBePositive();
+error CannotTransferToZeroAddress();
+
+if (amount == 0) revert AmountMustBePositive();
+if (to == address(0)) revert CannotTransferToZeroAddress();
+```
+
+**Benefits of custom errors**:
+- More gas efficient than require strings
+- Better error identification in tests and debugging
+- Cleaner, more professional code
+- Consistent with modern Solidity best practices
+
+## Testing Guidelines
+
+### Core Testing Principles
+
+**Every feature or change MUST have comprehensive tests before creating a PR**. This is non-negotiable for maintaining code quality and preventing regressions.
+
+### When to Write Tests
+
+- **New Features**: Write tests that demonstrate the complete flow and all edge cases
+- **Bug Fixes**: Add tests that reproduce the bug and verify the fix
+- **Refactoring**: Ensure existing tests still pass; add new ones if behavior changes
+- **Gas Optimizations**: Include benchmark tests showing before/after comparisons
+
+### Types of Required Tests
+
+**Unit Tests**:
+- Write clear unit tests that demonstrate the general flow of your feature/change
+- Test both happy paths and failure cases
+- Include edge cases and boundary conditions
+- Test revert conditions with specific error messages
+
+**Fuzz Tests**:
+- **Fuzz tests are highly encouraged** for all new functionality
+- Use Foundry's built-in fuzzing capabilities
+- Apply random arguments to thoroughly test your implementation
+
+Example fuzz test pattern:
+```solidity
+function testFuzz_myFeature(uint256 amount, address user) public {
+    // Bound inputs to reasonable ranges
+    amount = bound(amount, 1, type(uint128).max);
+    vm.assume(user != address(0));
+    
+    // Test your feature with random inputs
+    myContract.myFeature(amount, user);
+    
+    // Assert expected outcomes
+    assertEq(myContract.balanceOf(user), amount);
+}
+```
+
+### Testing Checklist Before PR
+
+Before opening any PR, ensure:
+- [ ] All new functions have unit tests
+- [ ] Critical paths have fuzz tests with random inputs
+- [ ] Edge cases and revert scenarios are tested
+- [ ] Gas benchmarks are included for optimizations
+- [ ] All tests pass: `forge test`
+- [ ] No test coverage regression: `forge coverage`
+
+## Verification Workflow
+
+```bash
+forge build                    # compile
+forge test                     # full test suite
+forge snapshot                 # gas snapshot
+forge test --match-test bench  # run benchmarks
+forge test --gas-report        # gas usage report
+forge coverage                 # code coverage
+```
+
+## Asset Tokenization Kit Specific Guidelines
+
+### Contract Structure
+- Follow the SMART protocol patterns for all asset implementations
+- Use the established factory pattern (`ATKBondFactory`, `ATKEquityFactory`, etc.)
+- Implement proper ERC-3643 compliance for all tokenized assets
+- Utilize the extension system (`SMARTBurnable`, `SMARTCapped`, etc.) for modularity
+
+### Testing Assets
+When testing tokenized assets:
+- Test compliance features (identity registry, claim topics)
+- Test factory deployment patterns
+- Test proxy upgradeability
+- Test all extensions used by the asset
+- Include integration tests with the compliance system
+
+### Common Patterns
+- Use `AccessControl` for role-based permissions
+- Implement `Pausable` for emergency stops
+- Follow ERC-3643 for identity and compliance
+- Use proxy patterns for upgradeability
+
+### Available Tools
+
+The Asset Tokenization Kit includes:
+- Foundry for contract compilation and testing
+- OpenZeppelin contracts for base implementations
+- SMART protocol contracts for compliance
+- Hardhat for additional tooling support
+
+### Project Structure
+
+- `contracts/`: Smart contract source files
+  - `assets/`: Asset factories and implementations
+  - `smart/`: SMART protocol base contracts and extensions
+  - `system/`: Compliance and registry contracts
+  - `test/`: Test contracts and utilities
+- `test/`: Foundry tests
+- `scripts/`: Deployment and utility scripts
+
+## Critical Reminders
+
+### DO NOT
+
+- Use require() statements - always use custom errors
+- Create contracts without comprehensive tests
+- Make gas-intensive changes without benchmarks
+- Skip security considerations for any change
+- Use inline strings for errors
+
+### ALWAYS
+
+- Follow SMART protocol patterns
+- Test all compliance features
+- Measure gas impact of changes
+- Consider upgradeability implications
+- Use established factory patterns
+- Document assembly blocks
+- Run full test suite before PR
+
+## Continuous Learning
+
+- Consult SMART protocol documentation
+- Review OpenZeppelin best practices
+- Study ERC-3643 compliance requirements
+- Learn from audited tokenization projects
+
+Apply these rules rigorously when working with Solidity files in the Asset Tokenization Kit.

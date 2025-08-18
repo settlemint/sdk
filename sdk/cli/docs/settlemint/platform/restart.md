@@ -24,8 +24,8 @@ Commands:
 <pre>Usage: settlemint platform restart blockchain-network|bnw 
 Examples:
 
-  # Restarts the specified blockchain network by id
-  $ settlemint platform restart blockchain-network &lt;blockchain network-id&gt;
+  # Restarts the specified blockchain network by unique name
+  $ settlemint platform restart blockchain-network &lt;unique-name&gt;
 
   # Restarts the default blockchain network in the production environment
   $ settlemint platform restart blockchain-network default --prod
@@ -51,8 +51,8 @@ Options:
 <pre>Usage: settlemint platform restart blockchain-node|bn 
 Examples:
 
-  # Restarts the specified blockchain node by id
-  $ settlemint platform restart blockchain-node &lt;blockchain node-id&gt;
+  # Restarts the specified blockchain node by unique name
+  $ settlemint platform restart blockchain-node &lt;unique-name&gt;
 
   # Restarts the default blockchain node in the production environment
   $ settlemint platform restart blockchain-node default --prod
@@ -77,8 +77,8 @@ Options:
 <pre>Usage: settlemint platform restart custom-deployment|cd 
 Examples:
 
-  # Restarts the specified custom deployment by id
-  $ settlemint platform restart custom-deployment &lt;custom deployment-id&gt;
+  # Restarts the specified custom deployment by unique name
+  $ settlemint platform restart custom-deployment &lt;unique-name&gt;
 
   # Restarts the default custom deployment in the production environment
   $ settlemint platform restart custom-deployment default --prod
@@ -117,11 +117,11 @@ Commands:
 <pre>Usage: settlemint platform restart insights blockscout|bs 
 Examples:
 
-  # Restarts the specified insights by id
-  $ settlemint platform restart blockscout blockscout &lt;insights-id&gt;
+  # Restarts the specified insights by unique name
+  $ settlemint platform restart insights blockscout &lt;unique-name&gt;
 
   # Restarts the default insights in the production environment
-  $ settlemint platform restart blockscout blockscout default --prod
+  $ settlemint platform restart insights blockscout default --prod
 
 Restart a insights in the SettleMint platform. Provide the insights unique name
 or use &#039;default&#039; to restart the default insights from your .env file.
@@ -160,11 +160,11 @@ Commands:
 <pre>Usage: settlemint platform restart integration-tool hasura|ha 
 Examples:
 
-  # Restarts the specified integration tool by id
-  $ settlemint platform restart hasura hasura &lt;integration tool-id&gt;
+  # Restarts the specified integration tool by unique name
+  $ settlemint platform restart integration-tool hasura &lt;unique-name&gt;
 
   # Restarts the default integration tool in the production environment
-  $ settlemint platform restart hasura hasura default --prod
+  $ settlemint platform restart integration-tool hasura default --prod
 
 Restart a integration tool in the SettleMint platform. Provide the integration
 tool unique name or use &#039;default&#039; to restart the default integration tool from
@@ -186,8 +186,8 @@ Options:
 <pre>Usage: settlemint platform restart load-balancer|lb 
 Examples:
 
-  # Restarts the specified load balancer by id
-  $ settlemint platform restart load-balancer &lt;load balancer-id&gt;
+  # Restarts the specified load balancer by unique name
+  $ settlemint platform restart load-balancer &lt;unique-name&gt;
 
   # Restarts the default load balancer in the production environment
   $ settlemint platform restart load-balancer default --prod
@@ -227,11 +227,11 @@ Commands:
 <pre>Usage: settlemint platform restart middleware graph|gr 
 Examples:
 
-  # Restarts the specified middleware by id
-  $ settlemint platform restart graph graph &lt;middleware-id&gt;
+  # Restarts the specified middleware by unique name
+  $ settlemint platform restart middleware graph &lt;unique-name&gt;
 
   # Restarts the default middleware in the production environment
-  $ settlemint platform restart graph graph default --prod
+  $ settlemint platform restart middleware graph default --prod
 
 Restart a middleware in the SettleMint platform. Provide the middleware unique
 name or use &#039;default&#039; to restart the default middleware from your .env file.
@@ -252,11 +252,11 @@ Options:
 <pre>Usage: settlemint platform restart middleware smart-contract-portal|scp 
 Examples:
 
-  # Restarts the specified middleware by id
-  $ settlemint platform restart smart-contract-portal smart-contract-portal &lt;middleware-id&gt;
+  # Restarts the specified middleware by unique name
+  $ settlemint platform restart middleware smart-contract-portal &lt;unique-name&gt;
 
   # Restarts the default middleware in the production environment
-  $ settlemint platform restart smart-contract-portal smart-contract-portal default --prod
+  $ settlemint platform restart middleware smart-contract-portal default --prod
 
 Restart a middleware in the SettleMint platform. Provide the middleware unique
 name or use &#039;default&#039; to restart the default middleware from your .env file.
@@ -298,11 +298,11 @@ Commands:
 <pre>Usage: settlemint platform restart storage ipfs|ip 
 Examples:
 
-  # Restarts the specified storage by id
-  $ settlemint platform restart ipfs &lt;storage-id&gt;
+  # Restarts the specified storage by unique name
+  $ settlemint platform restart storage ipfs &lt;unique-name&gt;
 
   # Restarts the default storage in the production environment
-  $ settlemint platform restart ipfs default --prod
+  $ settlemint platform restart storage ipfs default --prod
 
 Restart a storage in the SettleMint platform. Provide the storage unique name or
 use &#039;default&#039; to restart the default storage from your .env file.
@@ -323,11 +323,11 @@ Options:
 <pre>Usage: settlemint platform restart storage minio|m 
 Examples:
 
-  # Restarts the specified storage by id
-  $ settlemint platform restart minio &lt;storage-id&gt;
+  # Restarts the specified storage by unique name
+  $ settlemint platform restart storage minio &lt;unique-name&gt;
 
   # Restarts the default storage in the production environment
-  $ settlemint platform restart minio default --prod
+  $ settlemint platform restart storage minio default --prod
 
 Restart a storage in the SettleMint platform. Provide the storage unique name or
 use &#039;default&#039; to restart the default storage from your .env file.

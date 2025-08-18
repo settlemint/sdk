@@ -1,12 +1,12 @@
+import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
+import { cancel, note } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { missingApplication } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { serviceNotRunningError } from "@/error/service-not-running-error";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
-import { hasValidPrivateKey } from "@/utils/cluster-service";
-import type { BlockchainNode, SettlemintClient } from "@settlemint/sdk-js";
-import { cancel, note } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { hasValidPrivateKey, isRunning } from "@/utils/cluster-service";
 
 export async function selectTargetNode({
   env,
@@ -20,7 +20,7 @@ export async function selectTargetNode({
   settlemint: SettlemintClient;
 }): Promise<BlockchainNode> {
   const nodeUniqueName = blockchainNodeUniqueName ?? (autoAccept ? env.SETTLEMINT_BLOCKCHAIN_NODE : undefined);
-  let node: BlockchainNode | undefined = undefined;
+  let node: BlockchainNode | undefined;
   if (!nodeUniqueName) {
     if (!env.SETTLEMINT_APPLICATION) {
       return missingApplication();
@@ -78,7 +78,7 @@ function validateNode(node: BlockchainNode, cancelOnError = true) {
     }
     return false;
   }
-  if (node.status !== "COMPLETED") {
+  if (!isRunning(node)) {
     if (cancelOnError) {
       serviceNotRunningError("blockchain node", node.status);
     }

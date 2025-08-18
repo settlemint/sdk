@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for creating a new storage instance
@@ -28,39 +29,38 @@ export const platformStorageCreate = (server: McpServer, env: Partial<DotEnv>, p
     instance: instance,
   });
 
-  server.tool(
-    "platform-storage-create",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to create the storage in"),
-      name: z.string().describe("Name of the storage"),
-      type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the storage (DEDICATED or SHARED)"),
-      size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the storage"),
-      provider: z.string().describe("Provider for the storage"),
-      region: z.string().describe("Region for the storage"),
-      storageProtocol: z.enum(["IPFS", "MINIO"]).describe("Storage protocol (IPFS or MINIO)"),
-    },
-    async (params) => {
-      const storage = await client.storage.create({
-        applicationUniqueName: params.applicationUniqueName,
-        name: params.name,
-        type: params.type,
-        size: params.size,
-        provider: params.provider,
-        region: params.region,
-        storageProtocol: params.storageProtocol,
-      });
+  const schema = z.object({
+    applicationUniqueName: z.string().describe("Unique name of the application to create the storage in"),
+    name: z.string().describe("Name of the storage"),
+    type: z.enum(["DEDICATED", "SHARED"]).describe("Type of the storage (DEDICATED or SHARED)"),
+    size: z.enum(["SMALL", "MEDIUM", "LARGE"]).describe("Size of the storage"),
+    provider: z.string().describe("Provider for the storage"),
+    region: z.string().describe("Region for the storage"),
+    storageProtocol: z.enum(["IPFS", "MINIO"]).describe("Storage protocol (IPFS or MINIO)"),
+  });
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Storage Created",
-            description: `Created storage: ${params.name} in application: ${params.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(storage, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-storage-create", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const parsed = schema.parse(params);
+    const storage = await client.storage.create({
+      applicationUniqueName: parsed.applicationUniqueName,
+      name: parsed.name,
+      type: parsed.type,
+      size: parsed.size,
+      provider: parsed.provider,
+      region: parsed.region,
+      storageProtocol: parsed.storageProtocol,
+    });
+
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Storage Created",
+          description: `Created storage: ${parsed.name} in application: ${parsed.applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(storage, null, 2),
+        },
+      ],
+    };
+  });
 };

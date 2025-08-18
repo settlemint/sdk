@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading an application by ID
@@ -28,24 +29,23 @@ export const platformApplicationRead = (server: McpServer, env: Partial<DotEnv>,
     instance: instance,
   });
 
-  server.tool(
-    "platform-application-read",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to read"),
-    },
-    async (params) => {
-      const application = await client.application.read(params.applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Application Details",
-            description: `Details for application: ${params.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(application, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  const schema = z.object({
+    applicationUniqueName: z.string().describe("Unique name of the application to read"),
+  });
+
+  server.tool("platform-application-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const application = await client.application.read(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Application Details",
+          description: `Details for application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(application, null, 2),
+        },
+      ],
+    };
+  });
 };

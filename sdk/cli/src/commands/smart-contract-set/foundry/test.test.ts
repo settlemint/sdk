@@ -1,6 +1,6 @@
 import { describe, expect, test } from "bun:test";
-import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { Command } from "@commander-js/extra-typings";
+import { mapPassthroughOptions } from "@/utils/commands/passthrough-options";
 import { foundryTestCommand } from "./test"; // Import the actual command
 
 describe("foundryTestCommand", () => {
@@ -13,7 +13,7 @@ describe("foundryTestCommand", () => {
     const cmdToTest = foundryTestCommand();
 
     // Hijack the action of the command to inspect inputs to mapPassthroughOptions
-    cmdToTest.action(async (operands, options, cmd) => {
+    cmdToTest.action(async (operands, options, _cmd) => {
       // In foundryTestCommand's actual action, it calls:
       // mapPassthroughOptions(options, { args: operands } as Command)
       // So, we replicate that here to capture the result.

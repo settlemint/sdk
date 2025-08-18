@@ -1,15 +1,15 @@
+import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient, type SettlemintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import type { ResourceType } from "@/constants/resource-type";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { createExamples } from "@/utils/commands/create-examples";
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { Command } from "@commander-js/extra-typings";
-import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates a command for restarting resources in the SettleMint platform.
@@ -26,7 +26,6 @@ import type { DotEnv } from "@settlemint/sdk-utils/validation";
 export function getRestartCommand({
   name,
   type,
-  subType,
   alias,
   envKey,
   restartFunction,
@@ -34,13 +33,14 @@ export function getRestartCommand({
 }: {
   name: string;
   type: ResourceType;
-  subType?: string;
   alias: string;
   envKey: keyof DotEnv;
-  restartFunction: (settlemintClient: SettlemintClient, id: string) => Promise<{ name: string }>;
+  restartFunction: (settlemintClient: SettlemintClient, uniqueName: string) => Promise<{ name: string }>;
   usePersonalAccessToken?: boolean;
 }) {
   const commandName = sanitizeCommandName(name);
+  const typeCommandName = sanitizeCommandName(type);
+  const exampleCommandPrefix = `platform restart ${typeCommandName !== commandName ? `${typeCommandName} ` : ""}${commandName}`;
   return new Command(commandName)
     .alias(alias)
     .description(
@@ -49,12 +49,12 @@ export function getRestartCommand({
     .usage(
       createExamples([
         {
-          description: `Restarts the specified ${type} by id`,
-          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} <${type}-id>`,
+          description: `Restarts the specified ${type} by unique name`,
+          command: `${exampleCommandPrefix} <unique-name>`,
         },
         {
           description: `Restarts the default ${type} in the production environment`,
-          command: `platform restart ${commandName}${subType ? ` ${subType}` : ""} default --prod`,
+          command: `${exampleCommandPrefix} default --prod`,
         },
       ]),
     )

@@ -24,6 +24,7 @@ describe("Restart platform resources using the SDK", () => {
       "--accept-defaults",
     ]).result;
     expect(output).toInclude(`Middleware ${PORTAL_NAME} restart initiated successfully`);
+    expect(output).toInclude("Middleware is restarted");
     // Make sure it is running
     const env = await loadEnv(false, false);
     const response = await fetchWithRetry(env.SETTLEMINT_PORTAL_REST_ENDPOINT ?? "");

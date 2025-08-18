@@ -1,10 +1,10 @@
 import { writeFile } from "node:fs/promises";
-import { testGqlEndpoint } from "@/commands/codegen/utils/test-gql-endpoint";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { getTsconfig } from "get-tsconfig";
+import { testGqlEndpoint } from "@/commands/codegen/utils/test-gql-endpoint";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 
 export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: string[]) {
   const tsconfig = getTsconfig();
@@ -92,14 +92,18 @@ export async function codegenTsconfig(env: DotEnv, thegraphSubgraphNames?: strin
       ...thegraph
         .filter((endpoint) => endpoint.success)
         .map(({ endpoint }) => {
-          const name = getSubgraphName(endpoint)!;
+          const name = getSubgraphName(endpoint);
+          if (!name) {
+            return undefined;
+          }
           return {
             name: `thegraph-${name}`,
             schema: `the-graph-schema-${name}.graphql`,
             tadaOutputLocation: `the-graph-env-${name}.d.ts`,
             tadaTurboLocation: `the-graph-cache-${name}.d.ts`,
           };
-        }),
+        })
+        .filter((schema) => schema !== undefined),
       ...(portal
         ? [
             {

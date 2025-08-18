@@ -43,7 +43,7 @@ export async function serviceUrlPrompt({
       try {
         validate(UrlSchema, value);
         return true;
-      } catch (error) {
+      } catch (_error) {
         return "Invalid URL";
       }
     },

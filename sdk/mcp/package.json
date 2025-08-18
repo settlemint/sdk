@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./*": {
       "types": "./dist/*.d.ts",
@@ -33,21 +35,21 @@
   "scripts": {
     "build": "bun run build.ts",
     "dev": "tsdown --watch",
-    "test": "bun test",
-    "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "@graphql-tools/load": "8.1.0",
-    "@graphql-tools/url-loader": "8.0.31",
-    "@modelcontextprotocol/sdk": "1.13.0",
+    "@commander-js/extra-typings": "14.0.0",
+    "@graphql-tools/load": "8.1.2",
+    "@graphql-tools/url-loader": "8.0.33",
+    "@modelcontextprotocol/sdk": "1.17.3",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
-    "@commander-js/extra-typings": "14.0.0",
     "commander": "14.0.0",
-    "zod": "^3.25.0"
+    "graphql": "16.11.0",
+    "zod": "^4",
+    "zod-to-json-schema": "^3.23.0"
   },
   "devDependencies": {},
   "peerDependencies": {},

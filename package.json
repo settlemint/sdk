@@ -1,6 +1,6 @@
 {
   "name": "sdk",
-  "version": "2.4.0",
+  "version": "2.5.10",
   "private": true,
   "license": "FSL-1.1-MIT",
   "author": {
@@ -33,8 +33,7 @@
     "deploy": "turbo deploy",
     "translate": "turbo translate",
     "typecheck": "turbo typecheck",
-    "ci:local": "bunx turbo format:biome lint build attw publint test:coverage --concurrency=14 --summarize",
-    "postinstall": "lefthook install",
+    "ci:local": "bunx turbo format:biome codegen typecheck lint build attw publint test:coverage --concurrency=14 --summarize",
     "test:typecheck": "cd test && bunx tsc",
     "test:e2e": "bun test test/*.ts --coverage --preload ./test/scripts/setup-platform-resources.ts",
     "link:all": "for dir in sdk/*; do cd $dir && bun link && cd ../..; done",
@@ -43,25 +42,28 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
-    "@biomejs/biome": "1.9.4",
-    "@types/bun": "1.2.17",
+    "@biomejs/biome": "2.2.0",
+    "@types/bun": "1.2.20",
     "@types/mustache": "4.2.6",
-    "knip": "5.61.2",
-    "lefthook": "1.11.14",
+    "knip": "5.62.0",
     "mustache": "4.2.0",
     "publint": "0.3.12",
-    "tsdown": "^0.12.3",
-    "turbo": "2.5.4",
-    "typedoc": "0.28.5",
-    "typedoc-plugin-markdown": "4.7.0",
+    "tsdown": "^0.14.0",
+    "turbo": "2.5.6",
+    "typedoc": "0.28.10",
+    "typedoc-plugin-markdown": "4.8.1",
     "typedoc-plugin-merge-modules": "7.0.0",
     "typedoc-plugin-zod": "1.4.2",
-    "typescript": "5.8.3"
+    "typescript": "5.9.2"
   },
   "engines": {
     "node": ">=20"
   },
-  "workspaces": ["sdk/*", "apps/*"],
+  "workspaces": [
+    "sdk/*",
+    "test",
+    "scripts"
+  ],
   "trustedDependencies": [
     "@biomejs/biome",
     "bufferutil",
@@ -75,9 +77,10 @@
   ],
   "overrides": {
     "elliptic": "6.6.1",
-    "ws": "8.18.2",
+    "ws": "8.18.3",
     "adm-zip": "0.5.16",
-    "react-is": "19.1.0",
-    "undici": "7.10.0"
-  }
+    "react-is": "19.1.1",
+    "undici": "7.14.0"
+  },
+  "dependencies": {}
 }

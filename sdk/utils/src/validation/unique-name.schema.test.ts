@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { ZodError } from "zod/v4";
+import { ZodError } from "zod";
 import { UniqueNameSchema } from "./unique-name.schema.js";
 
 describe("UniqueNameSchema", () => {

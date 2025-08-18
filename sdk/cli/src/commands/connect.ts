@@ -1,8 +1,14 @@
+import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { maskTokens } from "@settlemint/sdk-utils/logging";
+import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
+import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { missingPersonalAccessTokenError } from "@/error/missing-config-error";
 import { applicationAccessTokenPrompt } from "@/prompts/aat.prompt";
 import { applicationPrompt } from "@/prompts/application.prompt";
-import { blockchainNodeOrLoadBalancerPrompt } from "@/prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { blockchainNodePrompt } from "@/prompts/cluster-service/blockchain-node.prompt";
+import { blockchainNodeOrLoadBalancerPrompt } from "@/prompts/cluster-service/blockchain-node-or-load-balancer.prompt";
 import { blockscoutPrompt } from "@/prompts/cluster-service/blockscout.prompt";
 import { customDeploymentPrompt } from "@/prompts/cluster-service/custom-deployment.prompt";
 import { hasuraPrompt } from "@/prompts/cluster-service/hasura.prompt";
@@ -37,12 +43,6 @@ import {
 } from "@/utils/get-cluster-service-env";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { getTheGraphSubgraphNames, getTheGraphSubgraphUrl, getTheGraphUrl } from "@/utils/subgraph/thegraph-url";
-import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { maskTokens } from "@settlemint/sdk-utils/logging";
-import { intro, outro, table } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
 import { serviceValuePrompt } from "../prompts/standalone/service-value.prompt";
 
 /**
@@ -397,6 +397,7 @@ async function connectToStandalone(
       example: "subgraph-1,subgraph-2",
       defaultValue: getTheGraphSubgraphNames(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).join(","),
       type: "value",
+      required: false,
     },
     {
       id: "portalGraphqlEndpoint",
@@ -479,6 +480,7 @@ async function connectToStandalone(
               example,
               defaultValue,
               accept: acceptDefaults,
+              required: prompt.required,
             });
     selectedServices[id] = {
       label: prompt.label,
@@ -515,7 +517,9 @@ async function connectToStandalone(
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS:
       theGraphUrl && theGraphSubgraphNames
         ? theGraphSubgraphNames.split(",").map((name) => getTheGraphSubgraphUrl(theGraphUrl, name))
-        : [],
+        : theGraphUrl
+          ? [theGraphUrl]
+          : [],
     SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: theGraphSubgraphNames ? theGraphSubgraphNames.split(",")[0] : undefined,
     SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: selectedServices.portalGraphqlEndpoint?.result,
     SETTLEMINT_MINIO_ENDPOINT: selectedServices.minioEndpoint?.result,

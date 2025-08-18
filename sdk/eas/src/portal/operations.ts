@@ -59,4 +59,54 @@ export const GraphQLOperations = {
           }
         }`),
   },
+
+  queries: {
+    getSchema: (graphql: PortalClient["graphql"]) =>
+      graphql(`
+        query EASSchemaRegistryGetSchema($address: String!, $uid: String!) {
+          EASSchemaRegistry(address: $address) {
+            getSchema(uid: $uid) {
+              uid
+              resolver
+              revocable
+              schema
+            }
+          }
+        }`),
+
+    getAttestation: (graphql: PortalClient["graphql"]) =>
+      graphql(`
+        query EASGetAttestation($address: String!, $uid: String!) {
+          EAS(address: $address) {
+            getAttestation(uid: $uid) {
+              uid
+              schema
+              attester
+              recipient
+              time
+              expirationTime
+              revocable
+              refUID
+              data
+              revocationTime
+            }
+          }
+        }`),
+
+    isAttestationValid: (graphql: PortalClient["graphql"]) =>
+      graphql(`
+        query EASIsAttestationValid($address: String!, $uid: String!) {
+          EAS(address: $address) {
+            isAttestationValid(uid: $uid)
+          }
+        }`),
+
+    getTimestamp: (graphql: PortalClient["graphql"]) =>
+      graphql(`
+        query EASGetTimestamp($address: String!, $data: String!) {
+          EAS(address: $address) {
+            getTimestamp(data: $data)
+          }
+        }`),
+  },
 };

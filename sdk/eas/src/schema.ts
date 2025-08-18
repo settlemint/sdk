@@ -1,5 +1,5 @@
 import { type Address, type Hex, zeroAddress } from "viem";
-import type { z } from "zod/v4";
+import type { z } from "zod";
 import type { EASClientOptionsSchema } from "./utils/validation.js";
 
 /**

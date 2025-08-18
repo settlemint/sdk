@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/viem.cjs",
   "module": "./dist/viem.js",
   "types": "./dist/viem.d.ts",
@@ -52,7 +54,8 @@
   "devDependencies": {},
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
-    "viem": "^2"
+    "viem": "^2",
+    "zod": "^4"
   },
   "peerDependencies": {},
   "engines": {

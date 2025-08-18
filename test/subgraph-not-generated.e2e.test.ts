@@ -3,9 +3,7 @@ import { copyFile, rmdir, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
-import {} from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { getSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
-import {} from "./utils/link-dependencies";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const PROJECT_NAME = "contracts-subgraphs-not-generated";
@@ -36,7 +34,7 @@ afterEach(() => {
   forceExitAllCommands(COMMAND_TEST_SCOPE);
 });
 
-describe("Add a subgraph to a subgraph which is using a manually maintained subgrapy config yaml", () => {
+describe("Add a subgraph to a subgraph which is using a manually maintained subgraph config yaml", () => {
   test(`Create a ${TEMPLATE_NAME} project`, async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,

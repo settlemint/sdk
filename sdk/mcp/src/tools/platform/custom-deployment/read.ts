@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a custom deployment by ID
@@ -28,24 +29,23 @@ export const platformCustomDeploymentRead = (server: McpServer, env: Partial<Dot
     instance: instance,
   });
 
-  server.tool(
-    "platform-custom-deployment-read",
-    {
-      customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to read"),
-    },
-    async (params) => {
-      const customDeployment = await client.customDeployment.read(params.customDeploymentUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Custom Deployment Details",
-            description: `Details for custom deployment: ${params.customDeploymentUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(customDeployment, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  const schema = z.object({
+    customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to read"),
+  });
+
+  server.tool("platform-custom-deployment-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { customDeploymentUniqueName } = schema.parse(params);
+    const customDeployment = await client.customDeployment.read(customDeploymentUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Custom Deployment Details",
+          description: `Details for custom deployment: ${customDeploymentUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(customDeployment, null, 2),
+        },
+      ],
+    };
+  });
 };

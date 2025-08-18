@@ -1,4 +1,5 @@
 import { defineConfig } from "tsdown";
+// @ts-expect-error - tsdown-factory.ts is a .ts file
 import { createMultiConfig, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 export default createMultiConfig([
@@ -28,7 +29,7 @@ export default createMultiConfig([
     },
   },
   {
-    entry: ["src/config/*.ts"],
+    entry: ["src/config/with-settlemint.ts"],
     format: ["cjs", "esm"],
     platform: "neutral",
     outDir: "dist/config",

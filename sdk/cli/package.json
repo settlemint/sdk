@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     "./*": {
       "types": "./dist/*.d.ts",
@@ -41,33 +43,39 @@
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
-    "node-fetch-native": "1.6.6"
+    "@gql.tada/cli-utils": "1.7.1",
+    "@inquirer/core": "10.1.15",
+    "node-fetch-native": "1.6.7",
+    "zod": "^4"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "14.0.0",
     "commander": "14.0.0",
-    "@inquirer/confirm": "5.1.12",
-    "@inquirer/input": "4.1.12",
-    "@inquirer/password": "4.0.15",
-    "@inquirer/select": "4.2.3",
+    "@inquirer/confirm": "5.1.15",
+    "@inquirer/input": "4.2.1",
+    "@inquirer/password": "4.0.17",
+    "@inquirer/select": "4.3.1",
+    "@settlemint/sdk-hasura": "workspace:*",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "@settlemint/sdk-viem": "workspace:*",
-    "@types/node": "24.0.3",
+    "@types/node": "24.3.0",
     "@types/semver": "7.7.0",
     "@types/which": "3.0.4",
     "get-tsconfig": "4.10.1",
     "giget": "2.0.0",
-    "is-in-ci": "1.0.0",
+    "is-in-ci": "2.0.0",
     "semver": "7.7.2",
     "slugify": "1.6.6",
-    "viem": "2.31.4",
+    "viem": "2.33.3",
     "which": "5.0.0",
-    "yaml": "2.8.0",
-    "yoctocolors": "2.1.1"
+    "yaml": "2.8.1",
+    "yoctocolors": "2.1.1",
+    "yocto-spinner": "^1.0.0"
   },
   "peerDependencies": {
-    "hardhat": "2.24.3"
+    "hardhat": "<= 4",
+    "@settlemint/sdk-js": "workspace:*"
   },
   "peerDependenciesMeta": {
     "hardhat": {

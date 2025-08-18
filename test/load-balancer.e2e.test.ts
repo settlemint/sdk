@@ -71,7 +71,7 @@ describe("Load Balancer E2E Tests", () => {
       await command.result;
       // Should not reach this point
       expect(false).toBe(true);
-    } catch (err) {
+    } catch (_err) {
       expect(output.join("\n")).toContain("No blockchain network selected");
     }
   });
@@ -101,7 +101,7 @@ describe("Load Balancer E2E Tests", () => {
       await command.result;
       // Should not reach this point
       expect(false).toBe(true);
-    } catch (err) {
+    } catch (_err) {
       expect(output.join("\n")).toContain(
         `Blockchain node(s) 'non-existent-node' are not part of the application '${env.SETTLEMINT_APPLICATION}'`,
       );

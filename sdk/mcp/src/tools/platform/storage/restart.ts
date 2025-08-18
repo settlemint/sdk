@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting a storage instance
@@ -28,24 +29,23 @@ export const platformStorageRestart = (server: McpServer, env: Partial<DotEnv>, 
     instance: instance,
   });
 
-  server.tool(
-    "platform-storage-restart",
-    {
-      storageUniqueName: z.string().describe("Unique name of the storage to restart"),
-    },
-    async (params) => {
-      const storage = await client.storage.restart(params.storageUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Storage Restarted",
-            description: `Restarted storage: ${params.storageUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(storage, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  const schema = z.object({
+    storageUniqueName: z.string().describe("Unique name of the storage to restart"),
+  });
+
+  server.tool("platform-storage-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { storageUniqueName } = schema.parse(params);
+    const storage = await client.storage.restart(storageUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Storage Restarted",
+          description: `Restarted storage: ${storageUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(storage, null, 2),
+        },
+      ],
+    };
+  });
 };

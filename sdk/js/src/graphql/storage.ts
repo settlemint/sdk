@@ -1,6 +1,6 @@
-import { applicationRead } from "@/graphql/application.js";
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import type { GraphQLClient } from "graphql-request";
+import { applicationRead } from "@/graphql/application.js";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 
 /**
  * GraphQL fragment containing core storage fields.
@@ -116,6 +116,34 @@ const restartStorage = graphql(
 );
 
 /**
+ * Mutation to pause a storage.
+ */
+const pauseStorage = graphql(
+  `
+    mutation PauseStorage($uniqueName: String!) {
+      pauseStorageByUniqueName(uniqueName: $uniqueName) {
+        ...Storage
+      }
+    }
+  `,
+  [StorageFragment],
+);
+
+/**
+ * Mutation to resume a storage.
+ */
+const resumeStorage = graphql(
+  `
+    mutation ResumeStorage($uniqueName: String!) {
+      resumeStorageByUniqueName(uniqueName: $uniqueName) {
+        ...Storage
+      }
+    }
+  `,
+  [StorageFragment],
+);
+
+/**
  * Creates a function to list storages for an application.
  *
  * @param gqlClient - The GraphQL client instance
@@ -175,6 +203,38 @@ export const storageRestart =
   (gqlClient: GraphQLClient) =>
   async (storageUniqueName: string): Promise<Storage> => {
     const { restartStorageByUniqueName: storage } = await gqlClient.request(restartStorage, {
+      uniqueName: storageUniqueName,
+    });
+    return storage;
+  };
+
+/**
+ * Creates a function to pause a storage.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that pauses storage by unique name
+ * @throws If the storage cannot be found or the pause fails
+ */
+export const storagePause =
+  (gqlClient: GraphQLClient) =>
+  async (storageUniqueName: string): Promise<Storage> => {
+    const { pauseStorageByUniqueName: storage } = await gqlClient.request(pauseStorage, {
+      uniqueName: storageUniqueName,
+    });
+    return storage;
+  };
+
+/**
+ * Creates a function to resume a storage.
+ *
+ * @param gqlClient - The GraphQL client instance
+ * @returns Function that resumes storage by unique name
+ * @throws If the storage cannot be found or the resume fails
+ */
+export const storageResume =
+  (gqlClient: GraphQLClient) =>
+  async (storageUniqueName: string): Promise<Storage> => {
+    const { resumeStorageByUniqueName: storage } = await gqlClient.request(resumeStorage, {
       uniqueName: storageUniqueName,
     });
     return storage;

@@ -1,7 +1,7 @@
-import { getInstanceCredentials } from "@/utils/config";
 import confirm from "@inquirer/confirm";
 import password from "@inquirer/password";
 import { type DotEnv, PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
+import { getInstanceCredentials } from "@/utils/config";
 
 /**
  * Prompts the user for their personal access token.
@@ -42,7 +42,7 @@ export async function personalAccessTokenPrompt(
       try {
         validate(PersonalAccessTokenSchema, value);
         return true;
-      } catch (error) {
+      } catch (_error) {
         return "Invalid personal access token, it should start with sm_pat_...";
       }
     },

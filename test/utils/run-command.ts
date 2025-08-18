@@ -95,8 +95,10 @@ export function forceExitAllCommands(testScope: string) {
       `[forceExitAllCommands] Killing all commands for test scope ${testScope} (count: ${commandsRunning[testScope].length})`,
     );
   }
-  // biome-ignore lint/complexity/noForEach: <explanation>
-  commandsRunning[testScope]?.forEach((command) => command.pid && killProcess(command.pid));
+  // biome-ignore lint/complexity/noForEach: Iterating over array to kill processes
+  commandsRunning[testScope]?.forEach((command) => {
+    if (command.pid) killProcess(command.pid);
+  });
   commandsRunning[testScope] = [];
 }
 
@@ -109,7 +111,10 @@ function killProcess(pid: number) {
       $`kill -9 ${pid}`
         .then(() => console.log(`[kill] Killed process ${pid}`))
         .catch((killError) => {
-          console.error(`Failed to kill process ${pid}`, { pkillError, killError });
+          console.error(`Failed to kill process ${pid}`, {
+            pkillError,
+            killError,
+          });
         });
     });
 }

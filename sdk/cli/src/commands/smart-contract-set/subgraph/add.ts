@@ -1,5 +1,9 @@
 import { copyFile, mkdir, readFile, unlink, writeFile } from "node:fs/promises";
 import { basename, dirname, isAbsolute, join, relative } from "node:path";
+import { Command } from "@commander-js/extra-typings";
+import { exists, findMonoRepoRoot, projectRoot } from "@settlemint/sdk-utils/filesystem";
+import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
+import { executeCommand, intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import { createExamples } from "@/utils/commands/create-examples";
 import {
   getSubgraphYamlConfig,
@@ -8,10 +12,6 @@ import {
   updateSubgraphYamlConfig,
 } from "@/utils/subgraph/subgraph-config";
 import { validateIfRequiredPackagesAreInstalled } from "@/utils/validate-required-packages";
-import { Command } from "@commander-js/extra-typings";
-import { exists, findMonoRepoRoot, projectRoot } from "@settlemint/sdk-utils/filesystem";
-import { getPackageManagerExecutable } from "@settlemint/sdk-utils/package-manager";
-import { executeCommand, intro, note, outro } from "@settlemint/sdk-utils/terminal";
 
 const DEFAULT_ADDRESS = "0x0000000000000000000000000000000000000000";
 
@@ -115,7 +115,6 @@ async function fixPackageJson(packageJsonDir: string, requiresCodegenScript = tr
 
   if (subgraphPackageJsonData.packageManager?.includes("bun")) {
     note("Removing package manager from package.json (bun is not an official package manager)");
-    // biome-ignore lint/performance/noDelete: <explanation>
     delete subgraphPackageJsonData.packageManager;
     hasPackageJsonChanged = true;
   }

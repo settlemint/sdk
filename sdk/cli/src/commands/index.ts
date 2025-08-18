@@ -1,10 +1,10 @@
-import { telemetry } from "@/utils/telemetry";
 import { Command, CommanderError } from "@commander-js/extra-typings";
 import { AbortPromptError, CancelPromptError, ExitPromptError, ValidationError } from "@inquirer/core";
-import { CancelError, SpinnerError, ascii, maskTokens, note } from "@settlemint/sdk-utils/terminal";
-import { redBright } from "yoctocolors";
+import { ascii, CancelError, maskTokens, note, SpinnerError } from "@settlemint/sdk-utils/terminal";
+import { magentaBright, redBright } from "yoctocolors";
+import { telemetry } from "@/utils/telemetry";
 import pkg from "../../package.json";
-import { validateSdkVersionFromCommand } from "../utils/sdk-version";
+import { getInstalledSdkVersion, validateSdkVersionFromCommand } from "../utils/sdk-version";
 import { codegenCommand } from "./codegen";
 import { connectCommand } from "./connect";
 import { createCommand } from "./create";
@@ -68,6 +68,7 @@ function addHooksToCommand(cmd: Command, rootCmd: ExtendedCommand, argv: string[
       }
       if (isLeafCommand(thisCommand)) {
         ascii();
+        note(magentaBright(`v${getInstalledSdkVersion()}`));
         await validateSdkVersionFromCommand(thisCommand);
       }
     })

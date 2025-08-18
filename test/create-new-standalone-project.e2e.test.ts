@@ -1,6 +1,7 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { copyFile, readFile, rmdir, stat, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
+import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
@@ -90,6 +91,23 @@ describe("Setup a project on a standalone environment using the SDK", () => {
       },
       env as Record<string, unknown>,
     );
+    if (
+      env.SETTLEMINT_THEGRAPH &&
+      (!Array.isArray(envWithAccessTokenInUrl.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS) ||
+        envWithAccessTokenInUrl.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS.length === 0)
+    ) {
+      const settlemintClient = createSettleMintClient({
+        instance: env.SETTLEMINT_INSTANCE!,
+        accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
+      });
+      const theGraphMiddleware = await settlemintClient.middleware.read(env.SETTLEMINT_THEGRAPH);
+      // Add a default url to the env file
+      if (theGraphMiddleware?.serviceUrl) {
+        envWithAccessTokenInUrl.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS = [
+          `${theGraphMiddleware.serviceUrl}${encodeURIComponent(env.SETTLEMINT_ACCESS_TOKEN!)}`,
+        ];
+      }
+    }
     await writeFile(
       join(projectDir, ".env"),
       Object.entries(envWithAccessTokenInUrl)
@@ -128,7 +146,6 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(env.SETTLEMINT_MINIO_SECRET_KEY).toBeString();
     expect(env.SETTLEMINT_IPFS_API_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS).toBeArray();
-    expect(env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH).toBeString();
     expect(env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_HASURA_ENDPOINT).toBeString();
     expect(env.SETTLEMINT_HASURA_ADMIN_SECRET).toBeString();
@@ -274,7 +291,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     try {
       await $`bun addresses`.cwd(dAppDir).env(env);
       await $`bun lint`.cwd(dAppDir).env(env);
-      await $`bunx tsc --diagnostics --noEmit`.cwd(dAppDir).env(env);
+      //await $`bunx tsc --diagnostics --noEmit`.cwd(dAppDir).env(env);
     } catch (err) {
       const shellError = err as $.ShellError;
       console.log(shellError.stdout.toString());

@@ -1,13 +1,15 @@
-import { getVariableName } from "@/commands/codegen/utils/get-variable-name";
-import { writeTemplate } from "@/commands/codegen/utils/write-template";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
-import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
+import { readFile, writeFile } from "node:fs/promises";
+import { join } from "node:path";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { getVariableName } from "@/commands/codegen/utils/get-variable-name";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
+import { getSubgraphName } from "@/utils/subgraph/subgraph-name";
 
 const PACKAGE_NAME = "@settlemint/sdk-thegraph";
 
@@ -50,11 +52,15 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
 
   for (const gqlEndpoint of toGenerate) {
     const name = getSubgraphName(gqlEndpoint)!;
+    if (!name) {
+      continue;
+    }
     const introspectionVariable = getVariableName(`${name}Introspection`);
     note(`Generating TheGraph subgraph ${name}`);
+    const schemaName = `the-graph-schema-${name}.graphql`;
     await generateSchema({
       input: gqlEndpoint,
-      output: `the-graph-schema-${name}.graphql`,
+      output: schemaName,
       tsconfig: undefined,
       headers: accessToken
         ? {
@@ -62,6 +68,7 @@ export async function codegenTheGraph(env: DotEnv, subgraphNames?: string[]) {
           }
         : {},
     });
+    await injectFetchAllDirective(schemaName);
     const nameSuffix = capitalizeFirstLetter(name);
     const graphqlClientVariable = getVariableName(`theGraphClient${nameSuffix}`);
     const graphqlVariable = getVariableName(`theGraphGraphql${nameSuffix}`);
@@ -113,5 +120,31 @@ export const theGraphGraphql = ${graphqlVariable};
   // Install the package only if it's not already installed
   if (!(await isPackageInstalled(PACKAGE_NAME, projectDir))) {
     await installDependencies(PACKAGE_NAME, projectDir);
+  }
+}
+
+async function injectFetchAllDirective(schemaName: string) {
+  try {
+    const schemaPath = join(process.cwd(), schemaName);
+    const schema = await readFile(schemaPath, "utf8");
+    const directive = `"""
+Indicates that the field should fetch data for all pages.
+"""
+directive @fetchAll on FIELD`;
+    // Inject directive at the top of the file
+    const newSchema = `${directive}\n${schema}`;
+    // For all lines containing  "skip: Int = 0" add @fetchAll directive at the end of the line
+    const schemaLines = newSchema.split("\n");
+    for (let i = 0; i < schemaLines.length; i++) {
+      if (schemaLines[i].includes("skip: Int = 0")) {
+        schemaLines[i] += " @fetchAll";
+      }
+    }
+    await writeFile(schemaPath, schemaLines.join("\n"), "utf8");
+  } catch (error: unknown) {
+    note(
+      `Error injecting fetchAll directive into ${schemaName}: ${error instanceof Error ? error.message : String(error)}`,
+      "warn",
+    );
   }
 }

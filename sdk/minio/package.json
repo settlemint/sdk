@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/minio.cjs",
   "module": "./dist/minio.js",
   "types": "./dist/minio.d.ts",
@@ -53,7 +55,7 @@
   "dependencies": {
     "@settlemint/sdk-utils": "workspace:*",
     "minio": "^8",
-    "zod": "^3.25.0"
+    "zod": "^4"
   },
   "peerDependencies": {},
   "engines": {

@@ -1,14 +1,14 @@
+import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient } from "@settlemint/sdk-js";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
+import { PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { personalAccessTokenPrompt } from "@/prompts/pat.prompt";
 import { loginSpinner } from "@/spinners/login.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
 import { storeCredentials } from "@/utils/config";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
-import { Command } from "@commander-js/extra-typings";
-import { createSettleMintClient } from "@settlemint/sdk-js";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { cancel, intro, outro } from "@settlemint/sdk-utils/terminal";
-import { PersonalAccessTokenSchema, validate } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'login' command for the SettleMint SDK CLI.
@@ -97,7 +97,7 @@ export function loginCommand(): Command {
 
       try {
         await loginSpinner(client);
-      } catch (error) {
+      } catch (_error) {
         cancel(`Invalid personal access token for instance ${selectedInstance}`);
       }
 

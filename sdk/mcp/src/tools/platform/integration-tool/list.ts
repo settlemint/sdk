@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing integration tools in an application
@@ -28,24 +29,23 @@ export const platformIntegrationToolList = (server: McpServer, env: Partial<DotE
     instance: instance,
   });
 
-  server.tool(
-    "platform-integration-tool-list",
-    {
-      applicationUniqueName: z.string().describe("Unique name of the application to list integration tools from"),
-    },
-    async (params) => {
-      const integrationTools = await client.integrationTool.list(params.applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Integration Tool List",
-            description: `List of integration tools in application: ${params.applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(integrationTools, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  const schema = z.object({
+    applicationUniqueName: z.string().describe("Unique name of the application to list integration tools from"),
+  });
+
+  server.tool("platform-integration-tool-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName } = schema.parse(params);
+    const integrationTools = await client.integrationTool.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Integration Tool List",
+          description: `List of integration tools in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(integrationTools, null, 2),
+        },
+      ],
+    };
+  });
 };

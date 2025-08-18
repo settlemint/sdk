@@ -13,10 +13,7 @@
   },
   "biome.requireConfigFile": true,
   "editor.codeActionsOnSave": {
-    "quickfix.biome": "explicit",
-    "source.organizeImports": "never",
-    "source.organizeImports.biome": "explicit",
-    "source.removeUnusedImports": "always"
+    "source.fixAll.biome": "explicit"
   },
   "editor.defaultFormatter": "biomejs.biome",
   "editor.stickyScroll.enabled": true,

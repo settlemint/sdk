@@ -1,10 +1,10 @@
-import { writeTemplate } from "@/commands/codegen/utils/write-template";
-import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
+import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 
 const PACKAGE_NAME = "@settlemint/sdk-hasura";
 
@@ -35,7 +35,7 @@ export async function codegenHasura(env: DotEnv) {
     });
 
     // Generate Hasura client template with build time safety
-    const hasuraTemplate = `import { createHasuraClient } from "${PACKAGE_NAME}";
+    const hasuraTemplate = `import { createHasuraClient, createHasuraMetadataClient } from "${PACKAGE_NAME}";
 import type { introspection } from "@schemas/hasura-env";
 import { createLogger, requestLogger, type LogLevel } from '@settlemint/sdk-utils/logging';
 
@@ -62,7 +62,13 @@ export const { client: hasuraClient, graphql: hasuraGraphql } = createHasuraClie
   adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
 }, {
   fetch: requestLogger(logger, "hasura", fetch) as typeof fetch,
-});`;
+});
+
+export const hasuraMetadataClient = createHasuraMetadataClient({
+  instance: process.env.SETTLEMINT_HASURA_ENDPOINT!,
+  accessToken: process.env.SETTLEMINT_ACCESS_TOKEN,
+  adminSecret: process.env.SETTLEMINT_HASURA_ADMIN_SECRET!,
+}, logger);`;
 
     await writeTemplate(hasuraTemplate, "/lib/settlemint", "hasura.ts");
   } else {

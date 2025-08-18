@@ -5,15 +5,17 @@
 Foundry commands for building and testing smart contracts
 
 Options:
-  -h, --help                       display help for command
+  -h, --help                        display help for command
 
 Commands:
-  <a href="#foundry-build">build</a> [options] [operands...]    Build the smart contracts using Foundry/forge
-  <a href="#foundry-format">format</a> [options] [operands...]   Format the smart contracts using
-                                   Foundry/forge
-  <a href="#foundry-network">network</a> [options] [operands...]  Start a development network Foundry/anvil
-  <a href="#foundry-test">test</a> [options] [operands...]     Test the smart contracts using Foundry/forge
-  help [command]                   display help for command
+  <a href="#foundry-build">build</a> [options] [operands...]     Build the smart contracts using
+                                    Foundry/forge
+  <a href="#foundry-format">format</a> [options] [operands...]    Format the smart contracts using
+                                    Foundry/forge
+  <a href="#foundry-network">network</a> [options] [operands...]   Start a development network Foundry/anvil
+  <a href="#foundry-coverage">coverage</a> [options] [operands...]  Generate coverage report using Foundry/forge
+  <a href="#foundry-test">test</a> [options] [operands...]      Test the smart contracts using Foundry/forge
+  help [command]                    display help for command
 </pre>
 
 <h2 id="foundry-build"><a href="#home">Foundry</a> > Build</h2>
@@ -74,6 +76,26 @@ Start a development network Foundry/anvil
 
 Options:
   -h, --help  Get list of possible anvil options
+</pre>
+
+<h2 id="foundry-coverage"><a href="#home">Foundry</a> > Coverage</h2>
+
+<pre>Usage: settlemint smart-contract-set foundry coverage 
+Examples:
+
+  # Run coverage using Foundry
+  $ settlemint scs foundry coverage
+
+  # Get list of possible Forge coverage options
+  $ settlemint scs foundry coverage --help
+
+  # Generate lcov report with additional Forge options
+  $ settlemint scs foundry coverage --report lcov
+
+Generate coverage report using Foundry/forge
+
+Options:
+  -h, --help  Get list of possible forge options
 </pre>
 
 <h2 id="foundry-test"><a href="#home">Foundry</a> > Test</h2>

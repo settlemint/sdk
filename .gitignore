@@ -47,8 +47,11 @@ test/unknown
 test/contracts
 test/contracts-subgraphs
 test/contracts-subgraphs-not-generated
-test/test-app
+test/test-app/*
 !test/test-app/portal-env.d.ts
+!test/test-app/hasura-env.d.ts
+!test/test-app/package.json
+!test/test-app/tsconfig.json
 .temp-mono-repo-test
 
 # Docs
@@ -66,4 +69,3 @@ sdk/**/LICENSE
 demo-token/
 demo-dapp/
 .specstory
-.claude

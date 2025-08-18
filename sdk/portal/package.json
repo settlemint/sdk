@@ -20,7 +20,9 @@
     "url": "https://github.com/settlemint/sdk/issues",
     "email": "support@settlemint.com"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/portal.cjs",
   "module": "./dist/portal.js",
   "types": "./dist/portal.d.ts",
@@ -51,6 +53,7 @@
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/portal.ts --out ./docs"
   },
   "devDependencies": {
+    "graphql": "16.11.0",
     "viem": "^2"
   },
   "dependencies": {
@@ -58,7 +61,7 @@
     "graphql-ws": "^6",
     "@settlemint/sdk-utils": "workspace:*",
     "graphql-request": "^7",
-    "zod": "^3.25.0"
+    "zod": "^4"
   },
   "peerDependencies": {},
   "engines": {

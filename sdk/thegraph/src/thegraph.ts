@@ -3,7 +3,8 @@ import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import { type AbstractSetupSchema, initGraphQLTada } from "gql.tada";
 import { GraphQLClient } from "graphql-request";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { createTheGraphClientWithPagination } from "./utils/pagination.js";
 
 /**
  * Type definition for GraphQL client configuration options
@@ -78,7 +79,7 @@ function getFullUrl(options: ClientOptions): string {
  * // Making GraphQL queries
  * const query = graphql(`
  *   query SearchAssets {
- *     assets {
+ *     assets @fetchAll {
  *       id
  *       name
  *       symbol
@@ -100,14 +101,21 @@ export function createTheGraphClient<const Setup extends AbstractSetupSchema>(
   const graphql = initGraphQLTada<Setup>();
   const fullUrl = getFullUrl(validatedOptions);
 
+  const client = new GraphQLClient(fullUrl, {
+    ...clientOptions,
+    headers: appendHeaders(clientOptions?.headers, { "x-auth-token": validatedOptions.accessToken }),
+  });
+  const originalRequest = client.request.bind(client);
+  const paginatedClient = createTheGraphClientWithPagination({
+    request: originalRequest,
+  });
+  client.request = paginatedClient.query;
   return {
-    client: new GraphQLClient(fullUrl, {
-      ...clientOptions,
-      headers: appendHeaders(clientOptions?.headers, { "x-auth-token": validatedOptions.accessToken }),
-    }),
+    client,
     graphql,
   };
 }
 
-export { readFragment } from "gql.tada";
 export type { FragmentOf, ResultOf, VariablesOf } from "gql.tada";
+export { readFragment } from "gql.tada";
+export { createTheGraphClientWithPagination } from "./utils/pagination.js";

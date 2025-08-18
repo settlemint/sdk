@@ -1,6 +1,6 @@
 import input from "@inquirer/input";
 import { type DotEnv, validate } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * Prompts the user for the name of their new SettleMint project.
@@ -32,7 +32,7 @@ export async function projectNamePrompt(env: Partial<DotEnv>, argument?: string)
       try {
         validate(z.string(), value);
         return true;
-      } catch (error) {
+      } catch (_error) {
         return "Invalid projectname";
       }
     },

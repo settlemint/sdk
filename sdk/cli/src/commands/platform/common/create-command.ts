@@ -1,3 +1,9 @@
+import { Command } from "@commander-js/extra-typings";
+import { createSettleMintClient, type SettlemintClient } from "@settlemint/sdk-js";
+import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { waitForCompletion } from "@/commands/platform/utils/wait-for-completion";
 import type { ResourceType } from "@/constants/resource-type";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
@@ -10,12 +16,6 @@ import { type CommandExample, createExamples } from "@/utils/commands/create-exa
 import { sanitizeCommandName } from "@/utils/commands/sanitize-command-name";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getBlockchainNodeEnv } from "@/utils/get-cluster-service-env";
-import { Command } from "@commander-js/extra-typings";
-import { type SettlemintClient, createSettleMintClient } from "@settlemint/sdk-js";
-import { capitalizeFirstLetter } from "@settlemint/sdk-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 type DefaultArgs = {
   acceptDefaults?: true | undefined;
@@ -23,6 +23,7 @@ type DefaultArgs = {
   prod?: true | undefined;
   wait?: true | undefined;
   restartIfTimeout?: true | undefined;
+  restartOnError?: true | undefined;
   provider?: string | undefined;
   region?: string | undefined;
 };
@@ -94,12 +95,16 @@ export function getCreateCommand({
   if (requiresDeployment) {
     cmd
       .option("-w, --wait", "Wait until deployed")
-      .option("-r, --restart-if-timeout", "Restart if wait time is exceeded");
+      .option("--restart-if-timeout", "Restart if wait time is exceeded")
+      .option("--restart-on-error", "Restart if deployment fails");
   }
 
   execute(
     cmd,
-    async ({ acceptDefaults, prod, default: isDefault, wait, restartIfTimeout, provider, region }, createFunction) => {
+    async (
+      { acceptDefaults, prod, default: isDefault, wait, restartIfTimeout, restartOnError, provider, region },
+      createFunction,
+    ) => {
       intro(`Creating ${type} in the SettleMint platform`);
 
       const env: Partial<DotEnv> = await loadEnv(false, !!prod);
@@ -117,8 +122,8 @@ export function getCreateCommand({
       });
       const platformConfig = await settlemint.platform.config();
 
-      let selectedProvider: Awaited<ReturnType<typeof providerPrompt>> | undefined = undefined;
-      let selectedRegion: Awaited<ReturnType<typeof regionPrompt>> | undefined = undefined;
+      let selectedProvider: Awaited<ReturnType<typeof providerPrompt>> | undefined;
+      let selectedRegion: Awaited<ReturnType<typeof regionPrompt>> | undefined;
       if (cmd.options.some((option) => option.long === "--provider")) {
         selectedProvider = await providerPrompt(platformConfig, provider);
         if (!selectedProvider) {
@@ -152,6 +157,7 @@ export function getCreateCommand({
           uniqueName: waitFor?.uniqueName ?? result.uniqueName,
           action: "deploy",
           restartIfTimeout,
+          restartOnError,
         });
         if (!isDeployed) {
           throw new Error(

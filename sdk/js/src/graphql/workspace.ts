@@ -1,6 +1,6 @@
-import { type ResultOf, type VariablesOf, graphql } from "@/helpers/graphql.js";
 import { type Id, IdSchema, validate } from "@settlemint/sdk-utils/validation";
 import type { GraphQLClient } from "graphql-request";
+import { graphql, type ResultOf, type VariablesOf } from "@/helpers/graphql.js";
 
 /**
  * GraphQL fragment containing core workspace fields.

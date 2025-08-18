@@ -22,12 +22,14 @@ jobs:
     runs-on: namespace-profile-sdk
     steps:
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action/configure@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load secrets
-        uses: 1password/load-secrets-action@581a835fb51b8e7ec56b71cf2ffddd7e68bb25e0 # v2
+        uses: 1password/load-secrets-action@13f58eec611f8e5db52ec16247f58c508398f3e6 # v3
+        with:
+          export-env: true
         env:
           E2E_GITHUB_TOKEN: "op://platform/SDK E2E/github-token"
           SETTLEMINT_ACCESS_TOKEN_E2E_TESTS: "op://platform/SDK E2E/pat-token"
@@ -39,7 +41,7 @@ jobs:
         uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
 
       - name: Setup caches
-        uses: namespacelabs/nscloud-cache-action@449c929cd5138e6607e7e78458e88cc476e76f89 # v1
+        uses: namespacelabs/nscloud-cache-action@305bfa7ea980a858d511af4899414a84847c7991 # v1
         with:
           path: |
             ./.turbo
@@ -128,7 +130,7 @@ jobs:
 
       - name: Send Slack notification
         if: ${{ !cancelled() }}
-        uses: slackapi/slack-github-action@b0fa283ad8fea605de13dc3f449259339835fc52 # v2.1.0
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # v2.1.1
         with:
           webhook: ${{ env.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook

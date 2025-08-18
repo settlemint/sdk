@@ -1,5 +1,3 @@
-import { getInstances } from "@/utils/config";
-import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 import input from "@inquirer/input";
 import select from "@inquirer/select";
 import { note } from "@settlemint/sdk-utils/terminal";
@@ -11,6 +9,8 @@ import {
   validate,
 } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
+import { getInstances } from "@/utils/config";
+import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 
 /**
  * Prompts the user for the URL of their SettleMint instance.
@@ -59,7 +59,7 @@ export async function instancePrompt({
         try {
           validate(UrlSchema, value);
           return true;
-        } catch (error) {
+        } catch (_error) {
           return "Invalid URL";
         }
       },

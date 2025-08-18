@@ -1,6 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing all workspaces
@@ -27,7 +29,10 @@ export const platformWorkspaceList = (server: McpServer, env: Partial<DotEnv>, p
     instance: instance,
   });
 
-  server.tool("platform-workspace-list", {}, async () => {
+  const schema = z.object({});
+
+  server.tool("platform-workspace-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    schema.parse(params);
     const workspaces = await client.workspace.list();
     return {
       content: [

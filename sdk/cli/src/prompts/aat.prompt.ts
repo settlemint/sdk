@@ -4,7 +4,7 @@ import password from "@inquirer/password";
 import type { Application, SettlemintClient } from "@settlemint/sdk-js";
 import { ApplicationAccessTokenSchema, type DotEnv, validate } from "@settlemint/sdk-utils/validation";
 import isInCi from "is-in-ci";
-import { z } from "zod/v4";
+import { z } from "zod";
 
 /**
  * Prompts the user for the access token of their SettleMint application.
@@ -61,7 +61,7 @@ export async function applicationAccessTokenPrompt(
         try {
           validate(z.string(), value);
           return true;
-        } catch (error) {
+        } catch (_error) {
           return "Invalid token name";
         }
       },
@@ -116,7 +116,7 @@ export async function applicationAccessTokenPrompt(
     try {
       validate(ApplicationAccessTokenSchema, aat);
       return aat;
-    } catch (error) {
+    } catch (_error) {
       // invalid, ask for it
     }
   }
@@ -127,7 +127,7 @@ export async function applicationAccessTokenPrompt(
       try {
         validate(ApplicationAccessTokenSchema, value);
         return true;
-      } catch (error) {
+      } catch (_error) {
         return "Invalid application access token, it should start with sm_aat_...";
       }
     },

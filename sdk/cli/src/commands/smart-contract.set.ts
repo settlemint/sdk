@@ -2,6 +2,7 @@ import { Command } from "@commander-js/extra-typings";
 import { createCommand } from "./smart-contract-set/create";
 import { foundryBuildCommand } from "./smart-contract-set/foundry/build";
 import { foundryFormatCommand } from "./smart-contract-set/foundry/format";
+import { foundryCoverageCommand } from "./smart-contract-set/foundry/coverage";
 import { foundryNetworkCommand } from "./smart-contract-set/foundry/network";
 import { foundryTestCommand } from "./smart-contract-set/foundry/test";
 import { hardhatBuildCommand } from "./smart-contract-set/hardhat/build";
@@ -30,6 +31,7 @@ export function smartContractSetCommand(): Command {
   foundry.addCommand(foundryBuildCommand());
   foundry.addCommand(foundryFormatCommand());
   foundry.addCommand(foundryNetworkCommand());
+  foundry.addCommand(foundryCoverageCommand());
   foundry.addCommand(foundryTestCommand());
 
   const hardhat = new Command("hardhat")

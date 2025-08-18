@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing blockchain networks in an application
@@ -28,36 +29,35 @@ export const platformBlockchainNetworkList = (server: McpServer, env: Partial<Do
     instance: instance,
   });
 
-  server.tool(
-    "platform-blockchain-network-list",
-    {
-      applicationUniqueName: z
-        .string()
-        .describe("Unique name of the application to list blockchain networks from")
-        .optional(),
-    },
-    async (params) => {
-      // Prioritize environment variable over LLM-provided parameter
-      const applicationUniqueName = env.SETTLEMINT_APPLICATION || params.applicationUniqueName;
+  const schema = z.object({
+    applicationUniqueName: z
+      .string()
+      .describe("Unique name of the application to list blockchain networks from")
+      .optional(),
+  });
 
-      if (!applicationUniqueName) {
-        throw new Error(
-          "Application unique name is required. Set SETTLEMINT_APPLICATION environment variable or provide applicationUniqueName parameter.",
-        );
-      }
+  server.tool("platform-blockchain-network-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { applicationUniqueName: provided } = schema.parse(params);
+    // Prioritize environment variable over LLM-provided parameter
+    const applicationUniqueName = env.SETTLEMINT_APPLICATION || provided;
 
-      const networks = await client.blockchainNetwork.list(applicationUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Blockchain Network List",
-            description: `List of blockchain networks in application: ${applicationUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(networks, null, 2),
-          },
-        ],
-      };
-    },
-  );
+    if (!applicationUniqueName) {
+      throw new Error(
+        "Application unique name is required. Set SETTLEMINT_APPLICATION environment variable or provide applicationUniqueName parameter.",
+      );
+    }
+
+    const networks = await client.blockchainNetwork.list(applicationUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Blockchain Network List",
+          description: `List of blockchain networks in application: ${applicationUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(networks, null, 2),
+        },
+      ],
+    };
+  });
 };

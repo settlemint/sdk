@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a workspace by ID
@@ -28,24 +29,23 @@ export const platformWorkspaceRead = (server: McpServer, env: Partial<DotEnv>, p
     instance: instance,
   });
 
-  server.tool(
-    "platform-workspace-read",
-    {
-      workspaceUniqueName: z.string().describe("Unique name of the workspace to read"),
-    },
-    async (params) => {
-      const workspace = await client.workspace.read(params.workspaceUniqueName);
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Workspace Details",
-            description: `Details for workspace: ${params.workspaceUniqueName}`,
-            mimeType: "application/json",
-            text: JSON.stringify(workspace, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  const schema = z.object({
+    workspaceUniqueName: z.string().describe("Unique name of the workspace to read"),
+  });
+
+  server.tool("platform-workspace-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { workspaceUniqueName } = schema.parse(params);
+    const workspace = await client.workspace.read(workspaceUniqueName);
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Workspace Details",
+          description: `Details for workspace: ${workspaceUniqueName}`,
+          mimeType: "application/json",
+          text: JSON.stringify(workspace, null, 2),
+        },
+      ],
+    };
+  });
 };

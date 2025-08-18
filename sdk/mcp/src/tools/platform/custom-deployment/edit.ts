@@ -1,7 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod/v4";
+import { z } from "zod";
+import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for editing an existing custom deployment
@@ -28,26 +29,25 @@ export const platformCustomDeploymentEdit = (server: McpServer, env: Partial<Dot
     instance: instance,
   });
 
-  server.tool(
-    "platform-custom-deployment-edit",
-    {
-      customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to edit"),
-      imageTag: z.string().describe("The new tag of the Docker image"),
-    },
-    async (params) => {
-      const customDeployment = await client.customDeployment.update(params.customDeploymentUniqueName, params.imageTag);
+  const schema = z.object({
+    customDeploymentUniqueName: z.string().describe("Unique name of the custom deployment to edit"),
+    imageTag: z.string().describe("The new tag of the Docker image"),
+  });
 
-      return {
-        content: [
-          {
-            type: "text",
-            name: "Custom Deployment Updated",
-            description: `Updated custom deployment: ${params.customDeploymentUniqueName} to tag: ${params.imageTag}`,
-            mimeType: "application/json",
-            text: JSON.stringify(customDeployment, null, 2),
-          },
-        ],
-      };
-    },
-  );
+  server.tool("platform-custom-deployment-edit", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
+    const { customDeploymentUniqueName, imageTag } = schema.parse(params);
+    const customDeployment = await client.customDeployment.update(customDeploymentUniqueName, imageTag);
+
+    return {
+      content: [
+        {
+          type: "text",
+          name: "Custom Deployment Updated",
+          description: `Updated custom deployment: ${customDeploymentUniqueName} to tag: ${imageTag}`,
+          mimeType: "application/json",
+          text: JSON.stringify(customDeployment, null, 2),
+        },
+      ],
+    };
+  });
 };
