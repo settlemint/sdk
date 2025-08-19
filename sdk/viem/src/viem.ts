@@ -1,5 +1,5 @@
 /**
- * @fileoverview Viem client factory with intelligent caching and SettleMint platform integration.
+ * Viem client factory with intelligent caching and SettleMint platform integration.
  *
  * This module provides optimized blockchain client creation for the SettleMint platform.
  * Key architectural decisions:
@@ -110,8 +110,10 @@ const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain
  * WHY: Wallet clients need runtime verification parameters that can't be pre-cached.
  * BENEFIT: Amortizes chain resolution and transport configuration setup costs.
  */
-// biome-ignore lint/suspicious/noExplicitAny: Factory function type varies based on wallet client extensions
-const walletClientFactoryCache = new LRUCache<string, any>(50);
+const walletClientFactoryCache = new LRUCache<
+  string,
+  (verificationOptions?: WalletVerificationOptions) => ReturnType<typeof createWalletClientWithCustomMethods>
+>(50);
 
 /**
  * CACHE KEY GENERATION: Deterministic key creation for consistent cache behavior.
@@ -378,56 +380,62 @@ export const getWalletClient = (options: ClientOptions) => {
 
   // DESIGN PATTERN: Create factory function that captures static config but allows runtime verification
   const walletClientFactory = (verificationOptions?: WalletVerificationOptions) =>
-    createWalletClient({
-      chain: chain,
-      // WHY 500ms: Same as public client for consistent behavior
-      pollingInterval: 500,
-      transport: http(validatedOptions.rpcUrl, {
-        // NEVER BATCH!
-        batch: false,
-        // RELIABILITY: 60s timeout for potentially slow signing operations
-        timeout: 60_000,
-        ...validatedOptions.httpTransportConfig,
-        fetchOptions: {
-          ...validatedOptions?.httpTransportConfig?.fetchOptions,
-          // SECURITY: Runtime verification headers for HD wallet authentication
-          headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-            "x-auth-token": validatedOptions.accessToken,
-            // WHY conditional spreads: Only include headers when verification data is provided
-            ...(verificationOptions?.challengeResponse
-              ? {
-                  "x-auth-challenge-response": verificationOptions.challengeResponse,
-                }
-              : {}),
-            ...(verificationOptions?.challengeId
-              ? {
-                  "x-auth-challenge-id": verificationOptions.challengeId,
-                }
-              : {}),
-            ...(verificationOptions?.verificationId
-              ? {
-                  "x-auth-verification-id": verificationOptions.verificationId,
-                }
-              : {}),
-          }),
-        },
-      }),
-    })
-      // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
-      .extend(publicActions)
-      .extend(createWallet)
-      .extend(getWalletVerifications)
-      .extend(createWalletVerification)
-      .extend(deleteWalletVerification)
-      .extend(createWalletVerificationChallenge)
-      .extend(createWalletVerificationChallenges)
-      .extend(verifyWalletVerificationChallenge);
-
+    createWalletClientWithCustomMethods(chain, validatedOptions, verificationOptions);
   // PERFORMANCE: Cache the factory to amortize setup costs across multiple operations
   walletClientFactoryCache.set(cacheKey, walletClientFactory);
 
   return walletClientFactory;
 };
+
+const createWalletClientWithCustomMethods = (
+  chain: ReturnType<typeof getChain>,
+  validatedOptions: ClientOptions,
+  verificationOptions?: WalletVerificationOptions,
+) =>
+  createWalletClient({
+    chain: chain,
+    // WHY 500ms: Same as public client for consistent behavior
+    pollingInterval: 500,
+    transport: http(validatedOptions.rpcUrl, {
+      // NEVER BATCH!
+      batch: false,
+      // RELIABILITY: 60s timeout for potentially slow signing operations
+      timeout: 60_000,
+      ...validatedOptions.httpTransportConfig,
+      fetchOptions: {
+        ...validatedOptions?.httpTransportConfig?.fetchOptions,
+        // SECURITY: Runtime verification headers for HD wallet authentication
+        headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+          "x-auth-token": validatedOptions.accessToken,
+          // WHY conditional spreads: Only include headers when verification data is provided
+          ...(verificationOptions?.challengeResponse
+            ? {
+                "x-auth-challenge-response": verificationOptions.challengeResponse,
+              }
+            : {}),
+          ...(verificationOptions?.challengeId
+            ? {
+                "x-auth-challenge-id": verificationOptions.challengeId,
+              }
+            : {}),
+          ...(verificationOptions?.verificationId
+            ? {
+                "x-auth-verification-id": verificationOptions.verificationId,
+              }
+            : {}),
+        }),
+      },
+    }),
+  })
+    // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
+    .extend(publicActions)
+    .extend(createWallet)
+    .extend(getWalletVerifications)
+    .extend(createWalletVerification)
+    .extend(deleteWalletVerification)
+    .extend(createWalletVerificationChallenge)
+    .extend(createWalletVerificationChallenges)
+    .extend(verifyWalletVerificationChallenge);
 
 /**
  * Schema for the viem client options.
