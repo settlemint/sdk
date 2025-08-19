@@ -1,9 +1,9 @@
-import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { getChainId } from "@settlemint/sdk-viem";
+import { writeTemplate } from "@/commands/codegen/utils/write-template";
 
 const PACKAGE_NAME = "@settlemint/sdk-viem";
 
@@ -45,27 +45,59 @@ export async function codegenViem(env: DotEnv) {
 
   if (loadBalancerRpcEndpoint) {
     viemTemplate.push(`
+// Validate required environment variables
+const blockchainNetwork = process.env.SETTLEMINT_BLOCKCHAIN_NETWORK;
+const loadBalancerRpcEndpoint = process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT;
+
+if (!blockchainNetwork) {
+  throw new Error('SETTLEMINT_BLOCKCHAIN_NETWORK environment variable is required');
+}
+
+if (!loadBalancerRpcEndpoint) {
+  throw new Error('SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT environment variable is required');
+}
+
 /**
  * The public client. Use this if you need to read from the blockchain.
  */
 export const publicClient = getPublicClient({
   accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN ?? "",
-  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!" : `"${chainId}"`},
-  chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
-  rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT!,
+  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID" : `"${chainId}"`},
+  chainName: blockchainNetwork,
+  rpcUrl: loadBalancerRpcEndpoint,
 });`);
   }
 
   if (blockchainNodeRpcEndpoint) {
     viemTemplate.push(`
+${
+  loadBalancerRpcEndpoint
+    ? ""
+    : `// Validate required environment variables
+const blockchainNetwork = process.env.SETTLEMINT_BLOCKCHAIN_NETWORK;
+`
+}const nodeRpcEndpoint = process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT;
+
+${
+  loadBalancerRpcEndpoint
+    ? ""
+    : `if (!blockchainNetwork) {
+  throw new Error('SETTLEMINT_BLOCKCHAIN_NETWORK environment variable is required');
+}
+
+`
+}if (!nodeRpcEndpoint) {
+  throw new Error('SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT environment variable is required');
+}
+
 /**
  * The wallet client. Use this if you need to write to the blockchain.
  */
 export const walletClient = getWalletClient({
   accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN ?? "",
-  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!" : `"${chainId}"`},
-  chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
-  rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,
+  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID" : `"${chainId}"`},
+  chainName: blockchainNetwork,
+  rpcUrl: nodeRpcEndpoint,
 })();
 
 /**
@@ -74,9 +106,9 @@ export const walletClient = getWalletClient({
  */
 export const hdWalletClient = getWalletClient({
   accessToken: process.env.SETTLEMINT_BLOCKCHAIN_ACCESS_TOKEN ?? "",
-  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID!" : `"${chainId}"`},
-  chainName: process.env.SETTLEMINT_BLOCKCHAIN_NETWORK!,
-  rpcUrl: process.env.SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT!,
+  chainId: ${env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID ? "process.env.SETTLEMINT_BLOCKCHAIN_NETWORK_CHAIN_ID" : `"${chainId}"`},
+  chainName: blockchainNetwork,
+  rpcUrl: nodeRpcEndpoint,
 });`);
   }
 
