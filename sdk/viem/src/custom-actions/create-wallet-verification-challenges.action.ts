@@ -1,5 +1,5 @@
 import type { Client } from "viem";
-import type { WalletVerificationType } from "./types/wallet-verification.enum.js";
+import type { WalletVerificationChallenge } from "./types/wallet-verification-challenge.js";
 import type { AddressOrObject } from "./verify-wallet-verification-challenge.action.js";
 
 /**
@@ -7,27 +7,13 @@ import type { AddressOrObject } from "./verify-wallet-verification-challenge.act
  */
 export interface CreateWalletVerificationChallengesParameters {
   /** The wallet address or object containing wallet address and optional verification ID. */
-  addressOrObject: AddressOrObject;
-}
-
-/**
- * Represents a wallet verification challenge.
- */
-export interface WalletVerificationChallenge {
-  /** The unique identifier of the challenge. */
-  id: string;
-  /** The name of the challenge. */
-  name: string;
-  /** The type of verification required. */
-  verificationType: WalletVerificationType;
-  /** The challenge parameters specific to the verification type. */
-  challenge: Record<string, string>;
+  addressOrObject: AddressOrObject<{ amount?: number }>;
 }
 
 /**
  * Response from creating wallet verification challenges.
  */
-export type CreateWalletVerificationChallengesResponse = WalletVerificationChallenge[];
+export type CreateWalletVerificationChallengesResponse = WalletVerificationChallenge<Record<string, string>>[];
 
 /**
  * RPC schema for creating wallet verification challenges.

@@ -3,11 +3,23 @@ import type { Client } from "viem";
 /**
  * Represents either a wallet address string or an object containing wallet address and optional verification ID.
  */
-export type AddressOrObject =
+
+// biome-ignore lint/complexity/noBannedTypes: is optional and the default is empty
+export type AddressOrObject<Extra = {}> =
   | string
-  | {
+  | ({
       userWalletAddress: string;
       verificationId?: string;
+    } & Extra);
+
+/**
+ * Represents either a wallet address string, an object containing wallet address and optional verification ID or a challenge ID.
+ */
+export type AddressOrObjectWithChallengeId =
+  | AddressOrObject
+  | {
+      /** ID of the challenge to verify against */
+      challengeId: string;
     };
 
 /**
@@ -15,7 +27,7 @@ export type AddressOrObject =
  */
 export interface VerifyWalletVerificationChallengeParameters {
   /** The wallet address or object containing wallet address and optional verification ID. */
-  addressOrObject: AddressOrObject;
+  addressOrObject: AddressOrObjectWithChallengeId;
   /** The response to the verification challenge. */
   challengeResponse: string;
 }
@@ -38,7 +50,7 @@ export type VerifyWalletVerificationChallengeResponse = VerificationResult[];
  */
 type WalletRpcSchema = {
   Method: "user_verifyWalletVerificationChallenge";
-  Parameters: [addressOrObject: AddressOrObject, challengeResponse: string];
+  Parameters: [addressOrObject: AddressOrObjectWithChallengeId, challengeResponse: string];
   ReturnType: VerifyWalletVerificationChallengeResponse;
 };
 

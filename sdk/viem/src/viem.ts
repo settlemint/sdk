@@ -1,5 +1,5 @@
 /**
- * @fileoverview Viem client factory with intelligent caching and SettleMint platform integration.
+ * Viem client factory with intelligent caching and SettleMint platform integration.
  *
  * This module provides optimized blockchain client creation for the SettleMint platform.
  * Key architectural decisions:
@@ -16,70 +16,23 @@ import {
   createPublicClient,
   createWalletClient,
   defineChain,
-  http,
-  publicActions,
   type HttpTransportConfig,
+  http,
   type PublicClient,
+  publicActions,
   type Transport,
   type Chain as ViemChain,
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
-import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
-import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
 import { createWallet } from "./custom-actions/create-wallet.action.js";
+import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
+import { createWalletVerificationChallenge } from "./custom-actions/create-wallet-verification-challenge.action.js";
+import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
 import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
 import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
-
-/**
- * DESIGN DECISION: Custom LRU cache implementation over external libraries.
- *
- * WHY: Avoids external dependencies for this critical infrastructure component.
- * TRADEOFF: Simpler implementation trades advanced features (TTL, statistics) for reliability.
- * PERFORMANCE: O(1) access with automatic memory management prevents unbounded growth.
- *
- * Alternative considered: Using Map without eviction - rejected due to memory leak risk
- * in long-running server applications with diverse chain/client combinations.
- */
-class LRUCache<K, V> {
-  private cache = new Map<K, V>();
-  private readonly maxSize: number;
-
-  constructor(maxSize: number) {
-    this.maxSize = maxSize;
-  }
-
-  get(key: K): V | undefined {
-    const value = this.cache.get(key);
-    if (value !== undefined) {
-      // PERFORMANCE: Move to end to maintain LRU ordering - prevents premature eviction
-      this.cache.delete(key);
-      this.cache.set(key, value);
-    }
-    return value;
-  }
-
-  set(key: K, value: V): void {
-    // INVARIANT: Remove existing key to update position in insertion order
-    this.cache.delete(key);
-
-    // MEMORY MANAGEMENT: Enforce size limit to prevent unbounded growth
-    if (this.cache.size >= this.maxSize) {
-      // WHY: Maps preserve insertion order - first key is least recently used
-      const firstKey = this.cache.keys().next().value;
-      if (firstKey !== undefined) {
-        this.cache.delete(firstKey);
-      }
-    }
-
-    this.cache.set(key, value);
-  }
-
-  clear(): void {
-    this.cache.clear();
-  }
-}
+import { LRUCache } from "./utils/lru-cache.js";
 
 /**
  * CACHE SIZING STRATEGY: Different limits based on usage patterns and memory impact.
@@ -109,8 +62,10 @@ const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain
  * WHY: Wallet clients need runtime verification parameters that can't be pre-cached.
  * BENEFIT: Amortizes chain resolution and transport configuration setup costs.
  */
-// biome-ignore lint/suspicious/noExplicitAny: Factory function type varies based on wallet client extensions
-const walletClientFactoryCache = new LRUCache<string, any>(50);
+const walletClientFactoryCache = new LRUCache<
+  string,
+  (verificationOptions?: WalletVerificationOptions) => ReturnType<typeof createWalletClientWithCustomMethods>
+>(50);
 
 /**
  * CACHE KEY GENERATION: Deterministic key creation for consistent cache behavior.
@@ -295,7 +250,6 @@ export interface WalletVerificationOptions {
    * The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications.
    */
   verificationId?: string;
-
   /**
    * The challenge id (used for HD wallets)
    */
@@ -378,55 +332,62 @@ export const getWalletClient = (options: ClientOptions) => {
 
   // DESIGN PATTERN: Create factory function that captures static config but allows runtime verification
   const walletClientFactory = (verificationOptions?: WalletVerificationOptions) =>
-    createWalletClient({
-      chain: chain,
-      // WHY 500ms: Same as public client for consistent behavior
-      pollingInterval: 500,
-      transport: http(validatedOptions.rpcUrl, {
-        // NEVER BATCH!
-        batch: false,
-        // RELIABILITY: 60s timeout for potentially slow signing operations
-        timeout: 60_000,
-        ...validatedOptions.httpTransportConfig,
-        fetchOptions: {
-          ...validatedOptions?.httpTransportConfig?.fetchOptions,
-          // SECURITY: Runtime verification headers for HD wallet authentication
-          headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
-            "x-auth-token": validatedOptions.accessToken,
-            // WHY conditional spreads: Only include headers when verification data is provided
-            ...(verificationOptions?.challengeResponse
-              ? {
-                  "x-auth-challenge-response": verificationOptions.challengeResponse,
-                }
-              : {}),
-            ...(verificationOptions?.challengeId
-              ? {
-                  "x-auth-challenge-id": verificationOptions.challengeId,
-                }
-              : {}),
-            ...(verificationOptions?.verificationId
-              ? {
-                  "x-auth-verification-id": verificationOptions.verificationId,
-                }
-              : {}),
-          }),
-        },
-      }),
-    })
-      // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
-      .extend(publicActions)
-      .extend(createWallet)
-      .extend(getWalletVerifications)
-      .extend(createWalletVerification)
-      .extend(deleteWalletVerification)
-      .extend(createWalletVerificationChallenges)
-      .extend(verifyWalletVerificationChallenge);
-
+    createWalletClientWithCustomMethods(chain, validatedOptions, verificationOptions);
   // PERFORMANCE: Cache the factory to amortize setup costs across multiple operations
   walletClientFactoryCache.set(cacheKey, walletClientFactory);
 
   return walletClientFactory;
 };
+
+const createWalletClientWithCustomMethods = (
+  chain: ReturnType<typeof getChain>,
+  validatedOptions: ClientOptions,
+  verificationOptions?: WalletVerificationOptions,
+) =>
+  createWalletClient({
+    chain: chain,
+    // WHY 500ms: Same as public client for consistent behavior
+    pollingInterval: 500,
+    transport: http(validatedOptions.rpcUrl, {
+      // NEVER BATCH!
+      batch: false,
+      // RELIABILITY: 60s timeout for potentially slow signing operations
+      timeout: 60_000,
+      ...validatedOptions.httpTransportConfig,
+      fetchOptions: {
+        ...validatedOptions?.httpTransportConfig?.fetchOptions,
+        // SECURITY: Runtime verification headers for HD wallet authentication
+        headers: buildHeaders(validatedOptions?.httpTransportConfig?.fetchOptions?.headers, {
+          "x-auth-token": validatedOptions.accessToken,
+          // WHY conditional spreads: Only include headers when verification data is provided
+          ...(verificationOptions?.challengeResponse
+            ? {
+                "x-auth-challenge-response": verificationOptions.challengeResponse,
+              }
+            : {}),
+          ...(verificationOptions?.challengeId
+            ? {
+                "x-auth-challenge-id": verificationOptions.challengeId,
+              }
+            : {}),
+          ...(verificationOptions?.verificationId
+            ? {
+                "x-auth-verification-id": verificationOptions.verificationId,
+              }
+            : {}),
+        }),
+      },
+    }),
+  })
+    // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
+    .extend(publicActions)
+    .extend(createWallet)
+    .extend(getWalletVerifications)
+    .extend(createWalletVerification)
+    .extend(deleteWalletVerification)
+    .extend(createWalletVerificationChallenge)
+    .extend(createWalletVerificationChallenges)
+    .extend(verifyWalletVerificationChallenge);
 
 /**
  * Schema for the viem client options.
@@ -567,10 +528,10 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
 }
 
 export type {
-  CreateWalletVerificationChallengesParameters,
-  CreateWalletVerificationChallengesResponse,
-  WalletVerificationChallenge,
-} from "./custom-actions/create-wallet-verification-challenges.action.js";
+  CreateWalletParameters,
+  CreateWalletResponse,
+  WalletInfo,
+} from "./custom-actions/create-wallet.action.js";
 export type {
   CreateWalletVerificationParameters,
   CreateWalletVerificationResponse,
@@ -580,10 +541,14 @@ export type {
   WalletVerificationInfo,
 } from "./custom-actions/create-wallet-verification.action.js";
 export type {
-  CreateWalletParameters,
-  CreateWalletResponse,
-  WalletInfo,
-} from "./custom-actions/create-wallet.action.js";
+  CreateWalletVerificationChallengeParameters,
+  CreateWalletVerificationChallengeResponse,
+  WalletVerificationChallengeData,
+} from "./custom-actions/create-wallet-verification-challenge.action.js";
+export type {
+  CreateWalletVerificationChallengesParameters,
+  CreateWalletVerificationChallengesResponse,
+} from "./custom-actions/create-wallet-verification-challenges.action.js";
 export type {
   DeleteWalletVerificationParameters,
   DeleteWalletVerificationResponse,
@@ -597,8 +562,10 @@ export {
   OTPAlgorithm,
   WalletVerificationType,
 } from "./custom-actions/types/wallet-verification.enum.js";
+export type { WalletVerificationChallenge } from "./custom-actions/types/wallet-verification-challenge.js";
 export type {
   AddressOrObject,
+  AddressOrObjectWithChallengeId,
   VerificationResult,
   VerifyWalletVerificationChallengeParameters,
   VerifyWalletVerificationChallengeResponse,
