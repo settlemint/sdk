@@ -16,18 +16,19 @@ import {
   createPublicClient,
   createWalletClient,
   defineChain,
-  http,
-  publicActions,
   type HttpTransportConfig,
+  http,
   type PublicClient,
+  publicActions,
   type Transport,
   type Chain as ViemChain,
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
-import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
-import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
 import { createWallet } from "./custom-actions/create-wallet.action.js";
+import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
+import { createWalletVerificationChallenge } from "./custom-actions/create-wallet-verification-challenge.action.js";
+import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
 import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
 import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
@@ -295,7 +296,6 @@ export interface WalletVerificationOptions {
    * The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications.
    */
   verificationId?: string;
-
   /**
    * The challenge id (used for HD wallets)
    */
@@ -419,6 +419,7 @@ export const getWalletClient = (options: ClientOptions) => {
       .extend(getWalletVerifications)
       .extend(createWalletVerification)
       .extend(deleteWalletVerification)
+      .extend(createWalletVerificationChallenge)
       .extend(createWalletVerificationChallenges)
       .extend(verifyWalletVerificationChallenge);
 
@@ -567,10 +568,10 @@ function getChain({ chainId, chainName, rpcUrl }: Pick<ClientOptions, "chainId" 
 }
 
 export type {
-  CreateWalletVerificationChallengesParameters,
-  CreateWalletVerificationChallengesResponse,
-  WalletVerificationChallenge,
-} from "./custom-actions/create-wallet-verification-challenges.action.js";
+  CreateWalletParameters,
+  CreateWalletResponse,
+  WalletInfo,
+} from "./custom-actions/create-wallet.action.js";
 export type {
   CreateWalletVerificationParameters,
   CreateWalletVerificationResponse,
@@ -580,10 +581,10 @@ export type {
   WalletVerificationInfo,
 } from "./custom-actions/create-wallet-verification.action.js";
 export type {
-  CreateWalletParameters,
-  CreateWalletResponse,
-  WalletInfo,
-} from "./custom-actions/create-wallet.action.js";
+  CreateWalletVerificationChallengesParameters,
+  CreateWalletVerificationChallengesResponse,
+  WalletVerificationChallenge,
+} from "./custom-actions/create-wallet-verification-challenges.action.js";
 export type {
   DeleteWalletVerificationParameters,
   DeleteWalletVerificationResponse,

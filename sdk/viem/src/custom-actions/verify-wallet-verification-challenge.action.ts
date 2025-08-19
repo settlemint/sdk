@@ -3,12 +3,14 @@ import type { Client } from "viem";
 /**
  * Represents either a wallet address string or an object containing wallet address and optional verification ID.
  */
-export type AddressOrObject =
+
+// biome-ignore lint/complexity/noBannedTypes: is optional and the default is empty
+export type AddressOrObject<Extra = {}> =
   | string
-  | {
+  | ({
       userWalletAddress: string;
       verificationId?: string;
-    };
+    } & Extra);
 
 /**
  * Parameters for verifying a wallet verification challenge.

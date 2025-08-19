@@ -7,7 +7,7 @@ import type { AddressOrObject } from "./verify-wallet-verification-challenge.act
  */
 export interface CreateWalletVerificationChallengesParameters {
   /** The wallet address or object containing wallet address and optional verification ID. */
-  addressOrObject: AddressOrObject;
+  addressOrObject: AddressOrObject<{ amount?: number }>;
 }
 
 /**
@@ -18,6 +18,8 @@ export interface WalletVerificationChallenge {
   id: string;
   /** The name of the challenge. */
   name: string;
+  /** The verification ID. */
+  verificationId: string;
   /** The type of verification required. */
   verificationType: WalletVerificationType;
   /** The challenge parameters specific to the verification type. */
