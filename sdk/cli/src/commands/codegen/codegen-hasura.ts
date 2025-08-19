@@ -1,8 +1,15 @@
 import { generateSchema } from "@gql.tada/cli-utils";
 import { projectRoot } from "@settlemint/sdk-utils/filesystem";
-import { installDependencies, isPackageInstalled } from "@settlemint/sdk-utils/package-manager";
+import {
+  installDependencies,
+  isPackageInstalled,
+} from "@settlemint/sdk-utils/package-manager";
 import { note } from "@settlemint/sdk-utils/terminal";
-import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
+import {
+  type DotEnv,
+  LOCAL_INSTANCE,
+  STANDALONE_INSTANCE,
+} from "@settlemint/sdk-utils/validation";
 import { writeTemplate } from "@/commands/codegen/utils/write-template";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 
@@ -93,7 +100,7 @@ export const hasuraMetadataClient = createHasuraMetadataClient({
     let template: string;
 
     if (useBun) {
-      // Generate Bun SQL template
+      // Generate Bun SQL template with connection pool settings matching PostgreSQL pool
       template = `import { SQL } from 'bun';
 
 const databaseUrl = process.env.SETTLEMINT_HASURA_DATABASE_URL;
@@ -102,7 +109,26 @@ if (!databaseUrl) {
   throw new Error('SETTLEMINT_HASURA_DATABASE_URL environment variable is required');
 }
 
-export const client = new SQL(databaseUrl);
+export const client = new SQL({
+  url: databaseUrl,
+  
+  // Connection pool settings (matching PostgreSQL pool configuration)
+  max: 20, // Maximum connections in pool
+  idleTimeout: 30, // Close idle connections after 30 seconds
+  connectionTimeout: 5, // Timeout when establishing new connections (5 seconds)
+  
+  // Optional callbacks for monitoring
+  onconnect: () => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Bun SQL] Connected to database');
+    }
+  },
+  onclose: () => {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('[Bun SQL] Connection closed');
+    }
+  },
+});
 `;
     } else {
       // Use existing Drizzle template
