@@ -18,6 +18,7 @@ Options:
   --prod                                         Connect to your production environment
   --thegraph-subgraph-names &lt;subgraph-names...&gt;  The name(s) of the TheGraph subgraph(s) to generate (skip if you want to generate all)
   --generate-viem                                Generate Viem resources
+  --bun                                          Generate Bun SQL code instead of PostgreSQL pool for Hasura
   -h, --help                                     display help for command
 </pre>
 
