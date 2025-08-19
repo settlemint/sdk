@@ -115,9 +115,10 @@ export function createPostgresPool(databaseUrl: string) {
 
   const pool = new pg.Pool({
     connectionString: databaseUrl,
-    max: 20,
+    max: 10,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 5000,
+    maxLifetimeSeconds: 0,
   });
 
   setupErrorHandling(pool);
