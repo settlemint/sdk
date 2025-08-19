@@ -1,14 +1,14 @@
+import { Command } from "@commander-js/extra-typings";
+import { generateOutput } from "@gql.tada/cli-utils";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenHasura } from "@/commands/codegen/codegen-hasura";
 import { codegenPortal } from "@/commands/codegen/codegen-portal";
 import { codegenTheGraph } from "@/commands/codegen/codegen-the-graph";
 import { codegenTsconfig } from "@/commands/codegen/codegen-tsconfig";
 import { subgraphPrompt } from "@/prompts/smart-contract-set/subgraph.prompt";
 import { createExamples } from "@/utils/commands/create-examples";
-import { Command } from "@commander-js/extra-typings";
-import { generateOutput } from "@gql.tada/cli-utils";
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { intro, note, outro, spinner } from "@settlemint/sdk-utils/terminal";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { codegenBlockscout } from "./codegen/codegen-blockscout";
 import { codegenIpfs, shouldCodegenIpfs } from "./codegen/codegen-ipfs";
 import { codegenMinio, shouldCodegenMinio } from "./codegen/codegen-minio";
@@ -31,6 +31,7 @@ export function codegenCommand(): Command {
         "The name(s) of the TheGraph subgraph(s) to generate (skip if you want to generate all)",
       )
       .option("--generate-viem", "Generate Viem resources")
+      .option("--bun", "Generate Bun SQL code instead of PostgreSQL pool for Hasura")
       // Set the command description
       .description("Generate GraphQL and REST types and queries")
       .usage(
@@ -50,7 +51,7 @@ export function codegenCommand(): Command {
         ]),
       )
       // Define the action to be executed when the command is run
-      .action(async ({ prod, thegraphSubgraphNames, generateViem }) => {
+      .action(async ({ prod, thegraphSubgraphNames, generateViem, bun }) => {
         intro("Generating GraphQL types and queries for your dApp");
         const env: DotEnv = await loadEnv(true, !!prod);
 
@@ -78,7 +79,7 @@ export function codegenCommand(): Command {
 
         if (hasura) {
           note("Generating Hasura resources");
-          await codegenHasura(env);
+          await codegenHasura(env, bun);
         }
         if (portal) {
           note("Generating Portal resources");
