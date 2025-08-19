@@ -3,7 +3,7 @@ import type { WalletVerificationType } from "@/custom-actions/types/wallet-verif
 /**
  * Represents a wallet verification challenge.
  */
-export interface WalletVerificationChallenge {
+export interface WalletVerificationChallenge<ChallengeData> {
   /** The unique identifier of the challenge. */
   id: string;
   /** The name of the challenge. */
@@ -13,5 +13,5 @@ export interface WalletVerificationChallenge {
   /** The type of verification required. */
   verificationType: WalletVerificationType;
   /** The challenge parameters specific to the verification type. */
-  challenge: Record<string, string>;
+  challenge: ChallengeData;
 }

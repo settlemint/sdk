@@ -28,7 +28,7 @@ export interface WalletVerificationChallengeData {
 /**
  * Response from creating wallet verification challenge.
  */
-export type CreateWalletVerificationChallengeResponse = WalletVerificationChallenge;
+export type CreateWalletVerificationChallengeResponse = WalletVerificationChallenge<WalletVerificationChallengeData>;
 
 /**
  * RPC schema for creating wallet verification challenge.

@@ -13,7 +13,7 @@ export interface CreateWalletVerificationChallengesParameters {
 /**
  * Response from creating wallet verification challenges.
  */
-export type CreateWalletVerificationChallengesResponse = WalletVerificationChallenge[];
+export type CreateWalletVerificationChallengesResponse = WalletVerificationChallenge<Record<string, string>>[];
 
 /**
  * RPC schema for creating wallet verification challenges.
