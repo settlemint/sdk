@@ -57,6 +57,7 @@
     - [WalletVerificationOptions](#walletverificationoptions)
   - [Type Aliases](#type-aliases)
     - [AddressOrObject\<Extra\>](#addressorobjectextra)
+    - [AddressOrObjectWithChallengeId](#addressorobjectwithchallengeid)
     - [ClientOptions](#clientoptions)
     - [CreateWalletVerificationChallengeResponse](#createwalletverificationchallengeresponse)
     - [CreateWalletVerificationChallengesResponse](#createwalletverificationchallengesresponse)
@@ -82,7 +83,7 @@ The SettleMint Viem SDK provides a lightweight wrapper that automatically config
 
 > **getChainId**(`options`): `Promise`\<`number`\>
 
-Defined in: [sdk/viem/src/viem.ts:494](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L494)
+Defined in: [sdk/viem/src/viem.ts:446](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L446)
 
 Discovers the chain ID from an RPC endpoint without requiring prior knowledge.
 
@@ -135,7 +136,7 @@ console.log(chainId);
 
 > **getPublicClient**(`options`): \{ \} \| \{ \}
 
-Defined in: [sdk/viem/src/viem.ts:249](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L249)
+Defined in: [sdk/viem/src/viem.ts:201](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L201)
 
 Creates an optimized public client for blockchain read operations.
 
@@ -193,7 +194,7 @@ console.log(block);
 
 > **getWalletClient**(`options`): (`verificationOptions?`) => `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>\>
 
-Defined in: [sdk/viem/src/viem.ts:363](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L363)
+Defined in: [sdk/viem/src/viem.ts:315](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L315)
 
 Creates a factory function for wallet clients with runtime verification support.
 
@@ -450,7 +451,7 @@ Parameters for getting wallet verifications.
 
 #### VerificationResult
 
-Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:28](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L28)
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:38](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L38)
 
 Result of a wallet verification challenge.
 
@@ -458,13 +459,13 @@ Result of a wallet verification challenge.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="verified"></a> `verified` | `boolean` | Whether the verification was successful. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:30](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L30) |
+| <a id="verified"></a> `verified` | `boolean` | Whether the verification was successful. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:40](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L40) |
 
 ***
 
 #### VerifyWalletVerificationChallengeParameters
 
-Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:18](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L18)
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:28](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L28)
 
 Parameters for verifying a wallet verification challenge.
 
@@ -472,8 +473,8 @@ Parameters for verifying a wallet verification challenge.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="addressorobject-1"></a> `addressOrObject` | [`AddressOrObject`](#addressorobject-2) | The wallet address or object containing wallet address and optional verification ID. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:20](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L20) |
-| <a id="challengeresponse"></a> `challengeResponse` | `string` | The response to the verification challenge. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:22](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L22) |
+| <a id="addressorobject-1"></a> `addressOrObject` | [`AddressOrObjectWithChallengeId`](#addressorobjectwithchallengeid) | The wallet address or object containing wallet address and optional verification ID. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:30](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L30) |
+| <a id="challengeresponse"></a> `challengeResponse` | `string` | The response to the verification challenge. | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:32](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L32) |
 
 ***
 
@@ -612,7 +613,7 @@ Data specific to a wallet verification challenge.
 
 #### WalletVerificationOptions
 
-Defined in: [sdk/viem/src/viem.ts:296](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L296)
+Defined in: [sdk/viem/src/viem.ts:248](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L248)
 
 The options for the wallet client.
 
@@ -620,9 +621,9 @@ The options for the wallet client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeid-1"></a> `challengeId?` | `string` | The challenge id (used for HD wallets) | [sdk/viem/src/viem.ts:304](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L304) |
-| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:308](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L308) |
-| <a id="verificationid-3"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:300](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L300) |
+| <a id="challengeid-1"></a> `challengeId?` | `string` | The challenge id (used for HD wallets) | [sdk/viem/src/viem.ts:256](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L256) |
+| <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:260](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L260) |
+| <a id="verificationid-3"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:252](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L252) |
 
 ### Type Aliases
 
@@ -642,11 +643,31 @@ Represents either a wallet address string or an object containing wallet address
 
 ***
 
+#### AddressOrObjectWithChallengeId
+
+> **AddressOrObjectWithChallengeId** = [`AddressOrObject`](#addressorobject-2) \| \{ `challengeId`: `string`; \}
+
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:18](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L18)
+
+Represents either a wallet address string, an object containing wallet address and optional verification ID or a challenge ID.
+
+##### Type declaration
+
+[`AddressOrObject`](#addressorobject-2)
+
+\{ `challengeId`: `string`; \}
+
+| Name | Type | Description | Defined in |
+| ------ | ------ | ------ | ------ |
+| `challengeId` | `string` | ID of the challenge to verify against | [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:22](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L22) |
+
+***
+
 #### ClientOptions
 
 > **ClientOptions** = `Omit`\<`z.infer`\<*typeof* [`ClientOptionsSchema`](#clientoptionsschema)\>, `"httpTransportConfig"`\> & `object`
 
-Defined in: [sdk/viem/src/viem.ts:211](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L211)
+Defined in: [sdk/viem/src/viem.ts:163](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L163)
 
 Type representing the validated client options.
 
@@ -654,7 +675,7 @@ Type representing the validated client options.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:212](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L212) |
+| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:164](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L164) |
 
 ***
 
@@ -682,7 +703,7 @@ Response from creating wallet verification challenges.
 
 > **GetChainIdOptions** = `Omit`\<`z.infer`\<*typeof* [`GetChainIdOptionsSchema`](#getchainidoptionsschema)\>, `"httpTransportConfig"`\> & `object`
 
-Defined in: [sdk/viem/src/viem.ts:461](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L461)
+Defined in: [sdk/viem/src/viem.ts:413](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L413)
 
 Type representing the validated get chain id options.
 
@@ -690,7 +711,7 @@ Type representing the validated get chain id options.
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:462](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L462) |
+| `httpTransportConfig?` | `HttpTransportConfig` | [sdk/viem/src/viem.ts:414](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L414) |
 
 ***
 
@@ -708,7 +729,7 @@ Response from getting wallet verifications.
 
 > **VerifyWalletVerificationChallengeResponse** = [`VerificationResult`](#verificationresult)[]
 
-Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:36](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L36)
+Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts:46](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/custom-actions/verify-wallet-verification-challenge.action.ts#L46)
 
 Response from verifying a wallet verification challenge.
 
@@ -728,7 +749,7 @@ Union type of all possible wallet verification information types.
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `chainId`: `ZodString`; `chainName`: `ZodString`; `httpTransportConfig`: `ZodOptional`\<`ZodAny`\>; `rpcUrl`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
 
-Defined in: [sdk/viem/src/viem.ts:185](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L185)
+Defined in: [sdk/viem/src/viem.ts:137](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L137)
 
 Schema for the viem client options.
 
@@ -738,7 +759,7 @@ Schema for the viem client options.
 
 > `const` **GetChainIdOptionsSchema**: `ZodObject`\<\{ `accessToken`: `ZodOptional`\<`ZodString`\>; `httpTransportConfig`: `ZodOptional`\<`ZodAny`\>; `rpcUrl`: `ZodUnion`\<readonly \[`ZodString`, `ZodString`\]\>; \}, `$strip`\>
 
-Defined in: [sdk/viem/src/viem.ts:443](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L443)
+Defined in: [sdk/viem/src/viem.ts:395](https://github.com/settlemint/sdk/blob/v2.5.11/sdk/viem/src/viem.ts#L395)
 
 Schema for the viem client options.
 
