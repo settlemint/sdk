@@ -1,5 +1,5 @@
 import type { Client } from "viem";
-import type { WalletVerificationType } from "./types/wallet-verification.enum.js";
+import type { WalletVerificationChallenge } from "./types/wallet-verification-challenge.js";
 
 /**
  * Parameters for creating wallet verification challenges.
@@ -23,22 +23,6 @@ export interface WalletVerificationChallengeData {
   salt?: string;
   /** Optional secret for PINCODE verification type. */
   secret?: string;
-}
-
-/**
- * Represents a wallet verification challenge.
- */
-export interface WalletVerificationChallenge {
-  /** The unique identifier of the challenge. */
-  id: string;
-  /** The name of the challenge. */
-  name: string;
-  /** The verification ID. */
-  verificationId: string;
-  /** The type of verification required. */
-  verificationType: WalletVerificationType;
-  /** The challenge parameters specific to the verification type. */
-  challenge: WalletVerificationChallengeData;
 }
 
 /**

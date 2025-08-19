@@ -581,9 +581,13 @@ export type {
   WalletVerificationInfo,
 } from "./custom-actions/create-wallet-verification.action.js";
 export type {
+  CreateWalletVerificationChallengeParameters,
+  CreateWalletVerificationChallengeResponse,
+  WalletVerificationChallengeData,
+} from "./custom-actions/create-wallet-verification-challenge.action.js";
+export type {
   CreateWalletVerificationChallengesParameters,
   CreateWalletVerificationChallengesResponse,
-  WalletVerificationChallenge,
 } from "./custom-actions/create-wallet-verification-challenges.action.js";
 export type {
   DeleteWalletVerificationParameters,
@@ -598,6 +602,7 @@ export {
   OTPAlgorithm,
   WalletVerificationType,
 } from "./custom-actions/types/wallet-verification.enum.js";
+export type { WalletVerificationChallenge } from "./custom-actions/types/wallet-verification-challenge.js";
 export type {
   AddressOrObject,
   VerificationResult,
