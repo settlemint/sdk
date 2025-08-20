@@ -6,6 +6,8 @@ import type { Client } from "viem";
 export interface WalletInfo {
   /** The name of the wallet. */
   name: string;
+  /** Optional index for the wallet, walletIndex enables HD derivation paths */
+  walletIndex?: number;
 }
 
 /**
