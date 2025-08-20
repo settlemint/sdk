@@ -15,10 +15,6 @@ export interface CreateWalletVerificationChallengeParameters {
  * Data specific to a wallet verification challenge.
  */
 export interface WalletVerificationChallengeData {
-  /** The verification ID (for backward compatibility). */
-  id: string;
-  /** The unique identifier of the challenge. */
-  challengeId: string;
   /** Optional salt for PINCODE verification type. */
   salt?: string;
   /** Optional secret for PINCODE verification type. */
