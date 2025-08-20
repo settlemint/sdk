@@ -315,7 +315,7 @@ Used to identify different verification mechanisms when creating or managing wal
 
 #### CreateWalletParameters
 
-Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:14](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L14)
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:16](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L16)
 
 Parameters for creating a wallet.
 
@@ -323,14 +323,14 @@ Parameters for creating a wallet.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="keyvaultid"></a> `keyVaultId` | `string` | The unique name of the key vault where the wallet will be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:16](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L16) |
-| <a id="walletinfo"></a> `walletInfo` | [`WalletInfo`](#walletinfo-1) | Information about the wallet to be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:18](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L18) |
+| <a id="keyvaultid"></a> `keyVaultId` | `string` | The unique name of the key vault where the wallet will be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:18](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L18) |
+| <a id="walletinfo"></a> `walletInfo` | [`WalletInfo`](#walletinfo-1) | Information about the wallet to be created. | [sdk/viem/src/custom-actions/create-wallet.action.ts:20](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L20) |
 
 ***
 
 #### CreateWalletResponse
 
-Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:24](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L24)
+Defined in: [sdk/viem/src/custom-actions/create-wallet.action.ts:26](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L26)
 
 Response from creating a wallet.
 
@@ -338,10 +338,10 @@ Response from creating a wallet.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="address"></a> `address` | `string` | The blockchain address of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:30](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L30) |
-| <a id="derivationpath"></a> `derivationPath` | `string` | The HD derivation path used to create the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:32](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L32) |
-| <a id="id"></a> `id` | `string` | The unique identifier of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:26](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L26) |
-| <a id="name"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:28](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L28) |
+| <a id="address"></a> `address` | `string` | The blockchain address of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:32](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L32) |
+| <a id="derivationpath"></a> `derivationPath` | `string` | The HD derivation path used to create the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:34](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L34) |
+| <a id="id"></a> `id` | `string` | The unique identifier of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:28](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L28) |
+| <a id="name"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:30](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L30) |
 
 ***
 
@@ -489,6 +489,7 @@ Information about the wallet to be created.
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
 | <a id="name-2"></a> `name` | `string` | The name of the wallet. | [sdk/viem/src/custom-actions/create-wallet.action.ts:8](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L8) |
+| <a id="walletindex"></a> `walletIndex?` | `number` | Optional index for the wallet, walletIndex enables HD derivation paths | [sdk/viem/src/custom-actions/create-wallet.action.ts:10](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet.action.ts#L10) |
 
 ***
 
@@ -604,10 +605,8 @@ Data specific to a wallet verification challenge.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeid"></a> `challengeId` | `string` | The unique identifier of the challenge. | [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:21](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L21) |
-| <a id="id-4"></a> `id` | `string` | The verification ID (for backward compatibility). | [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:19](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L19) |
-| <a id="salt"></a> `salt?` | `string` | Optional salt for PINCODE verification type. | [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:23](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L23) |
-| <a id="secret"></a> `secret?` | `string` | Optional secret for PINCODE verification type. | [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:25](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L25) |
+| <a id="salt"></a> `salt?` | `string` | Optional salt for PINCODE verification type. | [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:19](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L19) |
+| <a id="secret"></a> `secret?` | `string` | Optional secret for PINCODE verification type. | [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:21](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L21) |
 
 ***
 
@@ -621,7 +620,7 @@ The options for the wallet client.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="challengeid-1"></a> `challengeId?` | `string` | The challenge id (used for HD wallets) | [sdk/viem/src/viem.ts:256](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/viem.ts#L256) |
+| <a id="challengeid"></a> `challengeId?` | `string` | The challenge id (used for HD wallets) | [sdk/viem/src/viem.ts:256](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/viem.ts#L256) |
 | <a id="challengeresponse-1"></a> `challengeResponse` | `string` | The challenge response (used for HD wallets) | [sdk/viem/src/viem.ts:260](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/viem.ts#L260) |
 | <a id="verificationid-3"></a> `verificationId?` | `string` | The verification id (used for HD wallets), if not provided, the challenge response will be validated against all active verifications. | [sdk/viem/src/viem.ts:252](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/viem.ts#L252) |
 
@@ -683,7 +682,7 @@ Type representing the validated client options.
 
 > **CreateWalletVerificationChallengeResponse** = [`WalletVerificationChallenge`](#walletverificationchallenge)\<[`WalletVerificationChallengeData`](#walletverificationchallengedata)\>
 
-Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:31](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L31)
+Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts:27](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenge.action.ts#L27)
 
 Response from creating wallet verification challenge.
 
@@ -691,7 +690,7 @@ Response from creating wallet verification challenge.
 
 #### CreateWalletVerificationChallengesResponse
 
-> **CreateWalletVerificationChallengesResponse** = [`WalletVerificationChallenge`](#walletverificationchallenge)\<`Record`\<`string`, `string`\>\>[]
+> **CreateWalletVerificationChallengesResponse** = `Omit`\<[`WalletVerificationChallenge`](#walletverificationchallenge)\<`Record`\<`string`, `string`\>\>, `"verificationId"`\>[]
 
 Defined in: [sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts:16](https://github.com/settlemint/sdk/blob/v2.5.13/sdk/viem/src/custom-actions/create-wallet-verification-challenges.action.ts#L16)
 
