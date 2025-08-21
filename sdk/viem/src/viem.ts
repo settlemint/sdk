@@ -13,14 +13,12 @@ import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import {
-  createPublicClient,
+  createPublicClient as createPublicClientViem,
   createWalletClient,
   defineChain,
   type HttpTransportConfig,
   http,
-  type PublicClient,
   publicActions,
-  type Transport,
   type Chain as ViemChain,
 } from "viem";
 import * as chains from "viem/chains";
@@ -216,34 +214,40 @@ export const getPublicClient = (options: ClientOptions) => {
   });
 
   // CONFIGURATION: Create new client with optimized settings
-  const client = createPublicClient({
-    chain: getChain({
-      chainId: validatedOptions.chainId,
-      chainName: validatedOptions.chainName,
-      rpcUrl: validatedOptions.rpcUrl,
-    }),
-    // WHY 500ms: Balances real-time updates with reasonable server load
-    pollingInterval: 500,
-    transport: http(validatedOptions.rpcUrl, {
-      // PERFORMANCE: Batch requests reduce network round-trips for multiple calls
-      batch: true,
-      // RELIABILITY: 60s timeout prevents indefinite hangs on slow networks
-      timeout: 60_000,
-      ...validatedOptions.httpTransportConfig,
-      fetchOptions: {
-        ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers,
-      },
-    }),
-  })
-    // FEATURE COMPOSITION: Extend with anvil actions
-    .extend(anvilSetBalance);
+  const client = createPublicClient(validatedOptions, headers);
 
   // PERFORMANCE: Cache for future requests with identical configuration
   publicClientCache.set(cacheKey, client);
 
   return client;
 };
+
+function createPublicClient(validatedOptions: ClientOptions, headers: HeadersInit) {
+  return (
+    createPublicClientViem({
+      chain: getChain({
+        chainId: validatedOptions.chainId,
+        chainName: validatedOptions.chainName,
+        rpcUrl: validatedOptions.rpcUrl,
+      }),
+      // WHY 500ms: Balances real-time updates with reasonable server load
+      pollingInterval: 500,
+      transport: http(validatedOptions.rpcUrl, {
+        // PERFORMANCE: Batch requests reduce network round-trips for multiple calls
+        batch: true,
+        // RELIABILITY: 60s timeout prevents indefinite hangs on slow networks
+        timeout: 60_000,
+        ...validatedOptions.httpTransportConfig,
+        fetchOptions: {
+          ...validatedOptions?.httpTransportConfig?.fetchOptions,
+          headers,
+        },
+      }),
+    })
+      // FEATURE COMPOSITION: Extend with anvil actions
+      .extend(anvilSetBalance)
+  );
+}
 
 /**
  * The options for the wallet client.
@@ -457,7 +461,7 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
   });
 
   // WHY no caching: Chain ID discovery is typically a one-time setup operation
-  const client = createPublicClient({
+  const client = createPublicClientViem({
     transport: http(validatedOptions.rpcUrl, {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {
