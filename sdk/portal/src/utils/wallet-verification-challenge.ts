@@ -127,9 +127,9 @@ export async function handleWalletVerificationChallenge<const Setup extends Abst
     }
     const verificationChallenge = await portalClient.request<CreateWalletVerificationChallengeResponse>(
       portalGraphql(`
-        mutation CreateWalletVerificationChallenge($address: String!, $verificationId: String!) {
+        mutation CreateWalletVerificationChallenge($userWalletAddress: String!, $verificationId: String!) {
           createWalletVerificationChallenge(
-            userWalletAddress: $address
+            userWalletAddress: $userWalletAddress
             verificationId: $verificationId
           ) {
             id

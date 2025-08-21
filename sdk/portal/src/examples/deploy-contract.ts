@@ -68,7 +68,7 @@ const transaction = await waitForTransactionReceipt(deployForwarder.DeployContra
 /**
  * Deploy a stablecoin implementation contract
  */
-const deployStableCoinFactory = await portalClient.request(
+const deployStableCoinImplementation = await portalClient.request(
   portalGraphql(`
     mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractATKStableCoinImplementationInput!) {
       DeployContractATKStableCoinImplementation(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
@@ -84,7 +84,7 @@ const deployStableCoinFactory = await portalClient.request(
   },
 );
 
-console.log(deployStableCoinFactory?.DeployContractATKStableCoinImplementation?.transactionHash);
+console.log(deployStableCoinImplementation?.DeployContractATKStableCoinImplementation?.transactionHash);
 
 const contractAddresses = await portalClient.request(
   portalGraphql(`

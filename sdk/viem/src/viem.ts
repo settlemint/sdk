@@ -340,7 +340,6 @@ export const getWalletClient = (options: ClientOptions) => {
   return walletClientFactory;
 };
 
-// TODO: add anvil set balance
 const createWalletClientWithCustomMethods = (
   chain: ReturnType<typeof getChain>,
   validatedOptions: ClientOptions,
