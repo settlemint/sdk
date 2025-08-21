@@ -162,7 +162,7 @@ export async function handleWalletVerificationChallenge<const Setup extends Abst
     }
 
     if (verificationType === "SECRET_CODES") {
-      // Add - separator to the code
+      // Add a hyphen after every 5 characters to format the secret code
       const formattedCode = code.toString().replace(/(.{5})(?=.)/, "$1-");
       return {
         challengeResponse: formattedCode,
