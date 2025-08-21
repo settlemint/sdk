@@ -235,7 +235,9 @@ export const getPublicClient = (options: ClientOptions) => {
         headers,
       },
     }),
-  });
+  })
+    // FEATURE COMPOSITION: Extend with anvil actions
+    .extend(anvilSetBalance);
 
   // PERFORMANCE: Cache for future requests with identical configuration
   publicClientCache.set(cacheKey, client);
@@ -380,7 +382,7 @@ const createWalletClientWithCustomMethods = (
       },
     }),
   })
-    // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
+    // FEATURE COMPOSITION: Extend with both standard viem actions, anvil actions and SettleMint-specific wallet features
     .extend(publicActions)
     .extend(anvilSetBalance)
     .extend(createWallet)
