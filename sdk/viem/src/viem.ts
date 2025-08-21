@@ -25,6 +25,7 @@ import {
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
+import { anvilSetBalance } from "./custom-actions/anvil/anvil-set-balance.js";
 import { createWallet } from "./custom-actions/create-wallet.action.js";
 import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
 import { createWalletVerificationChallenge } from "./custom-actions/create-wallet-verification-challenge.action.js";
@@ -339,6 +340,7 @@ export const getWalletClient = (options: ClientOptions) => {
   return walletClientFactory;
 };
 
+// TODO: add anvil set balance
 const createWalletClientWithCustomMethods = (
   chain: ReturnType<typeof getChain>,
   validatedOptions: ClientOptions,
@@ -381,6 +383,7 @@ const createWalletClientWithCustomMethods = (
   })
     // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
     .extend(publicActions)
+    .extend(anvilSetBalance)
     .extend(createWallet)
     .extend(getWalletVerifications)
     .extend(createWalletVerification)

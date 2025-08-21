@@ -13,7 +13,7 @@
  */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
-import type { Address } from "viem";
+import { getAddress } from "viem";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
 import { handleWalletVerificationChallenge } from "../utils/wallet-verification-challenge.js"; // Replace this path with "@settlemint/sdk-portal"
 import type { introspection } from "./schemas/portal-env.js"; // Replace this path with the generated introspection type
@@ -85,9 +85,9 @@ const challengeResponse = await handleWalletVerificationChallenge({
   portalClient,
   portalGraphql,
   verificationId: pincodeVerification.createWalletVerification?.id!,
-  userWalletAddress: wallet.createWallet?.address! as Address,
+  userWalletAddress: getAddress(wallet.createWallet?.address!),
   code: "123456",
-  verificationType: "pincode",
+  verificationType: "PINCODE",
 });
 
 /**
@@ -98,37 +98,46 @@ const challengeResponse = await handleWalletVerificationChallenge({
  */
 const result = await portalClient.request(
   portalGraphql(`
-    mutation StableCoinFactoryCreate(
-      $challengeResponse: String!
-      $verificationId: String
+    mutation CreateStableCoinMutation(
       $address: String!
       $from: String!
-      $input: StableCoinFactoryCreateInput!
+      $symbol: String!
+      $name: String!
+      $decimals: Int!
+      $initialModulePairs: [ATKStableCoinFactoryImplementationATKStableCoinFactoryImplementationCreateStableCoinInitialModulePairsInput!]!
+      $challengeId: String
+      $challengeResponse: String
+      $countryCode: Int!
     ) {
-      StableCoinFactoryCreate(
-        challengeResponse: $challengeResponse
-        verificationId: $verificationId
+      CreateStableCoin: ATKStableCoinFactoryImplementationCreateStableCoin(
         address: $address
         from: $from
-        input: $input
+        input: {
+          symbol_: $symbol
+          name_: $name
+          decimals_: $decimals
+          initialModulePairs_: $initialModulePairs
+          countryCode_: $countryCode
+        }
+        challengeId: $challengeId
+        challengeResponse: $challengeResponse
       ) {
         transactionHash
       }
     }
   `),
   {
-    challengeResponse: challengeResponse.challengeResponse,
-    verificationId: pincodeVerification.createWalletVerification?.id!,
     address: "0x5e771e1417100000000000000000000000000004",
     from: wallet.createWallet?.address!,
-    input: {
-      name: "Test Coin",
-      symbol: "TEST",
-      decimals: 18,
-      collateralLivenessSeconds: 3_600,
-    },
+    symbol: "TEST",
+    name: "Test Coin",
+    decimals: 18,
+    initialModulePairs: [],
+    challengeResponse: challengeResponse.challengeResponse,
+    challengeId: challengeResponse.challengeId,
+    countryCode: 56, // Example country code for BE
   },
 );
 
 // Log the transaction hash
-console.log("Transaction hash:", result.StableCoinFactoryCreate?.transactionHash);
+console.log("Transaction hash:", result.CreateStableCoin?.transactionHash);
