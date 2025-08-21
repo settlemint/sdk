@@ -56,7 +56,7 @@ const chainCache = new LRUCache<string, ViemChain>(100);
  * SECURITY CONSIDERATION: Public clients contain auth tokens in transport config.
  * Cache key generation ensures tokens are not leaked between different access contexts.
  */
-const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain>>(50);
+const publicClientCache = new LRUCache<string, ReturnType<typeof createPublicClient>>(50);
 
 /**
  * DESIGN PATTERN: Factory caching rather than client instance caching.
