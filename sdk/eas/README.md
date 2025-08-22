@@ -950,7 +950,7 @@ export { runEASWorkflow, type UserReputationSchema };
 
 > **createEASClient**(`options`): [`EASClient`](#easclient)
 
-Defined in: [sdk/eas/src/eas.ts:716](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L716)
+Defined in: [sdk/eas/src/eas.ts:716](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L716)
 
 Create an EAS client instance
 
@@ -989,7 +989,7 @@ const deployment = await easClient.deploy("0x1234...deployer-address");
 
 #### EASClient
 
-Defined in: [sdk/eas/src/eas.ts:44](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L44)
+Defined in: [sdk/eas/src/eas.ts:44](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L44)
 
 Main EAS client class for interacting with Ethereum Attestation Service via Portal
 
@@ -1014,7 +1014,7 @@ console.log("EAS deployed at:", deployment.easAddress);
 
 > **new EASClient**(`options`): [`EASClient`](#easclient)
 
-Defined in: [sdk/eas/src/eas.ts:55](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L55)
+Defined in: [sdk/eas/src/eas.ts:55](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L55)
 
 Create a new EAS client instance
 
@@ -1039,7 +1039,7 @@ Create a new EAS client instance
 
 > **attest**(`request`, `fromAddress`, `gasLimit?`): `Promise`\<[`TransactionResult`](#transactionresult)\>
 
-Defined in: [sdk/eas/src/eas.ts:295](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L295)
+Defined in: [sdk/eas/src/eas.ts:295](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L295)
 
 Create an attestation
 
@@ -1089,7 +1089,7 @@ console.log("Attestation created:", attestationResult.hash);
 
 > **deploy**(`deployerAddress`, `forwarderAddress?`, `gasLimit?`): `Promise`\<[`DeploymentResult`](#deploymentresult)\>
 
-Defined in: [sdk/eas/src/eas.ts:106](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L106)
+Defined in: [sdk/eas/src/eas.ts:106](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L106)
 
 Deploy EAS contracts via Portal
 
@@ -1131,7 +1131,7 @@ console.log("EAS Contract:", deployment.easAddress);
 
 > **getAttestation**(`uid`): `Promise`\<[`AttestationInfo`](#attestationinfo)\>
 
-Defined in: [sdk/eas/src/eas.ts:549](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L549)
+Defined in: [sdk/eas/src/eas.ts:549](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L549)
 
 Get an attestation by UID
 
@@ -1149,7 +1149,7 @@ Get an attestation by UID
 
 > **getAttestations**(`_options?`): `Promise`\<[`AttestationInfo`](#attestationinfo)[]\>
 
-Defined in: [sdk/eas/src/eas.ts:589](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L589)
+Defined in: [sdk/eas/src/eas.ts:589](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L589)
 
 Get attestations with pagination and filtering
 
@@ -1171,7 +1171,7 @@ Consider using getAttestation() for individual attestation lookups.
 
 > **getContractAddresses**(): `object`
 
-Defined in: [sdk/eas/src/eas.ts:662](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L662)
+Defined in: [sdk/eas/src/eas.ts:662](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L662)
 
 Get current contract addresses
 
@@ -1181,14 +1181,14 @@ Get current contract addresses
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `easAddress?` | `` `0x${string}` `` | [sdk/eas/src/eas.ts:662](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L662) |
-| `schemaRegistryAddress?` | `` `0x${string}` `` | [sdk/eas/src/eas.ts:662](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L662) |
+| `easAddress?` | `` `0x${string}` `` | [sdk/eas/src/eas.ts:662](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L662) |
+| `schemaRegistryAddress?` | `` `0x${string}` `` | [sdk/eas/src/eas.ts:662](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L662) |
 
 ###### getOptions()
 
 > **getOptions**(): `object`
 
-Defined in: [sdk/eas/src/eas.ts:648](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L648)
+Defined in: [sdk/eas/src/eas.ts:648](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L648)
 
 Get client configuration
 
@@ -1196,17 +1196,17 @@ Get client configuration
 
 | Name | Type | Default value | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| `accessToken?` | `string` | - | The application access token | [sdk/eas/src/utils/validation.ts:21](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L21) |
-| `debug?` | `boolean` | - | Whether to enable debug mode | [sdk/eas/src/utils/validation.ts:33](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L33) |
-| `easContractAddress?` | `` `0x${string}` `` | - | The EAS contract address | [sdk/eas/src/utils/validation.ts:25](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L25) |
-| `instance` | `string` | `UrlSchema` | The EAS instance URL | [sdk/eas/src/utils/validation.ts:17](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L17) |
-| `schemaRegistryContractAddress?` | `` `0x${string}` `` | - | The schema registry contract address | [sdk/eas/src/utils/validation.ts:29](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L29) |
+| `accessToken?` | `string` | - | The application access token | [sdk/eas/src/utils/validation.ts:21](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L21) |
+| `debug?` | `boolean` | - | Whether to enable debug mode | [sdk/eas/src/utils/validation.ts:33](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L33) |
+| `easContractAddress?` | `` `0x${string}` `` | - | The EAS contract address | [sdk/eas/src/utils/validation.ts:25](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L25) |
+| `instance` | `string` | `UrlSchema` | The EAS instance URL | [sdk/eas/src/utils/validation.ts:17](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L17) |
+| `schemaRegistryContractAddress?` | `` `0x${string}` `` | - | The schema registry contract address | [sdk/eas/src/utils/validation.ts:29](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L29) |
 
 ###### getPortalClient()
 
 > **getPortalClient**(): `GraphQLClient`
 
-Defined in: [sdk/eas/src/eas.ts:655](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L655)
+Defined in: [sdk/eas/src/eas.ts:655](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L655)
 
 Get the Portal client instance for advanced operations
 
@@ -1218,7 +1218,7 @@ Get the Portal client instance for advanced operations
 
 > **getSchema**(`uid`): `Promise`\<[`SchemaData`](#schemadata)\>
 
-Defined in: [sdk/eas/src/eas.ts:506](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L506)
+Defined in: [sdk/eas/src/eas.ts:506](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L506)
 
 Get a schema by UID
 
@@ -1236,7 +1236,7 @@ Get a schema by UID
 
 > **getSchemas**(`_options?`): `Promise`\<[`SchemaData`](#schemadata)[]\>
 
-Defined in: [sdk/eas/src/eas.ts:540](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L540)
+Defined in: [sdk/eas/src/eas.ts:540](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L540)
 
 Get all schemas with pagination
 
@@ -1258,7 +1258,7 @@ Consider using getSchema() for individual schema lookups.
 
 > **getTimestamp**(`data`): `Promise`\<`bigint`\>
 
-Defined in: [sdk/eas/src/eas.ts:623](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L623)
+Defined in: [sdk/eas/src/eas.ts:623](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L623)
 
 Get the timestamp for specific data
 
@@ -1278,7 +1278,7 @@ The timestamp when the data was timestamped
 
 > **isValidAttestation**(`uid`): `Promise`\<`boolean`\>
 
-Defined in: [sdk/eas/src/eas.ts:598](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L598)
+Defined in: [sdk/eas/src/eas.ts:598](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L598)
 
 Check if an attestation is valid
 
@@ -1296,7 +1296,7 @@ Check if an attestation is valid
 
 > **multiAttest**(`requests`, `fromAddress`, `gasLimit?`): `Promise`\<[`TransactionResult`](#transactionresult)\>
 
-Defined in: [sdk/eas/src/eas.ts:386](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L386)
+Defined in: [sdk/eas/src/eas.ts:386](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L386)
 
 Create multiple attestations in a single transaction
 
@@ -1359,7 +1359,7 @@ console.log("Multiple attestations created:", multiAttestResult.hash);
 
 > **registerSchema**(`request`, `fromAddress`, `gasLimit?`): `Promise`\<[`TransactionResult`](#transactionresult)\>
 
-Defined in: [sdk/eas/src/eas.ts:216](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L216)
+Defined in: [sdk/eas/src/eas.ts:216](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L216)
 
 Register a new schema in the EAS Schema Registry
 
@@ -1403,7 +1403,7 @@ console.log("Schema registered:", schemaResult.hash);
 
 > **revoke**(`schemaUID`, `attestationUID`, `fromAddress`, `value?`, `gasLimit?`): `Promise`\<[`TransactionResult`](#transactionresult)\>
 
-Defined in: [sdk/eas/src/eas.ts:464](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/eas.ts#L464)
+Defined in: [sdk/eas/src/eas.ts:464](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/eas.ts#L464)
 
 Revoke an existing attestation
 
@@ -1447,7 +1447,7 @@ console.log("Attestation revoked:", revokeResult.hash);
 
 #### AttestationData
 
-Defined in: [sdk/eas/src/schema.ts:63](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L63)
+Defined in: [sdk/eas/src/schema.ts:63](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L63)
 
 Attestation data structure
 
@@ -1455,18 +1455,18 @@ Attestation data structure
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="data"></a> `data` | `` `0x${string}` `` | Encoded attestation data | [sdk/eas/src/schema.ts:73](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L73) |
-| <a id="expirationtime"></a> `expirationTime` | `bigint` | Expiration time (0 for no expiration) | [sdk/eas/src/schema.ts:67](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L67) |
-| <a id="recipient"></a> `recipient` | `` `0x${string}` `` | Recipient of the attestation | [sdk/eas/src/schema.ts:65](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L65) |
-| <a id="refuid"></a> `refUID` | `` `0x${string}` `` | Reference UID (use ZERO_BYTES32 for no reference) | [sdk/eas/src/schema.ts:71](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L71) |
-| <a id="revocable"></a> `revocable` | `boolean` | Whether this attestation can be revoked | [sdk/eas/src/schema.ts:69](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L69) |
-| <a id="value"></a> `value` | `bigint` | Value sent with the attestation | [sdk/eas/src/schema.ts:75](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L75) |
+| <a id="data"></a> `data` | `` `0x${string}` `` | Encoded attestation data | [sdk/eas/src/schema.ts:73](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L73) |
+| <a id="expirationtime"></a> `expirationTime` | `bigint` | Expiration time (0 for no expiration) | [sdk/eas/src/schema.ts:67](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L67) |
+| <a id="recipient"></a> `recipient` | `` `0x${string}` `` | Recipient of the attestation | [sdk/eas/src/schema.ts:65](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L65) |
+| <a id="refuid"></a> `refUID` | `` `0x${string}` `` | Reference UID (use ZERO_BYTES32 for no reference) | [sdk/eas/src/schema.ts:71](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L71) |
+| <a id="revocable"></a> `revocable` | `boolean` | Whether this attestation can be revoked | [sdk/eas/src/schema.ts:69](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L69) |
+| <a id="value"></a> `value` | `bigint` | Value sent with the attestation | [sdk/eas/src/schema.ts:75](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L75) |
 
 ***
 
 #### AttestationInfo
 
-Defined in: [sdk/eas/src/schema.ts:115](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L115)
+Defined in: [sdk/eas/src/schema.ts:115](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L115)
 
 Attestation information
 
@@ -1474,22 +1474,22 @@ Attestation information
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="attester"></a> `attester` | `` `0x${string}` `` | Address that created the attestation | [sdk/eas/src/schema.ts:121](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L121) |
-| <a id="data-1"></a> `data` | `` `0x${string}` `` | Encoded attestation data | [sdk/eas/src/schema.ts:133](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L133) |
-| <a id="expirationtime-1"></a> `expirationTime` | `bigint` | Expiration timestamp | [sdk/eas/src/schema.ts:127](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L127) |
-| <a id="recipient-1"></a> `recipient` | `` `0x${string}` `` | Recipient of the attestation | [sdk/eas/src/schema.ts:123](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L123) |
-| <a id="refuid-1"></a> `refUID` | `` `0x${string}` `` | Reference UID | [sdk/eas/src/schema.ts:131](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L131) |
-| <a id="revocable-1"></a> `revocable` | `boolean` | Whether this attestation can be revoked | [sdk/eas/src/schema.ts:129](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L129) |
-| <a id="schema"></a> `schema` | `` `0x${string}` `` | Schema UID | [sdk/eas/src/schema.ts:119](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L119) |
-| <a id="time"></a> `time` | `bigint` | Creation timestamp | [sdk/eas/src/schema.ts:125](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L125) |
-| <a id="uid"></a> `uid` | `` `0x${string}` `` | Attestation UID | [sdk/eas/src/schema.ts:117](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L117) |
-| <a id="value-1"></a> `value` | `bigint` | Value sent with the attestation | [sdk/eas/src/schema.ts:135](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L135) |
+| <a id="attester"></a> `attester` | `` `0x${string}` `` | Address that created the attestation | [sdk/eas/src/schema.ts:121](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L121) |
+| <a id="data-1"></a> `data` | `` `0x${string}` `` | Encoded attestation data | [sdk/eas/src/schema.ts:133](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L133) |
+| <a id="expirationtime-1"></a> `expirationTime` | `bigint` | Expiration timestamp | [sdk/eas/src/schema.ts:127](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L127) |
+| <a id="recipient-1"></a> `recipient` | `` `0x${string}` `` | Recipient of the attestation | [sdk/eas/src/schema.ts:123](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L123) |
+| <a id="refuid-1"></a> `refUID` | `` `0x${string}` `` | Reference UID | [sdk/eas/src/schema.ts:131](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L131) |
+| <a id="revocable-1"></a> `revocable` | `boolean` | Whether this attestation can be revoked | [sdk/eas/src/schema.ts:129](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L129) |
+| <a id="schema"></a> `schema` | `` `0x${string}` `` | Schema UID | [sdk/eas/src/schema.ts:119](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L119) |
+| <a id="time"></a> `time` | `bigint` | Creation timestamp | [sdk/eas/src/schema.ts:125](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L125) |
+| <a id="uid"></a> `uid` | `` `0x${string}` `` | Attestation UID | [sdk/eas/src/schema.ts:117](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L117) |
+| <a id="value-1"></a> `value` | `bigint` | Value sent with the attestation | [sdk/eas/src/schema.ts:135](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L135) |
 
 ***
 
 #### AttestationRequest
 
-Defined in: [sdk/eas/src/schema.ts:81](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L81)
+Defined in: [sdk/eas/src/schema.ts:81](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L81)
 
 Attestation request
 
@@ -1497,14 +1497,14 @@ Attestation request
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="data-2"></a> `data` | [`AttestationData`](#attestationdata) | Attestation data | [sdk/eas/src/schema.ts:85](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L85) |
-| <a id="schema-1"></a> `schema` | `` `0x${string}` `` | Schema UID to attest against | [sdk/eas/src/schema.ts:83](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L83) |
+| <a id="data-2"></a> `data` | [`AttestationData`](#attestationdata) | Attestation data | [sdk/eas/src/schema.ts:85](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L85) |
+| <a id="schema-1"></a> `schema` | `` `0x${string}` `` | Schema UID to attest against | [sdk/eas/src/schema.ts:83](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L83) |
 
 ***
 
 #### DeploymentResult
 
-Defined in: [sdk/eas/src/schema.ts:167](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L167)
+Defined in: [sdk/eas/src/schema.ts:167](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L167)
 
 Contract deployment result
 
@@ -1512,16 +1512,16 @@ Contract deployment result
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="easaddress"></a> `easAddress` | `` `0x${string}` `` | Deployed EAS contract address | [sdk/eas/src/schema.ts:169](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L169) |
-| <a id="eastransactionhash"></a> `easTransactionHash?` | `` `0x${string}` `` | EAS deployment transaction hash (when address not immediately available) | [sdk/eas/src/schema.ts:173](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L173) |
-| <a id="schemaregistryaddress"></a> `schemaRegistryAddress` | `` `0x${string}` `` | Deployed Schema Registry contract address | [sdk/eas/src/schema.ts:171](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L171) |
-| <a id="schemaregistrytransactionhash"></a> `schemaRegistryTransactionHash?` | `` `0x${string}` `` | Schema Registry deployment transaction hash (when address not immediately available) | [sdk/eas/src/schema.ts:175](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L175) |
+| <a id="easaddress"></a> `easAddress` | `` `0x${string}` `` | Deployed EAS contract address | [sdk/eas/src/schema.ts:169](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L169) |
+| <a id="eastransactionhash"></a> `easTransactionHash?` | `` `0x${string}` `` | EAS deployment transaction hash (when address not immediately available) | [sdk/eas/src/schema.ts:173](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L173) |
+| <a id="schemaregistryaddress"></a> `schemaRegistryAddress` | `` `0x${string}` `` | Deployed Schema Registry contract address | [sdk/eas/src/schema.ts:171](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L171) |
+| <a id="schemaregistrytransactionhash"></a> `schemaRegistryTransactionHash?` | `` `0x${string}` `` | Schema Registry deployment transaction hash (when address not immediately available) | [sdk/eas/src/schema.ts:175](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L175) |
 
 ***
 
 #### GetAttestationsOptions
 
-Defined in: [sdk/eas/src/schema.ts:151](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L151)
+Defined in: [sdk/eas/src/schema.ts:151](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L151)
 
 Options for retrieving attestations
 
@@ -1529,17 +1529,17 @@ Options for retrieving attestations
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="attester-1"></a> `attester?` | `` `0x${string}` `` | Filter by attester address | [sdk/eas/src/schema.ts:159](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L159) |
-| <a id="limit"></a> `limit?` | `number` | Maximum number of attestations to return | [sdk/eas/src/schema.ts:153](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L153) |
-| <a id="offset"></a> `offset?` | `number` | Number of attestations to skip | [sdk/eas/src/schema.ts:155](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L155) |
-| <a id="recipient-2"></a> `recipient?` | `` `0x${string}` `` | Filter by recipient address | [sdk/eas/src/schema.ts:161](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L161) |
-| <a id="schema-2"></a> `schema?` | `` `0x${string}` `` | Filter by schema UID | [sdk/eas/src/schema.ts:157](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L157) |
+| <a id="attester-1"></a> `attester?` | `` `0x${string}` `` | Filter by attester address | [sdk/eas/src/schema.ts:159](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L159) |
+| <a id="limit"></a> `limit?` | `number` | Maximum number of attestations to return | [sdk/eas/src/schema.ts:153](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L153) |
+| <a id="offset"></a> `offset?` | `number` | Number of attestations to skip | [sdk/eas/src/schema.ts:155](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L155) |
+| <a id="recipient-2"></a> `recipient?` | `` `0x${string}` `` | Filter by recipient address | [sdk/eas/src/schema.ts:161](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L161) |
+| <a id="schema-2"></a> `schema?` | `` `0x${string}` `` | Filter by schema UID | [sdk/eas/src/schema.ts:157](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L157) |
 
 ***
 
 #### GetSchemasOptions
 
-Defined in: [sdk/eas/src/schema.ts:141](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L141)
+Defined in: [sdk/eas/src/schema.ts:141](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L141)
 
 Options for retrieving schemas
 
@@ -1547,14 +1547,14 @@ Options for retrieving schemas
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="limit-1"></a> `limit?` | `number` | Maximum number of schemas to return | [sdk/eas/src/schema.ts:143](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L143) |
-| <a id="offset-1"></a> `offset?` | `number` | Number of schemas to skip | [sdk/eas/src/schema.ts:145](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L145) |
+| <a id="limit-1"></a> `limit?` | `number` | Maximum number of schemas to return | [sdk/eas/src/schema.ts:143](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L143) |
+| <a id="offset-1"></a> `offset?` | `number` | Number of schemas to skip | [sdk/eas/src/schema.ts:145](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L145) |
 
 ***
 
 #### SchemaData
 
-Defined in: [sdk/eas/src/schema.ts:101](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L101)
+Defined in: [sdk/eas/src/schema.ts:101](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L101)
 
 Schema information
 
@@ -1562,16 +1562,16 @@ Schema information
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="resolver"></a> `resolver` | `` `0x${string}` `` | Resolver contract address | [sdk/eas/src/schema.ts:105](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L105) |
-| <a id="revocable-2"></a> `revocable` | `boolean` | Whether attestations can be revoked | [sdk/eas/src/schema.ts:107](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L107) |
-| <a id="schema-3"></a> `schema` | `string` | Schema string | [sdk/eas/src/schema.ts:109](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L109) |
-| <a id="uid-1"></a> `uid` | `` `0x${string}` `` | Schema UID | [sdk/eas/src/schema.ts:103](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L103) |
+| <a id="resolver"></a> `resolver` | `` `0x${string}` `` | Resolver contract address | [sdk/eas/src/schema.ts:105](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L105) |
+| <a id="revocable-2"></a> `revocable` | `boolean` | Whether attestations can be revoked | [sdk/eas/src/schema.ts:107](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L107) |
+| <a id="schema-3"></a> `schema` | `string` | Schema string | [sdk/eas/src/schema.ts:109](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L109) |
+| <a id="uid-1"></a> `uid` | `` `0x${string}` `` | Schema UID | [sdk/eas/src/schema.ts:103](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L103) |
 
 ***
 
 #### SchemaField
 
-Defined in: [sdk/eas/src/schema.ts:32](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L32)
+Defined in: [sdk/eas/src/schema.ts:32](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L32)
 
 Represents a single field in an EAS schema.
 
@@ -1579,15 +1579,15 @@ Represents a single field in an EAS schema.
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="description"></a> `description?` | `string` | Optional description of the field's purpose | [sdk/eas/src/schema.ts:38](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L38) |
-| <a id="name"></a> `name` | `string` | The name of the field | [sdk/eas/src/schema.ts:34](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L34) |
-| <a id="type"></a> `type` | `"string"` \| `"address"` \| `"bool"` \| `"bytes"` \| `"bytes32"` \| `"uint256"` \| `"int256"` \| `"uint8"` \| `"int8"` | The Solidity type of the field | [sdk/eas/src/schema.ts:36](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L36) |
+| <a id="description"></a> `description?` | `string` | Optional description of the field's purpose | [sdk/eas/src/schema.ts:38](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L38) |
+| <a id="name"></a> `name` | `string` | The name of the field | [sdk/eas/src/schema.ts:34](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L34) |
+| <a id="type"></a> `type` | `"string"` \| `"address"` \| `"bool"` \| `"bytes"` \| `"bytes32"` \| `"uint256"` \| `"int256"` \| `"uint8"` \| `"int8"` | The Solidity type of the field | [sdk/eas/src/schema.ts:36](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L36) |
 
 ***
 
 #### SchemaRequest
 
-Defined in: [sdk/eas/src/schema.ts:49](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L49)
+Defined in: [sdk/eas/src/schema.ts:49](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L49)
 
 Schema registration request
 
@@ -1595,16 +1595,16 @@ Schema registration request
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="fields"></a> `fields?` | [`SchemaField`](#schemafield)[] | Schema fields (alternative to schema string) | [sdk/eas/src/schema.ts:51](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L51) |
-| <a id="resolver-1"></a> `resolver` | `` `0x${string}` `` | Resolver contract address (use ZERO_ADDRESS for no resolver) | [sdk/eas/src/schema.ts:55](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L55) |
-| <a id="revocable-3"></a> `revocable` | `boolean` | Whether attestations using this schema can be revoked | [sdk/eas/src/schema.ts:57](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L57) |
-| <a id="schema-4"></a> `schema?` | `string` | Raw schema string (alternative to fields) | [sdk/eas/src/schema.ts:53](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L53) |
+| <a id="fields"></a> `fields?` | [`SchemaField`](#schemafield)[] | Schema fields (alternative to schema string) | [sdk/eas/src/schema.ts:51](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L51) |
+| <a id="resolver-1"></a> `resolver` | `` `0x${string}` `` | Resolver contract address (use ZERO_ADDRESS for no resolver) | [sdk/eas/src/schema.ts:55](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L55) |
+| <a id="revocable-3"></a> `revocable` | `boolean` | Whether attestations using this schema can be revoked | [sdk/eas/src/schema.ts:57](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L57) |
+| <a id="schema-4"></a> `schema?` | `string` | Raw schema string (alternative to fields) | [sdk/eas/src/schema.ts:53](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L53) |
 
 ***
 
 #### TransactionResult
 
-Defined in: [sdk/eas/src/schema.ts:91](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L91)
+Defined in: [sdk/eas/src/schema.ts:91](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L91)
 
 Transaction result
 
@@ -1612,8 +1612,8 @@ Transaction result
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="hash"></a> `hash` | `` `0x${string}` `` | Transaction hash | [sdk/eas/src/schema.ts:93](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L93) |
-| <a id="success"></a> `success` | `boolean` | Whether the transaction was successful | [sdk/eas/src/schema.ts:95](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L95) |
+| <a id="hash"></a> `hash` | `` `0x${string}` `` | Transaction hash | [sdk/eas/src/schema.ts:93](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L93) |
+| <a id="success"></a> `success` | `boolean` | Whether the transaction was successful | [sdk/eas/src/schema.ts:95](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L95) |
 
 ### Type Aliases
 
@@ -1621,7 +1621,7 @@ Transaction result
 
 > **EASClientOptions** = `object`
 
-Defined in: [sdk/eas/src/schema.ts:44](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L44)
+Defined in: [sdk/eas/src/schema.ts:44](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L44)
 
 Configuration options for the EAS client
 
@@ -1629,11 +1629,11 @@ Configuration options for the EAS client
 
 | Name | Type | Default value | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken?` | `string` | - | The application access token | [sdk/eas/src/utils/validation.ts:21](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L21) |
-| <a id="debug"></a> `debug?` | `boolean` | - | Whether to enable debug mode | [sdk/eas/src/utils/validation.ts:33](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L33) |
-| <a id="eascontractaddress"></a> `easContractAddress?` | `` `0x${string}` `` | - | The EAS contract address | [sdk/eas/src/utils/validation.ts:25](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L25) |
-| <a id="instance"></a> `instance` | `string` | `UrlSchema` | The EAS instance URL | [sdk/eas/src/utils/validation.ts:17](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L17) |
-| <a id="schemaregistrycontractaddress"></a> `schemaRegistryContractAddress?` | `` `0x${string}` `` | - | The schema registry contract address | [sdk/eas/src/utils/validation.ts:29](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L29) |
+| <a id="accesstoken"></a> `accessToken?` | `string` | - | The application access token | [sdk/eas/src/utils/validation.ts:21](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L21) |
+| <a id="debug"></a> `debug?` | `boolean` | - | Whether to enable debug mode | [sdk/eas/src/utils/validation.ts:33](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L33) |
+| <a id="eascontractaddress"></a> `easContractAddress?` | `` `0x${string}` `` | - | The EAS contract address | [sdk/eas/src/utils/validation.ts:25](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L25) |
+| <a id="instance"></a> `instance` | `string` | `UrlSchema` | The EAS instance URL | [sdk/eas/src/utils/validation.ts:17](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L17) |
+| <a id="schemaregistrycontractaddress"></a> `schemaRegistryContractAddress?` | `` `0x${string}` `` | - | The schema registry contract address | [sdk/eas/src/utils/validation.ts:29](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L29) |
 
 ### Variables
 
@@ -1641,7 +1641,7 @@ Configuration options for the EAS client
 
 > `const` **EAS\_FIELD\_TYPES**: `object`
 
-Defined in: [sdk/eas/src/schema.ts:15](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L15)
+Defined in: [sdk/eas/src/schema.ts:15](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L15)
 
 Supported field types for EAS schema fields.
 Maps to the Solidity types that can be used in EAS schemas.
@@ -1650,15 +1650,15 @@ Maps to the Solidity types that can be used in EAS schemas.
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="address"></a> `address` | `"address"` | `"address"` | [sdk/eas/src/schema.ts:17](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L17) |
-| <a id="bool"></a> `bool` | `"bool"` | `"bool"` | [sdk/eas/src/schema.ts:18](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L18) |
-| <a id="bytes"></a> `bytes` | `"bytes"` | `"bytes"` | [sdk/eas/src/schema.ts:19](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L19) |
-| <a id="bytes32"></a> `bytes32` | `"bytes32"` | `"bytes32"` | [sdk/eas/src/schema.ts:20](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L20) |
-| <a id="int256"></a> `int256` | `"int256"` | `"int256"` | [sdk/eas/src/schema.ts:22](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L22) |
-| <a id="int8"></a> `int8` | `"int8"` | `"int8"` | [sdk/eas/src/schema.ts:24](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L24) |
-| <a id="string"></a> `string` | `"string"` | `"string"` | [sdk/eas/src/schema.ts:16](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L16) |
-| <a id="uint256"></a> `uint256` | `"uint256"` | `"uint256"` | [sdk/eas/src/schema.ts:21](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L21) |
-| <a id="uint8"></a> `uint8` | `"uint8"` | `"uint8"` | [sdk/eas/src/schema.ts:23](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L23) |
+| <a id="address"></a> `address` | `"address"` | `"address"` | [sdk/eas/src/schema.ts:17](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L17) |
+| <a id="bool"></a> `bool` | `"bool"` | `"bool"` | [sdk/eas/src/schema.ts:18](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L18) |
+| <a id="bytes"></a> `bytes` | `"bytes"` | `"bytes"` | [sdk/eas/src/schema.ts:19](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L19) |
+| <a id="bytes32"></a> `bytes32` | `"bytes32"` | `"bytes32"` | [sdk/eas/src/schema.ts:20](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L20) |
+| <a id="int256"></a> `int256` | `"int256"` | `"int256"` | [sdk/eas/src/schema.ts:22](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L22) |
+| <a id="int8"></a> `int8` | `"int8"` | `"int8"` | [sdk/eas/src/schema.ts:24](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L24) |
+| <a id="string"></a> `string` | `"string"` | `"string"` | [sdk/eas/src/schema.ts:16](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L16) |
+| <a id="uint256"></a> `uint256` | `"uint256"` | `"uint256"` | [sdk/eas/src/schema.ts:21](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L21) |
+| <a id="uint8"></a> `uint8` | `"uint8"` | `"uint8"` | [sdk/eas/src/schema.ts:23](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L23) |
 
 ***
 
@@ -1666,7 +1666,7 @@ Maps to the Solidity types that can be used in EAS schemas.
 
 > `const` **EASClientOptionsSchema**: `ZodObject`\<[`EASClientOptions`](#easclientoptions)\>
 
-Defined in: [sdk/eas/src/utils/validation.ts:13](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/utils/validation.ts#L13)
+Defined in: [sdk/eas/src/utils/validation.ts:13](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/utils/validation.ts#L13)
 
 Zod schema for EASClientOptions.
 
@@ -1676,7 +1676,7 @@ Zod schema for EASClientOptions.
 
 > `const` **ZERO\_ADDRESS**: `"0x0000000000000000000000000000000000000000"` = `zeroAddress`
 
-Defined in: [sdk/eas/src/schema.ts:8](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/eas/src/schema.ts#L8)
+Defined in: [sdk/eas/src/schema.ts:8](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/eas/src/schema.ts#L8)
 
 Common address constants
 

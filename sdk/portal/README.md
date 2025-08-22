@@ -613,7 +613,7 @@ console.log("Transaction hash:", result.CreateStableCoin?.transactionHash);
 
 > **createPortalClient**\<`Setup`\>(`options`, `clientOptions?`): `object`
 
-Defined in: [sdk/portal/src/portal.ts:72](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L72)
+Defined in: [sdk/portal/src/portal.ts:72](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L72)
 
 Creates a Portal GraphQL client with the provided configuration.
 
@@ -641,8 +641,8 @@ An object containing the configured GraphQL client and graphql helper function
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
-| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L76) |
-| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:77](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L77) |
+| `client` | `GraphQLClient` | [sdk/portal/src/portal.ts:76](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L76) |
+| `graphql` | `initGraphQLTada`\<`Setup`\> | [sdk/portal/src/portal.ts:77](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L77) |
 
 ##### Throws
 
@@ -694,7 +694,7 @@ const result = await portalClient.request(query);
 
 > **getWebsocketClient**(`options`): `Client`
 
-Defined in: [sdk/portal/src/utils/websocket-client.ts:30](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/websocket-client.ts#L30)
+Defined in: [sdk/portal/src/utils/websocket-client.ts:30](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/websocket-client.ts#L30)
 
 Creates a GraphQL WebSocket client for the Portal API
 
@@ -727,7 +727,7 @@ const client = getWebsocketClient({
 
 > **handleWalletVerificationChallenge**\<`Setup`\>(`options`): `Promise`\<\{ `challengeId`: `string`; `challengeResponse`: `string`; \}\>
 
-Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:111](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L111)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:111](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L111)
 
 Handles a wallet verification challenge by generating an appropriate response
 
@@ -780,7 +780,7 @@ const result = await handleWalletVerificationChallenge({
 
 > **waitForTransactionReceipt**(`transactionHash`, `options`): `Promise`\<[`Transaction`](#transaction)\>
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:80](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L80)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:80](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L80)
 
 Waits for a blockchain transaction receipt by subscribing to transaction updates via GraphQL.
 This function polls until the transaction is confirmed or the timeout is reached.
@@ -818,7 +818,7 @@ const transaction = await waitForTransactionReceipt("0x123...", {
 
 #### WalletVerificationChallengeError
 
-Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:14](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L14)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:14](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L14)
 
 Custom error class for challenge-related errors
 
@@ -830,7 +830,7 @@ Custom error class for challenge-related errors
 
 #### HandleWalletVerificationChallengeOptions\<Setup\>
 
-Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:70](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L70)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:70](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L70)
 
 Options for handling a wallet verification challenge
 
@@ -844,19 +844,19 @@ Options for handling a wallet verification challenge
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="code"></a> `code` | `string` \| `number` | The verification code provided by the user | [sdk/portal/src/utils/wallet-verification-challenge.ts:80](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L80) |
-| <a id="portalclient"></a> `portalClient` | `GraphQLClient` | The portal client instance | [sdk/portal/src/utils/wallet-verification-challenge.ts:72](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L72) |
-| <a id="portalgraphql"></a> `portalGraphql` | `initGraphQLTada`\<`Setup`\> | The GraphQL query builder | [sdk/portal/src/utils/wallet-verification-challenge.ts:74](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L74) |
-| <a id="requestid"></a> `requestId?` | `string` | Request id which can be added for tracing purposes | [sdk/portal/src/utils/wallet-verification-challenge.ts:84](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L84) |
-| <a id="userwalletaddress"></a> `userWalletAddress` | `` `0x${string}` `` | The wallet address to verify | [sdk/portal/src/utils/wallet-verification-challenge.ts:78](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L78) |
-| <a id="verificationid"></a> `verificationId` | `string` | The ID of the verification challenge | [sdk/portal/src/utils/wallet-verification-challenge.ts:76](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L76) |
-| <a id="verificationtype"></a> `verificationType` | [`WalletVerificationType`](#walletverificationtype) | The type of verification being performed | [sdk/portal/src/utils/wallet-verification-challenge.ts:82](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L82) |
+| <a id="code"></a> `code` | `string` \| `number` | The verification code provided by the user | [sdk/portal/src/utils/wallet-verification-challenge.ts:80](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L80) |
+| <a id="portalclient"></a> `portalClient` | `GraphQLClient` | The portal client instance | [sdk/portal/src/utils/wallet-verification-challenge.ts:72](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L72) |
+| <a id="portalgraphql"></a> `portalGraphql` | `initGraphQLTada`\<`Setup`\> | The GraphQL query builder | [sdk/portal/src/utils/wallet-verification-challenge.ts:74](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L74) |
+| <a id="requestid"></a> `requestId?` | `string` | Request id which can be added for tracing purposes | [sdk/portal/src/utils/wallet-verification-challenge.ts:84](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L84) |
+| <a id="userwalletaddress"></a> `userWalletAddress` | `` `0x${string}` `` | The wallet address to verify | [sdk/portal/src/utils/wallet-verification-challenge.ts:78](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L78) |
+| <a id="verificationid"></a> `verificationId` | `string` | The ID of the verification challenge | [sdk/portal/src/utils/wallet-verification-challenge.ts:76](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L76) |
+| <a id="verificationtype"></a> `verificationType` | [`WalletVerificationType`](#walletverificationtype) | The type of verification being performed | [sdk/portal/src/utils/wallet-verification-challenge.ts:82](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L82) |
 
 ***
 
 #### Transaction
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:34](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L34)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:34](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L34)
 
 Represents the structure of a blockchain transaction with its receipt
 
@@ -864,18 +864,18 @@ Represents the structure of a blockchain transaction with its receipt
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="address"></a> `address` | `string` | The contract address involved in the transaction | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:43](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L43) |
-| <a id="createdat"></a> `createdAt` | `string` | Timestamp when the transaction was created | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:41](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L41) |
-| <a id="from"></a> `from` | `string` | The sender address (duplicate of receipt.from) | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:39](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L39) |
-| <a id="functionname"></a> `functionName` | `string` | The name of the function called in the transaction | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:45](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L45) |
-| <a id="iscontract"></a> `isContract` | `boolean` | Whether the transaction is a contract deployment | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:47](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L47) |
-| <a id="transactionhash"></a> `transactionHash` | `string` | The hash of the transaction (duplicate of receipt.transactionHash) | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:37](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L37) |
+| <a id="address"></a> `address` | `string` | The contract address involved in the transaction | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:43](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L43) |
+| <a id="createdat"></a> `createdAt` | `string` | Timestamp when the transaction was created | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:41](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L41) |
+| <a id="from"></a> `from` | `string` | The sender address (duplicate of receipt.from) | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:39](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L39) |
+| <a id="functionname"></a> `functionName` | `string` | The name of the function called in the transaction | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:45](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L45) |
+| <a id="iscontract"></a> `isContract` | `boolean` | Whether the transaction is a contract deployment | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:47](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L47) |
+| <a id="transactionhash"></a> `transactionHash` | `string` | The hash of the transaction (duplicate of receipt.transactionHash) | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:37](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L37) |
 
 ***
 
 #### TransactionEvent
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:8](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L8)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:8](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L8)
 
 Represents an event emitted during a transaction execution
 
@@ -883,15 +883,15 @@ Represents an event emitted during a transaction execution
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="args"></a> `args` | `Record`\<`string`, `unknown`\> | The arguments emitted by the event | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:12](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L12) |
-| <a id="eventname"></a> `eventName` | `string` | The name of the event that was emitted | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:10](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L10) |
-| <a id="topics"></a> `topics` | `` `0x${string}` ``[] | Indexed event parameters used for filtering and searching | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:14](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L14) |
+| <a id="args"></a> `args` | `Record`\<`string`, `unknown`\> | The arguments emitted by the event | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:12](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L12) |
+| <a id="eventname"></a> `eventName` | `string` | The name of the event that was emitted | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:10](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L10) |
+| <a id="topics"></a> `topics` | `` `0x${string}` ``[] | Indexed event parameters used for filtering and searching | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:14](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L14) |
 
 ***
 
 #### TransactionReceipt
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:20](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L20)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:20](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L20)
 
 Represents the structure of a blockchain transaction receipt
 
@@ -903,16 +903,16 @@ Represents the structure of a blockchain transaction receipt
 
 | Property | Type | Description | Overrides | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="contractaddress"></a> `contractAddress` | `` `0x${string}` `` | The address of the contract deployed in the transaction | `TransactionReceiptViem.contractAddress` | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:28](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L28) |
-| <a id="events"></a> `events` | [`TransactionEvent`](#transactionevent)[] | Array of events emitted during the transaction | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:26](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L26) |
-| <a id="revertreason"></a> `revertReason` | `string` | The raw reason for transaction reversion, if applicable | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:22](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L22) |
-| <a id="revertreasondecoded"></a> `revertReasonDecoded` | `string` | Human-readable version of the revert reason | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:24](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L24) |
+| <a id="contractaddress"></a> `contractAddress` | `` `0x${string}` `` | The address of the contract deployed in the transaction | `TransactionReceiptViem.contractAddress` | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:28](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L28) |
+| <a id="events"></a> `events` | [`TransactionEvent`](#transactionevent)[] | Array of events emitted during the transaction | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:26](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L26) |
+| <a id="revertreason"></a> `revertReason` | `string` | The raw reason for transaction reversion, if applicable | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:22](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L22) |
+| <a id="revertreasondecoded"></a> `revertReasonDecoded` | `string` | Human-readable version of the revert reason | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:24](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L24) |
 
 ***
 
 #### WaitForTransactionReceiptOptions
 
-Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:57](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L57)
+Defined in: [sdk/portal/src/utils/wait-for-transaction-receipt.ts:57](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L57)
 
 Options for waiting for a transaction receipt
 
@@ -924,15 +924,15 @@ Options for waiting for a transaction receipt
 
 | Property | Type | Description | Inherited from | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
-| <a id="accesstoken"></a> `accessToken?` | `string` | The access token for authentication with the Portal API | [`WebsocketClientOptions`](#websocketclientoptions).[`accessToken`](#accesstoken-1) | [sdk/portal/src/utils/websocket-client.ts:14](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/websocket-client.ts#L14) |
-| <a id="portalgraphqlendpoint"></a> `portalGraphqlEndpoint` | `string` | The GraphQL endpoint URL for the Portal API | [`WebsocketClientOptions`](#websocketclientoptions).[`portalGraphqlEndpoint`](#portalgraphqlendpoint-1) | [sdk/portal/src/utils/websocket-client.ts:10](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/websocket-client.ts#L10) |
-| <a id="timeout"></a> `timeout?` | `number` | Optional timeout in milliseconds before the operation fails | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:59](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L59) |
+| <a id="accesstoken"></a> `accessToken?` | `string` | The access token for authentication with the Portal API | [`WebsocketClientOptions`](#websocketclientoptions).[`accessToken`](#accesstoken-1) | [sdk/portal/src/utils/websocket-client.ts:14](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/websocket-client.ts#L14) |
+| <a id="portalgraphqlendpoint"></a> `portalGraphqlEndpoint` | `string` | The GraphQL endpoint URL for the Portal API | [`WebsocketClientOptions`](#websocketclientoptions).[`portalGraphqlEndpoint`](#portalgraphqlendpoint-1) | [sdk/portal/src/utils/websocket-client.ts:10](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/websocket-client.ts#L10) |
+| <a id="timeout"></a> `timeout?` | `number` | Optional timeout in milliseconds before the operation fails | - | [sdk/portal/src/utils/wait-for-transaction-receipt.ts:59](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wait-for-transaction-receipt.ts#L59) |
 
 ***
 
 #### WebsocketClientOptions
 
-Defined in: [sdk/portal/src/utils/websocket-client.ts:6](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/websocket-client.ts#L6)
+Defined in: [sdk/portal/src/utils/websocket-client.ts:6](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/websocket-client.ts#L6)
 
 Options for the GraphQL WebSocket client
 
@@ -944,8 +944,8 @@ Options for the GraphQL WebSocket client
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="accesstoken-1"></a> `accessToken?` | `string` | The access token for authentication with the Portal API | [sdk/portal/src/utils/websocket-client.ts:14](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/websocket-client.ts#L14) |
-| <a id="portalgraphqlendpoint-1"></a> `portalGraphqlEndpoint` | `string` | The GraphQL endpoint URL for the Portal API | [sdk/portal/src/utils/websocket-client.ts:10](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/websocket-client.ts#L10) |
+| <a id="accesstoken-1"></a> `accessToken?` | `string` | The access token for authentication with the Portal API | [sdk/portal/src/utils/websocket-client.ts:14](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/websocket-client.ts#L14) |
+| <a id="portalgraphqlendpoint-1"></a> `portalGraphqlEndpoint` | `string` | The GraphQL endpoint URL for the Portal API | [sdk/portal/src/utils/websocket-client.ts:10](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/websocket-client.ts#L10) |
 
 ### Type Aliases
 
@@ -953,7 +953,7 @@ Options for the GraphQL WebSocket client
 
 > **ClientOptions** = `object`
 
-Defined in: [sdk/portal/src/portal.ts:25](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L25)
+Defined in: [sdk/portal/src/portal.ts:25](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L25)
 
 Type representing the validated client options.
 
@@ -961,9 +961,9 @@ Type representing the validated client options.
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="accesstoken-2"></a> `accessToken?` | `string` | - | [sdk/portal/src/portal.ts:18](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L18) |
-| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/portal/src/portal.ts:19](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L19) |
-| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/portal/src/portal.ts:17](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L17) |
+| <a id="accesstoken-2"></a> `accessToken?` | `string` | - | [sdk/portal/src/portal.ts:18](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L18) |
+| <a id="cache"></a> `cache?` | `"default"` \| `"force-cache"` \| `"no-cache"` \| `"no-store"` \| `"only-if-cached"` \| `"reload"` | - | [sdk/portal/src/portal.ts:19](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L19) |
+| <a id="instance"></a> `instance` | `string` | `UrlOrPathSchema` | [sdk/portal/src/portal.ts:17](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L17) |
 
 ***
 
@@ -971,7 +971,7 @@ Type representing the validated client options.
 
 > **RequestConfig** = `ConstructorParameters`\<*typeof* `GraphQLClient`\>\[`1`\]
 
-Defined in: [sdk/portal/src/portal.ts:11](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L11)
+Defined in: [sdk/portal/src/portal.ts:11](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L11)
 
 Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
@@ -981,7 +981,7 @@ Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
 
 > **WalletVerificationType** = `"PINCODE"` \| `"OTP"` \| `"SECRET_CODES"`
 
-Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:9](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L9)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:9](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/utils/wallet-verification-challenge.ts#L9)
 
 Type representing the different types of wallet verification methods
 
@@ -991,7 +991,7 @@ Type representing the different types of wallet verification methods
 
 > `const` **ClientOptionsSchema**: `ZodObject`\<[`ClientOptions`](#clientoptions)\>
 
-Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L16)
+Defined in: [sdk/portal/src/portal.ts:16](https://github.com/settlemint/sdk/blob/v2.6.0/sdk/portal/src/portal.ts#L16)
 
 Schema for validating Portal client configuration options.
 
