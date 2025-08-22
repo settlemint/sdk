@@ -27,7 +27,11 @@ async function generateReadme() {
     const sdkDir = join(__dirname, "..", "sdk");
     console.log(`Scanning SDK directory: ${sdkDir}`);
     const sdkDirEntries = await readdir(sdkDir, { withFileTypes: true });
-    const packages = sdkDirEntries.filter((entry) => entry.isDirectory()).map((entry) => entry.name);
+    const packages = sdkDirEntries
+      .filter((entry) => entry.isDirectory())
+      .map((entry) => entry.name)
+      .filter((entry) => entry !== "test")
+      .sort();
     console.log(`Found ${packages.length} packages`);
 
     // Generate README for each package
