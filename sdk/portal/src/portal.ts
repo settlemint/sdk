@@ -102,5 +102,7 @@ export {
 export {
   type HandleWalletVerificationChallengeOptions,
   handleWalletVerificationChallenge,
+  WalletVerificationChallengeError,
+  type WalletVerificationType,
 } from "./utils/wallet-verification-challenge.js";
 export { getWebsocketClient, type WebsocketClientOptions } from "./utils/websocket-client.js";
