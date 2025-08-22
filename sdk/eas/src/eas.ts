@@ -1,4 +1,5 @@
 import { createPortalClient, waitForTransactionReceipt } from "@settlemint/sdk-portal";
+import { createTheGraphClient, type ResultOf } from "@settlemint/sdk-thegraph";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { validate } from "@settlemint/sdk-utils/validation";
 import type { Address, Hex } from "viem";
@@ -46,6 +47,7 @@ export class EASClient {
   private readonly portalClient: PortalClient["client"];
   private readonly portalGraphql: PortalClient["graphql"];
   private deployedAddresses?: DeploymentResult;
+  private theGraph?: ReturnType<typeof createTheGraphClient<any>>;
 
   /**
    * Create a new EAS client instance
@@ -74,6 +76,19 @@ export class EASClient {
 
     this.portalClient = portalClient;
     this.portalGraphql = portalGraphql;
+
+    // Initialize The Graph client if configured
+    if (this.options.theGraph) {
+      this.theGraph = createTheGraphClient<any>(
+        {
+          instances: this.options.theGraph.instances,
+          accessToken: this.options.theGraph.accessToken,
+          subgraphName: this.options.theGraph.subgraphName,
+          cache: this.options.theGraph.cache,
+        },
+        undefined,
+      );
+    }
   }
 
   /**
@@ -538,9 +553,38 @@ export class EASClient {
    * Consider using getSchema() for individual schema lookups.
    */
   public async getSchemas(_options?: GetSchemasOptions): Promise<SchemaData[]> {
-    throw new Error(
-      "Schema listing not implemented yet. Portal's direct contract queries don't support listing all schemas. Use getSchema() for individual schema lookups or implement The Graph subgraph integration for bulk queries.",
-    );
+    if (!this.theGraph) {
+      throw new Error(
+        "Schema listing requires The Graph configuration. Provide 'theGraph' options when creating EAS client.",
+      );
+    }
+
+    // Basic listing without filters. Pagination can be added via @fetchAll directive.
+    const query = this.theGraph.graphql(`
+      query ListSchemas($first: Int = 100, $skip: Int = 0) {
+        schemas(first: $first, skip: $skip) @fetchAll {
+          id
+          resolver
+          revocable
+          schema
+        }
+      }
+    `);
+
+    const result = (await this.theGraph.client.request(query)) as ResultOf<typeof query>;
+    const list = (result as any).schemas as Array<{
+      id: string;
+      resolver: string;
+      revocable: boolean;
+      schema: string | null;
+    }>;
+
+    return list.map((s) => ({
+      uid: s.id as Hex,
+      resolver: s.resolver as Address,
+      revocable: Boolean(s.revocable),
+      schema: s.schema ?? "",
+    }));
   }
 
   /**
@@ -586,10 +630,72 @@ export class EASClient {
    * as Portal's direct contract queries don't support listing all attestations.
    * Consider using getAttestation() for individual attestation lookups.
    */
-  public async getAttestations(_options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
-    throw new Error(
-      "Attestation listing not implemented yet. Portal's direct contract queries don't support listing all attestations. Use getAttestation() for individual attestation lookups or implement The Graph subgraph integration for bulk queries.",
-    );
+  public async getAttestations(options?: GetAttestationsOptions): Promise<AttestationInfo[]> {
+    if (!this.theGraph) {
+      throw new Error(
+        "Attestation listing requires The Graph configuration. Provide 'theGraph' options when creating EAS client.",
+      );
+    }
+
+    const query = this.theGraph.graphql(`
+      query ListAttestations($first: Int = 100, $skip: Int = 0, $schema: Bytes, $attester: Bytes, $recipient: Bytes) {
+        attestations(
+          first: $first
+          skip: $skip
+          where: {
+            ${options?.schema ? "schema: $schema" : ""}
+            ${options?.attester ? "attester: $attester" : ""}
+            ${options?.recipient ? "recipient: $recipient" : ""}
+          }
+        ) @fetchAll {
+          id
+          schema { id }
+          attester
+          recipient
+          time
+          expirationTime
+          revocable
+          refUID
+          data
+          revokedAt
+        }
+      }
+    `);
+
+    const variables: Record<string, unknown> = {
+      first: options?.limit ?? 100,
+      skip: options?.offset ?? 0,
+    };
+    if (options?.schema) variables.schema = options.schema;
+    if (options?.attester) variables.attester = options.attester;
+    if (options?.recipient) variables.recipient = options.recipient;
+
+    const result = (await this.theGraph.client.request(query, variables)) as ResultOf<typeof query>;
+    const list = (result as any).attestations as Array<{
+      id: string;
+      schema: { id: string } | string;
+      attester: string;
+      recipient: string;
+      time: string | number | null;
+      expirationTime: string | number | null;
+      revocable: boolean;
+      refUID: string | null;
+      data: string | null;
+      revokedAt?: string | null;
+    }>;
+
+    return list.map((a) => ({
+      uid: (a.id ?? (a as any).uid) as Hex,
+      schema: (typeof a.schema === "string" ? a.schema : a.schema.id) as Hex,
+      attester: a.attester as Address,
+      recipient: a.recipient as Address,
+      time: a.time ? BigInt(a.time) : BigInt(0),
+      expirationTime: a.expirationTime ? BigInt(a.expirationTime) : BigInt(0),
+      revocable: Boolean(a.revocable),
+      refUID: (a.refUID ?? ("0x" + "0".repeat(64))) as Hex,
+      data: (a.data ?? "0x") as Hex,
+      value: BigInt(0),
+    }));
   }
 
   /**
