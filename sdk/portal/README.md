@@ -38,6 +38,8 @@
     - [getWebsocketClient()](#getwebsocketclient)
     - [handleWalletVerificationChallenge()](#handlewalletverificationchallenge)
     - [waitForTransactionReceipt()](#waitfortransactionreceipt)
+  - [Classes](#classes)
+    - [WalletVerificationChallengeError](#walletverificationchallengeerror)
   - [Interfaces](#interfaces)
     - [HandleWalletVerificationChallengeOptions\<Setup\>](#handlewalletverificationchallengeoptionssetup)
     - [Transaction](#transaction)
@@ -48,6 +50,7 @@
   - [Type Aliases](#type-aliases)
     - [ClientOptions](#clientoptions)
     - [RequestConfig](#requestconfig)
+    - [WalletVerificationType](#walletverificationtype)
   - [Variables](#variables)
     - [ClientOptionsSchema](#clientoptionsschema)
 - [Contributing](#contributing)
@@ -112,7 +115,7 @@ const FROM = getAddress("0x4B03331cF2db1497ec58CAa4AFD8b93611906960");
 const deployForwarder = await portalClient.request(
   portalGraphql(`
     mutation DeployContractForwarder($from: String!) {
-      DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
+      DeployContractATKForwarder(from: $from, gasLimit: "0x3d0900") {
         transactionHash
       }
     }
@@ -125,18 +128,18 @@ const deployForwarder = await portalClient.request(
 /**
  * Wait for the forwarder contract deployment to be finalized
  */
-const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
+const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractATKForwarder?.transactionHash!, {
   portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
   accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });
 
 /**
- * Deploy a stablecoin factory contract
+ * Deploy a stablecoin implementation contract
  */
-const deployStableCoinFactory = await portalClient.request(
+const deployStableCoinImplementation = await portalClient.request(
   portalGraphql(`
-    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
-      DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
+    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractATKStableCoinImplementationInput!) {
+      DeployContractATKStableCoinImplementation(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
         transactionHash
       }
     }
@@ -144,12 +147,12 @@ const deployStableCoinFactory = await portalClient.request(
   {
     from: FROM,
     constructorArguments: {
-      forwarder: getAddress(transaction?.receipt.contractAddress!),
+      forwarder_: getAddress(transaction?.receipt.contractAddress!),
     },
   },
 );
 
-console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);
+console.log(deployStableCoinImplementation?.DeployContractATKStableCoinImplementation?.transactionHash);
 
 const contractAddresses = await portalClient.request(
   portalGraphql(`
@@ -471,7 +474,7 @@ runMonitoringExample();
  */
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
-import type { Address } from "viem";
+import { getAddress } from "viem";
 import { createPortalClient } from "../portal.js"; // Replace this path with "@settlemint/sdk-portal"
 import { handleWalletVerificationChallenge } from "../utils/wallet-verification-challenge.js"; // Replace this path with "@settlemint/sdk-portal"
 import type { introspection } from "./schemas/portal-env.js"; // Replace this path with the generated introspection type
@@ -543,9 +546,9 @@ const challengeResponse = await handleWalletVerificationChallenge({
   portalClient,
   portalGraphql,
   verificationId: pincodeVerification.createWalletVerification?.id!,
-  userWalletAddress: wallet.createWallet?.address! as Address,
+  userWalletAddress: getAddress(wallet.createWallet?.address!),
   code: "123456",
-  verificationType: "pincode",
+  verificationType: "PINCODE",
 });
 
 /**
@@ -556,40 +559,49 @@ const challengeResponse = await handleWalletVerificationChallenge({
  */
 const result = await portalClient.request(
   portalGraphql(`
-    mutation StableCoinFactoryCreate(
-      $challengeResponse: String!
-      $verificationId: String
+    mutation CreateStableCoinMutation(
       $address: String!
       $from: String!
-      $input: StableCoinFactoryCreateInput!
+      $symbol: String!
+      $name: String!
+      $decimals: Int!
+      $initialModulePairs: [ATKStableCoinFactoryImplementationATKStableCoinFactoryImplementationCreateStableCoinInitialModulePairsInput!]!
+      $challengeId: String
+      $challengeResponse: String
+      $countryCode: Int!
     ) {
-      StableCoinFactoryCreate(
-        challengeResponse: $challengeResponse
-        verificationId: $verificationId
+      CreateStableCoin: ATKStableCoinFactoryImplementationCreateStableCoin(
         address: $address
         from: $from
-        input: $input
+        input: {
+          symbol_: $symbol
+          name_: $name
+          decimals_: $decimals
+          initialModulePairs_: $initialModulePairs
+          countryCode_: $countryCode
+        }
+        challengeId: $challengeId
+        challengeResponse: $challengeResponse
       ) {
         transactionHash
       }
     }
   `),
   {
-    challengeResponse: challengeResponse.challengeResponse,
-    verificationId: pincodeVerification.createWalletVerification?.id!,
     address: "0x5e771e1417100000000000000000000000000004",
     from: wallet.createWallet?.address!,
-    input: {
-      name: "Test Coin",
-      symbol: "TEST",
-      decimals: 18,
-      collateralLivenessSeconds: 3_600,
-    },
+    symbol: "TEST",
+    name: "Test Coin",
+    decimals: 18,
+    initialModulePairs: [],
+    challengeResponse: challengeResponse.challengeResponse,
+    challengeId: challengeResponse.challengeId,
+    countryCode: 56, // Example country code for BE
   },
 );
 
 // Log the transaction hash
-console.log("Transaction hash:", result.StableCoinFactoryCreate?.transactionHash);
+console.log("Transaction hash:", result.CreateStableCoin?.transactionHash);
 
 ```
 
@@ -713,9 +725,9 @@ const client = getWebsocketClient({
 
 #### handleWalletVerificationChallenge()
 
-> **handleWalletVerificationChallenge**\<`Setup`\>(`options`): `Promise`\<\{ `challengeResponse`: `string`; `verificationId?`: `string`; \}\>
+> **handleWalletVerificationChallenge**\<`Setup`\>(`options`): `Promise`\<\{ `challengeId`: `string`; `challengeResponse`: `string`; \}\>
 
-Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:103](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L103)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:111](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L111)
 
 Handles a wallet verification challenge by generating an appropriate response
 
@@ -733,7 +745,7 @@ Handles a wallet verification challenge by generating an appropriate response
 
 ##### Returns
 
-`Promise`\<\{ `challengeResponse`: `string`; `verificationId?`: `string`; \}\>
+`Promise`\<\{ `challengeId`: `string`; `challengeResponse`: `string`; \}\>
 
 Promise resolving to an object containing the challenge response and optionally the verification ID
 
@@ -758,7 +770,7 @@ const result = await handleWalletVerificationChallenge({
   verificationId: "verification-123",
   userWalletAddress: "0x123...",
   code: "123456",
-  verificationType: "otp"
+  verificationType: "OTP"
 });
 ```
 
@@ -802,11 +814,23 @@ const transaction = await waitForTransactionReceipt("0x123...", {
 });
 ```
 
+### Classes
+
+#### WalletVerificationChallengeError
+
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:14](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L14)
+
+Custom error class for challenge-related errors
+
+##### Extends
+
+- `Error`
+
 ### Interfaces
 
 #### HandleWalletVerificationChallengeOptions\<Setup\>
 
-Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:64](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L64)
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:70](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L70)
 
 Options for handling a wallet verification challenge
 
@@ -820,12 +844,13 @@ Options for handling a wallet verification challenge
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="code"></a> `code` | `string` \| `number` | The verification code provided by the user | [sdk/portal/src/utils/wallet-verification-challenge.ts:74](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L74) |
-| <a id="portalclient"></a> `portalClient` | `GraphQLClient` | The portal client instance | [sdk/portal/src/utils/wallet-verification-challenge.ts:66](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L66) |
-| <a id="portalgraphql"></a> `portalGraphql` | `initGraphQLTada`\<`Setup`\> | The GraphQL query builder | [sdk/portal/src/utils/wallet-verification-challenge.ts:68](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L68) |
-| <a id="userwalletaddress"></a> `userWalletAddress` | `` `0x${string}` `` | The wallet address to verify | [sdk/portal/src/utils/wallet-verification-challenge.ts:72](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L72) |
-| <a id="verificationid"></a> `verificationId` | `string` | The ID of the verification challenge | [sdk/portal/src/utils/wallet-verification-challenge.ts:70](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L70) |
-| <a id="verificationtype"></a> `verificationType` | `"otp"` \| `"secret-code"` \| `"pincode"` | The type of verification being performed | [sdk/portal/src/utils/wallet-verification-challenge.ts:76](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L76) |
+| <a id="code"></a> `code` | `string` \| `number` | The verification code provided by the user | [sdk/portal/src/utils/wallet-verification-challenge.ts:80](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L80) |
+| <a id="portalclient"></a> `portalClient` | `GraphQLClient` | The portal client instance | [sdk/portal/src/utils/wallet-verification-challenge.ts:72](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L72) |
+| <a id="portalgraphql"></a> `portalGraphql` | `initGraphQLTada`\<`Setup`\> | The GraphQL query builder | [sdk/portal/src/utils/wallet-verification-challenge.ts:74](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L74) |
+| <a id="requestid"></a> `requestId?` | `string` | Request id which can be added for tracing purposes | [sdk/portal/src/utils/wallet-verification-challenge.ts:84](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L84) |
+| <a id="userwalletaddress"></a> `userWalletAddress` | `` `0x${string}` `` | The wallet address to verify | [sdk/portal/src/utils/wallet-verification-challenge.ts:78](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L78) |
+| <a id="verificationid"></a> `verificationId` | `string` | The ID of the verification challenge | [sdk/portal/src/utils/wallet-verification-challenge.ts:76](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L76) |
+| <a id="verificationtype"></a> `verificationType` | [`WalletVerificationType`](#walletverificationtype) | The type of verification being performed | [sdk/portal/src/utils/wallet-verification-challenge.ts:82](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L82) |
 
 ***
 
@@ -949,6 +974,16 @@ Type representing the validated client options.
 Defined in: [sdk/portal/src/portal.ts:11](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/portal.ts#L11)
 
 Configuration options for the GraphQL client, excluding 'url' and 'exchanges'.
+
+***
+
+#### WalletVerificationType
+
+> **WalletVerificationType** = `"PINCODE"` \| `"OTP"` \| `"SECRET_CODES"`
+
+Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:9](https://github.com/settlemint/sdk/blob/v2.5.14/sdk/portal/src/utils/wallet-verification-challenge.ts#L9)
+
+Type representing the different types of wallet verification methods
 
 ### Variables
 
