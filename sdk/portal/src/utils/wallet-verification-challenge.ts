@@ -4,9 +4,14 @@ import type { GraphQLClient } from "graphql-request";
 import type { Address } from "viem";
 
 /**
+ * Type representing the different types of wallet verification methods
+ */
+export type WalletVerificationType = "PINCODE" | "OTP" | "SECRET_CODES";
+
+/**
  * Custom error class for challenge-related errors
  */
-export class ChallengeError extends Error {
+export class WalletVerificationChallengeError extends Error {
   readonly code: string;
 
   constructor(message: string, code: string) {
@@ -20,20 +25,21 @@ export class ChallengeError extends Error {
  * Represents the structure of a wallet verification challenge
  */
 interface WalletVerificationChallenge {
-  challenge: {
-    secret: string;
-    salt: string;
-  };
   id: string;
   name: string;
-  verificationType: string;
+  verificationId: string;
+  verificationType: WalletVerificationType;
+  challenge?: {
+    salt: string;
+    secret: string;
+  };
 }
 
 /**
- * Response type for the CreateWalletVerificationChallenges mutation
+ * Response type for the CreateWalletVerificationChallenge mutation
  */
-interface CreateWalletVerificationChallengesResponse {
-  createWalletVerificationChallenges: WalletVerificationChallenge[];
+interface CreateWalletVerificationChallengeResponse {
+  createWalletVerificationChallenge: WalletVerificationChallenge;
 }
 
 /**
@@ -73,7 +79,9 @@ export interface HandleWalletVerificationChallengeOptions<Setup extends Abstract
   /** The verification code provided by the user */
   code: string | number;
   /** The type of verification being performed */
-  verificationType: "otp" | "secret-code" | "pincode";
+  verificationType: WalletVerificationType;
+  /** Request id which can be added for tracing purposes */
+  requestId?: string;
 }
 
 /**
@@ -81,7 +89,7 @@ export interface HandleWalletVerificationChallengeOptions<Setup extends Abstract
  *
  * @param options - The options for handling the wallet verification challenge
  * @returns Promise resolving to an object containing the challenge response and optionally the verification ID
- * @throws {ChallengeError} If the challenge cannot be created or is invalid
+ * @throws {WalletVerificationChallengeError} If the challenge cannot be created or is invalid
  * @example
  * import { createPortalClient } from "@settlemint/sdk-portal";
  * import { handleWalletVerificationChallenge } from "@settlemint/sdk-portal";
@@ -97,7 +105,7 @@ export interface HandleWalletVerificationChallengeOptions<Setup extends Abstract
  *   verificationId: "verification-123",
  *   userWalletAddress: "0x123...",
  *   code: "123456",
- *   verificationType: "otp"
+ *   verificationType: "OTP"
  * });
  */
 export async function handleWalletVerificationChallenge<const Setup extends AbstractSetupSchema>({
@@ -107,35 +115,31 @@ export async function handleWalletVerificationChallenge<const Setup extends Abst
   userWalletAddress,
   code,
   verificationType,
+  requestId,
 }: HandleWalletVerificationChallengeOptions<Setup>): Promise<{
   challengeResponse: string;
-  verificationId?: string;
+  challengeId: string;
 }> {
   try {
-    if (verificationType === "otp") {
-      return {
-        challengeResponse: code.toString(),
-        verificationId,
-      };
+    const requestHeaders = new Headers();
+    if (requestId) {
+      requestHeaders.append("x-request-id", requestId);
     }
-
-    if (verificationType === "secret-code") {
-      // Add - separator to the code
-      const formattedCode = code.toString().replace(/(.{5})(?=.)/, "$1-");
-      return {
-        challengeResponse: formattedCode,
-        verificationId,
-      };
-    }
-
-    const verificationChallenges = await portalClient.request<CreateWalletVerificationChallengesResponse>(
+    const verificationChallenge = await portalClient.request<CreateWalletVerificationChallengeResponse>(
       portalGraphql(`
-        mutation CreateWalletVerificationChallenges($userWalletAddress: String!, $verificationId: String!) {
-          createWalletVerificationChallenges(userWalletAddress: $userWalletAddress, verificationId: $verificationId) {
-            challenge
+        mutation CreateWalletVerificationChallenge($userWalletAddress: String!, $verificationId: String!) {
+          createWalletVerificationChallenge(
+            userWalletAddress: $userWalletAddress
+            verificationId: $verificationId
+          ) {
             id
             name
+            verificationId
             verificationType
+            challenge {
+              salt
+              secret
+            }
           }
         }
       `),
@@ -143,30 +147,47 @@ export async function handleWalletVerificationChallenge<const Setup extends Abst
         userWalletAddress,
         verificationId,
       },
+      requestHeaders,
     );
 
-    if (!verificationChallenges.createWalletVerificationChallenges?.length) {
-      throw new ChallengeError("No verification challenges received", "NO_CHALLENGES");
+    if (!verificationChallenge.createWalletVerificationChallenge) {
+      throw new WalletVerificationChallengeError("No verification challenge received", "NO_CHALLENGES");
     }
 
-    const walletVerificationChallenge = verificationChallenges.createWalletVerificationChallenges.find(
-      (challenge) => challenge.id === verificationId,
-    );
-
-    if (!walletVerificationChallenge?.challenge?.secret || !walletVerificationChallenge?.challenge?.salt) {
-      throw new ChallengeError("Invalid challenge format", "INVALID_CHALLENGE");
+    if (verificationType === "OTP") {
+      return {
+        challengeResponse: code.toString(),
+        challengeId: verificationChallenge.createWalletVerificationChallenge.id,
+      };
     }
 
-    const { secret, salt } = walletVerificationChallenge.challenge;
+    if (verificationType === "SECRET_CODES") {
+      // Add a hyphen after every 5 characters to format the secret code
+      const formattedCode = code.toString().replace(/(.{5})(?=.)/, "$1-");
+      return {
+        challengeResponse: formattedCode,
+        challengeId: verificationChallenge.createWalletVerificationChallenge.id,
+      };
+    }
+
+    const { secret, salt } = verificationChallenge.createWalletVerificationChallenge.challenge ?? {};
+
+    if (!secret || !salt) {
+      throw new WalletVerificationChallengeError("Invalid challenge format", "INVALID_CHALLENGE");
+    }
+
     const challengeResponse = generateResponse(code.toString(), salt, secret);
     return {
       challengeResponse,
-      verificationId,
+      challengeId: verificationChallenge.createWalletVerificationChallenge.id,
     };
   } catch (error) {
-    if (error instanceof ChallengeError) {
+    if (error instanceof WalletVerificationChallengeError) {
       throw error;
     }
-    throw new ChallengeError("Failed to process wallet verification challenge", "CHALLENGE_PROCESSING_ERROR");
+    throw new WalletVerificationChallengeError(
+      "Failed to process wallet verification challenge",
+      "CHALLENGE_PROCESSING_ERROR",
+    );
   }
 }

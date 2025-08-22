@@ -13,18 +13,17 @@ import { appendHeaders } from "@settlemint/sdk-utils/http";
 import { ensureServer } from "@settlemint/sdk-utils/runtime";
 import { ApplicationAccessTokenSchema, UrlOrPathSchema, validate } from "@settlemint/sdk-utils/validation";
 import {
-  createPublicClient,
+  createPublicClient as createPublicClientViem,
   createWalletClient,
   defineChain,
   type HttpTransportConfig,
   http,
-  type PublicClient,
   publicActions,
-  type Transport,
   type Chain as ViemChain,
 } from "viem";
 import * as chains from "viem/chains";
 import { z } from "zod";
+import { anvilSetBalance } from "./custom-actions/anvil/anvil-set-balance.js";
 import { createWallet } from "./custom-actions/create-wallet.action.js";
 import { createWalletVerification } from "./custom-actions/create-wallet-verification.action.js";
 import { createWalletVerificationChallenge } from "./custom-actions/create-wallet-verification-challenge.action.js";
@@ -55,7 +54,7 @@ const chainCache = new LRUCache<string, ViemChain>(100);
  * SECURITY CONSIDERATION: Public clients contain auth tokens in transport config.
  * Cache key generation ensures tokens are not leaked between different access contexts.
  */
-const publicClientCache = new LRUCache<string, PublicClient<Transport, ViemChain>>(50);
+const publicClientCache = new LRUCache<string, ReturnType<typeof createPublicClient>>(50);
 
 /**
  * DESIGN PATTERN: Factory caching rather than client instance caching.
@@ -215,32 +214,40 @@ export const getPublicClient = (options: ClientOptions) => {
   });
 
   // CONFIGURATION: Create new client with optimized settings
-  const client = createPublicClient({
-    chain: getChain({
-      chainId: validatedOptions.chainId,
-      chainName: validatedOptions.chainName,
-      rpcUrl: validatedOptions.rpcUrl,
-    }),
-    // WHY 500ms: Balances real-time updates with reasonable server load
-    pollingInterval: 500,
-    transport: http(validatedOptions.rpcUrl, {
-      // PERFORMANCE: Batch requests reduce network round-trips for multiple calls
-      batch: true,
-      // RELIABILITY: 60s timeout prevents indefinite hangs on slow networks
-      timeout: 60_000,
-      ...validatedOptions.httpTransportConfig,
-      fetchOptions: {
-        ...validatedOptions?.httpTransportConfig?.fetchOptions,
-        headers,
-      },
-    }),
-  });
+  const client = createPublicClient(validatedOptions, headers);
 
   // PERFORMANCE: Cache for future requests with identical configuration
   publicClientCache.set(cacheKey, client);
 
   return client;
 };
+
+function createPublicClient(validatedOptions: ClientOptions, headers: HeadersInit) {
+  return (
+    createPublicClientViem({
+      chain: getChain({
+        chainId: validatedOptions.chainId,
+        chainName: validatedOptions.chainName,
+        rpcUrl: validatedOptions.rpcUrl,
+      }),
+      // WHY 500ms: Balances real-time updates with reasonable server load
+      pollingInterval: 500,
+      transport: http(validatedOptions.rpcUrl, {
+        // PERFORMANCE: Batch requests reduce network round-trips for multiple calls
+        batch: true,
+        // RELIABILITY: 60s timeout prevents indefinite hangs on slow networks
+        timeout: 60_000,
+        ...validatedOptions.httpTransportConfig,
+        fetchOptions: {
+          ...validatedOptions?.httpTransportConfig?.fetchOptions,
+          headers,
+        },
+      }),
+    })
+      // FEATURE COMPOSITION: Extend with anvil actions
+      .extend(anvilSetBalance)
+  );
+}
 
 /**
  * The options for the wallet client.
@@ -379,8 +386,9 @@ const createWalletClientWithCustomMethods = (
       },
     }),
   })
-    // FEATURE COMPOSITION: Extend with both standard viem actions and SettleMint-specific wallet features
+    // FEATURE COMPOSITION: Extend with both standard viem actions, anvil actions and SettleMint-specific wallet features
     .extend(publicActions)
+    .extend(anvilSetBalance)
     .extend(createWallet)
     .extend(getWalletVerifications)
     .extend(createWalletVerification)
@@ -453,7 +461,7 @@ export async function getChainId(options: GetChainIdOptions): Promise<number> {
   });
 
   // WHY no caching: Chain ID discovery is typically a one-time setup operation
-  const client = createPublicClient({
+  const client = createPublicClientViem({
     transport: http(validatedOptions.rpcUrl, {
       ...validatedOptions.httpTransportConfig,
       fetchOptions: {

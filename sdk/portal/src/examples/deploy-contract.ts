@@ -47,7 +47,7 @@ const FROM = getAddress("0x4B03331cF2db1497ec58CAa4AFD8b93611906960");
 const deployForwarder = await portalClient.request(
   portalGraphql(`
     mutation DeployContractForwarder($from: String!) {
-      DeployContractForwarder(from: $from, gasLimit: "0x3d0900") {
+      DeployContractATKForwarder(from: $from, gasLimit: "0x3d0900") {
         transactionHash
       }
     }
@@ -60,18 +60,18 @@ const deployForwarder = await portalClient.request(
 /**
  * Wait for the forwarder contract deployment to be finalized
  */
-const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder?.transactionHash!, {
+const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractATKForwarder?.transactionHash!, {
   portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
   accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });
 
 /**
- * Deploy a stablecoin factory contract
+ * Deploy a stablecoin implementation contract
  */
-const deployStableCoinFactory = await portalClient.request(
+const deployStableCoinImplementation = await portalClient.request(
   portalGraphql(`
-    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractStableCoinFactoryInput!) {
-      DeployContractStableCoinFactory(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
+    mutation DeployContractStableCoinFactory($from: String!, $constructorArguments: DeployContractATKStableCoinImplementationInput!) {
+      DeployContractATKStableCoinImplementation(from: $from, constructorArguments: $constructorArguments, gasLimit: "0x3d0900") {
         transactionHash
       }
     }
@@ -79,12 +79,12 @@ const deployStableCoinFactory = await portalClient.request(
   {
     from: FROM,
     constructorArguments: {
-      forwarder: getAddress(transaction?.receipt.contractAddress!),
+      forwarder_: getAddress(transaction?.receipt.contractAddress!),
     },
   },
 );
 
-console.log(deployStableCoinFactory?.DeployContractStableCoinFactory?.transactionHash);
+console.log(deployStableCoinImplementation?.DeployContractATKStableCoinImplementation?.transactionHash);
 
 const contractAddresses = await portalClient.request(
   portalGraphql(`

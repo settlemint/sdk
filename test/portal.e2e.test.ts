@@ -166,23 +166,23 @@ describe("Portal E2E Tests", () => {
         verificationId: pincodeVerification.createWalletVerification?.id!,
         userWalletAddress: wallet.createWallet?.address! as Address,
         code: "123456",
-        verificationType: "pincode",
+        verificationType: "PINCODE",
       });
       expect(challengeResponse.challengeResponse).toBeString();
-      expect(challengeResponse.verificationId).toBe(pincodeVerification.createWalletVerification?.id!);
+      expect(challengeResponse.challengeId).toBeString();
 
       const result = await portalClient.request(
         portalGraphql(`
           mutation StableCoinFactoryCreate(
             $challengeResponse: String!
-            $verificationId: String
+            $challengeId: String
             $address: String!
             $from: String!
             $input: StableCoinFactoryCreateInput!
           ) {
             StableCoinFactoryCreate(
               challengeResponse: $challengeResponse
-              verificationId: $verificationId
+              challengeId: $challengeId
               address: $address
               from: $from
               input: $input
@@ -194,7 +194,7 @@ describe("Portal E2E Tests", () => {
         `),
         {
           challengeResponse: challengeResponse.challengeResponse,
-          verificationId: pincodeVerification.createWalletVerification?.id!,
+          challengeId: challengeResponse.challengeId,
           address: "0x5e771e1417100000000000000000000000000004",
           from: wallet.createWallet?.address!,
           input: {
