@@ -52,7 +52,7 @@
     "@commander-js/extra-typings": "14.0.0",
     "commander": "14.0.0",
     "@inquirer/confirm": "5.1.15",
-    "@inquirer/input": "4.2.1",
+    "@inquirer/input": "4.2.2",
     "@inquirer/password": "4.0.17",
     "@inquirer/select": "4.3.1",
     "@settlemint/sdk-hasura": "workspace:*",
