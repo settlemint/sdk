@@ -141,7 +141,7 @@ Defined in: [sdk/thegraph/src/thegraph.ts:27](https://github.com/settlemint/sdk/
 
 Type definition for client options derived from the ClientOptionsSchema
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |

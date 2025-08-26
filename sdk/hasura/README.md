@@ -304,7 +304,7 @@ Defined in: [sdk/hasura/src/hasura.ts:28](https://github.com/settlemint/sdk/blob
 
 Type definition for client options derived from the ClientOptionsSchema.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |
