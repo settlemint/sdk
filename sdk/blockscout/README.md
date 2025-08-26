@@ -140,7 +140,7 @@ Defined in: [sdk/blockscout/src/blockscout.ts:24](https://github.com/settlemint/
 
 Type definition for client options derived from the ClientOptionsSchema
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |

@@ -1625,7 +1625,7 @@ Defined in: [sdk/eas/src/schema.ts:44](https://github.com/settlemint/sdk/blob/v2
 
 Configuration options for the EAS client
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Default value | Description | Defined in |
 | ------ | ------ | ------ | ------ | ------ |
@@ -1646,7 +1646,7 @@ Defined in: [sdk/eas/src/schema.ts:15](https://github.com/settlemint/sdk/blob/v2
 Supported field types for EAS schema fields.
 Maps to the Solidity types that can be used in EAS schemas.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |

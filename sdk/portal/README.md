@@ -957,7 +957,7 @@ Defined in: [sdk/portal/src/portal.ts:25](https://github.com/settlemint/sdk/blob
 
 Type representing the validated client options.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Default value | Defined in |
 | ------ | ------ | ------ | ------ |

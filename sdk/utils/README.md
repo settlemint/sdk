@@ -1730,7 +1730,7 @@ Defined in: [sdk/utils/src/validation/dot-env.schema.ts:112](https://github.com/
 
 Type definition for the environment variables schema.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
@@ -1784,7 +1784,7 @@ Defined in: [sdk/utils/src/validation/dot-env.schema.ts:123](https://github.com/
 
 Type definition for the partial environment variables schema.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |

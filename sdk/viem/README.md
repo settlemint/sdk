@@ -650,7 +650,7 @@ Defined in: [sdk/viem/src/custom-actions/verify-wallet-verification-challenge.ac
 
 Represents either a wallet address string, an object containing wallet address and optional verification ID or a challenge ID.
 
-##### Type declaration
+##### Type Declaration
 
 [`AddressOrObject`](#addressorobject-2)
 
@@ -670,7 +670,7 @@ Defined in: [sdk/viem/src/viem.ts:162](https://github.com/settlemint/sdk/blob/v2
 
 Type representing the validated client options.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
@@ -706,7 +706,7 @@ Defined in: [sdk/viem/src/viem.ts:421](https://github.com/settlemint/sdk/blob/v2
 
 Type representing the validated get chain id options.
 
-##### Type declaration
+##### Type Declaration
 
 | Name | Type | Defined in |
 | ------ | ------ | ------ |
