@@ -68,7 +68,7 @@
     "@antfu/install-pkg": "^1",
     "@dotenvx/dotenvx": "^1",
     "@manypkg/find-root": "^3.0.0",
-    "@npmcli/package-json": "^6",
+    "@npmcli/package-json": "^7.0.0",
     "console-table-printer": "^2",
     "deepmerge-ts": "^7",
     "environment": "^1",
