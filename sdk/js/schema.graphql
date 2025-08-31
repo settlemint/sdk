@@ -6202,6 +6202,9 @@ input CreateMultiServiceBlockchainNetworkArgs {
   """The genesis configuration for Geth networks"""
   gethGenesis: GethGenesisInput
 
+  """Whether to include predeployed contracts in the genesis configuration"""
+  includePredeployedContracts: Boolean = false
+
   """The key material for permissioned EVM networks"""
   keyMaterial: ID
 
@@ -13210,6 +13213,9 @@ type Mutation {
     """The genesis configuration for Geth networks"""
     gethGenesis: GethGenesisInput
 
+    """Whether to include predeployed contracts in the genesis configuration"""
+    includePredeployedContracts: Boolean = false
+
     """The key material for permissioned EVM networks"""
     keyMaterial: ID
 
@@ -13442,6 +13448,9 @@ type Mutation {
 
     """The genesis configuration for Geth networks"""
     gethGenesis: GethGenesisInput
+
+    """Whether to include predeployed contracts in the genesis configuration"""
+    includePredeployedContracts: Boolean = false
 
     """The key material for permissioned EVM networks"""
     keyMaterial: ID
