@@ -3,7 +3,7 @@ import { copyFile, readFile, rmdir, stat, unlink, writeFile } from "node:fs/prom
 import { join } from "node:path";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { exists } from "@settlemint/sdk-utils/filesystem";
+import { exists, projectRoot } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
 import { getSubgraphYamlConfig, updateSubgraphYamlConfig } from "../sdk/cli/src/utils/subgraph/subgraph-config";
 import { PRIVATE_KEY_SMART_CONTRACTS_NAMES } from "./constants/test-resources";
@@ -128,6 +128,8 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   });
 
   test("Connect to standalone environment", async () => {
+    const root = await projectRoot();
+    expect(root).toBe(projectDir);
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["connect", "--instance", "standalone", "--accept-defaults"],

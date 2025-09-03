@@ -38,36 +38,6 @@ const BlockchainNodeFragment = graphql(`
         ... on BesuIbftv2BlockchainNetwork {
           chainId
         }
-        ... on GethPoWBlockchainNetwork {
-          chainId
-        }
-        ... on GethPoSRinkebyBlockchainNetwork {
-          chainId
-        }
-        ... on GethVenidiumBlockchainNetwork {
-          chainId
-        }
-        ... on GethGoerliBlockchainNetwork {
-          chainId
-        }
-        ... on AvalancheBlockchainNetwork {
-          chainId
-        }
-        ... on AvalancheFujiBlockchainNetwork {
-          chainId
-        }
-        ... on BscPoWBlockchainNetwork {
-          chainId
-        }
-        ... on BscPoWTestnetBlockchainNetwork {
-          chainId
-        }
-        ... on PolygonBlockchainNetwork {
-          chainId
-        }
-        ... on PolygonMumbaiBlockchainNetwork {
-          chainId
-        }
         ... on PolygonEdgePoABlockchainNetwork {
           chainId
         }
@@ -75,6 +45,9 @@ const BlockchainNodeFragment = graphql(`
           chainId
         }
         ... on GethCliqueBlockchainNetwork {
+          chainId
+        }
+        ... on PublicEvmBlockchainNetwork {
           chainId
         }
       }
