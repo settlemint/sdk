@@ -50,7 +50,6 @@ afterEach(() => {
 
 describe("Setup a project on a standalone environment using the SDK", () => {
   let contractsDeploymentInfo: Record<string, string> = {};
-  let hasInstalledDependencies = false;
 
   test(`Create a ${TEMPLATE_NAME} project`, async () => {
     const { output } = await runCommand(
@@ -126,13 +125,12 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
     await $`bun install`.cwd(projectDir).env(env);
-    const root = await projectRoot();
-    expect(root).toBe(projectDir);
-    expect(await findMonoRepoRoot(projectDir)).toBe(projectDir);
-    hasInstalledDependencies = true;
   });
 
-  test.skipIf(!hasInstalledDependencies)("Connect to standalone environment", async () => {
+  test("Connect to standalone environment", async () => {
+    const root = await projectRoot(true, projectDir);
+    expect(root).toBe(projectDir);
+    expect(await findMonoRepoRoot(projectDir)).toBe(projectDir);
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["connect", "--instance", "standalone", "--accept-defaults"],
@@ -141,7 +139,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("dApp connected");
   });
 
-  test.skipIf(!hasInstalledDependencies)("Validate that .env file has the correct values", async () => {
+  test("Validate that .env file has the correct values", async () => {
     const env = await loadEnv(false, false, projectDir);
 
     expect(env.SETTLEMINT_INSTANCE).toBe("standalone");
@@ -157,12 +155,12 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(env.SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT).toBeString();
   });
 
-  test.skipIf(!hasInstalledDependencies)("contracts - Install dependencies", async () => {
+  test("contracts - Install dependencies", async () => {
     const result = await $`bun run dependencies`.cwd(contractsDir);
     expect(result.exitCode).toBe(0);
   });
 
-  test.skipIf(!hasInstalledDependencies)("contracts - Build and Deploy smart contracts", async () => {
+  test("contracts - Build and Deploy smart contracts", async () => {
     const deploymentId = "asset-tokenization-kit";
     let retries = 0;
     // Only deploy the forwarder, otherwise it will take very long to deploy all the contracts
@@ -202,7 +200,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(deployOutput).not.toInclude("Error reading hardhat.config.ts");
   });
 
-  test.skipIf(!hasInstalledDependencies)("subgraph - Update contract addresses", async () => {
+  test("subgraph - Update contract addresses", async () => {
     const config = await getSubgraphYamlConfig(subgraphDir);
     const updatedConfig: typeof config = {
       ...config,
@@ -221,21 +219,21 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     await updateSubgraphYamlConfig(updatedConfig, subgraphDir);
   });
 
-  test.skipIf(!hasInstalledDependencies)("subgraph - Build subgraph", async () => {
+  test("subgraph - Build subgraph", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "build"], {
       cwd: subgraphDir,
     }).result;
     expect(output).toInclude("Build completed");
   });
 
-  test.skipIf(!hasInstalledDependencies)("subgraph - Codegen subgraph", async () => {
+  test("subgraph - Codegen subgraph", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["smart-contract-set", "subgraph", "codegen"], {
       cwd: subgraphDir,
     }).result;
     expect(output).toInclude("Types generated successfully");
   });
 
-  test.skipIf(!hasInstalledDependencies)("subgraph - Deploy subgraphs", async () => {
+  test("subgraph - Deploy subgraphs", async () => {
     for (const subgraphName of SUBGRAPH_NAMES) {
       const { output } = await retryCommand(
         () =>
@@ -265,14 +263,14 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     }
   });
 
-  test.skipIf(!hasInstalledDependencies)("hasura - Track tables", async () => {
+  test("hasura - Track tables", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["hasura", "track", "--accept-defaults"], {
       cwd: projectDir,
     }).result;
     expect(output).toInclude("Table tracking completed successfully");
   });
 
-  test.skipIf(!hasInstalledDependencies)("dApp - Codegen", async () => {
+  test("dApp - Codegen", async () => {
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
       ["codegen", "--generate-viem", "--thegraph-subgraph-names", ...SUBGRAPH_NAMES],
@@ -291,7 +289,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     expect(output).toInclude("Codegen complete");
   });
 
-  test.skipIf(!hasInstalledDependencies)("dApp - Build", async () => {
+  test("dApp - Build", async () => {
     const env = { ...process.env, NODE_ENV: "production", NODE_OPTIONS: "--max-old-space-size=4096" };
     try {
       await $`bun addresses`.cwd(dAppDir).env(env);
@@ -305,7 +303,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     }
   });
 
-  test.skipIf(!hasInstalledDependencies)("subgraph - Remove subgraphs", async () => {
+  test("subgraph - Remove subgraphs", async () => {
     const subgraphToRemove = SUBGRAPH_NAMES[1];
     const { output } = await runCommand(
       COMMAND_TEST_SCOPE,
