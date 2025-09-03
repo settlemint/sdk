@@ -29,6 +29,7 @@ import { createWalletVerification } from "./custom-actions/create-wallet-verific
 import { createWalletVerificationChallenge } from "./custom-actions/create-wallet-verification-challenge.action.js";
 import { createWalletVerificationChallenges } from "./custom-actions/create-wallet-verification-challenges.action.js";
 import { deleteWalletVerification } from "./custom-actions/delete-wallet-verification.action.js";
+import { ethSign } from "./custom-actions/eth-sign.action.js";
 import { getWalletVerifications } from "./custom-actions/get-wallet-verifications.action.js";
 import { verifyWalletVerificationChallenge } from "./custom-actions/verify-wallet-verification-challenge.action.js";
 import { LRUCache } from "./utils/lru-cache.js";
@@ -395,7 +396,8 @@ const createWalletClientWithCustomMethods = (
     .extend(deleteWalletVerification)
     .extend(createWalletVerificationChallenge)
     .extend(createWalletVerificationChallenges)
-    .extend(verifyWalletVerificationChallenge);
+    .extend(verifyWalletVerificationChallenge)
+    .extend(ethSign);
 
 /**
  * Schema for the viem client options.

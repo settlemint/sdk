@@ -1,10 +1,10 @@
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { addClusterServiceArgs } from "@/commands/platform/common/cluster-service.args";
 import { getCreateCommand } from "@/commands/platform/common/create-command";
 import { missingApplication } from "@/error/missing-config-error";
 import { getBlockchainNetworkChainId } from "@/utils/blockchain-network";
 import { getBlockchainNodeEnv, getBlockchainNodeOrLoadBalancerEnv } from "@/utils/get-cluster-service-env";
 import { parseNumber } from "@/utils/parse-number";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 
 /**
  * Creates and returns the 'blockchain-network besu' command for the SettleMint SDK.
@@ -80,8 +80,15 @@ export function blockchainNetworkBesuCreateCommand() {
                   }),
                 );
 
+                // Give it some time to kick off the creation of the first blockchain node
+                await new Promise((resolve) => setTimeout(resolve, 1_000));
+                const blockchainNetworkWithNodes = await showSpinner(() =>
+                  settlemint.blockchainNetwork.read(result.uniqueName),
+                );
+
                 const blockchainNode =
-                  result.blockchainNodes.find((item) => item.name === nodeName) ?? result.blockchainNodes[0];
+                  blockchainNetworkWithNodes.blockchainNodes.find((item) => item.name === nodeName) ??
+                  blockchainNetworkWithNodes.blockchainNodes[0];
 
                 return {
                   result,

@@ -14,6 +14,7 @@ const SDK_PACKAGES = [
   "thegraph",
   "utils",
   "viem",
+  "eas",
 ] as const;
 
 const SDK_DIR = join(__dirname, "../../", "sdk");
