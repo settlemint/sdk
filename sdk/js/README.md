@@ -149,7 +149,7 @@ Type representing an application entity.
 
 > **BlockchainNetwork** = `ResultOf`\<*typeof* `BlockchainNetworkFragment`\>
 
-Defined in: [sdk/js/src/graphql/blockchain-network.ts:82](https://github.com/settlemint/sdk/blob/v2.6.1/sdk/js/src/graphql/blockchain-network.ts#L82)
+Defined in: [sdk/js/src/graphql/blockchain-network.ts:55](https://github.com/settlemint/sdk/blob/v2.6.1/sdk/js/src/graphql/blockchain-network.ts#L55)
 
 Type representing a blockchain network entity.
 
@@ -159,7 +159,7 @@ Type representing a blockchain network entity.
 
 > **BlockchainNode** = `ResultOf`\<*typeof* `BlockchainNodeFragment`\>
 
-Defined in: [sdk/js/src/graphql/blockchain-node.ts:96](https://github.com/settlemint/sdk/blob/v2.6.1/sdk/js/src/graphql/blockchain-node.ts#L96)
+Defined in: [sdk/js/src/graphql/blockchain-node.ts:69](https://github.com/settlemint/sdk/blob/v2.6.1/sdk/js/src/graphql/blockchain-node.ts#L69)
 
 Type representing a blockchain node entity.
 
