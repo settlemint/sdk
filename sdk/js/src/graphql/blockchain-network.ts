@@ -116,6 +116,7 @@ const createBlockchainNetwork = graphql(
     $quorumGenesis: QuorumGenesisInput
     $externalNodes: [BlockchainNetworkExternalNodeInput!]
     $privateKeyId: ID
+    $includePredeployedContracts: Boolean
   ) {
     createBlockchainNetwork(
       applicationId: $applicationId
@@ -144,6 +145,7 @@ const createBlockchainNetwork = graphql(
       quorumGenesis: $quorumGenesis
       externalNodes: $externalNodes
       keyMaterial: $privateKeyId
+      includePredeployedContracts: $includePredeployedContracts
     ) {
       ...BlockchainNetwork
     }

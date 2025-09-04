@@ -70,15 +70,19 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
     }
   });
 
-  test("Install dependencies and link SDK to use local one", async () => {
-    const env = { ...process.env, NODE_ENV: "production" };
-    await registerLinkedDependencies();
-    await updatePackageJsonToUseLinkedDependencies(projectDir);
-    await updatePackageJsonToUseLinkedDependencies(dAppDir);
-    await updatePackageJsonToUseLinkedDependencies(contractsDir);
-    await updatePackageJsonToUseLinkedDependencies(subgraphDir);
-    await $`bun install`.cwd(projectDir).env(env);
-  });
+  test(
+    "Install dependencies and link SDK to use local one",
+    async () => {
+      const env = { ...process.env, NODE_ENV: "production" };
+      await registerLinkedDependencies();
+      await updatePackageJsonToUseLinkedDependencies(projectDir);
+      await updatePackageJsonToUseLinkedDependencies(dAppDir);
+      await updatePackageJsonToUseLinkedDependencies(contractsDir);
+      await updatePackageJsonToUseLinkedDependencies(subgraphDir);
+      await $`bun install`.cwd(projectDir).env(env);
+    },
+    { retry: 3 },
+  );
 
   test("Connect to platform", async () => {
     const root = await projectRoot(true, projectDir);

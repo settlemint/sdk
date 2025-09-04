@@ -1,9 +1,9 @@
-import { loadEnv } from "@settlemint/sdk-utils/environment";
-import { exists } from "@settlemint/sdk-utils/filesystem";
-import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { afterAll, beforeAll, expect } from "bun:test";
 import { copyFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
+import { loadEnv } from "@settlemint/sdk-utils/environment";
+import { exists } from "@settlemint/sdk-utils/filesystem";
+import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import {
   AAT_NAME,
   APPLICATION_NAME,
@@ -171,6 +171,7 @@ async function createBlockchainNetworkMinioAndIpfs() {
             CLUSTER_REGION,
             "--node-name",
             NODE_NAME,
+            "--includePredeployedContracts",
             "--accept-defaults",
             "--default",
             "--wait",
