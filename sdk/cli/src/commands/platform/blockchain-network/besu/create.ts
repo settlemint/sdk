@@ -31,7 +31,7 @@ export function blockchainNetworkBesuCreateCommand() {
         .option("--gas-limit <limit>", "Block gas limit")
         .option("--gas-price <price>", "Gas price in wei", parseNumber)
         .option("--seconds-per-block <seconds>", "Block time in seconds", parseNumber)
-        .option("--includePredeployedContracts", "Include predeployed contracts in the genesis file", parseNumber)
+        .option("--includePredeployedContracts", "Include predeployed contracts in the genesis file")
         .action(
           async (
             name,
