@@ -39,7 +39,6 @@ import {
 } from "../utils/test-resources";
 
 // Needed so it loads the correct environment variables
-// @ts-expect-error allow process.env to be modified
 process.env.NODE_ENV = "development";
 
 const COMMAND_TEST_SCOPE = __filename;
