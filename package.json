@@ -45,7 +45,7 @@
     "@biomejs/biome": "2.2.2",
     "@types/mustache": "4.2.6",
     "bun-types": "1.2.22-canary.20250910T140559",
-    "knip": "5.63.0",
+    "knip": "5.63.1",
     "mustache": "4.2.0",
     "publint": "0.3.12",
     "tsdown": "^0.14.0",
