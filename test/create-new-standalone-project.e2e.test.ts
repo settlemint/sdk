@@ -71,7 +71,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     const envWithAccessTokenInUrl = Object.entries(env).reduce(
       (acc, [key, value]) => {
         try {
-          if (typeof value === "string" && key !== "SETTLEMINT_INSTANCE") {
+          if (typeof value === "string" && key !== "SETTLEMINT_INSTANCE" && key !== "SETTLEMINT_HASURA_DATABASE_URL") {
             const url = new URL(value);
             url.pathname = `/${encodeURIComponent(env.SETTLEMINT_ACCESS_TOKEN!)}/${url.pathname.slice(1)}`;
             acc[key] = url.toString();
@@ -121,6 +121,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     "Install dependencies and link SDK to use local one",
     async () => {
       const env = { ...process.env, NODE_ENV: "production" };
+      await $`rm -rf node_modules`.cwd(projectDir);
       await registerLinkedDependencies();
       await updatePackageJsonToUseLinkedDependencies(projectDir);
       await updatePackageJsonToUseLinkedDependencies(dAppDir);
@@ -268,6 +269,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
   });
 
   test("hasura - Track tables", async () => {
+    await $`bun run db:push`.cwd(dAppDir);
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["hasura", "track", "--accept-defaults"], {
       cwd: projectDir,
     }).result;
