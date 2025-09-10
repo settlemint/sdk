@@ -44,6 +44,11 @@ export interface SchemaField {
 export type EASClientOptions = z.infer<typeof EASClientOptionsSchema>;
 
 /**
+ * Narrow type for The Graph configuration inside EAS options
+ */
+export type EASTheGraphOptions = NonNullable<EASClientOptions["theGraph"]>;
+
+/**
  * Schema registration request
  */
 export interface SchemaRequest {
