@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
-    "@biomejs/biome": "2.2.3",
+    "@biomejs/biome": "2.2.4",
     "@types/bun": "1.2.21",
     "@types/mustache": "4.2.6",
     "bun-types": "1.2.22-canary.20250910T140559",
