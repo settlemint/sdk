@@ -74,6 +74,7 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
     "Install dependencies and link SDK to use local one",
     async () => {
       const env = { ...process.env, NODE_ENV: "production" };
+      await $`rm -rf node_modules`.cwd(projectDir);
       await registerLinkedDependencies();
       await updatePackageJsonToUseLinkedDependencies(projectDir);
       await updatePackageJsonToUseLinkedDependencies(dAppDir);
@@ -249,6 +250,7 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
   });
 
   test("hasura - Track tables", async () => {
+    await $`bun run db:push`.cwd(dAppDir);
     const { output } = await runCommand(COMMAND_TEST_SCOPE, ["hasura", "track", "--accept-defaults"], {
       cwd: projectDir,
     }).result;
