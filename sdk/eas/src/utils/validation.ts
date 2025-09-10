@@ -43,9 +43,7 @@ export const EASClientOptionsSchema = z.object({
       /** Optional access token for authenticated Graph endpoints. */
       accessToken: ApplicationAccessTokenSchema.optional(),
       /** Optional cache policy passed to GraphQL client. */
-      cache: z
-        .enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"])
-        .optional(),
+      cache: z.enum(["default", "force-cache", "no-cache", "no-store", "only-if-cached", "reload"]).optional(),
     })
     .optional(),
 });

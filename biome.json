@@ -9,7 +9,17 @@
       "!contracts/artifacts",
       "!**/graphql-env.d.ts",
       "!**/graphql-cache.d.ts",
-      "!**/sdk/js/schema.graphql"
+      "!**/sdk/js/schema.graphql",
+      "!sdk/eas/subgraph/generated",
+      "!sdk/eas/subgraph/build",
+      "!sdk/eas/subgraph/abis",
+      "!sdk/portal/src/examples/schemas/portal-schema.graphql"
+    ],
+    "experimentalScannerIgnores": [
+      "sdk/eas/subgraph/generated/**",
+      "sdk/eas/subgraph/build/**",
+      "sdk/eas/subgraph/abis/**",
+      "sdk/portal/src/examples/schemas/portal-schema.graphql"
     ]
   },
   "linter": {

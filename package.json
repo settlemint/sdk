@@ -43,8 +43,8 @@
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
     "@biomejs/biome": "2.2.2",
-    "@types/bun": "1.2.21",
     "@types/mustache": "4.2.6",
+    "bun-types": "1.2.22-canary.20250910T140559",
     "knip": "5.63.0",
     "mustache": "4.2.0",
     "publint": "0.3.12",
@@ -82,5 +82,7 @@
     "react-is": "19.1.1",
     "undici": "7.15.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.97.1"
+  }
 }

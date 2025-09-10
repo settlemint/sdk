@@ -21,7 +21,9 @@ async function theGraphWorkflow() {
     process.exit(1);
   }
   if (!env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS || env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS.length === 0) {
-    console.error("❌ Missing SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS (JSON array of subgraph URLs ending with /<name>)");
+    console.error(
+      "❌ Missing SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS (JSON array of subgraph URLs ending with /<name>)",
+    );
     process.exit(1);
   }
 
@@ -29,19 +31,17 @@ async function theGraphWorkflow() {
   console.log("================================\n");
 
   // Build client with The Graph config
-  const eas = createEASClient(
-    {
-      instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+  const eas = createEASClient({
+    instance: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT,
+    accessToken: env.SETTLEMINT_ACCESS_TOKEN,
+    theGraph: {
+      instances: env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS,
+      subgraphName: env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? "eas",
       accessToken: env.SETTLEMINT_ACCESS_TOKEN,
-      theGraph: {
-        instances: env.SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS,
-        subgraphName: env.SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH ?? "eas",
-        accessToken: env.SETTLEMINT_ACCESS_TOKEN,
-        cache: "force-cache",
-      },
-      debug: true,
+      cache: "force-cache",
     },
-  );
+    debug: true,
+  });
 
   // Replace global fetch logging for visibility (no-op in Node unless used)
   // This pattern mirrors other examples and ensures consistent logging.
@@ -71,7 +71,9 @@ async function theGraphWorkflow() {
     // Optional filters
     const schemaUID = process.env.EAS_SCHEMA_UID as Hex | undefined;
     const attester = process.env.EAS_ATTESTER as Address | undefined;
-    const recipient = (env.SETTLEMINT_DEPLOYER_ADDRESS as Address | undefined) ?? (process.env.EAS_RECIPIENT as Address | undefined);
+    const recipient =
+      (process.env.SETTLEMINT_DEPLOYER_ADDRESS as Address | undefined) ??
+      (process.env.EAS_RECIPIENT as Address | undefined);
 
     const attestations = await eas.getAttestations({
       limit: 10,
@@ -104,7 +106,7 @@ async function theGraphWorkflow() {
       return;
     }
 
-    const schema = schemas[0];
+    const schema = schemas[0]!;
     const [example] = await eas.getAttestations({ limit: 1, offset: 0, schema: schema.uid });
     if (!example || !example.data || example.data === ("0x" as Hex)) {
       console.log("ℹ️  Skipping decode: no example attestation with data found\n");

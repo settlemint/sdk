@@ -1,7 +1,7 @@
 # EAS Subgraph Schema (MVP)
 
-type Schema @entity {
-  id: Bytes! # uid
+type Schema @entity(immutable: true) {
+  id: String! # uid as hex string
   resolver: Bytes!
   revocable: Boolean!
   schema: String!
@@ -9,9 +9,9 @@ type Schema @entity {
   txHash: Bytes!
 }
 
-type Attestation @entity {
-  id: Bytes! # uid
-  schema: Schema!
+type Attestation @entity(immutable: false) {
+  id: String! # uid as hex string
+  schema: Bytes! # schema uid as bytes32
   attester: Bytes!
   recipient: Bytes!
   time: BigInt!
@@ -21,4 +21,5 @@ type Attestation @entity {
   data: Bytes!
   revokedAt: BigInt
   txHash: Bytes!
+  revoked: Boolean! # Added to track revocation status
 }

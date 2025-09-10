@@ -15,6 +15,7 @@
     "outDir": "dist",
     "jsx": "react-jsx",
     "noEmit": true,
+    "types": ["bun-types"],
     "paths": {
       "@/*": ["./src/*"]
     }

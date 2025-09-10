@@ -52,6 +52,8 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "@graphprotocol/graph-cli": "0.97.1",
+
     "@settlemint/sdk-portal": "workspace:*",
     "@settlemint/sdk-thegraph": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",

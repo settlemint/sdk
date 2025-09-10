@@ -101,6 +101,19 @@ export interface TransactionResult {
 }
 
 /**
+ * Schema registration result with additional helpers
+ */
+export interface SchemaRegistrationResult extends TransactionResult {
+  /**
+   * Extract the schema UID from the transaction receipt
+   * @param portalEndpoint - Portal GraphQL endpoint
+   * @param accessToken - Access token for Portal
+   * @param timeout - Timeout for waiting for transaction (default: 60000ms)
+   */
+  getSchemaUID(portalEndpoint: string, accessToken: string, timeout?: number): Promise<Hex>;
+}
+
+/**
  * Schema information
  */
 export interface SchemaData {
@@ -138,6 +151,8 @@ export interface AttestationInfo {
   data: Hex;
   /** Value sent with the attestation */
   value: bigint;
+  /** Transaction hash where this attestation was created */
+  txHash?: Hex;
 }
 
 /**

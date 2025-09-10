@@ -1,8 +1,10 @@
 import { createPortalClient, waitForTransactionReceipt } from "@settlemint/sdk-portal";
 import { createTheGraphClient, type ResultOf } from "@settlemint/sdk-thegraph";
+import type { AbstractSetupSchema } from "gql.tada";
 import { createLogger, requestLogger } from "@settlemint/sdk-utils/logging";
 import { validate } from "@settlemint/sdk-utils/validation";
 import type { Address, Hex } from "viem";
+import { deployEASSubgraphInternal } from "./deploy-subgraph.js";
 import { GraphQLOperations } from "./portal/operations.js";
 import type { PortalClient } from "./portal/portal-client.js";
 import type { introspection } from "./portal/portal-env.d.ts";
@@ -47,7 +49,12 @@ export class EASClient {
   private readonly portalClient: PortalClient["client"];
   private readonly portalGraphql: PortalClient["graphql"];
   private deployedAddresses?: DeploymentResult;
-  private theGraph?: ReturnType<typeof createTheGraphClient<any>>;
+  private theGraph?: ReturnType<typeof createTheGraphClient<GraphSetup>>;
+
+  // Minimal Graph setup type for TheGraph client generics
+  // Scalars are strings as returned by The Graph APIs
+  // Introspection type is unknown since we do not ship static schema here.
+  // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 
   /**
    * Create a new EAS client instance
@@ -79,7 +86,7 @@ export class EASClient {
 
     // Initialize The Graph client if configured
     if (this.options.theGraph) {
-      this.theGraph = createTheGraphClient<any>(
+      this.theGraph = createTheGraphClient<GraphSetup>(
         {
           instances: this.options.theGraph.instances,
           accessToken: this.options.theGraph.accessToken,
@@ -572,12 +579,15 @@ export class EASClient {
     `);
 
     const result = (await this.theGraph.client.request(query)) as ResultOf<typeof query>;
-    const list = (result as any).schemas as Array<{
-      id: string;
-      resolver: string;
-      revocable: boolean;
-      schema: string | null;
-    }>;
+    type SchemaListResult = {
+      schemas: Array<{
+        id: string;
+        resolver: string;
+        revocable: boolean;
+        schema: string | null;
+      }>;
+    };
+    const list = (result as unknown as SchemaListResult).schemas;
 
     return list.map((s) => ({
       uid: s.id as Hex,
@@ -658,6 +668,7 @@ export class EASClient {
           refUID
           data
           revokedAt
+          txHash
         }
       }
     `);
@@ -671,30 +682,35 @@ export class EASClient {
     if (options?.recipient) variables.recipient = options.recipient;
 
     const result = (await this.theGraph.client.request(query, variables)) as ResultOf<typeof query>;
-    const list = (result as any).attestations as Array<{
-      id: string;
-      schema: { id: string } | string;
-      attester: string;
-      recipient: string;
-      time: string | number | null;
-      expirationTime: string | number | null;
-      revocable: boolean;
-      refUID: string | null;
-      data: string | null;
-      revokedAt?: string | null;
-    }>;
+    type AttestationListResult = {
+      attestations: Array<{
+        id: string;
+        schema: { id: string } | string;
+        attester: string;
+        recipient: string;
+        time: string | number | null;
+        expirationTime: string | number | null;
+        revocable: boolean;
+        refUID: string | null;
+        data: string | null;
+        revokedAt?: string | null;
+        txHash: string;
+      }>;
+    };
+    const list = (result as unknown as AttestationListResult).attestations;
 
     return list.map((a) => ({
-      uid: (a.id ?? (a as any).uid) as Hex,
+      uid: a.id as Hex,
       schema: (typeof a.schema === "string" ? a.schema : a.schema.id) as Hex,
       attester: a.attester as Address,
       recipient: a.recipient as Address,
       time: a.time ? BigInt(a.time) : BigInt(0),
       expirationTime: a.expirationTime ? BigInt(a.expirationTime) : BigInt(0),
       revocable: Boolean(a.revocable),
-      refUID: (a.refUID ?? ("0x" + "0".repeat(64))) as Hex,
+      refUID: (a.refUID ?? `0x${"0".repeat(64)}`) as Hex,
       data: (a.data ?? "0x") as Hex,
       value: BigInt(0),
+      txHash: a.txHash as Hex,
     }));
   }
 
@@ -749,6 +765,85 @@ export class EASClient {
   }
 
   /**
+   * Deploy EAS subgraph to The Graph using Graph CLI and configure SettleMint TheGraph SDK
+   *
+   * @param theGraphAdminEndpoint - The Graph admin endpoint URL
+   * @param subgraphName - Optional custom subgraph name (defaults to timestamped name)
+   * @returns Promise resolving to the subgraph query endpoint
+   *
+   * @example
+   * ```typescript
+   * import { createEASClient } from "@settlemint/sdk-eas";
+   *
+   * const easClient = createEASClient({
+   *   instance: "https://your-portal-instance.settlemint.com",
+   *   accessToken: "your-access-token"
+   * });
+   *
+   * // Deploy contracts first
+   * const deployment = await easClient.deploy("0x1234...deployer-address");
+   *
+   * // Deploy subgraph using Graph CLI
+   * const subgraphEndpoint = await easClient.deploySubgraph(
+   *   "https://your-graph-node.com/admin",
+   *   "eas-attestations"
+   * );
+   *
+   * console.log("Subgraph deployed at:", subgraphEndpoint);
+   * // Now the client will automatically use The Graph for queries via SettleMint TheGraph SDK
+   * ```
+   */
+  public async deploySubgraph(theGraphAdminEndpoint: string, subgraphName?: string): Promise<string> {
+    const easAddress = this.getEASAddress();
+    const schemaRegistryAddress = this.getSchemaRegistryAddress();
+
+    const finalSubgraphName = subgraphName || `eas-${Date.now()}`;
+
+    LOGGER.info(`📊 Deploying EAS subgraph "${finalSubgraphName}" to The Graph...`);
+    LOGGER.info(`📝 EAS Contract: ${easAddress}`);
+    LOGGER.info(`📝 Schema Registry: ${schemaRegistryAddress}`);
+
+    try {
+      // Ensure admin endpoint includes access token path where required
+      let adminEndpoint = theGraphAdminEndpoint;
+      if (this.options.accessToken && !adminEndpoint.includes(this.options.accessToken)) {
+        const url = new URL(theGraphAdminEndpoint);
+        const hasTokenPath = url.pathname.split("/").some((p) => p === encodeURIComponent(this.options.accessToken!));
+        if (!hasTokenPath) {
+          url.pathname = `/${encodeURIComponent(this.options.accessToken)}/admin`;
+          adminEndpoint = url.toString();
+        }
+      }
+      // Use the internal deployment function
+      const queryEndpoint = await deployEASSubgraphInternal({
+        subgraphName: finalSubgraphName,
+        theGraphAdminEndpoint: adminEndpoint,
+        easAddress,
+        schemaRegistryAddress,
+      });
+
+      // Configure SettleMint TheGraph SDK with the deployed subgraph
+      this.theGraph = createTheGraphClient<GraphSetup>(
+        {
+          instances: [queryEndpoint],
+          accessToken: this.options.accessToken,
+          subgraphName: finalSubgraphName,
+          cache: "force-cache",
+        },
+        undefined,
+      );
+
+      LOGGER.info("✅ EAS subgraph deployed and SettleMint TheGraph SDK configured!");
+      LOGGER.info(`🔗 Query endpoint: ${queryEndpoint}`);
+
+      return queryEndpoint;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(`Failed to deploy EAS subgraph: ${error.message}`);
+    }
+  }
+
+  /**
    * Get client configuration
    */
   public getOptions(): EASClientOptions {
@@ -799,6 +894,18 @@ export class EASClient {
     return fields.map((field) => `${field.type} ${field.name}`).join(", ");
   }
 }
+
+// Minimal Graph client setup type for TheGraph generic
+type GraphSetup = AbstractSetupSchema & {
+  disableMasking: true;
+  scalars: {
+    Bytes: string;
+    Int8: string;
+    BigInt: string;
+    BigDecimal: string;
+    Timestamp: string;
+  };
+};
 
 /**
  * Create an EAS client instance

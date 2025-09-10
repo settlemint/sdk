@@ -1,14 +1,14 @@
-specVersion: 0.0.6
+specVersion: 1.2.0
 schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
     name: SchemaRegistry
-    network: {{network}}
+    network: settlemint
     source:
-      address: "{{schemaRegistryAddress}}"
+      address: "0x9d59a180322f97c2625a2fb91df86a1018072546"
       abi: SchemaRegistry
-      startBlock: {{startBlock}}
+      
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -19,16 +19,16 @@ dataSources:
         - name: SchemaRegistry
           file: ./abis/SchemaRegistry.json
       eventHandlers:
-        - event: Registered(indexed bytes32,indexed address,bool,string)
+        - event: Registered(indexed bytes32,indexed address,(bytes32,address,bool,string))
           handler: handleRegistered
       file: ./src/mapping.ts
   - kind: ethereum
     name: EAS
-    network: {{network}}
+    network: settlemint
     source:
-      address: "{{easAddress}}"
+      address: "0x8019c2eb95b512c99688edef51a5bcf4b85ac044"
       abi: EAS
-      startBlock: {{startBlock}}
+      
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -39,8 +39,8 @@ dataSources:
         - name: EAS
           file: ./abis/EAS.json
       eventHandlers:
-        - event: Attested(indexed bytes32,indexed bytes32,indexed address,address,uint64,uint64,bool,bytes32,bytes)
+        - event: Attested(indexed address,indexed address,bytes32,indexed bytes32)
           handler: handleAttested
-        - event: Revoked(indexed address,indexed bytes32,indexed address,bytes32)
+        - event: Revoked(indexed address,indexed address,bytes32,indexed bytes32)
           handler: handleRevoked
       file: ./src/mapping.ts

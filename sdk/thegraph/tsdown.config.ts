@@ -3,7 +3,7 @@ import { defineConfig } from "tsdown";
 import { createWebOptimizedPackage, withPerformanceMonitoring } from "../../shared/tsdown-factory.ts";
 
 const configs = createWebOptimizedPackage(["src/thegraph.ts"], {
-  external: ["graphql", "@settlemint/sdk-js"],
+  external: ["graphql", "@settlemint/sdk-js", "bun"],
   banner: {
     js: "/* SettleMint The Graph SDK - Indexing Protocol */",
   },
