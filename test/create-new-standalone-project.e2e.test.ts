@@ -117,20 +117,15 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     await unlink(join(projectDir, ".env.local"));
   });
 
-  test(
-    "Install dependencies and link SDK to use local one",
-    async () => {
-      const env = { ...process.env, NODE_ENV: "production" };
-      await $`rm -rf node_modules`.cwd(projectDir);
-      await registerLinkedDependencies();
-      await updatePackageJsonToUseLinkedDependencies(projectDir);
-      await updatePackageJsonToUseLinkedDependencies(dAppDir);
-      await updatePackageJsonToUseLinkedDependencies(contractsDir);
-      await updatePackageJsonToUseLinkedDependencies(subgraphDir);
-      await $`bun install`.cwd(projectDir).env(env);
-    },
-    { retry: 3 },
-  );
+  test("Install dependencies and link SDK to use local one", async () => {
+    const env = { ...process.env, NODE_ENV: "production" };
+    await registerLinkedDependencies();
+    await updatePackageJsonToUseLinkedDependencies(projectDir);
+    await updatePackageJsonToUseLinkedDependencies(dAppDir);
+    await updatePackageJsonToUseLinkedDependencies(contractsDir);
+    await updatePackageJsonToUseLinkedDependencies(subgraphDir);
+    await $`bun install --no-cache`.cwd(projectDir).env(env);
+  });
 
   test("Connect to standalone environment", async () => {
     const root = await projectRoot(true, projectDir);
