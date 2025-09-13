@@ -65,7 +65,7 @@
         "@types/node": "24.3.3",
         "@types/semver": "7.7.1",
         "@types/which": "3.0.4",
-        "commander": "14.0.0",
+        "commander": "14.0.1",
         "get-tsconfig": "4.10.1",
         "giget": "2.0.0",
         "is-in-ci": "2.0.0",
@@ -145,7 +145,7 @@
         "@modelcontextprotocol/sdk": "1.18.0",
         "@settlemint/sdk-js": "workspace:*",
         "@settlemint/sdk-utils": "workspace:*",
-        "commander": "14.0.0",
+        "commander": "14.0.1",
         "graphql": "16.11.0",
         "zod": "^4",
         "zod-to-json-schema": "^3.23.0",
@@ -833,7 +833,7 @@
 
     "color-string": ["color-string@1.9.1", "", { "dependencies": { "color-name": "^1.0.0", "simple-swizzle": "^0.2.2" } }, "sha512-shrVawQFojnZv6xM40anx4CkoDP+fZsw/ZerEMsW/pyzsRbElpsL/DBVW7q3ExxwusdNXI3lXpuhEZkzs8p5Eg=="],
 
-    "commander": ["commander@14.0.0", "", {}, "sha512-2uM9rYjPvyq39NwLRqaiLtWHyDC1FvryJDa2ATTVims5YAS4PupsEQsDvP14FqhFr0P49CYDugi59xaxJlTXRA=="],
+    "commander": ["commander@14.0.1", "", {}, "sha512-2JkV3gUZUVrbNA+1sjBOYLsMZ5cEEl8GTFP2a4AVz5hvasAMCQ1D2l2le/cX+pV4N6ZU17zjUahLpIXRrnWL8A=="],
 
     "confbox": ["confbox@0.2.2", "", {}, "sha512-1NB+BKqhtNipMsov4xI/NnhCKp9XG9NamYp5PVm9klAT0fsrNPjaFICsCFhNhwZJKNh7zB/3q8qXz0E9oaMNtQ=="],
 
