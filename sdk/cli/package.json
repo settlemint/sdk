@@ -51,7 +51,7 @@
   "devDependencies": {
     "@commander-js/extra-typings": "14.0.0",
     "commander": "14.0.1",
-    "@inquirer/confirm": "5.1.16",
+    "@inquirer/confirm": "5.1.17",
     "@inquirer/input": "4.2.2",
     "@inquirer/password": "4.0.18",
     "@inquirer/select": "4.3.2",
