@@ -59,7 +59,7 @@
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
     "@settlemint/sdk-viem": "workspace:*",
-    "@types/node": "24.3.3",
+    "@types/node": "24.4.0",
     "@types/semver": "7.7.1",
     "@types/which": "3.0.4",
     "get-tsconfig": "4.10.1",
