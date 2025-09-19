@@ -1542,6 +1542,11 @@ type BesuIbftv2BlockchainNetwork implements AbstractClusterService & AbstractEnt
 
   """Genesis configuration for the Besu blockchain network"""
   genesis: BesuGenesisType!
+
+  """
+  Genesis artifacts tag for large allocations (stores only the version tag for network-wide pinning)
+  """
+  genesisArtifactsTag: String
   genesisWithDiscoveryConfig: BesuGenesisType!
 
   """Health status of the service"""
@@ -2014,6 +2019,11 @@ type BesuQBFTBlockchainNetwork implements AbstractClusterService & AbstractEntit
 
   """Genesis configuration for the Besu blockchain network"""
   genesis: BesuGenesisType!
+
+  """
+  Genesis artifacts tag for large allocations (stores only the version tag for network-wide pinning)
+  """
+  genesisArtifactsTag: String
   genesisWithDiscoveryConfig: BesuGenesisType!
 
   """Health status of the service"""
@@ -4254,6 +4264,9 @@ input CreateMultiServiceIntegrationArgs {
 
   """Name of the cluster service"""
   name: String!
+
+  """Preload database schema"""
+  preloadDatabaseSchema: Boolean
   productName: String!
 
   """Provider of the cluster service"""
@@ -8901,8 +8914,14 @@ type Mutation {
     inviteId: ID!
   ): Boolean!
 
-  """Accepts an invitation to a workspace"""
-  acceptWorkspaceInvite(inviteId: ID!): Boolean!
+  """Accepts an invitation or multiple invitations to a workspace"""
+  acceptWorkspaceInvite(
+    """Single workspace invite ID to accept"""
+    inviteId: ID
+
+    """Multiple workspace invite IDs to accept"""
+    inviteIds: [ID!]
+  ): Boolean!
   acceptWorkspaceTransferCode(
     """Secret code for workspace transfer"""
     secretCode: String!
@@ -9359,6 +9378,9 @@ type Mutation {
 
     """Name of the cluster service"""
     name: String!
+
+    """Preload database schema"""
+    preloadDatabaseSchema: Boolean
 
     """Provider of the cluster service"""
     provider: String!
