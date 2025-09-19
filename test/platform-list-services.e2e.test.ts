@@ -144,6 +144,7 @@ describe("Test platform list services command", () => {
     expect(output).toContain("Workspaces");
     expect(output).toContain("Name");
     expect(output).toContain("Unique Name");
+    expect(env.SETTLEMINT_WORKSPACE).toBeDefined();
     expect(output).toContain(env.SETTLEMINT_WORKSPACE ?? "");
     expect(output).not.toContain("Url");
   });
