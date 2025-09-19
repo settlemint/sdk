@@ -144,7 +144,7 @@ describe("Test platform list services command", () => {
     expect(output).toContain("Workspaces");
     expect(output).toContain("Name");
     expect(output).toContain("Unique Name");
-    expect(output).toContain(env.SETTLEMINT_WORKSPACE);
+    expect(output).toContain(env.SETTLEMINT_WORKSPACE ?? "");
     expect(output).not.toContain("Url");
   });
 
@@ -154,7 +154,8 @@ describe("Test platform list services command", () => {
     expect(output).toContain("Workspaces");
     expect(output).toContain("Name");
     expect(output).toContain("Unique Name");
-    expect(output).toContain(env.SETTLEMINT_WORKSPACE);
+    expect(env.SETTLEMINT_WORKSPACE).toBeDefined();
+    expect(output).toContain(env.SETTLEMINT_WORKSPACE ?? "");
     expect(output).toContain("Url");
   });
 
@@ -208,7 +209,8 @@ describe("Test platform list services command", () => {
     expect(output).toContain("Applications");
     expect(output).toContain("Name");
     expect(output).toContain("Unique Name");
-    expect(output).toContain(env.SETTLEMINT_APPLICATION);
+    expect(env.SETTLEMINT_APPLICATION).toBeDefined();
+    expect(output).toContain(env.SETTLEMINT_APPLICATION ?? "");
     expect(output).not.toContain("Url");
   });
 
@@ -218,7 +220,8 @@ describe("Test platform list services command", () => {
     expect(output).toContain("Applications");
     expect(output).toContain("Name");
     expect(output).toContain("Unique Name");
-    expect(output).toContain(env.SETTLEMINT_APPLICATION);
+    expect(env.SETTLEMINT_APPLICATION).toBeDefined();
+    expect(output).toContain(env.SETTLEMINT_APPLICATION ?? "");
     expect(output).toContain("Url");
   });
 
