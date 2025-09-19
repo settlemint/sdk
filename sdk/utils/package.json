@@ -72,7 +72,7 @@
     "console-table-printer": "^2",
     "deepmerge-ts": "^7",
     "environment": "^1",
-    "find-up": "^7",
+    "find-up": "^8.0.0",
     "glob": "11.0.3",
     "is-in-ci": "^2.0.0",
     "nano-spawn": "^1.0.0",
