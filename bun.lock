@@ -14,7 +14,7 @@
         "tsdown": "^0.15.0",
         "turbo": "2.5.6",
         "typedoc": "0.28.13",
-        "typedoc-plugin-markdown": "4.8.1",
+        "typedoc-plugin-markdown": "4.9.0",
         "typedoc-plugin-merge-modules": "7.0.0",
         "typedoc-plugin-zod": "1.4.2",
         "typescript": "5.9.2",
@@ -1511,7 +1511,7 @@
 
     "typedoc": ["typedoc@0.28.13", "", { "dependencies": { "@gerrit0/mini-shiki": "^3.12.0", "lunr": "^2.3.9", "markdown-it": "^14.1.0", "minimatch": "^9.0.5", "yaml": "^2.8.1" }, "peerDependencies": { "typescript": "5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x || 5.8.x || 5.9.x" }, "bin": { "typedoc": "bin/typedoc" } }, "sha512-dNWY8msnYB2a+7Audha+aTF1Pu3euiE7ySp53w8kEsXoYw7dMouV5A1UsTUY345aB152RHnmRMDiovuBi7BD+w=="],
 
-    "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.8.1", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-ug7fc4j0SiJxSwBGLncpSo8tLvrT9VONvPUQqQDTKPxCoFQBADLli832RGPtj6sfSVJebNSrHZQRUdEryYH/7g=="],
+    "typedoc-plugin-markdown": ["typedoc-plugin-markdown@4.9.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-9Uu4WR9L7ZBgAl60N/h+jqmPxxvnC9nQAlnnO/OujtG2ubjnKTVUFY1XDhcMY+pCqlX3N2HsQM2QTYZIU9tJuw=="],
 
     "typedoc-plugin-merge-modules": ["typedoc-plugin-merge-modules@7.0.0", "", { "peerDependencies": { "typedoc": "0.28.x" } }, "sha512-DQyfbbPNBElhpdpGrlkS+CrhGD3iooDjp/PHT8O1D/jumLCB+7XAY3jHiqob7d01o25EfwEOJWVwJK+9J6WlBg=="],
 
