@@ -138,6 +138,8 @@ Options:
   --gas-limit &lt;limit&gt;                 Block gas limit
   --gas-price &lt;price&gt;                 Gas price in wei
   --seconds-per-block &lt;seconds&gt;       Block time in seconds
+  --includePredeployedContracts       Include predeployed contracts in the
+                                      genesis file
   -h, --help                          display help for command
 </pre>
 

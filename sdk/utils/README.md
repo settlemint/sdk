@@ -77,7 +77,7 @@
     - [ExecuteCommandOptions](#executecommandoptions)
     - [Logger](#logger)
     - [LoggerOptions](#loggeroptions)
-    - [SpinnerOptions\<R\>](#spinneroptionsr)
+    - [SpinnerOptions](#spinneroptions)
   - [Type Aliases](#type-aliases)
     - [AccessToken](#accesstoken)
     - [ApplicationAccessToken](#applicationaccesstoken)
@@ -1678,7 +1678,7 @@ Configuration options for the logger
 
 ***
 
-#### SpinnerOptions\<R\>
+#### SpinnerOptions
 
 Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/utils/src/terminal/spinner.ts#L25)
 

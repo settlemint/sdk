@@ -41,7 +41,7 @@
   - [Classes](#classes)
     - [WalletVerificationChallengeError](#walletverificationchallengeerror)
   - [Interfaces](#interfaces)
-    - [HandleWalletVerificationChallengeOptions\<Setup\>](#handlewalletverificationchallengeoptionssetup)
+    - [HandleWalletVerificationChallengeOptions](#handlewalletverificationchallengeoptions)
     - [Transaction](#transaction)
     - [TransactionEvent](#transactionevent)
     - [TransactionReceipt](#transactionreceipt)
@@ -828,7 +828,7 @@ Custom error class for challenge-related errors
 
 ### Interfaces
 
-#### HandleWalletVerificationChallengeOptions\<Setup\>
+#### HandleWalletVerificationChallengeOptions
 
 Defined in: [sdk/portal/src/utils/wallet-verification-challenge.ts:70](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/portal/src/utils/wallet-verification-challenge.ts#L70)
 

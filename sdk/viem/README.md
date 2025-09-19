@@ -52,11 +52,11 @@
     - [WalletPincodeVerificationInfo](#walletpincodeverificationinfo)
     - [WalletSecretCodesVerificationInfo](#walletsecretcodesverificationinfo)
     - [WalletVerification](#walletverification)
-    - [WalletVerificationChallenge\<ChallengeData\>](#walletverificationchallengechallengedata)
+    - [WalletVerificationChallenge](#walletverificationchallenge)
     - [WalletVerificationChallengeData](#walletverificationchallengedata)
     - [WalletVerificationOptions](#walletverificationoptions)
   - [Type Aliases](#type-aliases)
-    - [AddressOrObject\<Extra\>](#addressorobjectextra)
+    - [AddressOrObject](#addressorobject)
     - [AddressOrObjectWithChallengeId](#addressorobjectwithchallengeid)
     - [ClientOptions](#clientoptions)
     - [CreateWalletVerificationChallengeResponse](#createwalletverificationchallengeresponse)
@@ -571,7 +571,7 @@ Represents a wallet verification.
 
 ***
 
-#### WalletVerificationChallenge\<ChallengeData\>
+#### WalletVerificationChallenge
 
 Defined in: [sdk/viem/src/custom-actions/types/wallet-verification-challenge.ts:6](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/viem/src/custom-actions/types/wallet-verification-challenge.ts#L6)
 
@@ -626,7 +626,7 @@ The options for the wallet client.
 
 ### Type Aliases
 
-#### AddressOrObject\<Extra\>
+#### AddressOrObject
 
 > **AddressOrObject**\<`Extra`\> = `string` \| `object` & `Extra`
 
