@@ -59,7 +59,7 @@ jobs:
       CONSOLE_GRAPHQL: ""
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
+        uses: namespacelabs/nscloud-checkout-action@c79c9a72c5df9e9590f9de7718b2f232c3e75879 # v7
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
           persist-credentials: false
@@ -377,7 +377,7 @@ jobs:
       SLACK_CHANNEL_ID: ""
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
+        uses: namespacelabs/nscloud-checkout-action@c79c9a72c5df9e9590f9de7718b2f232c3e75879 # v7
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
@@ -431,7 +431,7 @@ jobs:
       SLACK_CHANNEL_ID: ""
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@953fed31a6113cc2347ca69c9d823743c65bc84b # v7
+        uses: namespacelabs/nscloud-checkout-action@c79c9a72c5df9e9590f9de7718b2f232c3e75879 # v7
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
