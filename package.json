@@ -79,7 +79,7 @@
     "elliptic": "6.6.1",
     "ws": "8.18.3",
     "adm-zip": "0.5.16",
-    "react-is": "19.1.1",
+    "react-is": "19.2.0",
     "undici": "7.16.0"
   },
   "dependencies": {}
