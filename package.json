@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "0.18.2",
-    "@biomejs/biome": "2.2.4",
+    "@biomejs/biome": "2.2.5",
     "@types/bun": "1.2.23",
     "@types/mustache": "4.2.6",
     "knip": "5.64.1",
