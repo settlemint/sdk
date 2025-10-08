@@ -96,10 +96,7 @@ beforeAll(async () => {
   }
 });
 
-afterAll(async () => {
-  await cleanup();
-  process.exit(1);
-});
+afterAll(cleanup);
 
 async function addWorkspaceCredits() {
   // Add some credits so the workspace will not be auto paused
