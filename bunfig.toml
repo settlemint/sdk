@@ -6,3 +6,4 @@ linker = isolated
 [test]
 coverage = true
 coverageSkipTestFiles = true
+concurrentTestGlob="./test/**/*.test.ts"

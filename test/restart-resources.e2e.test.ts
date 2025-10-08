@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, setDefaultTimeout, test } from "bun:test";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { fetchWithRetry } from "@settlemint/sdk-utils/http";
-import { PORTAL_NAME } from "./constants/test-resources";
+import { NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
 
 const COMMAND_TEST_SCOPE = __filename;
@@ -13,18 +13,17 @@ afterEach(() => {
 });
 
 describe("Restart platform resources using the SDK", () => {
-  test("Restart smart contract portal middleware on the platform", async () => {
+  test("Restart blockchain node on the platform", async () => {
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
       "restart",
-      "middleware",
-      "scp",
-      "default",
+      "blockchain-node",
+      NODE_NAME_3_WITHOUT_PK,
       "--wait",
       "--accept-defaults",
     ]).result;
-    expect(output).toInclude(`Middleware ${PORTAL_NAME} restart initiated successfully`);
-    expect(output).toInclude("Middleware is restarted");
+    expect(output).toInclude(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} restart initiated successfully`);
+    expect(output).toInclude("Blockchain node is restarted");
     // Make sure it is running
     const env = await loadEnv(false, false);
     const response = await fetchWithRetry(env.SETTLEMINT_PORTAL_REST_ENDPOINT ?? "");

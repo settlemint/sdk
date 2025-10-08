@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "bun run build.ts",
-    "dev": "tsdown --watch",
+    "dev": "tsdown --watch ./src",
     "typecheck": "tsc --noEmit",
     "publish-npm": "bun publish --tag ${TAG} --access public || exit 0",
     "prepack": "cp ../../LICENSE ."

@@ -41,7 +41,7 @@
   },
   "scripts": {
     "build": "tsdown",
-    "dev": "tsdown --watch",
+    "dev": "tsdown --watch ./src",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",
