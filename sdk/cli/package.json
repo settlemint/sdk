@@ -34,7 +34,7 @@
   },
   "scripts": {
     "build": "bun run build.ts",
-    "dev": "tsdown --watch",
+    "dev": "tsdown --watch ./src",
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",

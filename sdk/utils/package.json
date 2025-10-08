@@ -51,7 +51,7 @@
   },
   "scripts": {
     "build": "NODE_OPTIONS='--max-old-space-size=3072' tsdown",
-    "dev": "tsdown --watch",
+    "dev": "tsdown --watch ./src",
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "test": "bun test",
