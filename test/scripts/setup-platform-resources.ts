@@ -45,7 +45,7 @@ const COMMAND_TEST_SCOPE = __filename;
 const DISABLE_CONCURRENT_DEPLOYMENT = process.env.DISABLE_CONCURRENT_DEPLOYMENT === "true";
 
 // Required for the beforeAll hook to not to timeout
-setDefaultTimeout(1000 * 60 * 10); // 1 hour
+setDefaultTimeout(1000 * 60 * 60); // 1 hour
 
 async function cleanup(force = false) {
   if (process.env.DISABLE_WORKSPACE_DELETE && !force) {
