@@ -1478,6 +1478,9 @@ type BesuIbftv2BlockchainNetwork implements AbstractClusterService & AbstractEnt
   application: Application!
   applicationDashBoardDependantsTree: DependantsTree!
 
+  """Image of the artifacts for the installed kit"""
+  artifactsImageTag: String
+
   """The blockchain nodes associated with this network"""
   blockchainNodes: [BlockchainNodeType!]!
   canAddValidatingNodes: [Workspace!]!
@@ -1542,11 +1545,6 @@ type BesuIbftv2BlockchainNetwork implements AbstractClusterService & AbstractEnt
 
   """Genesis configuration for the Besu blockchain network"""
   genesis: BesuGenesisType!
-
-  """
-  Genesis artifacts tag for large allocations (stores only the version tag for network-wide pinning)
-  """
-  genesisArtifactsTag: String
   genesisWithDiscoveryConfig: BesuGenesisType!
 
   """Health status of the service"""
@@ -1566,6 +1564,9 @@ type BesuIbftv2BlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
@@ -1955,6 +1956,9 @@ type BesuQBFTBlockchainNetwork implements AbstractClusterService & AbstractEntit
   application: Application!
   applicationDashBoardDependantsTree: DependantsTree!
 
+  """Image of the artifacts for the installed kit"""
+  artifactsImageTag: String
+
   """The blockchain nodes associated with this network"""
   blockchainNodes: [BlockchainNodeType!]!
   canAddValidatingNodes: [Workspace!]!
@@ -2019,11 +2023,6 @@ type BesuQBFTBlockchainNetwork implements AbstractClusterService & AbstractEntit
 
   """Genesis configuration for the Besu blockchain network"""
   genesis: BesuGenesisType!
-
-  """
-  Genesis artifacts tag for large allocations (stores only the version tag for network-wide pinning)
-  """
-  genesisArtifactsTag: String
   genesisWithDiscoveryConfig: BesuGenesisType!
 
   """Health status of the service"""
@@ -2043,6 +2042,9 @@ type BesuQBFTBlockchainNetwork implements AbstractClusterService & AbstractEntit
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
@@ -2805,6 +2807,9 @@ interface BlockchainNetwork implements AbstractClusterService & AbstractEntity {
   jobLogs: [String!]!
   jobProgress: Float!
 
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
+
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
   latestVersion: String!
@@ -3480,6 +3485,8 @@ enum ConsensusAlgorithm {
   ARBITRUM_SEPOLIA
   AVALANCHE
   AVALANCHE_FUJI
+  BASE_MAINNET
+  BASE_SEPOLIA
   BESU_IBFTv2
   BESU_QBFT
   BSC_POW
@@ -3494,6 +3501,8 @@ enum ConsensusAlgorithm {
   HEDERA_MAINNET
   HEDERA_TESTNET
   HOLESKY
+  LINEA_MAINNET
+  LINEA_SEPOLIA
   OPTIMISM
   OPTIMISM_GOERLI
   OPTIMISM_SEPOLIA
@@ -3507,8 +3516,6 @@ enum ConsensusAlgorithm {
   QUORUM_QBFT
   SEPOLIA
   SONEIUM_MINATO
-  SONIC_BLAZE
-  SONIC_MAINNET
   TEZOS
   TEZOS_TESTNET
 }
@@ -3591,6 +3598,9 @@ type CordaBlockchainNetwork implements AbstractClusterService & AbstractEntity &
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
@@ -5456,6 +5466,9 @@ type FabricRaftBlockchainNetwork implements AbstractClusterService & AbstractEnt
   jobLogs: [String!]!
   jobProgress: Float!
 
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
+
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
   latestVersion: String!
@@ -5971,6 +5984,9 @@ type GethCliqueBlockchainNetwork implements AbstractClusterService & AbstractEnt
   jobLogs: [String!]!
   jobProgress: Float!
 
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
+
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
   latestVersion: String!
@@ -6268,12 +6284,12 @@ input GethGenesisConfigInput {
   muirGlacierBlock: Float
 
   """The block number for the Muir Glacier hard fork (deprecated)"""
-  muirGlacierblock: Float
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """
   The block number for the Muir Glacier hard fork (all lowercase - deprecated)
   """
-  muirglacierblock: Float
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """The block number for the Petersburg hard fork"""
   petersburgBlock: Float
@@ -8279,6 +8295,9 @@ type Kit {
 
   """Kit ID"""
   id: String!
+
+  """Kit is a pre-release (eg beta, alpha, etc)"""
+  isPreRelease: Boolean!
 
   """Kit name"""
   name: String!
@@ -11861,6 +11880,9 @@ type PolygonEdgePoABlockchainNetwork implements AbstractClusterService & Abstrac
   jobLogs: [String!]!
   jobProgress: Float!
 
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
+
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
   latestVersion: String!
@@ -12025,6 +12047,9 @@ type PolygonSupernetBlockchainNetwork implements AbstractClusterService & Abstra
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
@@ -12658,6 +12683,9 @@ type PublicEvmBlockchainNetwork implements AbstractClusterService & AbstractEnti
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
@@ -13614,10 +13642,10 @@ input QuorumGenesisConfigInput {
   muirGlacierBlock: Float
 
   """Block number for Muir Glacier hard fork (deprecated)"""
-  muirGlacierblock: Float
+  muirGlacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """Block number for Muir Glacier hard fork (all lowercase - deprecated)"""
-  muirglacierblock: Float
+  muirglacierblock: Float @deprecated(reason: "Use muirGlacierBlock instead (capital B)")
 
   """Block number for Petersburg hard fork"""
   petersburgBlock: Float
@@ -13941,6 +13969,9 @@ type QuorumQBFTBlockchainNetwork implements AbstractClusterService & AbstractEnt
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
@@ -15580,6 +15611,9 @@ type TezosBlockchainNetwork implements AbstractClusterService & AbstractEntity &
   jobLogs: [String!]!
   jobProgress: Float!
 
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
+
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
   latestVersion: String!
@@ -16038,6 +16072,9 @@ type TezosTestnetBlockchainNetwork implements AbstractClusterService & AbstractE
   isPublicEvmNetwork: Boolean!
   jobLogs: [String!]!
   jobProgress: Float!
+
+  """The ID of the kit used to create this blockchain network"""
+  kitId: String
 
   """Date when the service was last completed"""
   lastCompletedAt: DateTime!
