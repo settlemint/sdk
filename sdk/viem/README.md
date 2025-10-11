@@ -134,7 +134,7 @@ console.log(chainId);
 
 #### getPublicClient()
 
-> **getPublicClient**(`options`): `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `PublicRpcSchema`, `object` & `PublicActions`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`\>\>
+> **getPublicClient**(`options`): `Client`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>, `Chain`, `undefined`, `PublicRpcSchema`, `object` & `PublicActions`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>, `Chain`\>\>
 
 Defined in: [sdk/viem/src/viem.ts:201](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/viem/src/viem.ts#L201)
 
@@ -148,7 +148,7 @@ Creates an optimized public client for blockchain read operations.
 
 ##### Returns
 
-`Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`, `undefined`, `PublicRpcSchema`, `object` & `PublicActions`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>, `Chain`\>\>
+`Client`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>, `Chain`, `undefined`, `PublicRpcSchema`, `object` & `PublicActions`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>, `Chain`\>\>
 
 Cached or newly created public client with read-only blockchain access
 
@@ -192,7 +192,7 @@ console.log(block);
 
 #### getWalletClient()
 
-> **getWalletClient**(`options`): (`verificationOptions?`) => `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>\>
+> **getWalletClient**(`options`): (`verificationOptions?`) => `Client`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>\>
 
 Defined in: [sdk/viem/src/viem.ts:323](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/viem/src/viem.ts#L323)
 
@@ -208,7 +208,7 @@ Creates a factory function for wallet clients with runtime verification support.
 
 Factory function that accepts runtime verification options
 
-> (`verificationOptions?`): `Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>\>
+> (`verificationOptions?`): `Client`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>\>
 
 ###### Parameters
 
@@ -218,7 +218,7 @@ Factory function that accepts runtime verification options
 
 ###### Returns
 
-`Client`\<`HttpTransport`\<`undefined` \| `RpcSchema`, `boolean`\>\>
+`Client`\<`HttpTransport`\<`RpcSchema` \| `undefined`, `boolean`\>\>
 
 ##### Remarks
 

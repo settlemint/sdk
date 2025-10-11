@@ -458,7 +458,7 @@ const baseUrl = extractBaseUrlBeforeSegment("https://example.com/api/v1/subgraph
 
 #### extractJsonObject()
 
-> **extractJsonObject**\<`T`\>(`value`): `null` \| `T`
+> **extractJsonObject**\<`T`\>(`value`): `T` \| `null`
 
 Defined in: [sdk/utils/src/json.ts:50](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/utils/src/json.ts#L50)
 
@@ -478,7 +478,7 @@ Extracts a JSON object from a string.
 
 ##### Returns
 
-`null` \| `T`
+`T` \| `null`
 
 The parsed JSON object, or null if no JSON object is found
 
@@ -570,7 +570,7 @@ console.log(packages); // Output: ["/path/to/your/project/packages/core", "/path
 
 #### findMonoRepoRoot()
 
-> **findMonoRepoRoot**(`startDir`): `Promise`\<`null` \| `string`\>
+> **findMonoRepoRoot**(`startDir`): `Promise`\<`string` \| `null`\>
 
 Defined in: [sdk/utils/src/filesystem/mono-repo.ts:19](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/utils/src/filesystem/mono-repo.ts#L19)
 
@@ -584,7 +584,7 @@ Finds the root directory of a monorepo
 
 ##### Returns
 
-`Promise`\<`null` \| `string`\>
+`Promise`\<`string` \| `null`\>
 
 The root directory of the monorepo or null if not found
 
@@ -1404,7 +1404,7 @@ const truncated = truncate("Hello, world!", 10);
 
 #### tryParseJson()
 
-> **tryParseJson**\<`T`\>(`value`, `defaultValue`): `null` \| `T`
+> **tryParseJson**\<`T`\>(`value`, `defaultValue`): `T` \| `null`
 
 Defined in: [sdk/utils/src/json.ts:23](https://github.com/settlemint/sdk/blob/v2.6.2/sdk/utils/src/json.ts#L23)
 
@@ -1421,11 +1421,11 @@ Attempts to parse a JSON string into a typed value, returning a default value if
 | Parameter | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
 | `value` | `string` | `undefined` | The JSON string to parse |
-| `defaultValue` | `null` \| `T` | `null` | The value to return if parsing fails or results in null/undefined |
+| `defaultValue` | `T` \| `null` | `null` | The value to return if parsing fails or results in null/undefined |
 
 ##### Returns
 
-`null` \| `T`
+`T` \| `null`
 
 The parsed JSON value as type T, or the default value if parsing fails
 
