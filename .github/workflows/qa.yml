@@ -202,7 +202,7 @@ jobs:
 
       - name: Auto-commit changes to docs and README
         if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' && github.ref == 'refs/heads/main' && env.TAG == 'main' }}
-        uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6
+        uses: stefanzweifel/git-auto-commit-action@28e16e81777b558cc906c8750092100bbb34c5e3 # v7
         with:
           commit_message: "chore: update docs [skip ci]"
           branch: main
@@ -241,7 +241,7 @@ jobs:
                 | SDK EAS | `@settlemint/sdk-eas@${{ env.VERSION }}` | |
 
       - name: Auto-commit updated package versions
-        uses: stefanzweifel/git-auto-commit-action@778341af668090896ca464160c2def5d1d1a3eb0 # v6
+        uses: stefanzweifel/git-auto-commit-action@28e16e81777b558cc906c8750092100bbb34c5e3 # v7
         if: ${{ github.event_name != 'pull_request' && github.event_name != 'pull_request_review' && env.TAG == 'latest' }}
         with:
           commit_message: "chore: update package versions [skip ci]"
