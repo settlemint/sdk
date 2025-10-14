@@ -53,7 +53,7 @@
     "commander": "14.0.1",
     "@inquirer/confirm": "5.1.19",
     "@inquirer/input": "4.2.5",
-    "@inquirer/password": "4.0.20",
+    "@inquirer/password": "4.0.21",
     "@inquirer/select": "4.3.4",
     "@settlemint/sdk-hasura": "workspace:*",
     "@settlemint/sdk-js": "workspace:*",
