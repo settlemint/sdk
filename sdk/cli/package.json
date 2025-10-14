@@ -54,7 +54,7 @@
     "@inquirer/confirm": "5.1.19",
     "@inquirer/input": "4.2.5",
     "@inquirer/password": "4.0.21",
-    "@inquirer/select": "4.3.4",
+    "@inquirer/select": "4.4.0",
     "@settlemint/sdk-hasura": "workspace:*",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
