@@ -425,15 +425,6 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 
       // Set results in order
       for (const { field, data } of fieldResults) {
-        // Use array path format for es-toolkit's set function
-        if (field.path.length > 1) {
-          const parentPath = field.path.slice(0, -1);
-          const existingParent = get(result, parentPath);
-
-          if (!existingParent || typeof existingParent !== "object" || isArray(existingParent)) {
-            set(result, parentPath, {});
-          }
-        }
         set(result, field.path, data);
       }
 

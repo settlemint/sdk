@@ -368,8 +368,10 @@ describe("createTheGraphClientWithPagination", () => {
       },
     );
 
-    expect(result.token).toEqual({
-      holders: TEST_HOLDERS,
+    expect(result).toEqual({
+      token: {
+        holders: TEST_HOLDERS,
+      },
     });
     expect(requestMock).toHaveBeenCalledTimes(3);
   });
