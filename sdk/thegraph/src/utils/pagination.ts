@@ -1,7 +1,7 @@
 import { sortBy } from "es-toolkit";
 import { get, isArray, isEmpty, set } from "es-toolkit/compat";
 import type { TadaDocumentNode } from "gql.tada";
-import { type ArgumentNode, type DocumentNode, Kind, parse, visit } from "graphql";
+import { type ArgumentNode, type DocumentNode, type FieldNode, Kind, parse, visit } from "graphql";
 import type { GraphQLClient, RequestDocument, RequestOptions, Variables } from "graphql-request";
 
 // Constants for TheGraph limits
@@ -244,7 +244,6 @@ function createSingleFieldQuery(
 
 // Create query without list fields
 function createNonListQuery(document: DocumentNode, listFields: ListFieldWithFetchAllDirective[]): DocumentNode | null {
-  let hasFields = false;
   const pathStack: string[] = [];
 
   const filtered = visit(document, {
@@ -263,17 +262,35 @@ function createNonListQuery(document: DocumentNode, listFields: ListFieldWithFet
           pathStack.pop();
           return null;
         }
-
-        hasFields = true;
         return undefined;
       },
-      leave: () => {
+      leave: (node: FieldNode) => {
         pathStack.pop();
+        if (node.selectionSet && node.selectionSet.selections.length === 0) {
+          return null;
+        }
+        return undefined;
       },
     },
   });
 
-  return hasFields ? filtered : null;
+  return filtered;
+}
+
+function countExecutableFields(document: DocumentNode): number {
+  let fieldCount = 0;
+
+  visit(document, {
+    Field: (node) => {
+      if (!node.name.value.startsWith("__")) {
+        if (!node.selectionSet || node.selectionSet.selections.length > 0) {
+          fieldCount += 1;
+        }
+      }
+    },
+  });
+
+  return fieldCount;
 }
 
 // Filter variables to only include used ones
@@ -409,6 +426,14 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       // Set results in order
       for (const { field, data } of fieldResults) {
         // Use array path format for es-toolkit's set function
+        if (field.path.length > 1) {
+          const parentPath = field.path.slice(0, -1);
+          const existingParent = get(result, parentPath);
+
+          if (!existingParent || typeof existingParent !== "object" || isArray(existingParent)) {
+            set(result, parentPath, {});
+          }
+        }
         set(result, field.path, data);
       }
 
@@ -416,6 +441,9 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
       const nonListQuery = createNonListQuery(processedDocument, listFields);
 
       if (nonListQuery) {
+        if (countExecutableFields(nonListQuery) === 0) {
+          return result as TResult;
+        }
         const nonListResult = await theGraphClient.request(
           nonListQuery,
           filterVariables(variables, nonListQuery) ?? {},
