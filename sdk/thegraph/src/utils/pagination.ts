@@ -425,6 +425,7 @@ export function createTheGraphClientWithPagination(theGraphClient: Pick<GraphQLC
 
       // Set results in order
       for (const { field, data } of fieldResults) {
+        // Use array path format for es-toolkit's set function
         set(result, field.path, data);
       }
 
