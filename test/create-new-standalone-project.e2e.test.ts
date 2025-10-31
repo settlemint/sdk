@@ -124,7 +124,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
     await updatePackageJsonToUseLinkedDependencies(dAppDir);
     await updatePackageJsonToUseLinkedDependencies(contractsDir);
     await updatePackageJsonToUseLinkedDependencies(subgraphDir);
-    await $`bun install --no-cache`.cwd(projectDir).env(env);
+    await $`bun install --no-cache --linker=hoisted`.cwd(projectDir).env(env);
   });
 
   test("Connect to standalone environment", async () => {
