@@ -353,6 +353,29 @@ describe("createTheGraphClientWithPagination", () => {
     });
   });
 
+  it("should return token if only @fetchAll field is requested", async () => {
+    const result = await client.query(
+      theGraphGraphql(`
+        query($name: String) {
+          token(name: $name) {
+            holders @fetchAll {
+              name
+            }
+          }
+        }`),
+      {
+        name: "Token 100",
+      },
+    );
+
+    expect(result).toEqual({
+      token: {
+        holders: TEST_HOLDERS,
+      },
+    });
+    expect(requestMock).toHaveBeenCalledTimes(3);
+  });
+
   it("should allow multiple queries in a single request", async () => {
     const result = await client.query(
       theGraphGraphql(`
