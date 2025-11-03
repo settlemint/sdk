@@ -3,6 +3,7 @@ import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { fetchWithRetry } from "@settlemint/sdk-utils/http";
 import { NODE_NAME_3_WITHOUT_PK } from "./constants/test-resources";
 import { forceExitAllCommands, runCommand } from "./utils/run-command";
+import { findBlockchainNodeByName } from "./utils/test-resources";
 
 const COMMAND_TEST_SCOPE = __filename;
 
@@ -14,11 +15,15 @@ afterEach(() => {
 
 describe("Restart platform resources using the SDK", () => {
   test("Restart blockchain node on the platform", async () => {
+    const blockchainNode = await findBlockchainNodeByName(NODE_NAME_3_WITHOUT_PK);
+    if (!blockchainNode) {
+      throw new Error(`Blockchain node ${NODE_NAME_3_WITHOUT_PK} not found`);
+    }
     const { output } = await runCommand(COMMAND_TEST_SCOPE, [
       "platform",
       "restart",
       "blockchain-node",
-      NODE_NAME_3_WITHOUT_PK,
+      blockchainNode.uniqueName,
       "--wait",
       "--accept-defaults",
     ]).result;
