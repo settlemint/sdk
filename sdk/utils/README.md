@@ -353,11 +353,13 @@ ensureServer();
 
 > **executeCommand**(`command`, `args`, `options?`): `Promise`\<`string`[]\>
 
-Defined in: [sdk/utils/src/terminal/execute-command.ts:51](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/execute-command.ts#L51)
+Defined in: [sdk/utils/src/terminal/execute-command.ts:60](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/execute-command.ts#L60)
 
 Executes a command with the given arguments in a child process.
 Pipes stdin to the child process and captures stdout/stderr output.
 Masks any sensitive tokens in the output before displaying or returning.
+In quiet mode (when CLAUDECODE, REPL_ID, or AGENT env vars are set),
+output is suppressed unless the command errors out.
 
 ##### Parameters
 
@@ -1048,18 +1050,20 @@ const masked = maskTokens("Token: sm_pat_****"); // "Token: ***"
 
 > **note**(`message`, `level`): `void`
 
-Defined in: [sdk/utils/src/terminal/note.ts:21](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/note.ts#L21)
+Defined in: [sdk/utils/src/terminal/note.ts:90](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/note.ts#L90)
 
-Displays a note message with optional warning level formatting.
-Regular notes are displayed in normal text, while warnings are shown in yellow.
+Displays a note message with optional warning or error level formatting.
+Regular notes are displayed in normal text, warnings are shown in yellow, and errors in red.
 Any sensitive tokens in the message are masked before display.
+Warnings and errors are always displayed, even in quiet mode (when CLAUDECODE, REPL_ID, or AGENT env vars are set).
+When an Error object is provided with level "error", the stack trace is automatically included.
 
 ##### Parameters
 
 | Parameter | Type | Default value | Description |
 | ------ | ------ | ------ | ------ |
-| `message` | `string` | `undefined` | The message to display as a note |
-| `level` | `"info"` \| `"warn"` | `"info"` | The note level: "info" (default) or "warn" for warning styling |
+| `message` | `string` \| `Error` | `undefined` | The message to display as a note. Can be either: - A string: Displayed directly with appropriate styling - An Error object: The error message is displayed, and for level "error", the stack trace is automatically included |
+| `level` | `"error"` \| `"info"` \| `"warn"` | `"info"` | The note level: "info" (default), "warn" for warning styling, or "error" for error styling |
 
 ##### Returns
 
@@ -1075,6 +1079,17 @@ note("Operation completed successfully");
 
 // Display warning note
 note("Low disk space remaining", "warn");
+
+// Display error note (string)
+note("Operation failed", "error");
+
+// Display error with stack trace automatically (Error object)
+try {
+  // some operation
+} catch (error) {
+  // If error is an Error object and level is "error", stack trace is included automatically
+  note(error, "error");
+}
 ```
 
 ***
@@ -1290,7 +1305,7 @@ await setName("my-new-project-name");
 
 > **spinner**\<`R`\>(`options`): `Promise`\<`R`\>
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:55](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L55)
+Defined in: [sdk/utils/src/terminal/spinner.ts:54](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L54)
 
 Displays a loading spinner while executing an async task.
 Shows progress with start/stop messages and handles errors.
@@ -1615,7 +1630,7 @@ The output of the command
 
 #### SpinnerError
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:12](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L12)
+Defined in: [sdk/utils/src/terminal/spinner.ts:11](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L11)
 
 Error class used to indicate that the spinner operation failed.
 This error is used to signal that the operation should be aborted.
@@ -1680,7 +1695,7 @@ Configuration options for the logger
 
 #### SpinnerOptions
 
-Defined in: [sdk/utils/src/terminal/spinner.ts:25](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L25)
+Defined in: [sdk/utils/src/terminal/spinner.ts:24](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L24)
 
 Options for configuring the spinner behavior
 
@@ -1694,9 +1709,9 @@ Options for configuring the spinner behavior
 
 | Property | Type | Description | Defined in |
 | ------ | ------ | ------ | ------ |
-| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:27](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L27) |
-| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:31](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L31) |
-| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:29](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L29) |
+| <a id="startmessage"></a> `startMessage` | `string` | Message to display when spinner starts | [sdk/utils/src/terminal/spinner.ts:26](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L26) |
+| <a id="stopmessage"></a> `stopMessage` | `string` | Message to display when spinner completes successfully | [sdk/utils/src/terminal/spinner.ts:30](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L30) |
+| <a id="task"></a> `task` | (`spinner?`) => `Promise`\<`R`\> | Async task to execute while spinner is active | [sdk/utils/src/terminal/spinner.ts:28](https://github.com/settlemint/sdk/blob/v2.6.3/sdk/utils/src/terminal/spinner.ts#L28) |
 
 ### Type Aliases
 
