@@ -6,7 +6,8 @@
     "build": {
       "dependsOn": ["^build", "codegen"],
       "inputs": ["$TURBO_DEFAULT$", ".env*", "tsdown.config.ts", "../../shared/tsdown-factory.ts"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"]
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**", "artifacts/**"],
+      "outputLogs": "new-only"
     },
     "codegen": {
       "inputs": ["graphql/**"],
@@ -16,50 +17,62 @@
         "src/examples/schemas/**",
         "src/portal/portal-cache.d.ts",
         "src/portal/portal-env.d.ts"
-      ]
+      ],
+      "outputLogs": "new-only"
     },
     "publish-npm": {
       "dependsOn": ["build"],
-      "cache": false
+      "cache": false,
+      "outputLogs": "new-only"
     },
     "//#lint:biome": {
       "dependsOn": ["//#format:biome"]
     },
     "//#format:biome": {},
     "lint": {
-      "dependsOn": ["^build", "//#lint:biome"]
+      "dependsOn": ["^build", "//#lint:biome"],
+      "outputLogs": "new-only"
     },
     "//#knip": {
-      "cache": false
+      "cache": false,
+      "outputLogs": "new-only"
     },
     "docker": {
-      "cache": false
+      "cache": false,
+      "outputLogs": "new-only"
     },
     "attw": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "outputLogs": "new-only"
     },
-    "publint": { "dependsOn": ["build"] },
+    "publint": { "dependsOn": ["build"], "outputLogs": "new-only" },
     "dev": {
       "dependsOn": ["^build", "codegen"],
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "outputLogs": "new-only"
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "new-only"
     },
     "test:coverage": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputLogs": "new-only"
     },
     "translate": {
-      "inputs": ["messages/**"]
+      "inputs": ["messages/**"],
+      "outputLogs": "new-only"
     },
     "typecheck": {
-      "dependsOn": ["^build", "codegen"]
+      "dependsOn": ["^build", "codegen"],
+      "outputLogs": "new-only"
     },
     "docs": {
       "dependsOn": ["^build", "codegen"],
       "inputs": ["src/**", "scripts/create-docs.ts", "../../typedoc.config.mjs", "../../package.json"],
-      "outputs": ["docs/**", "!docs/ABOUT.md"]
+      "outputs": ["docs/**", "!docs/ABOUT.md"],
+      "outputLogs": "new-only"
     },
     "//#generate-readme": {
       "dependsOn": ["^build"],
@@ -69,7 +82,8 @@
         "sdk/**/docs/**",
         "sdk/**/examples/**"
       ],
-      "outputs": ["sdk/**/README.md"]
+      "outputs": ["sdk/**/README.md"],
+      "outputLogs": "new-only"
     }
   }
 }
