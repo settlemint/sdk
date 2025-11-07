@@ -65,14 +65,14 @@ export async function executeCommand(
   const { silent, ...spawnOptions } = options ?? {};
   const quietMode = isQuietMode();
   // In quiet mode, suppress output unless explicitly overridden with silent: false
-  const shouldSuppressOutput = quietMode ? (silent !== false) : !!silent;
-  
+  const shouldSuppressOutput = quietMode ? silent !== false : !!silent;
+
   const child = spawn(command, args, { ...spawnOptions, env: { ...process.env, ...options?.env } });
   process.stdin.pipe(child.stdin);
   const output: string[] = [];
   const stdoutOutput: string[] = [];
   const stderrOutput: string[] = [];
-  
+
   return new Promise((resolve, reject) => {
     child.stdout.on("data", (data: Buffer | string) => {
       const maskedData = maskTokens(data.toString());
@@ -90,7 +90,7 @@ export async function executeCommand(
       output.push(maskedData);
       stderrOutput.push(maskedData);
     });
-    
+
     const showErrorOutput = () => {
       // In quiet mode, show output on error
       if (quietMode && shouldSuppressOutput && output.length > 0) {
@@ -103,7 +103,7 @@ export async function executeCommand(
         }
       }
     };
-    
+
     child.on("error", (err) => {
       process.stdin.unpipe(child.stdin);
       showErrorOutput();
