@@ -54,8 +54,8 @@ export interface SpinnerOptions<R> {
  */
 export const spinner = async <R>(options: SpinnerOptions<R>): Promise<R> => {
   const handleError = (error: Error) => {
+    note(error, "error");
     const errorMessage = maskTokens(error.message);
-    note(redBright(`${errorMessage}\n\n${error.stack}`));
     throw new SpinnerError(errorMessage, error);
   };
   if (isInCi || !shouldPrint()) {

@@ -1,7 +1,7 @@
 import { Command, CommanderError } from "@commander-js/extra-typings";
 import { AbortPromptError, CancelPromptError, ExitPromptError, ValidationError } from "@inquirer/core";
 import { ascii, CancelError, maskTokens, note, SpinnerError } from "@settlemint/sdk-utils/terminal";
-import { magentaBright, redBright } from "yoctocolors";
+import { magentaBright } from "yoctocolors";
 import { telemetry } from "@/utils/telemetry";
 import pkg from "../../package.json";
 import { getInstalledSdkVersion, validateSdkVersionFromCommand } from "../utils/sdk-version";
@@ -113,8 +113,7 @@ async function onError(sdkcli: ExtendedCommand, argv: string[], error: Error) {
   }
 
   if (!(error instanceof CancelError || error instanceof SpinnerError)) {
-    const errorMessage = maskTokens(error.message);
-    note(redBright(`Unknown error: ${errorMessage}\n\n${error.stack}`));
+    note(error, "error");
   }
 
   // Get the command path from the command that threw the error
