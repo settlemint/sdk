@@ -39,6 +39,11 @@
       "automerge": true,
       "automergeType": "pr",
       "platformAutomerge": true
+    },
+    {
+      "groupName": "Inquirer",
+      "groupSlug": "inquirer",
+      "matchPackageNames": ["/^@inquirer//"]
     }
   ],
   "hostRules": [
