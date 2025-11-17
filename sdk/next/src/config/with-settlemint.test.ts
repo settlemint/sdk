@@ -46,9 +46,6 @@ describe("withSettleMint", () => {
   it("should preserve custom config properties", async () => {
     const originalConfig: NextConfig = {
       distDir: "custom-dist",
-      experimental: {
-        turbo: {},
-      },
       env: {
         CUSTOM_VAR: "value",
       },
@@ -58,9 +55,6 @@ describe("withSettleMint", () => {
 
     expect(result).toEqual({
       distDir: "custom-dist",
-      experimental: {
-        turbo: {},
-      },
       env: {
         CUSTOM_VAR: "value",
       },
