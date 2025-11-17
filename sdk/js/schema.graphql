@@ -3480,6 +3480,7 @@ interface Company {
 }
 
 enum ConsensusAlgorithm {
+  ADI_TESTNET
   ARBITRUM
   ARBITRUM_GOERLI
   ARBITRUM_SEPOLIA
