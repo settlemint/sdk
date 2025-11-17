@@ -44,7 +44,7 @@
   },
   "dependencies": {
     "@gql.tada/cli-utils": "1.7.2",
-    "@inquirer/core": "10.3.2",
+    "@inquirer/core": "11.0.1",
     "node-fetch-native": "1.6.7",
     "zod": "^4"
   },
