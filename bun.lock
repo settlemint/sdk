@@ -141,8 +141,8 @@
       },
       "dependencies": {
         "@commander-js/extra-typings": "14.0.0",
-        "@graphql-tools/load": "8.1.4",
-        "@graphql-tools/url-loader": "9.0.2",
+        "@graphql-tools/load": "8.1.6",
+        "@graphql-tools/url-loader": "9.0.4",
         "@modelcontextprotocol/sdk": "1.21.1",
         "@settlemint/sdk-js": "workspace:*",
         "@settlemint/sdk-utils": "workspace:*",
@@ -420,13 +420,13 @@
 
     "@graphql-tools/executor-legacy-ws": ["@graphql-tools/executor-legacy-ws@1.1.23", "", { "dependencies": { "@graphql-tools/utils": "^10.10.3", "@types/ws": "^8.0.0", "isomorphic-ws": "^5.0.0", "tslib": "^2.4.0", "ws": "^8.17.1" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-wwS6ZlJDaC+zxE1DcfYrPJk1ynQ0xcbOWS/x8dy4hO6ZCjRawkogoqN3Muab0E9RzuwF29LRu+aOH6isO5mQKg=="],
 
-    "@graphql-tools/load": ["@graphql-tools/load@8.1.4", "", { "dependencies": { "@graphql-tools/schema": "^10.0.27", "@graphql-tools/utils": "^10.10.1", "p-limit": "3.1.0", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-WJOJZnroCA7AoI4oOQgR2FAwyhQbIL1QOo8T65MFU5xnPUS5rKU2MDPpClXizq91m2lwYDn6Wcs2SvrEPjaTFw=="],
+    "@graphql-tools/load": ["@graphql-tools/load@8.1.6", "", { "dependencies": { "@graphql-tools/schema": "^10.0.29", "@graphql-tools/utils": "^10.10.3", "p-limit": "3.1.0", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-/bUYqGdB2Y6BflW42IjmauBDzxjec3LQmVAuImVGeiOqw1Rca/DDP7KRQe3vEv8yf/xMVj/PkIl+YRjoo12YxA=="],
 
     "@graphql-tools/merge": ["@graphql-tools/merge@9.1.5", "", { "dependencies": { "@graphql-tools/utils": "^10.10.3", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-eVcir6nCcOC/Wzv7ZAng3xec3dj6FehE8+h9TvgvUyrDEKVMdFfrO6etRFZ2hucWVcY8S6drx7zQx04N4lPM8Q=="],
 
     "@graphql-tools/schema": ["@graphql-tools/schema@10.0.29", "", { "dependencies": { "@graphql-tools/merge": "^9.1.5", "@graphql-tools/utils": "^10.10.3", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-+Htiupnq6U/AWOEAJerIOGT1pAf4u43Q3n2JmFpqFfYJchz6sKWZ7L9Lpe/NusaaUQty/IOF+eQlNFypEaWxhg=="],
 
-    "@graphql-tools/url-loader": ["@graphql-tools/url-loader@9.0.2", "", { "dependencies": { "@graphql-tools/executor-graphql-ws": "^3.1.0", "@graphql-tools/executor-http": "^3.0.4", "@graphql-tools/executor-legacy-ws": "^1.1.21", "@graphql-tools/utils": "^10.10.1", "@graphql-tools/wrap": "^11.0.0", "@types/ws": "^8.0.0", "@whatwg-node/fetch": "^0.10.11", "@whatwg-node/promise-helpers": "^1.0.0", "isomorphic-ws": "^5.0.0", "sync-fetch": "0.6.0-2", "tslib": "^2.4.0", "ws": "^8.17.1" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-3w5dJHzRbl4fgid+Gnd+j+Ufxq1BW00Ny+ZTetuITOBDOhOOOekARe7wSBh/gajLmgLNv3WNqscrheNjzfypXQ=="],
+    "@graphql-tools/url-loader": ["@graphql-tools/url-loader@9.0.4", "", { "dependencies": { "@graphql-tools/executor-graphql-ws": "^3.1.2", "@graphql-tools/executor-http": "^3.0.6", "@graphql-tools/executor-legacy-ws": "^1.1.23", "@graphql-tools/utils": "^10.10.3", "@graphql-tools/wrap": "^11.0.0", "@types/ws": "^8.0.0", "@whatwg-node/fetch": "^0.10.13", "@whatwg-node/promise-helpers": "^1.0.0", "isomorphic-ws": "^5.0.0", "sync-fetch": "0.6.0-2", "tslib": "^2.4.0", "ws": "^8.17.1" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-UNLU9g3IcZjldb08hsBLp6G8YPzZwC38bZ8PFFs/QyXXPFXzoXECT8rHLzvt32w3YFGSbTpj8FiS/KMdTQHZCg=="],
 
     "@graphql-tools/utils": ["@graphql-tools/utils@10.10.3", "", { "dependencies": { "@graphql-typed-document-node/core": "^3.1.1", "@whatwg-node/promise-helpers": "^1.0.0", "cross-inspect": "1.0.1", "tslib": "^2.4.0" }, "peerDependencies": { "graphql": "^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0" } }, "sha512-2EdYiefeLLxsoeZTukSNZJ0E/Z5NnWBUGK2VJa0DQj1scDhVd93HeT1eW9TszJOYmIh3eWAKLv58ri/1XUmdsQ=="],
 
