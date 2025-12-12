@@ -267,7 +267,7 @@
   "overrides": {
     "adm-zip": "0.5.16",
     "elliptic": "6.6.1",
-    "react-is": "19.2.1",
+    "react-is": "19.2.3",
     "undici": "7.16.0",
     "ws": "8.18.3",
   },
