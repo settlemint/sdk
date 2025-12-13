@@ -44,17 +44,17 @@
   },
   "dependencies": {
     "@gql.tada/cli-utils": "1.7.2",
-    "@inquirer/core": "11.0.2",
+    "@inquirer/core": "11.1.0",
     "node-fetch-native": "1.6.7",
     "zod": "^4"
   },
   "devDependencies": {
     "@commander-js/extra-typings": "14.0.0",
     "commander": "14.0.2",
-    "@inquirer/confirm": "6.0.2",
-    "@inquirer/input": "5.0.2",
-    "@inquirer/password": "5.0.2",
-    "@inquirer/select": "5.0.2",
+    "@inquirer/confirm": "6.0.3",
+    "@inquirer/input": "5.0.3",
+    "@inquirer/password": "5.0.3",
+    "@inquirer/select": "5.0.3",
     "@settlemint/sdk-hasura": "workspace:*",
     "@settlemint/sdk-js": "workspace:*",
     "@settlemint/sdk-utils": "workspace:*",
