@@ -73,7 +73,7 @@
     "deepmerge-ts": "^7",
     "environment": "^1",
     "find-up": "^8.0.0",
-    "glob": "12.0.0",
+    "glob": "13.0.0",
     "is-in-ci": "^2.0.0",
     "nano-spawn": "^2.0.0",
     "package-manager-detector": "^1.0.0",
