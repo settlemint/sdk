@@ -118,6 +118,7 @@ jobs:
         uses: settlemint/shared-actions/.github/actions/setup-dependencies@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          runner: github
           disable_foundry: "true"
           disable_helm: "true"
           disable_helm_docs: "true"
