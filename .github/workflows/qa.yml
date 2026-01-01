@@ -39,7 +39,7 @@ jobs:
       (github.event_name == 'pull_request' && github.event.action != 'closed') ||
       github.event_name == 'pull_request_review' ||
       github.event_name == 'release'
-    runs-on: namespace-profile-sdk
+    runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
       contents: read
@@ -60,7 +60,7 @@ jobs:
       CONSOLE_GRAPHQL: ""
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@0c5e6ce59a41299aba2ad91baa0126f1bfde8e5c # v8
+        uses: actions/checkout@v6
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
           persist-credentials: false
@@ -120,7 +120,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           disable_node: "true"
 
-      - name: Setup Node.js for npm publishing
+      - name: Setup Node.js for npm publish --provenanceing
         if: github.event_name == 'push' || github.event_name == 'release'
         uses: actions/setup-node@v4
         with:

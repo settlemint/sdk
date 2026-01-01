@@ -45,7 +45,7 @@
     "publint": "publint run --strict",
     "attw": "attw --pack .",
     "typecheck": "tsc --noEmit",
-    "publish-npm": "npm publish  --tag ${TAG} --access public",
+    "publish-npm": "npm publish --provenance  --tag ${TAG} --access public",
     "prepack": "cp ../../LICENSE .",
     "codegen": "gql-tada generate-output",
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/eas.ts --out ./docs"
