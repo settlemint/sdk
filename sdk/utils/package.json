@@ -57,7 +57,7 @@
     "test": "bun test",
     "test:coverage": "bun test --coverage",
     "typecheck": "tsc --noEmit",
-    "publish-npm": "npm publish --provenance --tag ${TAG} --access public || exit 0",
+    "publish-npm": "npm publish --provenance --tag ${TAG} --access public",
     "prepack": "cp ../../LICENSE .",
     "docs": "typedoc --options '../../typedoc.config.mjs' --entryPoints src/index.ts src/environment.ts src/filesystem.ts src/http.ts src/logging.ts src/package-manager.ts src/runtime.ts src/terminal.ts src/validation.ts --out ./docs"
   },

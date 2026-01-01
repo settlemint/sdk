@@ -36,7 +36,7 @@
     "build": "bun run build.ts",
     "dev": "tsdown --watch ./src",
     "typecheck": "tsc --noEmit",
-    "publish-npm": "npm publish --provenance --tag ${TAG} --access public || exit 0",
+    "publish-npm": "npm publish --provenance --tag ${TAG} --access public",
     "prepack": "cp ../../LICENSE ."
   },
   "dependencies": {
