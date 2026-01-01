@@ -97,8 +97,11 @@ function createCacheKey(options: Partial<ClientOptions>): string {
 
   // EDGE CASE: Serialize only the serializable parts of httpTransportConfig
   if (options.httpTransportConfig) {
-    // biome-ignore lint/correctness/noUnusedVariables: Destructuring to exclude functions from serialization
-    const { onFetchRequest, onFetchResponse, ...serializableConfig } = options.httpTransportConfig;
+    const {
+      onFetchRequest: _onFetchRequest,
+      onFetchResponse: _onFetchResponse,
+      ...serializableConfig
+    } = options.httpTransportConfig;
     if (Object.keys(serializableConfig).length > 0) {
       keyObject.httpTransportConfig = serializableConfig;
     }

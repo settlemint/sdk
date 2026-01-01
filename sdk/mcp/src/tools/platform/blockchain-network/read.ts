@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a blockchain network by ID
@@ -29,32 +28,33 @@ export const platformBlockchainNetworkRead = (server: McpServer, env: Partial<Do
     instance: instance,
   });
 
-  const schema = z.object({
-    blockchainNetworkUniqueName: z.string().describe("Unique name of the blockchain network to read").optional(),
-  });
+  server.tool(
+    "platform-blockchain-network-read",
+    {
+      blockchainNetworkUniqueName: z.string().describe("Unique name of the blockchain network to read").optional(),
+    },
+    async ({ blockchainNetworkUniqueName: provided }) => {
+      // Prioritize environment variable over LLM-provided parameter
+      const blockchainNetworkUniqueName = env.SETTLEMINT_BLOCKCHAIN_NETWORK || provided;
 
-  server.tool("platform-blockchain-network-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { blockchainNetworkUniqueName: provided } = schema.parse(params);
-    // Prioritize environment variable over LLM-provided parameter
-    const blockchainNetworkUniqueName = env.SETTLEMINT_BLOCKCHAIN_NETWORK || provided;
+      if (!blockchainNetworkUniqueName) {
+        throw new Error(
+          "Blockchain network unique name is required. Set SETTLEMINT_BLOCKCHAIN_NETWORK environment variable or provide blockchainNetworkUniqueName parameter.",
+        );
+      }
 
-    if (!blockchainNetworkUniqueName) {
-      throw new Error(
-        "Blockchain network unique name is required. Set SETTLEMINT_BLOCKCHAIN_NETWORK environment variable or provide blockchainNetworkUniqueName parameter.",
-      );
-    }
-
-    const network = await client.blockchainNetwork.read(blockchainNetworkUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Blockchain Network Details",
-          description: `Details for blockchain network: ${blockchainNetworkUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(network, null, 2),
-        },
-      ],
-    };
-  });
+      const network = await client.blockchainNetwork.read(blockchainNetworkUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Blockchain Network Details",
+            description: `Details for blockchain network: ${blockchainNetworkUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(network, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

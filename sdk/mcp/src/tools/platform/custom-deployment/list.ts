@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing custom deployments in an application
@@ -29,23 +28,22 @@ export const platformCustomDeploymentList = (server: McpServer, env: Partial<Dot
     instance: instance,
   });
 
-  const schema = z.object({
-    applicationUniqueName: z.string().describe("Unique name of the application to list custom deployments from"),
-  });
-
-  server.tool("platform-custom-deployment-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { applicationUniqueName } = schema.parse(params);
-    const customDeployments = await client.customDeployment.list(applicationUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Custom Deployment List",
-          description: `List of custom deployments in application: ${applicationUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(customDeployments, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-custom-deployment-list",
+    { applicationUniqueName: z.string().describe("Unique name of the application to list custom deployments from") },
+    async ({ applicationUniqueName }) => {
+      const customDeployments = await client.customDeployment.list(applicationUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Custom Deployment List",
+            description: `List of custom deployments in application: ${applicationUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(customDeployments, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

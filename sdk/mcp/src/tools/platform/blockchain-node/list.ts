@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for listing blockchain nodes in an application
@@ -29,23 +28,22 @@ export const platformBlockchainNodeList = (server: McpServer, env: Partial<DotEn
     instance: instance,
   });
 
-  const schema = z.object({
-    applicationUniqueName: z.string().describe("Unique name of the application to list blockchain nodes from"),
-  });
-
-  server.tool("platform-blockchain-node-list", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { applicationUniqueName } = schema.parse(params);
-    const nodes = await client.blockchainNode.list(applicationUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Blockchain Node List",
-          description: `List of blockchain nodes in application: ${applicationUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(nodes, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-blockchain-node-list",
+    { applicationUniqueName: z.string().describe("Unique name of the application to list blockchain nodes from") },
+    async ({ applicationUniqueName }) => {
+      const nodes = await client.blockchainNode.list(applicationUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Blockchain Node List",
+            description: `List of blockchain nodes in application: ${applicationUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(nodes, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

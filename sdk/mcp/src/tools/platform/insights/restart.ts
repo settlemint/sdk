@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting an insights instance
@@ -29,23 +28,22 @@ export const platformInsightsRestart = (server: McpServer, env: Partial<DotEnv>,
     instance: instance,
   });
 
-  const schema = z.object({
-    insightsUniqueName: z.string().describe("Unique name of the insights to restart"),
-  });
-
-  server.tool("platform-insights-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { insightsUniqueName } = schema.parse(params);
-    const insights = await client.insights.restart(insightsUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Insights Restarted",
-          description: `Restarted insights: ${insightsUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(insights, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-insights-restart",
+    { insightsUniqueName: z.string().describe("Unique name of the insights to restart") },
+    async ({ insightsUniqueName }) => {
+      const insights = await client.insights.restart(insightsUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Insights Restarted",
+            description: `Restarted insights: ${insightsUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(insights, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

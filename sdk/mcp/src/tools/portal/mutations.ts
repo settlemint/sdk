@@ -1,8 +1,6 @@
 import { fetchProcessedSchema } from "@/utils/schema-processor";
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
-import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 export const portalMutations = (server: McpServer, env: Partial<DotEnv>) => {
   // Check if portal GraphQL endpoint exists in environment variables
@@ -19,11 +17,8 @@ export const portalMutations = (server: McpServer, env: Partial<DotEnv>) => {
     throw new Error("Access token not found in environment variables. Please set SETTLEMINT_ACCESS_TOKEN.");
   }
 
-  const schema = z.object({});
-
   // Tool for GraphQL mutations
-  server.tool("portal-mutations", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    schema.parse(params);
+  server.tool("portal-mutations", {}, async () => {
     try {
       const { mutationNames } = await fetchProcessedSchema(portalGraphqlEndpoint, accessToken);
 

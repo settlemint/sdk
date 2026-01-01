@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting a load balancer
@@ -29,23 +28,22 @@ export const platformLoadBalancerRestart = (server: McpServer, env: Partial<DotE
     instance: instance,
   });
 
-  const schema = z.object({
-    loadBalancerUniqueName: z.string().describe("Unique name of the load balancer to restart"),
-  });
-
-  server.tool("platform-load-balancer-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { loadBalancerUniqueName } = schema.parse(params);
-    const loadBalancer = await client.loadBalancer.restart(loadBalancerUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Load Balancer Restarted",
-          description: `Restarted load balancer: ${loadBalancerUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(loadBalancer, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-load-balancer-restart",
+    { loadBalancerUniqueName: z.string().describe("Unique name of the load balancer to restart") },
+    async ({ loadBalancerUniqueName }) => {
+      const loadBalancer = await client.loadBalancer.restart(loadBalancerUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Load Balancer Restarted",
+            description: `Restarted load balancer: ${loadBalancerUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(loadBalancer, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };
