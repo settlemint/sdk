@@ -118,6 +118,11 @@ jobs:
         uses: settlemint/shared-actions/.github/actions/setup-dependencies@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          disable_foundry: "true"
+          disable_helm: "true"
+          disable_helm_docs: "true"
+          disable_python: "true"
+          disable_chart_testing: "true"
 
       - name: Inject slug/short variables
         uses: rlespinasse/github-slug-action@6f7a8d2348e2a4aa5defafcdaafe5aef3f83bd4b # v5
