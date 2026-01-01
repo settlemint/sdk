@@ -23,6 +23,7 @@ permissions:
   contents: read
   pull-requests: write
   packages: write
+  id-token: write
 
 concurrency:
   group:
@@ -47,13 +48,13 @@ jobs:
       security-events: write
       actions: read
       packages: write
+      id-token: write
     env:
       SLACK_BOT_TOKEN: ""
       SLACK_CHANNEL_ID: ""
       HARBOR_USER: ""
       HARBOR_PASS: ""
       PAT_TOKEN: ""
-      NPM_TOKEN: ""
       TAG: ""
       VERSION: ""
       CONSOLE_GRAPHQL: ""
@@ -80,7 +81,6 @@ jobs:
           HARBOR_USER: op://platform/harbor/username
           HARBOR_PASS: op://platform/harbor/password
           PAT_TOKEN: op://platform/github-commit-pat/credential
-          NPM_TOKEN: op://platform/npmjs/credential
 
       # Label QA as running and notify Slack (only for non-draft PRs)
       - name: Label QA as running
@@ -118,7 +118,6 @@ jobs:
         uses: settlemint/shared-actions/.github/actions/setup-dependencies@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          npm_token: ${{ env.NPM_TOKEN }}
           disable_node: "true"
 
       - name: Inject slug/short variables
@@ -181,12 +180,6 @@ jobs:
           done
 
           echo "Updated version to $VERSION"
-
-      - name: Login to npm
-        if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
-          echo "//registry.npmjs.org/:_authToken=${{ env.NPM_TOKEN }}" >> ~/.npmrc
 
       - name: Setup git user
         run: |
