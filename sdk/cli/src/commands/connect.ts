@@ -319,18 +319,12 @@ async function connectToPlatform(
 async function connectToLocal() {
   await writeEnvSpinner(false, {
     SETTLEMINT_INSTANCE: LOCAL_INSTANCE,
-    SETTLEMINT_BLOCKCHAIN_NODE_JSON_RPC_ENDPOINT: "http://localhost:8547/",
-    SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER_JSON_RPC_ENDPOINT: "http://localhost:8547/",
-    SETTLEMINT_BLOCKSCOUT_GRAPHQL_ENDPOINT: "http://localhost:4000/api/v1/graphql",
-    SETTLEMINT_HASURA_ENDPOINT: "http://localhost:8080/v1/graphql",
     SETTLEMINT_IPFS_API_ENDPOINT: "https://ipfs.console.settlemint.com/",
     SETTLEMINT_MINIO_ACCESS_KEY: "atk-service",
     SETTLEMINT_MINIO_ENDPOINT: "s3://localhost:9000",
     SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: "http://localhost:7701/graphql",
     SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "kit",
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["http://localhost:8000/subgraphs/name/kit"],
-    SETTLEMINT_HASURA_ADMIN_SECRET: "hasura",
-    SETTLEMINT_HASURA_DATABASE_URL: "postgresql://hasura:hasura@localhost:5432/hasura",
     SETTLEMINT_MINIO_SECRET_KEY: "atk-service-secret",
   });
 }

@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading an insights instance by ID
@@ -29,23 +28,22 @@ export const platformInsightsRead = (server: McpServer, env: Partial<DotEnv>, pa
     instance: instance,
   });
 
-  const schema = z.object({
-    insightsUniqueName: z.string().describe("Unique name of the insights to read"),
-  });
-
-  server.tool("platform-insights-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { insightsUniqueName } = schema.parse(params);
-    const insights = await client.insights.read(insightsUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Insights Details",
-          description: `Details for insights: ${insightsUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(insights, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-insights-read",
+    { insightsUniqueName: z.string().describe("Unique name of the insights to read") },
+    async ({ insightsUniqueName }) => {
+      const insights = await client.insights.read(insightsUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Insights Details",
+            description: `Details for insights: ${insightsUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(insights, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

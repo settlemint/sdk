@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, readFile, rmdir, stat } from "node:fs/promises";
+import { copyFile, readFile, rm, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { exists } from "@settlemint/sdk-utils/filesystem";
@@ -27,7 +27,7 @@ setDefaultTimeout(15 * 60_000);
 async function cleanup() {
   try {
     if (await exists(projectDir)) {
-      await rmdir(projectDir, { recursive: true });
+      await rm(projectDir, { recursive: true });
     }
   } catch (err) {
     console.log("Failed to delete project dir", err);
@@ -76,7 +76,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
           "deploy",
           "remote",
           "--default-sender",
-          privateKey?.address!,
+          privateKey!.address,
           "--deployment-id",
           deploymentId,
           "--accept-defaults",

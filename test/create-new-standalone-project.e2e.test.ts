@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, readFile, rmdir, stat, unlink, writeFile } from "node:fs/promises";
+import { copyFile, readFile, rm, stat, unlink, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
@@ -34,7 +34,7 @@ async function cleanup() {
   try {
     await unlinkLinkedDependencies();
     if (await exists(projectDir)) {
-      await rmdir(projectDir, { recursive: true });
+      await rm(projectDir, { recursive: true });
     }
   } catch (err) {
     console.log("Failed to delete project dir", err);
@@ -175,7 +175,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
           "deploy",
           "remote",
           "--default-sender",
-          privateKey?.address!,
+          privateKey!.address,
           "--deployment-id",
           deploymentId,
           "--module",

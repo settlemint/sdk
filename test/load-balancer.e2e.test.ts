@@ -28,7 +28,7 @@ describe("Load Balancer E2E Tests", () => {
       console.error(err);
     }
     const applications = await settlemint.application.list(env.SETTLEMINT_WORKSPACE!);
-    applicationUniqueName = applications.find((application) => application.name === TEST_APPLICATION_NAME)?.uniqueName!;
+    applicationUniqueName = applications.find((application) => application.name === TEST_APPLICATION_NAME)!.uniqueName;
     if (!applicationUniqueName) {
       throw new Error("Application not found");
     }

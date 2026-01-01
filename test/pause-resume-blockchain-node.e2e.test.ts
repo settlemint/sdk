@@ -16,7 +16,7 @@ describe("Pause and resume blockchain node operations using the SDK", () => {
 
   beforeAll(async () => {
     const blockchainNode = await findBlockchainNodeByName(NODE_NAME_3_WITHOUT_PK);
-    blockchainNodeUniqueName = blockchainNode?.uniqueName!;
+    blockchainNodeUniqueName = blockchainNode!.uniqueName;
     expect(blockchainNodeUniqueName).toBeString();
   });
 

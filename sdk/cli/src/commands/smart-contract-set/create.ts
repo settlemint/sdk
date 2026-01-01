@@ -1,4 +1,4 @@
-import { rmdir } from "node:fs/promises";
+import { rm } from "node:fs/promises";
 import { join } from "node:path";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { instancePrompt } from "@/prompts/instance.prompt";
@@ -75,7 +75,7 @@ export function createCommand(): Command {
         if (!confirmEmpty) {
           cancel(`Error: A folder with the name ${targetDir} already exists in the current directory.`);
         }
-        await rmdir(projectDir, { recursive: true });
+        await rm(projectDir, { recursive: true });
       }
 
       await spinner({

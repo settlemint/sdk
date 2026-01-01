@@ -90,7 +90,7 @@ describe("Viem E2E Tests", () => {
       expect(wallet).toBeArray();
       expect(wallet.length).toBe(1);
       const verifications = await walletClient().createWalletVerification({
-        userWalletAddress: wallet[0]?.address!,
+        userWalletAddress: wallet[0]!.address,
         walletVerificationInfo: {
           name: "pincode-verification",
           verificationType: WalletVerificationType.PINCODE,
@@ -100,11 +100,11 @@ describe("Viem E2E Tests", () => {
       expect(verifications).toBeArray();
       expect(verifications.length).toBe(1);
       await walletClient().deleteWalletVerification({
-        userWalletAddress: wallet[0]?.address!,
-        verificationId: verifications[0]?.id!,
+        userWalletAddress: wallet[0]!.address,
+        verificationId: verifications[0]!.id,
       });
       const updatedVerifications = await walletClient().getWalletVerifications({
-        userWalletAddress: wallet[0]?.address!,
+        userWalletAddress: wallet[0]!.address,
       });
       expect(updatedVerifications).toBeArray();
       expect(updatedVerifications.length).toBe(0);

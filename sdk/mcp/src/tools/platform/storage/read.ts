@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a storage instance by ID
@@ -29,23 +28,22 @@ export const platformStorageRead = (server: McpServer, env: Partial<DotEnv>, pat
     instance: instance,
   });
 
-  const schema = z.object({
-    storageUniqueName: z.string().describe("Unique name of the storage to read"),
-  });
-
-  server.tool("platform-storage-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { storageUniqueName } = schema.parse(params);
-    const storage = await client.storage.read(storageUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Storage Details",
-          description: `Details for storage: ${storageUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(storage, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-storage-read",
+    { storageUniqueName: z.string().describe("Unique name of the storage to read") },
+    async ({ storageUniqueName }) => {
+      const storage = await client.storage.read(storageUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Storage Details",
+            description: `Details for storage: ${storageUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(storage, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

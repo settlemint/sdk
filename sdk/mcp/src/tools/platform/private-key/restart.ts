@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for restarting a private key
@@ -29,23 +28,22 @@ export const platformPrivateKeyRestart = (server: McpServer, env: Partial<DotEnv
     instance: instance,
   });
 
-  const schema = z.object({
-    privateKeyUniqueName: z.string().describe("Unique name of the private key to restart"),
-  });
-
-  server.tool("platform-private-key-restart", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { privateKeyUniqueName } = schema.parse(params);
-    const privateKey = await client.privateKey.restart(privateKeyUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Private Key Restarted",
-          description: `Restarted private key: ${privateKeyUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(privateKey, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-private-key-restart",
+    { privateKeyUniqueName: z.string().describe("Unique name of the private key to restart") },
+    async ({ privateKeyUniqueName }) => {
+      const privateKey = await client.privateKey.restart(privateKeyUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Private Key Restarted",
+            description: `Restarted private key: ${privateKeyUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(privateKey, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

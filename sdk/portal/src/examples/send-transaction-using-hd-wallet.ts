@@ -73,7 +73,7 @@ const pincodeVerification = await portalClient.request(
     }
     `),
   {
-    address: wallet.createWallet?.address!,
+    address: wallet.createWallet!.address!,
     pincode: "123456",
   },
 );
@@ -84,8 +84,8 @@ const pincodeVerification = await portalClient.request(
 const challengeResponse = await handleWalletVerificationChallenge({
   portalClient,
   portalGraphql,
-  verificationId: pincodeVerification.createWalletVerification?.id!,
-  userWalletAddress: getAddress(wallet.createWallet?.address!),
+  verificationId: pincodeVerification.createWalletVerification!.id!,
+  userWalletAddress: getAddress(wallet.createWallet!.address!),
   code: "123456",
   verificationType: "PINCODE",
 });
@@ -128,7 +128,7 @@ const result = await portalClient.request(
   `),
   {
     address: "0x5e771e1417100000000000000000000000000004",
-    from: wallet.createWallet?.address!,
+    from: wallet.createWallet!.address!,
     symbol: "TEST",
     name: "Test Coin",
     decimals: 18,

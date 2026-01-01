@@ -1,5 +1,5 @@
 import { afterAll, afterEach, beforeAll, describe, expect, setDefaultTimeout, test } from "bun:test";
-import { copyFile, rmdir, stat } from "node:fs/promises";
+import { copyFile, rm, stat } from "node:fs/promises";
 import { join } from "node:path";
 import { exists } from "@settlemint/sdk-utils/filesystem";
 import { $ } from "bun";
@@ -25,7 +25,7 @@ setDefaultTimeout(15 * 60_000);
 async function cleanup() {
   try {
     if (await exists(projectDir)) {
-      await rmdir(projectDir, { recursive: true });
+      await rm(projectDir, { recursive: true });
     }
   } catch (err) {
     console.log("Failed to delete project dir", err);
@@ -151,7 +151,7 @@ describe("Setup a smart contract set using the SDK", () => {
       deployRetries++;
       const deployCommand = runCommand(
         COMMAND_TEST_SCOPE,
-        ["scs", "hardhat", "deploy", "remote", "--default-sender", privateKey?.address!, "--accept-defaults"],
+        ["scs", "hardhat", "deploy", "remote", "--default-sender", privateKey!.address, "--accept-defaults"],
         {
           cwd: projectDir,
         },
@@ -186,7 +186,7 @@ describe("Setup a smart contract set using the SDK", () => {
           "-m",
           "ignition/modules/main.ts",
           "--default-sender",
-          privateKey?.address!,
+          privateKey!.address,
           "--accept-defaults",
         ],
         {

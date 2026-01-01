@@ -2,7 +2,6 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { createSettleMintClient } from "@settlemint/sdk-js";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { z } from "zod";
-import { zodToJsonSchema } from "zod-to-json-schema";
 
 /**
  * Creates a tool for reading a middleware by ID
@@ -29,23 +28,22 @@ export const platformMiddlewareRead = (server: McpServer, env: Partial<DotEnv>, 
     instance: instance,
   });
 
-  const schema = z.object({
-    middlewareUniqueName: z.string().describe("Unique name of the middleware to read"),
-  });
-
-  server.tool("platform-middleware-read", { inputSchema: zodToJsonSchema(schema) }, async (params) => {
-    const { middlewareUniqueName } = schema.parse(params);
-    const middleware = await client.middleware.read(middlewareUniqueName);
-    return {
-      content: [
-        {
-          type: "text",
-          name: "Middleware Details",
-          description: `Details for middleware: ${middlewareUniqueName}`,
-          mimeType: "application/json",
-          text: JSON.stringify(middleware, null, 2),
-        },
-      ],
-    };
-  });
+  server.tool(
+    "platform-middleware-read",
+    { middlewareUniqueName: z.string().describe("Unique name of the middleware to read") },
+    async ({ middlewareUniqueName }) => {
+      const middleware = await client.middleware.read(middlewareUniqueName);
+      return {
+        content: [
+          {
+            type: "text",
+            name: "Middleware Details",
+            description: `Details for middleware: ${middlewareUniqueName}`,
+            mimeType: "application/json",
+            text: JSON.stringify(middleware, null, 2),
+          },
+        ],
+      };
+    },
+  );
 };

@@ -60,7 +60,7 @@ const deployForwarder = await portalClient.request(
 /**
  * Wait for the forwarder contract deployment to be finalized
  */
-const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractATKForwarder?.transactionHash!, {
+const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractATKForwarder!.transactionHash!, {
   portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
   accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
 });
@@ -79,7 +79,7 @@ const deployStableCoinImplementation = await portalClient.request(
   {
     from: FROM,
     constructorArguments: {
-      forwarder_: getAddress(transaction?.receipt.contractAddress!),
+      forwarder_: getAddress(transaction!.receipt.contractAddress!),
     },
   },
 );
