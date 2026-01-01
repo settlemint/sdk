@@ -56,7 +56,7 @@ describe("Portal E2E Tests", () => {
           key.blockchainNodes?.some((node) => node.uniqueName === env.SETTLEMINT_BLOCKCHAIN_NODE!),
       );
       expect(privateKeyToDeploy).toBeDefined();
-      const from = getAddress(privateKeyToDeploy!.address);
+      const from = getAddress(privateKeyToDeploy!.address!);
 
       const deployForwarder = await portalClient.request(
         portalGraphql(`
@@ -72,7 +72,7 @@ describe("Portal E2E Tests", () => {
       );
       expect(deployForwarder.DeployContractForwarder?.transactionHash).toBeString();
 
-      const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder!.transactionHash, {
+      const transaction = await waitForTransactionReceipt(deployForwarder.DeployContractForwarder!.transactionHash!, {
         portalGraphqlEndpoint: env.SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT!,
         accessToken: env.SETTLEMINT_ACCESS_TOKEN!,
       });
@@ -154,7 +154,7 @@ describe("Portal E2E Tests", () => {
           }
         `),
         {
-          address: wallet.createWallet!.address,
+          address: wallet.createWallet!.address!,
           pincode: "123456",
         },
       );
@@ -163,8 +163,8 @@ describe("Portal E2E Tests", () => {
       const challengeResponse = await handleWalletVerificationChallenge({
         portalClient,
         portalGraphql,
-        verificationId: pincodeVerification.createWalletVerification!.id,
-        userWalletAddress: wallet.createWallet!.address as Address,
+        verificationId: pincodeVerification.createWalletVerification!.id!,
+        userWalletAddress: wallet.createWallet!.address! as Address,
         code: "123456",
         verificationType: "PINCODE",
       });
@@ -196,7 +196,7 @@ describe("Portal E2E Tests", () => {
           challengeResponse: challengeResponse.challengeResponse,
           challengeId: challengeResponse.challengeId,
           address: "0x5e771e1417100000000000000000000000000004",
-          from: wallet.createWallet!.address,
+          from: wallet.createWallet!.address!,
           input: {
             name: `Test Coin ${new Date().toISOString()}`,
             symbol: "TEST",

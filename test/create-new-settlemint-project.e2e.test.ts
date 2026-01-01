@@ -156,7 +156,7 @@ describe("Setup a project on the SettleMint platform using the SDK", () => {
           "deploy",
           "remote",
           "--default-sender",
-          privateKey!.address,
+          privateKey!.address!,
           "--deployment-id",
           deploymentId,
           "--module",

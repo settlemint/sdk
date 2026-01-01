@@ -76,7 +76,7 @@ describe("Build and deploy a subgraph using the SDK", () => {
           "deploy",
           "remote",
           "--default-sender",
-          privateKey!.address,
+          privateKey!.address!,
           "--deployment-id",
           deploymentId,
           "--accept-defaults",

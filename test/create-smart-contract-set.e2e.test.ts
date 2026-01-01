@@ -151,7 +151,7 @@ describe("Setup a smart contract set using the SDK", () => {
       deployRetries++;
       const deployCommand = runCommand(
         COMMAND_TEST_SCOPE,
-        ["scs", "hardhat", "deploy", "remote", "--default-sender", privateKey!.address, "--accept-defaults"],
+        ["scs", "hardhat", "deploy", "remote", "--default-sender", privateKey!.address!, "--accept-defaults"],
         {
           cwd: projectDir,
         },
@@ -186,7 +186,7 @@ describe("Setup a smart contract set using the SDK", () => {
           "-m",
           "ignition/modules/main.ts",
           "--default-sender",
-          privateKey!.address,
+          privateKey!.address!,
           "--accept-defaults",
         ],
         {

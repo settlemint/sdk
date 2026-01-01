@@ -175,7 +175,7 @@ describe("Setup a project on a standalone environment using the SDK", () => {
           "deploy",
           "remote",
           "--default-sender",
-          privateKey!.address,
+          privateKey!.address!,
           "--deployment-id",
           deploymentId,
           "--module",
