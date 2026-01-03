@@ -320,12 +320,9 @@ async function connectToLocal() {
   await writeEnvSpinner(false, {
     SETTLEMINT_INSTANCE: LOCAL_INSTANCE,
     SETTLEMINT_IPFS_API_ENDPOINT: "https://ipfs.console.settlemint.com/",
-    SETTLEMINT_MINIO_ACCESS_KEY: "atk-service",
-    SETTLEMINT_MINIO_ENDPOINT: "s3://localhost:9000",
     SETTLEMINT_PORTAL_GRAPHQL_ENDPOINT: "http://localhost:7701/graphql",
     SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: "kit",
     SETTLEMINT_THEGRAPH_SUBGRAPHS_ENDPOINTS: ["http://localhost:8000/subgraphs/name/kit"],
-    SETTLEMINT_MINIO_SECRET_KEY: "atk-service-secret",
   });
 }
 
