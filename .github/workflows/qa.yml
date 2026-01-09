@@ -375,7 +375,7 @@ jobs:
       SLACK_CHANNEL_ID: ""
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@0c5e6ce59a41299aba2ad91baa0126f1bfde8e5c # v8
+        uses: namespacelabs/nscloud-checkout-action@9e72ae580f3c60c57941cf5f813f854db2865202 # v8
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
@@ -429,7 +429,7 @@ jobs:
       SLACK_CHANNEL_ID: ""
     steps:
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@0c5e6ce59a41299aba2ad91baa0126f1bfde8e5c # v8
+        uses: namespacelabs/nscloud-checkout-action@9e72ae580f3c60c57941cf5f813f854db2865202 # v8
         with:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
