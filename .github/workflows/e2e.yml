@@ -38,7 +38,7 @@ jobs:
           SLACK_WEBHOOK_URL: "op://platform/SDK E2E/e2e-slack-webhook"
 
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@0c5e6ce59a41299aba2ad91baa0126f1bfde8e5c # v8
+        uses: namespacelabs/nscloud-checkout-action@99724ed126229e8e2a9cecf3a11c82611024862a # v8
 
       - name: Setup caches
         uses: namespacelabs/nscloud-cache-action@446d8f390563cd54ca27e8de5bdb816f63c0b706 # v1
