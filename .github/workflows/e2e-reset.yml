@@ -32,7 +32,7 @@ jobs:
           SETTLEMINT_INSTANCE: "op://platform/SDK E2E/instance"
 
       - name: Checkout repository
-        uses: namespacelabs/nscloud-checkout-action@0c5e6ce59a41299aba2ad91baa0126f1bfde8e5c # v8
+        uses: namespacelabs/nscloud-checkout-action@99724ed126229e8e2a9cecf3a11c82611024862a # v8
 
       - name: Login to SettleMint and delete workspace
         uses: settlemint/settlemint-action@main
