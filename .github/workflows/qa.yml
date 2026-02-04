@@ -126,7 +126,7 @@ jobs:
           disable_chart_testing: "true"
 
       - name: Inject slug/short variables
-        uses: rlespinasse/github-slug-action@6f7a8d2348e2a4aa5defafcdaafe5aef3f83bd4b # v5
+        uses: rlespinasse/github-slug-action@9e7def61550737ba68c62d34a32dd31792e3f429 # v5
 
       - name: Update package versions
         if: github.event_name == 'pull_request' || github.event_name == 'push' || github.event_name == 'release'
