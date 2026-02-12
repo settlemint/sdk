@@ -62,7 +62,7 @@
     "@types/node": "25",
     "@types/semver": "7.7.1",
     "@types/which": "3.0.4",
-    "get-tsconfig": "4.13.0",
+    "get-tsconfig": "4.13.6",
     "giget": "2.0.0",
     "is-in-ci": "2.0.0",
     "semver": "7.7.3",
