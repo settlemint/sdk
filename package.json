@@ -47,7 +47,7 @@
     "@types/mustache": "4.2.6",
     "knip": "5.80.0",
     "mustache": "4.2.0",
-    "publint": "0.3.16",
+    "publint": "0.3.17",
     "tsdown": "^0.18.0",
     "turbo": "2.7.3",
     "typedoc": "0.28.15",
