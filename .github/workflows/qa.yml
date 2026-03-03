@@ -66,13 +66,13 @@ jobs:
           persist-credentials: false
 
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@8d0d610af187e78a2772c2d18d627f4c52d3fbfb # v3
+        uses: 1password/load-secrets-action/configure@dafbe7cb03502b260e2b2893c753c352eee545bf # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load all secrets
         id: secrets
-        uses: 1password/load-secrets-action@8d0d610af187e78a2772c2d18d627f4c52d3fbfb # v3
+        uses: 1password/load-secrets-action@dafbe7cb03502b260e2b2893c753c352eee545bf # v3
         with:
           export-env: true
         env:
@@ -380,12 +380,12 @@ jobs:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@8d0d610af187e78a2772c2d18d627f4c52d3fbfb # v3
+        uses: 1password/load-secrets-action/configure@dafbe7cb03502b260e2b2893c753c352eee545bf # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load Slack secrets
-        uses: 1password/load-secrets-action@8d0d610af187e78a2772c2d18d627f4c52d3fbfb # v3
+        uses: 1password/load-secrets-action@dafbe7cb03502b260e2b2893c753c352eee545bf # v3
         with:
           export-env: true
         env:
@@ -434,12 +434,12 @@ jobs:
           fetch-depth: ${{ github.event_name == 'push' && 2 || 0 }}
 
       - name: Setup 1Password
-        uses: 1password/load-secrets-action/configure@8d0d610af187e78a2772c2d18d627f4c52d3fbfb # v3
+        uses: 1password/load-secrets-action/configure@dafbe7cb03502b260e2b2893c753c352eee545bf # v3
         with:
           service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
 
       - name: Load Slack secrets
-        uses: 1password/load-secrets-action@8d0d610af187e78a2772c2d18d627f4c52d3fbfb # v3
+        uses: 1password/load-secrets-action@dafbe7cb03502b260e2b2893c753c352eee545bf # v3
         with:
           export-env: true
         env:
