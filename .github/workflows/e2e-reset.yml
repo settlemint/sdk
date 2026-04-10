@@ -35,7 +35,7 @@ jobs:
         uses: namespacelabs/nscloud-checkout-action@0c5e6ce59a41299aba2ad91baa0126f1bfde8e5c # v8
 
       - name: Login to SettleMint and delete workspace
-        uses: settlemint/settlemint-action@main
+        uses: settlemint/settlemint-action@3eb4a628a7136a4d951ba99bda3845e1d6437c97 # main
         if: ${{ env.SETTLEMINT_WORKSPACE != '' }}
         env:
           SETTLEMINT_WORKSPACE: ${{ secrets.SETTLEMINT_WORKSPACE }}
