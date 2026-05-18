@@ -69,7 +69,7 @@
     "slugify": "1.6.6",
     "viem": "2.43.5",
     "which": "6.0.0",
-    "yaml": "2.8.2",
+    "yaml": "2.9.0",
     "yoctocolors": "2.1.2",
     "yocto-spinner": "^1.0.0"
   },
