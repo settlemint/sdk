@@ -99,7 +99,25 @@ describe("Viem E2E Tests", () => {
       });
       expect(verifications).toBeArray();
       expect(verifications.length).toBe(1);
-      await walletClient().deleteWalletVerification({
+      // Deleting a verification requires proof of an existing verification: answer a challenge for the PIN code
+      const challenge = await walletClient().createWalletVerificationChallenge({
+        userWalletAddress: wallet[0]!.address,
+        verificationId: verifications[0]!.id,
+      });
+      const challengeResponse = settlemint.wallet.pincodeVerificationChallengeResponse({
+        verificationChallenge: {
+          name: challenge.name,
+          challenge: {
+            secret: challenge.challenge.secret!,
+            salt: challenge.challenge.salt!,
+          },
+        },
+        pincode: "123456",
+      });
+      await walletClient({
+        challengeId: challenge.id,
+        challengeResponse,
+      }).deleteWalletVerification({
         userWalletAddress: wallet[0]!.address,
         verificationId: verifications[0]!.id,
       });

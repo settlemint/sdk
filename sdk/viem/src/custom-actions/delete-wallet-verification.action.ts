@@ -2,6 +2,13 @@ import type { Client } from "viem";
 
 /**
  * Parameters for deleting a wallet verification.
+ *
+ * @remarks
+ * The platform requires proof of an existing verification to delete a verification. Create a
+ * challenge for an existing verification (this can be the one you delete), compute its
+ * response, and pass both to the wallet client factory
+ * (`walletClient({ challengeId, challengeResponse })`). The client sends them as the
+ * `x-auth-challenge-id` and `x-auth-challenge-response` headers.
  */
 export interface DeleteWalletVerificationParameters {
   /** The wallet address for which to delete the verification. */
@@ -36,8 +43,23 @@ export function deleteWalletVerification(client: Client) {
   return {
     /**
      * Deletes a wallet verification.
+     *
+     * Call this on a client created with proof of an existing verification:
+     * `walletClient({ challengeId, challengeResponse })`.
      * @param args - The parameters for deleting the verification.
      * @returns A promise that resolves to an array of deletion results.
+     * @example
+     * ```ts
+     * const challenge = await walletClient().createWalletVerificationChallenge({
+     *   userWalletAddress,
+     *   verificationId,
+     * });
+     * const challengeResponse = computeChallengeResponse(challenge); // e.g. the PIN code response
+     * await walletClient({ challengeId: challenge.id, challengeResponse }).deleteWalletVerification({
+     *   userWalletAddress,
+     *   verificationId,
+     * });
+     * ```
      */
     deleteWalletVerification(args: DeleteWalletVerificationParameters): Promise<DeleteWalletVerificationResponse[]> {
       return client.request<WalletRpcSchema>({

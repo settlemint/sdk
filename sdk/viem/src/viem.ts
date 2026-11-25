@@ -255,6 +255,12 @@ function createPublicClient(validatedOptions: ClientOptions, headers: HeadersIni
 
 /**
  * The options for the wallet client.
+ *
+ * @remarks
+ * The client sends these values as the `x-auth-verification-id`, `x-auth-challenge-id` and
+ * `x-auth-challenge-response` headers on every request it makes. Use them to sign with an
+ * HD wallet, and to prove an existing verification when you add a second verification
+ * (`createWalletVerification`) or delete a verification (`deleteWalletVerification`).
  */
 export interface WalletVerificationOptions {
   /**

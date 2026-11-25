@@ -55,6 +55,14 @@ export type WalletVerificationInfo =
 
 /**
  * Parameters for creating a wallet verification.
+ *
+ * @remarks
+ * When the wallet already has a verification, the platform requires proof of an existing
+ * verification to add another one. Create a challenge for an existing verification, compute
+ * its response, and pass both to the wallet client factory
+ * (`walletClient({ challengeId, challengeResponse })`). The client sends them as the
+ * `x-auth-challenge-id` and `x-auth-challenge-response` headers. The first verification of
+ * a wallet needs no proof.
  */
 export interface CreateWalletVerificationParameters {
   /** The wallet address for which to create the verification. */
@@ -95,8 +103,23 @@ export function createWalletVerification(client: Client) {
   return {
     /**
      * Creates a new wallet verification.
+     *
+     * When the wallet already has a verification, call this on a client created with proof of
+     * an existing verification: `walletClient({ challengeId, challengeResponse })`.
      * @param args - The parameters for creating the verification.
      * @returns A promise that resolves to an array of created wallet verification responses.
+     * @example
+     * ```ts
+     * const challenge = await walletClient().createWalletVerificationChallenge({
+     *   userWalletAddress,
+     *   verificationId: existingVerificationId,
+     * });
+     * const challengeResponse = computeChallengeResponse(challenge); // e.g. the PIN code response
+     * await walletClient({ challengeId: challenge.id, challengeResponse }).createWalletVerification({
+     *   userWalletAddress,
+     *   walletVerificationInfo: { name: "otp", verificationType: WalletVerificationType.OTP },
+     * });
+     * ```
      */
     createWalletVerification(args: CreateWalletVerificationParameters): Promise<CreateWalletVerificationResponse[]> {
       return client.request<WalletRpcSchema>({
