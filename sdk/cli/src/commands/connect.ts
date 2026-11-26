@@ -40,6 +40,7 @@ import {
   getIpfsEnv,
   getMinioEnv,
   getPortalEnv,
+  warnAboutUnreadableSecrets,
 } from "@/utils/get-cluster-service-env";
 import { sanitizeAndValidateInstanceUrl } from "@/utils/instance-url-utils";
 import { getTheGraphSubgraphNames, getTheGraphSubgraphUrl, getTheGraphUrl } from "@/utils/subgraph/thegraph-url";
@@ -285,6 +286,10 @@ async function connectToPlatform(
     table("Selected services", selectedServices);
   }
 
+  const hasuraEnv = getHasuraEnv(hasura);
+  const minioEnv = getMinioEnv(minio);
+  warnAboutUnreadableSecrets({ ...hasuraEnv, ...minioEnv });
+
   await writeEnvSpinner(!!prod, {
     SETTLEMINT_ACCESS_TOKEN: aatToken,
     SETTLEMINT_INSTANCE: selectedInstance,
@@ -297,7 +302,7 @@ async function connectToPlatform(
     SETTLEMINT_BLOCKCHAIN_NODE_OR_LOAD_BALANCER: loadBalancerOrBlockchainNode?.uniqueName,
     ...getBlockchainNodeOrLoadBalancerEnv(loadBalancerOrBlockchainNode),
     SETTLEMINT_HASURA: hasura?.uniqueName,
-    ...getHasuraEnv(hasura),
+    ...hasuraEnv,
     SETTLEMINT_THEGRAPH: thegraph?.uniqueName,
     ...graphEnv,
     SETTLEMINT_THEGRAPH_DEFAULT_SUBGRAPH: defaultSubgraph,
@@ -306,7 +311,7 @@ async function connectToPlatform(
     SETTLEMINT_HD_PRIVATE_KEY: hdPrivateKey?.uniqueName,
     ...getHdPrivateKeyEnv(hdPrivateKey),
     SETTLEMINT_MINIO: minio?.uniqueName,
-    ...getMinioEnv(minio),
+    ...minioEnv,
     SETTLEMINT_IPFS: ipfs?.uniqueName,
     ...getIpfsEnv(ipfs),
     SETTLEMINT_CUSTOM_DEPLOYMENT: cDeployment?.uniqueName,

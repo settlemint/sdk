@@ -10,7 +10,7 @@ import type {
   Storage,
 } from "@settlemint/sdk-js";
 import { retryWhenFailed } from "@settlemint/sdk-utils/retry";
-import { spinner } from "@settlemint/sdk-utils/terminal";
+import { note, spinner } from "@settlemint/sdk-utils/terminal";
 import type { DotEnv } from "@settlemint/sdk-utils/validation";
 import { DEFAULT_SUBGRAPH_NAME } from "@/constants/default-subgraph";
 import { isAnyHasura } from "@/prompts/cluster-service/hasura.prompt";
@@ -127,6 +127,45 @@ export function getMinioEnv(service: Storage | undefined): Partial<DotEnv> {
     SETTLEMINT_MINIO_SECRET_KEY: service?.credentials.find((credential) => credential.id.endsWith("secret-key"))
       ?.displayValue,
   };
+}
+
+/**
+ * Env names whose values come from secret credential or endpoint items of a service.
+ * The platform returns these items only to workspace admins using a personal access token.
+ */
+const SERVICE_SECRET_ENV_NAMES = [
+  "SETTLEMINT_HASURA_ADMIN_SECRET",
+  "SETTLEMINT_HASURA_DATABASE_URL",
+  "SETTLEMINT_MINIO_SECRET_KEY",
+] as const satisfies ReadonlyArray<keyof DotEnv>;
+
+/**
+ * Returns the secret env names that a selected service did not return a value for.
+ *
+ * @param serviceEnv - Env values built by the service env getters (for example getHasuraEnv and getMinioEnv).
+ * A secret env name is only checked when the getter set it, so services that were not selected are ignored.
+ * @returns The env names that could not be read, in a stable order
+ */
+function getUnreadableSecretEnvNames(serviceEnv: Partial<DotEnv>): string[] {
+  return SERVICE_SECRET_ENV_NAMES.filter((name) => name in serviceEnv && !serviceEnv[name]);
+}
+
+/**
+ * Warns the user about secret env values that the selected services did not return.
+ * The other values are still written, so this does not stop the command.
+ *
+ * @param serviceEnv - Env values built by the service env getters
+ * @returns The env names that could not be read
+ */
+export function warnAboutUnreadableSecrets(serviceEnv: Partial<DotEnv>): string[] {
+  const unreadable = getUnreadableSecretEnvNames(serviceEnv);
+  if (unreadable.length > 0) {
+    note(
+      `Could not read ${unreadable.join(", ")}. The platform returns these values only to workspace admins using a personal access token, so they are not written to your .env.local file. Run \`settlemint login\` with the personal access token of a workspace admin and run \`settlemint connect\` again, or set these values yourself.`,
+      "warn",
+    );
+  }
+  return unreadable;
 }
 
 export function getBlockchainNodeEnv(service: Pick<BlockchainNode, "endpoints"> | undefined | null): Partial<DotEnv> {

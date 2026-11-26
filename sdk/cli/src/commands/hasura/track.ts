@@ -4,14 +4,16 @@ import { createSettleMintClient } from "@settlemint/sdk-js";
 import { loadEnv } from "@settlemint/sdk-utils/environment";
 import { intro, note, outro } from "@settlemint/sdk-utils/terminal";
 import { type DotEnv, LOCAL_INSTANCE, STANDALONE_INSTANCE } from "@settlemint/sdk-utils/validation";
-import { missingApplication } from "@/error/missing-config-error";
+import { missingApplication, missingHasuraAdminSecretError } from "@/error/missing-config-error";
 import { nothingSelectedError } from "@/error/nothing-selected-error";
 import { hasuraPrompt } from "@/prompts/cluster-service/hasura.prompt";
 import { instancePrompt } from "@/prompts/instance.prompt";
 import { serviceSpinner } from "@/spinners/service.spinner";
 import { createExamples } from "@/utils/commands/create-examples";
+import { getInstanceCredentials } from "@/utils/config";
 import { getApplicationOrPersonalAccessToken } from "@/utils/get-app-or-personal-token";
 import { getHasuraEnv } from "@/utils/get-cluster-service-env";
+import { sanitizeInstanceUrl } from "@/utils/instance-url-utils";
 
 export function hasuraTrackCommand() {
   return new Command("track")
@@ -58,9 +60,13 @@ export function hasuraTrackCommand() {
           instance: selectedInstance,
           prefer: "application",
         });
+        // The platform returns the Hasura admin secret only to workspace admins using a personal access token,
+        // so the integration tools are read with the personal access token when there is one.
+        const personalAccessToken = (await getInstanceCredentials(sanitizeInstanceUrl(selectedInstance), false))
+          ?.personalAccessToken;
 
         const settlemint = createSettleMintClient({
-          accessToken,
+          accessToken: personalAccessToken ?? accessToken,
           instance: selectedInstance,
         });
 
@@ -81,7 +87,11 @@ export function hasuraTrackCommand() {
 
         const hasuraEnv = getHasuraEnv(hasura);
         hasuraGraphqlEndpoint = hasuraEnv.SETTLEMINT_HASURA_ENDPOINT;
-        hasuraAdminSecret = hasuraEnv.SETTLEMINT_HASURA_ADMIN_SECRET;
+        hasuraAdminSecret = hasuraEnv.SETTLEMINT_HASURA_ADMIN_SECRET ?? env.SETTLEMINT_HASURA_ADMIN_SECRET;
+
+        if (!hasuraAdminSecret) {
+          return missingHasuraAdminSecretError(!!personalAccessToken);
+        }
       }
 
       if (!hasuraGraphqlEndpoint || !hasuraAdminSecret) {
